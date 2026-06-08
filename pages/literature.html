@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>文献情报 · MA-MG-HUB</title>
+<link rel="stylesheet" href="/MA-MG-HUB/assets/main.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/MA-MG-HUB/" class="nav-brand">MA-MG-HUB</a>
+    <div class="nav-links">
+      <a href="/MA-MG-HUB/pages/literature.html" class="nav-link active">文献情报</a>
+      <a href="#" class="nav-link disabled">会议信息</a>
+      <a href="#" class="nav-link disabled">临床试验</a>
+      <a href="#" class="nav-link disabled">监管动态</a>
+      <a href="#" class="nav-link disabled">竞争情报</a>
+      <a href="#" class="nav-link disabled">诊治格局</a>
+      <a href="#" class="nav-link disabled">数据状态</a>
+    </div>
+  </div>
+</nav>
+
+<main class="main">
+  <div class="page-header">
+    <h1>文献情报</h1>
+    <div class="page-header-actions">
+      <span class="update-badge" id="updateBadge">Loading…</span>
+      <button class="btn" id="btnExport">📋 生成本周简报</button>
+    </div>
+  </div>
+
+  <!-- 顶部统计条 -->
+  <div class="stats-bar" id="statsBar">
+    <div class="stat">文献总量 <strong id="statTotal">—</strong></div>
+    <div class="stat">近30天 <strong id="stat30d">—</strong></div>
+    <div class="stat">中国相关 <strong id="statChina">—</strong></div>
+    <div class="stat">期刊数 <strong id="statJournal">—</strong></div>
+  </div>
+
+  <!-- 筛选器 + 列表 -->
+  <div class="content-layout">
+    <aside class="sidebar-filters" id="filters">
+      <div class="filter-group">
+        <label class="filter-label">关键词搜索</label>
+        <input type="text" class="filter-input" id="filterKeyword" placeholder="搜索标题/作者/期刊…">
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">时间范围</label>
+        <select class="filter-select" id="filterTime">
+          <option value="7">最近 7 天</option>
+          <option value="30" selected>最近 30 天</option>
+          <option value="90">最近 90 天</option>
+          <option value="365">最近 1 年</option>
+          <option value="all">全部</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">中国研究</label>
+        <select class="filter-select" id="filterChina">
+          <option value="all" selected>全部</option>
+          <option value="china">仅中国相关</option>
+          <option value="non-china">非中国</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">期刊筛选</label>
+        <select class="filter-select" id="filterJournal">
+          <option value="all">全部期刊</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">证据等级</label>
+        <select class="filter-select" id="filterEvidence">
+          <option value="all">待后处理回填</option>
+        </select>
+      </div>
+
+      <div class="filter-stats">
+        筛选结果: <strong id="filterCount">0</strong> 篇
+      </div>
+    </aside>
+
+    <section class="results" id="results">
+      <div class="loading" id="loading">📡 加载数据中…</div>
+    </section>
+  </div>
+</main>
+
+<script src="/MA-MG-HUB/assets/literature.js"></script>
+</body>
+</html>
