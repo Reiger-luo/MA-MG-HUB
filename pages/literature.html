@@ -69,9 +69,24 @@
       </div>
 
       <div class="filter-group">
-        <label class="filter-label">期刊筛选</label>
-        <select class="filter-select" id="filterJournal">
-          <option value="all">全部期刊</option>
+        <label class="filter-label">影响因子 <span style="color:var(--fg3);font-weight:normal">(待后处理)</span></label>
+        <select class="filter-select" id="filterIF" disabled>
+          <option value="all" selected>全部</option>
+          <option value="0-2">&lt; 2</option>
+          <option value="2-5">2 – 5</option>
+          <option value="5-10">5 – 10</option>
+          <option value="10">≥ 10</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">期刊分区 <span style="color:var(--fg3);font-weight:normal">(待后处理)</span></label>
+        <select class="filter-select" id="filterQuartile" disabled>
+          <option value="all" selected>全部</option>
+          <option value="1">Q1 (1区)</option>
+          <option value="2">Q2 (2区)</option>
+          <option value="3">Q3 (3区)</option>
+          <option value="4">Q4 (4区)</option>
         </select>
       </div>
 

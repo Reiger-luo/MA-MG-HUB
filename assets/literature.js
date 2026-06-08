@@ -4,6 +4,8 @@
 
   let allArticles = [];
   let filteredResults = [];
+  let currentPage = 0;
+  const PAGE_SIZE = 20;
 
   const DATA_URL = '/MA-MG-HUB/data/literature-full.json';
 
@@ -20,7 +22,8 @@
     filterKeyword: $('filterKeyword'),
     filterTime: $('filterTime'),
     filterChina: $('filterChina'),
-    filterJournal: $('filterJournal'),
+    filterIF: $('filterIF'),
+    filterQuartile: $('filterQuartile'),
     btnExport: $('btnExport'),
   };
 
@@ -132,15 +135,32 @@
     return text.length > 500 ? text.slice(0, 500) + '…' : text;
   }
 
-  function applyFilters() {
+  function applyFilters(resetPage) {
+    if (resetPage === undefined) resetPage = true;
     const keyword = (el.filterKeyword.value || '').toLowerCase().trim();
     const timeVal = el.filterTime.value;
     const chinaVal = el.filterChina.value;
+    const ifVal = el.filterIF.value;
+    const quartileVal = el.filterQuartile.value;
 
     const timeCutoff = timeVal === 'all' ? null : daysAgo(parseInt(timeVal));
 
+    function matchesIF(a) {
+      const v = a.journal_if;
+      if (v === null || v === undefined) return ifVal === 'all'; // 未标注的不过滤
+      if (ifVal === 'all') return true;
+      const [lo, hi] = ifVal.split('-').map(Number);
+      if (ifVal === '10') return v >= 10;
+      return v >= lo && v < hi;
+    }
+    function matchesQuartile(a) {
+      const q = a.journal_quartile;
+      if (q === null || q === undefined) return quartileVal === 'all';
+      if (quartileVal === 'all') return true;
+      return String(q) === quartileVal;
+    }
+
     filteredResults = allArticles.filter(a => {
-      // 关键词
       if (keyword) {
         const inTitle = (a.title || '').toLowerCase().includes(keyword);
         const inAuthors = (a.authors || []).some(au => au.toLowerCase().includes(keyword));
@@ -148,25 +168,24 @@
         const inPmid = a.pmid === keyword;
         if (!inTitle && !inAuthors && !inJournal && !inPmid) return false;
       }
-
-      // 时间
       if (timeCutoff) {
         const ed = parseDate(a.entry_date);
         if (ed && ed < timeCutoff) return false;
       }
-
-      // 中国
       if (chinaVal === 'china' && !a.china_related) return false;
       if (chinaVal === 'non-china' && a.china_related) return false;
-
+      if (!matchesIF(a)) return false;
+      if (!matchesQuartile(a)) return false;
       return true;
     });
 
     el.filterCount.textContent = filteredResults.length;
-    renderResults(filteredResults);
+    if (resetPage) currentPage = 0;
+    renderResults();
   }
 
-  function renderResults(articles) {
+  function renderResults() {
+    const articles = filteredResults;
     el.results.innerHTML = '';
 
     if (articles.length === 0) {
@@ -174,11 +193,42 @@
       return;
     }
 
+    // 分页
+    const totalPages = Math.ceil(articles.length / PAGE_SIZE);
+    const start = currentPage * PAGE_SIZE;
+    const pageArticles = articles.slice(start, start + PAGE_SIZE);
+
     const fragment = document.createDocumentFragment();
-    for (const a of articles) {
+    for (const a of pageArticles) {
       fragment.appendChild(renderArticle(a));
     }
     el.results.appendChild(fragment);
+
+    // 分页导航
+    const nav = document.createElement('div');
+    nav.className = 'pagination';
+    nav.style.cssText = 'display:flex;justify-content:center;align-items:center;gap:0.5rem;margin-top:1rem;padding:0.5rem 0';
+
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'btn';
+    prevBtn.textContent = '‹ 上一页';
+    prevBtn.disabled = currentPage === 0;
+    prevBtn.addEventListener('click', () => { if (currentPage > 0) { currentPage--; renderResults(); window.scrollTo(0,0); } });
+    nav.appendChild(prevBtn);
+
+    const pageInfo = document.createElement('span');
+    pageInfo.style.cssText = 'font-size:0.85rem;color:var(--fg3)';
+    pageInfo.textContent = `${currentPage + 1} / ${totalPages} 页 (${articles.length} 篇)`;
+    nav.appendChild(pageInfo);
+
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'btn';
+    nextBtn.textContent = '下一页 ›';
+    nextBtn.disabled = currentPage >= totalPages - 1;
+    nextBtn.addEventListener('click', () => { if (currentPage < totalPages - 1) { currentPage++; renderResults(); window.scrollTo(0,0); } });
+    nav.appendChild(nextBtn);
+
+    el.results.appendChild(nav);
   }
 
   // ── 统计 ──
