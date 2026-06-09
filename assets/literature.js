@@ -7,9 +7,6 @@
   let currentPage = 0;
   const PAGE_SIZE = 20;
   const DATA_PREFIX = '/MA-MG-HUB/data/literature-';
-  // 月初化时加载最近 3 个月
-  const now = new Date();
-  const DEFAULT_MONTHS = 3;
 
   // DOM refs
   const $ = id => document.getElementById(id);
@@ -30,16 +27,30 @@
     return `${y}-${String(m).padStart(2, '0')}`;
   }
 
-  function getMonthsToLoad() {
+  // 从当前月递推到指定月份，生成所有中间月份
+  function monthsSince(untilYM) {
+    const [untilY, untilM] = untilYM.split('-').map(Number);
+    const now = new Date();
     const months = [];
     const y = now.getFullYear();
     const m = now.getMonth() + 1;
-    for (let i = 0; i < DEFAULT_MONTHS; i++) {
-      let my = y, mm = m - i;
-      while (mm <= 0) { my--; mm += 12; }
-      months.push(monthStr(my, mm));
+    let cy = y, cm = m;
+    while (cy > untilY || (cy === untilY && cm >= untilM)) {
+      months.push(monthStr(cy, cm));
+      cm--;
+      while (cm <= 0) { cy--; cm += 12; }
     }
     return months;
+  }
+
+  function getMonthsToLoad() {
+    // 一次加载近 1 年（12 个月）
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = now.getMonth() + 1;
+    let py = y, pm = m - 11;
+    while (pm <= 0) { py--; pm += 12; }
+    return monthsSince(monthStr(py, pm));
   }
 
   async function loadMonth(ym) {
@@ -98,7 +109,6 @@
       sel.appendChild(opt);
     }
     sel.value = 'all';
-    // 时间筛选器变动时，触发按月份文件加载
     sel.addEventListener('change', onMonthFilterChange);
   }
 
@@ -107,11 +117,9 @@
   async function onMonthFilterChange() {
     const val = el.filterTime.value;
     if (val === 'all') {
-      // 切回全部 → 重新加载当前所有已加载的月份数据即可
       applyFilters();
       return;
     }
-    // 如果还没加载过这个月
     if (!loadedMonths.has(val)) {
       el.loading.textContent = `📡 加载 ${val} 月数据…`;
       const data = await loadMonth(val);
@@ -227,7 +235,7 @@
 
     let tagsHTML = '';
     if (china) tagsHTML += '<span class="badge-china">🇨🇳 中国</span>';
-    if (evLevel) tagsHTML += `<span class="badge-pending">L${evLevel}</span>`;
+    if (evLevel) tagsHTML += `<span class="badge-evidence">证据等级 ${evLevel}</span>`;
     else if (studyTypes.length > 0 && studyTypes[0] !== 'Unclassified')
       tagsHTML += `<span class="badge-pending">${studyTypes[0]}</span>`;
 
@@ -237,7 +245,7 @@
       <div class="article-card-authors">${authorStr || '作者未知'}</div>
       ${article.abstract ? `
         <button class="abstract-toggle" data-pmid="${article.pmid}">显示摘要</button>
-        <div class="article-card-abstract" id="abs-${article.pmid}">${escapeHtml(article.abstract.slice(0, 500))}${article.abstract.length > 500 ? '…' : ''}</div>
+        <div class="article-card-abstract" id="abs-${article.pmid}">${escapeHtml(article.abstract.slice(0, 300))}${article.abstract.length > 300 ? '…' : ''}</div>
       ` : ''}
       <div class="article-card-links">
         <a href="${article.url}" target="_blank">PubMed</a>
@@ -251,6 +259,11 @@
       toggle.addEventListener('click', function() {
         const abs = document.getElementById('abs-' + article.pmid);
         if (abs) {
+          // 第一次展开：填充全文，不再截断
+          if (abs.getAttribute('data-fulltext') !== '1') {
+            abs.innerHTML = escapeHtml(article.abstract);
+            abs.setAttribute('data-fulltext', '1');
+          }
           abs.classList.toggle('open');
           this.textContent = abs.classList.contains('open') ? '收起摘要' : '显示摘要';
         }
@@ -268,7 +281,7 @@
 
   async function init() {
     const monthsToLoad = getMonthsToLoad();
-    el.loading.textContent = `📡 加载最近 ${monthsToLoad.length} 个月数据…`;
+    el.loading.textContent = `📡 加载 ${monthsToLoad.length} 个月数据…`;
 
     try {
       const results = await Promise.all(monthsToLoad.map(ym => loadMonth(ym)));
