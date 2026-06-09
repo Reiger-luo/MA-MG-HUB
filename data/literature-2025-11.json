@@ -26,7 +26,7 @@
     "affiliations": [
       "Department of Neurology and Department of Neuroscience, The First Affiliated Hospital of Xiamen University, School of Medicine, Xiamen University, Xiamen, China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "Unclassified"
     ],
@@ -60,7 +60,7 @@
     "affiliations": [
       "Department of Neurology With Experimental Neurology, Charité - Universitätsmedizin Berlin, Corporate Member of Freie Universität Berlin and Humboldt-Universität zu Berlin, Berlin, Germany."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "RCT"
     ],
@@ -93,7 +93,7 @@
     "affiliations": [
       "University of Alabama at Birmingham, Birmingham, AL, USA."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Unclassified"
     ],
@@ -125,7 +125,7 @@
     "affiliations": [
       "Department of Neurology, Yuncheng Central Hospital Affiliated to Shanxi Medical University Yuncheng, Shanxi Province, China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "Single Arm"
     ],
@@ -150,7 +150,7 @@
     "affiliations": [
       "Department of Pediatrics, Uwajima City Hospital, Goten-Machi, Ehime 798-8510, Japan. Electronic address: mas_hayashi@outlook.jp."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Review"
     ],
@@ -180,7 +180,7 @@
     "affiliations": [
       "Department of Cardiothoracic Surgery, The First Hospital of Nanchang, Nanchang, China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "ITC"
     ],
@@ -217,7 +217,7 @@
     "affiliations": [
       "Department of Neurology, Tianjin Medical University General Hospital, China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "Single Arm"
     ],
@@ -250,7 +250,7 @@
     "affiliations": [
       "Department of Neurology, Graduate School of Medicine, Chiba University, Chiba, Japan."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Single Arm"
     ],
@@ -287,7 +287,7 @@
     "affiliations": [
       "School of Basic Medical Sciences, Harbin Medical University, Harbin, 150081, China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "Unclassified"
     ],
@@ -323,7 +323,7 @@
     "affiliations": [
       "Department of Neurology, Osaka Red Cross Hospital, Osaka, Japan."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Case Report"
     ],
@@ -358,7 +358,7 @@
     "affiliations": [
       "Department of Medicine Huddinge, Karolinska Institutet, Stockholm, Sweden."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "RCT"
     ],
@@ -390,7 +390,7 @@
     "affiliations": [
       "Laboratório de Farmacologia e Neurobiologia, 4050-313, Porto, Portugal; Center for Drug Discovery and Innovative Medicines (MedInUP)/RISE-Health: Health Research Network, Instituto de Ciências Biomédicas Abel Salazar - Universidade do Porto (ICBAS-UP), 4050-313, Porto, Portugal. Electronic address: jbmatos@icbas.up.pt."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Animal Study"
     ],
@@ -417,7 +417,7 @@
     "affiliations": [
       "Department of Neurology & Rehabilitation Medicine, School of Medicine & Health Sciences, George Washington University, Washington, DC, USA."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Unclassified"
     ],
@@ -467,7 +467,7 @@
     "affiliations": [
       "Institute of Environmental Medicine, Karolinska Institutet, Stockholm, Sweden."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "RCT"
     ],
@@ -501,7 +501,7 @@
     "affiliations": [
       "Department of Surgery, The Jikei University Kashiwa Hospital, 163-1 Kashiwashita Kashiwashi, Chiba, 277-8567, Japan. shoheijapan@jikei.ac.jp."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Historical Control"
     ],
@@ -531,7 +531,7 @@
     "affiliations": [
       "Department of Neurology, International University of Health and Welfare Mita Hospital, Tokyo, Japan. Electronic address: mitsutake-tky@umin.ac.jp."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Single Arm"
     ],
@@ -568,7 +568,7 @@
     "affiliations": [
       "Department of Infectious Disease, Hebei Medical University Third Hospital, Shijiazhuang, China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "Case Report"
     ],
@@ -600,7 +600,7 @@
     "affiliations": [
       "Department of Internal Medicine, Hadassah Hebrew University Hospital, Mt. Scopus, Jerusalem, Israel."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Single Arm"
     ],
@@ -641,7 +641,7 @@
     "affiliations": [
       "Department of Neurology, The First Affiliated Hospital, Sun Yat-sen University, Guangzhou, China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "RCT"
     ],
@@ -682,7 +682,7 @@
     "affiliations": [
       "Faculty of Chinese Medicine & State Key Laboratory of Quality Research in Chinese Medicine, Macau University of Science and Technology, Macau, China; Macau Institute for Applied Research in Medicine and Health, Macau University of Science and Technology, Macau, China; The Second Affiliated Hospital of Guizhou University of Traditional Chinese Medicine, Guiyang, China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "Unclassified"
     ],
@@ -718,7 +718,7 @@
     "affiliations": [
       "Ellen and Martin Prosserman Centre for Neuromuscular Diseases, Toronto General Hospital, University of Toronto, Toronto, ON, Canada. c.barnetttapia@utoronto.ca."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "RCT"
     ],
@@ -749,7 +749,7 @@
     "affiliations": [
       "Wannan Medical College, Wuhu, China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "Case Report"
     ],
@@ -775,7 +775,7 @@
     "affiliations": [
       "The Second School of Clinical Medicine, Zhejiang Chinese Medical University, Zhejiang, China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "Case Report"
     ],
@@ -805,7 +805,7 @@
     "affiliations": [
       "The First Clinical College, Changsha Medical University, Changsha, Hunan, China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "RCT"
     ],
@@ -836,7 +836,7 @@
     "affiliations": [
       "Guizhou University of Traditional Chinese Medicine, Guiyang, P.R. China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "ITC"
     ],
@@ -875,7 +875,7 @@
     "affiliations": [
       "Department of Surgery, Competence Center of Thoracic Surgery, Charité Universitätsmedizin Berlin, Berlin, Germany."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Unclassified"
     ],
@@ -915,7 +915,7 @@
     "affiliations": [
       "Department of Neurology, The First Affiliated Hospital of Wenzhou Medical University, Wenzhou, Zhejiang, China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "Protocol"
     ],
@@ -966,7 +966,7 @@
     "affiliations": [
       "U.O.C. Clinical Pathology, San Filippo Neri Hospital, ASLRoma1, Rome, Italy."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Non-randomized controlled cohort"
     ],
@@ -994,7 +994,7 @@
     "affiliations": [
       "General Surgery Department, Affiliated Hospital of Shandong Second Medical University, School of Clinical Medicine, Shandong Second Medical University, Weifang, Shandong Province, China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "Case Report"
     ],
@@ -1019,7 +1019,7 @@
     "affiliations": [
       "Neurology Department, University of Miami, Miami, FL, USA."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Review"
     ],
@@ -1056,7 +1056,7 @@
     "affiliations": [
       "Department of Endocrinology, The Third Affiliated Hospital of Wenzhou Medical University, Wenzhou, Zhejiang, China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "RCT"
     ],
@@ -1094,7 +1094,7 @@
     "affiliations": [
       "Department of Neurology, The Second Affiliated Hospital of Harbin Medical University, Harbin, Heilongjiang, China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "In Vitro"
     ],
@@ -1127,7 +1127,7 @@
     "affiliations": [
       "Department of Neurology, Xinhua Hospital of Zhejiang Province, The Second Affiliated Hospital of Zhejiang Chinese Medical University, Hangzhou, China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "Unclassified"
     ],
@@ -1164,7 +1164,7 @@
     "affiliations": [
       "Department of Neurology, Nanjing First Hospital, Nanjing Medical University, Nanjing, China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "RCT"
     ],
@@ -1203,7 +1203,7 @@
     "affiliations": [
       "Neurology Unit, University Hospital \"San Giovanni di Dio e Ruggi d'Aragona, Salerno, Italy. Electronic address: claudia.vinciguerra@sangiovannieruggi.it."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Historical Control"
     ],
@@ -1230,7 +1230,7 @@
     "affiliations": [
       "Azienda Sanitaria Provinciale Catania, Catania, Italy. chry.messina@gmail.com."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Review"
     ],
@@ -1260,7 +1260,7 @@
     "affiliations": [
       "Department of Neurology, University of California San Francisco, San Francisco, California, USA."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Review"
     ],
@@ -1300,7 +1300,7 @@
     "affiliations": [
       "Department of Neurology With Experimental Neurology and Integrated Myasthenia Center, Charité-Universitätsmedizin Berlin, Corporate Member of Freie Universität Berlin and Humboldt-Universität Zu Berlin, Berlin, Germany."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Non-randomized controlled cohort"
     ],
@@ -1330,7 +1330,7 @@
     "affiliations": [
       "Duke University Medical Center 40 Duke Medicine Circle Durham, NC 27710, US. Electronic address: Jonathan.morena@duke.edu."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Case Report"
     ],
@@ -1366,7 +1366,7 @@
     "affiliations": [
       "Department of Medical Sciences, Clinical Neurophysiology, Uppsala University, Uppsala, Sweden."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "RCT"
     ],
@@ -1399,7 +1399,7 @@
     "affiliations": [
       "Department of Neurology, The Affiliated Hospital of Xuzhou Medical University, Xuzhou, Jiangsu, China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "Single Arm"
     ],
@@ -1436,7 +1436,7 @@
     "affiliations": [
       "Department of Thoracic Surgery, Nanjing Drum Tower Hospital Clinical College of Nanjing Medical University, Nanjing Medical University, Nanjing, 211166, Jiangsu Province, China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "RCT"
     ],
@@ -1495,7 +1495,7 @@
     "affiliations": [
       "Department of Biomedicine, Neuroscience and Advanced Diagnostics (BiND), University of Palermo, 90127 Palermo, Italy. Electronic address: vincenzo.distefano07@unipa.it."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Unclassified"
     ],
@@ -1524,7 +1524,7 @@
     "affiliations": [
       "Department of Pain Rehabilitation, Cancer Hospital of the University of Chinese Academy of Sciences (Zhejiang Cancer Hospital), Hangzhou, China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "Single Arm"
     ],
@@ -1557,7 +1557,7 @@
     "affiliations": [
       "Section Translational Neuroimmunology, Department of Neurology, Jena University Hospital, Jena, Germany."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Review"
     ],
@@ -1587,7 +1587,7 @@
     "affiliations": [
       "Department of Neurology, Peking University People's Hospital, Beijing, China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "Historical Control"
     ],
@@ -1620,7 +1620,7 @@
     "affiliations": [
       "Division of Nephrology, Department of Medicine, Stanford University School of Medicine, CA."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Guideline/Consensus"
     ],
@@ -1647,7 +1647,7 @@
     "affiliations": [
       "Alexion Pharma GK, AstraZeneca Rare Disease, Tokyo, Japan. naoki.numajiri@alexion.com."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Historical Control"
     ],
@@ -1703,7 +1703,7 @@
     "affiliations": [
       "Department of General Thoracic Surgery, Fondazione Policlinico Universitario \"A. Gemelli\", IRCCS, Università Cattolica del Sacro Cuore, 00168 Rome, Italy."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Historical Control"
     ],
@@ -1733,7 +1733,7 @@
     "affiliations": [
       "Department of Thoracic Surgery, the First Affiliated Hospital of Jinan University, Guangzhou, China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "Historical Control"
     ],
@@ -1763,7 +1763,7 @@
     "affiliations": [
       "Neurology, Prisma Health-Upstate/University of South Carolina School of Medicine Greenville, Greenville, USA."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Case Report"
     ],
@@ -1797,7 +1797,7 @@
     "affiliations": [
       "The First Clinical Medical College of Guangzhou University of Chinese Medicine, Guangzhou, Guangdong, China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "Unclassified"
     ],
@@ -1827,7 +1827,7 @@
     "affiliations": [
       "Neurology, Akita University Graduate School of Medicine, Akita, JPN."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Case Report"
     ],
@@ -1856,7 +1856,7 @@
     "affiliations": [
       "Emergency Department, Cliniques Universitaires Saint-Luc (CUSL), Brussels, BEL."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Case Report"
     ],
@@ -1884,7 +1884,7 @@
     "affiliations": [
       "Saint Luke's Marion Bloch Neuroscience Institute, 4401 Wornall Rd, Kansas City, MO 64111, USA Department of Neurology, University of Missouri-Kansas City, Kansas City, MO, USA."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Unclassified"
     ],
@@ -1917,7 +1917,7 @@
     "affiliations": [
       "Department of Transfusion Medicine, All India Institute of Medical Sciences, New Delhi, India."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Case Report"
     ],
@@ -1950,7 +1950,7 @@
     "affiliations": [
       "Department of Neurology, Peking University First Hospital, Beijing, China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "Single Arm"
     ],
@@ -1985,7 +1985,7 @@
     "affiliations": [
       "Department of Neurology, Kindai University Faculty of Medicine, Osaka, Japan."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Single Arm"
     ],
@@ -2023,7 +2023,7 @@
     "affiliations": [
       "Department of Neurology, Affiliated First Hospital of Hunan Traditional Chinese Medical College, Zhuzhou, Hunan, China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "Review"
     ],
@@ -2057,7 +2057,7 @@
     "affiliations": [
       "Department of Neurology, Affiliated First Hospital of Hunan Traditional Chinese Medical College, Zhuzhou, Hunan 412000, China; Department of Neurology, Affiliated Provincial Traditional Chinese Medical Hospital of Hunan University of Chinese Medicine, Zhuzhou, Hunan 412000, China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "Review"
     ],
@@ -2084,7 +2084,7 @@
     "affiliations": [
       "Department of Ophthalmology, Icahn School of Medicine at Mount Sinai, New York Eye and Ear Infirmary and Union Square Eye Care, New York, NY, United States."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Review"
     ],
@@ -2113,7 +2113,7 @@
     "affiliations": [
       "Department of Neurology, Selahaddin Eyyubi State Hospital, Diyarbakir, Türkiye."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Case Report"
     ],
@@ -2138,7 +2138,7 @@
     "affiliations": [
       "School of Biotechnology, Dublin City University, Glasnevin, Dublin 9, Ireland. Michael.Freeley@dcu.ie."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Review"
     ],
@@ -2163,7 +2163,7 @@
     "affiliations": [
       "Thomas Jefferson University, Philadelphia, PA; and."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Review"
     ],
@@ -2195,7 +2195,7 @@
     "affiliations": [
       "Department of Endocrinology, Shishi General Hospital, Fujian Province, China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "Case Report"
     ],
@@ -2222,7 +2222,7 @@
     "affiliations": [
       "Department of Immunology and Allergy, Ankara Bilkent City Hospital, Ankara, Türkiye."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Case Report"
     ],
@@ -2251,7 +2251,7 @@
     "affiliations": [
       "Department of Anesthesiology, Université Libre de Bruxelles, H.U.B Hôpital Erasme, Brussels, Belgium."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Review"
     ],
@@ -2282,7 +2282,7 @@
     "affiliations": [
       "Department of Transfusion Medicine, Medanta-The Medicity, Gurugram, Haryana, India."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Non-randomized controlled cohort"
     ],
@@ -2318,7 +2318,7 @@
     "affiliations": [
       "Department of Rheumatology, Emergency County Clinical Hospital Cluj, Cluj-Napoca, Romania."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Case Report"
     ],
@@ -2350,7 +2350,7 @@
     "affiliations": [
       "Department of Thoracic and Cardiovascular Surgery, Seoul National University Hospital, Seoul National University College of Medicine, Seoul 03080, Republic of Korea."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Single Arm"
     ],
@@ -2378,7 +2378,7 @@
     "affiliations": [
       "Department of Biomedicine, Neuroscience, and Advanced Diagnostic (BIND), University of Palermo, Via del Vespro 143, 90129, Palermo, Italy."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Unclassified"
     ],
@@ -2411,7 +2411,7 @@
     "affiliations": [
       "Department of Medicine, Division of Oncology, Jewish General Hospital, Montreal, Québec, Canada."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Single Arm"
     ],
@@ -2457,7 +2457,7 @@
     "affiliations": [
       "Department of Neurology, The Affiliated Hospital of Xuzhou Medical University, Xuzhou, Jiangsu, China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "Single Arm"
     ],
@@ -2484,7 +2484,7 @@
     "affiliations": [
       "Department of Immunohematology and Transfusion Medicine, SMS Medical College and Hospital, Jaipur, Rajasthan, India."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Case Report"
     ],
@@ -2516,7 +2516,7 @@
     "affiliations": [
       "Ellen and Martin Prosserman Centre for Neuromuscular Diseases, University Health Network, University of Toronto, Toronto, ON, Canada."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "RCT"
     ],
@@ -2546,7 +2546,7 @@
     "affiliations": [
       "Department of Surgery, University of California San Francisco-East Bay, Oakland, CA, USA."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Case Report"
     ],
@@ -2578,7 +2578,7 @@
     "affiliations": [
       "Service ENMG et de pathologies neuromusculaires, centre de référence des maladies neuromusculaires PACA-Réunion-Rhône Alpes, Hôpital Neurologique P. Wertheimer, Hospices Civils de Lyon, France. Electronic address: antoine.pegat@chu-lyon.fr."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Review"
     ],
@@ -2606,7 +2606,7 @@
     "affiliations": [
       "Department of Dermatology, Nantes University Hospital, Nantes, France. Electronic address: victoire.groussin@gmail.com."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Review"
     ],
@@ -2638,7 +2638,7 @@
     "affiliations": [
       "Divison of Thoracic Surgery, Swedish Cancer Institute, Seattle, Washington."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Non-randomized controlled cohort"
     ],
@@ -2667,7 +2667,7 @@
     "affiliations": [
       "Division of Neurology, Faculdade de Medicina, Hospital das Clínicas HCFMUSP, Universidade de São Paulo, São Paulo, SP, Brazil."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Systematic Review"
     ],
@@ -2701,7 +2701,7 @@
     "affiliations": [
       "Department of Neurology, Amrita Institute of Medical Sciences (AIMS), Amrita Vishwa Vidyapeetham, Amrita University, Ponekkara PO, Kochi, 682041, Kerala, India."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Historical Control"
     ],
@@ -2736,7 +2736,7 @@
     "affiliations": [
       "Center of Treatment of Myasthenia Gravis, Shijiazhuang People's Hospital, Shijiazhuang, China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "Historical Control"
     ],
@@ -2765,7 +2765,7 @@
     "affiliations": [
       "Department of Dermatology, Columbia University, New York, New York, USA; Department of Dermatology, Faculty of Medicine Siriraj Hospital, Mahidol University, Bangkok, Thailand and."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Review"
     ],
@@ -2807,7 +2807,7 @@
     "affiliations": [
       "Department of Neuroimmunology, Henan Institute of Medical and Pharmaceutical Sciences, Zhengzhou University, Zhengzhou, China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "Unclassified"
     ],
@@ -2838,7 +2838,7 @@
     "affiliations": [
       "Department of Medicine, Emek Medical Center, Clalit Health Services, Afula, Israel."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Review"
     ],
@@ -2863,7 +2863,7 @@
     "affiliations": [
       "Neurology, Dalian Medical University, Dalian, China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "RCT"
     ],
@@ -2895,7 +2895,7 @@
     "affiliations": [
       "Department of Biomedicine, Neuroscience and Advanced Diagnostics (BiND), University of Palermo, 90129 Palermo, Italy."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Unclassified"
     ],
@@ -2925,7 +2925,7 @@
     "affiliations": [
       "Department of Medicine for Older People, Stockport NHS Foundation Trust, Stockport, GBR."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Case Report"
     ],
@@ -2961,7 +2961,7 @@
     "affiliations": [
       "Department of Pharmacy, Mianyang Central Hospital, School of Medicine, University of Electronic Science and Technology of China, Mianyang, China."
     ],
-    "china_related": null,
+    "china_related": true,
     "study_types": [
       "Review"
     ],
@@ -2992,7 +2992,7 @@
     "affiliations": [
       "Pathology, North Eastern Indira Gandhi Regional Institute of Health and Medical Sciences, Shillong, IND."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Case Report"
     ],
@@ -3022,7 +3022,7 @@
     "affiliations": [
       "Department of Emergency Medicine, Campus Benjamin Franklin, Charité - Universitätsmedizin Berlin, Corporate Member of Freie Universität Berlin and Humboldt-Universität zu Berlin, Hindenburgdamm 30, 12203, Berlin, Germany. sandra.pflock@charite.de."
     ],
-    "china_related": null,
+    "china_related": false,
     "study_types": [
       "Review"
     ],

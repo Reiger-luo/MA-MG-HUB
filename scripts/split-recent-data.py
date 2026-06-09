@@ -65,6 +65,22 @@ def main():
 
     print(f"\n📊 共 {len(recent)} 篇，{len(by_month)} 个月")
 
+    # 更新文献总量硬编码到 literature.js
+    js_path = PROJECT / "assets" / "literature.js"
+    if js_path.exists():
+        js = js_path.read_text("utf-8")
+        import re
+        new_js = re.sub(
+            r"document\.getElementById\('statTotal'\)\.textContent = '[0-9,]+'",
+            f"document.getElementById('statTotal').textContent = '{len(articles):,}'",
+            js
+        )
+        if new_js != js:
+            js_path.write_text(new_js, "utf-8")
+            print(f"✅ 已更新 literature.js 总量为 {len(articles):,}")
+        else:
+            print(f"ℹ️  literature.js 总量未变（{len(articles):,}）")
+
 
 if __name__ == "__main__":
     main()
