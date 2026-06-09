@@ -132,10 +132,10 @@ def parse_article_xml(article_elem, edat_map):
             full = f"{last} {fore}" if fore else last
             authors.append(full.strip())
 
-    # 期刊
-    journal = medline.findtext(".//Journal/ISOAbbreviation", "")
-    if not journal:
-        journal = medline.findtext(".//Journal/Title", "")
+    # 期刊：优先全称（Title），次选 ISO 缩写
+    journal_title = medline.findtext(".//Journal/Title", "")
+    journal_iso = medline.findtext(".//Journal/ISOAbbreviation", "")
+    journal = journal_title if journal_title else journal_iso
 
     # PubDate
     pub_date_elem = medline.find(".//Journal/JournalIssue/PubDate")
