@@ -7,7 +7,8 @@
   let currentPage = 0;
   const PAGE_SIZE = 20;
 
-  const DATA_URL = '/MA-MG-HUB/data/literature-2026.json';
+  const CACHE_BUST = '?_t=' + Date.now();
+  const DATA_URL = '/MA-MG-HUB/data/literature-2026.json' + CACHE_BUST;
 
   // DOM refs
   const $ = id => document.getElementById(id);
