@@ -335,17 +335,18 @@
       const recent30 = allArticles.filter(a => { const d = parseDate(a.entry_date); return d && d >= cutoff; });
       document.getElementById('stat30d').textContent = recent30.length;
 
-      // 证据等级分布
+      // 证据等级分布（以已有等级的总数作分母）
       const evCounts = {};
+      let evTotal = 0;
       for (const a of allArticles) {
         const ev = a.evidence_level;
-        if (ev) evCounts[ev] = (evCounts[ev] || 0) + 1;
+        if (ev) { evCounts[ev] = (evCounts[ev] || 0) + 1; evTotal++; }
       }
       const evOrder = ['I','II','III','IV','V','VI'];
       const evParts = [];
       for (const k of evOrder) {
         if (evCounts[k]) {
-          const pct = (evCounts[k] / yearCount * 100).toFixed(1);
+          const pct = (evCounts[k] / evTotal * 100).toFixed(1);
           evParts.push(`${k}级 ${evCounts[k]}篇（${pct}%）`);
         }
       }
