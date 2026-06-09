@@ -321,7 +321,6 @@
       const chinaYear = allArticles.filter(a => {
         if (a.china_related === true) return true;
         if (a.china_related === null) {
-          // fallback 同 fillChinaRelated
           return (a.affiliations || []).some(aff =>
             /\b(China|Chinese|Hong Kong|Taiwan|Macau)\b/i.test(aff)
           );
@@ -334,6 +333,18 @@
       const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 30);
       const recent30 = allArticles.filter(a => { const d = parseDate(a.entry_date); return d && d >= cutoff; });
       document.getElementById('stat30d').textContent = recent30.length;
+
+      // 近30天中国相关
+      const china30d = recent30.filter(a => {
+        if (a.china_related === true) return true;
+        if (a.china_related === null) {
+          return (a.affiliations || []).some(aff =>
+            /\b(China|Chinese|Hong Kong|Taiwan|Macau)\b/i.test(aff)
+          );
+        }
+        return false;
+      }).length;
+      document.getElementById('statChina30d').textContent = china30d;
 
       // 证据等级分布（以已有等级的总数作分母）
       const evCounts = {};
