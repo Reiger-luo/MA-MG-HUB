@@ -124,7 +124,6 @@ body {
   margin-bottom: 0.5rem;
 }
 .filter-checkbox-list {
-  max-height: 200px; overflow-y: auto;
   display: flex; flex-direction: column; gap: 0.2rem;
 }
 .filter-checkbox-item {
