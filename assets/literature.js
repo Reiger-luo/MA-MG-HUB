@@ -8,7 +8,7 @@
   const PAGE_SIZE = 20;
 
   const CACHE_BUST = '?_t=' + Date.now();
-  const DATA_URL = '/MA-MG-HUB/data/literature-2026.json' + CACHE_BUST;
+  const DATA_URL = '/MA-MG-HUB/data/literature-recent.json' + CACHE_BUST;
 
   // DOM refs
   const $ = id => document.getElementById(id);
@@ -70,17 +70,33 @@
 
   // ── 获取期刊列表 ──
 
-  function populateMonths() {
+  function populateMonths(articles) {
     const sel = el.filterTime;
-    const now = new Date();
-    const currentMonth = now.getMonth() + 1; // 1-12
-    for (let m = 1; m <= currentMonth; m++) {
+    // 从数据里提取所有年份-月份
+    const ymSet = new Set();
+    for (const a of articles) {
+      const ed = a.entry_date || '';
+      const m = ed.match(/^(\d{4})\/(\d{2})/);
+      if (m) ymSet.add(`${m[1]}/${m[2]}`);
+    }
+    const sorted = Array.from(ymSet).sort().reverse();
+    // 按年份分组显示
+    let lastYear = '';
+    for (const ym of sorted) {
+      const [y, m] = ym.split('/');
+      if (y !== lastYear) {
+        // 年份分隔
+        const opt = document.createElement('option');
+        opt.disabled = true;
+        opt.textContent = `── ${y}年 ──`;
+        sel.appendChild(opt);
+        lastYear = y;
+      }
       const opt = document.createElement('option');
-      opt.value = String(m);
-      opt.textContent = `${m} 月`;
+      opt.value = ym;
+      opt.textContent = `${y}/${parseInt(m)} 月`;
       sel.appendChild(opt);
     }
-    // 默认选当前月（如果当前月有数据）或全部
     sel.value = 'all';
   }
 
@@ -171,15 +187,8 @@
         if (!inTitle && !inAuthors && !inJournal && !inPmid) return false;
       }
       if (timeVal !== 'all') {
-      const targetMonth = parseInt(timeVal);
-      // 从 entry_date 提取月份匹配
-      if (a.entry_date) {
-        const m = a.entry_date.match(/^2026\/(\d{2})/);
-        if (m) {
-          const entryMonth = parseInt(m[1]);
-          if (entryMonth !== targetMonth) return false;
-        }
-      }
+      // timeVal 格式: "2026/06"
+      if (a.entry_date && !a.entry_date.startsWith(timeVal)) return false;
     }
       if (chinaVal === 'china' && !a.china_related) return false;
       if (chinaVal === 'non-china' && a.china_related) return false;
@@ -309,7 +318,7 @@
       fillChinaRelated(allArticles);
 
       // 填充月份
-      populateMonths();
+      populateMonths(allArticles);
 
       // 更新统计
       updateStats(allArticles);
