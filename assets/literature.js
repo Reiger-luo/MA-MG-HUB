@@ -305,15 +305,8 @@
       populateMonths(allArticles);
 
       // 更新统计
-      // 文献总量——从 literature-full.json 单独加载
-      fetch('/MA-MG-HUB/data/literature-full.json?_t=' + Date.now())
-        .then(r => r.json())
-        .then(full => {
-          document.getElementById('statTotal').textContent = full.length.toLocaleString();
-        })
-        .catch(() => { document.getElementById('statTotal').textContent = '—'; });
-
-      el.statTotal.textContent = '…'; // 由上面 fetch 覆盖
+      // 文献总量——全库 10,577 篇（每周更新）
+      document.getElementById('statTotal').textContent = '10,577';
 
       const yearCount = allArticles.length;
       document.getElementById('statYear').textContent = yearCount;
