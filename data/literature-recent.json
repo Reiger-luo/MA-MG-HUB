@@ -26,7 +26,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 4.6,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40755069",
@@ -92,7 +94,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41452548",
@@ -146,7 +150,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "42157574",
@@ -213,7 +219,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41993176",
@@ -241,7 +249,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41945880",
@@ -304,7 +314,9 @@
     "study_types": [
       "In Vitro"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "42148089",
@@ -331,7 +343,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41786016",
@@ -367,7 +381,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 4.0,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41699526",
@@ -398,7 +414,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42162453",
@@ -432,7 +450,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.4,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40679699",
@@ -550,7 +570,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41269450",
@@ -583,7 +605,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 4.3,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41373880",
@@ -611,7 +635,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 4.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41084449",
@@ -669,7 +695,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 4.0,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41327586",
@@ -695,7 +723,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.0,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41773442",
@@ -721,7 +751,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41702748",
@@ -748,7 +780,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.1,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40873092",
@@ -782,7 +816,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41861184",
@@ -903,7 +939,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40675734",
@@ -929,7 +967,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "42161670",
@@ -961,7 +1001,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 4.0,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41547250",
@@ -988,7 +1030,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 4.7,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41524248",
@@ -1026,7 +1070,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 5.0,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40958409",
@@ -1058,7 +1104,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.7,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40537818",
@@ -1095,7 +1143,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.5,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41812675",
@@ -1125,7 +1175,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.6,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40842122",
@@ -1153,7 +1205,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41580680",
@@ -1180,7 +1234,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40999366",
@@ -1209,7 +1265,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 2.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40681713",
@@ -1237,7 +1295,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42223343",
@@ -1277,7 +1337,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 5.0,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41818112",
@@ -1333,7 +1395,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 2.5,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40675735",
@@ -1358,7 +1422,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41020460",
@@ -1386,7 +1452,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41261388",
@@ -1418,7 +1486,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 3.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41118002",
@@ -1453,7 +1523,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 4.6,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41112289",
@@ -1483,7 +1555,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40726281",
@@ -1541,7 +1615,9 @@
     "study_types": [
       "ITC"
     ],
-    "evidence_level": "I"
+    "evidence_level": "I",
+    "journal_if": 3.4,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41972143",
@@ -1575,7 +1651,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41163359",
@@ -1601,7 +1679,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.7,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41129501",
@@ -1631,7 +1711,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.6,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40946449",
@@ -1690,7 +1772,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41394836",
@@ -1724,7 +1808,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41945881",
@@ -1784,7 +1870,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41671609",
@@ -1814,7 +1902,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.5,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40883381",
@@ -1844,7 +1934,9 @@
     "study_types": [
       "Animal Study"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41503688",
@@ -1872,7 +1964,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40664087",
@@ -1902,7 +1996,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 2.7,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42064058",
@@ -1931,7 +2027,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40770830",
@@ -1965,7 +2063,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 6.8,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40505554",
@@ -1999,7 +2099,9 @@
     "study_types": [
       "Systematic Review"
     ],
-    "evidence_level": "I"
+    "evidence_level": "I",
+    "journal_if": 1.6,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41722595",
@@ -2044,7 +2146,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 45.5,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "41862279",
@@ -2071,7 +2175,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41101818",
@@ -2097,7 +2203,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "40914739",
@@ -2133,7 +2241,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 5.6,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41483096",
@@ -2227,7 +2337,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 2.4,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41520205",
@@ -2256,7 +2368,9 @@
     "study_types": [
       "Systematic Review"
     ],
-    "evidence_level": "I"
+    "evidence_level": "I",
+    "journal_if": 2.3,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41363919",
@@ -2322,7 +2436,9 @@
     "study_types": [
       "In Vitro"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41038808",
@@ -2372,7 +2488,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 15.7,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "41261589",
@@ -2436,7 +2554,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.5,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41669887",
@@ -2513,7 +2633,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 50.0,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "42182584",
@@ -2552,7 +2674,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 5.1,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41481736",
@@ -2598,7 +2722,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 12.5,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "41319444",
@@ -2623,7 +2749,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 2.5,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41169356",
@@ -2650,7 +2778,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41160183",
@@ -2680,7 +2810,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 4.6,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41630490",
@@ -2705,7 +2837,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41699286",
@@ -2739,7 +2873,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 4.6,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41261682",
@@ -2793,7 +2929,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.7,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40720448",
@@ -2826,7 +2964,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.6,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41895886",
@@ -2851,7 +2991,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 1.4,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41264893",
@@ -2923,7 +3065,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 3.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41197538",
@@ -2956,7 +3100,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 3.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41175252",
@@ -3018,7 +3164,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "40776639",
@@ -3046,7 +3194,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 5.3,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40544117",
@@ -3072,7 +3222,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 4.3,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41211783",
@@ -3136,7 +3288,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41772612",
@@ -3199,7 +3353,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 1.1,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41983870",
@@ -3276,7 +3432,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41555504",
@@ -3362,7 +3520,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41693182",
@@ -3388,7 +3548,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 1.6,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41331966",
@@ -3414,7 +3576,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41307955",
@@ -3449,7 +3613,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 6.1,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "40874431",
@@ -3515,7 +3681,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 2.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42145953",
@@ -3544,7 +3712,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.4,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41271088",
@@ -3601,7 +3771,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41919672",
@@ -3656,7 +3828,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "40804363",
@@ -3683,7 +3857,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41406247",
@@ -3710,7 +3886,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41263248",
@@ -3737,7 +3915,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40631640",
@@ -3798,7 +3978,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 5.0,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41396134",
@@ -3832,7 +4014,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 1.0,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40904272",
@@ -3859,7 +4043,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 3.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40681684",
@@ -3891,7 +4077,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41517964",
@@ -3920,7 +4108,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40675742",
@@ -3951,7 +4141,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "42048329",
@@ -3978,7 +4170,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.6,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41642475",
@@ -4009,7 +4203,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 4.3,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41936333",
@@ -4037,7 +4233,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.5,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40919881",
@@ -4097,7 +4295,9 @@
     "study_types": [
       "Personal Narrative"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 4.3,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41793243",
@@ -4126,7 +4326,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41869344",
@@ -4154,7 +4356,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41467263",
@@ -4181,7 +4385,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41324784",
@@ -4241,7 +4447,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.5,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "42096038",
@@ -4279,7 +4487,9 @@
     "study_types": [
       "ITC"
     ],
-    "evidence_level": "I"
+    "evidence_level": "I",
+    "journal_if": 3.1,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41795502",
@@ -4344,7 +4554,9 @@
     "study_types": [
       "ITC"
     ],
-    "evidence_level": "I"
+    "evidence_level": "I",
+    "journal_if": 4.0,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40534130",
@@ -4453,7 +4665,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.1,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41072489",
@@ -4517,7 +4731,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "42018844",
@@ -4544,7 +4760,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 1.3,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41603484",
@@ -4570,7 +4788,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42070450",
@@ -4663,7 +4883,9 @@
     "study_types": [
       "Animal Study"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42149058",
@@ -4793,7 +5015,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 5.0,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41761996",
@@ -4821,7 +5045,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 0.8,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41884848",
@@ -4861,7 +5087,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40857039",
@@ -4889,7 +5117,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40985852",
@@ -4951,7 +5181,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40496856",
@@ -4978,7 +5210,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41623245",
@@ -5010,7 +5244,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40743488",
@@ -5048,7 +5284,9 @@
     "study_types": [
       "In Vitro"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 7.5,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "41394837",
@@ -5082,7 +5320,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41364382",
@@ -5108,7 +5348,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.4,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40745651",
@@ -5172,7 +5414,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.6,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41269534",
@@ -5206,7 +5450,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 1.3,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41756288",
@@ -5245,7 +5491,9 @@
     "study_types": [
       "ITC"
     ],
-    "evidence_level": "I"
+    "evidence_level": "I",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "42190696",
@@ -5336,7 +5584,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 7.5,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "41707811",
@@ -5432,7 +5682,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 3.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40614598",
@@ -5465,7 +5717,9 @@
     "study_types": [
       "Animal Study"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 4.7,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40721896",
@@ -5497,7 +5751,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 4.6,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40675737",
@@ -5523,7 +5779,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41455461",
@@ -5555,7 +5813,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 3.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41588655",
@@ -5590,7 +5850,9 @@
     "study_types": [
       "In Vitro"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40907058",
@@ -5618,7 +5880,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.7,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41524776",
@@ -5643,7 +5907,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41579003",
@@ -5711,7 +5977,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 4.8,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40518270",
@@ -5739,7 +6007,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.5,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40695604",
@@ -5771,7 +6041,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 2.3,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40680581",
@@ -5845,7 +6117,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 0.7,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41480886",
@@ -5880,7 +6154,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 1.4,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41621163",
@@ -5917,7 +6193,9 @@
     "study_types": [
       "In Vitro"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.5,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41837820",
@@ -5960,7 +6238,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 5.0,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41547654",
@@ -5996,7 +6276,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 5.6,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40491040",
@@ -6022,7 +6304,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.7,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40825554",
@@ -6082,7 +6366,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41687435",
@@ -6112,7 +6398,9 @@
     "study_types": [
       "Animal Study"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.5,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41653839",
@@ -6144,7 +6432,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.5,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41082365",
@@ -6171,7 +6461,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41072251",
@@ -6282,7 +6574,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 7.7,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "41109821",
@@ -6310,7 +6604,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 2.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42041547",
@@ -6336,7 +6632,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 5.2,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41989988",
@@ -6369,7 +6667,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 0.7,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40675740",
@@ -6396,7 +6696,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "40675738",
@@ -6422,7 +6724,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "40921886",
@@ -6465,7 +6769,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 4.6,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41854135",
@@ -6521,7 +6827,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "40714827",
@@ -6550,7 +6858,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 0.7,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40569533",
@@ -6580,7 +6890,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.4,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41737228",
@@ -6609,7 +6921,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41405829",
@@ -6698,7 +7012,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 50.0,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "40504622",
@@ -6737,7 +7053,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 13.6,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "41667558",
@@ -6768,7 +7086,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41909657",
@@ -6804,7 +7124,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "42254001",
@@ -6831,7 +7153,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40748491",
@@ -6891,7 +7215,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41876876",
@@ -6923,7 +7249,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 4.6,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41004697",
@@ -7038,7 +7366,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 1.1,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41787190",
@@ -7069,7 +7399,9 @@
     "study_types": [
       "ITC"
     ],
-    "evidence_level": "I"
+    "evidence_level": "I",
+    "journal_if": 4.6,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41319836",
@@ -7108,7 +7440,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41205003",
@@ -7142,7 +7476,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 4.6,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41488758",
@@ -7179,7 +7515,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 5.1,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41832797",
@@ -7211,7 +7549,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 1.6,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40635622",
@@ -7243,7 +7583,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42112324",
@@ -7269,7 +7611,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41582064",
@@ -7309,7 +7653,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 5.6,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41546732",
@@ -7337,7 +7683,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.4,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42102247",
@@ -7396,7 +7744,9 @@
     "study_types": [
       "Animal Study"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41764572",
@@ -7429,7 +7779,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 0.8,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41188194",
@@ -7483,7 +7835,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 4.3,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40599774",
@@ -7509,7 +7863,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41589418",
@@ -7667,7 +8023,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.1,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41338910",
@@ -7694,7 +8052,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.5,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40934847",
@@ -7724,7 +8084,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41217187",
@@ -7750,7 +8112,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.9,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41853948",
@@ -7837,7 +8201,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.8,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41229181",
@@ -7865,7 +8231,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 3.5,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42234197",
@@ -7901,7 +8269,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 4.6,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41114833",
@@ -7977,7 +8347,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 21.2,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "40821799",
@@ -8010,7 +8382,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41101817",
@@ -8036,7 +8410,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "42101054",
@@ -8102,7 +8478,9 @@
     "study_types": [
       "Animal Study"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41387932",
@@ -8168,7 +8546,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 4.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40659410",
@@ -8193,7 +8573,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.3,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41872575",
@@ -8225,7 +8607,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 4.6,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41958278",
@@ -8257,7 +8641,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40675733",
@@ -8283,7 +8669,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41189178",
@@ -8342,7 +8730,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41418342",
@@ -8441,7 +8831,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41200184",
@@ -8481,7 +8873,9 @@
     "study_types": [
       "Protocol"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41999078",
@@ -8515,7 +8909,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42052862",
@@ -8554,7 +8950,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.5,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40580181",
@@ -8585,7 +8983,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.0,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41926836",
@@ -8617,7 +9017,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.5,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41593440",
@@ -8651,7 +9053,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "40556475",
@@ -8745,7 +9149,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40779124",
@@ -8800,7 +9206,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "40544116",
@@ -8825,7 +9233,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 4.3,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41287506",
@@ -8913,7 +9323,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 4.6,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "42033803",
@@ -8974,7 +9386,9 @@
     "study_types": [
       "Systematic Review"
     ],
-    "evidence_level": "I"
+    "evidence_level": "I",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "40787458",
@@ -9010,7 +9424,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40660289",
@@ -9051,7 +9467,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 3.5,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41925914",
@@ -9082,7 +9500,9 @@
     "study_types": [
       "ITC"
     ],
-    "evidence_level": "I"
+    "evidence_level": "I",
+    "journal_if": 4.6,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40843740",
@@ -9148,7 +9568,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.7,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40966533",
@@ -9180,7 +9602,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 7.5,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "40775536",
@@ -9209,7 +9633,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 4.6,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40557161",
@@ -9240,7 +9666,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40499586",
@@ -9334,7 +9762,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 4.0,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "42233017",
@@ -9364,7 +9794,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41820352",
@@ -9444,7 +9876,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 15.7,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "40675736",
@@ -9472,7 +9906,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41802783",
@@ -9507,7 +9943,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.3,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40563042",
@@ -9600,7 +10038,9 @@
     "study_types": [
       "In Vitro"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.5,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41666468",
@@ -9661,7 +10101,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41084143",
@@ -9703,7 +10145,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 3.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41553721",
@@ -9735,7 +10179,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.0,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40743586",
@@ -9803,7 +10249,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "40583272",
@@ -9944,7 +10392,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 3.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41290420",
@@ -9969,7 +10419,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 2.3,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41582708",
@@ -9996,7 +10448,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.3,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41574649",
@@ -10063,7 +10517,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 4.3,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41782541",
@@ -10090,7 +10546,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41466387",
@@ -10118,7 +10576,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 3.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40913424",
@@ -10152,7 +10612,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 7.7,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "42220523",
@@ -10177,7 +10639,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41090479",
@@ -10236,7 +10700,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.8,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41145132",
@@ -10267,7 +10733,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 1.6,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41870109",
@@ -10329,7 +10797,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 4.6,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41101822",
@@ -10355,7 +10825,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41147199",
@@ -10428,7 +10900,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 4.0,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41213488",
@@ -10464,7 +10938,9 @@
     "study_types": [
       "In Vitro"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 4.0,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40578418",
@@ -10627,7 +11103,9 @@
     "study_types": [
       "Animal Study"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 4.8,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41973420",
@@ -10728,7 +11206,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 2.5,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40889171",
@@ -10787,7 +11267,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "42015819",
@@ -10860,7 +11342,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.5,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41440190",
@@ -10924,7 +11408,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41029312",
@@ -11024,7 +11510,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "42000538",
@@ -11088,7 +11576,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 7.5,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "41402829",
@@ -11188,7 +11678,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 2.3,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40605600",
@@ -11243,7 +11735,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41493641",
@@ -11280,7 +11774,9 @@
     "study_types": [
       "ITC"
     ],
-    "evidence_level": "I"
+    "evidence_level": "I",
+    "journal_if": 2.4,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41024342",
@@ -11351,7 +11847,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 1.6,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40607384",
@@ -11380,7 +11878,9 @@
     "study_types": [
       "In Vitro"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41645666",
@@ -11455,7 +11955,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.3,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40915254",
@@ -11487,7 +11989,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 2.5,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41591648",
@@ -11520,7 +12024,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 4.0,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41132654",
@@ -11549,7 +12055,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41408204",
@@ -11583,7 +12091,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 2.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42053006",
@@ -11639,7 +12149,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40698586",
@@ -11682,7 +12194,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42207816",
@@ -11708,7 +12222,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.6,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40580880",
@@ -11739,7 +12255,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41686610",
@@ -11824,7 +12342,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41575277",
@@ -11856,7 +12376,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41476025",
@@ -11884,7 +12406,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.7,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41101825",
@@ -11910,7 +12434,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41795178",
@@ -11949,7 +12475,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41729403",
@@ -12011,7 +12539,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41542987",
@@ -12083,7 +12613,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 2.7,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41338899",
@@ -12111,7 +12643,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.5,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41280898",
@@ -12146,7 +12680,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40811489",
@@ -12189,7 +12725,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.6,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41795172",
@@ -12226,7 +12764,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40500161",
@@ -12269,7 +12809,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 1.1,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41123841",
@@ -12303,7 +12845,9 @@
     "study_types": [
       "ITC"
     ],
-    "evidence_level": "I"
+    "evidence_level": "I",
+    "journal_if": 4.0,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "42030590",
@@ -12336,7 +12880,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 2.5,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41817069",
@@ -12364,7 +12910,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 0.8,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41700072",
@@ -12428,7 +12976,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41274039",
@@ -12465,7 +13015,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.5,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40812271",
@@ -12496,7 +13048,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42125648",
@@ -12529,7 +13083,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "42190146",
@@ -12609,7 +13165,9 @@
     "study_types": [
       "Animal Study"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 10.1,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "40781689",
@@ -12727,7 +13285,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.4,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41006369",
@@ -12758,7 +13318,9 @@
     "study_types": [
       "Guideline/Consensus"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41243030",
@@ -12783,7 +13345,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 4.6,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40525756",
@@ -12811,7 +13375,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 4.0,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41285577",
@@ -12839,7 +13405,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 2.3,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40515798",
@@ -12898,7 +13466,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.4,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40656929",
@@ -12996,7 +13566,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 2.6,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41567119",
@@ -13026,7 +13598,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.3,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40877497",
@@ -13070,7 +13644,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 3.6,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41555182",
@@ -13150,7 +13726,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 4.6,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41261457",
@@ -13188,7 +13766,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 3.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41548480",
@@ -13292,7 +13872,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.7,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41099443",
@@ -13322,7 +13904,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 2.2,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40651620",
@@ -13401,7 +13985,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41834075",
@@ -13437,7 +14023,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40571422",
@@ -13465,7 +14053,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.5,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41583497",
@@ -13493,7 +14083,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "42033462",
@@ -13524,7 +14116,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 4.6,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41104507",
@@ -13554,7 +14148,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41962987",
@@ -13646,7 +14242,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.4,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41700316",
@@ -13675,7 +14273,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40831557",
@@ -13700,7 +14300,9 @@
     "study_types": [
       "In Vitro"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41998298",
@@ -13738,7 +14340,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 4.6,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40745672",
@@ -13797,7 +14401,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 2.7,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41763674",
@@ -13824,7 +14430,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.5,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40510022",
@@ -13854,7 +14462,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 2.3,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41101823",
@@ -13880,7 +14490,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41101820",
@@ -13906,7 +14518,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "42025269",
@@ -13932,7 +14546,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.5,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41235764",
@@ -14029,7 +14645,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 3.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41310415",
@@ -14062,7 +14680,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 3.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40634627",
@@ -14092,7 +14712,9 @@
     "study_types": [
       "Systematic Review"
     ],
-    "evidence_level": "I"
+    "evidence_level": "I",
+    "journal_if": 4.6,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "42030965",
@@ -14149,7 +14771,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 98.4,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "41037173",
@@ -14201,7 +14825,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.5,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41085161",
@@ -14298,7 +14924,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 3.0,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40607605",
@@ -14361,7 +14989,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.5,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40670126",
@@ -14469,7 +15099,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 7.5,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "40879277",
@@ -14499,7 +15131,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41388640",
@@ -14526,7 +15160,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40690397",
@@ -14555,7 +15191,9 @@
     "study_types": [
       "Animal Study"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 1.0,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41826324",
@@ -14590,7 +15228,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 15.7,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "42160148",
@@ -14617,7 +15257,9 @@
     "study_types": [
       "Historical Article"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41631867",
@@ -14646,7 +15288,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40579340",
@@ -14671,7 +15315,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 4.3,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41534441",
@@ -14703,7 +15349,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 3.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40675741",
@@ -14729,7 +15377,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "40842108",
@@ -14757,7 +15407,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.7,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41972441",
@@ -14844,7 +15496,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40619040",
@@ -14961,7 +15615,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 17.3,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "40601074",
@@ -14990,7 +15646,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 4.6,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41607837",
@@ -15029,7 +15687,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40706450",
@@ -15087,7 +15747,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41230121",
@@ -15118,7 +15780,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 4.1,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40903999",
@@ -15174,7 +15838,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "40704537",
@@ -15231,7 +15897,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41928376",
@@ -15256,7 +15924,9 @@
     "study_types": [
       "Guideline/Consensus"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41576890",
@@ -15283,7 +15953,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41113248",
@@ -15341,7 +16013,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 1.0,
+    "journal_quartile": null
   },
   {
     "pmid": "40746607",
@@ -15368,7 +16042,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 3.3,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42132748",
@@ -15451,7 +16127,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.7,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41169211",
@@ -15510,7 +16188,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 2.4,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42084498",
@@ -15556,7 +16236,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 3.5,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40755994",
@@ -15614,7 +16296,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.4,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41940097",
@@ -15642,7 +16326,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42232178",
@@ -15674,7 +16360,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 4.8,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40590525",
@@ -15694,7 +16382,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 3.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41456989",
@@ -15754,7 +16444,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 4.4,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41586099",
@@ -15789,7 +16481,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41620150",
@@ -15814,7 +16508,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 17.3,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "41473438",
@@ -15844,7 +16540,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 3.3,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40766205",
@@ -15878,7 +16576,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 4.1,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40630912",
@@ -15905,7 +16605,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41862942",
@@ -15935,7 +16637,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 3.5,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41839388",
@@ -15992,7 +16696,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "40506214",
@@ -16017,7 +16723,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.3,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41209176",
@@ -16079,7 +16787,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41777512",
@@ -16107,7 +16817,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 1.1,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40892711",
@@ -16172,7 +16884,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41664151",
@@ -16304,7 +17018,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42131832",
@@ -16337,7 +17053,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41766084",
@@ -16366,7 +17084,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41871627",
@@ -16392,7 +17112,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 1.6,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41451993",
@@ -16444,7 +17166,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 4.4,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40839911",
@@ -16549,7 +17273,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "41712474",
@@ -16665,7 +17391,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 4.8,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40823470",
@@ -16692,7 +17420,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "41617145",
@@ -16719,7 +17449,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41869422",
@@ -16748,7 +17480,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42053191",
@@ -16775,7 +17509,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.7,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41526148",
@@ -16801,7 +17537,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "42015320",
@@ -16895,7 +17633,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41053529",
@@ -16923,7 +17663,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 2.4,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41766080",
@@ -16954,7 +17696,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "40963855",
@@ -16985,7 +17729,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 3.3,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41338982",
@@ -17013,7 +17759,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 1.1,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40824132",
@@ -17067,7 +17815,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 1.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42078791",
@@ -17092,7 +17842,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.9,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41405535",
@@ -17181,7 +17933,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 2.1,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41426144",
@@ -17244,7 +17998,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "40684089",
@@ -17303,7 +18059,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "41857630",
@@ -17336,7 +18094,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41680656",
@@ -17415,7 +18175,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 4.8,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41080268",
@@ -17441,7 +18203,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "41149784",
@@ -17595,7 +18359,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41863473",
@@ -17647,7 +18413,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 1.3,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41377446",
@@ -17701,7 +18469,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "42028533",
@@ -17730,7 +18500,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "41947805",
@@ -17765,7 +18537,9 @@
     "study_types": [
       "Guideline/Consensus"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 4.1,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41312342",
@@ -17797,7 +18571,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40703512",
@@ -17823,7 +18599,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41458125",
@@ -17858,7 +18636,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40988756",
@@ -17892,7 +18672,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 3.0,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40813187",
@@ -17945,7 +18727,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 1.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41622196",
@@ -17976,7 +18760,9 @@
     "study_types": [
       "Systematic Review"
     ],
-    "evidence_level": "I"
+    "evidence_level": "I",
+    "journal_if": 3.1,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40584517",
@@ -18025,7 +18811,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 4.1,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41602815",
@@ -18052,7 +18840,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.9,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41326745",
@@ -18148,7 +18938,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 4.1,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41491925",
@@ -18176,7 +18968,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 2.1,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41936334",
@@ -18203,7 +18997,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.5,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41581511",
@@ -18227,7 +19023,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 1.6,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "42199478",
@@ -18267,7 +19065,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.7,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41163855",
@@ -18366,7 +19166,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.3,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41637180",
@@ -18401,7 +19203,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.4,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41824214",
@@ -18431,7 +19235,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 2.1,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41758503",
@@ -18487,7 +19293,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40669205",
@@ -18517,7 +19325,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 10.1,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41922037",
@@ -18543,7 +19353,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 2.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41262791",
@@ -18571,7 +19383,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "40680252",
@@ -18625,7 +19439,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "42233901",
@@ -18683,7 +19499,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.3,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41039703",
@@ -18710,7 +19528,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "40557170",
@@ -18823,7 +19643,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 1.6,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41189824",
@@ -18850,7 +19672,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "41356884",
@@ -18877,7 +19701,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "41365187",
@@ -18901,7 +19727,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41499269",
@@ -18932,7 +19760,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 3.4,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41032229",
@@ -19000,7 +19830,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.1,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "42111069",
@@ -19025,7 +19857,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42238146",
@@ -19050,7 +19884,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "40769629",
@@ -19074,7 +19910,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 16.4,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "42224956",
@@ -19205,7 +20043,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 2.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42200436",
@@ -19289,7 +20129,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 4.1,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "42030966",
@@ -19313,7 +20155,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 98.4,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "41765605",
@@ -19371,7 +20215,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 2.0,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42043767",
@@ -19402,7 +20248,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 4.8,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41416001",
@@ -19431,7 +20279,9 @@
     "study_types": [
       "Guideline/Consensus"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 4.1,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41541106",
@@ -19493,7 +20343,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 10.1,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41546683",
@@ -19524,7 +20376,9 @@
     "study_types": [
       "Systematic Review"
     ],
-    "evidence_level": "I"
+    "evidence_level": "I",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41244175",
@@ -19590,7 +20444,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41442252",
@@ -19618,7 +20474,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.4,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41959797",
@@ -19741,7 +20599,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 1.8,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40658304",
@@ -19863,7 +20723,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41598576",
@@ -19898,7 +20760,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40689326",
@@ -19926,7 +20790,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41960209",
@@ -19953,7 +20819,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 1.8,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "42025103",
@@ -19981,7 +20849,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 2.7,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40507707",
@@ -20005,7 +20875,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41410951",
@@ -20054,7 +20926,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 2.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41141095",
@@ -20081,7 +20955,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "40983285",
@@ -20115,7 +20991,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 16.4,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "40512269",
@@ -20147,7 +21025,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 2.4,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40725661",
@@ -20179,7 +21059,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 2.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41777944",
@@ -20208,7 +21090,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "40762789",
@@ -20240,7 +21124,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 4.8,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41602394",
@@ -20267,7 +21153,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 3.3,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41737895",
@@ -20329,7 +21217,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 3.1,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40666538",
@@ -20414,7 +21304,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41570772",
@@ -20499,7 +21391,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 4.1,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41132658",
@@ -20529,7 +21423,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41322303",
@@ -20558,7 +21454,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 4.8,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41642058",
@@ -20584,7 +21482,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 9.6,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41000735",
@@ -20645,7 +21545,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 1.1,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41576642",
@@ -20676,7 +21578,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41281548",
@@ -20709,7 +21613,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40652498",
@@ -20734,7 +21640,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.8,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40706637",
@@ -20767,7 +21675,9 @@
     "study_types": [
       "ITC"
     ],
-    "evidence_level": "I"
+    "evidence_level": "I",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41700204",
@@ -20825,7 +21735,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "41696676",
@@ -20861,7 +21773,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 4.1,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41049031",
@@ -20887,7 +21801,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.8,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41040424",
@@ -20951,7 +21867,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41548740",
@@ -21028,7 +21946,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 0.7,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41726319",
@@ -21064,7 +21984,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 4.1,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40615948",
@@ -21091,7 +22013,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41922188",
@@ -21120,7 +22044,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41139802",
@@ -21151,7 +22077,9 @@
     "study_types": [
       "ITC"
     ],
-    "evidence_level": "I"
+    "evidence_level": "I",
+    "journal_if": 2.2,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40852525",
@@ -21184,7 +22112,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41821629",
@@ -21213,7 +22143,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42154663",
@@ -21267,7 +22199,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "42069815",
@@ -21296,7 +22230,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 3.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40837899",
@@ -21324,7 +22260,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "42127467",
@@ -21356,7 +22294,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 1.6,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41565840",
@@ -21386,7 +22326,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41368047",
@@ -21446,7 +22388,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "41395452",
@@ -21501,7 +22445,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 1.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41131267",
@@ -21537,7 +22483,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 4.8,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40537007",
@@ -21610,7 +22558,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "42121215",
@@ -21683,7 +22633,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "40950289",
@@ -21764,7 +22716,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41536333",
@@ -21790,7 +22744,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41503777",
@@ -21820,7 +22776,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.5,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41439073",
@@ -21849,7 +22807,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "42147223",
@@ -21879,7 +22839,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 3.3,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41660448",
@@ -21913,7 +22875,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 1.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41762916",
@@ -21938,7 +22902,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.5,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41700957",
@@ -22023,7 +22989,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41633824",
@@ -22088,7 +23056,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "41882900",
@@ -22133,7 +23103,9 @@
     "study_types": [
       "Guideline/Consensus"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 1.1,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41270472",
@@ -22226,7 +23198,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 4.8,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40921232",
@@ -22275,7 +23249,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40641501",
@@ -22301,7 +23277,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "42254084",
@@ -22327,7 +23305,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.6,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41172986",
@@ -22406,7 +23386,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41255784",
@@ -22433,7 +23415,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40849050",
@@ -22469,7 +23453,9 @@
     "study_types": [
       "HEOR"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 4.0,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "42081930",
@@ -22539,7 +23525,9 @@
     "study_types": [
       "Animal Study"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 1.9,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41078519",
@@ -22608,7 +23596,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 3.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41639896",
@@ -22638,7 +23628,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.8,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40584640",
@@ -22664,7 +23656,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 3.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40772172",
@@ -22692,7 +23686,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "42004615",
@@ -22780,7 +23776,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "40917658",
@@ -22812,7 +23810,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41654846",
@@ -22906,7 +23906,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.1,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40661339",
@@ -22935,7 +23937,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.8,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "42154647",
@@ -22964,7 +23968,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.4,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40909041",
@@ -22992,7 +23998,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "41631236",
@@ -23019,7 +24027,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41085805",
@@ -23106,7 +24116,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 16.4,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "41049926",
@@ -23136,7 +24148,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "42261457",
@@ -23163,7 +24177,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "41552140",
@@ -23193,7 +24209,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "42104265",
@@ -23223,7 +24241,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42003220",
@@ -23282,7 +24302,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "42019495",
@@ -23447,7 +24469,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 4.4,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41426979",
@@ -23477,7 +24501,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42227466",
@@ -23559,7 +24585,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "41495972",
@@ -23585,7 +24613,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 2.2,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40544482",
@@ -23802,7 +24832,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42145731",
@@ -23833,7 +24865,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.0,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41526151",
@@ -23858,7 +24892,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41376973",
@@ -23884,7 +24920,9 @@
     "study_types": [
       "Animal Study"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 1.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41169950",
@@ -23917,7 +24955,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41878400",
@@ -23943,7 +24983,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.7,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40870896",
@@ -24001,7 +25043,9 @@
     "study_types": [
       "Systematic Review"
     ],
-    "evidence_level": "I"
+    "evidence_level": "I",
+    "journal_if": 2.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41078500",
@@ -24031,7 +25075,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 2.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41552382",
@@ -24056,7 +25102,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 2.7,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "42072999",
@@ -24147,7 +25195,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.6,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41359492",
@@ -24206,7 +25256,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 3.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41940306",
@@ -24239,7 +25291,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41063964",
@@ -24294,7 +25348,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "42046766",
@@ -24329,7 +25385,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 1.3,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40996884",
@@ -24438,7 +25496,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 3.4,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41356363",
@@ -24495,7 +25555,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "41699220",
@@ -24550,7 +25612,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "42115958",
@@ -24576,7 +25640,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41331968",
@@ -24603,7 +25669,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41248446",
@@ -24628,7 +25696,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 7.5,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "41979428",
@@ -24656,7 +25726,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.6,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40948685",
@@ -24685,7 +25757,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "40755780",
@@ -24711,7 +25785,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41964787",
@@ -24738,7 +25814,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 2.1,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40843319",
@@ -24795,7 +25873,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40513031",
@@ -24821,7 +25901,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41493482",
@@ -24849,7 +25931,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 2.4,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41103821",
@@ -24878,7 +25962,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "41744014",
@@ -24904,7 +25990,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 1.6,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41892369",
@@ -24959,7 +26047,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 3.3,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41099132",
@@ -24986,7 +26076,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.2,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "42139024",
@@ -25006,7 +26098,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 1.4,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40949050",
@@ -25061,7 +26155,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41897632",
@@ -25120,7 +26216,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "40515812",
@@ -25176,7 +26274,9 @@
     "study_types": [
       "Animal Study"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.3,
+    "journal_quartile": null
   },
   {
     "pmid": "42088710",
@@ -25204,7 +26304,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.4,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41675778",
@@ -25296,7 +26398,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "41957339",
@@ -25330,7 +26434,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 4.8,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "42250887",
@@ -25385,7 +26491,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 2.4,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42199141",
@@ -25442,7 +26550,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.8,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40757701",
@@ -25498,7 +26608,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 1.4,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41041682",
@@ -25528,7 +26640,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41722445",
@@ -25595,7 +26709,9 @@
     "study_types": [
       "Animal Study"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 10.1,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "41494381",
@@ -25652,7 +26768,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 4.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40721277",
@@ -25713,7 +26831,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.7,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40979273",
@@ -25799,7 +26919,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42162585",
@@ -25829,7 +26951,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41141066",
@@ -25858,7 +26982,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "41357059",
@@ -25910,7 +27036,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41394288",
@@ -25936,7 +27064,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 4.1,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41502595",
@@ -25962,7 +27092,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 1.6,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41995788",
@@ -25986,7 +27118,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 2.1,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40827839",
@@ -26017,7 +27151,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 1.5,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40565966",
@@ -26053,7 +27189,9 @@
     "study_types": [
       "ITC"
     ],
-    "evidence_level": "I"
+    "evidence_level": "I",
+    "journal_if": 2.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41158935",
@@ -26085,7 +27223,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "41211059",
@@ -26172,7 +27312,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41698381",
@@ -26249,7 +27391,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "42091851",
@@ -26277,7 +27421,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 4.8,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "42099932",
@@ -26303,7 +27449,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.8,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41473789",
@@ -26439,7 +27587,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 1.6,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41572859",
@@ -26464,7 +27614,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.1,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "42152296",
@@ -26547,7 +27699,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 2.0,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41356249",
@@ -26577,7 +27731,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40700243",
@@ -26693,7 +27849,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40787486",
@@ -26747,7 +27905,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41098393",
@@ -26805,7 +27965,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 4.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41114975",
@@ -26896,7 +28058,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "41394139",
@@ -26926,7 +28090,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 4.8,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "42143506",
@@ -26954,7 +28120,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 4.7,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41071972",
@@ -26987,7 +28155,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 7.5,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "40549349",
@@ -27126,7 +28296,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40718168",
@@ -27155,7 +28327,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "41244193",
@@ -27216,7 +28390,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "41221456",
@@ -27323,7 +28499,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.4,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42166045",
@@ -27383,7 +28561,9 @@
     "study_types": [
       "ITC"
     ],
-    "evidence_level": "I"
+    "evidence_level": "I",
+    "journal_if": 3.4,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41504129",
@@ -27409,7 +28589,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 3.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41025281",
@@ -27463,7 +28645,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41958428",
@@ -27518,7 +28702,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41859574",
@@ -27547,7 +28733,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "42138115",
@@ -27578,7 +28766,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 2.6,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41425574",
@@ -27607,7 +28797,9 @@
     "study_types": [
       "ITC"
     ],
-    "evidence_level": "I"
+    "evidence_level": "I",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40800691",
@@ -27641,7 +28833,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40884033",
@@ -27726,7 +28920,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41126943",
@@ -27755,7 +28951,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.9,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41403966",
@@ -27790,7 +28988,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41776695",
@@ -27818,7 +29018,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.4,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41754015",
@@ -27871,7 +29073,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41252449",
@@ -27984,7 +29188,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 4.8,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "42235055",
@@ -28042,7 +29248,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41517410",
@@ -28072,7 +29280,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 2.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41079342",
@@ -28106,7 +29316,9 @@
     "study_types": [
       "Systematic Review"
     ],
-    "evidence_level": "I"
+    "evidence_level": "I",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41883304",
@@ -28228,7 +29440,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41100007",
@@ -28256,7 +29470,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 2.4,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41904038",
@@ -28313,7 +29529,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41314979",
@@ -28370,7 +29588,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41245531",
@@ -28447,7 +29667,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.4,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41822957",
@@ -28472,7 +29694,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41798820",
@@ -28502,7 +29726,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41244179",
@@ -28676,7 +29902,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 5.3,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "42239682",
@@ -28704,7 +29932,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40896927",
@@ -28763,7 +29993,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 4.8,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40828747",
@@ -28791,7 +30023,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.8,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41063713",
@@ -28874,7 +30108,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 3.4,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "42053690",
@@ -28899,7 +30135,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 2.4,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40795646",
@@ -29030,7 +30268,9 @@
     "study_types": [
       "ITC"
     ],
-    "evidence_level": "I"
+    "evidence_level": "I",
+    "journal_if": 4.1,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41526133",
@@ -29056,7 +30296,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "42046139",
@@ -29087,7 +30329,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.1,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41151932",
@@ -29115,7 +30359,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41487981",
@@ -29142,7 +30388,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.6,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41350408",
@@ -29172,7 +30420,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 3.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40925732",
@@ -29228,7 +30478,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 4.8,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "42184545",
@@ -29254,7 +30506,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.5,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41361129",
@@ -29369,7 +30623,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.6,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40755985",
@@ -29457,7 +30713,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.4,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41559594",
@@ -29491,7 +30749,9 @@
     "study_types": [
       "Systematic Review"
     ],
-    "evidence_level": "I"
+    "evidence_level": "I",
+    "journal_if": 2.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40949470",
@@ -29601,7 +30861,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "41862926",
@@ -29667,7 +30929,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 4.1,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "42216195",
@@ -29726,7 +30990,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42019752",
@@ -29887,7 +31153,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41619021",
@@ -29961,7 +31229,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40761829",
@@ -29999,7 +31269,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.4,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40704307",
@@ -30081,7 +31353,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "40873839",
@@ -30108,7 +31382,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "40802145",
@@ -30189,7 +31465,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "41884268",
@@ -30220,7 +31498,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.4,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41494305",
@@ -30265,7 +31545,9 @@
     "study_types": [
       "ITC"
     ],
-    "evidence_level": "I"
+    "evidence_level": "I",
+    "journal_if": 3.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41857416",
@@ -30306,7 +31588,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.4,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41210436",
@@ -30334,7 +31618,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41494872",
@@ -30358,7 +31644,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.3,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40757546",
@@ -30418,7 +31706,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.8,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41808843",
@@ -30445,7 +31735,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 3.4,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41540172",
@@ -30472,7 +31764,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 5.7,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41994709",
@@ -30501,7 +31795,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "42211300",
@@ -30526,7 +31822,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41284500",
@@ -30615,7 +31913,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 0.8,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "42107209",
@@ -30706,7 +32006,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41769309",
@@ -30744,7 +32046,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 4.1,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "42178262",
@@ -30773,7 +32077,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 1.1,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40945804",
@@ -30800,7 +32106,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 4.0,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41628617",
@@ -30852,7 +32160,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40528144",
@@ -30878,7 +32188,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.1,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41937978",
@@ -30905,7 +32217,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41912936",
@@ -30962,7 +32276,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.0,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41061184",
@@ -31000,7 +32316,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 7.5,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "42043793",
@@ -31038,7 +32356,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 21.3,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "41797742",
@@ -31067,7 +32387,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.6,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41827683",
@@ -31109,7 +32431,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 4.4,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41604997",
@@ -31134,7 +32458,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40995701",
@@ -31194,7 +32520,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41960072",
@@ -31282,7 +32610,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.8,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41341567",
@@ -31308,7 +32638,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.6,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41289971",
@@ -31366,7 +32698,9 @@
     "study_types": [
       "ITC"
     ],
-    "evidence_level": "I"
+    "evidence_level": "I",
+    "journal_if": 3.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40566997",
@@ -31399,7 +32733,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 4.0,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42104835",
@@ -31454,7 +32790,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 4.8,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41732618",
@@ -31482,7 +32820,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "42047999",
@@ -31512,7 +32852,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.4,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41025042",
@@ -31542,7 +32884,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.4,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40522261",
@@ -31627,7 +32971,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.3,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42247725",
@@ -31746,7 +33092,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41682639",
@@ -31775,7 +33123,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 2.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41399565",
@@ -31809,7 +33159,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "42083560",
@@ -31866,7 +33218,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.6,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41567052",
@@ -31917,7 +33271,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41948617",
@@ -31947,7 +33303,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41149478",
@@ -31999,7 +33357,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41429669",
@@ -32054,7 +33414,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 2.5,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41297576",
@@ -32168,7 +33530,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 5.2,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41383535",
@@ -32195,7 +33559,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.6,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41188651",
@@ -32224,7 +33590,9 @@
     "study_types": [
       "Systematic Review"
     ],
-    "evidence_level": "I"
+    "evidence_level": "I",
+    "journal_if": 3.1,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41709922",
@@ -32256,7 +33624,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40647363",
@@ -32283,7 +33653,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 4.4,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40642632",
@@ -32334,7 +33706,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "40783336",
@@ -32395,7 +33769,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 4.0,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "42242900",
@@ -32509,7 +33885,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42008094",
@@ -32572,7 +33950,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.9,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41728453",
@@ -32599,7 +33979,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "41317518",
@@ -32631,7 +34013,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41928893",
@@ -32665,7 +34049,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.7,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40536951",
@@ -32755,7 +34141,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 1.6,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41737168",
@@ -32780,7 +34168,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 1.7,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40718253",
@@ -32806,7 +34196,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "41258322",
@@ -32839,7 +34231,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 4.8,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40977954",
@@ -32868,7 +34262,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41884016",
@@ -32893,7 +34289,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 4.1,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "42110106",
@@ -32921,7 +34319,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "41364463",
@@ -32948,7 +34348,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41008338",
@@ -33100,7 +34502,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 4.1,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40775651",
@@ -33132,7 +34536,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.5,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40843677",
@@ -33221,7 +34627,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41487432",
@@ -33250,7 +34658,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41674783",
@@ -33275,7 +34685,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41423716",
@@ -33312,7 +34724,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 3.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "40636272",
@@ -33371,7 +34785,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "41470000",
@@ -33404,7 +34820,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 10.1,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "41794683",
@@ -33439,7 +34857,9 @@
     "study_types": [
       "Systematic Review"
     ],
-    "evidence_level": "I"
+    "evidence_level": "I",
+    "journal_if": 2.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41142144",
@@ -33470,7 +34890,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40673289",
@@ -33495,7 +34917,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "41890833",
@@ -33649,7 +35073,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 5.7,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41809936",
@@ -33690,7 +35116,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41200447",
@@ -33730,7 +35158,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41682192",
@@ -33840,7 +35270,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 78.5,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "41954011",
@@ -33867,7 +35299,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.6,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40636113",
@@ -33898,7 +35332,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41709234",
@@ -33930,7 +35366,9 @@
     "study_types": [
       "Animal Study"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 10.1,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "41250193",
@@ -33986,7 +35424,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 1.2,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41874899",
@@ -34043,7 +35483,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.4,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40968776",
@@ -34068,7 +35510,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.2,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41769457",
@@ -34093,7 +35537,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "41462932",
@@ -34119,7 +35565,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41810408",
@@ -34148,7 +35596,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 2.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41936007",
@@ -34180,7 +35630,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.1,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41522102",
@@ -34215,7 +35667,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 1.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41142446",
@@ -34245,7 +35699,9 @@
     "study_types": [
       "ITC"
     ],
-    "evidence_level": "I"
+    "evidence_level": "I",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "41245608",
@@ -34327,7 +35783,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.4,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40800064",
@@ -34388,7 +35846,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42216051",
@@ -34473,7 +35933,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 2.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41449450",
@@ -34566,7 +36028,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41161212",
@@ -34615,7 +36079,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41341320",
@@ -34644,7 +36110,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "41992404",
@@ -34786,7 +36254,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "40893460",
@@ -34847,7 +36317,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 5.9,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41452401",
@@ -34908,7 +36380,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 5.0,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41541962",
@@ -34938,7 +36412,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "41684543",
@@ -35002,7 +36478,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 4.1,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41153571",
@@ -35099,7 +36577,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 17.3,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "41209955",
@@ -35128,7 +36608,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "41494980",
@@ -35219,7 +36701,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.5,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "42251157",
@@ -35244,7 +36728,9 @@
     "study_types": [
       "ITC"
     ],
-    "evidence_level": "I"
+    "evidence_level": "I",
+    "journal_if": 4.6,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41080361",
@@ -35273,7 +36759,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   },
   {
     "pmid": "40971137",
@@ -35310,7 +36798,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 4.8,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41653661",
@@ -35335,7 +36825,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.2,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41565210",
@@ -35366,7 +36858,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 6.1,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "41824170",
@@ -35427,7 +36921,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.6,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40556853",
@@ -35490,7 +36986,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.3,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41821047",
@@ -35525,7 +37023,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 10.1,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "42159021",
@@ -35550,7 +37050,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 2.4,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41804001",
@@ -35608,7 +37110,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 0.0,
+    "journal_quartile": null
   },
   {
     "pmid": "40923143",
@@ -35640,7 +37144,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.7,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41836758",
@@ -35679,7 +37185,9 @@
     "study_types": [
       "In Vitro"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 4.8,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41146809",
@@ -35707,6 +37215,8 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.3,
+    "journal_quartile": null
   }
 ]
