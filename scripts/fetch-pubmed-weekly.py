@@ -158,6 +158,12 @@ def parse_article_xml(article_elem, edat_map):
             doi = eid.text or ""
             break
 
+    # Publication Types
+    pub_types = []
+    for pt in medline.findall(".//PublicationTypeList/PublicationType"):
+        if pt.text:
+            pub_types.append(pt.text)
+
     # URL
     url = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
 
@@ -181,6 +187,7 @@ def parse_article_xml(article_elem, edat_map):
         "doi": doi,
         "url": url,
         "affiliations": affiliations,
+        "pub_types": pub_types,
         "china_related": None,      # 暂空
         "study_types": [],           # 后处理回填
         "evidence_level": None,      # 后处理回填

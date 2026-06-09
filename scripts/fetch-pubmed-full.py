@@ -151,6 +151,12 @@ def parse_article_xml(article_elem, edat_map):
     if first_aff is not None and first_aff.text:
         affiliations.append(first_aff.text.strip())
 
+    # Publication Types
+    pub_types = []
+    for pt in medline.findall(".//PublicationTypeList/PublicationType"):
+        if pt.text:
+            pub_types.append(pt.text)
+
     entry_date = edat_map.get(pmid, "")
 
     return {
@@ -163,6 +169,7 @@ def parse_article_xml(article_elem, edat_map):
         "pub_date": pub_date,
         "doi": doi,
         "url": f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/",
+        "pub_types": pub_types,
         "affiliations": affiliations,
         "china_related": None,
         "study_types": [],
