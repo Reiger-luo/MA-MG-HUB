@@ -992,7 +992,7 @@
   "Acta medica Philippina": {
     "IF": 0.0,
     "CAS": null,
-    "updated": "2026-05-31",
+    "updated": "2026-06-09",
     "source": "ablesci"
   },
   "Acta neurologica Belgica": {
@@ -2136,6 +2136,180 @@
     "source": "ablesci"
   },
   "Acta Med Philipp": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "A & A case reports": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "A&A practice": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "AACE clinical case reports": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "AANA journal": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "ACG case reports journal": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "ACP journal club": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "ACS chemical neuroscience": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "AJP reports": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "AME case reports": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "ANZ journal of surgery": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "APMIS : acta pathologica, microbiologica, et immunologica Scandinavica": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Academic emergency medicine : official journal of the Society for Academic Emergency Medicine": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Academic pathology": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Academic radiology": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Access microbiology": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Accident; analysis and prevention": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Acta anaesthesiologica Belgica": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Acta anaesthesiologica Scandinavica": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Acta anaesthesiologica Taiwanica : official journal of the Taiwan Society of Anesthesiologists": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Acta bio-medica : Atenei Parmensis": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Acta chirurgica Belgica": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Acta chirurgica Iugoslavica": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Acta clinica Croatica": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Acta dermato-venereologica": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Acta gastro-enterologica Belgica": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Acta gastroenterologica Latinoamericana": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Acta medica Indonesiana": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Acta medica Iranica": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Acta myologica : myopathies and cardiomyopathies : official journal of the Mediterranean Society of Myology": {
     "IF": 0.0,
     "CAS": null,
     "updated": "2026-06-09",
