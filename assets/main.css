@@ -74,8 +74,18 @@ body {
   background: var(--bg2); border-radius: 8px;
   border: 1px solid var(--bg3);
 }
+.stats-bar-sub {
+  display: flex; gap: 0.5rem; align-items: center;
+  margin-bottom: 1.2rem; padding: 0.5rem 1rem;
+  background: var(--bg2); border-radius: 8px;
+  border: 1px solid var(--bg3);
+  font-size: 0.85rem; color: var(--fg2);
+  flex-wrap: wrap;
+}
+.stat-label { color: var(--fg3); }
 .stat { font-size: 0.9rem; color: var(--fg2); }
 .stat strong { color: var(--fg); font-size: 1.05rem; }
+.stat-sep { color: var(--bg3); font-size: 1rem; user-select: none; }
 
 /* ── 双栏布局 ── */
 .content-layout {

@@ -305,15 +305,50 @@
       populateMonths(allArticles);
 
       // 更新统计
-      el.statTotal.textContent = allArticles.length;
-      const chinaCount = allArticles.filter(a => a.china_related).length;
-      document.querySelectorAll('.stat')[2].innerHTML = `中国相关 <strong>${chinaCount}</strong>`;
-      const journals = new Set(allArticles.filter(a => a.journal).map(a => a.journal));
-      document.querySelectorAll('.stat')[3].innerHTML = `期刊数 <strong>${journals.size}</strong>`;
+      // 文献总量——从 literature-full.json 单独加载
+      fetch('/MA-MG-HUB/data/literature-full.json?_t=' + Date.now())
+        .then(r => r.json())
+        .then(full => {
+          document.getElementById('statTotal').textContent = full.length.toLocaleString();
+        })
+        .catch(() => { document.getElementById('statTotal').textContent = '—'; });
+
+      el.statTotal.textContent = '…'; // 由上面 fetch 覆盖
+
+      const yearCount = allArticles.length;
+      document.getElementById('statYear').textContent = yearCount;
+
+      const chinaYear = allArticles.filter(a => {
+        if (a.china_related === true) return true;
+        if (a.china_related === null) {
+          // fallback 同 fillChinaRelated
+          return (a.affiliations || []).some(aff =>
+            /\b(China|Chinese|Hong Kong|Taiwan|Macau)\b/i.test(aff)
+          );
+        }
+        return false;
+      }).length;
+      document.getElementById('statChinaYear').textContent = chinaYear;
+
       // 近30天
       const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 30);
       const recent30 = allArticles.filter(a => { const d = parseDate(a.entry_date); return d && d >= cutoff; });
-      document.querySelectorAll('.stat')[1].innerHTML = `近30天 <strong>${recent30.length}</strong>`;
+      document.getElementById('stat30d').textContent = recent30.length;
+
+      // 证据等级分布
+      const evCounts = {};
+      for (const a of allArticles) {
+        const ev = a.evidence_level;
+        if (ev) evCounts[ev] = (evCounts[ev] || 0) + 1;
+      }
+      const evOrder = ['I','II','III','IV','V','VI'];
+      const evParts = [];
+      for (const k of evOrder) {
+        if (evCounts[k]) evParts.push(`${k}级 ${evCounts[k]}篇`);
+      }
+      const unclassified = yearCount - evOrder.reduce((s,k) => s + (evCounts[k]||0), 0);
+      if (unclassified > 0) evParts.push(`待分类 ${unclassified}篇`);
+      document.getElementById('statEvDist').textContent = evParts.join(' · ');
 
       applyFilters();
       document.getElementById('updateBadge').textContent = `数据: ${monthsToLoad[0]} 起 · ${allArticles.length}篇`;
