@@ -88,8 +88,8 @@
 
       <div class="filter-group">
         <label class="filter-label">证据等级</label>
-        <select class="filter-select" id="filterEvidence">
-          <option value="all">待后处理回填</option>
+        <select class="filter-select" id="filterEvidence" disabled>
+          <option value="all">全部（分类待后处理）</option>
         </select>
       </div>
 
@@ -101,6 +101,29 @@
     <section class="results" id="results">
       <div class="loading" id="loading">📡 加载数据中…</div>
     </section>
+  </div>
+
+  <!-- 证据等级参考（折叠） -->
+  <div class="evidence-ref">
+    <button class="evidence-ref-toggle" onclick="toggleEvidenceRef()">
+      📖 证据等级分类说明 <span id="evidenceArrow">▸</span>
+    </button>
+    <div class="evidence-ref-content" id="evidenceContent">
+      <p>文献证据等级基于 <strong>PubMed Publication Type</strong> + <strong>标题/摘要</strong> 综合判定（AI 辅助分类，非最终医学裁决）。</p>
+      <table class="evidence-table">
+        <tr><th>等级</th><th>分类</th><th>说明</th></tr>
+        <tr><td rowspan="2"><strong>L1</strong></td><td>Systematic Review / Meta-Analysis</td><td>系统综述 / 荟萃分析</td></tr>
+        <tr><td>Guideline / Consensus</td><td>临床指南 / 专家共识</td></tr>
+        <tr><td rowspan="2"><strong>L2</strong></td><td>Randomized Controlled Trial</td><td>随机对照试验</td></tr>
+        <tr><td>Controlled Clinical Trial</td><td>对照临床试验（非随机）</td></tr>
+        <tr><td rowspan="2"><strong>L3</strong></td><td>Cohort Study</td><td>队列研究（前瞻性 / 回顾性对照）</td></tr>
+        <tr><td>Case-Control Study</td><td>病例对照研究</td></tr>
+        <tr><td><strong>L4</strong></td><td>Case Series / Single Arm</td><td>病例系列 / 单臂研究</td></tr>
+        <tr><td><strong>L5</strong></td><td>Case Report</td><td>病例报告</td></tr>
+        <tr><td><strong>N/A</strong></td><td>Narrative Review / Editorial / Letter / Comment</td><td>叙述性综述 / 编者按 / 信函 / 评论</td></tr>
+      </table>
+      <p style="margin-top:0.5rem;font-size:0.8rem;color:var(--fg3);">⚠️ 分类结果来自 AI 自动判定，仅供快速过滤参考。重要决策请核查原文。</p>
+    </div>
   </div>
 </main>
 

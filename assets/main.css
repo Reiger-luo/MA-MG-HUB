@@ -203,7 +203,33 @@ body {
 }
 .modal-actions { margin-top: 1rem; text-align: right; }
 
-/* ── 空状态 ── */
+/* ── 证据等级参考 ── */
+.evidence-ref {
+  margin-top: 2rem; max-width: 1400px; margin-left: auto; margin-right: auto;
+  padding: 0 1.5rem;
+}
+.evidence-ref-toggle {
+  width: 100%; padding: 0.6rem 1rem; text-align: left;
+  background: var(--bg2); border: 1px solid var(--bg3); border-radius: 8px;
+  color: var(--fg2); font-size: 0.9rem; cursor: pointer;
+  transition: background 0.15s;
+}
+.evidence-ref-toggle:hover { background: var(--bg3); }
+.evidence-ref-content {
+  display: none; margin-top: 0.5rem;
+  background: var(--bg2); border: 1px solid var(--bg3); border-radius: 8px;
+  padding: 1rem; font-size: 0.85rem; color: var(--fg2); line-height: 1.6;
+}
+.evidence-ref-content.open { display: block; }
+.evidence-table {
+  width: 100%; border-collapse: collapse; margin-top: 0.5rem;
+}
+.evidence-table th, .evidence-table td {
+  padding: 0.4rem 0.6rem; border: 1px solid var(--bg3);
+  text-align: left; font-size: 0.85rem;
+}
+.evidence-table th { background: var(--bg3); color: var(--fg); font-weight: 500; }
+.evidence-table td { color: var(--fg2); }
 .empty-state {
   text-align: center; padding: 4rem 2rem; color: var(--fg3);
 }

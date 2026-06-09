@@ -395,3 +395,13 @@
   init();
 
 })();
+
+// 证据等级折叠（全局函数，HTML onclick 调用）
+function toggleEvidenceRef() {
+  const content = document.getElementById('evidenceContent');
+  const arrow = document.getElementById('evidenceArrow');
+  if (content && arrow) {
+    content.classList.toggle('open');
+    arrow.textContent = content.classList.contains('open') ? '▾' : '▸';
+  }
+}
