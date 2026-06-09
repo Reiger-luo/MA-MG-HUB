@@ -37,17 +37,14 @@
 
   function parseDate(dateStr) {
     if (!dateStr) return null;
-    // EDAT: "2026/06/07 02:52"
     if (/^\d{4}\/\d{2}\/\d{2}/.test(dateStr)) {
       const m = dateStr.match(/(\d{4})\/(\d{2})\/(\d{2})/);
       if (m) return new Date(+m[1], +m[2]-1, +m[3]);
     }
-    // PubDate: "2026-Jun-06"
     if (/^\d{4}-/.test(dateStr)) {
       const d = new Date(dateStr);
       if (!isNaN(d)) return d;
     }
-    // fallback
     const d = new Date(dateStr);
     return isNaN(d) ? null : d;
   }
@@ -73,12 +70,18 @@
 
   // ── 获取期刊列表 ──
 
-  function getJournalList(articles) {
-    const journals = new Set();
-    for (const a of articles) {
-      if (a.journal) journals.add(a.journal);
+  function populateMonths() {
+    const sel = el.filterTime;
+    const now = new Date();
+    const currentMonth = now.getMonth() + 1; // 1-12
+    for (let m = 1; m <= currentMonth; m++) {
+      const opt = document.createElement('option');
+      opt.value = String(m);
+      opt.textContent = `${m} 月`;
+      sel.appendChild(opt);
     }
-    return Array.from(journals).sort();
+    // 默认选当前月（如果当前月有数据）或全部
+    sel.value = 'all';
   }
 
   // ── 渲染 ──
@@ -144,8 +147,6 @@
     const ifVal = el.filterIF.value;
     const quartileVal = el.filterQuartile.value;
 
-    const timeCutoff = timeVal === 'all' ? null : daysAgo(parseInt(timeVal));
-
     function matchesIF(a) {
       const v = a.journal_if;
       if (v === null || v === undefined) return ifVal === 'all'; // 未标注的不过滤
@@ -169,10 +170,17 @@
         const inPmid = a.pmid === keyword;
         if (!inTitle && !inAuthors && !inJournal && !inPmid) return false;
       }
-      if (timeCutoff) {
-        const ed = parseDate(a.entry_date);
-        if (ed && ed < timeCutoff) return false;
+      if (timeVal !== 'all') {
+      const targetMonth = parseInt(timeVal);
+      // 从 entry_date 提取月份匹配
+      if (a.entry_date) {
+        const m = a.entry_date.match(/^2026\/(\d{2})/);
+        if (m) {
+          const entryMonth = parseInt(m[1]);
+          if (entryMonth !== targetMonth) return false;
+        }
       }
+    }
       if (chinaVal === 'china' && !a.china_related) return false;
       if (chinaVal === 'non-china' && a.china_related) return false;
       if (!matchesIF(a)) return false;
@@ -300,14 +308,13 @@
       // 回填中国标记
       fillChinaRelated(allArticles);
 
-      // 填充期刊选择器
-      populateJournalSelect(allArticles);
+      // 填充月份
+      populateMonths();
 
       // 更新统计
       updateStats(allArticles);
 
-      // 默认显示最近30天
-      el.filterTime.value = '30';
+      // 默认渲染全部
       applyFilters();
 
       // 更新 badge
