@@ -344,10 +344,11 @@
       const evOrder = ['I','II','III','IV','V','VI'];
       const evParts = [];
       for (const k of evOrder) {
-        if (evCounts[k]) evParts.push(`${k}级 ${evCounts[k]}篇`);
+        if (evCounts[k]) {
+          const pct = (evCounts[k] / yearCount * 100).toFixed(1);
+          evParts.push(`${k}级 ${evCounts[k]}篇（${pct}%）`);
+        }
       }
-      const unclassified = yearCount - evOrder.reduce((s,k) => s + (evCounts[k]||0), 0);
-      if (unclassified > 0) evParts.push(`待分类 ${unclassified}篇`);
       document.getElementById('statEvDist').textContent = evParts.join(' · ');
 
       applyFilters();
