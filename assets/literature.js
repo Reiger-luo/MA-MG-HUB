@@ -5,7 +5,7 @@
   let allArticles = [];
   let filteredResults = [];
   let currentPage = 0;
-  const PAGE_SIZE = 20;
+  const PAGE_SIZE = 10;
   const DATA_PREFIX = '/MA-MG-HUB/data/literature-';
 
   // DOM refs
