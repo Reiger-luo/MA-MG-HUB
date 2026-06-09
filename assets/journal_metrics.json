@@ -1406,7 +1406,7 @@
   "Acta neurologica Taiwanica": {
     "IF": 0.0,
     "CAS": null,
-    "updated": "2026-05-31",
+    "updated": "2026-06-09",
     "source": "ablesci"
   },
   "Case reports in critical care": {
@@ -2190,14 +2190,14 @@
     "source": "ablesci"
   },
   "AME case reports": {
-    "IF": 0.0,
-    "CAS": null,
+    "IF": 0.7,
+    "CAS": "4区",
     "updated": "2026-06-09",
     "source": "ablesci"
   },
   "ANZ journal of surgery": {
-    "IF": 0.0,
-    "CAS": null,
+    "IF": 1.6,
+    "CAS": "4区",
     "updated": "2026-06-09",
     "source": "ablesci"
   },
@@ -2312,6 +2312,264 @@
   "Acta myologica : myopathies and cardiomyopathies : official journal of the Mediterranean Society of Myology": {
     "IF": 0.0,
     "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Acta neuropathologica communications": {
+    "IF": 5.7,
+    "CAS": "1区",
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Advanced science (Weinheim, Baden-Wurttemberg, Germany)": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Advances in experimental medicine and biology": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Aesthetic surgery journal": {
+    "IF": 3.9,
+    "CAS": "3区",
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Allergologia et immunopathologia": {
+    "IF": 2.1,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "American family physician": {
+    "IF": 3.5,
+    "CAS": "3区",
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "American journal of translational research": {
+    "IF": 1.6,
+    "CAS": "4区",
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Analytical and bioanalytical chemistry": {
+    "IF": 3.8,
+    "CAS": "2区",
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Annales de dermatologie et de venereologie": {
+    "IF": 2.8,
+    "CAS": "4区",
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Annals of intensive care": {
+    "IF": 5.5,
+    "CAS": "1区",
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Annals of medicine and surgery (2012)": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Annals of thoracic and cardiovascular surgery : official journal of the Association of Thoracic and Cardiovascular Surgeons of Asia": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Annals of thoracic surgery short reports": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Annual International Conference of the IEEE Engineering in Medicine and Biology Society. IEEE Engineering in Medicine and Biology Society. Annual International Conference": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Antibodies (Basel, Switzerland)": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Archives of Iranian medicine": {
+    "IF": 1.0,
+    "CAS": "4区",
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Archivum immunologiae et therapiae experimentalis": {
+    "IF": 3.9,
+    "CAS": "3区",
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Arthritis care & research": {
+    "IF": 3.3,
+    "CAS": "2区",
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Asian journal of transfusion science": {
+    "IF": 0.6,
+    "CAS": "4区",
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Autoimmunity reviews": {
+    "IF": 3.1,
+    "CAS": "3区",
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "BMC anesthesiology": {
+    "IF": 2.6,
+    "CAS": "3区",
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "BMC cancer": {
+    "IF": 3.4,
+    "CAS": "2区",
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "BMC cardiovascular disorders": {
+    "IF": 2.3,
+    "CAS": "3区",
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "BMC infectious diseases": {
+    "IF": 3.0,
+    "CAS": "3区",
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "BMC medical informatics and decision making": {
+    "IF": 3.8,
+    "CAS": "2区",
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "BMC medicine": {
+    "IF": 8.3,
+    "CAS": "1区",
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "BMC ophthalmology": {
+    "IF": 1.7,
+    "CAS": "4区",
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "BMC pharmacology & toxicology": {
+    "IF": 2.7,
+    "CAS": "3区",
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "BMC public health": {
+    "IF": 3.6,
+    "CAS": "2区",
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Best practice & research. Clinical rheumatology": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Biomedicine & pharmacotherapy = Biomedecine & pharmacotherapie": {
+    "IF": 10.8,
+    "CAS": "1区",
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Blood reviews": {
+    "IF": 23.1,
+    "CAS": "1区",
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Brain : a journal of neurology": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Brain and nerve = Shinkei kenkyu no shinpo": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Brain sciences": {
+    "IF": 2.8,
+    "CAS": "3区",
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "British journal of hospital medicine (London, England : 2005)": {
+    "IF": 1.8,
+    "CAS": "4区",
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "CPT: pharmacometrics & systems pharmacology": {
+    "IF": 3.0,
+    "CAS": "3区",
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Canadian journal of ophthalmology. Journal canadien d'ophtalmologie": {
+    "IF": 2.8,
+    "CAS": "3区",
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Cancer discovery": {
+    "IF": 33.3,
+    "CAS": "1区",
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Cancer immunology, immunotherapy : CII": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Cancer investigation": {
+    "IF": 1.9,
+    "CAS": "4区",
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Cancer management and research": {
+    "IF": 0.7,
+    "CAS": "4区",
+    "updated": "2026-06-09",
+    "source": "ablesci"
+  },
+  "Cancer science": {
+    "IF": 4.3,
+    "CAS": "2区",
     "updated": "2026-06-09",
     "source": "ablesci"
   }
