@@ -1,4 +1,4 @@
-/* MA-MG-HUB 文献情报页面 JS - 按月拆分版本 */
+/* MA-MG-HUB 文献情报页面 JS - 单文件加载版 */
 (function() {
   'use strict';
 
@@ -6,7 +6,6 @@
   let filteredResults = [];
   let currentPage = 0;
   const PAGE_SIZE = 10;
-  const DATA_PREFIX = '/MA-MG-HUB/data/literature-';
 
   // DOM refs
   const $ = id => document.getElementById(id);
@@ -22,57 +21,6 @@
     filterQuartile: $('filterQuartile'),
     btnExport: $('btnExport'),
   };
-
-  function monthStr(y, m) {
-    return `${y}-${String(m).padStart(2, '0')}`;
-  }
-
-  // 从当前月递推到指定月份，生成所有中间月份
-  function monthsSince(untilYM) {
-    const [untilY, untilM] = untilYM.split('-').map(Number);
-    const now = new Date();
-    const months = [];
-    const y = now.getFullYear();
-    const m = now.getMonth() + 1;
-    let cy = y, cm = m;
-    while (cy > untilY || (cy === untilY && cm >= untilM)) {
-      months.push(monthStr(cy, cm));
-      cm--;
-      while (cm <= 0) { cy--; cm += 12; }
-    }
-    return months;
-  }
-
-  function getMonthsToLoad() {
-    // 一次加载近 1 年（12 个月）
-    const now = new Date();
-    const y = now.getFullYear();
-    const m = now.getMonth() + 1;
-    let py = y, pm = m - 11;
-    while (pm <= 0) { py--; pm += 12; }
-    return monthsSince(monthStr(py, pm));
-  }
-
-  async function loadMonth(ym) {
-    const url = `${DATA_PREFIX}${ym}.json?_t=${Date.now()}`;
-    try {
-      const resp = await fetch(url);
-      if (!resp.ok) return null;
-      return await resp.json();
-    } catch {
-      return null;
-    }
-  }
-
-  function fillChinaRelated(articles) {
-    for (const a of articles) {
-      if (a.china_related === null) {
-        a.china_related = (a.affiliations || []).some(aff =>
-          /\b(China|Chinese|Hong Kong|Taiwan|Macau)\b/i.test(aff)
-        );
-      }
-    }
-  }
 
   function parseDate(dateStr) {
     if (!dateStr) return null;
@@ -109,28 +57,6 @@
       sel.appendChild(opt);
     }
     sel.value = 'all';
-    sel.addEventListener('change', onMonthFilterChange);
-  }
-
-  let loadedMonths = new Set();
-
-  async function onMonthFilterChange() {
-    const val = el.filterTime.value;
-    if (val === 'all') {
-      applyFilters();
-      return;
-    }
-    if (!loadedMonths.has(val)) {
-      el.loading.textContent = `📡 加载 ${val} 月数据…`;
-      const data = await loadMonth(val);
-      if (data) {
-        fillChinaRelated(data);
-        allArticles = allArticles.concat(data);
-        loadedMonths.add(val);
-        el.loading.textContent = `📡 ${allArticles.length} 篇`;
-      }
-    }
-    applyFilters();
   }
 
   function applyFilters(resetPage) {
@@ -259,7 +185,6 @@
       toggle.addEventListener('click', function() {
         const abs = document.getElementById('abs-' + article.pmid);
         if (abs) {
-          // 第一次展开：填充全文，不再截断
           if (abs.getAttribute('data-fulltext') !== '1') {
             abs.innerHTML = escapeHtml(article.abstract);
             abs.setAttribute('data-fulltext', '1');
@@ -280,46 +205,32 @@
   }
 
   async function init() {
-    const monthsToLoad = getMonthsToLoad();
-    el.loading.textContent = `📡 加载 ${monthsToLoad.length} 个月数据…`;
+    el.loading.textContent = '📡 加载文献数据…';
 
     try {
-      const results = await Promise.all(monthsToLoad.map(ym => loadMonth(ym)));
-      allArticles = [];
-      loadedMonths = new Set();
-      for (let i = 0; i < monthsToLoad.length; i++) {
-        if (results[i]) {
-          fillChinaRelated(results[i]);
-          allArticles = allArticles.concat(results[i]);
-          loadedMonths.add(monthsToLoad[i]);
-        }
+      const resp = await fetch('/MA-MG-HUB/data/literature-recent.json?_t=' + Date.now());
+      if (!resp.ok) {
+        el.loading.innerHTML = '<div class="empty-state"><h3>⚠️ 数据加载失败</h3><p>HTTP ' + resp.status + '</p></div>';
+        return;
       }
+      allArticles = await resp.json();
 
       if (allArticles.length === 0) {
-        el.loading.innerHTML = '<div class="empty-state"><h3>暂无数据</h3><p>数据加载失败，请稍后刷新</p></div>';
+        el.loading.innerHTML = '<div class="empty-state"><h3>暂无数据</h3></div>';
         return;
       }
 
-      el.loading.textContent = `📡 ${allArticles.length} 篇`;
+      el.loading.style.display = 'none';
 
+      // 时间筛选
       populateMonths(allArticles);
 
       // 更新统计
-      // 文献总量——全库 10,577 篇（每周更新）
       document.getElementById('statTotal').textContent = '10,577';
+      document.getElementById('statYear').textContent = allArticles.length;
 
-      const yearCount = allArticles.length;
-      document.getElementById('statYear').textContent = yearCount;
-
-      const chinaYear = allArticles.filter(a => {
-        if (a.china_related === true) return true;
-        if (a.china_related === null) {
-          return (a.affiliations || []).some(aff =>
-            /\b(China|Chinese|Hong Kong|Taiwan|Macau)\b/i.test(aff)
-          );
-        }
-        return false;
-      }).length;
+      // 中国相关
+      const chinaYear = allArticles.filter(a => a.china_related).length;
       document.getElementById('statChinaYear').textContent = chinaYear;
 
       // 近30天
@@ -328,18 +239,10 @@
       document.getElementById('stat30d').textContent = recent30.length;
 
       // 近30天中国相关
-      const china30d = recent30.filter(a => {
-        if (a.china_related === true) return true;
-        if (a.china_related === null) {
-          return (a.affiliations || []).some(aff =>
-            /\b(China|Chinese|Hong Kong|Taiwan|Macau)\b/i.test(aff)
-          );
-        }
-        return false;
-      }).length;
+      const china30d = recent30.filter(a => a.china_related).length;
       document.getElementById('statChina30d').textContent = china30d;
 
-      // 证据等级分布（以已有等级的总数作分母）
+      // 证据等级分布
       const evCounts = {};
       let evTotal = 0;
       for (const a of allArticles) {
@@ -351,16 +254,16 @@
       for (const k of evOrder) {
         if (evCounts[k]) {
           const pct = (evCounts[k] / evTotal * 100).toFixed(1);
-          evParts.push(`${k}级 ${evCounts[k]}篇（${pct}%）`);
+          evParts.push(k + '级 ' + evCounts[k] + '篇（' + pct + '%）');
         }
       }
       document.getElementById('statEvDist').textContent = evParts.join(' · ');
 
       applyFilters();
-      document.getElementById('updateBadge').textContent = `数据: ${monthsToLoad[0]} 起 · ${allArticles.length}篇`;
+      document.getElementById('updateBadge').textContent = '数据: ' + allArticles.length + ' 篇';
 
     } catch (err) {
-      el.loading.innerHTML = `<div class="empty-state"><h3>⚠️ 数据加载失败</h3><p>${err.message}</p></div>`;
+      el.loading.innerHTML = '<div class="empty-state"><h3>⚠️ 数据加载失败</h3><p>' + err.message + '</p></div>';
       console.error('Literature page init error:', err);
     }
   }
@@ -371,10 +274,10 @@
     const articles = filteredResults.length > 0 ? filteredResults : allArticles;
     const now = new Date().toLocaleDateString('zh-CN');
     const top5 = articles.slice(0, 5);
-    let text = `# MA-MG-HUB 文献简报\n生成日期: ${now}\n\n当前筛选: ${articles.length} 篇\n\n`;
-    top5.forEach((a, i) => {
+    let text = '# MA-MG-HUB 文献简报\n生成日期: ' + now + '\n\n当前筛选: ' + articles.length + ' 篇\n\n';
+    top5.forEach(function(a, i) {
       const authors = (a.authors || []).slice(0, 3).join(', ');
-      text += `\n${i+1}. ${a.title}\n   作者: ${authors || '未知'}\n   期刊: ${a.journal || '未知'}\n   链接: ${a.url}\n`;
+      text += '\n' + (i+1) + '. ' + a.title + '\n   作者: ' + (authors || '未知') + '\n   期刊: ' + (a.journal || '未知') + '\n   链接: ' + a.url + '\n';
     });
 
     const overlay = document.createElement('div');
@@ -392,13 +295,13 @@
     `;
     document.body.appendChild(overlay);
     overlay.querySelector('#copyBrief').addEventListener('click', function() {
-      navigator.clipboard.writeText(text).then(() => {
+      navigator.clipboard.writeText(text).then(function() {
         this.textContent = '✅ 已复制';
-        setTimeout(() => this.textContent = '📋 复制到剪贴板', 2000);
-      });
+        setTimeout(function() { this.textContent = '📋 复制到剪贴板'; }.bind(this), 2000);
+      }.bind(this));
     });
-    overlay.querySelector('#closeBrief').addEventListener('click', () => overlay.remove());
-    overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+    overlay.querySelector('#closeBrief').addEventListener('click', function() { overlay.remove(); });
+    overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
   });
 
   init();
