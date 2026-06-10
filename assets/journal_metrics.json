@@ -1767,13 +1767,13 @@
   "AME case reports": {
     "IF": 0.7,
     "CAS": "4区",
-    "updated": "2026-06-09",
+    "updated": "2026-06-10",
     "source": "ablesci"
   },
   "ANZ journal of surgery": {
     "IF": 1.6,
     "CAS": "4区",
-    "updated": "2026-06-09",
+    "updated": "2026-06-10",
     "source": "ablesci"
   },
   "Acta neuropathologica communications": {
@@ -2300,8 +2300,8 @@
     "source": "ablesci"
   },
   "Ibrain": {
-    "IF": 0.0,
-    "CAS": null,
+    "IF": 0.4,
+    "CAS": "3区",
     "updated": "2026-06-10",
     "source": "ablesci"
   },
@@ -2378,8 +2378,8 @@
     "source": "ablesci"
   },
   "International journal of oral and maxillofacial surgery": {
-    "IF": 0.0,
-    "CAS": null,
+    "IF": 2.7,
+    "CAS": "3区",
     "updated": "2026-06-10",
     "source": "ablesci"
   },
@@ -2852,8 +2852,8 @@
     "source": "ablesci"
   },
   "Radiology case reports": {
-    "IF": 0.0,
-    "CAS": null,
+    "IF": 0.7,
+    "CAS": "4区",
     "updated": "2026-06-10",
     "source": "ablesci"
   },
@@ -2924,8 +2924,8 @@
     "source": "ablesci"
   },
   "The American journal of Chinese medicine": {
-    "IF": 0.0,
-    "CAS": null,
+    "IF": 2.9,
+    "CAS": "3区",
     "updated": "2026-06-10",
     "source": "ablesci"
   },
@@ -3074,8 +3074,8 @@
     "source": "ablesci"
   },
   "Viruses": {
-    "IF": 0.0,
-    "CAS": null,
+    "IF": 3.5,
+    "CAS": "3区",
     "updated": "2026-06-10",
     "source": "ablesci"
   },
