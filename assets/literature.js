@@ -285,7 +285,6 @@
           '<div class="article-card-abstract" id="abs-' + article.pmid + '">' + escapeHtml(article.abstract.slice(0, 300)) + (article.abstract.length > 300 ? '…' : '') + '</div>'
         : '') +
       '<div class="article-card-links">' +
-        '<a href="' + article.url + '" target="_blank">PubMed</a>' +
         (article.doi ? '<a href="https://doi.org/' + article.doi + '" target="_blank">DOI</a>' : '') +
         tagsHTML +
       '</div>';
