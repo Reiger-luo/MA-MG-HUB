@@ -1,4 +1,4 @@
-/* MA-MG-HUB 文献情报页面 JS - 单文件加载 + 时间多选 */
+/* MA-MG-HUB 文献情报页面 JS - 从 .js 全局变量加载 */
 (function() {
   'use strict';
 
@@ -15,7 +15,8 @@
     statTotal: $('statTotal'),
     filterKeyword: $('filterKeyword'),
     filterTimeList: $('filterTimeList'),
-    filterChina: $('filterChina'),
+    chinaCheck: $('chinaCheck'),
+    nonChinaCheck: $('nonChinaCheck'),
     filterIF: $('filterIF'),
     filterQuartile: $('filterQuartile'),
     filterEvidence: $('filterEvidence'),
@@ -39,6 +40,14 @@
     return checked;
   }
 
+  function getChinaFilter() {
+    var china = el.chinaCheck.checked;
+    var nonChina = el.nonChinaCheck.checked;
+    if (china && !nonChina) return 'china';
+    if (!china && nonChina) return 'non-china';
+    return 'all';
+  }
+
   function populateMonths(articles) {
     var ymSet = {};
     for (var i = 0; i < articles.length; i++) {
@@ -51,9 +60,7 @@
     html += '<label class="filter-checkbox-item"><input type="checkbox" value="all" checked> 全部月份</label>';
     var lastYear = '';
     for (var j = 0; j < sorted.length; j++) {
-      var ym = sorted[j];
-      var parts = ym.split('-');
-      var y = parts[0], mm = parts[1];
+      var ym = sorted[j], parts = ym.split('-'), y = parts[0], mm = parts[1];
       if (y !== lastYear) {
         html += '<label class="filter-checkbox-item" style="color:var(--fg3);font-size:0.75rem;pointer-events:none">── ' + y + '年 ──</label>';
         lastYear = y;
@@ -62,22 +69,19 @@
     }
     el.filterTimeList.innerHTML = html;
 
-    // 全选/取消联动
     el.filterTimeList.addEventListener('change', function(e) {
       var cb = e.target;
       if (!cb || cb.type !== 'checkbox') return;
       if (cb.value === 'all') {
-        // 点"全部月份"→ 全选或全取消
         var allCbs = el.filterTimeList.querySelectorAll('input[type="checkbox"]');
         for (var k = 0; k < allCbs.length; k++) {
           if (allCbs[k].value !== 'all') allCbs[k].checked = cb.checked;
         }
       } else {
-        // 点单个月 → 检查是不是所有月份都选了，同步"全部月份"
         var checkedItems = el.filterTimeList.querySelectorAll('input[type="checkbox"]:checked');
-        var allItems = el.filterTimeList.querySelectorAll('input[type="checkbox"]');
         var allCheckbox = el.filterTimeList.querySelector('input[value="all"]');
-        if (checkedItems.length === allItems.length - 1) { // -1 because "全部" itself
+        var allItems = el.filterTimeList.querySelectorAll('input[type="checkbox"]');
+        if (checkedItems.length === allItems.length - 1) {
           allCheckbox.checked = true;
         } else {
           allCheckbox.checked = false;
@@ -91,7 +95,7 @@
     if (resetPage === undefined) resetPage = true;
     var keyword = (el.filterKeyword.value || '').toLowerCase().trim();
     var selectedMonths = getSelectedMonths();
-    var chinaVal = el.filterChina.value;
+    var chinaVal = getChinaFilter();
     var ifVal = el.filterIF.value;
     var quartileVal = el.filterQuartile.value;
     var evidenceVal = el.filterEvidence.value;
@@ -113,9 +117,8 @@
       var q = a.journal_quartile;
       if (q === null || q === undefined) return quartileVal === 'all';
       if (quartileVal === 'all') return true;
-      return String(q) === quartileVal;
+      return String(q).charAt(0) === quartileVal;
     }
-
     function matchesTime(a) {
       if (allSelected || selectedMonths.length === 0) return true;
       var ed = a.entry_date || '';
@@ -258,16 +261,15 @@
     return d.innerHTML;
   }
 
-  async function init() {
+  function init() {
     el.loading.textContent = '📡 加载文献数据…';
 
     try {
-      var resp = await fetch('/MA-MG-HUB/data/literature-recent.json?_t=' + Date.now());
-      if (!resp.ok) {
-        el.loading.innerHTML = '<div class="empty-state"><h3>⚠️ 数据加载失败</h3><p>HTTP ' + resp.status + '</p></div>';
+      if (typeof window.MG_LITERATURE_DATA === 'undefined') {
+        el.loading.innerHTML = '<div class="empty-state"><h3>⚠️ 数据加载失败</h3><p>全局变量 MG_LITERATURE_DATA 未定义</p></div>';
         return;
       }
-      allArticles = await resp.json();
+      allArticles = window.MG_LITERATURE_DATA;
 
       if (allArticles.length === 0) {
         el.loading.innerHTML = '<div class="empty-state"><h3>暂无数据</h3></div>';
@@ -302,6 +304,7 @@
       }
       document.getElementById('statChina30d').textContent = china30d;
 
+      // 证据等级
       var evCounts = {};
       var evTotal = 0;
       for (var i = 0; i < allArticles.length; i++) {
@@ -319,6 +322,14 @@
       }
       document.getElementById('statEvDist').textContent = evParts.join(' · ');
 
+      // 事件监听
+      el.filterKeyword.addEventListener('input', applyFilters);
+      el.chinaCheck.addEventListener('change', applyFilters);
+      el.nonChinaCheck.addEventListener('change', applyFilters);
+      el.filterIF.addEventListener('change', applyFilters);
+      el.filterQuartile.addEventListener('change', applyFilters);
+      el.filterEvidence.addEventListener('change', applyFilters);
+
       applyFilters();
       document.getElementById('updateBadge').textContent = '数据: ' + allArticles.length + ' 篇';
 
@@ -328,11 +339,6 @@
     }
   }
 
-  el.filterKeyword.addEventListener('input', applyFilters);
-  el.filterChina.addEventListener('change', applyFilters);
-  el.filterIF.addEventListener('change', applyFilters);
-  el.filterQuartile.addEventListener('change', applyFilters);
-  el.filterEvidence.addEventListener('change', applyFilters);
   el.btnExport.addEventListener('click', function() {
     var articles = filteredResults.length > 0 ? filteredResults : allArticles;
     var now = new Date().toLocaleDateString('zh-CN');

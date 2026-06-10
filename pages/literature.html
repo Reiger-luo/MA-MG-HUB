@@ -66,11 +66,10 @@
 
       <div class="filter-group">
         <label class="filter-label">中国研究</label>
-        <select class="filter-select" id="filterChina">
-          <option value="all" selected>全部</option>
-          <option value="china">仅中国相关</option>
-          <option value="non-china">非中国</option>
-        </select>
+        <div class="filter-checkbox-list" id="filterChina">
+          <label class="filter-checkbox-item"><input type="checkbox" value="china" id="chinaCheck"> 仅中国相关</label>
+          <label class="filter-checkbox-item"><input type="checkbox" value="non-china" id="nonChinaCheck"> 非中国</label>
+        </div>
       </div>
 
       <div class="filter-group">
@@ -143,6 +142,8 @@
   </div>
 </main>
 
+<!-- 数据脚本（gzip 压缩，比 fetch JSON 快） -->
+<script src="/MA-MG-HUB/data/literature-recent.js"></script>
 <script src="/MA-MG-HUB/assets/literature.js"></script>
 </body>
 </html>

@@ -18493,7 +18493,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 8.0,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "41484314",
@@ -22512,7 +22514,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.8,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "42011445",
@@ -23333,7 +23337,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 4.2,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41721962",
@@ -25639,7 +25645,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 2.0,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40561659",
@@ -31403,7 +31411,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 1.9,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "42202343",

@@ -40,11 +40,18 @@ def main():
         if dt < cutoff:
             continue
         recent.append(a)
-
+    # 写 recent.json（回填用）和 recent.js（前端用）
     recent_path = DATA_DIR / "literature-recent.json"
     with open(recent_path, "w") as f:
         json.dump(recent, f, ensure_ascii=False, indent=2)
     print(f"✅ literature-recent.json ({len(recent)} 篇)")
+
+    js_path = DATA_DIR / "literature-recent.js"
+    with open(js_path, "w") as f:
+        f.write("window.MG_LITERATURE_DATA = ")
+        json.dump(recent, f, ensure_ascii=False)
+        f.write(";\n")
+    print(f"✅ literature-recent.js ({len(recent)} 篇)")
 
     # 更新文献总量硬编码到 literature.js
     js_path = PROJECT / "assets" / "literature.js"
