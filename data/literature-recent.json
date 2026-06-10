@@ -480,7 +480,9 @@
     "study_types": [
       "ITC"
     ],
-    "evidence_level": "I"
+    "evidence_level": "I",
+    "journal_if": 4.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41052541",
@@ -881,7 +883,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 1.9,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40598873",
@@ -4975,7 +4979,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 4.4,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41084336",
@@ -6279,34 +6285,6 @@
     "evidence_level": "IV",
     "journal_if": 5.6,
     "journal_quartile": "2区"
-  },
-  {
-    "pmid": "40491040",
-    "title": "Therapeutic Apheresis for Neurological Diseases: A Five-Year Retrospective Study at a Large Academic Medical Center.",
-    "abstract": "Therapeutic plasma exchange (TPE) represents a crucial treatment modality for a wide range of neurological disorders. However, data regarding institutional variation in practice and clinical trends over time is limited, especially concerning diagnostic indications, treatment setting, line access, safety, and the impact of novel drug therapies on TPE utilization. We analyzed all TPE procedures performed at our institution between 2019 and 2023 for neurological indications. A total of 109 patients and 1310 procedures were retrospectively reviewed, focusing on procedure volumes, clinical parameters, and safety outcomes. An average of 173 procedures were performed per year, with no significant change in volume year-to-year. However, a significant decrease in the proportion of TPE procedures performed for myasthenia gravis (MG) was found over time. The most common diagnoses included MG, demyelinating diseases, and encephalitis. The overall complication rate was found to be 3.4%, most commonly hypotension and perioral tingling. While most procedures were conducted in the outpatient setting, we found a significant increase in the proportion of inpatient procedures over time. Additionally, most TPE procedures were conducted via central line, and we observed a significant increase in central line use over time. Notably, three MG patients safely received greater than 90 procedures each during the study period, with significantly fewer complications than the general cohort. These findings provide valuable insights into TPE management of neurological disorders, reaffirming its safety even in chronic refractory disease, and highlighting key trends relevant to treatment setting, line access, and the impact of novel drug therapies.",
-    "authors": [
-      "Jamal Yaseen Ali",
-      "Yigitbilek Furkan",
-      "Yunce Muharrem"
-    ],
-    "journal": "Journal of clinical apheresis",
-    "entry_date": "2025/06/10 01:23",
-    "pub_date": "2025-06",
-    "doi": "",
-    "url": "https://pubmed.ncbi.nlm.nih.gov/40491040/",
-    "pub_types": [
-      "Journal Article"
-    ],
-    "affiliations": [
-      "Department of Pathology, Stanford University School of Medicine, Stanford, California, USA."
-    ],
-    "china_related": false,
-    "study_types": [
-      "Single Arm"
-    ],
-    "evidence_level": "IV",
-    "journal_if": 2.7,
-    "journal_quartile": "4区"
   },
   {
     "pmid": "40825554",
@@ -8511,7 +8489,9 @@
     "study_types": [
       "In Vitro"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 2.7,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41860006",
@@ -10321,7 +10301,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 3.0,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40795579",
@@ -11142,46 +11124,6 @@
     "evidence_level": "II"
   },
   {
-    "pmid": "40493875",
-    "title": "Nicotine, Alcohol Consumption, and Risk of Myasthenia Gravis: Results From the Swedish Nationwide GEMG Study.",
-    "abstract": "BACKGROUND AND OBJECTIVES: Myasthenia gravis (MG), an autoimmune disease characterized by fluctuating muscle weakness, is believed to result from complex gene-environment interactions, yet few risk factors have been identified. The objective of this study was to determine the effect of nicotine and alcohol on MG disease risk.\nMETHODS: The Genes and Environment in Myasthenia Gravis study is a Swedish, nationwide cross-sectional case-control study where prevalent patients with MG were invited to submit an extensive questionnaire on lifestyle and environment. Data collection took place between November 2018 and August 2019, and cases were matched by sex and year of birth to population controls. Year of disease onset was used as index year. Associations between use of alcohol, tobacco smoke, Swedish snuff, and MG risk were investigated using multivariable logistic regression.\nRESULTS: A total of 1,067 patients with MG (mean age at onset 48 (SD 21) years, 53% female) were matched to 2,087 controls. Any alcohol consumption was associated with a lower MG risk compared with not drinking at all (odds ratio [OR] 0.48, 95% CI 0.39-0.59, p < 0.001, exposed cases n = 616). Effects were observed in a similar direction across disease subtypes, with the strongest association in the late-onset MG group (onset ≥50 years). Although neither cigarette smoke nor use of Swedish snuff affected the disease risk of the whole group, subset specific effects were observed. Smoking at onset was associated with an increased risk of early-onset MG (EOMG, onset 18-49 years; OR 1.60, 95% CI 1.17-2.20, p = 0.003, n = 133), which was accentuated in acetylcholine receptor antibody-positive EOMG (OR 2.08, 95% CI 1.34-3.25, p = 0.001, n = 74). Use of Swedish snuff, which contains high levels of nicotine, at disease onset was also associated with an increased risk of EOMG (OR 1.61, 95% CI 1.02-2.54, p = 0.039, n = 43).\nDISCUSSION: We observed an inverse correlation of MG risk and alcohol consumption. Furthermore, smoking and the use of Swedish snuff at disease onset were positively associated with EOMG. We recognize limitations related to retrospective data and limited number of available controls. However, multiple sensitivity analyses were performed supporting the robustness of our results.",
-    "authors": [
-      "Petersson Malin",
-      "Jons Daniel",
-      "Feresiadou Amalia",
-      "Ilinca Andreea",
-      "Lundin Fredrik",
-      "Johansson Rune",
-      "Budzianowska Anna",
-      "Roos Anna-Karin",
-      "Kagstrom Viktor",
-      "Gunnarsson Martin",
-      "Sundström Peter",
-      "Klareskog Lars",
-      "Olsson Tomas",
-      "Kockum Ingrid",
-      "Piehl Fredrik",
-      "Alfredsson Lars",
-      "Brauner Susanna"
-    ],
-    "journal": "Neurology",
-    "entry_date": "2025/06/10 16:03",
-    "pub_date": "2025-07-08",
-    "doi": "",
-    "url": "https://pubmed.ncbi.nlm.nih.gov/40493875/",
-    "pub_types": [
-      "Journal Article"
-    ],
-    "affiliations": [
-      "Department of Clinical Neuroscience, Karolinska Institutet, Stockholm, Sweden."
-    ],
-    "china_related": false,
-    "study_types": [
-      "Historical Control"
-    ],
-    "evidence_level": "IV"
-  },
-  {
     "pmid": "40795619",
     "title": "Clinical utility of autoantibodies in the diagnosis and management of Myasthenia gravis.",
     "abstract": "Myasthenia gravis is an autoimmune neuromuscular disease characterised by fatigable muscle weakness. The disease is caused by autoantibodies targeting components of the post-synaptic neuromuscular junction, which are identifiable in 90 % of cases. The most well-known and best-characterised of these is acetylcholine-receptor (AChR) antibody, which is present in approximately 50 % of ocular and 85 % of generalised MG patients. Other recognised pathogenic autoantibodies in MG target muscle specific kinase (MuSK) and low-density lipoprotein-receptor related protein 4 (LRP4), present in approximately 5-10 % and 1-5 % of MG cases respectively. Some autoantibodies are not directly pathogenic but inform disease severity and thymic status. Many other autoantibodies are described in MG, although their pathogenic role and clinical significance is yet to be determined. These include autoantibodies targeting COLQ, cortactin, rapsyn, AChE, and Kv1.4. In this review, we discuss the clinical utility of all autoantibodies implicated in MG to date, including their role in the diagnosis, management, and monitoring of the disease.",
@@ -11240,7 +11182,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 4.3,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41164186",
@@ -11445,7 +11389,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 1.7,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "42171932",
@@ -11614,7 +11560,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 8.3,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "40645852",
@@ -11643,7 +11591,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 3.6,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40940171",
@@ -12120,7 +12070,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.8,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41974154",
@@ -13229,36 +13181,6 @@
     "evidence_level": "VI"
   },
   {
-    "pmid": "40495043",
-    "title": "Normotensive primary aldosteronism in a patient with myasthenia gravis: a localization diagnostic conundrum unraveled by 68Ga-pentixafor PET/CT - a case report with review of literature.",
-    "abstract": "PURPOSE: While primary aldosteronism (PA) is typically screened in hypertensive patients, normotensive PA remains underrecognized, especially in complex cases where standard diagnostic approaches fail. We present a challenging case of normotensive PA complicated by myasthenia gravis (MG) requiring chronic glucocorticoids, which interfere with conventional cortisol-based adrenal venous sampling (AVS) interpretation. This case highlights the pivotal role of 68Ga-pentixafor PET/CT as an innovative alternative for subtype differentiation in such complex scenarios.\nMETHODS: A 30-year-old normotensive woman with MG (on long-term glucocorticoids) was incidentally found to have a left adrenal adenoma. Biochemical testing confirmed PA (elevated ARR, positive captopril challenge test and saline infusion test). Due to glucocorticoid interference with AVS interpretation, 68Ga-pentixafor PET/CT was utilized for precise localization. We further reviewed literature on alternative diagnostic strategies for PA when conventional cortisol-based AVS interpretation is compromised.\nRESULTS: 68Ga-pentixafor PET/CT successfully localized the aldosterone-producing adenoma, guiding laparoscopic adrenalectomy. Postoperatively, the patient achieved complete biochemical remission (normalized ARR and potassium). To our knowledge, this is the first reported use of 68Ga-pentixafor PET/CT for PA subtype diagnosis in a glucocorticoid-dependent normotensive patient, offering a paradigm for similar challenging cases.\nCONCLUSIONS: For PA patients with confounding factors affecting cortisol-based AVS interpretation (e.g., chronic glucocorticoid use), 68Ga-pentixafor PET/CT emerges as a robust non-invasive alternative for accurate subtype differentiation. This case provides a novel diagnostic framework for complex PA presentations, advocating for tailored imaging strategies to overcome traditional limitations.",
-    "authors": [
-      "Chen Jin-Liang",
-      "Zhang Jiu-Dan",
-      "Song Xiao-Xiao",
-      "Sanan Shriya",
-      "Zhao Yi-Ming"
-    ],
-    "journal": "Endocrine",
-    "entry_date": "2025/06/10 23:20",
-    "pub_date": "2025-09",
-    "doi": "",
-    "url": "https://pubmed.ncbi.nlm.nih.gov/40495043/",
-    "pub_types": [
-      "Journal Article",
-      "Case Reports",
-      "Review"
-    ],
-    "affiliations": [
-      "Department of Endocrinology and Metabolism, The Second Affiliated Hospital, Zhejiang University School of Medicine, Hangzhou, China."
-    ],
-    "china_related": true,
-    "study_types": [
-      "Review"
-    ],
-    "evidence_level": "VI"
-  },
-  {
     "pmid": "41634421",
     "title": "Delayed recovery following myasthenic exacerbation and subsequent endplate-protecting treatment.",
     "abstract": "Endplate-protecting therapies have improved treatment of myasthenia gravis and indicate a rapid onset of their treatment effect. Currently, these substances can be used following myasthenic exacerbation (ME). Clinical worsening due to ME however often results in prolonged recovery. We here evaluated the treatment courses of patients having received endplate-protecting treatment following ME. Among 12 patients with ME described here, seven received endplate-protecting therapies. Our findings indicate that acceptable recovery usually takes nine months. In the lights of recent trials for treatment of myasthenia, our findings implicate that the effectiveness of novel substances should be judged only after sufficient observation periods.",
@@ -13944,7 +13866,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41747738",
@@ -14895,7 +14819,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 10.6,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "41422493",
@@ -15017,36 +14943,6 @@
     ],
     "affiliations": [
       "Chest Medical Center, Takamatsu Red Cross Hospital, Takamatsu, Kagawa, Japan."
-    ],
-    "china_related": false,
-    "study_types": [
-      "Case Report"
-    ],
-    "evidence_level": "V"
-  },
-  {
-    "pmid": "40491307",
-    "title": "Development of thymoma without myasthenia gravis in a patient with radiographic axial spondyloarthritis treated with tumor necrosis factor-α inhibitors.",
-    "abstract": "Thymic tumors are rare in the general population, and to the best of our knowledge, no cases of thymoma have been described in patients with rheumatic diseases treated with tumor necrosis factor (TNF)-α inhibitors, except for the case of a patient receiving infliximab for Crohn's disease (CD) who developed a B2 thymoma. We describe a 60-year-old Caucasian male with radiographic axial spondyloarthritis (r-axSpA) and CD who developed an AB-type thymoma without myasthenia gravis after 18 years of treatment with TNF-α inhibitors. The patient had received the same molecule since the r-axSpA/CD diagnosis and changed it 6 months before the diagnosis of thymoma due to a disease flare. At the time of the drug switch, no mediastinal mass was present on the chest X-ray. The thymoma was surgically removed, and no additional therapy was needed. Treatment with TNF-α inhibitors was reintroduced after surgery. This case raises some important questions that remain open and deserve to be addressed in the future, such as the association between immunosuppressive therapy and thymoma and the controversial relationship between TNF-α inhibitors and myasthenia gravis.",
-    "authors": [
-      "Altieri Piera",
-      "Mariani Francesco Maria",
-      "Di Ruscio Evy",
-      "Carubbi Francesco",
-      "Ferri Claudio",
-      "Alunno Alessia"
-    ],
-    "journal": "Reumatismo",
-    "entry_date": "2025/06/10 03:33",
-    "pub_date": "2025-09-17",
-    "doi": "",
-    "url": "https://pubmed.ncbi.nlm.nih.gov/40491307/",
-    "pub_types": [
-      "Case Reports",
-      "Journal Article"
-    ],
-    "affiliations": [
-      "Department of Life, Health and Environmental Sciences, University of L'Aquila; Internal Medicine and Nephrology Division, ASL1 Avezzano-Sulmona-L'Aquila, San Salvatore Hospital, L'Aquila."
     ],
     "china_related": false,
     "study_types": [
@@ -15551,7 +15447,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.6,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40604668",
@@ -15583,7 +15481,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.6,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41455493",
@@ -17246,7 +17146,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 10.8,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "41523534",
@@ -17579,7 +17481,9 @@
     "study_types": [
       "RCT"
     ],
-    "evidence_level": "II"
+    "evidence_level": "II",
+    "journal_if": 5.7,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "41227236",
@@ -18029,7 +17933,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 3.4,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "42181373",
@@ -18122,7 +18028,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 2.6,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40716765",
@@ -18294,7 +18202,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.7,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40551857",
@@ -18327,7 +18237,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.6,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "42218175",
@@ -18701,7 +18613,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 23.1,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "41816389",
@@ -20409,7 +20323,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.6,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41767003",
@@ -20635,7 +20551,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 5.5,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "41349566",
@@ -21362,7 +21280,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 0.6,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41466846",
@@ -21834,7 +21754,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 0.6,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41200439",
@@ -22661,7 +22583,9 @@
     "study_types": [
       "Animal Study"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 1.6,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40906015",
@@ -23139,7 +23063,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 10.8,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "41349278",
@@ -24645,7 +24571,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42028749",
@@ -24677,7 +24605,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 3.9,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41784328",
@@ -24737,7 +24667,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 33.3,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "40832342",
@@ -24803,7 +24735,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.0,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41164399",
@@ -26803,7 +26737,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.8,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40688189",
@@ -27789,7 +27725,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 2.1,
+    "journal_quartile": null
   },
   {
     "pmid": "41223006",
@@ -28239,7 +28177,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.7,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "40680253",
@@ -28360,7 +28300,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 0.6,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41769624",
@@ -28458,7 +28400,9 @@
     "study_types": [
       "ITC"
     ],
-    "evidence_level": "I"
+    "evidence_level": "I",
+    "journal_if": 3.1,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "42104030",
@@ -28892,7 +28836,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.7,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "42198688",
@@ -29160,7 +29106,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 1.7,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41258323",
@@ -29755,7 +29703,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.6,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41961712",
@@ -30168,7 +30118,9 @@
     "study_types": [
       "ITC"
     ],
-    "evidence_level": "I"
+    "evidence_level": "I",
+    "journal_if": 10.5,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "42091015",
@@ -30897,7 +30849,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 3.8,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41180124",
@@ -31124,7 +31078,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 3.5,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41341518",
@@ -31974,7 +31930,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 3.8,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "41323224",
@@ -32580,7 +32538,9 @@
     "study_types": [
       "Single Arm"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41882752",
@@ -32668,7 +32628,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 2.8,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41781681",
@@ -33033,7 +32995,9 @@
     "study_types": [
       "Historical Control"
     ],
-    "evidence_level": "IV"
+    "evidence_level": "IV",
+    "journal_if": 3.3,
+    "journal_quartile": "2区"
   },
   {
     "pmid": "42190394",
@@ -34379,7 +34343,9 @@
     "study_types": [
       "Review"
     ],
-    "evidence_level": "VI"
+    "evidence_level": "VI",
+    "journal_if": 2.8,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "40496233",
@@ -34598,7 +34564,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 8.3,
+    "journal_quartile": "1区"
   },
   {
     "pmid": "42256565",
@@ -34757,7 +34725,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 0.7,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "42046591",
@@ -35216,7 +35186,9 @@
     "study_types": [
       "Case Report"
     ],
-    "evidence_level": "V"
+    "evidence_level": "V",
+    "journal_if": 1.0,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41098798",
@@ -36140,7 +36112,9 @@
     "study_types": [
       "Unclassified"
     ],
-    "evidence_level": null
+    "evidence_level": null,
+    "journal_if": 1.9,
+    "journal_quartile": "4区"
   },
   {
     "pmid": "41872753",
@@ -36164,7 +36138,9 @@
     "study_types": [
       "Non-randomized controlled cohort"
     ],
-    "evidence_level": "III"
+    "evidence_level": "III",
+    "journal_if": 2.3,
+    "journal_quartile": "3区"
   },
   {
     "pmid": "41497016",
