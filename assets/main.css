@@ -97,7 +97,6 @@ body {
   width: 260px; flex-shrink: 0;
   background: var(--bg2); border-radius: 8px;
   border: 1px solid var(--bg3); padding: 1rem;
-  position: sticky; top: 5rem;
 }
 .filter-group {
   margin-bottom: 1rem;
@@ -130,7 +129,8 @@ body {
   display: flex; align-items: center; gap: 0.35rem;
   font-size: 0.82rem; color: var(--fg2); cursor: pointer;
 }
-.filter-checkbox-item input[type="checkbox"] {
+.filter-checkbox-item input[type="checkbox"],
+.filter-checkbox-item input[type="radio"] {
   accent-color: var(--accent); cursor: pointer;
 }
 .filter-checkbox-item:hover { color: var(--fg); }

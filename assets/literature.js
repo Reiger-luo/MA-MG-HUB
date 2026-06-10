@@ -17,9 +17,9 @@
     filterTimeList: $('filterTimeList'),
     chinaCheck: $('chinaCheck'),
     nonChinaCheck: $('nonChinaCheck'),
-    filterIF: $('filterIF'),
-    filterQuartile: $('filterQuartile'),
-    filterEvidence: $('filterEvidence'),
+    filterIFList: $('filterIFList'),
+    filterQuartileList: $('filterQuartileList'),
+    filterEvidenceList: $('filterEvidenceList'),
     btnExport: $('btnExport'),
   };
 
@@ -96,9 +96,9 @@
     var keyword = (el.filterKeyword.value || '').toLowerCase().trim();
     var selectedMonths = getSelectedMonths();
     var chinaVal = getChinaFilter();
-    var ifVal = el.filterIF.value;
-    var quartileVal = el.filterQuartile.value;
-    var evidenceVal = el.filterEvidence.value;
+    var ifVal = (el.filterIFList.querySelector('input[name="if"]:checked') || {}).value || 'all';
+    var quartileVal = (el.filterQuartileList.querySelector('input[name="quartile"]:checked') || {}).value || 'all';
+    var evidenceVal = (el.filterEvidenceList.querySelector('input[name="evidence"]:checked') || {}).value || 'all';
 
     var allSelected = false;
     for (var s = 0; s < selectedMonths.length; s++) {
@@ -326,9 +326,9 @@
       el.filterKeyword.addEventListener('input', applyFilters);
       el.chinaCheck.addEventListener('change', applyFilters);
       el.nonChinaCheck.addEventListener('change', applyFilters);
-      el.filterIF.addEventListener('change', applyFilters);
-      el.filterQuartile.addEventListener('change', applyFilters);
-      el.filterEvidence.addEventListener('change', applyFilters);
+      el.filterIFList.addEventListener('change', applyFilters);
+      el.filterQuartileList.addEventListener('change', applyFilters);
+      el.filterEvidenceList.addEventListener('change', applyFilters);
 
       applyFilters();
       document.getElementById('updateBadge').textContent = '数据: ' + allArticles.length + ' 篇';
