@@ -1,4 +1,4 @@
-/* MA-MG-HUB 文献情报页面 JS - 从 .js 全局变量加载 */
+/* MA-MG-HUB 文献情报页面 JS */
 (function() {
   'use strict';
 
@@ -15,8 +15,8 @@
     statTotal: $('statTotal'),
     filterKeyword: $('filterKeyword'),
     filterTimeList: $('filterTimeList'),
-    chinaCheck: $('chinaCheck'),
-    nonChinaCheck: $('nonChinaCheck'),
+    chinaAll: $('chinaAll'),
+    chinaOnly: $('chinaOnly'),
     filterIFList: $('filterIFList'),
     filterQuartileList: $('filterQuartileList'),
     filterEvidenceList: $('filterEvidenceList'),
@@ -40,12 +40,38 @@
     return checked;
   }
 
-  function getChinaFilter() {
-    var china = el.chinaCheck.checked;
-    var nonChina = el.nonChinaCheck.checked;
-    if (china && !nonChina) return 'china';
-    if (!china && nonChina) return 'non-china';
-    return 'all';
+  function getCheckedValues(container) {
+    var cbs = container.querySelectorAll('input[type="checkbox"]');
+    var vals = [];
+    for (var i = 0; i < cbs.length; i++) {
+      if (cbs[i].checked && cbs[i].value !== 'all') vals.push(cbs[i].value);
+    }
+    var allCb = container.querySelector('input[value="all"]');
+    return { values: vals, isAll: allCb ? allCb.checked : false };
+  }
+
+  // checkbox 全选联动（通用）
+  function wireCheckboxAll(containerId) {
+    var container = document.getElementById(containerId);
+    if (!container) return;
+    container.addEventListener('change', function(e) {
+      var cb = e.target;
+      if (!cb || cb.type !== 'checkbox') return;
+      var allCb = container.querySelector('input[value="all"]');
+      var others = container.querySelectorAll('input[type="checkbox"]:not([value="all"])');
+      if (cb.value === 'all') {
+        for (var k = 0; k < others.length; k++) others[k].checked = cb.checked;
+      } else {
+        // 检查是否所有非all都被选中
+        var allChecked = true;
+        for (var k = 0; k < others.length; k++) {
+          if (!others[k].checked) { allChecked = false; break; }
+        }
+        if (allCb) allCb.checked = allChecked;
+        // 如果取消了全部，至少有一个勾着就行
+      }
+      applyFilters();
+    });
   }
 
   function populateMonths(articles) {
@@ -80,8 +106,7 @@
       } else {
         var checkedItems = el.filterTimeList.querySelectorAll('input[type="checkbox"]:checked');
         var allCheckbox = el.filterTimeList.querySelector('input[value="all"]');
-        var allItems = el.filterTimeList.querySelectorAll('input[type="checkbox"]');
-        if (checkedItems.length === allItems.length - 1) {
+        if (checkedItems.length === el.filterTimeList.querySelectorAll('input[type="checkbox"]').length - 1) {
           allCheckbox.checked = true;
         } else {
           allCheckbox.checked = false;
@@ -91,34 +116,38 @@
     });
   }
 
+  function matchesMulti(container, articleValue) {
+    var state = getCheckedValues(container);
+    if (state.isAll) return true;
+    if (state.values.length === 0) return true;
+    for (var v = 0; v < state.values.length; v++) {
+      if (articleValue === state.values[v]) return true;
+    }
+    return false;
+  }
+
+  function ifRangeMatch(rangeStr, ifVal) {
+    if (ifVal === null || ifVal === undefined) return false;
+    var parts = rangeStr.split('-').map(Number);
+    if (rangeStr === '10') return ifVal >= 10;
+    return ifVal >= parts[0] && ifVal < parts[1];
+  }
+
   function applyFilters(resetPage) {
     if (resetPage === undefined) resetPage = true;
     var keyword = (el.filterKeyword.value || '').toLowerCase().trim();
     var selectedMonths = getSelectedMonths();
-    var chinaVal = getChinaFilter();
-    var ifVal = (el.filterIFList.querySelector('input[name="if"]:checked') || {}).value || 'all';
-    var quartileVal = (el.filterQuartileList.querySelector('input[name="quartile"]:checked') || {}).value || 'all';
-    var evidenceVal = (el.filterEvidenceList.querySelector('input[name="evidence"]:checked') || {}).value || 'all';
+    var chinaVal = el.chinaOnly.checked ? 'china' : 'all';
+
+    var ifState = getCheckedValues(el.filterIFList);
+    var quartileState = getCheckedValues(el.filterQuartileList);
+    var evState = getCheckedValues(el.filterEvidenceList);
 
     var allSelected = false;
     for (var s = 0; s < selectedMonths.length; s++) {
       if (selectedMonths[s] === 'all') { allSelected = true; break; }
     }
 
-    function matchesIF(a) {
-      var v = a.journal_if;
-      if (v === null || v === undefined) return ifVal === 'all';
-      if (ifVal === 'all') return true;
-      var parts = ifVal.split('-').map(Number);
-      if (ifVal === '10') return v >= 10;
-      return v >= parts[0] && v < parts[1];
-    }
-    function matchesQuartile(a) {
-      var q = a.journal_quartile;
-      if (q === null || q === undefined) return quartileVal === 'all';
-      if (quartileVal === 'all') return true;
-      return String(q).charAt(0) === quartileVal;
-    }
     function matchesTime(a) {
       if (allSelected || selectedMonths.length === 0) return true;
       var ed = a.entry_date || '';
@@ -134,6 +163,7 @@
     filteredResults = [];
     for (var i = 0; i < allArticles.length; i++) {
       var a = allArticles[i];
+
       if (keyword) {
         var inTitle = (a.title || '').toLowerCase().indexOf(keyword) !== -1;
         var inAuthors = false;
@@ -145,12 +175,38 @@
         var inPmid = a.pmid === keyword;
         if (!inTitle && !inAuthors && !inJournal && !inPmid) continue;
       }
+
       if (!matchesTime(a)) continue;
       if (chinaVal === 'china' && !a.china_related) continue;
-      if (chinaVal === 'non-china' && a.china_related) continue;
-      if (!matchesIF(a)) continue;
-      if (!matchesQuartile(a)) continue;
-      if (evidenceVal !== 'all' && a.evidence_level !== evidenceVal) continue;
+
+      // IF 多选
+      if (!ifState.isAll && ifState.values.length > 0) {
+        var ifMatch = false;
+        for (var vi = 0; vi < ifState.values.length; vi++) {
+          if (ifRangeMatch(ifState.values[vi], a.journal_if)) { ifMatch = true; break; }
+        }
+        if (!ifMatch) continue;
+      }
+
+      // 分区多选
+      if (!quartileState.isAll && quartileState.values.length > 0) {
+        var q = a.journal_quartile;
+        var qMatch = false;
+        for (var qi = 0; qi < quartileState.values.length; qi++) {
+          if (q && String(q).charAt(0) === quartileState.values[qi]) { qMatch = true; break; }
+        }
+        if (!qMatch) continue;
+      }
+
+      // 证据等级多选
+      if (!evState.isAll && evState.values.length > 0) {
+        var evMatch = false;
+        for (var ei = 0; ei < evState.values.length; ei++) {
+          if (a.evidence_level === evState.values[ei]) { evMatch = true; break; }
+        }
+        if (!evMatch) continue;
+      }
+
       filteredResults.push(a);
     }
 
@@ -178,7 +234,6 @@
 
     var nav = document.createElement('div');
     nav.className = 'pagination';
-    nav.style.cssText = 'display:flex;justify-content:center;align-items:center;gap:0.5rem;margin-top:1rem;padding:0.5rem 0';
 
     var prevBtn = document.createElement('button');
     prevBtn.className = 'btn';
@@ -251,7 +306,6 @@
         });
       })(article.pmid, article.abstract);
     }
-
     return div;
   }
 
@@ -262,7 +316,7 @@
   }
 
   function init() {
-    el.loading.textContent = '📡 加载文献数据…';
+    el.loading.innerHTML = '';
 
     try {
       if (typeof window.MG_LITERATURE_DATA === 'undefined') {
@@ -270,15 +324,21 @@
         return;
       }
       allArticles = window.MG_LITERATURE_DATA;
-
       if (allArticles.length === 0) {
         el.loading.innerHTML = '<div class="empty-state"><h3>暂无数据</h3></div>';
         return;
       }
 
       el.loading.style.display = 'none';
-
       populateMonths(allArticles);
+
+      // 事件监听
+      el.filterKeyword.addEventListener('input', applyFilters);
+      el.chinaAll.addEventListener('change', applyFilters);
+      el.chinaOnly.addEventListener('change', applyFilters);
+      wireCheckboxAll('filterIFList');
+      wireCheckboxAll('filterQuartileList');
+      wireCheckboxAll('filterEvidenceList');
 
       // 统计
       document.getElementById('statTotal').textContent = '10,577';
@@ -304,7 +364,6 @@
       }
       document.getElementById('statChina30d').textContent = china30d;
 
-      // 证据等级
       var evCounts = {};
       var evTotal = 0;
       for (var i = 0; i < allArticles.length; i++) {
@@ -321,14 +380,6 @@
         }
       }
       document.getElementById('statEvDist').textContent = evParts.join(' · ');
-
-      // 事件监听
-      el.filterKeyword.addEventListener('input', applyFilters);
-      el.chinaCheck.addEventListener('change', applyFilters);
-      el.nonChinaCheck.addEventListener('change', applyFilters);
-      el.filterIFList.addEventListener('change', applyFilters);
-      el.filterQuartileList.addEventListener('change', applyFilters);
-      el.filterEvidenceList.addEventListener('change', applyFilters);
 
       applyFilters();
       document.getElementById('updateBadge').textContent = '数据: ' + allArticles.length + ' 篇';
