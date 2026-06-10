@@ -61,11 +61,18 @@ def load_articles():
 
 
 def get_journals(articles, mode="recent"):
+    """获取需要查的期刊列表。只挑有证据等级的文章期刊。"""
     all_journals = sorted(set(
         a["journal"] for a in articles if a["journal"]
     ))
     cache = load_cache()
-    needs_fetch = [j for j in all_journals if j not in cache or cache[j].get("IF", 0) == 0]
+    # 只找有证据等级且缺IF的期刊
+    needs_fetch_journals = set()
+    for a in articles:
+        if a.get("evidence_level") and not a.get("journal_if") and a.get("journal"):
+            needs_fetch_journals.add(a["journal"])
+    
+    needs_fetch = [j for j in all_journals if j in needs_fetch_journals and (j not in cache or cache[j].get("IF", 0) == 0)]
 
     if mode != "all":
         from datetime import datetime as dt, timedelta
