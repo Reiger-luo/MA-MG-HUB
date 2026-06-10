@@ -290,8 +290,9 @@
   "Current opinion in neurology": {
     "IF": 4.4,
     "CAS": "2区",
-    "updated": "2026-05-16",
-    "source": "ablesci"
+    "JCR": "Q1",
+    "updated": "2026-06-10",
+    "source": "web"
   },
   "Current opinion in rheumatology": {
     "IF": 4.3,
@@ -2024,6 +2025,1621 @@
   "Contemporary clinical trials": {
     "IF": 1.9,
     "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Acta medica Philippina": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Acta neurologica Taiwanica": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Advances in experimental medicine and biology": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Annals of thoracic surgery short reports": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Best practice & research. Clinical rheumatology": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Brain : a journal of neurology": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Case reports in rheumatology": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Case reports in veterinary medicine": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Clinical pharmacology and therapeutics": {
+    "IF": 0.7,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Clinical reviews in allergy & immunology": {
+    "IF": 5.2,
+    "CAS": "2区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Current oncology (Toronto, Ont.)": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Current opinion in immunology": {
+    "IF": 5.8,
+    "CAS": "2区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Current opinion in pharmacology": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Deutsches Arzteblatt international": {
+    "IF": 7.1,
+    "CAS": "1区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Diabetes/metabolism research and reviews": {
+    "IF": 6.0,
+    "CAS": "2区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Digital biomarkers": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Discover oncology": {
+    "IF": 2.9,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Drugs": {
+    "IF": 14.4,
+    "CAS": "1区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Drugs - real world outcomes": {
+    "IF": 1.9,
+    "CAS": "4区",
+    "JCR": "Q3",
+    "updated": "2026-06-10",
+    "source": "web"
+  },
+  "Drugs in context": {
+    "IF": 2.8,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Dysphagia": {
+    "IF": 3.0,
+    "CAS": "2区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "EBioMedicine": {
+    "IF": 10.8,
+    "CAS": "1区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "EClinicalMedicine": {
+    "IF": 10.0,
+    "CAS": "1区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Ecancermedicalscience": {
+    "IF": 1.3,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Endocrine, metabolic & immune disorders drug targets": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Endokrynologia Polska": {
+    "IF": 2.1,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Epigenomes": {
+    "IF": 3.5,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "European heart journal": {
+    "IF": 35.6,
+    "CAS": "1区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "European heart journal. Case reports": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "European journal of case reports in internal medicine": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "European journal of clinical pharmacology": {
+    "IF": 1.5,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "European journal of neurology": {
+    "IF": 3.9,
+    "CAS": "2区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Folia phoniatrica et logopaedica : official organ of the International Association of Logopedics and Phoniatrics (IALP)": {
+    "IF": 0.7,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Fortschritte der Neurologie-Psychiatrie": {
+    "IF": 0.6,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Frontiers in cell and developmental biology": {
+    "IF": 4.3,
+    "CAS": "2区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Frontiers in microbiology": {
+    "IF": 4.5,
+    "CAS": "2区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Frontiers in nutrition": {
+    "IF": 5.1,
+    "CAS": "2区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Frontiers in stroke": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Frontiers of medicine": {
+    "IF": 3.0,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Gastroenterology": {
+    "IF": 25.1,
+    "CAS": "1区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Genes and immunity": {
+    "IF": 4.5,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Georgian medical news": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "HLA": {
+    "IF": 4.1,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Handbook of clinical neurology": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "IBRO neuroscience reports": {
+    "IF": 2.9,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Ibrain": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Immunity, inflammation and disease": {
+    "IF": 2.7,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Immunobiology": {
+    "IF": 2.3,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Immunological medicine": {
+    "IF": 2.9,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Indian journal of ophthalmology": {
+    "IF": 1.8,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Interdisciplinary cardiovascular and thoracic surgery": {
+    "IF": 1.3,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "International cancer conference journal": {
+    "IF": 6.0,
+    "CAS": "2区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "International immunology": {
+    "IF": 3.2,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "International journal of applied & basic medical research": {
+    "IF": 2.6,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "International journal of circumpolar health": {
+    "IF": 1.9,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "International journal of clinical oncology": {
+    "IF": 2.8,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "International journal of molecular medicine": {
+    "IF": 4.9,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "International journal of ophthalmology": {
+    "IF": 1.4,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "International journal of oral and maxillofacial surgery": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "International ophthalmology clinics": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "International review of neurobiology": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Investigational new drugs": {
+    "IF": 2.7,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "JA clinical reports": {
+    "IF": 1.0,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "JAAD case reports": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "JACC. Case reports": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "JAMA network open": {
+    "IF": 9.7,
+    "CAS": "1区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "JMIR cancer": {
+    "IF": 2.7,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "JTCVS open": {
+    "IF": 1.9,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal der Deutschen Dermatologischen Gesellschaft = Journal of the German Society of Dermatology : JDDG": {
+    "IF": 3.8,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal for immunotherapy of cancer": {
+    "IF": 10.6,
+    "CAS": "1区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of Korean medical science": {
+    "IF": 2.3,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of autoimmunity": {
+    "IF": 3.1,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of basic and clinical physiology and pharmacology": {
+    "IF": 0.3,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of biological methods": {
+    "IF": 1.9,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of biomolecular structure & dynamics": {
+    "IF": 2.4,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of bioscience and bioengineering": {
+    "IF": 2.9,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of cardiothoracic and vascular anesthesia": {
+    "IF": 2.1,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of child neurology": {
+    "IF": 1.6,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of clinical neuromuscular disease": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of clinical practice and research": {
+    "IF": 0.2,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of community hospital internal medicine perspectives": {
+    "IF": 0.6,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of comparative effectiveness research": {
+    "IF": 2.5,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of ethnopharmacology": {
+    "IF": 5.4,
+    "CAS": "2区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of feline medicine and surgery": {
+    "IF": 2.1,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of imaging informatics in medicine": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of intensive care medicine": {
+    "IF": 2.1,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of internal medicine": {
+    "IF": 9.2,
+    "CAS": "1区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of maxillofacial and oral surgery": {
+    "IF": 2.6,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of medicinal chemistry": {
+    "IF": 6.8,
+    "CAS": "1区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of nanobiotechnology": {
+    "IF": 4.9,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of neurology, neurosurgery, and psychiatry": {
+    "IF": 7.5,
+    "CAS": "1区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of ophthalmology": {
+    "IF": 1.9,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of orthopaedics": {
+    "IF": 1.5,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of pediatric endocrinology & metabolism : JPEM": {
+    "IF": 1.2,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of proteome research": {
+    "IF": 3.6,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of surgical case reports": {
+    "IF": 0.7,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of the ASEAN Federation of Endocrine Societies": {
+    "IF": 1.2,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of the National Comprehensive Cancer Network : JNCCN": {
+    "IF": 16.4,
+    "CAS": "2区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of translational autoimmunity": {
+    "IF": 3.6,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of translational medicine": {
+    "IF": 7.5,
+    "CAS": "1区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Khirurgiia": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Kidney medicine": {
+    "IF": 3.4,
+    "CAS": "2区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "MMW Fortschritte der Medizin": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Med (New York, N.Y.)": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Medical hypothesis, discovery & innovation ophthalmology journal": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Medical journal, Armed Forces India": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Medical mycology case reports": {
+    "IF": 1.3,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Medicina": {
+    "IF": 0.5,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Medicine and pharmacy reports": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Medicine, health care, and philosophy": {
+    "IF": 3.1,
+    "CAS": "1区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Mediterranean journal of rheumatology": {
+    "IF": 1.4,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Metabolic brain disease": {
+    "IF": 3.5,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "MethodsX": {
+    "IF": 1.9,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Monaldi archives for chest disease = Archivio Monaldi per le malattie del torace": {
+    "IF": 0.8,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Multimedia manual of cardiothoracic surgery : MMCTS": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Neural regeneration research": {
+    "IF": 6.7,
+    "CAS": "2区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Neuro endocrinology letters": {
+    "IF": 0.6,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Neuroepidemiology": {
+    "IF": 4.0,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Neurologia": {
+    "IF": 3.1,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Neurological research": {
+    "IF": 2.4,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Neurological research and practice": {
+    "IF": 3.2,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Neurology": {
+    "IF": 8.5,
+    "CAS": "1区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Neurology international": {
+    "IF": 3.0,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Neuropharmacology": {
+    "IF": 4.6,
+    "CAS": "2区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Neurophysiologie clinique = Clinical neurophysiology": {
+    "IF": 2.4,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Neuroscience": {
+    "IF": 2.8,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Nucleic acids research": {
+    "IF": 13.1,
+    "CAS": "1区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "OTO open": {
+    "IF": 1.5,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Open life sciences": {
+    "IF": 1.7,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Oral surgery, oral medicine, oral pathology and oral radiology": {
+    "IF": 1.9,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Pathology": {
+    "IF": 3.0,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Pathology, research and practice": {
+    "IF": 3.2,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Photodiagnosis and photodynamic therapy": {
+    "IF": 2.6,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Postgraduate medical journal": {
+    "IF": 2.7,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Pregnancy hypertension": {
+    "IF": 2.1,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Qatar medical journal": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Radiation oncology journal": {
+    "IF": 2.2,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Radiology case reports": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Research square": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Reumatismo": {
+    "IF": 1.0,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Revista espanola de geriatria y gerontologia": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Revue medicale suisse": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Saudi journal of anaesthesia": {
+    "IF": 1.4,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Scandinavian journal of immunology": {
+    "IF": 1.6,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Sleep medicine": {
+    "IF": 3.4,
+    "CAS": "2区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "South Asian journal of cancer": {
+    "IF": 0.8,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Stem cell research": {
+    "IF": 0.7,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Stem cell research & therapy": {
+    "IF": 0.7,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Strabismus": {
+    "IF": 0.8,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "The American journal of Chinese medicine": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "The American journal of managed care": {
+    "IF": 2.1,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "The American journal of medicine": {
+    "IF": 5.3,
+    "CAS": "2区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "The American journal of tropical medicine and hygiene": {
+    "IF": 1.6,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "The Annals of thoracic surgery": {
+    "IF": 3.9,
+    "CAS": "2区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "The British and Irish orthoptic journal": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "The Cochrane database of systematic reviews": {
+    "IF": 9.4,
+    "CAS": "1区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "The Journal of international medical research": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "The Journal of the Association of Physicians of India": {
+    "IF": 1.3,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "The Lancet regional health. Western Pacific": {
+    "IF": 13.0,
+    "CAS": "1区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "The Lancet. Oncology": {
+    "IF": 35.9,
+    "CAS": "1区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "The Neurohospitalist": {
+    "IF": 0.7,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "The journal of the Royal College of Physicians of Edinburgh": {
+    "IF": 0.4,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "The lancet. Healthy longevity": {
+    "IF": 14.6,
+    "CAS": "1区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "The patient": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "The veterinary clinics of North America. Exotic animal practice": {
+    "IF": 1.5,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Therapeutic advances in chronic disease": {
+    "IF": 2.8,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Thoracic cancer": {
+    "IF": 2.3,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Tidsskrift for den Norske laegeforening : tidsskrift for praktisk medicin, ny raekke": {
+    "IF": 1.3,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Translational cancer research": {
+    "IF": 1.7,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Translational vision science & technology": {
+    "IF": 2.6,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Ugeskrift for laeger": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Urology case reports": {
+    "IF": 0.4,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Vaccine": {
+    "IF": 3.5,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Virulence": {
+    "IF": 5.4,
+    "CAS": "1区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Viruses": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Zeitschrift fur Rheumatologie": {
+    "IF": 1.0,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Zhejiang da xue xue bao. Yi xue ban = Journal of Zhejiang University. Medical sciences": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Zhurnal nevrologii i psikhiatrii imeni S.S. Korsakova": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "eNeurologicalSci": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "A&A practice": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Advanced science (Weinheim, Baden-Wurttemberg, Germany)": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Annals of thoracic and cardiovascular surgery : official journal of the Association of Thoracic and Cardiovascular Surgeons of Asia": {
+    "IF": 1.3,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Cancer immunology, immunotherapy : CII": {
+    "IF": 5.1,
+    "CAS": "2区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Acta myologica : myopathies and cardiomyopathies : official journal of the Mediterranean Society of Myology": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Annals of medicine and surgery (2012)": {
+    "IF": 1.6,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Annual International Conference of the IEEE Engineering in Medicine and Biology Society. IEEE Engineering in Medicine and Biology Society. Annual International Conference": {
+    "IF": 4.4,
+    "CAS": "2区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Brain and nerve = Shinkei kenkyu no shinpo": {
+    "IF": 1.0,
+    "CAS": "4区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Cardio-oncology (London, England)": {
+    "IF": 3.2,
+    "CAS": "3区",
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Critical care (London, England)": {
+    "IF": 9.3,
+    "CAS": "1区",
+    "JCR": "Q1",
+    "updated": "2026-06-10",
+    "source": "web"
+  },
+  "Current issues in molecular biology": {
+    "IF": 3.0,
+    "CAS": "3区",
+    "JCR": "Q2",
+    "updated": "2026-06-10",
+    "source": "web"
+  },
+  "Current opinion in anaesthesiology": {
+    "IF": 2.1,
+    "CAS": "3区",
+    "JCR": "Q2",
+    "updated": "2026-06-10",
+    "source": "web"
+  },
+  "Current opinion in infectious diseases": {
+    "IF": 4.0,
+    "CAS": "3区",
+    "JCR": "Q1",
+    "updated": "2026-06-10",
+    "source": "web"
+  },
+  "Current pain and headache reports": {
+    "IF": 3.5,
+    "CAS": "3区",
+    "JCR": "Q2",
+    "updated": "2026-06-10",
+    "source": "web"
+  },
+  "Current pharmaceutical design": {
+    "IF": 2.8,
+    "CAS": "4区",
+    "JCR": "Q2",
+    "updated": "2026-06-10",
+    "source": "web"
+  },
+  "Current problems in cardiology": {
+    "IF": 3.3,
+    "CAS": "3区",
+    "JCR": "Q2",
+    "updated": "2026-06-10",
+    "source": "web"
+  },
+  "DEN open": {
+    "IF": 1.5,
+    "CAS": "4区",
+    "JCR": "Q4",
+    "updated": "2026-06-10",
+    "source": "web"
+  },
+  "Cell & bioscience": {
+    "IF": 6.2,
+    "CAS": "2区",
+    "JCR": "Q1",
+    "updated": "2026-06-10",
+    "source": "web_research",
+    "note": "Cell & Bioscience (Cell Biosci, ISSN 2045-3701). 2024 IF=6.2, 5年平均IF=7.2。中科院分区: 生物2区(生化与分子生物学2区)。JCR分区: Q1 (BIOCHEMISTRY & MOLECULAR BIOLOGY - SCIE)。出版商: BioMed Central。"
+  },
+  "Cephalalgia : an international journal of headache": {
+    "IF": 4.6,
+    "CAS": "2区",
+    "JCR": "Q1",
+    "updated": "2026-06-10",
+    "source": "web_research",
+    "note": "Cephalalgia (ISSN 0333-1024). 2024 IF=4.6 (2023 IF=5.0)。中科院分区: 医学2区(Top期刊), 小类: 临床神经病学2区, 神经科学2区。JCR分区: Q1 (Clinical Neurology)。国际头痛学会官方期刊。"
+  },
+  "Children (Basel, Switzerland)": {
+    "IF": 2.1,
+    "CAS": "4区",
+    "JCR": "Q1/Q2",
+    "updated": "2026-06-10",
+    "source": "web_research",
+    "note": "Children-Basel (ISSN 2227-9067). MDPI期刊。2024 IF=2.1 (2023 IF=2.0)。中科院分区: 医学4区, 小类: 儿科3区。JCR分区: 儿科领域Q1(排名42/130)或Q2。年发文量~1800+。"
+  },
+  "Clinica chimica acta; international journal of clinical chemistry": {
+    "IF": 2.9,
+    "CAS": "3区",
+    "JCR": "Q2",
+    "updated": "2026-06-10",
+    "source": "web_research",
+    "note": "Clinica Chimica Acta (ISSN 0009-8981). Elsevier期刊。2024 IF=2.9, 5年平均IF=3.7。中科院分区: 医学3区(医学实验技术)。JCR分区: Q2 (MEDICAL LABORATORY TECHNOLOGY - SCIE, 排名11/31)。"
+  },
+  "Clinical & translational immunology": {
+    "IF": 3.8,
+    "CAS": "2区/3区",
+    "JCR": "Q2",
+    "updated": "2026-06-10",
+    "source": "web_research",
+    "note": "Clinical & Translational Immunology (ISSN 2050-0068). Wiley/ASI OA期刊。2024 IF=3.8 (官网数据) 或 4.6 (部分来源)。中科院分区: 医学2区(大类), 免疫学3区(小类)。JCR分区: Q2 (IMMUNOLOGY - SCIE, 排名46/181, 74.86%)。"
+  },
+  "Clinical autonomic research : official journal of the Clinical Autonomic Research Society": {
+    "IF": 3.4,
+    "CAS": "3区",
+    "JCR": "Q2",
+    "updated": "2026-06-10",
+    "source": "web_research",
+    "note": "Clinical Autonomic Research (ISSN 0959-9851). Springer期刊。2024 IF=3.4 (5年IF=4.2)。中科院分区: 医学3区, 小类: 临床神经病学3区。JCR分区: Q2 (NEUROSCIENCES - SCIE, 排名93/278, 66.73%; CLINICAL NEUROLOGY Q2, 123/310)。"
+  },
+  "Clinical neurophysiology : official journal of the International Federation of Clinical Neurophysiology": {
+    "IF": 3.6,
+    "CAS": "3区",
+    "JCR": "Q1",
+    "updated": "2026-06-10",
+    "source": "web_research",
+    "note": "Clinical Neurophysiology (ISSN 1388-2457). Elsevier期刊。2024 IF=3.6 (2023 IF=3.7)。中科院分区: 医学3区, 小类: 临床神经病学3区, 神经科学3区。JCR分区: Q1 (Clinical Neurology/Neurosciences - SCIE)。IFCN官方期刊。年发文~180篇。"
+  },
+  "Clinical ophthalmology (Auckland, N.Z.)": {
+    "IF": 2.2,
+    "CAS": "4区",
+    "JCR": "Q2",
+    "updated": "2026-06-10",
+    "source": "web_research",
+    "note": "Clinical Ophthalmology (ISSN 1177-5483). Dove Medical Press期刊。2024 IF=2.2 (5年IF=2.3)。中科院分区: 医学4区, 小类: 眼科学3区。JCR分区: Q2 (OPHTHALMOLOGY - ESCI)。"
+  },
+  "Antibodies (Basel, Switzerland)": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Clinical trials (London, England)": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Continuum (Minneapolis, Minn.)": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Diagnostics (Basel, Switzerland)": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "European journal of cancer (Oxford, England : 1990)": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "European journal of cardio-thoracic surgery : official journal of the European Association for Cardio-thoracic Surgery": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "European neuropsychopharmacology : the journal of the European College of Neuropsychopharmacology": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "FASEB journal : official publication of the Federation of American Societies for Experimental Biology": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Gan to kagaku ryoho. Cancer & chemotherapy": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "General thoracic and cardiovascular surgery cases": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Global advances in integrative medicine and health": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Harefuah": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Healthcare (Basel, Switzerland)": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Hinyokika kiyo. Acta urologica Japonica": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "International journal of obesity (2005)": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "International journal of urology : official journal of the Japanese Urological Association": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "JNMA; journal of the Nepal Medical Association": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of clinical neurophysiology : official publication of the American Electroencephalographic Society": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of clinical neuroscience : official journal of the Neurosurgical Society of Australasia": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of clinical rheumatology : practical reports on rheumatic & musculoskeletal diseases": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of clinical ultrasound : JCU": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of electromyography and kinesiology : official journal of the International Society of Electrophysiological Kinesiology": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of immunotherapy (Hagerstown, Md. : 1997)": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of molecular neuroscience : MN": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of neural transmission (Vienna, Austria : 1996)": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of neuro-ophthalmology : the official journal of the North American Neuro-Ophthalmology Society": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of neuroimmune pharmacology : the official journal of the Society on NeuroImmune Pharmacology": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Journal of the Formosan Medical Association = Taiwan yi zhi": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "La Radiologia medica": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Lung cancer (Amsterdam, Netherlands)": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Mediastinum (Hong Kong, China)": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Medical sciences (Basel, Switzerland)": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Medicina (Kaunas, Lithuania)": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Medicine": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Mikrochimica acta": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Molecular therapy : the journal of the American Society of Gene Therapy": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Muscles (Basel, Switzerland)": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Neuro-ophthalmology (Aeolus Press)": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Presse medicale (Paris, France : 1983)": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Prilozi (Makedonska akademija na naukite i umetnostite. Oddelenie za medicinski nauki)": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Quality of life research : an international journal of quality of life aspects of treatment, care and rehabilitation": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Reports (MDPI)": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Rhode Island medical journal (2013)": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Sisli Etfal Hastanesi tip bulteni": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Structure (London, England : 1993)": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "The Journal of pharmacy technology : jPT : official publication of the Association of Pharmacy Technicians": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Therapeutic apheresis and dialysis : official peer-reviewed journal of the International Society for Apheresis, the Japanese Society for Apheresis, the Japanese Society for Dialysis Therapy": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Tierarztliche Praxis. Ausgabe G, Grosstiere/Nutztiere": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Transfusion and apheresis science : official journal of the World Apheresis Association : official journal of the European Society for Haemapheresis": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Turkish journal of haematology : official journal of Turkish Society of Haematology": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Value in health : the journal of the International Society for Pharmacoeconomics and Outcomes Research": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Wiener medizinische Wochenschrift (1946)": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Zhongguo Zhong yao za zhi = Zhongguo zhongyao zazhi = China journal of Chinese materia medica": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Zhongguo shi yan xue ye xue za zhi": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Zhongguo yi xue ke xue yuan xue bao. Acta Academiae Medicinae Sinicae": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Zhonghua jie he he hu xi za zhi = Zhonghua jiehe he huxi zazhi = Chinese journal of tuberculosis and respiratory diseases": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Zhonghua lao dong wei sheng zhi ye bing za zhi = Zhonghua laodong weisheng zhiyebing zazhi = Chinese journal of industrial hygiene and occupational diseases": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Zhonghua yi xue yi chuan xue za zhi = Zhonghua yixue yichuanxue zazhi = Chinese journal of medical genetics": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "Zhonghua yi xue za zhi": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "bioRxiv : the preprint server for biology": {
+    "IF": 0.0,
+    "CAS": null,
+    "updated": "2026-06-10",
+    "source": "ablesci"
+  },
+  "medRxiv : the preprint server for health sciences": {
+    "IF": 0.0,
+    "CAS": null,
     "updated": "2026-06-10",
     "source": "ablesci"
   }
