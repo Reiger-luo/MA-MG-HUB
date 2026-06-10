@@ -18,6 +18,7 @@
     filterChina: $('filterChina'),
     filterIF: $('filterIF'),
     filterQuartile: $('filterQuartile'),
+    filterEvidence: $('filterEvidence'),
     btnExport: $('btnExport'),
   };
 
@@ -93,6 +94,7 @@
     var chinaVal = el.filterChina.value;
     var ifVal = el.filterIF.value;
     var quartileVal = el.filterQuartile.value;
+    var evidenceVal = el.filterEvidence.value;
 
     var allSelected = false;
     for (var s = 0; s < selectedMonths.length; s++) {
@@ -145,6 +147,7 @@
       if (chinaVal === 'non-china' && a.china_related) continue;
       if (!matchesIF(a)) continue;
       if (!matchesQuartile(a)) continue;
+      if (evidenceVal !== 'all' && a.evidence_level !== evidenceVal) continue;
       filteredResults.push(a);
     }
 
@@ -327,6 +330,9 @@
 
   el.filterKeyword.addEventListener('input', applyFilters);
   el.filterChina.addEventListener('change', applyFilters);
+  el.filterIF.addEventListener('change', applyFilters);
+  el.filterQuartile.addEventListener('change', applyFilters);
+  el.filterEvidence.addEventListener('change', applyFilters);
   el.btnExport.addEventListener('click', function() {
     var articles = filteredResults.length > 0 ? filteredResults : allArticles;
     var now = new Date().toLocaleDateString('zh-CN');

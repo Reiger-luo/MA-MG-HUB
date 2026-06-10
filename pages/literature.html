@@ -74,8 +74,8 @@
       </div>
 
       <div class="filter-group">
-        <label class="filter-label">影响因子 <span style="color:var(--fg3);font-weight:normal">(待后处理)</span></label>
-        <select class="filter-select" id="filterIF" disabled>
+        <label class="filter-label">影响因子</label>
+        <select class="filter-select" id="filterIF">
           <option value="all" selected>全部</option>
           <option value="0-2">&lt; 2</option>
           <option value="2-5">2 – 5</option>
@@ -85,8 +85,8 @@
       </div>
 
       <div class="filter-group">
-        <label class="filter-label">期刊分区 <span style="color:var(--fg3);font-weight:normal">(待后处理)</span></label>
-        <select class="filter-select" id="filterQuartile" disabled>
+        <label class="filter-label">期刊分区</label>
+        <select class="filter-select" id="filterQuartile">
           <option value="all" selected>全部</option>
           <option value="1">Q1 (1区)</option>
           <option value="2">Q2 (2区)</option>
@@ -97,8 +97,14 @@
 
       <div class="filter-group">
         <label class="filter-label">证据等级</label>
-        <select class="filter-select" id="filterEvidence" disabled>
-          <option value="all">全部（分类待后处理）</option>
+        <select class="filter-select" id="filterEvidence">
+          <option value="all">全部</option>
+          <option value="I">I级 - 系统综述/指南</option>
+          <option value="II">II级 - RCT</option>
+          <option value="III">III级 - 对照队列</option>
+          <option value="IV">IV级 - 单臂/病例对照</option>
+          <option value="V">V级 - 病例报告</option>
+          <option value="VI">VI级 - 叙述性综述</option>
         </select>
       </div>
 

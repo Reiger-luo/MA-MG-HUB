@@ -168,11 +168,9 @@ def backfill_articles(articles, cache):
 
 
 def main():
-    mode = "all"
+    mode = "recent"  # 默认近1年，不限batch
     if "--all" in sys.argv:
         mode = "all"
-    elif "--recent" in sys.argv:
-        mode = "recent"
 
     articles = load_articles()
     cache = load_cache()
@@ -187,8 +185,8 @@ def main():
     if not needs_fetch:
         print("🎉 全部已覆盖，直接回填。")
     else:
-        batch = needs_fetch[:BATCH_SIZE] if mode != "all" else needs_fetch
-        print(f"🔍 本批查询: {len(batch)} 个期刊")
+        print(f"🔍 查询全部 {len(needs_fetch)} 个待覆盖期刊（batch={BATCH_SIZE}、mode={mode}）")
+        batch = needs_fetch  # 不限batch，一次性跑完
 
         cookie_path = init_cookie()
         if not cookie_path:
@@ -208,13 +206,8 @@ def main():
                     }
                     print(f"    → IF={if_val}, 分区={quartile}")
                 else:
-                    cache[journal] = {
-                        "IF": 0.0,
-                        "CAS": None,
-                        "updated": datetime.now().strftime("%Y-%m-%d"),
-                        "source": "ablesci",
-                    }
-                    print(f"    → 未查到（标记为 null）")
+                    # 未查到 → 不写入 cache，保持 null 以便后续重试
+                    print(f"    → Ablesci 未查到（跳过，不标记）")
 
                 if i < len(batch) - 1:
                     delay = random.uniform(*RATE_RANGE)
