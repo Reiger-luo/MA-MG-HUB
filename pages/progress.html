@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>前沿进展报告 · MA-MG-HUB</title>
+<link rel="stylesheet" href="/MA-MG-HUB/assets/main.css">
+<style>
+.progress-main { max-width: 1000px; margin: 0 auto; padding: 1.5rem; }
+.step-bar {
+  display: flex; gap: 0.5rem; align-items: center;
+  margin: 1rem 0 1.5rem; padding: 0.6rem 1rem;
+  background: var(--bg2); border-radius: 8px; border: 1px solid var(--bg3);
+}
+.step { font-size: 0.82rem; color: var(--fg3); padding: 0.2rem 0.5rem; border-radius: 4px; }
+.step.active { background: var(--accent); color: #fff; }
+.step.done { color: var(--green); }
+.step-arrow { color: var(--bg3); }
+
+.filter-row { display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center; margin-bottom: 1rem; }
+.filter-row select, .filter-row input {
+  padding: 0.35rem 0.6rem; border-radius: 6px;
+  border: 1px solid var(--bg3); background: var(--bg2);
+  color: var(--fg); font-size: 0.85rem;
+}
+
+.preview-list { list-style: none; }
+.preview-item {
+  padding: 0.6rem 0; border-bottom: 1px solid var(--bg3);
+  display: flex; align-items: flex-start; gap: 0.5rem;
+}
+.preview-item input[type="checkbox"] { margin-top: 0.2rem; }
+.preview-info { flex: 1; }
+.preview-title { font-size: 0.85rem; color: var(--accent); text-decoration: none; }
+.preview-title:hover { text-decoration: underline; }
+.preview-meta { font-size: 0.78rem; color: var(--fg3); margin-top: 0.1rem; }
+
+.format-options { display: flex; gap: 0.6rem; margin: 1rem 0; }
+.format-btn {
+  padding: 0.5rem 1rem; border-radius: 8px;
+  border: 1px solid var(--bg3); background: var(--bg2);
+  cursor: pointer; font-size: 0.85rem; transition: all 0.12s;
+}
+.format-btn:hover { border-color: var(--accent); }
+.format-btn.selected { border-color: var(--accent); background: rgba(37,99,235,0.08); color: var(--accent); }
+
+.gen-bar {
+  margin-top: 1rem; padding: 0.8rem 1rem;
+  background: var(--bg2); border-radius: 8px; border: 1px solid var(--bg3);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.gen-bar .count { font-size: 0.85rem; color: var(--fg2); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/MA-MG-HUB/" class="nav-brand">MA-MG-HUB</a>
+    <div class="nav-links">
+      <a href="/MA-MG-HUB/" class="nav-link">工作台</a>
+      <a href="/MA-MG-HUB/pages/literature.html" class="nav-link">自由探索</a>
+      <a href="/MA-MG-HUB/pages/data-ops.html" class="nav-link">数据状态</a>
+    </div>
+  </div>
+</nav>
+
+<div class="progress-main">
+  <div class="page-header">
+    <h1>📄 前沿进展报告</h1>
+    <div class="page-header-actions">
+      <span class="update-badge">数据: 实时 · 近1年文献</span>
+    </div>
+  </div>
+
+  <!-- Step 1: 筛选 -->
+  <div class="step-bar">
+    <span class="step active">① 设定条件</span>
+    <span class="step-arrow">→</span>
+    <span class="step">② 预览条目</span>
+    <span class="step-arrow">→</span>
+    <span class="step">③ 选择格式并生成</span>
+  </div>
+
+  <div class="filter-row">
+    <span style="font-size:0.82rem;color:var(--fg3)">时间：</span>
+    <select id="filterTime">
+      <option value="7">近7天</option>
+      <option value="30" selected>近30天</option>
+      <option value="90">近3个月</option>
+      <option value="365">近1年</option>
+    </select>
+    <input type="text" id="filterKeyword" placeholder="关键词搜索…" style="width:180px">
+    <select id="filterEvidence">
+      <option value="all">全部证据等级</option>
+      <option value="I">I 级</option>
+      <option value="II">II 级</option>
+      <option value="III">III 级</option>
+      <option value="IV">IV 级</option>
+    </select>
+    <button class="btn" onclick="applyFilter()" style="background:var(--accent);color:#fff;border:none">筛选</button>
+  </div>
+
+  <!-- Step 2: 预览 -->
+  <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem">
+    <span style="font-size:0.85rem;color:var(--fg2)">选中 <strong id="selectedCount">0</strong> 篇</span>
+    <button class="btn" onclick="selectAll()" style="font-size:0.78rem">全选</button>
+    <button class="btn" onclick="deselectAll()" style="font-size:0.78rem">清空</button>
+  </div>
+
+  <div class="loading" id="loading">📡 加载文献数据…</div>
+  <ul class="preview-list" id="previewList" style="display:none"></ul>
+
+  <!-- Step 3: 生成 -->
+  <div class="gen-bar" id="genBar" style="display:none">
+    <span class="count" id="genCount">已选 0 篇</span>
+    <div style="display:flex;gap:0.5rem">
+      <div class="format-options" style="margin:0">
+        <div class="format-btn selected" data-format="md" onclick="selectFormat(this)">Markdown</div>
+        <div class="format-btn" data-format="html" onclick="selectFormat(this)">HTML</div>
+        <div class="format-btn disabled" data-format="pptx" onclick="selectFormat(this)" style="opacity:0.4;cursor:default">PPT</div>
+      </div>
+      <button class="ops-btn" onclick="generateReport()">🚀 生成报告</button>
+    </div>
+  </div>
+</div>
+
+<script src="/MA-MG-HUB/data/literature-recent.js"></script>
+<script>
+(function(){
+  const data = window.MG_LITERATURE_DATA || [];
+  let filtered = [];
+  let selected = new Set();
+
+  const loading = document.getElementById('loading');
+  const list = document.getElementById('previewList');
+  const genBar = document.getElementById('genBar');
+
+  if (!data.length) {
+    loading.textContent = '⚠️ 数据加载失败';
+    return;
+  }
+  loading.style.display = 'none';
+  list.style.display = 'block';
+
+  window.applyFilter = function() {
+    const timeVal = parseInt(document.getElementById('filterTime').value);
+    const keyword = document.getElementById('filterKeyword').value.trim().toLowerCase();
+    const ev = document.getElementById('filterEvidence').value;
+
+    const now = new Date();
+    const cutoff = new Date(now); cutoff.setDate(cutoff.getDate() - timeVal);
+
+    filtered = data.filter(a => {
+      const ed = a.entry_date || '';
+      const m = ed.match(/^(\d{4})\/(\d{2})\/(\d{2})/);
+      if (m) {
+        const d = new Date(+m[1], +m[2]-1, +m[3]);
+        if (d < cutoff) return false;
+      }
+      if (keyword) {
+        const inTitle = (a.title || '').toLowerCase().indexOf(keyword) !== -1;
+        const inAuthors = (a.authors || []).some(au => au.toLowerCase().indexOf(keyword) !== -1);
+        if (!inTitle && !inAuthors) return false;
+      }
+      if (ev !== 'all' && a.evidence_level !== ev) return false;
+      return true;
+    });
+
+    selected = new Set();
+    render();
+  };
+
+  function render() {
+    list.innerHTML = filtered.map(a => {
+      const pid = a.pmid || a.id;
+      const checked = selected.has(pid) ? 'checked' : '';
+      return '<li class="preview-item">' +
+        '<input type="checkbox" ' + checked + ' value="' + pid + '" onchange="toggleSel(\'' + pid + '\', this.checked)">' +
+        '<div class="preview-info">' +
+          '<a class="preview-title" href="' + (a.url || '#') + '" target="_blank">' + escapeHtml(a.title) + '</a>' +
+          '<div class="preview-meta">' +
+            (a.journal ? escapeHtml(a.journal) : '') +
+            (a.entry_date ? ' · ' + a.entry_date.slice(0,10) : '') +
+            (a.evidence_level ? ' · 证据 ' + a.evidence_level + ' 级' : '') +
+          '</div>' +
+        '</div>' +
+      '</li>';
+    }).join('');
+    updateGenBar();
+    if (filtered.length === 0) list.innerHTML = '<li style="padding:2rem;text-align:center;color:var(--fg3)">暂无匹配文献</li>';
+  }
+
+  window.toggleSel = function(pid, checked) {
+    if (checked) selected.add(pid); else selected.delete(pid);
+    updateGenBar();
+  };
+  window.selectAll = function() {
+    filtered.forEach(a => selected.add(a.pmid || a.id));
+    render();
+  };
+  window.deselectAll = function() {
+    selected.clear();
+    render();
+  };
+
+  function updateGenBar() {
+    document.getElementById('selectedCount').textContent = selected.size;
+    if (selected.size > 0) {
+      genBar.style.display = 'flex';
+      document.getElementById('genCount').textContent = '已选 ' + selected.size + ' 篇';
+    } else {
+      genBar.style.display = 'none';
+    }
+  }
+
+  window.selectFormat = function(el) {
+    document.querySelectorAll('.format-btn:not(.disabled)').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+  };
+
+  window.generateReport = function() {
+    const selItems = filtered.filter(a => selected.has(a.pmid || a.id));
+    if (!selItems.length) { alert('请至少选中一篇文献'); return; }
+    const fmt = document.querySelector('.format-btn.selected');
+    const format = fmt ? fmt.dataset.format : 'md';
+    // 简报生成（简化版）
+    const now = new Date().toLocaleDateString('zh-CN');
+    let text = '# 前沿进展报告\n生成日期: ' + now + '\n\n共 ' + selItems.length + ' 篇\n\n';
+    selItems.slice(0, 20).forEach((a, i) => {
+      text += (i+1) + '. ' + a.title + '\n';
+      text += '   期刊: ' + (a.journal || '未知') + '\n';
+      text += '   链接: ' + (a.url || '#') + '\n\n';
+    });
+    if (selItems.length > 20) text += '… 以及 ' + (selItems.length - 20) + ' 篇\n';
+
+    if (format === 'md') {
+      // 弹窗展示markdown
+      const overlay = document.createElement('div');
+      overlay.className = 'modal-overlay open';
+      overlay.innerHTML =
+        '<div class="modal">' +
+          '<button class="modal-close" onclick="this.closest(\'.modal-overlay\').remove()">✕</button>' +
+          '<h2>📋 报告预览</h2>' +
+          '<pre>' + escapeHtml(text) + '</pre>' +
+          '<div class="modal-actions">' +
+            '<button class="btn" onclick="navigator.clipboard.writeText(this.closest(\'.modal\').querySelector(\'pre\').textContent).then(()=>{this.textContent=\'✅ 已复制\';setTimeout(()=>{this.textContent=\'📋 复制\';},2000)})">📋 复制</button>' +
+            '<button class="btn" onclick="this.closest(\'.modal-overlay\').remove()">关闭</button>' +
+          '</div>' +
+        '</div>';
+      document.body.appendChild(overlay);
+    } else {
+      alert('HTML 格式生成（待实现）');
+    }
+  };
+
+  function escapeHtml(t) {
+    if (!t) return '';
+    var d = document.createElement('div');
+    d.textContent = t; return d.innerHTML;
+  }
+
+  // 默认加载近30天
+  applyFilter();
+})();
+</script>
+</body>
+</html>

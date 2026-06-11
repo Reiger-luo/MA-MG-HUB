@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>历史产出 · MA-MG-HUB</title>
+<link rel="stylesheet" href="/MA-MG-HUB/assets/main.css">
+<style>
+.out-main { max-width: 900px; margin: 0 auto; padding: 1.5rem; }
+.filter-bar {
+  display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;
+  margin-bottom: 1rem; padding: 0.6rem 1rem;
+  background: var(--bg2); border-radius: 8px; border: 1px solid var(--bg3);
+}
+.filter-bar select { padding: 0.3rem 0.5rem; border: 1px solid var(--bg3); border-radius: 6px; background: var(--bg); font-size: 0.85rem; color: var(--fg); }
+
+.output-card {
+  background: var(--bg2); border: 1px solid var(--bg3);
+  border-radius: 8px; padding: 0.8rem 1rem; margin-bottom: 0.5rem;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.output-info { flex: 1; }
+.output-title { font-size: 0.9rem; font-weight: 500; color: var(--fg); }
+.output-meta { font-size: 0.78rem; color: var(--fg3); margin-top: 0.1rem; display: flex; gap: 0.5rem; align-items: center; }
+.output-tag {
+  display: inline-block; padding: 0.1rem 0.35rem; border-radius: 4px;
+  font-size: 0.72rem; background: var(--bg); color: var(--fg2);
+}
+.output-actions { display: flex; gap: 0.3rem; }
+.output-actions .btn { font-size: 0.75rem; padding: 0.25rem 0.5rem; }
+
+.empty-state { text-align: center; padding: 3rem; color: var(--fg3); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/MA-MG-HUB/" class="nav-brand">MA-MG-HUB</a>
+    <div class="nav-links">
+      <a href="/MA-MG-HUB/" class="nav-link">工作台</a>
+      <a href="/MA-MG-HUB/pages/literature.html" class="nav-link">自由探索</a>
+      <a href="/MA-MG-HUB/pages/data-ops.html" class="nav-link">数据状态</a>
+    </div>
+  </div>
+</nav>
+
+<div class="out-main">
+  <div class="page-header">
+    <h1>📌 历史产出</h1>
+    <div class="page-header-actions">
+      <span class="update-badge" data-placeholder="true">产出总数: 5</span>
+    </div>
+  </div>
+
+  <div class="filter-bar">
+    <span style="font-size:0.82rem;color:var(--fg3)">类型筛选：</span>
+    <select id="typeFilter" onchange="filterOutputs()">
+      <option value="all">全部</option>
+      <option value="progress">前沿进展报告</option>
+      <option value="landscape">治疗格局报告</option>
+      <option value="competitive">竞品应对策略</option>
+      <option value="explore">自由探索</option>
+    </select>
+    <span style="font-size:0.82rem;color:var(--fg3);margin-left:auto" id="resultCount">显示 5 条</span>
+  </div>
+
+  <div id="outputList">
+    <!-- 占位产出列表 -->
+  </div>
+</div>
+
+<script>
+// data-placeholder — 假数据，用于原型展示
+const MOCK_OUTPUTS = [
+  { id: 'out-001', type: 'landscape', title: 'FcRn 靶点治疗 MG 的竞争格局', format: 'md', date: '2026-06-08', params: 'FcRn·MG·全局' },
+  { id: 'out-002', type: 'competitive', title: '泰它西普 MG 竞品分析 v3', format: 'md', date: '2026-06-01', params: '泰它西普·竞品' },
+  { id: 'out-003', type: 'progress', title: '第22周前沿进展简报', format: 'md', date: '2026-05-25', params: 'MG·周报' },
+  { id: 'out-004', type: 'landscape', title: '补体抑制在 MG 中的应用全景', format: 'md', date: '2026-05-18', params: '补体·MG·治疗格局' },
+  { id: 'out-005', type: 'explore', title: '2026 AAN 会议摘要精选', format: 'md', date: '2026-05-10', params: 'AAN·会议·摘要' },
+];
+
+const TYPE_LABELS = {
+  progress: '前沿进展报告',
+  landscape: '治疗格局报告',
+  competitive: '竞品应对策略',
+  explore: '自由探索'
+};
+
+const FORMAT_LABELS = { md: 'Markdown', html: 'HTML', pptx: 'PPT' };
+
+function filterOutputs() {
+  const type = document.getElementById('typeFilter').value;
+  const filtered = type === 'all' ? MOCK_OUTPUTS : MOCK_OUTPUTS.filter(o => o.type === type);
+
+  document.getElementById('resultCount').textContent = '显示 ' + filtered.length + ' 条';
+
+  const list = document.getElementById('outputList');
+  list.innerHTML = filtered.map(o => {
+    const typeLabel = TYPE_LABELS[o.type] || o.type;
+    const fmtLabel = FORMAT_LABELS[o.format] || o.format;
+    return '<div class="output-card" data-placeholder="true">' +
+      '<div class="output-info">' +
+        '<div class="output-title">' + o.title + '</div>' +
+        '<div class="output-meta">' +
+          '<span class="output-tag">' + typeLabel + '</span>' +
+          '<span>' + o.date + '</span>' +
+          '<span>' + fmtLabel + '</span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="output-actions">' +
+        '<button class="btn" onclick="alert(\'下载功能（待实现）\n\n文件路径: outputs/\' + \'' + o.type + '/' + o.id + '.' + o.format + '\')">⬇️ 下载</button>' +
+        '<button class="btn" onclick="alert(\'重新生成（待实现）\n\n基于原始参数: ' + o.params + '\')">🔄 重新生成</button>' +
+        '<button class="btn" onclick="if(confirm(\'确认删除？\')) this.closest(\'.output-card\').remove()">🗑️</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+filterOutputs();
+</script>
+</body>
+</html>
