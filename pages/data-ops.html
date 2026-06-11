@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>数据状态 · MA-MG-HUB</title>
+<link rel="stylesheet" href="/MA-MG-HUB/assets/main.css">
+<style>
+.ops-main { max-width: 900px; margin: 0 auto; padding: 1.5rem; }
+.source-card {
+  background: var(--bg2); border-radius: 8px;
+  border: 1px solid var(--bg3); padding: 1rem 1.2rem;
+  margin-bottom: 0.6rem;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.source-info { flex: 1; }
+.source-name { font-size: 0.95rem; font-weight: 500; color: var(--fg); }
+.source-meta { font-size: 0.8rem; color: var(--fg3); margin-top: 0.15rem; }
+.source-status { font-size: 0.8rem; }
+.source-status .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 0.3rem; }
+.source-status .dot.green { background: var(--green); }
+.source-status .dot.yellow { background: var(--yellow); }
+.source-status .dot.gray { background: var(--bg3); }
+.ops-section-title { font-size: 0.9rem; font-weight: 500; color: var(--fg2); margin: 1.2rem 0 0.6rem; }
+.ops-btn {
+  padding: 0.4rem 0.8rem; border-radius: 6px;
+  background: var(--accent); color: #fff; border: none;
+  font-size: 0.82rem; cursor: pointer;
+  transition: opacity 0.15s;
+}
+.ops-btn:hover { opacity: 0.85; }
+.ops-btn:disabled { opacity: 0.4; cursor: default; }
+.log-line {
+  font-size: 0.8rem; color: var(--fg3); padding: 0.3rem 0;
+  border-bottom: 1px solid var(--bg3);
+  font-family: monospace;
+}
+.section-divider { border: none; border-top: 1px solid var(--bg3); margin: 1.5rem 0; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/MA-MG-HUB/" class="nav-brand">MA-MG-HUB</a>
+    <div class="nav-links">
+      <a href="/MA-MG-HUB/" class="nav-link">工作台</a>
+      <a href="/MA-MG-HUB/pages/literature.html" class="nav-link">自由探索</a>
+      <a href="/MA-MG-HUB/pages/data-ops.html" class="nav-link active">数据状态</a>
+    </div>
+  </div>
+</nav>
+
+<div class="ops-main">
+  <div class="page-header">
+    <h1>🔧 数据状态</h1>
+  </div>
+
+  <!-- 源健康度 -->
+  <div class="ops-section-title" style="margin-top:0">数据源</div>
+
+  <div class="source-card">
+    <div class="source-info">
+      <div class="source-name">PubMed 文献全量</div>
+      <div class="source-meta">10,577 篇 · 含证据等级 · IF/分区已回填 · 近1年 1,154 篇</div>
+    </div>
+    <div class="source-status"><span class="dot green"></span>正常</div>
+  </div>
+
+  <div class="source-card">
+    <div class="source-info">
+      <div class="source-name">会议摘要</div>
+      <div class="source-meta">暂未接入 · AAN / EAN / AANEM</div>
+    </div>
+    <div class="source-status"><span class="dot gray"></span>待接入</div>
+  </div>
+
+  <div class="source-card">
+    <div class="source-info">
+      <div class="source-name">临床试验 (ClinicalTrials.gov)</div>
+      <div class="source-meta">暂未接入</div>
+    </div>
+    <div class="source-status"><span class="dot gray"></span>待接入</div>
+  </div>
+
+  <div class="source-card">
+    <div class="source-info">
+      <div class="source-name">监管动态 (FDA/NMPA)</div>
+      <div class="source-meta">暂未接入</div>
+    </div>
+    <div class="source-status"><span class="dot gray"></span>待接入</div>
+  </div>
+
+  <div class="source-card">
+    <div class="source-info">
+      <div class="source-name">手动上传 Poster</div>
+      <div class="source-meta">目录: data/uploads/ · 扫描结果将显示于此</div>
+    </div>
+    <div class="source-status"><span class="dot gray"></span>待接入</div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- 操作 -->
+  <div class="ops-section-title">操作</div>
+  <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:0.5rem">
+    <button class="ops-btn" onclick="alert('手动扫描触发（待实现）\n\n将扫描 data/uploads/ 目录\n→ 生成 poster-manifest.json')">📂 扫描 Poster 目录</button>
+    <button class="ops-btn" onclick="alert('手动更新触发（待实现）')">🔄 触发 PubMed 更新</button>
+  </div>
+  <div style="font-size:0.78rem;color:var(--fg3);margin-top:0.3rem">
+    💡 将 PDF 放入 <code>data/uploads/</code> 后，点"扫描"即可入库
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- 更新日志 -->
+  <div class="ops-section-title">更新日志</div>
+  <div class="log-line">[2026-06-09] IF/分区回填完成（82.6%覆盖率）</div>
+  <div class="log-line">[2026-06-09] 期刊名全称改写完成（374篇 ISO缩写→全称）</div>
+  <div class="log-line">[2026-06-08] 证据等级分类跑通（全部文献）</div>
+  <div class="log-line">[2026-06-08] 数据改为 .js 格式加载（gzip 加速）</div>
+  <div class="log-line">[2026-06-07] 项目搭建 · 全量 10,577 篇入库</div>
+  <div class="log-line">[2026-06-07] GitHub Pages 部署 + 域名绑定</div>
+
+</div>
+</body>
+</html>
