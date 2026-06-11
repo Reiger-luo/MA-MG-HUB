@@ -224,41 +224,64 @@
     if (!selItems.length) { alert('请至少选中一篇文献'); return; }
     const fmt = document.querySelector('.format-btn.selected');
     const format = fmt ? fmt.dataset.format : 'md';
-    // 简报生成（简化版）
+
     const now = new Date().toLocaleDateString('zh-CN');
-    let text = '# 前沿进展报告\n生成日期: ' + now + '\n\n共 ' + selItems.length + ' 篇\n\n';
-    selItems.slice(0, 20).forEach((a, i) => {
-      text += (i+1) + '. ' + a.title + '\n';
-      text += '   期刊: ' + (a.journal || '未知') + '\n';
-      text += '   链接: ' + (a.url || '#') + '\n\n';
+    let q = now;
+
+    // 生成 Markdown 内容
+    let md = '# 前沿进展报告\n生成日期: ' + q + '\n\n共 ' + selItems.length + ' 篇\n\n';
+    selItems.slice(0, 50).forEach((a, i) => {
+      md += (i+1) + '. **[' + escapeHtml(a.title) + '](' + (a.url || '#') + ')**\n';
+      md += '   ' + (a.journal ? escapeHtml(a.journal) : 'Unknown');
+      md += (a.evidence_level ? ' · 证据 ' + a.evidence_level + ' 级' : '');
+      md += (a.entry_date ? ' · ' + a.entry_date.slice(0,10) : '') + '\n\n';
     });
-    if (selItems.length > 20) text += '… 以及 ' + (selItems.length - 20) + ' 篇\n';
+    if (selItems.length > 50) md += '… 以及 ' + (selItems.length - 50) + ' 篇\n';
 
-    if (format === 'md') {
-      // 弹窗展示markdown
-      const overlay = document.createElement('div');
-      overlay.className = 'modal-overlay open';
-      overlay.innerHTML =
-        '<div class="modal">' +
-          '<button class="modal-close" onclick="this.closest(\'.modal-overlay\').remove()">✕</button>' +
-          '<h2>📋 报告预览</h2>' +
-          '<pre>' + escapeHtml(text) + '</pre>' +
-          '<div class="modal-actions">' +
-            '<button class="btn" onclick="navigator.clipboard.writeText(this.closest(\'.modal\').querySelector(\'pre\').textContent).then(()=>{this.textContent=\'✅ 已复制\';setTimeout(()=>{this.textContent=\'📋 复制\';},2000)})">📋 复制</button>' +
-            '<button class="btn" onclick="this.closest(\'.modal-overlay\').remove()">关闭</button>' +
+    // 生成 HTML 内容
+    let html = '<article style="font-family:-apple-system,sans-serif;max-width:700px;margin:0 auto;padding:1rem">';
+    html += '<h1 style="font-size:1.3rem;margin-bottom:0.3rem">前沿进展报告</h1>';
+    html += '<p style="color:#666;font-size:0.85rem;margin-bottom:1rem">生成日期: ' + q + ' · 共 ' + selItems.length + ' 篇</p>';
+    selItems.slice(0, 50).forEach((a, i) => {
+      html += '<div style="margin-bottom:0.8rem;padding-bottom:0.6rem;border-bottom:1px solid #eee">';
+      html += '<a href="' + (a.url || '#') + '" target="_blank" style="color:#2563eb;text-decoration:none;font-weight:500">' + escapeHtml(a.title) + '</a>';
+      html += '<div style="font-size:0.8rem;color:#888;margin-top:0.15rem">';
+      html += (a.journal ? escapeHtml(a.journal) : 'Unknown');
+      html += (a.evidence_level ? ' · 证据 ' + a.evidence_level + ' 级' : '');
+      html += (a.entry_date ? ' · ' + a.entry_date.slice(0,10) : '');
+      html += '</div></div>';
+    });
+    if (selItems.length > 50) html += '<p style="color:#999">… 以及 ' + (selItems.length - 50) + ' 篇</p>';
+    html += '</article>';
+
+    // 双栏弹窗
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay open';
+    overlay.innerHTML =
+      '<div class="modal" style="max-width:900px">' +
+        '<button class="modal-close" onclick="this.closest(\'.modal-overlay\').remove()">✕</button>' +
+        '<h2>📋 报告预览</h2>' +
+        '<div style="display:flex;gap:1rem;min-height:400px">' +
+          '<div style="flex:1;display:flex;flex-direction:column">' +
+            '<div style="font-size:0.78rem;color:var(--fg3);margin-bottom:0.3rem">预览</div>' +
+            (format === 'md'
+              ? '<pre id="reportContent" style="flex:1;font-size:0.8rem;line-height:1.5;white-space:pre-wrap;word-break:break-word;color:var(--fg2);background:var(--bg);padding:0.8rem;border-radius:6px;border:1px solid var(--bg3);overflow-y:auto">' + escapeHtml(md) + '</pre>'
+              : '<div id="reportContent" style="flex:1;font-size:0.9rem;background:#fff;color:#333;padding:1rem;border-radius:6px;border:1px solid #ddd;overflow-y:auto">' + html + '</div>'
+            ) +
           '</div>' +
-        '</div>';
-      document.body.appendChild(overlay);
-    } else {
-      alert('HTML 格式生成（待实现）');
-    }
+          '<div style="width:180px;flex-shrink:0">' +
+            '<div style="font-size:0.78rem;color:var(--fg3);margin-bottom:0.5rem">操作</div>' +
+            '<button class="btn" onclick="document.getElementById(\'reportContent\').textContent;navigator.clipboard.writeText(document.getElementById(\'reportContent\').textContent).then(()=>{this.textContent=\'✅ 已复制\';setTimeout(()=>{this.textContent=\'📋 复制\';},1500)})" style="display:block;width:100%;margin-bottom:0.4rem;text-align:center">📋 复制</button>' +
+            '<p style="font-size:0.72rem;color:var(--fg3);margin-bottom:0.5rem">复制后可粘贴到微信/飞书/邮件</p>' +
+            '<hr style="border:none;border-top:1px solid var(--bg3);margin:0.5rem 0">' +
+            '<p style="font-size:0.72rem;color:var(--fg3)">后续支持：</p>' +
+            '<button class="btn" disabled style="display:block;width:100%;margin-bottom:0.3rem;text-align:center;opacity:0.5">⬇️ 下载 HTML</button>' +
+            '<button class="btn" disabled style="display:block;width:100%;text-align:center;opacity:0.5">⬇️ 下载 PPT</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(overlay);
   };
-
-  function escapeHtml(t) {
-    if (!t) return '';
-    var d = document.createElement('div');
-    d.textContent = t; return d.innerHTML;
-  }
 
   // 默认加载近30天
   applyFilter();

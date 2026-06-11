@@ -340,7 +340,7 @@
       wireCheckboxAll('filterEvidenceList');
 
       // 统计
-      document.getElementById('statTotal').textContent = '10,577';
+      document.getElementById('statTotal').textContent = allArticles.length;
       document.getElementById('statYear').textContent = allArticles.length;
 
       var chinaYear = 0;
@@ -392,36 +392,49 @@
   el.btnExport.addEventListener('click', function() {
     var articles = filteredResults.length > 0 ? filteredResults : allArticles;
     var now = new Date().toLocaleDateString('zh-CN');
-    var top5 = articles.slice(0, 5);
-    var text = '# MA-MG-HUB 文献简报\n生成日期: ' + now + '\n\n当前筛选: ' + articles.length + ' 篇\n\n';
-    for (var i = 0; i < top5.length; i++) {
-      var a = top5[i];
-      var authors = (a.authors || []).slice(0, 3).join(', ');
-      text += '\n' + (i+1) + '. ' + a.title + '\n   作者: ' + (authors || '未知') + '\n   期刊: ' + (a.journal || '未知') + '\n   链接: ' + a.url + '\n';
-    }
 
-    var overlay = document.createElement('div');
-    overlay.className = 'modal-overlay open';
-    overlay.innerHTML =
-      '<div class="modal">' +
-        '<button class="modal-close" onclick="this.closest(\'.modal-overlay\').remove()">✕</button>' +
-        '<h2>📋 文献简报预览</h2>' +
-        '<pre>' + escapeHtml(text) + '</pre>' +
-        '<div class="modal-actions">' +
-          '<button class="btn" id="copyBrief">📋 复制到剪贴板</button>' +
-          '<button class="btn" id="closeBrief">关闭</button>' +
+    // 生成 Markdown
+    var md = '# MA-MG-HUB 文献简报\n生成日期: ' + now + '\n\n当前筛选: ' + articles.length + ' 篇\n\n';
+    for (var i = 0; i < Math.min(articles.length, 50); i++) {
+      var a = articles[i];
+      var authors = (a.authors || []).slice(0, 3).join(', ');
+      md += (i+1) + '. ' + a.title + '\n';
+      md += '   作者: ' + (authors || '未知') + ' · 期刊: ' + (a.journal || '未知') + '\n';
+      md += '   ' + a.url + '\n\n';
+    }
+    if (articles.length > 50) md += '… 以及 ' + (articles.length - 50) + ' 篇\n';
+
+    // 双栏弹窗
+    var d = document.createElement('div');
+    d.className = 'modal-overlay open';
+    var closeBtn = '<button class="modal-close" onclick="this.parentElement.parentElement.classList.remove(\'open\')">\u2715</button>';
+    var preId = 'brief_' + Date.now();
+    d.innerHTML =
+      '<div class="modal" style="max-width:900px">' +
+        closeBtn +
+        '<h2>\uD83D\uDCCB 文献简报</h2>' +
+        '<div style="display:flex;gap:1rem;min-height:350px">' +
+          '<div style="flex:1;display:flex;flex-direction:column">' +
+            '<div style="font-size:0.78rem;color:var(--fg3);margin-bottom:0.3rem">预览</div>' +
+            '<pre id="' + preId + '" style="flex:1;font-size:0.8rem;line-height:1.5;white-space:pre-wrap;word-break:break-word;color:var(--fg2);background:var(--bg);padding:0.8rem;border-radius:6px;border:1px solid var(--bg3);overflow-y:auto">' + escapeHtml(md) + '</pre>' +
+          '</div>' +
+          '<div style="width:160px;flex-shrink:0">' +
+            '<div style="font-size:0.78rem;color:var(--fg3);margin-bottom:0.5rem">操作</div>' +
+            '<button class="btn" id="copy_' + preId + '" style="display:block;width:100%;margin-bottom:0.4rem;text-align:center">\uD83D\uDCCB 复制</button>' +
+            '<p style="font-size:0.72rem;color:var(--fg3)">复制后可粘贴到微信/飞书/邮件</p>' +
+          '</div>' +
         '</div>' +
       '</div>';
-    document.body.appendChild(overlay);
-    overlay.querySelector('#copyBrief').addEventListener('click', function() {
+    document.body.appendChild(d);
+
+    document.getElementById('copy_' + preId).addEventListener('click', function() {
+      var text = document.getElementById(preId).textContent;
       navigator.clipboard.writeText(text).then(function() {
-        this.textContent = '✅ 已复制';
+        this.textContent = '\u2705 已复制';
         var self = this;
-        setTimeout(function() { self.textContent = '📋 复制到剪贴板'; }, 2000);
+        setTimeout(function() { self.textContent = '\uD83D\uDCCB 复制'; }, 1500);
       }.bind(this));
     });
-    overlay.querySelector('#closeBrief').addEventListener('click', function() { overlay.remove(); });
-    overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
   });
 
   init();
