@@ -34,11 +34,7 @@ def load_data():
 def save_data(articles):
     with open(DATA_DIR / "literature-full.json", "w") as f:
         json.dump(articles, f, ensure_ascii=False, indent=2)
-    # 同步更新 2026 年版
-    yearly = [a for a in articles if a["entry_date"] and a["entry_date"].startswith("2026")]
-    with open(DATA_DIR / "literature-2026.json", "w") as f:
-        json.dump(yearly, f, ensure_ascii=False, indent=2)
-    print(f"Saved: {len(articles)} total, {len(yearly)} for 2026")
+    print(f"Saved: {len(articles)} total")
 
 def load_cache():
     if CACHE_PATH.exists():

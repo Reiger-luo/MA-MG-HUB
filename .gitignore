@@ -1,1 +1,7 @@
 .DS_Store
+
+# LLM 引擎层（阶段 0）— 密钥、缓存、成本日志不入仓库
+.env
+*.env
+data/.llm_cache/
+data/.llm_cost.log

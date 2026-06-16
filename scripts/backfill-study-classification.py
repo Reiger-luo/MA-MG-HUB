@@ -2,12 +2,12 @@
 """
 backfill-study-classification.py — 证据等级分类回填（任务 B）
 
-遍历 literature-2026.json（520 篇），对每篇文章：
+遍历 literature-full.json（全量），对每篇文章：
   1. 读取 pub_types（PubMed Publication Type）和 abstract
   2. 调用 pubmed-study-classifier 的 classify_study_type() 分类
   3. 回填到 study_types（数组）和 evidence_level（字符串）
 
-输出：直接更新 literature-2026.json 和 literature-full.json
+输出：直接更新 literature-full.json
 """
 
 import json, sys, os
@@ -151,17 +151,7 @@ def main():
     print("📚 MG-HUB 证据等级分类回填（任务 B）")
     print()
 
-    # 优先分类 2026 年文献
-    yearly_path = DATA_DIR / "literature-2026.json"
-    classified_26, total_26 = backfill_file(yearly_path, "2026年文献")
-    print(f"📝 2026年: {classified_26} 篇新分类, {total_26} 篇总")
-
-    if classified_26 > 0:
-        with open(yearly_path) as f:
-            articles = json.load(f)
-        print_stats(articles, "2026年")
-
-    # 全量文献（空闲时补）
+    # 直接分类全量文献（full.json 是唯一数据源，已包含全部记录）
     full_path = DATA_DIR / "literature-full.json"
     classified_full, total_full = backfill_file(full_path, "全量文献")
     print(f"📝 全量: {classified_full} 篇新分类, {total_full} 篇总")
