@@ -45,6 +45,11 @@
     <a href="/MA-MG-HUB/" class="nav-brand">MA-MG-HUB</a>
     <div class="nav-links">
       <a href="/MA-MG-HUB/" class="nav-link">工作台</a>
+      <a href="/MA-MG-HUB/pages/literature.html" class="nav-link">情报中心</a>
+      <a href="/MA-MG-HUB/pages/knowledge.html" class="nav-link">知识库</a>
+      <a href="/MA-MG-HUB/pages/msl.html" class="nav-link">MSL工作台</a>
+      <a href="/MA-MG-HUB/pages/materials.html" class="nav-link">内容工坊</a>
+      <a href="/MA-MG-HUB/pages/landscape.html" class="nav-link">诊治格局</a>
       <a href="/MA-MG-HUB/pages/data-ops.html" class="nav-link active">数据状态</a>
     </div>
   </div>
@@ -61,7 +66,7 @@
   <div class="source-card">
     <div class="source-info">
       <div class="source-name">PubMed 文献全量</div>
-      <div class="source-meta">10,577 篇 · 含证据等级 · IF/分区已回填 · 近1年 1,154 篇</div>
+      <div class="source-meta" id="pubmedMeta">读取中...</div>
     </div>
     <div class="source-status"><span class="dot green"></span>正常</div>
   </div>
@@ -69,33 +74,33 @@
   <div class="source-card">
     <div class="source-info">
       <div class="source-name">会议摘要</div>
-      <div class="source-meta">暂未接入 · AAN / EAN / AANEM</div>
+      <div class="source-meta">后续增强 · AAN / EAN / AANEM</div>
     </div>
-    <div class="source-status"><span class="dot gray"></span>待接入</div>
+    <div class="source-status"><span class="dot yellow"></span>规划中</div>
   </div>
 
   <div class="source-card">
     <div class="source-info">
       <div class="source-name">临床试验 (ClinicalTrials.gov)</div>
-      <div class="source-meta">暂未接入</div>
+      <div class="source-meta">规划暂不作为自动数据源</div>
     </div>
-    <div class="source-status"><span class="dot gray"></span>待接入</div>
+    <div class="source-status"><span class="dot yellow"></span>按需</div>
   </div>
 
   <div class="source-card">
     <div class="source-info">
       <div class="source-name">监管动态 (FDA/NMPA)</div>
-      <div class="source-meta">暂未接入</div>
+      <div class="source-meta">后续由手动维护与公开来源补充</div>
     </div>
-    <div class="source-status"><span class="dot gray"></span>待接入</div>
+    <div class="source-status"><span class="dot yellow"></span>规划中</div>
   </div>
 
   <div class="source-card">
     <div class="source-info">
-      <div class="source-name">手动上传 Poster</div>
-      <div class="source-meta">目录: data/uploads/ · 扫描结果将显示于此</div>
+      <div class="source-name">前端数据产物</div>
+      <div class="source-meta" id="frontendMeta">读取中...</div>
     </div>
-    <div class="source-status"><span class="dot gray"></span>待接入</div>
+    <div class="source-status"><span class="dot green"></span>已生成</div>
   </div>
 
   <hr class="section-divider">
@@ -103,17 +108,19 @@
   <!-- 操作 -->
   <div class="ops-section-title">操作</div>
   <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:0.5rem">
-    <button class="ops-btn" onclick="alert('手动扫描触发（待实现）\n\n将扫描 data/uploads/ 目录\n→ 生成 poster-manifest.json')">📂 扫描 Poster 目录</button>
-    <button class="ops-btn" onclick="alert('手动更新触发（待实现）')">🔄 触发 PubMed 更新</button>
+    <a class="ops-btn" href="/MA-MG-HUB/data/dashboard-data.js" target="_blank" style="text-decoration:none">查看 Dashboard 数据</a>
+    <a class="ops-btn" href="/MA-MG-HUB/data/signals-weekly.js" target="_blank" style="text-decoration:none">查看信号数据</a>
   </div>
   <div style="font-size:0.78rem;color:var(--fg3);margin-top:0.3rem">
-    💡 将 PDF 放入 <code>data/uploads/</code> 后，点"扫描"即可入库
+    本地更新命令：<code>python3 scripts/run-weekly-pipeline.py --skip-fetch</code>。GitHub Actions 可手动触发 weekly-pipeline。
   </div>
 
   <hr class="section-divider">
 
   <!-- 更新日志 -->
   <div class="ops-section-title">更新日志</div>
+  <div class="log-line">[2026-06-17] v3.2 静态站 MVP 落地：Dashboard / 情报中心 / 知识库 / MSL / 内容工坊 / 诊治格局</div>
+  <div class="log-line">[2026-06-17] 前端数据产物生成：signals / china / expert / landscape / modules / dashboard</div>
   <div class="log-line">[2026-06-09] IF/分区回填完成（82.6%覆盖率）</div>
   <div class="log-line">[2026-06-09] 期刊名全称改写完成（374篇 ISO缩写→全称）</div>
   <div class="log-line">[2026-06-08] 证据等级分类跑通（全部文献）</div>
@@ -121,6 +128,24 @@
   <div class="log-line">[2026-06-07] 项目搭建 · 全量 10,577 篇入库</div>
   <div class="log-line">[2026-06-07] GitHub Pages 部署 + 域名绑定</div>
 
+  <script src="/MA-MG-HUB/data/dashboard-data.js"></script>
+  <script>
+  (function(){
+    const data = window.MG_DASHBOARD_DATA || {};
+    const stats = data.stats || {};
+    const pubmedMeta = document.getElementById('pubmedMeta');
+    const frontendMeta = document.getElementById('frontendMeta');
+    if (pubmedMeta) {
+      pubmedMeta.textContent = (stats.recent_articles || 0) + ' 篇近1年文献 · ' +
+        (stats.china_articles || 0) + ' 篇中国相关 · ' +
+        (stats.signals || 0) + ' 条候选信号';
+    }
+    if (frontendMeta) {
+      frontendMeta.textContent = (stats.experts || 0) + ' 位专家画像 · ' +
+        (stats.modules || 0) + ' 个内容模块 · 更新时间 ' + (data.generated_at || '-');
+    }
+  })();
+  </script>
 </div>
 </body>
 </html>

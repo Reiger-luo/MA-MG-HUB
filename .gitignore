@@ -1,7 +1,20 @@
 .DS_Store
+__pycache__/
+*.pyc
+
+# 大体积本地数据（公开前端 .js 产物入仓库，原始 json 留本地）
+data/literature-full.json
+data/literature-recent.json
+data/archive/
 
 # LLM 引擎层（阶段 0）— 密钥、缓存、成本日志不入仓库
 .env
 *.env
 data/.llm_cache/
 data/.llm_cost.log
+
+# 内部/敏感业务数据不入公开仓库
+data/experts-core.json
+data/expert-internal.json
+data/visit-records.json
+data/follow-up-backlog.json

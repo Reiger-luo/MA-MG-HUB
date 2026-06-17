@@ -4,8 +4,13 @@
 
   let allArticles = [];
   let filteredResults = [];
+  let signalItems = [];
+  let signalFilter = 'all';
+  let chinaMonthlyChart = null;
+  let chinaEvidenceChart = null;
   let currentPage = 0;
   const PAGE_SIZE = 10;
+  const SIGNAL_WINDOW_DAYS = 14;
 
   const $ = id => document.getElementById(id);
   const el = {
@@ -21,6 +26,12 @@
     filterQuartileList: $('filterQuartileList'),
     filterEvidenceList: $('filterEvidenceList'),
     btnExport: $('btnExport'),
+    signalSummary: $('signalSummary'),
+    signalList: $('signalList'),
+    signalKeywords: $('signalKeywords'),
+    chinaBadge: $('chinaBadge'),
+    chinaRecentList: $('chinaRecentList'),
+    chinaSourceList: $('chinaSourceList'),
   };
 
   function parseDate(dateStr) {
@@ -314,7 +325,388 @@
     return d.innerHTML;
   }
 
+  function bindTabs() {
+    var tabs = document.querySelectorAll('.intel-tab');
+    var panels = document.querySelectorAll('.intel-tab-panel');
+    for (var i = 0; i < tabs.length; i++) {
+      tabs[i].addEventListener('click', function() {
+        var key = this.getAttribute('data-tab');
+        for (var t = 0; t < tabs.length; t++) tabs[t].classList.remove('active');
+        for (var p = 0; p < panels.length; p++) panels[p].classList.remove('active');
+        this.classList.add('active');
+        var panel = document.getElementById('tab-' + key);
+        if (panel) panel.classList.add('active');
+        if (key === 'china') resizeChinaCharts();
+      });
+    }
+  }
+
+  function bindSignalFilters() {
+    var btns = document.querySelectorAll('.signal-filter-btn');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].addEventListener('click', function() {
+        for (var b = 0; b < btns.length; b++) btns[b].classList.remove('active');
+        this.classList.add('active');
+        signalFilter = this.getAttribute('data-signal-filter') || 'all';
+        renderSignals();
+      });
+    }
+  }
+
+  function maxEntryDate(articles) {
+    var max = null;
+    for (var i = 0; i < articles.length; i++) {
+      var d = parseDate(articles[i].entry_date);
+      if (d && (!max || d > max)) max = d;
+    }
+    return max || new Date();
+  }
+
+  function daysApart(a, b) {
+    return Math.floor((a - b) / 86400000);
+  }
+
+  function hasAny(text, words) {
+    for (var i = 0; i < words.length; i++) {
+      if (text.indexOf(words[i]) !== -1) return true;
+    }
+    return false;
+  }
+
+  function inferTopics(article) {
+    var text = ((article.title || '') + ' ' + (article.abstract || '')).toLowerCase();
+    var defs = [
+      { label: 'FcRn', words: ['fcrn', 'efgartigimod', 'rozanolixizumab', 'nipocalimab', 'batoclimab'] },
+      { label: '补体', words: ['complement', 'zilucoplan', 'ravulizumab', 'eculizumab', 'c5 inhibitor'] },
+      { label: '抗体分型', words: ['seronegative', 'musk', 'achr', 'lrp4', 'autoantibody'] },
+      { label: '真实世界', words: ['real-world', 'registry', 'observational', 'retrospective'] },
+      { label: '安全性', words: ['safety', 'adverse', 'infection', 'tolerability'] },
+      { label: '疗效', words: ['efficacy', 'outcome', 'improvement', 'response'] },
+      { label: '机制', words: ['pathogenesis', 'mechanism', 'biomarker', 'cytokine', 'b cell', 't cell'] },
+      { label: '诊疗策略', words: ['guideline', 'consensus', 'recommendation', 'treatment strategy'] }
+    ];
+    var topics = [];
+    for (var i = 0; i < defs.length; i++) {
+      if (hasAny(text, defs[i].words)) topics.push(defs[i].label);
+    }
+    if (topics.length === 0 && article.study_types && article.study_types.length) {
+      topics.push(article.study_types[0]);
+    }
+    return topics.slice(0, 4);
+  }
+
+  function inferSignal(article, latestDate) {
+    var entryDate = parseDate(article.entry_date);
+    if (!entryDate) return null;
+    var age = daysApart(latestDate, entryDate);
+    if (age < 0 || age > SIGNAL_WINDOW_DAYS) return null;
+
+    var title = article.title || '';
+    var text = (title + ' ' + (article.abstract || '') + ' ' + (article.pub_types || []).join(' ')).toLowerCase();
+    var ev = article.evidence_level || '';
+    var ifVal = Number(article.journal_if || 0);
+    var topics = inferTopics(article);
+    var type = '新证据';
+    var subtype = '其他';
+    var reasons = [];
+
+    if (hasAny(text, ['guideline', 'consensus', 'recommendation', 'review', 'meta-analysis'])) type = '新观点';
+    if (hasAny(text, ['pathogenesis', 'mechanism', 'biomarker', 'cytokine', 'receptor', 'autoantibody'])) type = '新机制';
+    if (hasAny(text, ['trial', 'randomized', 'phase 2', 'phase 3', 'cohort', 'efficacy', 'safety', 'real-world'])) type = '新证据';
+
+    if (hasAny(text, ['efgartigimod', 'vyvgart'])) subtype = '本品';
+    else if (hasAny(text, ['rozanolixizumab', 'ravulizumab', 'eculizumab', 'zilucoplan', 'inebilizumab', 'nipocalimab', 'batoclimab'])) subtype = '竞品';
+
+    if (ev === 'I' || ev === 'II') reasons.push('高等级证据');
+    if (ifVal >= 10) reasons.push('高影响期刊');
+    else if (ifVal >= 5) reasons.push('中高影响期刊');
+    if (article.china_related) reasons.push('中国相关');
+    if (age <= 7) reasons.push('最新入库');
+
+    var isSignal = reasons.length > 0 || topics.length > 0;
+    if (!isSignal) return null;
+
+    var strength = '弱';
+    if (ifVal >= 10 || ((ev === 'I' || ev === 'II') && ifVal >= 5)) strength = '强';
+    else if (ifVal >= 4 || ev === 'I' || ev === 'II' || article.china_related) strength = '中';
+
+    var score = ifVal + (ev === 'I' ? 7 : ev === 'II' ? 5 : ev ? 2 : 0) + (article.china_related ? 1.5 : 0) + (SIGNAL_WINDOW_DAYS - age) / 3;
+    if (strength === '强') score += 10;
+    if (strength === '中') score += 4;
+
+    return {
+      article: article,
+      date: entryDate,
+      type: type,
+      subtype: subtype,
+      strength: strength,
+      topics: topics,
+      reasons: reasons,
+      score: score,
+      age: age
+    };
+  }
+
+  function buildSignals() {
+    if (window.MG_SIGNALS_DATA && window.MG_SIGNALS_DATA.signals) {
+      signalItems = window.MG_SIGNALS_DATA.signals.map(function(signal) {
+        return {
+          article: signal.article || {},
+          date: parseDate(signal.date),
+          type: signal.type || '新证据',
+          subtype: signal.subtype || '其他',
+          strength: signal.strength || '弱',
+          topics: signal.keywords || [],
+          reasons: signal.reason ? signal.reason.split(' · ') : [],
+          score: signal.score || 0,
+          age: 0
+        };
+      });
+      signalItems.sort(function(a, b) {
+        if (b.score !== a.score) return b.score - a.score;
+        return (b.date || 0) - (a.date || 0);
+      });
+      return;
+    }
+    var latest = maxEntryDate(allArticles);
+    signalItems = [];
+    for (var i = 0; i < allArticles.length; i++) {
+      var item = inferSignal(allArticles[i], latest);
+      if (item) signalItems.push(item);
+    }
+    signalItems.sort(function(a, b) {
+      if (b.score !== a.score) return b.score - a.score;
+      return b.date - a.date;
+    });
+  }
+
+  function renderSignals() {
+    if (!el.signalList || !el.signalSummary) return;
+    var counts = { all: signalItems.length, '强': 0, '中': 0, '弱': 0, china: 0 };
+    var typeCounts = {};
+    var topicCounts = {};
+
+    for (var i = 0; i < signalItems.length; i++) {
+      var s = signalItems[i];
+      counts[s.strength]++;
+      if (s.article.china_related) counts.china++;
+      typeCounts[s.type] = (typeCounts[s.type] || 0) + 1;
+      for (var k = 0; k < s.topics.length; k++) {
+        topicCounts[s.topics[k]] = (topicCounts[s.topics[k]] || 0) + 1;
+      }
+    }
+
+    el.signalSummary.innerHTML =
+      '<div class="signal-stat-card"><span>候选信号</span><strong>' + counts.all + '</strong></div>' +
+      '<div class="signal-stat-card strong"><span>强信号</span><strong>' + counts['强'] + '</strong></div>' +
+      '<div class="signal-stat-card medium"><span>中信号</span><strong>' + counts['中'] + '</strong></div>' +
+      '<div class="signal-stat-card china"><span>中国相关</span><strong>' + counts.china + '</strong></div>';
+
+    var filtered = [];
+    for (var j = 0; j < signalItems.length; j++) {
+      if (signalFilter === 'all' || signalItems[j].strength === signalFilter) filtered.push(signalItems[j]);
+    }
+
+    if (filtered.length === 0) {
+      el.signalList.innerHTML = '<div class="empty-state"><h3>暂无候选信号</h3><p>切换筛选条件或等待下一轮数据更新</p></div>';
+    } else {
+      var html = '';
+      for (var n = 0; n < Math.min(filtered.length, 24); n++) {
+        html += renderSignalCard(filtered[n]);
+      }
+      el.signalList.innerHTML = html;
+    }
+
+    var topics = Object.keys(topicCounts).sort(function(a, b) { return topicCounts[b] - topicCounts[a]; });
+    var keywordHtml = '';
+    for (var x = 0; x < Math.min(topics.length, 12); x++) {
+      keywordHtml += '<span class="keyword-pill">' + escapeHtml(topics[x]) + '<strong>' + topicCounts[topics[x]] + '</strong></span>';
+    }
+    el.signalKeywords.innerHTML = keywordHtml || '<span class="muted">暂无主题</span>';
+  }
+
+  function renderSignalCard(item) {
+    var a = item.article;
+    var dateStr = item.date ? item.date.toLocaleDateString('zh-CN') : (a.pub_date || '');
+    var topicHtml = '';
+    for (var i = 0; i < item.topics.length; i++) {
+      topicHtml += '<span class="signal-topic">' + escapeHtml(item.topics[i]) + '</span>';
+    }
+    var reason = item.reasons.length ? item.reasons.join(' · ') : '基于近期入库与主题关键词';
+    return '' +
+      '<article class="signal-card signal-' + item.strength + '">' +
+        '<div class="signal-card-head">' +
+          '<span class="signal-strength">' + item.strength + '信号</span>' +
+          '<span class="signal-type">' + item.type + ' · ' + item.subtype + '</span>' +
+        '</div>' +
+        '<a class="signal-title" href="' + a.url + '" target="_blank">' + escapeHtml(a.title || '(无标题)') + '</a>' +
+        '<div class="signal-meta">' + escapeHtml(a.journal || 'Unknown') + ' · ' + dateStr + ' · PMID ' + escapeHtml(a.pmid || '-') + '</div>' +
+        '<div class="signal-reason">' + escapeHtml(reason) + '</div>' +
+        '<div class="signal-topic-row">' + topicHtml + (a.china_related ? '<span class="signal-topic china">中国相关</span>' : '') + '</div>' +
+      '</article>';
+  }
+
+  function groupByMonth(articles) {
+    var months = {};
+    for (var i = 0; i < articles.length; i++) {
+      var ed = articles[i].entry_date || '';
+      var m = ed.match(/^(\d{4})\/(\d{2})/);
+      if (!m) continue;
+      var key = m[1] + '-' + m[2];
+      months[key] = (months[key] || 0) + 1;
+    }
+    return months;
+  }
+
+  function renderChinaInsights() {
+    if (!el.chinaRecentList || !el.chinaSourceList) return;
+    var chinaArticles = [];
+    for (var i = 0; i < allArticles.length; i++) {
+      if (allArticles[i].china_related) chinaArticles.push(allArticles[i]);
+    }
+    chinaArticles.sort(function(a, b) {
+      return (parseDate(b.entry_date) || 0) - (parseDate(a.entry_date) || 0);
+    });
+
+    if (el.chinaBadge) el.chinaBadge.textContent = '近1年 ' + chinaArticles.length + ' 篇';
+
+    var recentHtml = '';
+    for (var r = 0; r < Math.min(chinaArticles.length, 10); r++) {
+      var a = chinaArticles[r];
+      recentHtml += renderCompactArticle(a);
+    }
+    el.chinaRecentList.innerHTML = recentHtml || '<div class="empty-state"><h3>暂无中国相关文献</h3></div>';
+
+    var journalCounts = {};
+    var institutionCounts = {};
+    for (var j = 0; j < chinaArticles.length; j++) {
+      var art = chinaArticles[j];
+      var journal = art.journal || 'Unknown';
+      journalCounts[journal] = (journalCounts[journal] || 0) + 1;
+      var affs = art.affiliations || [];
+      for (var k = 0; k < affs.length; k++) {
+        var inst = normalizeInstitution(affs[k]);
+        if (inst) institutionCounts[inst] = (institutionCounts[inst] || 0) + 1;
+      }
+    }
+
+    el.chinaSourceList.innerHTML =
+      '<div class="source-block"><h4>主要期刊</h4>' + renderRankList(journalCounts, 8) + '</div>' +
+      '<div class="source-block"><h4>机构线索</h4>' + renderRankList(institutionCounts, 8) + '</div>';
+
+    renderChinaCharts(chinaArticles);
+  }
+
+  function renderCompactArticle(article) {
+    var d = parseDate(article.entry_date);
+    var dateStr = d ? d.toLocaleDateString('zh-CN') : (article.pub_date || '');
+    return '' +
+      '<article class="compact-article">' +
+        '<a href="' + article.url + '" target="_blank">' + escapeHtml(article.title || '(无标题)') + '</a>' +
+        '<div>' + escapeHtml(article.journal || 'Unknown') + ' · ' + dateStr + ' · PMID ' + escapeHtml(article.pmid || '-') + '</div>' +
+      '</article>';
+  }
+
+  function normalizeInstitution(affiliation) {
+    if (!affiliation) return '';
+    var parts = affiliation.split(',');
+    var candidates = [];
+    for (var i = 0; i < parts.length; i++) {
+      var part = parts[i].trim();
+      if (!part) continue;
+      if (/department|school|faculty|laboratory|center/i.test(part) && !/hospital|university/i.test(part)) continue;
+      if (/china|province|district|road|street|email|@/i.test(part)) continue;
+      candidates.push(part);
+    }
+    var inst = candidates.length ? candidates[0] : parts[0].trim();
+    inst = inst.replace(/^the\s+/i, '').replace(/\.$/, '');
+    if (inst.length > 70) inst = inst.slice(0, 70) + '...';
+    return inst;
+  }
+
+  function renderRankList(counts, limit) {
+    var keys = Object.keys(counts).sort(function(a, b) { return counts[b] - counts[a]; });
+    if (!keys.length) return '<div class="muted">暂无数据</div>';
+    var html = '<ol class="rank-list">';
+    for (var i = 0; i < Math.min(keys.length, limit); i++) {
+      html += '<li><span>' + escapeHtml(keys[i]) + '</span><strong>' + counts[keys[i]] + '</strong></li>';
+    }
+    html += '</ol>';
+    return html;
+  }
+
+  function renderChinaCharts(chinaArticles) {
+    if (typeof echarts === 'undefined') {
+      var monthlyEl = document.getElementById('chinaMonthlyChart');
+      var evidenceEl = document.getElementById('chinaEvidenceChart');
+      if (monthlyEl) monthlyEl.innerHTML = '<div class="chart-fallback">图表库未加载</div>';
+      if (evidenceEl) evidenceEl.innerHTML = '<div class="chart-fallback">图表库未加载</div>';
+      return;
+    }
+
+    var allMonths = groupByMonth(allArticles);
+    var chinaMonths = groupByMonth(chinaArticles);
+    var monthKeys = Object.keys(allMonths).sort();
+    if (monthKeys.length > 12) monthKeys = monthKeys.slice(monthKeys.length - 12);
+    var monthLabels = [];
+    var allValues = [];
+    var chinaValues = [];
+    for (var i = 0; i < monthKeys.length; i++) {
+      monthLabels.push(monthKeys[i].replace('-', '/'));
+      allValues.push(allMonths[monthKeys[i]] || 0);
+      chinaValues.push(chinaMonths[monthKeys[i]] || 0);
+    }
+
+    var monthlyEl = document.getElementById('chinaMonthlyChart');
+    if (monthlyEl) {
+      chinaMonthlyChart = chinaMonthlyChart || echarts.init(monthlyEl);
+      chinaMonthlyChart.setOption({
+        color: ['#93c5fd', '#22c55e'],
+        tooltip: { trigger: 'axis' },
+        legend: { top: 0, textStyle: { color: '#6b7280' } },
+        grid: { left: 36, right: 16, top: 42, bottom: 28 },
+        xAxis: { type: 'category', data: monthLabels, axisLabel: { color: '#6b7280' } },
+        yAxis: { type: 'value', axisLabel: { color: '#6b7280' }, splitLine: { lineStyle: { color: '#e5e7eb' } } },
+        series: [
+          { name: '全部文献', type: 'line', smooth: true, data: allValues, symbolSize: 6 },
+          { name: '中国相关', type: 'bar', data: chinaValues, barMaxWidth: 18 }
+        ]
+      });
+    }
+
+    var evidenceCounts = {};
+    for (var j = 0; j < chinaArticles.length; j++) {
+      var ev = chinaArticles[j].evidence_level || '未分类';
+      evidenceCounts[ev] = (evidenceCounts[ev] || 0) + 1;
+    }
+    var evOrder = ['I', 'II', 'III', 'IV', 'V', 'VI', '未分类'];
+    var evValues = [];
+    for (var e = 0; e < evOrder.length; e++) evValues.push(evidenceCounts[evOrder[e]] || 0);
+
+    var evidenceEl = document.getElementById('chinaEvidenceChart');
+    if (evidenceEl) {
+      chinaEvidenceChart = chinaEvidenceChart || echarts.init(evidenceEl);
+      chinaEvidenceChart.setOption({
+        color: ['#60a5fa'],
+        tooltip: { trigger: 'axis' },
+        grid: { left: 36, right: 16, top: 20, bottom: 28 },
+        xAxis: { type: 'category', data: evOrder, axisLabel: { color: '#6b7280' } },
+        yAxis: { type: 'value', axisLabel: { color: '#6b7280' }, splitLine: { lineStyle: { color: '#e5e7eb' } } },
+        series: [{ name: '篇数', type: 'bar', data: evValues, barMaxWidth: 22 }]
+      });
+    }
+  }
+
+  function resizeChinaCharts() {
+    setTimeout(function() {
+      if (chinaMonthlyChart) chinaMonthlyChart.resize();
+      if (chinaEvidenceChart) chinaEvidenceChart.resize();
+    }, 60);
+  }
+
   function init() {
+    bindTabs();
+    bindSignalFilters();
     el.loading.innerHTML = '';
 
     try {
@@ -381,6 +773,10 @@
       document.getElementById('statEvDist').textContent = evParts.join(' · ');
 
       applyFilters();
+      buildSignals();
+      renderSignals();
+      renderChinaInsights();
+      window.addEventListener('resize', resizeChinaCharts);
       document.getElementById('updateBadge').textContent = '数据: ' + allArticles.length + ' 篇';
 
     } catch (err) {

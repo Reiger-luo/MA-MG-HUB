@@ -3,37 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>治疗格局报告 · MA-MG-HUB</title>
+<title>诊治格局 · MA-MG-HUB</title>
 <link rel="stylesheet" href="/MA-MG-HUB/assets/main.css">
-<style>
-.landscape-main { max-width: 900px; margin: 0 auto; padding: 1.5rem; }
-.input-area {
-  background: var(--bg2); border: 1px solid var(--bg3);
-  border-radius: 10px; padding: 1.2rem; margin: 1rem 0;
-}
-.input-area label { display: block; font-size: 0.85rem; color: var(--fg2); margin-bottom: 0.3rem; }
-.input-area input, .input-area select {
-  width: 100%; padding: 0.5rem 0.7rem;
-  border: 1px solid var(--bg3); border-radius: 6px;
-  background: var(--bg); color: var(--fg); font-size: 0.9rem;
-  margin-bottom: 0.8rem;
-}
-.example-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.8rem; }
-.example-tag {
-  padding: 0.2rem 0.5rem; border-radius: 12px;
-  background: var(--bg); border: 1px solid var(--bg3);
-  font-size: 0.78rem; color: var(--fg2); cursor: pointer;
-  transition: all 0.1s;
-}
-.example-tag:hover { border-color: var(--accent); color: var(--accent); }
-
-.output-placeholder {
-  background: var(--bg2); border: 1px dashed var(--bg3);
-  border-radius: 8px; padding: 2rem; text-align: center;
-  color: var(--fg3); font-size: 0.9rem; margin-top: 1rem;
-}
-.output-placeholder strong { color: var(--fg2); }
-</style>
 </head>
 <body>
 
@@ -42,54 +13,60 @@
     <a href="/MA-MG-HUB/" class="nav-brand">MA-MG-HUB</a>
     <div class="nav-links">
       <a href="/MA-MG-HUB/" class="nav-link">工作台</a>
+      <a href="/MA-MG-HUB/pages/literature.html" class="nav-link">情报中心</a>
+      <a href="/MA-MG-HUB/pages/knowledge.html" class="nav-link">知识库</a>
+      <a href="/MA-MG-HUB/pages/msl.html" class="nav-link">MSL工作台</a>
+      <a href="/MA-MG-HUB/pages/materials.html" class="nav-link">内容工坊</a>
+      <a href="/MA-MG-HUB/pages/landscape.html" class="nav-link active">诊治格局</a>
       <a href="/MA-MG-HUB/pages/data-ops.html" class="nav-link">数据状态</a>
     </div>
   </div>
 </nav>
 
-<div class="landscape-main">
+<main class="main">
   <div class="page-header">
-    <h1>🏥 治疗格局报告</h1>
+    <h1>诊治格局</h1>
     <div class="page-header-actions">
-      <span class="update-badge" data-placeholder="true">🤖 LLM 提取功能 — 建设中</span>
+      <span class="update-badge" id="landscapeBadge">Loading...</span>
     </div>
   </div>
 
-  <div class="input-area">
-    <label>你想了解什么领域的格局？</label>
-    <div class="example-tags">
-      <span class="example-tag" onclick="fillExample(this)">FcRn 靶点治疗 MG 的竞争格局</span>
-      <span class="example-tag" onclick="fillExample(this)">难治性 MG 治疗策略</span>
-      <span class="example-tag" onclick="fillExample(this)">胸腺瘤相关 MG 诊疗进展</span>
-      <span class="example-tag" onclick="fillExample(this)">中国 MG 诊疗现状与中外差异</span>
-    </div>
-    <input type="text" id="topicInput" data-placeholder="true" placeholder="例如：FcRn 靶点治疗 MG 的竞争格局">
-    <label>侧重点</label>
-    <select id="focusSelect" data-placeholder="true">
-      <option value="comprehensive">综合</option>
-      <option value="clinical">临床数据</option>
-      <option value="regulatory">注册进展</option>
-      <option value="cn-vs-global">中外差异</option>
-    </select>
-    <button class="ops-btn" onclick="generateLandscape()" id="genBtn" disabled>🚀 生成格局报告（待实现）</button>
-    <div style="margin-top:0.5rem;font-size:0.78rem;color:var(--fg3)" data-placeholder="true">
-      💡 将依此顺序：数据湖检索 → 跨源聚合 → LLM 提取 → 结构化报告
-    </div>
+  <div class="intel-tabs" role="tablist" aria-label="诊治格局视图">
+    <button class="intel-tab active" type="button" data-landscape-tab="evidence">证据矩阵</button>
+    <button class="intel-tab" type="button" data-landscape-tab="tracks">治疗进展</button>
+    <button class="intel-tab" type="button" data-landscape-tab="china">中外差异</button>
+    <button class="intel-tab" type="button" data-landscape-tab="competitive">竞争格局</button>
   </div>
 
-  <div class="output-placeholder" id="outputArea">
-    <strong>📋 报告将显示在此处</strong><br>
-    <span data-placeholder="true">包含：概述 → 核心药物对比表 → 数据时间线 → 注册进展 → 中外差异 → 展望</span>
-  </div>
-</div>
+  <section class="intel-tab-panel active" id="landscape-evidence">
+    <div class="landscape-grid" id="evidenceMatrix"></div>
+  </section>
 
-<script>
-function fillExample(el) {
-  document.getElementById('topicInput').value = el.textContent;
-}
-function generateLandscape() {
-  alert('🤖 LLM 提取层尚未搭建\n\n完成后将实现：\n1. 从全量数据湖检索相关条目\n2. 跨源聚合语料\n3. LLM 按 prompt 提取\n4. 填充结构化报告模板');
-}
-</script>
+  <section class="intel-tab-panel" id="landscape-tracks">
+    <div class="chart-panel">
+      <div class="chart-title">通路文献热度</div>
+      <div class="chart-canvas" id="trackChart"></div>
+    </div>
+    <div class="landscape-grid" id="trackList"></div>
+  </section>
+
+  <section class="intel-tab-panel" id="landscape-china">
+    <div class="workspace-panel">
+      <h2>中外差异</h2>
+      <div class="comparison-table" id="chinaDiff"></div>
+    </div>
+  </section>
+
+  <section class="intel-tab-panel" id="landscape-competitive">
+    <div class="workspace-panel">
+      <h2>竞争管线</h2>
+      <div class="pipeline-table" id="pipelineTable"></div>
+    </div>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<script src="/MA-MG-HUB/data/landscape-data.js"></script>
+<script src="/MA-MG-HUB/assets/landscape.js"></script>
 </body>
 </html>

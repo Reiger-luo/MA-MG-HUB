@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>文献情报 · MA-MG-HUB</title>
+<title>情报中心 · MA-MG-HUB</title>
 <link rel="stylesheet" href="/MA-MG-HUB/assets/main.css">
 </head>
 <body>
@@ -13,7 +13,11 @@
     <a href="/MA-MG-HUB/" class="nav-brand">MA-MG-HUB</a>
     <div class="nav-links">
       <a href="/MA-MG-HUB/" class="nav-link">工作台</a>
-      <a href="/MA-MG-HUB/pages/literature.html" class="nav-link">自由探索</a>
+      <a href="/MA-MG-HUB/pages/literature.html" class="nav-link active">情报中心</a>
+      <a href="/MA-MG-HUB/pages/knowledge.html" class="nav-link">知识库</a>
+      <a href="/MA-MG-HUB/pages/msl.html" class="nav-link">MSL工作台</a>
+      <a href="/MA-MG-HUB/pages/materials.html" class="nav-link">内容工坊</a>
+      <a href="/MA-MG-HUB/pages/landscape.html" class="nav-link">诊治格局</a>
       <a href="/MA-MG-HUB/pages/data-ops.html" class="nav-link">数据状态</a>
     </div>
   </div>
@@ -21,7 +25,7 @@
 
 <main class="main">
   <div class="page-header">
-    <h1>📊 自由探索</h1>
+    <h1>情报中心</h1>
     <div class="page-header-actions">
       <span class="update-badge" id="updateBadge">Loading…</span>
       <span class="update-badge" id="briefBadge" style="display:none">📋 简报篮: <strong>0</strong></span>
@@ -29,123 +33,189 @@
     </div>
   </div>
 
-  <!-- 顶部统计条 -->
-  <div class="stats-bar" id="statsBar">
-    <div class="stat">文献总量 <strong id="statTotal">—</strong></div>
-    <span class="stat-sep">│</span>
-    <div class="stat">近1年 <strong id="statYear">—</strong></div>
-    <span class="stat-sep">│</span>
-    <div class="stat">近1年中国相关 <strong id="statChinaYear">—</strong></div>
-    <span class="stat-sep">│</span>
-    <div class="stat">近30天 <strong id="stat30d">—</strong></div>
-    <span class="stat-sep">│</span>
-    <div class="stat">近30天中国相关 <strong id="statChina30d">—</strong></div>
-  </div>
-  <div class="stats-bar-sub" id="statsBarSub">
-    <span class="stat-label">近1年文献证据等级分布：</span>
-    <span id="statEvDist">—</span>
+  <div class="intel-tabs" role="tablist" aria-label="情报中心视图">
+    <button class="intel-tab active" type="button" data-tab="literature">文献速览</button>
+    <button class="intel-tab" type="button" data-tab="signals">信号板</button>
+    <button class="intel-tab" type="button" data-tab="china">中国情报</button>
   </div>
 
-  <!-- 筛选器 + 列表 -->
-  <div class="content-layout">
-    <aside class="sidebar-filters" id="filters">
-      <div class="filter-notice">以下筛选基于近1年数据</div>
-
-      <div class="filter-group">
-        <label class="filter-label">关键词搜索</label>
-        <input type="text" class="filter-input" id="filterKeyword" placeholder="搜索标题/作者/期刊…">
-      </div>
-
-      <div class="filter-group">
-        <label class="filter-label">时间范围（多选）</label>
-        <div class="filter-checkbox-list" id="filterTimeList"></div>
-      </div>
-
-      <div class="filter-group">
-        <label class="filter-label">中国研究</label>
-        <div class="filter-radio-list" id="filterChina">
-          <label class="filter-checkbox-item"><input type="radio" name="china" value="all" checked id="chinaAll"> 全部</label>
-          <label class="filter-checkbox-item"><input type="radio" name="china" value="china" id="chinaOnly"> 仅中国相关</label>
-        </div>
-      </div>
-
-      <div class="filter-group">
-        <label class="filter-label">影响因子</label>
-        <div class="filter-checkbox-list" id="filterIFList">
-          <label class="filter-checkbox-item"><input type="checkbox" value="all" checked id="ifAll"> 全部</label>
-          <label class="filter-checkbox-item"><input type="checkbox" value="0-2"> &lt; 2</label>
-          <label class="filter-checkbox-item"><input type="checkbox" value="2-5"> 2 – 5</label>
-          <label class="filter-checkbox-item"><input type="checkbox" value="5-10"> 5 – 10</label>
-          <label class="filter-checkbox-item"><input type="checkbox" value="10"> ≥ 10</label>
-        </div>
-      </div>
-
-      <div class="filter-group">
-        <label class="filter-label">期刊分区（中科院）</label>
-        <div class="filter-checkbox-list" id="filterQuartileList">
-          <label class="filter-checkbox-item"><input type="checkbox" value="all" checked id="quartileAll"> 全部</label>
-          <label class="filter-checkbox-item"><input type="checkbox" value="1"> 1区</label>
-          <label class="filter-checkbox-item"><input type="checkbox" value="2"> 2区</label>
-          <label class="filter-checkbox-item"><input type="checkbox" value="3"> 3区</label>
-          <label class="filter-checkbox-item"><input type="checkbox" value="4"> 4区</label>
-        </div>
-      </div>
-
-      <div class="filter-group">
-        <label class="filter-label">证据等级</label>
-        <div class="filter-checkbox-list" id="filterEvidenceList">
-          <label class="filter-checkbox-item"><input type="checkbox" value="all" checked id="evAll"> 全部</label>
-          <label class="filter-checkbox-item"><input type="checkbox" value="I"> I</label>
-          <label class="filter-checkbox-item"><input type="checkbox" value="II"> II</label>
-          <label class="filter-checkbox-item"><input type="checkbox" value="III"> III</label>
-          <label class="filter-checkbox-item"><input type="checkbox" value="IV"> IV</label>
-          <label class="filter-checkbox-item"><input type="checkbox" value="V"> V</label>
-          <label class="filter-checkbox-item"><input type="checkbox" value="VI"> VI</label>
-        </div>
-      </div>
-
-      <div class="filter-stats">
-        <span>筛选结果 <strong id="filterCount">0</strong> 篇</span>
-      </div>
-    </aside>
-
-    <section class="results" id="results">
-      <div class="loading" id="loading">
-        <div class="skeleton-card"><div class="skeleton-line"></div><div class="skeleton-line"></div><div class="skeleton-line"></div></div>
-        <div class="skeleton-card"><div class="skeleton-line"></div><div class="skeleton-line"></div><div class="skeleton-line"></div></div>
-        <div class="skeleton-card"><div class="skeleton-line"></div><div class="skeleton-line"></div><div class="skeleton-line"></div></div>
-        <div class="skeleton-card"><div class="skeleton-line"></div><div class="skeleton-line"></div><div class="skeleton-line"></div></div>
-      </div>
-    </section>
-  </div>
-
-  <!-- 证据等级参考（折叠） -->
-  <div class="evidence-ref">
-    <button class="evidence-ref-toggle" onclick="toggleEvidenceRef()">
-      📖 证据等级分类说明 <span id="evidenceArrow">▸</span>
-    </button>
-    <div class="evidence-ref-content" id="evidenceContent">
-      <p>文献证据等级基于 <strong>PubMed Publication Type</strong> + <strong>标题/摘要</strong> 综合判定（AI 辅助分类，非最终医学裁决）。</p>
-      <table class="evidence-table">
-        <tr><th>等级</th><th>分类</th><th>说明</th></tr>
-        <tr><td rowspan="2"><strong>I</strong></td><td>Systematic Review / Meta-Analysis</td><td>系统综述 / 荟萃分析</td></tr>
-        <tr><td>Guideline / Consensus</td><td>临床指南 / 专家共识</td></tr>
-        <tr><td><strong>II</strong></td><td>Randomized Controlled Trial</td><td>随机对照试验</td></tr>
-        <tr><td rowspan="2"><strong>III</strong></td><td>Non-randomized Controlled Cohort</td><td>前瞻性对照队列 / 非随机对照临床研究</td></tr>
-        <tr><td>Adjusted Retrospective Cohort</td><td>回顾性对照 + 统计校正（PSM/IPTW 等）</td></tr>
-        <tr><td rowspan="2"><strong>IV</strong></td><td>Historical Control / Case-Control</td><td>回顾性对照（未校正）/ 病例对照</td></tr>
-        <tr><td>Single Arm</td><td>单臂研究（无对照）</td></tr>
-        <tr><td><strong>V</strong></td><td>Case Report</td><td>病例报告</td></tr>
-        <tr><td><strong>VI</strong></td><td>Narrative Review</td><td>叙述性综述</td></tr>
-        <tr><td><strong>—</strong></td><td>Protocol / HEOR / Editorial / Letter / Comment / Animal / In Vitro</td><td>非证据类</td></tr>
-      </table>
-      <p style="margin-top:0.5rem;font-size:0.8rem;color:var(--fg3);">⚠️ 分类结果来自 AI 自动判定，仅供快速过滤参考。重要决策请核查原文。</p>
+  <section class="intel-tab-panel active" id="tab-literature">
+    <!-- 顶部统计条 -->
+    <div class="stats-bar" id="statsBar">
+      <div class="stat">文献总量 <strong id="statTotal">—</strong></div>
+      <span class="stat-sep">│</span>
+      <div class="stat">近1年 <strong id="statYear">—</strong></div>
+      <span class="stat-sep">│</span>
+      <div class="stat">近1年中国相关 <strong id="statChinaYear">—</strong></div>
+      <span class="stat-sep">│</span>
+      <div class="stat">近30天 <strong id="stat30d">—</strong></div>
+      <span class="stat-sep">│</span>
+      <div class="stat">近30天中国相关 <strong id="statChina30d">—</strong></div>
     </div>
-  </div>
+    <div class="stats-bar-sub" id="statsBarSub">
+      <span class="stat-label">近1年文献证据等级分布：</span>
+      <span id="statEvDist">—</span>
+    </div>
+
+    <!-- 筛选器 + 列表 -->
+    <div class="content-layout">
+      <aside class="sidebar-filters" id="filters">
+        <div class="filter-notice">以下筛选基于近1年数据</div>
+
+        <div class="filter-group">
+          <label class="filter-label">关键词搜索</label>
+          <input type="text" class="filter-input" id="filterKeyword" placeholder="搜索标题/作者/期刊…">
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">时间范围（多选）</label>
+          <div class="filter-checkbox-list" id="filterTimeList"></div>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">中国研究</label>
+          <div class="filter-radio-list" id="filterChina">
+            <label class="filter-checkbox-item"><input type="radio" name="china" value="all" checked id="chinaAll"> 全部</label>
+            <label class="filter-checkbox-item"><input type="radio" name="china" value="china" id="chinaOnly"> 仅中国相关</label>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">影响因子</label>
+          <div class="filter-checkbox-list" id="filterIFList">
+            <label class="filter-checkbox-item"><input type="checkbox" value="all" checked id="ifAll"> 全部</label>
+            <label class="filter-checkbox-item"><input type="checkbox" value="0-2"> &lt; 2</label>
+            <label class="filter-checkbox-item"><input type="checkbox" value="2-5"> 2 – 5</label>
+            <label class="filter-checkbox-item"><input type="checkbox" value="5-10"> 5 – 10</label>
+            <label class="filter-checkbox-item"><input type="checkbox" value="10"> ≥ 10</label>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">期刊分区（中科院）</label>
+          <div class="filter-checkbox-list" id="filterQuartileList">
+            <label class="filter-checkbox-item"><input type="checkbox" value="all" checked id="quartileAll"> 全部</label>
+            <label class="filter-checkbox-item"><input type="checkbox" value="1"> 1区</label>
+            <label class="filter-checkbox-item"><input type="checkbox" value="2"> 2区</label>
+            <label class="filter-checkbox-item"><input type="checkbox" value="3"> 3区</label>
+            <label class="filter-checkbox-item"><input type="checkbox" value="4"> 4区</label>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">证据等级</label>
+          <div class="filter-checkbox-list" id="filterEvidenceList">
+            <label class="filter-checkbox-item"><input type="checkbox" value="all" checked id="evAll"> 全部</label>
+            <label class="filter-checkbox-item"><input type="checkbox" value="I"> I</label>
+            <label class="filter-checkbox-item"><input type="checkbox" value="II"> II</label>
+            <label class="filter-checkbox-item"><input type="checkbox" value="III"> III</label>
+            <label class="filter-checkbox-item"><input type="checkbox" value="IV"> IV</label>
+            <label class="filter-checkbox-item"><input type="checkbox" value="V"> V</label>
+            <label class="filter-checkbox-item"><input type="checkbox" value="VI"> VI</label>
+          </div>
+        </div>
+
+        <div class="filter-stats">
+          <span>筛选结果 <strong id="filterCount">0</strong> 篇</span>
+        </div>
+      </aside>
+
+      <section class="results" id="results">
+        <div class="loading" id="loading">
+          <div class="skeleton-card"><div class="skeleton-line"></div><div class="skeleton-line"></div><div class="skeleton-line"></div></div>
+          <div class="skeleton-card"><div class="skeleton-line"></div><div class="skeleton-line"></div><div class="skeleton-line"></div></div>
+          <div class="skeleton-card"><div class="skeleton-line"></div><div class="skeleton-line"></div><div class="skeleton-line"></div></div>
+          <div class="skeleton-card"><div class="skeleton-line"></div><div class="skeleton-line"></div><div class="skeleton-line"></div></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- 证据等级参考（折叠） -->
+    <div class="evidence-ref">
+      <button class="evidence-ref-toggle" onclick="toggleEvidenceRef()">
+        证据等级分类说明 <span id="evidenceArrow">▸</span>
+      </button>
+      <div class="evidence-ref-content" id="evidenceContent">
+        <p>文献证据等级基于 <strong>PubMed Publication Type</strong> + <strong>标题/摘要</strong> 综合判定（AI 辅助分类，非最终医学裁决）。</p>
+        <table class="evidence-table">
+          <tr><th>等级</th><th>分类</th><th>说明</th></tr>
+          <tr><td rowspan="2"><strong>I</strong></td><td>Systematic Review / Meta-Analysis</td><td>系统综述 / 荟萃分析</td></tr>
+          <tr><td>Guideline / Consensus</td><td>临床指南 / 专家共识</td></tr>
+          <tr><td><strong>II</strong></td><td>Randomized Controlled Trial</td><td>随机对照试验</td></tr>
+          <tr><td rowspan="2"><strong>III</strong></td><td>Non-randomized Controlled Cohort</td><td>前瞻性对照队列 / 非随机对照临床研究</td></tr>
+          <tr><td>Adjusted Retrospective Cohort</td><td>回顾性对照 + 统计校正（PSM/IPTW 等）</td></tr>
+          <tr><td rowspan="2"><strong>IV</strong></td><td>Historical Control / Case-Control</td><td>回顾性对照（未校正）/ 病例对照</td></tr>
+          <tr><td>Single Arm</td><td>单臂研究（无对照）</td></tr>
+          <tr><td><strong>V</strong></td><td>Case Report</td><td>病例报告</td></tr>
+          <tr><td><strong>VI</strong></td><td>Narrative Review</td><td>叙述性综述</td></tr>
+          <tr><td><strong>—</strong></td><td>Protocol / HEOR / Editorial / Letter / Comment / Animal / In Vitro</td><td>非证据类</td></tr>
+        </table>
+        <p style="margin-top:0.5rem;font-size:0.8rem;color:var(--fg3);">分类结果来自 AI 自动判定，仅供快速过滤参考。重要决策请核查原文。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="intel-tab-panel" id="tab-signals">
+    <div class="signal-topline">
+      <div>
+        <div class="section-kicker">近 14 天候选信号</div>
+        <h2>本周信号板</h2>
+      </div>
+      <div class="signal-filter" id="signalFilter">
+        <button class="signal-filter-btn active" type="button" data-signal-filter="all">全部</button>
+        <button class="signal-filter-btn" type="button" data-signal-filter="强">强</button>
+        <button class="signal-filter-btn" type="button" data-signal-filter="中">中</button>
+        <button class="signal-filter-btn" type="button" data-signal-filter="弱">弱</button>
+      </div>
+    </div>
+    <div class="signal-summary-grid" id="signalSummary"></div>
+    <div class="signal-layout">
+      <section class="signal-list" id="signalList"></section>
+      <aside class="signal-side">
+        <h3>高频主题</h3>
+        <div class="keyword-cloud" id="signalKeywords"></div>
+        <h3>信号口径</h3>
+        <p>当前为前端 MVP：根据证据等级、期刊影响因子、近期入库时间与题名/摘要关键词生成候选信号。后续接入 `signals-weekly.js` 后，本区域将直接展示 LLM 提取结果。</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="intel-tab-panel" id="tab-china">
+    <div class="signal-topline">
+      <div>
+        <div class="section-kicker">中国独立视角</div>
+        <h2>中国情报</h2>
+      </div>
+      <span class="update-badge" id="chinaBadge">—</span>
+    </div>
+    <div class="china-grid">
+      <div class="chart-panel">
+        <div class="chart-title">近一年中国相关文献趋势</div>
+        <div class="chart-canvas" id="chinaMonthlyChart"></div>
+      </div>
+      <div class="chart-panel">
+        <div class="chart-title">中国相关证据等级</div>
+        <div class="chart-canvas" id="chinaEvidenceChart"></div>
+      </div>
+    </div>
+    <div class="china-content-grid">
+      <section class="china-panel">
+        <h3>近期中国相关文献</h3>
+        <div id="chinaRecentList"></div>
+      </section>
+      <section class="china-panel">
+        <h3>主要期刊与机构线索</h3>
+        <div id="chinaSourceList"></div>
+      </section>
+    </div>
+  </section>
 </main>
 
 <!-- 数据脚本（gzip 压缩，比 fetch JSON 快） -->
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
 <script src="/MA-MG-HUB/data/literature-recent.js"></script>
+<script src="/MA-MG-HUB/data/signals-weekly.js"></script>
+<script src="/MA-MG-HUB/data/china-intelligence.js"></script>
 <script src="/MA-MG-HUB/assets/literature.js"></script>
 </body>
 </html>

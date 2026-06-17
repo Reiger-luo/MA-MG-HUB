@@ -3,38 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>素材库 · MA-MG-HUB</title>
+<title>内容工坊 · MA-MG-HUB</title>
 <link rel="stylesheet" href="/MA-MG-HUB/assets/main.css">
-<style>
-.mat-main { max-width: 1000px; margin: 0 auto; padding: 1.5rem; }
-.mat-tabs { display: flex; gap: 0.3rem; margin-bottom: 1rem; }
-.mat-tab {
-  padding: 0.4rem 0.9rem; border-radius: 6px 6px 0 0;
-  background: var(--bg); border: 1px solid var(--bg3);
-  border-bottom: none; font-size: 0.85rem; color: var(--fg3); cursor: pointer;
-}
-.mat-tab.active { background: var(--bg2); color: var(--fg); font-weight: 500; }
-.mat-panel { display: none; }
-.mat-panel.active { display: block; }
-
-.evidence-card {
-  background: var(--bg2); border: 1px solid var(--bg3);
-  border-radius: 8px; padding: 1rem 1.2rem; margin-bottom: 0.6rem;
-}
-.evidence-card h3 { font-size: 0.95rem; margin-bottom: 0.2rem; }
-.evidence-card .meta { font-size: 0.8rem; color: var(--fg3); margin-bottom: 0.4rem; }
-.evidence-card .body { font-size: 0.85rem; color: var(--fg2); line-height: 1.5; }
-.evidence-card .actions { margin-top: 0.5rem; display: flex; gap: 0.5rem; }
-
-.activity-table {
-  width: 100%; border-collapse: collapse;
-}
-.activity-table th, .activity-table td {
-  padding: 0.35rem 0.5rem; border: 1px solid var(--bg3);
-  font-size: 0.82rem; text-align: left;
-}
-.activity-table th { background: var(--bg); font-weight: 500; }
-</style>
 </head>
 <body>
 
@@ -43,124 +13,45 @@
     <a href="/MA-MG-HUB/" class="nav-brand">MA-MG-HUB</a>
     <div class="nav-links">
       <a href="/MA-MG-HUB/" class="nav-link">工作台</a>
+      <a href="/MA-MG-HUB/pages/literature.html" class="nav-link">情报中心</a>
+      <a href="/MA-MG-HUB/pages/knowledge.html" class="nav-link">知识库</a>
+      <a href="/MA-MG-HUB/pages/msl.html" class="nav-link">MSL工作台</a>
+      <a href="/MA-MG-HUB/pages/materials.html" class="nav-link active">内容工坊</a>
+      <a href="/MA-MG-HUB/pages/landscape.html" class="nav-link">诊治格局</a>
       <a href="/MA-MG-HUB/pages/data-ops.html" class="nav-link">数据状态</a>
     </div>
   </div>
 </nav>
 
-<div class="mat-main">
+<main class="main">
   <div class="page-header">
-    <h1>📎 素材库</h1>
+    <h1>内容工坊</h1>
     <div class="page-header-actions">
-      <span class="update-badge" data-placeholder="true">建设中 · 手动维护</span>
+      <span class="update-badge" id="moduleBadge">Loading...</span>
     </div>
   </div>
 
-  <div class="mat-tabs">
-    <div class="mat-tab active" onclick="switchTab(this,'ev')">证据卡片</div>
-    <div class="mat-tab" onclick="switchTab(this,'cmp')">竞品对比</div>
-    <div class="mat-tab" onclick="switchTab(this,'chart')">图表模板</div>
+  <div class="workspace-two-col content-workshop">
+    <section class="workspace-panel">
+      <h2>模板与模块</h2>
+      <div class="form-grid single">
+        <label><span>选择模板</span><select id="templateSelect"></select></label>
+      </div>
+      <div class="module-list" id="moduleList"></div>
+    </section>
+
+    <section class="workspace-panel">
+      <div class="panel-head">
+        <h2>组装草稿</h2>
+        <button class="btn primary" id="btnCompose">生成草稿</button>
+      </div>
+      <div class="compliance-box" id="complianceBox"></div>
+      <textarea id="draftOutput" class="draft-output" placeholder="选择模板和模块后生成草稿"></textarea>
+    </section>
   </div>
+</main>
 
-  <!-- 证据卡片 -->
-  <div class="mat-panel active" id="panel-ev">
-    <div class="evidence-card" data-placeholder="true">
-      <h3>ADAPT 研究核心数据</h3>
-      <div class="meta">更新: 2025-09 · 来源: N Engl J Med 2023</div>
-      <div class="body">
-        <strong>设计：</strong>随机双盲安慰剂对照，III 期<br>
-        <strong>人群：</strong>AChR-Ab+ gMG (n=167)<br>
-        <strong>主要终点：</strong>MG-ADL 改善 ≥2 分持续 ≥4 周<br>
-        <strong>结果：</strong>EFG 67.7% vs 安慰剂 29.7% (p&lt;0.0001)<br>
-        <strong>安全性：</strong>AE 发生率相当，多为轻中度
-      </div>
-      <div class="actions">
-        <button class="btn" style="font-size:0.78rem" onclick="alert('引用复制功能（待实现）')">📋 复制引用</button>
-      </div>
-    </div>
-
-    <div class="evidence-card" data-placeholder="true">
-      <h3>ADAPT-SC+ 长期数据</h3>
-      <div class="meta">更新: 2025-06 · 来源: AAN 2025 会议</div>
-      <div class="body">
-        <strong>设计：</strong>ADAPT-SC 开放标签延伸<br>
-        <strong>最长随访：</strong>3 年<br>
-        <strong>关键发现：</strong>长期维持 Q2W SC 安全性与疗效稳定<br>
-        <strong>无需剂量递增：</strong>从 IV 转换至 SC 无缝过渡
-      </div>
-      <div class="actions">
-        <button class="btn" style="font-size:0.78rem" onclick="alert('引用复制功能（待实现）')">📋 复制引用</button>
-      </div>
-    </div>
-
-    <div class="evidence-card" data-placeholder="true">
-      <h3>安全性数据汇总</h3>
-      <div class="meta">更新: 2025-12 · 来源: 各研究汇总</div>
-      <div class="body">
-        <strong>EFG 总体安全性：</strong>感染率 vs 安慰剂无显著差异<br>
-        <strong>头痛：</strong>最常见 AE，多为轻中度<br>
-        <strong>输液反应：</strong>SC 组 &lt;5%，均为 1-2 级<br>
-        <strong>长期安全性：</strong>3 年数据无新增安全信号
-      </div>
-      <div class="actions">
-        <button class="btn" style="font-size:0.78rem" onclick="alert('引用复制功能（待实现）')">📋 复制引用</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- 竞品对比 -->
-  <div class="mat-panel" id="panel-cmp">
-    <div style="font-size:0.85rem;color:var(--fg2);margin-bottom:0.8rem" data-placeholder="true">实时更新 · 数据源：文献 / CT.gov / FDA / 公开报道</div>
-    <table class="activity-table" data-placeholder="true">
-      <tr><th>维度</th><th>EFG (argenx)</th><th>泰它西普 (荣昌)</th><th>Rozanolixizumab</th><th>Nipocalimab</th></tr>
-      <tr><td>机制</td><td>FcRn 拮抗</td><td>BLyS/APRIL 双靶</td><td>FcRn 拮抗</td><td>FcRn 拮抗</td></tr>
-      <tr><td>MG III期</td><td>✅ 已获批</td><td>❌ 未启动</td><td>✅ 已获批</td><td>⏳ 进行中</td></tr>
-      <tr><td>SC 制剂</td><td>✅ 已上市</td><td>✅</td><td>✅</td><td>❌ IV only</td></tr>
-      <tr><td>剂量频率</td><td>Q2W SC</td><td>QW SC</td><td>Q3W SC</td><td>Q2W IV</td></tr>
-      <tr><td>中国可及</td><td>✅ 已获批</td><td>⏳ SLE已批 MG未申报</td><td>❌</td><td>❌</td></tr>
-    </table>
-  </div>
-
-  <!-- 图表模板 -->
-  <div class="mat-panel" id="panel-chart">
-    <div style="font-size:0.85rem;color:var(--fg2);margin-bottom:0.8rem" data-placeholder="true">可用模板（点预览查看示例）</div>
-
-    <div class="evidence-card" data-placeholder="true">
-      <h3>ADL-QMG 差异指数趋势图</h3>
-      <div class="meta">适用：展示 EFG vs 安慰剂随时间改善</div>
-      <div class="actions">
-        <button class="btn" style="font-size:0.78rem" onclick="alert('预览功能（待实现）')">👁️ 预览</button>
-        <button class="btn" style="font-size:0.78rem" onclick="alert('下载功能（待实现）')">⬇️ 下载</button>
-      </div>
-    </div>
-
-    <div class="evidence-card" data-placeholder="true">
-      <h3>竞品疗效森林图</h3>
-      <div class="meta">适用：多竞品 MG-ADL / QMG 改善对比</div>
-      <div class="actions">
-        <button class="btn" style="font-size:0.78rem" onclick="alert('预览功能（待实现）')">👁️ 预览</button>
-        <button class="btn" style="font-size:0.78rem" onclick="alert('下载功能（待实现）')">⬇️ 下载</button>
-      </div>
-    </div>
-
-    <div class="evidence-card" data-placeholder="true">
-      <h3>安全性数据瀑布图</h3>
-      <div class="meta">适用：展示 AE 分布对比</div>
-      <div class="actions">
-        <button class="btn" style="font-size:0.78rem" onclick="alert('预览功能（待实现）')">👁️ 预览</button>
-        <button class="btn" style="font-size:0.78rem" onclick="alert('下载功能（待实现）')">⬇️ 下载</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-function switchTab(el, panel) {
-  document.querySelectorAll('.mat-tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.mat-panel').forEach(p => p.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('panel-' + panel).classList.add('active');
-}
-</script>
+<script src="/MA-MG-HUB/data/content-modules.js"></script>
+<script src="/MA-MG-HUB/assets/materials.js"></script>
 </body>
 </html>

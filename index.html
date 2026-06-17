@@ -3,98 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MA-MG-HUB · 学术工作站</title>
+<title>工作台 · MA-MG-HUB</title>
 <link rel="stylesheet" href="/MA-MG-HUB/assets/main.css">
-<style>
-.home-main { max-width: 1000px; margin: 0 auto; padding: 1.5rem; }
-
-.quicklook {
-  background: var(--bg2); border-radius: 10px;
-  border: 1px solid var(--bg3); padding: 1rem 1.2rem;
-  margin-bottom: 1.5rem;
-}
-.quicklook-title { font-size: 0.8rem; color: var(--fg3); margin-bottom: 0.5rem; font-weight: 500; }
-.quicklook-grid { display: flex; gap: 0.8rem; flex-wrap: wrap; }
-.quicklook-item {
-  flex: 1; min-width: 140px;
-  padding: 0.6rem 0.8rem; border-radius: 8px;
-  background: var(--bg); border: 1px solid var(--bg3);
-  cursor: pointer; transition: all 0.15s;
-  text-decoration: none; color: inherit;
-}
-.quicklook-item:hover { border-color: var(--accent); transform: translateY(-1px); }
-.quicklook-num { font-size: 1.3rem; font-weight: 600; color: var(--fg); display: block; }
-.quicklook-label { font-size: 0.78rem; color: var(--fg2); margin-top: 0.1rem; }
-.quicklook-health {
-  margin-top: 0.5rem; font-size: 0.78rem; color: var(--fg3);
-  display: flex; align-items: center; gap: 0.3rem;
-}
-.quicklook-health .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
-.quicklook-health .dot.green { background: var(--green); }
-.quicklook-health .dot.yellow { background: var(--yellow); }
-
-.task-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-  gap: 0.8rem;
-}
-.task-card {
-  background: var(--bg2); border: 1px solid var(--bg3);
-  border-radius: 10px; padding: 1.2rem;
-  text-decoration: none; color: inherit;
-  transition: all 0.15s;
-  display: flex; flex-direction: column; gap: 0.3rem;
-}
-.task-card:hover {
-  border-color: var(--accent); transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-}
-.task-icon { font-size: 1.5rem; }
-.task-name { font-size: 0.95rem; font-weight: 600; color: var(--fg); }
-.task-desc { font-size: 0.78rem; color: var(--fg3); line-height: 1.4; }
-
-/* 速览展开面板 */
-.ql-detail-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.4);
-  z-index: 200; display: none; align-items: center; justify-content: center;
-}
-.ql-detail-overlay.open { display: flex; }
-.ql-detail-panel {
-  background: var(--bg2); border-radius: 12px;
-  border: 1px solid var(--bg3);
-  max-width: 750px; width: 90%; max-height: 85vh;
-  display: flex; flex-direction: column;
-}
-.ql-detail-header {
-  padding: 1rem 1.2rem 0.5rem;
-  border-bottom: 1px solid var(--bg3);
-  display: flex; align-items: center; justify-content: space-between;
-}
-.ql-detail-header h2 { font-size: 1rem; }
-.ql-detail-header .close-btn {
-  background: none; border: none;
-  color: var(--fg3); font-size: 1.2rem; cursor: pointer;
-}
-.ql-detail-body {
-  flex: 1; overflow-y: auto; padding: 0.5rem 1.2rem 1rem;
-}
-.ql-detail-footer {
-  padding: 0.5rem 1.2rem 1rem;
-  border-top: 1px solid var(--bg3);
-  text-align: center;
-}
-.detail-item {
-  padding: 0.6rem 0; border-bottom: 1px solid var(--bg3);
-}
-.detail-item:last-child { border-bottom: none; }
-.detail-item-title { font-size: 0.85rem; font-weight: 500; }
-.detail-item-title a { color: var(--accent); text-decoration: none; }
-.detail-item-title a:hover { text-decoration: underline; }
-.detail-item-meta { font-size: 0.75rem; color: var(--fg3); margin-top: 0.15rem; display: flex; gap: 0.4rem; flex-wrap: wrap; align-items: center; }
-.detail-item-meta .badge { font-size: 0.7rem; padding: 0.08rem 0.3rem; border-radius: 3px; }
-.badge-china-sm { background: rgba(22,163,74,0.1); color: var(--green); }
-.badge-ev-sm { background: rgba(37,99,235,0.08); color: var(--accent); }
-</style>
 </head>
 <body>
 
@@ -103,198 +13,55 @@
     <a href="/MA-MG-HUB/" class="nav-brand">MA-MG-HUB</a>
     <div class="nav-links">
       <a href="/MA-MG-HUB/" class="nav-link active">工作台</a>
+      <a href="/MA-MG-HUB/pages/literature.html" class="nav-link">情报中心</a>
+      <a href="/MA-MG-HUB/pages/knowledge.html" class="nav-link">知识库</a>
+      <a href="/MA-MG-HUB/pages/msl.html" class="nav-link">MSL工作台</a>
+      <a href="/MA-MG-HUB/pages/materials.html" class="nav-link">内容工坊</a>
+      <a href="/MA-MG-HUB/pages/landscape.html" class="nav-link">诊治格局</a>
       <a href="/MA-MG-HUB/pages/data-ops.html" class="nav-link">数据状态</a>
     </div>
   </div>
 </nav>
 
-<div class="home-main">
-  <div class="quicklook" id="quicklook">
-    <div class="quicklook-title">📡 数据速览 <span style="font-weight:normal;color:var(--fg3)">· 点击数字查看详情</span></div>
-    <div class="quicklook-grid" id="qlGrid">
-      <div class="quicklook-item" style="cursor:default;opacity:0.5"><span class="quicklook-num">—</span><span class="quicklook-label">加载中…</span></div>
-    </div>
-    <div class="quicklook-health" id="qlHealth"></div>
-  </div>
-
-  <div style="margin-bottom:0.8rem;font-size:0.9rem;font-weight:500;color:var(--fg2)">📋 新建任务</div>
-  <div class="task-grid">
-    <a href="/MA-MG-HUB/pages/progress.html" class="task-card">
-      <div class="task-icon">📄</div>
-      <div class="task-name">前沿进展报告</div>
-      <div class="task-desc">文献+会议综合，阶段性总结近期动态</div>
-    </a>
-    <a href="/MA-MG-HUB/pages/landscape.html" class="task-card">
-      <div class="task-icon">🏥</div>
-      <div class="task-name">治疗格局报告</div>
-      <div class="task-desc">回答结构性问题，某个领域/靶点的全局图景</div>
-    </a>
-    <a href="/MA-MG-HUB/pages/competitive.html" class="task-card">
-      <div class="task-icon">🎯</div>
-      <div class="task-name">竞品应对策略</div>
-      <div class="task-desc">单点攻击方案，针对某个竞品的情报分析</div>
-    </a>
-    <a href="/MA-MG-HUB/pages/literature.html" class="task-card">
-      <div class="task-icon">📊</div>
-      <div class="task-name">自由探索</div>
-      <div class="task-desc">翻卡片→勾选→简报篮，可转入正式任务</div>
-    </a>
-    <a href="/MA-MG-HUB/pages/materials.html" class="task-card">
-      <div class="task-icon">📎</div>
-      <div class="task-name">素材库</div>
-      <div class="task-desc">证据卡片、竞品对比表、图表模板</div>
-    </a>
-    <a href="/MA-MG-HUB/pages/outputs.html" class="task-card">
-      <div class="task-icon">📌</div>
-      <div class="task-name">历史产出</div>
-      <div class="task-desc">最近 10 条，可下载/重新生成</div>
-    </a>
-    <a href="/MA-MG-HUB/pages/data-ops.html" class="task-card">
-      <div class="task-icon">🔧</div>
-      <div class="task-name">数据状态</div>
-      <div class="task-desc">各源更新时间、手动扫描、更新日志</div>
-    </a>
-  </div>
-</div>
-
-<div class="ql-detail-overlay" id="qlOverlay">
-  <div class="ql-detail-panel">
-    <div class="ql-detail-header">
-      <h2 id="qlDetailTitle">详情</h2>
-      <button class="close-btn" onclick="document.getElementById('qlOverlay').classList.remove('open')">✕</button>
-    </div>
-    <div class="ql-detail-body" id="qlDetailBody"></div>
-    <div class="ql-detail-footer" id="qlDetailFooter" style="display:none">
-      <button class="btn" onclick="showMore()" style="font-size:0.82rem">查看更多 →</button>
+<main class="main">
+  <div class="page-header">
+    <h1>工作台</h1>
+    <div class="page-header-actions">
+      <span class="update-badge" id="dashboardBadge">Loading...</span>
     </div>
   </div>
-</div>
 
-<script src="/MA-MG-HUB/data/literature-recent.js"></script>
-<script>
-(function(){
-  const data = window.MG_LITERATURE_DATA || [];
-  if (!data.length) {
-    document.querySelector('#qlGrid').innerHTML = '<div class="quicklook-item" style="cursor:default">暂无数据</div>';
-    return;
-  }
+  <section class="dashboard-stats" id="dashboardStats"></section>
 
-  const now = new Date();
-  const weekAgo = new Date(now); weekAgo.setDate(weekAgo.getDate() - 7);
-  const monthAgo = new Date(now); monthAgo.setDate(monthAgo.getDate() - 30);
+  <div class="dashboard-grid">
+    <section class="workspace-panel dashboard-signals">
+      <div class="panel-head"><h2>本周信号</h2><a class="text-link" href="/MA-MG-HUB/pages/literature.html">查看全部</a></div>
+      <div id="dashboardSignals"></div>
+    </section>
 
-  let weekly = 0, monthly = 0, china = 0, total = data.length;
-  let weeklyArticles = [], monthlyArticles = [];
-  let currentType = 'week', currentOffset = 0;
+    <section class="workspace-panel">
+      <div class="panel-head"><h2>待处理工作</h2></div>
+      <div id="dashboardWork"></div>
+    </section>
 
-  for (const a of data) {
-    if (a.china_related) china++;
-    const ed = a.entry_date || '';
-    const m = ed.match(/^(\d{4})\/(\d{2})\/(\d{2})/);
-    if (m) {
-      const d = new Date(+m[1], +m[2]-1, +m[3]);
-      if (d >= monthAgo) {
-        monthly++;
-        monthlyArticles.push(a);
-        if (d >= weekAgo) { weekly++; weeklyArticles.push(a); }
-      }
-    }
-  }
+    <section class="workspace-panel">
+      <div class="panel-head"><h2>快速入口</h2></div>
+      <div class="quick-actions">
+        <a href="/MA-MG-HUB/pages/msl.html">新建拜访</a>
+        <a href="/MA-MG-HUB/pages/materials.html">生成简报</a>
+        <a href="/MA-MG-HUB/pages/knowledge.html">检索知识库</a>
+        <a href="/MA-MG-HUB/pages/landscape.html">查看证据矩阵</a>
+      </div>
+    </section>
 
-  let lastDate = '';
-  for (const a of data) { if ((a.entry_date || '') > lastDate) lastDate = a.entry_date; }
-  let daysSince = '—';
-  if (lastDate) {
-    const lm = lastDate.match(/^(\d{4})\/(\d{2})\/(\d{2})/);
-    if (lm) {
-      const last = new Date(+lm[1], +lm[2]-1, +lm[3]);
-      const diff = Math.floor((now - last) / 86400000);
-      daysSince = diff + ' 天';
-    }
-  }
+    <section class="workspace-panel">
+      <div class="panel-head"><h2>团队概览</h2></div>
+      <div id="teamOverview"></div>
+    </section>
+  </div>
+</main>
 
-  document.querySelector('#qlGrid').innerHTML =
-    '<div class="quicklook-item" onclick="showDetail(\'week\')">' +
-      '<span class="quicklook-num">' + weekly + '</span>' +
-      '<span class="quicklook-label">本周新增文献</span></div>' +
-    '<div class="quicklook-item" onclick="showDetail(\'month\')">' +
-      '<span class="quicklook-num">' + monthly + '</span>' +
-      '<span class="quicklook-label">近 30 天新增</span></div>' +
-    '<div class="quicklook-item" onclick="showDetail(\'china\')">' +
-      '<span class="quicklook-num">' + china + '</span>' +
-      '<span class="quicklook-label">中国相关文献</span></div>' +
-    '<div class="quicklook-item" onclick="showDetail(\'total\')">' +
-      '<span class="quicklook-num">' + total + '</span>' +
-      '<span class="quicklook-label">文献总量</span></div>';
-
-  const healthEl = document.getElementById('qlHealth');
-  const dotClass = parseInt(daysSince) > 7 ? 'yellow' : 'green';
-  healthEl.innerHTML = '<span class="dot ' + dotClass + '"></span> 距上次更新 ' + daysSince + ' · 近1年文献 ' + total + ' 篇';
-
-  function getItems(type) {
-    if (type === 'week') return weeklyArticles;
-    if (type === 'month') return monthlyArticles;
-    if (type === 'china') return data.filter(a => a.china_related);
-    return data;
-  }
-
-  function renderItems(items, offset) {
-    const slice = items.slice(offset, offset + 20);
-    return slice.map(a => {
-      const ed = (a.entry_date || '').slice(0,10);
-      const tags = [];
-      if (a.china_related) tags.push('<span class="badge badge-china-sm">🇨🇳 中国</span>');
-      if (a.evidence_level) tags.push('<span class="badge badge-ev-sm">证据 ' + a.evidence_level + '</span>');
-      return '<div class="detail-item">' +
-        '<div class="detail-item-title"><a href="' + (a.url || '#') + '" target="_blank">' + escapeHtml(a.title) + '</a></div>' +
-        '<div class="detail-item-meta">' +
-          (a.journal ? '<span>' + escapeHtml(a.journal) + '</span>' : '') +
-          (ed ? '<span>' + ed + '</span>' : '') +
-          tags.join('') +
-        '</div></div>';
-    }).join('');
-  }
-
-  window.showDetail = function(type) {
-    currentType = type;
-    currentOffset = 0;
-    const items = getItems(type);
-    const titles = { week: '本周新增', month: '近30天新增', china: '中国相关文献', total: '最近文献' };
-    document.getElementById('qlDetailTitle').textContent = titles[type] + ' (' + items.length + ' 篇)';
-
-    const body = document.getElementById('qlDetailBody');
-    body.innerHTML = renderItems(items, 0);
-
-    const footer = document.getElementById('qlDetailFooter');
-    if (items.length > 20) {
-      footer.style.display = 'block';
-      footer.querySelector('.btn').textContent = '查看更多 (' + Math.min(20, items.length - 20) + '+ 篇) →';
-    } else {
-      footer.style.display = 'none';
-    }
-    document.getElementById('qlOverlay').classList.add('open');
-  };
-
-  window.showMore = function() {
-    currentOffset += 20;
-    const items = getItems(currentType);
-    const body = document.getElementById('qlDetailBody');
-    body.innerHTML += renderItems(items, currentOffset);
-    const footer = document.getElementById('qlDetailFooter');
-    const remaining = items.length - currentOffset - 20;
-    if (remaining > 0) {
-      footer.querySelector('.btn').textContent = '查看更多 (' + remaining + '+ 篇) →';
-    } else {
-      footer.style.display = 'none';
-    }
-  };
-
-  function escapeHtml(t) {
-    if (!t) return '';
-    var d = document.createElement('div');
-    d.textContent = t; return d.innerHTML;
-  }
-})();
-</script>
+<script src="/MA-MG-HUB/data/dashboard-data.js"></script>
+<script src="/MA-MG-HUB/assets/dashboard.js"></script>
 </body>
 </html>
