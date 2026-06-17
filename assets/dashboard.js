@@ -46,7 +46,7 @@
     document.getElementById('teamOverview').innerHTML =
       '<div class="overview-row"><span>MSL 闭环</span><strong>本地 MVP 已就绪</strong></div>' +
       '<div class="overview-row"><span>专家候选池</span><strong>' + (stats.experts || 0) + ' 位</strong></div>' +
-      '<div class="overview-row"><span>待复核模块</span><strong>' + (stats.modules || 0) + ' 个</strong></div>' +
+      '<div class="overview-row"><span>待确认模块</span><strong>' + (stats.modules || 0) + ' 个</strong></div>' +
       '<div class="overview-row"><span>更新时间</span><strong>' + escapeHtml(data.generated_at || '-') + '</strong></div>';
   }
 

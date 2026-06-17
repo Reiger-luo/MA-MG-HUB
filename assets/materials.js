@@ -44,7 +44,7 @@
     var selected = new Set(template.modules || []);
     el.moduleList.innerHTML = modules.map(function(module) {
       var checked = selected.has(module.id) ? 'checked' : '';
-      var status = module.verified ? '已核实' : (module.placeholder ? '占位' : '待核实');
+      var status = module.verified ? '已确认' : (module.placeholder ? '资料不足' : '待确认');
       var claims = (module.claims || []).slice(0, 3).map(function(claim) {
         return '<li>' + escapeHtml(claim.text) + '<span>PMID ' + escapeHtml(claim.pmid || '-') + ' · ' + escapeHtml(claim.evidence_level || '未分类') + '</span></li>';
       }).join('');
@@ -74,9 +74,9 @@
     var placeholders = selected.filter(function(module) { return module.placeholder; }).length;
     var rows = [
       { ok: !missingPmid, text: '所有声明绑定 PMID' },
-      { ok: unverified === 0, text: unverified === 0 ? '模块已复核' : unverified + ' 个模块待医学/合规复核' },
-      { ok: placeholders === 0, text: placeholders === 0 ? '无 placeholder 模块' : placeholders + ' 个 placeholder 模块' },
-      { ok: false, text: '超说明书暗示需人工终审' }
+      { ok: unverified === 0, text: unverified === 0 ? '模块来源已确认' : unverified + ' 个模块待确认来源' },
+      { ok: placeholders === 0, text: placeholders === 0 ? '无资料不足模块' : placeholders + ' 个资料不足模块' },
+      { ok: false, text: '适应症、疗效、安全性结论需核对原文' }
     ];
     el.compliance.innerHTML = rows.map(function(row) {
       return '<div class="compliance-row ' + (row.ok ? 'ok' : 'warn') + '">' +
@@ -93,7 +93,7 @@
     lines.push('# ' + template.name);
     lines.push('');
     lines.push('生成时间：' + new Date().toLocaleString('zh-CN'));
-    lines.push('状态：草稿，需医学/合规终审');
+    lines.push('状态：草稿，待人工编辑');
     lines.push('');
     selected.forEach(function(module, index) {
       lines.push('## ' + (index + 1) + '. ' + module.title);
@@ -104,9 +104,9 @@
       });
       lines.push('');
     });
-    lines.push('## 合规提示');
+    lines.push('## 引用提示');
     lines.push('- 所有内容仅为自动组装草稿。');
-    lines.push('- verified=false 的模块不得直接对外使用。');
+    lines.push('- verified=false 表示来源或表述尚未人工确认。');
     lines.push('- 涉及适应症、疗效比较、安全性结论时需人工核查原文。');
     el.draft.value = lines.join('\n');
   }

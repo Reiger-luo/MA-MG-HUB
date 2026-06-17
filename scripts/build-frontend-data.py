@@ -387,7 +387,7 @@ def build_landscape(recent):
         matrices.append({
             "question": question,
             "verified": False,
-            "summary": "基于近一年 PubMed 文献的自动证据聚合，需医学复核。",
+            "summary": "基于近一年 PubMed 文献的自动证据聚合，请核对引用原文。",
             "evidence_matrix": [
                 {
                     "type": "支持",
@@ -395,7 +395,7 @@ def build_landscape(recent):
                     "source": ref.get("journal", ""),
                     "pmid": ref.get("pmid", ""),
                     "key_finding": ref.get("title", ""),
-                    "limitations": "自动提取，未完成人工核验",
+                    "limitations": "自动提取，来源待确认",
                 }
                 for ref in refs[:5]
             ],
@@ -445,7 +445,7 @@ def build_modules(recent, landscape):
             "updated_at": datetime.now().strftime("%Y-%m-%d"),
             "verified": False,
             "placeholder": len(refs) == 0,
-            "summary": "自动从近一年文献提取的模块草稿，需医学/合规复核后使用。",
+            "summary": "自动从近一年文献提取的模块草稿，请核对引用原文后使用。",
             "claims": [
                 {"text": ref.get("title", ""), "pmid": ref.get("pmid", ""), "evidence_level": ref.get("evidence_level") or "未分类"}
                 for ref in refs[:4]
@@ -453,22 +453,20 @@ def build_modules(recent, landscape):
             "references": refs,
         })
     templates = [
-        {"id": "weekly_brief", "name": "文献速递简报", "modules": ["module_clinical_efgartigod", "module_safety_fcrn", "module_real_world"]},
+        {"id": "weekly_brief", "name": "文献速递简报", "modules": ["module_clinical_efgartigimod", "module_safety_fcrn", "module_real_world"]},
         {"id": "visit_material", "name": "拜访材料", "modules": ["module_pharmacology_fcrn", "module_clinical_efgartigimod", "module_competitive_fcrn"]},
         {"id": "competitive_response", "name": "竞品应对", "modules": ["module_competitive_fcrn", "module_safety_fcrn"]},
         {"id": "internal_strategy", "name": "医学部内部", "modules": ["module_guideline", "module_real_world", "module_competitive_fcrn"]},
     ]
-    # 修正模板中的拼写，避免前端找不到模块。
-    templates[0]["modules"][0] = "module_clinical_efgartigimod"
     return {
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "modules": modules,
         "templates": templates,
         "compliance_rules": [
             {"id": "pmid_required", "label": "每条声明必须绑定 PMID", "type": "rule"},
-            {"id": "verified_required", "label": "正式使用前必须医学/合规复核", "type": "workflow"},
-            {"id": "placeholder_block", "label": "placeholder 模块不得进入最终材料", "type": "rule"},
-            {"id": "off_label_review", "label": "超说明书暗示需人工判定", "type": "llm_assist"},
+            {"id": "source_confirmed", "label": "正式使用前建议确认引用来源", "type": "workflow"},
+            {"id": "placeholder_block", "label": "资料不足模块不得进入最终材料", "type": "rule"},
+            {"id": "claim_source_check", "label": "适应症、疗效、安全性结论需核对原文", "type": "rule"},
         ],
     }
 
@@ -487,8 +485,8 @@ def build_dashboard(recent, signals, experts, china, landscape, modules):
         "work_items": [
             {"type": "文献", "label": "近 14 天候选信号", "count": len(signals["signals"]), "href": "/MA-MG-HUB/pages/literature.html"},
             {"type": "专家", "label": "已构建专家画像", "count": len(experts["experts"]), "href": "/MA-MG-HUB/pages/msl.html"},
-            {"type": "模块", "label": "待核实内容模块", "count": sum(1 for m in modules["modules"] if not m["verified"]), "href": "/MA-MG-HUB/pages/materials.html"},
-            {"type": "证据", "label": "待核实证据矩阵", "count": len(landscape["evidence_questions"]), "href": "/MA-MG-HUB/pages/landscape.html"},
+            {"type": "模块", "label": "待确认内容模块", "count": sum(1 for m in modules["modules"] if not m["verified"]), "href": "/MA-MG-HUB/pages/materials.html"},
+            {"type": "证据", "label": "待确认证据矩阵", "count": len(landscape["evidence_questions"]), "href": "/MA-MG-HUB/pages/landscape.html"},
         ],
     }
 

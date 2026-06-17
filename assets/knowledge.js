@@ -82,7 +82,7 @@
 
   function renderQuestion(item) {
     return '<article class="evidence-question-card">' +
-      '<div class="question-head"><strong>' + escapeHtml(item.question) + '</strong><span>' + (item.verified ? '已核实' : '待核实') + '</span></div>' +
+      '<div class="question-head"><strong>' + escapeHtml(item.question) + '</strong><span>' + (item.verified ? '已确认' : '待确认') + '</span></div>' +
       '<p>' + escapeHtml(item.summary || '') + '</p>' +
       '<div class="chip-row">' + (item.references || []).slice(0, 4).map(function(ref) { return '<span class="mini-chip">PMID ' + escapeHtml(ref.pmid) + '</span>'; }).join('') + '</div>' +
     '</article>';

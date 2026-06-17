@@ -34,7 +34,7 @@
         return '<tr><td>' + escapeHtml(row.type) + '</td><td>' + escapeHtml(row.level) + '</td><td><a href="https://pubmed.ncbi.nlm.nih.gov/' + escapeHtml(row.pmid) + '/" target="_blank">PMID ' + escapeHtml(row.pmid) + '</a></td><td>' + escapeHtml(row.key_finding) + '</td></tr>';
       }).join('');
       return '<article class="matrix-card">' +
-        '<div class="question-head"><strong>' + escapeHtml(item.question) + '</strong><span>' + (item.verified ? '已核实' : '待核实') + '</span></div>' +
+        '<div class="question-head"><strong>' + escapeHtml(item.question) + '</strong><span>' + (item.verified ? '已确认' : '待确认') + '</span></div>' +
         '<p>' + escapeHtml(item.summary || '') + '</p>' +
         '<table><tr><th>方向</th><th>等级</th><th>来源</th><th>关键发现</th></tr>' + rows + '</table>' +
       '</article>';
