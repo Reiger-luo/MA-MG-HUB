@@ -21,6 +21,7 @@ DATA_DIR = PROJECT / "data"
 FULL_PATH = DATA_DIR / "literature-full.json"
 RECENT_PATH = DATA_DIR / "literature-recent.json"
 RECENT_JS_PATH = DATA_DIR / "literature-recent.js"
+EXPERT_JS_PATH = DATA_DIR / "expert-profiles.js"
 
 STOPWORDS = {
     "with", "from", "into", "using", "study", "case", "report", "review",
@@ -91,9 +92,18 @@ def load_articles_for_frontend():
     if FULL_PATH.exists():
         full = load_json(FULL_PATH)
     else:
-        print("⚠️  literature-full.json 不存在，专家画像将使用近一年公开数据降级生成。")
-        full = recent
+        print("⚠️  literature-full.json 不存在，将复用已提交的专家画像数据。")
+        full = None
     return recent, full
+
+
+def load_or_build_experts(full, recent):
+    if full is not None:
+        return build_experts(full)
+    if EXPERT_JS_PATH.exists():
+        return load_public_js(EXPERT_JS_PATH, "MG_EXPERT_PROFILES")
+    print("⚠️  expert-profiles.js 不存在，临时使用近一年公开数据生成专家画像。")
+    return build_experts(recent)
 
 
 def parse_date(value: str | None):
@@ -495,7 +505,7 @@ def main():
     recent, full = load_articles_for_frontend()
     signals = build_signals(recent)
     china = build_china(recent)
-    experts = build_experts(full)
+    experts = load_or_build_experts(full, recent)
     landscape = build_landscape(recent)
     modules = build_modules(recent, landscape)
     dashboard = build_dashboard(recent, signals, experts, china, landscape, modules)
