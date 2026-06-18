@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 """
-merge-weekly-literature.py — 把每周 PubMed 增量合入近一年公开文献库。
+merge-weekly-literature.py — 把每周 PubMed 增量合入本地 full，并派生网站 recent。
 
 输出：
+  - data/literature-full.json：本地分析底座（如果存在则 upsert 更新，仍然 gitignore）
   - data/literature-recent.js：GitHub Pages 前端公开滚动数据源
   - data/literature-recent.json：可选本地调试缓存（默认不写）
 
-不会写入 literature-full.json。历史全库保持为离线快照，不参与周更。
+运行策略：
+  - 本地工作站有 literature-full.json：weekly → full → recent.js
+  - GitHub Actions 没有 literature-full.json：weekly → recent.js 轻量兜底
 """
 
 from __future__ import annotations
@@ -21,6 +24,7 @@ from pathlib import Path
 PROJECT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT / "data"
 DEFAULT_WEEKLY_PATH = DATA_DIR / "literature-weekly.json"
+FULL_PATH = DATA_DIR / "literature-full.json"
 RECENT_JSON_CACHE_PATH = DATA_DIR / "literature-recent.json"
 RECENT_JS_PATH = DATA_DIR / "literature-recent.js"
 DAYS_RECENT = 365
@@ -52,6 +56,13 @@ def loadRecent():
     if RECENT_JSON_CACHE_PATH.exists():
         return loadJson(RECENT_JSON_CACHE_PATH), "literature-recent.json"
     return [], "empty"
+
+
+def loadBaseArticles():
+    if FULL_PATH.exists():
+        return loadJson(FULL_PATH), "literature-full.json", True
+    recent, source = loadRecent()
+    return recent, source, False
 
 
 def parseDate(value: str | None):
@@ -116,11 +127,53 @@ def writeRecentJson(articles):
     )
 
 
+def writeFullJson(articles):
+    FULL_PATH.write_text(
+        json.dumps(articles, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+
 def writeRecentJs(articles):
     with RECENT_JS_PATH.open("w", encoding="utf-8") as f:
         f.write("window.MG_LITERATURE_DATA = ")
         json.dump(articles, f, ensure_ascii=False)
         f.write(";\n")
+
+
+def upsertArticles(base, incoming):
+    byPmid = {article.get("pmid"): article for article in base if article.get("pmid")}
+    added = 0
+    updated = 0
+    for article in incoming:
+        pmid = article.get("pmid")
+        if not pmid:
+            continue
+        if pmid in byPmid:
+            before = byPmid[pmid]
+            after = mergeArticle(before, article)
+            byPmid[pmid] = after
+            updated += int(after != before)
+        else:
+            byPmid[pmid] = article
+            added += 1
+    merged = list(byPmid.values())
+    merged.sort(key=sortKey, reverse=True)
+    return merged, added, updated
+
+
+def buildRecentArticles(articles):
+    cutoff = datetime.now() - timedelta(days=DAYS_RECENT)
+    recent = []
+    dropped = 0
+    for article in articles:
+        dt = parseDate(article.get("entry_date")) or parseDate(article.get("pub_date"))
+        if dt and dt < cutoff:
+            dropped += 1
+            continue
+        recent.append(article)
+    recent.sort(key=sortKey, reverse=True)
+    return recent, dropped
 
 
 def main():
@@ -133,49 +186,31 @@ def main():
     if not weeklyPath.exists():
         raise SystemExit(f"缺少 {weeklyPath}")
 
-    recent, source = loadRecent()
+    base, source, hasFull = loadBaseArticles()
     weekly = loadJson(weeklyPath)
-    byPmid = {article.get("pmid"): article for article in recent if article.get("pmid")}
 
-    added = 0
-    updated = 0
-    for article in weekly:
-        pmid = article.get("pmid")
-        if not pmid:
-            continue
-        if pmid in byPmid:
-            before = byPmid[pmid]
-            after = mergeArticle(before, article)
-            byPmid[pmid] = after
-            updated += int(after != before)
-        else:
-            byPmid[pmid] = article
-            added += 1
+    mergedBase, added, updated = upsertArticles(base, weekly)
+    if hasFull and (added or updated):
+        writeFullJson(mergedBase)
 
-    cutoff = datetime.now() - timedelta(days=DAYS_RECENT)
-    merged = []
-    dropped = 0
-    for article in byPmid.values():
-        dt = parseDate(article.get("entry_date")) or parseDate(article.get("pub_date"))
-        if dt and dt < cutoff:
-            dropped += 1
-            continue
-        merged.append(article)
-
-    merged.sort(key=sortKey, reverse=True)
-    writeRecentJs(merged)
+    recent, dropped = buildRecentArticles(mergedBase)
+    writeRecentJs(recent)
     if args.write_json_cache:
-        writeRecentJson(merged)
+        writeRecentJson(recent)
     elif RECENT_JSON_CACHE_PATH.exists():
         RECENT_JSON_CACHE_PATH.unlink()
 
-    print(f"✅ weekly 已合入近一年公开文献库")
-    print(f"   输入 recent: {len(recent)} 篇（来源 {source}）")
+    print(f"✅ weekly 已同步到文献存储并派生 recent.js")
+    print(f"   输入基线: {len(base)} 篇（来源 {source}）")
     print(f"   输入 weekly: {len(weekly)} 篇")
     print(f"   新增: {added}")
     print(f"   更新: {updated}")
+    if hasFull:
+        print(f"   full 本地分析底座: {len(mergedBase)} 篇")
+    else:
+        print("   full 本地分析底座: 不存在，已使用 recent.js 兜底")
     print(f"   滚动窗口剔除: {dropped}")
-    print(f"   输出 recent.js: {len(merged)} 篇")
+    print(f"   输出 recent.js: {len(recent)} 篇")
     if args.write_json_cache:
         print("   本地 JSON cache: 已写入")
     else:
