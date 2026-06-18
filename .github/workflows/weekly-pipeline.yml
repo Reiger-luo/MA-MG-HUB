@@ -2,11 +2,6 @@ name: MA-MG-HUB Weekly Pipeline
 
 on:
   workflow_dispatch:
-    inputs:
-      skip_fetch:
-        description: "Skip PubMed incremental fetch"
-        required: false
-        default: "true"
   schedule:
     - cron: "0 15 * * 0"
 
@@ -34,15 +29,7 @@ jobs:
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
         run: |
-          SKIP_FETCH="${{ github.event.inputs.skip_fetch }}"
-          if [ "${{ github.event_name }}" = "schedule" ]; then
-            SKIP_FETCH="true"
-          fi
-          if [ "$SKIP_FETCH" != "false" ]; then
-            python scripts/run-weekly-pipeline.py --skip-fetch
-          else
-            python scripts/run-weekly-pipeline.py
-          fi
+          python scripts/run-weekly-pipeline.py --skip-fetch
 
       - name: Publish weekly summary
         run: |

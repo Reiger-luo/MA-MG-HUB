@@ -2,8 +2,9 @@
 """
 run-weekly-pipeline.py — MA-MG-HUB 每周管线调度器。
 
-默认执行公开数据更新与前端数据构建。涉及敏感的拜访记录、专家内部标签
-不在本管线中处理，也不会写入公开仓库。
+默认执行公开数据更新、前端数据构建与周报生成。周更管线不再做历史全库回填；
+证据等级、IF/CAS 等补充只面向每周新增且有摘要、足够判断的文献。
+涉及敏感的拜访记录、专家内部标签不在本管线中处理，也不会写入公开仓库。
 """
 
 from __future__ import annotations
@@ -16,9 +17,6 @@ from pathlib import Path
 
 
 PROJECT = Path(__file__).resolve().parent.parent
-FULL_DATA = PROJECT / "data" / "literature-full.json"
-
-
 def run_step(label: str, command: list[str], optional: bool = False):
     print(f"\n== {label} ==")
     print("$ " + " ".join(command))
@@ -42,13 +40,9 @@ def main():
     if not args.skip_fetch:
         run_step("PubMed 增量抓取", [sys.executable, "scripts/fetch-pubmed-weekly.py"])
 
-    if FULL_DATA.exists():
-        run_step("证据等级回填", [sys.executable, "scripts/backfill-study-classification.py"], optional=True)
-        run_step("期刊 IF/分区回填", [sys.executable, "scripts/backfill-journal-metrics.py"], optional=True)
-        run_step("近一年数据切分", [sys.executable, "scripts/split-recent-data.py"])
-    else:
-        print("\n⚠️  data/literature-full.json 不存在，跳过全量回填与 recent 切分。")
-        print("   将使用已提交的公开 literature-recent.js 构建前端数据。")
+    print("\nℹ️  周更管线不执行历史全库回填。")
+    print("   历史数据保持现状；后续仅对每周新增且有摘要、足够判断的文献补充证据等级与 IF/CAS。")
+    print("   当前静态站将使用已提交的公开 literature-recent.js 构建前端数据。")
 
     run_step("前端数据产物生成", [sys.executable, "scripts/build-frontend-data.py"])
     run_step("当前通讯渠道周报生成", [sys.executable, "scripts/generate-weekly-summary.py"])
