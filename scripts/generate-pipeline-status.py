@@ -189,7 +189,7 @@ def buildStatus():
             "local_command": "python3 scripts/run-weekly-pipeline.py",
             "workflow": "MA-MG-HUB Weekly Pipeline",
             "schedule": "每周日 23:00 Asia/Shanghai",
-            "policy": "不做全库历史回填；只对 weekly 新增且有摘要、足够判断的文献补充证据等级与 IF/CAS。",
+            "policy": "不做全库历史回填；weekly 新增先补证据等级，无证据等级则剔除；有等级后再补 IF/CAS。",
         },
         "sources": sources,
         "artifacts": artifacts,

@@ -5,8 +5,8 @@ enrich-weekly-literature.py — 只富集每周新增 PubMed 文献。
 边界：
   - 只处理 data/literature-weekly.json
   - 不读取、不写入 literature-full.json
-  - 仅对有摘要、足够判断研究类型的文献补充 study_types / evidence_level
-  - IF/CAS 只使用 assets/journal_metrics.json 已有缓存，不在周更流程里爬站
+  - 先补 study_types / evidence_level；无证据等级的新文献不进入后续周更
+  - 有证据等级的文献再补 IF/CAS；只使用 assets/journal_metrics.json 已有缓存，不在周更流程里爬站
 """
 
 from __future__ import annotations
@@ -164,18 +164,8 @@ def inferChinaRelated(article):
     return any(keyword in text for keyword in CHINA_KEYWORDS)
 
 
-def enrichArticle(article, cache, normalized):
-    metricsFilled = False
+def classifyArticle(article):
     classificationFilled = False
-
-    metrics = getJournalMetrics(article, cache, normalized)
-    if metrics:
-        if article.get("journal_if") is None:
-            article["journal_if"] = metrics.get("IF")
-            metricsFilled = True
-        if article.get("journal_quartile") is None:
-            article["journal_quartile"] = metrics.get("CAS")
-            metricsFilled = True
 
     if article.get("china_related") is None:
         article["china_related"] = inferChinaRelated(article)
@@ -188,7 +178,20 @@ def enrichArticle(article, cache, normalized):
         article["evidence_level"] = evidenceLevel
         classificationFilled = bool(studyTypes)
 
-    return classificationFilled, metricsFilled
+    return classificationFilled
+
+
+def enrichMetrics(article, cache, normalized):
+    metricsFilled = False
+    metrics = getJournalMetrics(article, cache, normalized)
+    if metrics:
+        if article.get("journal_if") is None:
+            article["journal_if"] = metrics.get("IF")
+            metricsFilled = True
+        if article.get("journal_quartile") is None:
+            article["journal_quartile"] = metrics.get("CAS")
+            metricsFilled = True
+    return metricsFilled
 
 
 def main():
@@ -200,18 +203,26 @@ def main():
     classified = 0
     metricsFilled = 0
     assessable = 0
+    kept = []
+    droppedNoEvidence = 0
 
     for article in articles:
         if hasAssessableAbstract(article):
             assessable += 1
-        didClassify, didMetrics = enrichArticle(article, cache, normalized)
+        didClassify = classifyArticle(article)
         classified += int(didClassify)
+        if not article.get("evidence_level"):
+            droppedNoEvidence += 1
+            continue
+        didMetrics = enrichMetrics(article, cache, normalized)
         metricsFilled += int(didMetrics)
+        kept.append(article)
 
-    saveJson(WEEKLY_PATH, articles)
-    print(f"✅ weekly 文献富集完成: {len(articles)} 篇")
+    saveJson(WEEKLY_PATH, kept)
+    print(f"✅ weekly 文献富集完成: {len(kept)} / {len(articles)} 篇进入后续周更")
     print(f"   有可判断摘要: {assessable}")
     print(f"   补充研究类型/证据等级: {classified}")
+    print(f"   无证据等级剔除: {droppedNoEvidence}")
     print(f"   补充 IF/CAS: {metricsFilled}")
 
 

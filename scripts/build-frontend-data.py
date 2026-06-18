@@ -66,6 +66,13 @@ HIGH_VALUE_TERMS = [
     "randomized", "randomised", "trial", "phase 2", "phase 3", "real-world",
     "registry", "biomarker", "pathogenesis", "mechanism",
 ]
+LOW_VALUE_SIGNAL_TERMS = [
+    "retraction:",
+    "retracted article",
+    "author's response",
+    "response to comment",
+    "comment on",
+]
 
 PIPELINE = [
     {"name": "Efgartigimod", "target": "FcRn", "route": "IV/SC", "status": "已上市", "owner": "argenx"},
@@ -195,6 +202,12 @@ def has_high_value_signal(text, topics):
     return bool(SIGNAL_CORE_TOPICS.intersection(topics)) or has_any(text, HIGH_VALUE_TERMS)
 
 
+def is_low_value_signal(article, text):
+    pub_types = " ".join(article.get("pub_types") or []).lower()
+    title = (article.get("title") or "").strip().lower()
+    return has_any(f"{title} {pub_types} {text}", LOW_VALUE_SIGNAL_TERMS)
+
+
 def compact_article(article):
     return {
         "pmid": article.get("pmid", ""),
@@ -235,6 +248,8 @@ def build_signals(recent):
         for topic in topics:
             topic_counter[topic] += 1
         level = article.get("evidence_level")
+        if not level or is_low_value_signal(article, text):
+            continue
         if_val = float(article.get("journal_if") or 0)
         signal_type = "新证据"
         if has_any(text, ["guideline", "consensus", "recommendation", "review", "meta-analysis"]):
@@ -328,7 +343,7 @@ def normalize_institution(affiliation):
 
 
 def build_china(recent):
-    articles = [a for a in recent if a.get("china_related")]
+    articles = [a for a in recent if a.get("china_related") and a.get("evidence_level")]
     monthly = Counter()
     evidence = Counter()
     journals = Counter()

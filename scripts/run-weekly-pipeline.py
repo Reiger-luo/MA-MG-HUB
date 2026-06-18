@@ -2,9 +2,9 @@
 """
 run-weekly-pipeline.py — MA-MG-HUB 每周管线调度器。
 
-默认执行 PubMed 14 天增量抓取、weekly 富集、full/recent 存储同步、前端数据构建、周报与管线状态生成。
-周更管线不做历史全库回填；证据等级、IF/CAS 等补充只面向每周新增且有摘要、
-足够判断的文献。
+默认执行 PubMed 14 天增量抓取、weekly 证据等级筛选、IF/CAS 补充、full/recent
+存储同步、前端数据构建、周报与管线状态生成。
+周更管线不做历史全库回填；每周新增文献先补证据等级，无证据等级则不进入后续周更。
 涉及敏感的拜访记录、专家内部标签不在本管线中处理，也不会写入公开仓库。
 """
 
@@ -44,7 +44,7 @@ def main():
         run_step("文献存储同步与 recent 派生", [sys.executable, "scripts/merge-weekly-literature.py"])
 
     print("\nℹ️  周更管线不执行历史全库回填。")
-    print("   历史数据保持现状；仅对 weekly 新增且有摘要、足够判断的文献补充证据等级与 IF/CAS。")
+    print("   历史数据保持现状；weekly 新增先补证据等级，无证据等级则剔除；有等级后再补 IF/CAS。")
     print("   本地有 data/literature-full.json 时会 upsert 到 full；静态站使用 data/literature-recent.js。")
 
     run_step("前端数据产物生成", [sys.executable, "scripts/build-frontend-data.py"])
