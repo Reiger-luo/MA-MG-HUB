@@ -21,6 +21,7 @@
 .source-status .dot.green { background: var(--green); }
 .source-status .dot.yellow { background: var(--yellow); }
 .source-status .dot.gray { background: var(--bg3); }
+.source-status .dot.red { background: #d96c6c; }
 .ops-section-title { font-size: 0.9rem; font-weight: 500; color: var(--fg2); margin: 1.2rem 0 0.6rem; }
 .ops-btn {
   padding: 0.4rem 0.8rem; border-radius: 6px;
@@ -35,7 +36,20 @@
   border-bottom: 1px solid var(--bg3);
   font-family: monospace;
 }
+.artifact-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; }
+.artifact-item {
+  background: var(--bg2); border: 1px solid var(--bg3); border-radius: 8px;
+  padding: 0.8rem 0.9rem;
+}
+.artifact-name { font-size: 0.84rem; color: var(--fg); font-weight: 500; }
+.artifact-meta { font-size: 0.76rem; color: var(--fg3); margin-top: 0.2rem; line-height: 1.5; }
+.ops-note { font-size:0.78rem;color:var(--fg3);margin-top:0.3rem;line-height:1.7; }
 .section-divider { border: none; border-top: 1px solid var(--bg3); margin: 1.5rem 0; }
+@media (max-width: 640px) {
+  .source-card { align-items: flex-start; gap: 0.7rem; }
+  .source-status { white-space: nowrap; }
+  .artifact-grid { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
@@ -62,45 +76,14 @@
 
   <!-- 源健康度 -->
   <div class="ops-section-title" style="margin-top:0">数据源</div>
-
-  <div class="source-card">
-    <div class="source-info">
-      <div class="source-name">PubMed 近一年公开库</div>
-      <div class="source-meta" id="pubmedMeta">读取中...</div>
+  <div id="sourceList">
+    <div class="source-card">
+      <div class="source-info">
+        <div class="source-name">读取中...</div>
+        <div class="source-meta">正在加载管线状态</div>
+      </div>
+      <div class="source-status"><span class="dot gray"></span>加载</div>
     </div>
-    <div class="source-status"><span class="dot green"></span>正常</div>
-  </div>
-
-  <div class="source-card">
-    <div class="source-info">
-      <div class="source-name">会议摘要</div>
-      <div class="source-meta">后续增强 · AAN / EAN / AANEM</div>
-    </div>
-    <div class="source-status"><span class="dot yellow"></span>规划中</div>
-  </div>
-
-  <div class="source-card">
-    <div class="source-info">
-      <div class="source-name">临床试验 (ClinicalTrials.gov)</div>
-      <div class="source-meta">规划暂不作为自动数据源</div>
-    </div>
-    <div class="source-status"><span class="dot yellow"></span>按需</div>
-  </div>
-
-  <div class="source-card">
-    <div class="source-info">
-      <div class="source-name">监管动态 (FDA/NMPA)</div>
-      <div class="source-meta">后续由手动维护与公开来源补充</div>
-    </div>
-    <div class="source-status"><span class="dot yellow"></span>规划中</div>
-  </div>
-
-  <div class="source-card">
-    <div class="source-info">
-      <div class="source-name">前端数据产物</div>
-      <div class="source-meta" id="frontendMeta">读取中...</div>
-    </div>
-    <div class="source-status"><span class="dot green"></span>已生成</div>
   </div>
 
   <hr class="section-divider">
@@ -110,42 +93,104 @@
   <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:0.5rem">
     <a class="ops-btn" href="/MA-MG-HUB/data/dashboard-data.js" target="_blank" style="text-decoration:none">查看 Dashboard 数据</a>
     <a class="ops-btn" href="/MA-MG-HUB/data/signals-weekly.js" target="_blank" style="text-decoration:none">查看信号数据</a>
+    <a class="ops-btn" href="/MA-MG-HUB/data/pipeline-status.js" target="_blank" style="text-decoration:none">查看管线状态</a>
   </div>
-  <div style="font-size:0.78rem;color:var(--fg3);margin-top:0.3rem">
+  <div class="ops-note" id="pipelineNote">
     本地更新命令：<code>python3 scripts/run-weekly-pipeline.py</code>。GitHub Actions 可手动触发 weekly-pipeline。
   </div>
 
   <hr class="section-divider">
 
+  <!-- 公开产物 -->
+  <div class="ops-section-title">公开数据产物</div>
+  <div class="artifact-grid" id="artifactGrid"></div>
+
+  <hr class="section-divider">
+
   <!-- 更新日志 -->
   <div class="ops-section-title">更新日志</div>
-  <div class="log-line">[2026-06-18] 生产型周更接通：weekly 临时输入 → 本地 full 分析底座 → recent.js 公开滚动源 → 前端数据产物</div>
-  <div class="log-line">[2026-06-18] PubMed 14天窗口真实抓取：44篇，新增28篇，full 10605篇，近一年公开库1160篇</div>
-  <div class="log-line">[2026-06-17] v3.2 静态站 MVP 落地：Dashboard / 情报中心 / 知识库 / MSL / 内容工坊 / 诊治格局</div>
-  <div class="log-line">[2026-06-17] 前端数据产物生成：signals / china / expert / landscape / modules / dashboard</div>
-  <div class="log-line">[2026-06-09] IF/分区回填完成（82.6%覆盖率）</div>
-  <div class="log-line">[2026-06-09] 期刊名全称改写完成（374篇 ISO缩写→全称）</div>
-  <div class="log-line">[2026-06-08] 证据等级分类跑通（全部文献）</div>
-  <div class="log-line">[2026-06-08] 数据改为 .js 格式加载（gzip 加速）</div>
-  <div class="log-line">[2026-06-07] 项目搭建 · 全量 10,577 篇入库</div>
-  <div class="log-line">[2026-06-07] GitHub Pages 部署 + 域名绑定</div>
+  <div id="opsLog">
+    <div class="log-line">正在加载管线状态...</div>
+  </div>
 
   <script src="/MA-MG-HUB/data/dashboard-data.js"></script>
+  <script src="/MA-MG-HUB/data/pipeline-status.js"></script>
   <script>
   (function(){
-    const data = window.MG_DASHBOARD_DATA || {};
-    const stats = data.stats || {};
-    const pubmedMeta = document.getElementById('pubmedMeta');
-    const frontendMeta = document.getElementById('frontendMeta');
-    if (pubmedMeta) {
-      pubmedMeta.textContent = (stats.recent_articles || 0) + ' 篇近1年文献 · ' +
-        (stats.china_articles || 0) + ' 篇中国相关 · ' +
-        (stats.signals || 0) + ' 条候选信号';
+    const dashboard = window.MG_DASHBOARD_DATA || {};
+    const stats = dashboard.stats || {};
+    const status = window.MG_PIPELINE_STATUS || {};
+    const sourceList = document.getElementById('sourceList');
+    const artifactGrid = document.getElementById('artifactGrid');
+    const opsLog = document.getElementById('opsLog');
+    const pipelineNote = document.getElementById('pipelineNote');
+    const colorMap = { ok: 'green', generated: 'green', planned: 'yellow', manual: 'yellow', missing: 'red' };
+
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>"']/g, function(char) {
+        return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char];
+      });
     }
-    if (frontendMeta) {
-      frontendMeta.textContent = (stats.experts || 0) + ' 位专家画像 · ' +
-        (stats.modules || 0) + ' 个内容模块 · 更新时间 ' + (data.generated_at || '-');
+
+    function renderSources() {
+      const fallback = [
+        {
+          name: 'PubMed 近一年公开库',
+          meta: (stats.recent_articles || 0) + ' 篇近1年文献 · ' + (stats.china_articles || 0) + ' 篇中国相关 · ' + (stats.signals || 0) + ' 条候选信号',
+          status: 'ok',
+          status_label: '正常'
+        }
+      ];
+      const sources = status.sources || fallback;
+      sourceList.innerHTML = sources.map(function(source) {
+        const color = colorMap[source.status] || 'gray';
+        return '<div class="source-card">' +
+          '<div class="source-info">' +
+            '<div class="source-name">' + escapeHtml(source.name) + '</div>' +
+            '<div class="source-meta">' + escapeHtml(source.meta) + '</div>' +
+          '</div>' +
+          '<div class="source-status"><span class="dot ' + color + '"></span>' + escapeHtml(source.status_label || source.status || '-') + '</div>' +
+        '</div>';
+      }).join('');
     }
+
+    function renderPipelineNote() {
+      const pipeline = status.pipeline || {};
+      const command = pipeline.local_command || 'python3 scripts/run-weekly-pipeline.py';
+      const workflow = pipeline.workflow || 'weekly-pipeline';
+      const schedule = pipeline.schedule || '每周';
+      const policy = pipeline.policy || '周更只处理新增公开文献。';
+      pipelineNote.innerHTML = '本地更新命令：<code>' + escapeHtml(command) + '</code>。GitHub Actions：' +
+        escapeHtml(workflow) + '（' + escapeHtml(schedule) + '）。<br>' + escapeHtml(policy);
+    }
+
+    function renderArtifacts() {
+      const artifacts = status.artifacts || [];
+      if (!artifacts.length) {
+        artifactGrid.innerHTML = '<div class="artifact-item"><div class="artifact-name">暂无产物状态</div><div class="artifact-meta">等待 pipeline-status.js 生成</div></div>';
+        return;
+      }
+      artifactGrid.innerHTML = artifacts.map(function(item) {
+        const count = item.count === null || item.count === undefined ? '' : ' · ' + item.count + ' 条';
+        const size = item.size_kb === null || item.size_kb === undefined ? '' : ' · ' + item.size_kb + ' KB';
+        return '<div class="artifact-item">' +
+          '<div class="artifact-name">' + escapeHtml(item.label) + '</div>' +
+          '<div class="artifact-meta">' + escapeHtml(item.id) + count + size + '<br>更新时间 ' + escapeHtml(item.updated_at || '-') + '</div>' +
+        '</div>';
+      }).join('');
+    }
+
+    function renderLogs() {
+      const logs = status.logs || ['pipeline-status.js 尚未生成；页面正在使用 Dashboard 兜底数据。'];
+      opsLog.innerHTML = logs.map(function(line) {
+        return '<div class="log-line">' + escapeHtml(line) + '</div>';
+      }).join('');
+    }
+
+    renderSources();
+    renderPipelineNote();
+    renderArtifacts();
+    renderLogs();
   })();
   </script>
 </div>

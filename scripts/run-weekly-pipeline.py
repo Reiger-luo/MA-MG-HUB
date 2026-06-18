@@ -2,7 +2,7 @@
 """
 run-weekly-pipeline.py — MA-MG-HUB 每周管线调度器。
 
-默认执行 PubMed 14 天增量抓取、weekly 富集、full/recent 存储同步、前端数据构建与周报生成。
+默认执行 PubMed 14 天增量抓取、weekly 富集、full/recent 存储同步、前端数据构建、周报与管线状态生成。
 周更管线不做历史全库回填；证据等级、IF/CAS 等补充只面向每周新增且有摘要、
 足够判断的文献。
 涉及敏感的拜访记录、专家内部标签不在本管线中处理，也不会写入公开仓库。
@@ -49,6 +49,7 @@ def main():
 
     run_step("前端数据产物生成", [sys.executable, "scripts/build-frontend-data.py"])
     run_step("当前通讯渠道周报生成", [sys.executable, "scripts/generate-weekly-summary.py"])
+    run_step("管线状态生成", [sys.executable, "scripts/generate-pipeline-status.py"])
 
     print("\n✅ Pipeline finished:", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
