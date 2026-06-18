@@ -13,7 +13,7 @@ fetch-pubmed-weekly.py — MG-HUB PubMed 数据管线
   - china_related 暂不在管线层判定，保留 affiliations 原始数据供 UI 筛选
 """
 
-import json, os, sys, time, ssl, xml.etree.ElementTree as ET
+import argparse, json, os, sys, time, ssl, xml.etree.ElementTree as ET
 from datetime import datetime, timedelta
 from urllib.request import urlopen, Request
 from urllib.parse import quote
@@ -197,6 +197,10 @@ def parse_article_xml(article_elem, edat_map):
 # ── 主流程 ──────────────────────────────────────────
 
 def main():
+    parser = argparse.ArgumentParser(description="Fetch recent MG articles from PubMed")
+    parser.add_argument("--archive", action="store_true", help="额外写入 data/archive 日期归档")
+    args = parser.parse_args()
+
     print(f"📡 MG-HUB PubMed 抓取")
     print(f"   窗口: {DATE_STR_SINCE} → {DATE_STR_UNTIL}（{WINDOW_DAYS}天）")
     print(f"   检索: {QUERY}")
@@ -217,7 +221,7 @@ def main():
 
     if not pmids:
         print("   无新文献，输出空文件。")
-        _write_output([])
+        _write_output([], archive=args.archive)
         return
 
     # Step 2: 批量获取 EDAT
@@ -257,7 +261,7 @@ def main():
     print()
 
     # Step 4: 输出
-    _write_output(all_articles)
+    _write_output(all_articles, archive=args.archive)
 
     # 摘要
     china_count = sum(
@@ -271,10 +275,9 @@ def main():
     print(f"   覆盖期刊数: {len(set(a['journal'] for a in all_articles if a['journal']))}")
 
 
-def _write_output(articles):
-    """写入 data/literature-weekly.json + 归档"""
+def _write_output(articles, archive=False):
+    """写入 data/literature-weekly.json；归档需显式开启。"""
     DATA_DIR.mkdir(parents=True, exist_ok=True)
-    ARCHIVE_DIR.mkdir(parents=True, exist_ok=True)
 
     # 主文件
     main_path = DATA_DIR / "literature-weekly.json"
@@ -282,12 +285,15 @@ def _write_output(articles):
         json.dump(articles, f, ensure_ascii=False, indent=2)
     print(f"📝 输出: {main_path} ({len(articles)} 篇)")
 
-    # 归档（带日期）
-    date_str = TODAY.strftime("%Y-%m-%d")
-    archive_path = ARCHIVE_DIR / f"literature_{date_str}.json"
-    with open(archive_path, "w", encoding="utf-8") as f:
-        json.dump(articles, f, ensure_ascii=False, indent=2)
-    print(f"📦 归档: {archive_path}")
+    if archive:
+        ARCHIVE_DIR.mkdir(parents=True, exist_ok=True)
+        date_str = TODAY.strftime("%Y-%m-%d")
+        archive_path = ARCHIVE_DIR / f"literature_{date_str}.json"
+        with open(archive_path, "w", encoding="utf-8") as f:
+            json.dump(articles, f, ensure_ascii=False, indent=2)
+        print(f"📦 归档: {archive_path}")
+    else:
+        print("📦 归档: 跳过（需要时使用 --archive）")
 
 
 if __name__ == "__main__":

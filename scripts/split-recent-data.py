@@ -2,11 +2,14 @@
 """split-recent-data.py — 从 literature-full.json 截取近1年数据
 
 输出：
-  - data/literature-recent.json（近1年全量，前端一次加载）
+  - data/literature-recent.js（近1年公开滚动数据源，前端一次加载）
+  - data/literature-recent.json（可选本地调试缓存）
 
-每周增量后执行一次即可。同时自动更新 literature.js 中的文献总量数字。
+仅在需要从本地 full 快照重建近一年公开库时手动执行。
+日常周更使用 merge-weekly-literature.py，不再依赖 full 快照。
 """
 
+import argparse
 import json, re
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -17,6 +20,10 @@ DAYS_RECENT = 365
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Rebuild public recent literature data from local full snapshot")
+    parser.add_argument("--write-json-cache", action="store_true", help="同时写本地 literature-recent.json 调试缓存")
+    args = parser.parse_args()
+
     full_path = DATA_DIR / "literature-full.json"
     if not full_path.exists():
         print(f"❌ {full_path} not found")
@@ -40,14 +47,19 @@ def main():
         if dt < cutoff:
             continue
         recent.append(a)
-    # 写 recent.json（回填用）和 recent.js（前端用）
-    recent_path = DATA_DIR / "literature-recent.json"
-    with open(recent_path, "w") as f:
-        json.dump(recent, f, ensure_ascii=False, indent=2)
-    print(f"✅ literature-recent.json ({len(recent)} 篇)")
+    if args.write_json_cache:
+        recent_path = DATA_DIR / "literature-recent.json"
+        with open(recent_path, "w") as f:
+            json.dump(recent, f, ensure_ascii=False, indent=2)
+        print(f"✅ literature-recent.json cache ({len(recent)} 篇)")
+    else:
+        recent_path = DATA_DIR / "literature-recent.json"
+        if recent_path.exists():
+            recent_path.unlink()
+            print("🧹 已清理 literature-recent.json cache")
 
-    js_path = DATA_DIR / "literature-recent.js"
-    with open(js_path, "w") as f:
+    recent_js_path = DATA_DIR / "literature-recent.js"
+    with open(recent_js_path, "w") as f:
         f.write("window.MG_LITERATURE_DATA = ")
         json.dump(recent, f, ensure_ascii=False)
         f.write(";\n")

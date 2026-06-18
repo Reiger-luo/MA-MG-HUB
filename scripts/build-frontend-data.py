@@ -8,6 +8,7 @@ build-frontend-data.py — 生成 MA-MG-HUB 前端数据产物。
 
 from __future__ import annotations
 
+import argparse
 import json
 import math
 import re
@@ -19,8 +20,8 @@ from pathlib import Path
 PROJECT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT / "data"
 FULL_PATH = DATA_DIR / "literature-full.json"
-RECENT_PATH = DATA_DIR / "literature-recent.json"
 RECENT_JS_PATH = DATA_DIR / "literature-recent.js"
+RECENT_JSON_CACHE_PATH = DATA_DIR / "literature-recent.json"
 EXPERT_JS_PATH = DATA_DIR / "expert-profiles.js"
 
 STOPWORDS = {
@@ -81,18 +82,22 @@ def load_public_js(path: Path, global_name: str):
     return json.loads(match.group(1))
 
 
-def load_articles_for_frontend():
-    if RECENT_PATH.exists():
-        recent = load_json(RECENT_PATH)
-    elif RECENT_JS_PATH.exists():
+def load_articles_for_frontend(use_full_experts=False):
+    if RECENT_JS_PATH.exists():
         recent = load_public_js(RECENT_JS_PATH, "MG_LITERATURE_DATA")
+    elif RECENT_JSON_CACHE_PATH.exists():
+        print("⚠️  literature-recent.js 不存在，临时使用本地 JSON cache。")
+        recent = load_json(RECENT_JSON_CACHE_PATH)
     else:
-        raise FileNotFoundError("需要 data/literature-recent.json 或 data/literature-recent.js")
+        raise FileNotFoundError("需要 data/literature-recent.js")
 
-    if FULL_PATH.exists():
+    if use_full_experts and FULL_PATH.exists():
         full = load_json(FULL_PATH)
+    elif use_full_experts:
+        print("⚠️  请求从 full 重建专家画像，但 literature-full.json 不存在，将复用已提交专家画像。")
+        full = None
     else:
-        print("⚠️  literature-full.json 不存在，将复用已提交的专家画像数据。")
+        print("ℹ️  周更模式不读取 literature-full.json，将复用已提交的专家画像数据。")
         full = None
     return recent, full
 
@@ -109,11 +114,26 @@ def load_or_build_experts(full, recent):
 def parse_date(value: str | None):
     if not value:
         return None
+    value = value.strip()
     for pattern in ("%Y/%m/%d %H:%M", "%Y/%m/%d", "%Y-%m-%d", "%Y-%m"):
         try:
-            return datetime.strptime(value[: len(pattern)], pattern)
+            return datetime.strptime(value, pattern)
         except ValueError:
             pass
+    match = re.match(r"(\d{4})/(\d{1,2})/(\d{1,2})(?:\s+(\d{1,2}):(\d{1,2}))?", value)
+    if match:
+        year, month, day, hour, minute = match.groups()
+        return datetime(
+            int(year),
+            int(month),
+            int(day),
+            int(hour or 0),
+            int(minute or 0),
+        )
+    match = re.match(r"(\d{4})-(\d{1,2})(?:-(\d{1,2}))?", value)
+    if match:
+        year, month, day = match.groups()
+        return datetime(int(year), int(month), int(day or 1))
     match = re.match(r"(\d{4})", value)
     if match:
         return datetime(int(match.group(1)), 1, 1)
@@ -502,7 +522,11 @@ def build_dashboard(recent, signals, experts, china, landscape, modules):
 
 
 def main():
-    recent, full = load_articles_for_frontend()
+    parser = argparse.ArgumentParser(description="Build public frontend data bundles")
+    parser.add_argument("--rebuild-experts-from-full", action="store_true", help="手动从本地 full 快照重建专家画像")
+    args = parser.parse_args()
+
+    recent, full = load_articles_for_frontend(use_full_experts=args.rebuild_experts_from_full)
     signals = build_signals(recent)
     china = build_china(recent)
     experts = load_or_build_experts(full, recent)

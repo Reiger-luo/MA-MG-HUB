@@ -2,8 +2,9 @@
 """
 run-weekly-pipeline.py — MA-MG-HUB 每周管线调度器。
 
-默认执行公开数据更新、前端数据构建与周报生成。周更管线不再做历史全库回填；
-证据等级、IF/CAS 等补充只面向每周新增且有摘要、足够判断的文献。
+默认执行 PubMed 14 天增量抓取、weekly 富集、近一年公开数据合并、前端数据构建与周报生成。
+周更管线不再做历史全库回填；证据等级、IF/CAS 等补充只面向每周新增且有摘要、
+足够判断的文献。
 涉及敏感的拜访记录、专家内部标签不在本管线中处理，也不会写入公开仓库。
 """
 
@@ -39,10 +40,12 @@ def main():
 
     if not args.skip_fetch:
         run_step("PubMed 增量抓取", [sys.executable, "scripts/fetch-pubmed-weekly.py"])
+        run_step("每周文献轻量富集", [sys.executable, "scripts/enrich-weekly-literature.py"])
+        run_step("每周文献合入近一年公开库", [sys.executable, "scripts/merge-weekly-literature.py"])
 
     print("\nℹ️  周更管线不执行历史全库回填。")
-    print("   历史数据保持现状；后续仅对每周新增且有摘要、足够判断的文献补充证据等级与 IF/CAS。")
-    print("   当前静态站将使用已提交的公开 literature-recent.js 构建前端数据。")
+    print("   历史数据保持现状；仅对 weekly 新增且有摘要、足够判断的文献补充证据等级与 IF/CAS。")
+    print("   静态站使用 data/literature-recent.js 作为唯一公开滚动数据源。")
 
     run_step("前端数据产物生成", [sys.executable, "scripts/build-frontend-data.py"])
     run_step("当前通讯渠道周报生成", [sys.executable, "scripts/generate-weekly-summary.py"])
