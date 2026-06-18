@@ -157,7 +157,7 @@ def buildStatus():
         {
             "id": "frontendArtifacts",
             "name": "前端数据产物",
-            "meta": f"{stats.get('experts', 0)} 位专家画像 · {len(modules)} 个内容模块 · 更新时间 {dashboard.get('generated_at') or generatedAt}",
+            "meta": f"{stats.get('experts', 0)} 位专家画像 · {stats.get('modules', countPayload(modules) or 0)} 个内容模块 · 更新时间 {dashboard.get('generated_at') or generatedAt}",
             "status": "ok",
             "status_label": "已生成",
         },

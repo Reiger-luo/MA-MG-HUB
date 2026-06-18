@@ -55,6 +55,18 @@ DRUG_KEYWORDS = {
     "Rituximab": ["rituximab"],
 }
 
+SIGNAL_CORE_TOPICS = {"FcRn", "补体", "B细胞", "抗体分型", "真实世界", "安全性", "疗效", "机制", "诊疗策略"}
+CASE_REPORT_TERMS = ["case report", "case reports", "case series"]
+SAFETY_TERMS = [
+    "adverse", "safety", "toxicity", "infection", "hepatitis", "liver failure",
+    "myocarditis", "respiratory failure", "crisis", "fatal", "death", "severe",
+]
+HIGH_VALUE_TERMS = [
+    "guideline", "consensus", "recommendation", "meta-analysis", "systematic review",
+    "randomized", "randomised", "trial", "phase 2", "phase 3", "real-world",
+    "registry", "biomarker", "pathogenesis", "mechanism",
+]
+
 PIPELINE = [
     {"name": "Efgartigimod", "target": "FcRn", "route": "IV/SC", "status": "已上市", "owner": "argenx"},
     {"name": "Rozanolixizumab", "target": "FcRn", "route": "SC", "status": "已上市", "owner": "UCB"},
@@ -166,6 +178,23 @@ def evidence_score(level):
     return {"I": 7, "II": 5, "III": 4, "IV": 3, "V": 2, "VI": 1}.get(level or "", 0)
 
 
+def is_case_report(article, text):
+    study_types = {str(item).lower() for item in article.get("study_types") or []}
+    return "case report" in study_types or has_any(text, CASE_REPORT_TERMS)
+
+
+def has_drug_signal(text):
+    return any(has_any(text, words) for words in DRUG_KEYWORDS.values())
+
+
+def has_safety_signal(text):
+    return has_any(text, SAFETY_TERMS)
+
+
+def has_high_value_signal(text, topics):
+    return bool(SIGNAL_CORE_TOPICS.intersection(topics)) or has_any(text, HIGH_VALUE_TERMS)
+
+
 def compact_article(article):
     return {
         "pmid": article.get("pmid", ""),
@@ -228,16 +257,37 @@ def build_signals(recent):
             reasons.append("中国相关")
         if (latest - dt).days <= 7:
             reasons.append("最新入库")
-        if not reasons and not topics:
+        case_report = is_case_report(article, text)
+        drug_signal = has_drug_signal(text)
+        safety_signal = has_safety_signal(text)
+        high_value_signal = has_high_value_signal(text, topics)
+
+        # 病例报告保留在文献库，但只有涉及药物、安全性、中国相关或明确主题时才推入信号板。
+        if case_report and not (drug_signal or safety_signal or article.get("china_related") or topics):
+            continue
+        if not reasons and not high_value_signal:
             continue
         strength = "弱"
-        if if_val >= 10 or (level in {"I", "II"} and if_val >= 5):
+        if (
+            (level in {"I", "II"} and (if_val >= 5 or high_value_signal))
+            or (if_val >= 10 and high_value_signal and not case_report)
+            or (if_val >= 8 and safety_signal and drug_signal)
+        ):
             strength = "强"
-        elif if_val >= 4 or level in {"I", "II"} or article.get("china_related"):
+        elif if_val >= 4 or level in {"I", "II"} or article.get("china_related") or high_value_signal:
             strength = "中"
+        if case_report and strength == "强":
+            strength = "中"
+            reasons.append("病例报告降权")
         score = if_val + evidence_score(level) + (14 - (latest - dt).days) / 3
         if article.get("china_related"):
             score += 1.5
+        if case_report:
+            score -= 3
+        if drug_signal:
+            score += 1
+        if safety_signal:
+            score += 1
         if strength == "强":
             score += 10
         elif strength == "中":
@@ -254,7 +304,8 @@ def build_signals(recent):
             "score": round(score, 2),
             "article": compact_article(article),
         })
-    signals.sort(key=lambda item: (-item["score"], item["date"]))
+    strength_rank = {"强": 3, "中": 2, "弱": 1}
+    signals.sort(key=lambda item: (-strength_rank.get(item["strength"], 0), -item["score"], item["date"]))
     return {
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "window_days": 14,

@@ -1,19 +1,19 @@
 # MA-MG-HUB 周更
 
-生成时间：2026-06-18 13:13:16
+生成时间：2026-06-18 13:58:10
 
 ## 数据状态
 
 - 近1年文献：1160
 - 中国相关：321
-- 候选信号：45
+- 候选信号：44
 - 专家画像：160
 - 内容模块：6
 
 ## 强信号 Top 3
 
-1. [强] Acute Liver Failure in a Patient with Myasthenia Gravis.（PMID 42250887） - 高影响期刊
-2. [强] Proteomic and machine learning analysis predicts treatment response signatures in Myasthenia Gravis.（PMID 42304472） - 高等级证据 · 中高影响期刊 · 最新入库
+1. [强] Proteomic and machine learning analysis predicts treatment response signatures in Myasthenia Gravis.（PMID 42304472） - 高等级证据 · 中高影响期刊 · 最新入库
+2. [强] Comparing Efficacy and Safety of Various Monoclonal Antibodies in Myasthenia Gravis: A Systematic Review and Network Meta-Analysis of Randomized Controlled Trials.（PMID 42304705） - 高等级证据 · 最新入库
 3. [强] HMGB1-mediated endoplasmic reticulum stress in monocyte-derived dendritic cells regulates CD4+ T cell immune responses in myasthenia gravis.（PMID 42304385） - 高影响期刊 · 中国相关 · 最新入库
 
 ## 中国情报 Top 3
@@ -32,7 +32,7 @@
 
 ## 待处理
 
-- 近 14 天候选信号: 45
+- 近 14 天候选信号: 44
 - 已构建专家画像: 160
 - 待确认内容模块: 6
 - 待确认证据矩阵: 6
