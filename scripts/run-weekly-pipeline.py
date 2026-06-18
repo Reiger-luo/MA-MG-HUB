@@ -51,6 +51,7 @@ def main():
         print("   将使用已提交的公开 literature-recent.js 构建前端数据。")
 
     run_step("前端数据产物生成", [sys.executable, "scripts/build-frontend-data.py"])
+    run_step("当前通讯渠道周报生成", [sys.executable, "scripts/generate-weekly-summary.py"])
 
     print("\n✅ Pipeline finished:", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
