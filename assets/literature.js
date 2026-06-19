@@ -6,6 +6,7 @@
   let filteredResults = [];
   let signalItems = [];
   let signalFilter = 'all';
+  let signalTopicFilter = null;
   let chinaMonthlyChart = null;
   let chinaEvidenceChart = null;
   let chinaQuartileChart = null;
@@ -563,7 +564,15 @@
 
     var filtered = [];
     for (var j = 0; j < signalItems.length; j++) {
-      if (signalFilter === 'all' || signalItems[j].strength === signalFilter) filtered.push(signalItems[j]);
+      var ok = signalFilter === 'all' || signalItems[j].strength === signalFilter;
+      if (ok && signalTopicFilter) {
+        var hasTopic = false;
+        for (var t = 0; t < signalItems[j].topics.length; t++) {
+          if (signalItems[j].topics[t] === signalTopicFilter) { hasTopic = true; break; }
+        }
+        ok = hasTopic;
+      }
+      if (ok) filtered.push(signalItems[j]);
     }
 
     if (filtered.length === 0) {
@@ -579,9 +588,19 @@
     var topics = Object.keys(topicCounts).sort(function(a, b) { return topicCounts[b] - topicCounts[a]; });
     var keywordHtml = '';
     for (var x = 0; x < Math.min(topics.length, 12); x++) {
-      keywordHtml += '<span class="keyword-pill">' + escapeHtml(topics[x]) + '<strong>' + topicCounts[topics[x]] + '</strong></span>';
+      var isActive = topics[x] === signalTopicFilter;
+      keywordHtml += '<button type="button" class="keyword-pill' + (isActive ? ' active' : '') + '" data-signal-topic="' + escapeHtml(topics[x]) + '" aria-pressed="' + (isActive ? 'true' : 'false') + '" title="筛选主题：' + escapeHtml(topics[x]) + '">' + escapeHtml(topics[x]) + '<strong>' + topicCounts[topics[x]] + '</strong></button>';
     }
     el.signalKeywords.innerHTML = keywordHtml || '<span class="muted">暂无主题</span>';
+
+    var topicBtns = el.signalKeywords.querySelectorAll('.keyword-pill');
+    for (var b = 0; b < topicBtns.length; b++) {
+      topicBtns[b].addEventListener('click', function() {
+        var topic = this.getAttribute('data-signal-topic');
+        signalTopicFilter = (signalTopicFilter === topic) ? null : topic;
+        renderSignals();
+      });
+    }
   }
 
   function renderSignalCard(item) {
