@@ -33,7 +33,6 @@
     signalList: $('signalList'),
     signalKeywords: $('signalKeywords'),
     chinaBadge: $('chinaBadge'),
-    chinaRecentList: $('chinaRecentList'),
     chinaSourceList: $('chinaSourceList'),
   };
 
@@ -372,6 +371,17 @@
     return d.innerHTML;
   }
 
+  function buildArticleMeta(article, dateStr) {
+    var meta = [escapeHtml(article.journal || 'Unknown')];
+    if (dateStr) meta.push(escapeHtml(dateStr));
+    meta.push('PMID ' + escapeHtml(article.pmid || '-'));
+    if (article.evidence_level) meta.push('证据等级 ' + escapeHtml(article.evidence_level));
+    var impactFactor = formatImpactFactor(article.journal_if);
+    if (impactFactor) meta.push('IF ' + escapeHtml(impactFactor));
+    if (article.journal_quartile) meta.push('CAS ' + escapeHtml(String(article.journal_quartile)));
+    return meta.join(' · ');
+  }
+
   function bindTabs() {
     var tabs = document.querySelectorAll('.intel-tab');
     var panels = document.querySelectorAll('.intel-tab-panel');
@@ -622,7 +632,7 @@
           '<span class="signal-type">' + item.type + '</span>' +
         '</div>' +
         '<a class="signal-title" href="' + a.url + '" target="_blank">' + escapeHtml(a.title || '(无标题)') + '</a>' +
-        '<div class="signal-meta">' + escapeHtml(a.journal || 'Unknown') + ' · ' + dateStr + ' · PMID ' + escapeHtml(a.pmid || '-') + '</div>' +
+        '<div class="signal-meta">' + buildArticleMeta(a, dateStr) + '</div>' +
         '<div class="signal-topic-row">' + tagHtml + '</div>' +
       '</article>';
   }
@@ -640,7 +650,7 @@
   }
 
   function renderChinaInsights() {
-    if (!el.chinaRecentList || !el.chinaSourceList) return;
+    if (!el.chinaSourceList) return;
     var chinaPayload = window.MG_CHINA_DATA || null;
     var chinaArticles = chinaPayload && chinaPayload.pubmed_articles ? chinaPayload.pubmed_articles.slice() : [];
     if (chinaArticles.length === 0) {
@@ -658,17 +668,10 @@
       el.chinaBadge.textContent = label + chinaTotal + ' 篇';
     }
 
-    var recentHtml = '';
-    for (var r = 0; r < Math.min(chinaArticles.length, 10); r++) {
-      var a = chinaArticles[r];
-      recentHtml += renderCompactArticle(a);
-    }
-    el.chinaRecentList.innerHTML = recentHtml || '<div class="empty-state"><h3>暂无中国相关文献</h3></div>';
-
     var sourceHtml = '';
     if (chinaPayload && chinaPayload.top_journals && chinaPayload.top_journals.length) {
       sourceHtml += '<div class="source-block"><h4>主要期刊</h4>' + renderRankItems(chinaPayload.top_journals, 10, 'journal') + '</div>';
-      sourceHtml += '<div class="source-block"><h4>机构线索</h4>' + renderRankItems(chinaPayload.top_institutions || [], 8, 'institution') + '</div>';
+      sourceHtml += '<div class="source-block"><h4>机构线索（第一作者机构出现频次排序）</h4>' + renderRankItems(chinaPayload.top_institutions || [], 8, 'institution') + '</div>';
     } else {
       var journalCounts = {};
       var institutionCounts = {};
@@ -683,7 +686,7 @@
         }
       }
       sourceHtml += '<div class="source-block"><h4>主要期刊</h4>' + renderRankList(journalCounts, 10) + '</div>';
-      sourceHtml += '<div class="source-block"><h4>机构线索</h4>' + renderRankList(institutionCounts, 8) + '</div>';
+      sourceHtml += '<div class="source-block"><h4>机构线索（第一作者机构出现频次排序）</h4>' + renderRankList(institutionCounts, 8) + '</div>';
     }
     el.chinaSourceList.innerHTML =
       sourceHtml;
@@ -695,15 +698,10 @@
   function renderCompactArticle(article) {
     var d = parseDate(article.entry_date);
     var dateStr = d ? d.toLocaleDateString('zh-CN') : (article.pub_date || '');
-    var meta = [escapeHtml(article.journal || 'Unknown'), dateStr, 'PMID ' + escapeHtml(article.pmid || '-')];
-    if (article.evidence_level) meta.push('证据等级 ' + escapeHtml(article.evidence_level));
-    var impactFactor = formatImpactFactor(article.journal_if);
-    if (impactFactor) meta.push('IF ' + impactFactor);
-    if (article.journal_quartile) meta.push('CAS ' + escapeHtml(String(article.journal_quartile)));
     return '' +
       '<article class="compact-article">' +
         '<a href="' + article.url + '" target="_blank">' + escapeHtml(article.title || '(无标题)') + '</a>' +
-        '<div>' + meta.join(' · ') + '</div>' +
+        '<div>' + buildArticleMeta(article, dateStr) + '</div>' +
       '</article>';
   }
 

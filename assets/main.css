@@ -126,12 +126,14 @@ body {
 .signal-stat-card.medium { border-left: 4px solid rgba(202,138,4,0.55); }
 .signal-stat-card.china { border-left: 4px solid rgba(22,163,74,0.55); }
 .signal-layout {
-  display: grid; grid-template-columns: minmax(0, 1fr) 280px;
-  gap: 1rem; align-items: start;
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem; align-items: start;
 }
 .signal-list {
+  grid-column: span 3;
   display: flex; flex-direction: column; gap: 0.65rem;
 }
+.signal-side { grid-column: span 1; min-width: 0; }
 .signal-card {
   background: var(--bg2); border: 1px solid var(--bg3);
   border-radius: 8px; padding: 1rem 1.1rem;
@@ -238,12 +240,8 @@ body {
 .muted { color: var(--fg3); font-size: 0.82rem; }
 
 .china-grid {
-  display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 1fr);
+  display: grid; grid-template-columns: minmax(0, 1fr);
   gap: 1rem; margin-bottom: 1rem; align-items: stretch;
-}
-.china-chart-stack {
-  display: grid; grid-template-rows: repeat(2, minmax(0, 1fr));
-  gap: 1rem; min-width: 0;
 }
 .chart-title {
   color: var(--fg2); font-size: 0.9rem; font-weight: 500;
@@ -255,16 +253,25 @@ body {
 .chart-panel-wide .chart-canvas {
   height: 360px;
 }
-.china-chart-stack .chart-canvas {
-  height: 152px;
+.china-chart-pair .chart-canvas {
+  height: 260px;
 }
 .chart-fallback {
   height: 100%; display: flex; align-items: center; justify-content: center;
   color: var(--fg3); background: var(--bg); border-radius: 6px;
 }
 .china-content-grid {
-  display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 0.8fr);
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem; align-items: start;
+}
+.china-chart-pair {
+  grid-column: span 2;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem; min-width: 0;
+}
+.china-source-panel {
+  grid-column: span 1;
+  min-width: 0;
 }
 .compact-article {
   padding: 0.7rem 0; border-bottom: 1px solid var(--bg3);
@@ -875,10 +882,10 @@ body {
   .stat-sep { display: none; }
   .signal-topline { flex-direction: column; }
   .signal-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .signal-layout, .china-grid, .china-content-grid { grid-template-columns: 1fr; }
-  .china-chart-stack { grid-template-rows: none; }
+  .signal-layout, .china-grid, .china-content-grid, .china-chart-pair { grid-template-columns: 1fr; }
+  .signal-list, .signal-side, .china-chart-pair, .china-source-panel { grid-column: auto; }
   .chart-canvas { height: 240px; }
-  .chart-panel-wide .chart-canvas, .china-chart-stack .chart-canvas { height: 240px; }
+  .chart-panel-wide .chart-canvas, .china-chart-pair .chart-canvas { height: 240px; }
   .workbench-grid, .workspace-two-col { grid-template-columns: 1fr; }
   .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .form-grid { grid-template-columns: 1fr; }
