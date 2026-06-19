@@ -30,7 +30,6 @@ PROJECT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT / "data"
 TARGETS = [
     DATA_DIR / "literature-full.json",
-    DATA_DIR / "literature-weekly.json",
 ]
 
 LEVEL_MAP = {
