@@ -15,7 +15,7 @@
     document.getElementById('dashboardStats').innerHTML = [
       ['近1年文献', stats.recent_articles || 0],
       ['中国相关', stats.china_articles || 0],
-      ['候选信号', stats.signals || 0],
+      ['14 天信号', stats.signals || 0],
       ['专家画像', stats.experts || 0],
       ['内容模块', stats.modules || 0]
     ].map(function(item) {
@@ -26,10 +26,14 @@
   function renderSignals() {
     var html = (data.top_signals || []).map(function(signal) {
       var article = signal.article || {};
+      var drugHtml = (signal.drugs || []).map(function(d) {
+        return '<span class="signal-drug">' + escapeHtml(d) + '</span>';
+      }).join('');
       return '<article class="signal-card signal-' + escapeHtml(signal.strength) + '">' +
-        '<div class="signal-card-head"><span class="signal-strength">' + escapeHtml(signal.strength) + '信号</span><span class="signal-type">' + escapeHtml(signal.type) + ' · ' + escapeHtml(signal.subtype) + '</span></div>' +
+        '<div class="signal-card-head"><span class="signal-strength">' + escapeHtml(signal.strength) + '信号</span><span class="signal-type">' + escapeHtml(signal.type) + '</span></div>' +
         '<a class="signal-title" href="' + (article.url || '#') + '" target="_blank">' + escapeHtml(signal.summary) + '</a>' +
         '<div class="signal-meta">' + escapeHtml(article.journal || '') + ' · PMID ' + escapeHtml(article.pmid || '-') + '</div>' +
+        (drugHtml ? '<div class="signal-topic-row">' + drugHtml + '</div>' : '') +
       '</article>';
     }).join('');
     document.getElementById('dashboardSignals').innerHTML = html || '<div class="empty-state small"><h3>暂无信号</h3></div>';

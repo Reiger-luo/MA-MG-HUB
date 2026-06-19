@@ -256,22 +256,11 @@ def build_signals(recent):
             signal_type = "新观点"
         if has_any(text, ["pathogenesis", "mechanism", "biomarker", "cytokine", "receptor", "autoantibody"]):
             signal_type = "新机制"
-        subtype = "其他"
-        if has_any(text, ["efgartigimod", "vyvgart"]):
-            subtype = "本品"
-        elif any(has_any(text, words) for drug, words in DRUG_KEYWORDS.items() if drug != "Efgartigimod"):
-            subtype = "竞品"
-        reasons = []
-        if level in {"I", "II"}:
-            reasons.append("高等级证据")
-        if if_val >= 10:
-            reasons.append("高影响期刊")
-        elif if_val >= 5:
-            reasons.append("中高影响期刊")
-        if article.get("china_related"):
-            reasons.append("中国相关")
-        if (latest - dt).days <= 7:
-            reasons.append("最新入库")
+        # 匹配到的药物通用名（小写），可能为空列表
+        drugs = sorted(
+            drug.lower() for drug, words in DRUG_KEYWORDS.items()
+            if has_any(text, words)
+        )
         case_report = is_case_report(article, text)
         drug_signal = has_drug_signal(text)
         safety_signal = has_safety_signal(text)
@@ -280,20 +269,17 @@ def build_signals(recent):
         # 病例报告保留在文献库，但只有涉及药物、安全性、中国相关或明确主题时才推入信号板。
         if case_report and not (drug_signal or safety_signal or article.get("china_related") or topics):
             continue
-        if not reasons and not high_value_signal:
+        if not high_value_signal and not drug_signal and not article.get("china_related"):
             continue
+        # 强度分级
+        #   强（任一）：证据 I/II 级；IF ≥ 10
+        #   中（任一）：IF ≥ 5；证据 III/IV 级；中国相关
+        #   弱：其余入选条目
         strength = "弱"
-        if (
-            (level in {"I", "II"} and (if_val >= 5 or high_value_signal))
-            or (if_val >= 10 and high_value_signal and not case_report)
-            or (if_val >= 8 and safety_signal and drug_signal)
-        ):
+        if level in {"I", "II"} or if_val >= 10:
             strength = "强"
-        elif if_val >= 4 or level in {"I", "II"} or article.get("china_related") or high_value_signal:
+        elif if_val >= 5 or level in {"III", "IV"} or article.get("china_related"):
             strength = "中"
-        if case_report and strength == "强":
-            strength = "中"
-            reasons.append("病例报告降权")
         score = if_val + evidence_score(level) + (14 - (latest - dt).days) / 3
         if article.get("china_related"):
             score += 1.5
@@ -310,12 +296,11 @@ def build_signals(recent):
         signals.append({
             "date": dt.strftime("%Y-%m-%d"),
             "type": signal_type,
-            "subtype": subtype,
             "strength": strength,
             "summary": article.get("title", ""),
-            "reason": " · ".join(reasons) or "基于近期入库与主题关键词",
             "related_pmids": [article.get("pmid", "")],
             "keywords": topics,
+            "drugs": drugs,
             "score": round(score, 2),
             "article": compact_article(article),
         })
@@ -579,7 +564,7 @@ def build_dashboard(recent, signals, experts, china, landscape, modules):
         },
         "top_signals": signals["signals"][:5],
         "work_items": [
-            {"type": "文献", "label": "近 14 天候选信号", "count": len(signals["signals"]), "href": "/MA-MG-HUB/pages/literature.html"},
+            {"type": "文献", "label": "近 14 天信号", "count": len(signals["signals"]), "href": "/MA-MG-HUB/pages/literature.html"},
             {"type": "专家", "label": "已构建专家画像", "count": len(experts["experts"]), "href": "/MA-MG-HUB/pages/msl.html"},
             {"type": "模块", "label": "待确认内容模块", "count": sum(1 for m in modules["modules"] if not m["verified"]), "href": "/MA-MG-HUB/pages/materials.html"},
             {"type": "证据", "label": "待确认证据矩阵", "count": len(landscape["evidence_questions"]), "href": "/MA-MG-HUB/pages/landscape.html"},

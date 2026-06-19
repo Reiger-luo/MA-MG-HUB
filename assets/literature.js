@@ -440,6 +440,25 @@
     return topics.slice(0, 4);
   }
 
+  var DRUG_NAMES = [
+    { name: 'efgartigimod', words: ['efgartigimod', 'vyvgart'] },
+    { name: 'rozanolixizumab', words: ['rozanolixizumab'] },
+    { name: 'ravulizumab', words: ['ravulizumab'] },
+    { name: 'eculizumab', words: ['eculizumab'] },
+    { name: 'zilucoplan', words: ['zilucoplan'] },
+    { name: 'nipocalimab', words: ['nipocalimab'] },
+    { name: 'batoclimab', words: ['batoclimab'] },
+    { name: 'rituximab', words: ['rituximab'] }
+  ];
+
+  function matchDrugs(text) {
+    var drugs = [];
+    for (var i = 0; i < DRUG_NAMES.length; i++) {
+      if (hasAny(text, DRUG_NAMES[i].words)) drugs.push(DRUG_NAMES[i].name);
+    }
+    return drugs.sort();
+  }
+
   function inferSignal(article, latestDate) {
     var entryDate = parseDate(article.entry_date);
     if (!entryDate) return null;
@@ -449,31 +468,22 @@
     var title = article.title || '';
     var text = (title + ' ' + (article.abstract || '') + ' ' + (article.pub_types || []).join(' ')).toLowerCase();
     var ev = article.evidence_level || '';
+    if (!ev) return null;
     var ifVal = Number(article.journal_if || 0);
     var topics = inferTopics(article);
     var type = '新证据';
-    var subtype = '其他';
-    var reasons = [];
 
     if (hasAny(text, ['guideline', 'consensus', 'recommendation', 'review', 'meta-analysis'])) type = '新观点';
     if (hasAny(text, ['pathogenesis', 'mechanism', 'biomarker', 'cytokine', 'receptor', 'autoantibody'])) type = '新机制';
     if (hasAny(text, ['trial', 'randomized', 'phase 2', 'phase 3', 'cohort', 'efficacy', 'safety', 'real-world'])) type = '新证据';
 
-    if (hasAny(text, ['efgartigimod', 'vyvgart'])) subtype = '本品';
-    else if (hasAny(text, ['rozanolixizumab', 'ravulizumab', 'eculizumab', 'zilucoplan', 'inebilizumab', 'nipocalimab', 'batoclimab'])) subtype = '竞品';
+    var drugs = matchDrugs(text);
 
-    if (ev === 'I' || ev === 'II') reasons.push('高等级证据');
-    if (ifVal >= 10) reasons.push('高影响期刊');
-    else if (ifVal >= 5) reasons.push('中高影响期刊');
-    if (article.china_related) reasons.push('中国相关');
-    if (age <= 7) reasons.push('最新入库');
-
-    var isSignal = reasons.length > 0 || topics.length > 0;
-    if (!isSignal) return null;
+    if (topics.length === 0 && drugs.length === 0 && !article.china_related) return null;
 
     var strength = '弱';
-    if (ifVal >= 10 || ((ev === 'I' || ev === 'II') && ifVal >= 5)) strength = '强';
-    else if (ifVal >= 4 || ev === 'I' || ev === 'II' || article.china_related) strength = '中';
+    if (ev === 'I' || ev === 'II' || ifVal >= 10) strength = '强';
+    else if (ifVal >= 5 || ev === 'III' || ev === 'IV' || article.china_related) strength = '中';
 
     var score = ifVal + (ev === 'I' ? 7 : ev === 'II' ? 5 : ev ? 2 : 0) + (article.china_related ? 1.5 : 0) + (SIGNAL_WINDOW_DAYS - age) / 3;
     if (strength === '强') score += 10;
@@ -483,10 +493,9 @@
       article: article,
       date: entryDate,
       type: type,
-      subtype: subtype,
       strength: strength,
       topics: topics,
-      reasons: reasons,
+      drugs: drugs,
       score: score,
       age: age
     };
@@ -510,10 +519,9 @@
           article: signal.article || {},
           date: parseDate(signal.date),
           type: signal.type || '新证据',
-          subtype: signal.subtype || '其他',
           strength: signal.strength || '弱',
           topics: signal.keywords || [],
-          reasons: signal.reason ? signal.reason.split(' · ') : [],
+          drugs: signal.drugs || [],
           score: signal.score || 0,
           age: 0
         };
@@ -547,7 +555,7 @@
     }
 
     el.signalSummary.innerHTML =
-      '<div class="signal-stat-card"><span>候选信号</span><strong>' + counts.all + '</strong></div>' +
+      '<div class="signal-stat-card"><span>14 天信号</span><strong>' + counts.all + '</strong></div>' +
       '<div class="signal-stat-card strong"><span>强信号</span><strong>' + counts['强'] + '</strong></div>' +
       '<div class="signal-stat-card medium"><span>中信号</span><strong>' + counts['中'] + '</strong></div>' +
       '<div class="signal-stat-card china"><span>中国相关</span><strong>' + counts.china + '</strong></div>';
@@ -558,7 +566,7 @@
     }
 
     if (filtered.length === 0) {
-      el.signalList.innerHTML = '<div class="empty-state"><h3>暂无候选信号</h3><p>切换筛选条件或等待下一轮数据更新</p></div>';
+      el.signalList.innerHTML = '<div class="empty-state"><h3>近 14 天暂无信号</h3><p>切换筛选条件或等待下一轮数据更新</p></div>';
     } else {
       var html = '';
       for (var n = 0; n < Math.min(filtered.length, 24); n++) {
@@ -582,17 +590,20 @@
     for (var i = 0; i < item.topics.length; i++) {
       topicHtml += '<span class="signal-topic">' + escapeHtml(item.topics[i]) + '</span>';
     }
-    var reason = item.reasons.length ? item.reasons.join(' · ') : '基于近期入库与主题关键词';
+    var drugHtml = '';
+    for (var d = 0; d < item.drugs.length; d++) {
+      drugHtml += '<span class="signal-drug">' + escapeHtml(item.drugs[d]) + '</span>';
+    }
+    var tagHtml = topicHtml + drugHtml + (a.china_related ? '<span class="signal-topic china">中国相关</span>' : '');
     return '' +
       '<article class="signal-card signal-' + item.strength + '">' +
         '<div class="signal-card-head">' +
           '<span class="signal-strength">' + item.strength + '信号</span>' +
-          '<span class="signal-type">' + item.type + ' · ' + item.subtype + '</span>' +
+          '<span class="signal-type">' + item.type + '</span>' +
         '</div>' +
         '<a class="signal-title" href="' + a.url + '" target="_blank">' + escapeHtml(a.title || '(无标题)') + '</a>' +
         '<div class="signal-meta">' + escapeHtml(a.journal || 'Unknown') + ' · ' + dateStr + ' · PMID ' + escapeHtml(a.pmid || '-') + '</div>' +
-        '<div class="signal-reason">' + escapeHtml(reason) + '</div>' +
-        '<div class="signal-topic-row">' + topicHtml + (a.china_related ? '<span class="signal-topic china">中国相关</span>' : '') + '</div>' +
+        '<div class="signal-topic-row">' + tagHtml + '</div>' +
       '</article>';
   }
 

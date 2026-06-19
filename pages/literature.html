@@ -167,8 +167,8 @@
   <section class="intel-tab-panel" id="tab-signals">
     <div class="signal-topline">
       <div>
-        <div class="section-kicker">近 14 天候选信号</div>
-        <h2>本周信号板</h2>
+        <div class="section-kicker">滚动 14 天窗口 · 每周更新</div>
+        <h2>信号板</h2>
       </div>
       <div class="signal-filter" id="signalFilter">
         <button class="signal-filter-btn active" type="button" data-signal-filter="all">全部</button>
@@ -184,7 +184,43 @@
         <h3>高频主题</h3>
         <div class="keyword-cloud" id="signalKeywords"></div>
         <h3>信号口径</h3>
-        <p>当前根据证据等级、期刊影响因子、近期入库时间与题名/摘要关键词生成候选信号；默认周更使用规则版信号，LLM 仅作为后续手动增强。</p>
+        <div class="signal-spec">
+          <p class="signal-spec-intro">基于规则筛选与评分排序，由 <code>build-frontend-data.py</code> 每周生成；下方规则与代码完全对应，<strong>不</strong>使用 LLM。</p>
+
+          <div class="signal-spec-block">
+            <h4>① 时间窗口</h4>
+            <p>以库内最新入库日期为锚点，向前取 <strong>14 天</strong>（滚动窗口，非自然周）。</p>
+          </div>
+
+          <div class="signal-spec-block">
+            <h4>② 入选门槛</h4>
+            <ul>
+              <li>必须有证据等级（I–VI）；无分级直接剔除。</li>
+              <li>命中低价值词（撤稿 / 作者回复 / 对评论的回复等）直接剔除。</li>
+              <li>病例报告仅当涉及药物、安全性、中国相关或明确主题时保留，否则剔除。</li>
+              <li>无药物信号、无高价值主题且非中国相关时不入选。</li>
+            </ul>
+          </div>
+
+          <div class="signal-spec-block">
+            <h4>③ 信号分类</h4>
+            <p>类型（新观点 / 新机制 / 新证据）由题名、摘要、出版类型的关键词匹配判定。药物名称从文本中直接提取，一篇可能命中多个。</p>
+          </div>
+
+          <div class="signal-spec-block">
+            <h4>④ 强度分级</h4>
+            <ul>
+              <li><strong>强</strong>（任一）：证据 I 或 II 级；IF ≥ 10。</li>
+              <li><strong>中</strong>（任一）：IF ≥ 5；证据 III 或 IV 级；中国相关。</li>
+              <li><strong>弱</strong>：其余入选条目。</li>
+            </ul>
+          </div>
+
+          <div class="signal-spec-block">
+            <h4>⑤ 排序与数量</h4>
+            <p>按 强度 &gt; 评分 &gt; 日期 降序，窗口内最多 80 条。</p>
+          </div>
+        </div>
       </aside>
     </div>
   </section>

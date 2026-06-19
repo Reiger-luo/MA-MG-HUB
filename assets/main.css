@@ -155,10 +155,9 @@ body {
   font-size: 0.96rem; font-weight: 500; line-height: 1.45;
 }
 .signal-title:hover { text-decoration: underline; }
-.signal-meta, .signal-reason {
+.signal-meta {
   margin-top: 0.3rem; color: var(--fg3); font-size: 0.78rem;
 }
-.signal-reason { color: var(--fg2); }
 .signal-topic-row {
   margin-top: 0.55rem; display: flex; gap: 0.35rem; flex-wrap: wrap;
 }
@@ -170,6 +169,11 @@ body {
 .signal-topic.china {
   color: var(--green); background: rgba(22,163,74,0.08);
   border-color: rgba(22,163,74,0.18);
+}
+.signal-drug {
+  font-size: 0.74rem; color: var(--accent);
+  background: rgba(37,99,235,0.08); border: 1px solid rgba(37,99,235,0.18);
+  border-radius: 4px; padding: 0.12rem 0.42rem;
 }
 .signal-side, .china-panel, .chart-panel {
   background: var(--bg2); border: 1px solid var(--bg3);
@@ -192,6 +196,31 @@ body {
   color: var(--fg2); font-size: 0.78rem;
 }
 .keyword-pill strong { color: var(--fg); font-size: 0.72rem; }
+.signal-spec {
+  display: flex; flex-direction: column; gap: 0.65rem;
+}
+.signal-spec-intro {
+  font-size: 0.78rem; color: var(--fg3); line-height: 1.55;
+  padding-bottom: 0.5rem; border-bottom: 1px dashed var(--bg3);
+}
+.signal-spec-intro code {
+  background: var(--bg); border: 1px solid var(--bg3);
+  border-radius: 3px; padding: 0.05rem 0.28rem;
+  font-size: 0.74rem; color: var(--fg2);
+}
+.signal-spec-block h4 {
+  font-size: 0.78rem; font-weight: 600; color: var(--fg);
+  margin-bottom: 0.3rem;
+}
+.signal-spec-block p,
+.signal-spec-block li {
+  font-size: 0.76rem; color: var(--fg2); line-height: 1.55;
+}
+.signal-spec-block ul {
+  margin: 0.2rem 0 0; padding-left: 1.1rem;
+  display: flex; flex-direction: column; gap: 0.2rem;
+}
+.signal-spec-block strong { color: var(--fg); }
 .muted { color: var(--fg3); font-size: 0.82rem; }
 
 .china-grid {
