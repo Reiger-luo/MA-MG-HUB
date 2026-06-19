@@ -732,7 +732,7 @@
       wireCheckboxAll('filterEvidenceList');
 
       // 统计
-      document.getElementById('statTotal').textContent = '10,605';  // 全库文献总量（由 split-recent-data.py 更新）
+      document.getElementById('statTotal').textContent = window.MG_TOTAL_COUNT || allArticles.length;
       document.getElementById('statYear').textContent = allArticles.length;
 
       var chinaYear = 0;
