@@ -321,8 +321,9 @@
     var div = document.createElement('div');
     div.className = 'article-card';
 
-    var authors = (article.authors || []).slice(0, 5).join(', ');
-    var authorStr = authors + ((article.authors || []).length > 5 ? ' et al.' : '');
+    var metaParts = [escapeHtml(article.journal || 'Unknown')];
+    if (dateStr) metaParts.push(escapeHtml(dateStr));
+    metaParts.push('PMID ' + escapeHtml(article.pmid || '-'));
 
     var tagsHTML = '';
     if (china) tagsHTML += '<span class="badge-china">🇨🇳 中国</span>';
@@ -334,9 +335,8 @@
     if (article.journal_quartile) tagsHTML += '<span class="badge-metric">CAS ' + escapeHtml(String(article.journal_quartile)) + '</span>';
 
     div.innerHTML =
-      '<a class="article-card-title" href="' + article.url + '" target="_blank">' + (article.title || '(无标题)') + '</a>' +
-      '<div class="article-card-meta">' + (article.journal || 'Unknown') + ' · ' + dateStr + '</div>' +
-      '<div class="article-card-authors">' + (authorStr || '作者未知') + '</div>' +
+      '<a class="article-card-title" href="' + article.url + '" target="_blank">' + escapeHtml(article.title || '(无标题)') + '</a>' +
+      '<div class="article-card-meta">' + metaParts.join(' · ') + '</div>' +
       (article.abstract
         ? '<button class="abstract-toggle" data-pmid="' + article.pmid + '">显示摘要</button>' +
           '<div class="article-card-abstract" id="abs-' + article.pmid + '">' + escapeHtml(article.abstract.slice(0, 300)) + (article.abstract.length > 300 ? '…' : '') + '</div>'
