@@ -1,26 +1,26 @@
 #!/usr/bin/env python3
 """
-backfill-journal-metrics.py — 期刊 IF/分区回填（EasyScholar API 版）
+backfill-journal-metrics.py — 期刊 IF/分区更新（EasyScholar API 版）
 
-替代旧的 Ablesci curl+cookie+browser 级联方案。使用 EasyScholar 公开 API：
-- JSON 响应，无需反爬处理
-- 速率限制：1 req/s（由 easyscholar_api.py 自动控制）
-- 支持简称和全称
-
-输出：
-  1. assets/journal_metrics.json（cache 增量更新）
-  2. 直接回填到 literature-full.json
+只更新 assets/journal_metrics.json（期刊 cache），不碰文献数据。
+跑完这个后，运行 backfill-from-cache.py 将 cache 映射到文献。
 
 运行方式：
-  python3 scripts/backfill-journal-metrics.py             # 仅近1年期刊
+  python3 scripts/backfill-journal-metrics.py             # 近1年期刊（默认）
   python3 scripts/backfill-journal-metrics.py --all       # 全库期刊
   python3 scripts/backfill-journal-metrics.py --single "Neurology"  # 查单个期刊
+
+数据流：
+  EasyScholar API → assets/journal_metrics.json（独立期刊字典）
+                         ↓
+                 backfill-from-cache.py（映射到文献）
+                         ↓
+                 data/literature-full.json → split-recent-data.py → 前端
 """
 
 import json, os, sys, time
 from pathlib import Path
 
-# 添加 scripts/ 到 sys.path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from easyscholar_api import EasyScholarAPI
 
@@ -53,24 +53,26 @@ def load_articles():
 
 
 def get_journals(articles, mode="recent"):
-    """获取需要查的期刊列表。只挑有证据等级的文章期刊。"""
+    """
+    收集文献中出现的所有期刊，对比 cache 找出需要查询的。
+
+    EasyScholar 提供统一的 JSON 响应，对所有期刊一视同仁。
+    不再区分 evidence_level——每个期刊名都值得录入 cache。
+    """
     cache = load_cache()
 
-    needs_fetch_journals = set()
-    for a in articles:
-        if a.get("evidence_level") and not a.get("journal_if") and a.get("journal"):
-            needs_fetch_journals.add(a["journal"])
-
+    # 所有期刊（去重排序）
     all_journals = sorted(set(
         a["journal"] for a in articles if a["journal"]
     ))
 
+    # 按期刊名查全库：cache 中没有的 + cache 中 IF=0 的
     needs_fetch = [
         j for j in all_journals
-        if j in needs_fetch_journals
-        and (j not in cache or cache[j].get("IF", 0) == 0)
+        if j not in cache or cache[j].get("IF") is None or cache[j].get("IF", 0) == 0
     ]
 
+    # 近 1 年过滤
     if mode != "all":
         from datetime import datetime as dt, timedelta
         cutoff = dt.now() - timedelta(days=365)
@@ -87,27 +89,14 @@ def get_journals(articles, mode="recent"):
                     pass
         needs_fetch = [j for j in needs_fetch if j in recent_journals]
 
+    # 过滤中文期刊名（EasyScholar 查不了）
     needs_fetch = [
         j for j in needs_fetch
         if not any(kw in j.lower() for kw in ["zhonghua", "zhongguo", "beijing", "shanghai"])
     ]
-    covered = [j for j in all_journals if j in cache and cache[j].get("IF", 0) > 0]
+
+    covered = [j for j in all_journals if j in cache and cache[j].get("IF") is not None and cache[j].get("IF", 0) > 0]
     return all_journals, covered, needs_fetch
-
-
-def backfill_articles(articles, cache):
-    """从 cache 回填到文章数据。"""
-    filled = 0
-    for a in articles:
-        j = a.get("journal", "")
-        if not j:
-            continue
-        if j in cache and cache[j].get("IF", 0) > 0:
-            if a.get("journal_if") is None:
-                a["journal_if"] = cache[j]["IF"]
-                a["journal_quartile"] = cache[j].get("CAS")
-                filled += 1
-    return filled
 
 
 # ── Main ──
@@ -144,22 +133,24 @@ def main():
             print(f"⏭️  {journal}: 未查到")
         return
 
-    print("[main] starting…", flush=True)
+    print("[main] 开始…", flush=True)
 
     articles = load_articles()
-    print(f"[main] loaded {len(articles)} articles", flush=True)
+    print(f"[main] 已加载 {len(articles)} 篇文章", flush=True)
     cache = load_cache()
-    print(f"[main] cache {len(cache)} entries", flush=True)
+    print(f"[main] 期刊 cache {len(cache)} 条", flush=True)
+
     all_journals, covered, needs_fetch = get_journals(articles, mode)
 
-    print(f"📚 全库期刊数: {len(all_journals)}", flush=True)
-    print(f"📦 已缓存: {len(cache)}", flush=True)
-    print(f"✅ 已覆盖: {len(covered)}", flush=True)
+    print(f"📚 文献中出现的期刊数: {len(all_journals)}", flush=True)
+    print(f"📦 已有 cache: {len(cache)}", flush=True)
+    print(f"✅ 已覆盖 (IF>0): {len(covered)}", flush=True)
     print(f"⏳ 待查询: {len(needs_fetch)}", flush=True)
     print(flush=True)
 
     if not needs_fetch:
-        print("🎉 全部已覆盖!")
+        print("🎉 全部已覆盖！")
+        save_cache(cache)
     else:
         print(f"🔍 EasyScholar: 查询 {len(needs_fetch)} 个期刊…", flush=True)
         api = EasyScholarAPI()
@@ -178,7 +169,7 @@ def main():
                 hit += 1
                 print(f"IF={res['IF']}, {res['sciBase']}")
             else:
-                # 查不到也写入 cache（IF=0），避免下次再查
+                # 未查到也写入 cache（IF=0），避免下次再查
                 cache[journal] = {
                     "IF": 0,
                     "CAS": None,
@@ -188,18 +179,14 @@ def main():
                 print("未查到")
 
         save_cache(cache)
-        print(f"\n💾 完成: {hit}/{len(needs_fetch)} 命中", flush=True)
-
-    # 回填到文章
-    filled = backfill_articles(articles, cache)
-    full_path = DATA_DIR / "literature-full.json"
-    with open(full_path, "w") as f:
-        json.dump(articles, f, ensure_ascii=False, indent=2)
-    print(f"📝 已更新 {full_path.name} ({filled} 篇回填)", flush=True)
+        print(f"\n💾 Cache 更新完成: {hit}/{len(needs_fetch)} 命中，总 {len(cache)} 条", flush=True)
 
     remaining = [j for j in needs_fetch if j not in cache or cache[j].get("IF", 0) == 0]
     if remaining:
-        print(f"⏳ 仍缺 IF: {len(remaining)} 个期刊（下次重试自动跳过）", flush=True)
+        print(f"⏳ 仍缺 IF: {len(remaining)} 个期刊", flush=True)
+
+    print(f"\n📝 期刊 cache 已更新。")
+    print(f"   运行 scripts/backfill-from-cache.py 将 cache 映射到文献数据。", flush=True)
 
 
 if __name__ == "__main__":

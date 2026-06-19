@@ -2119,10 +2119,10 @@
     "source": "ablesci"
   },
   "Digital biomarkers": {
-    "IF": 0.0,
+    "IF": null,
     "CAS": null,
-    "updated": "2026-06-10",
-    "source": "ablesci"
+    "updated": "2026-06-19",
+    "source": "easyscholar"
   },
   "Discover oncology": {
     "IF": 2.9,
@@ -2654,16 +2654,16 @@
     "source": "ablesci"
   },
   "Medical hypothesis, discovery & innovation ophthalmology journal": {
-    "IF": 0.0,
+    "IF": 0,
     "CAS": null,
-    "updated": "2026-06-10",
-    "source": "ablesci"
+    "updated": "2026-06-19",
+    "source": "easyscholar"
   },
   "Medical journal, Armed Forces India": {
-    "IF": 0.0,
+    "IF": 0,
     "CAS": null,
-    "updated": "2026-06-10",
-    "source": "ablesci"
+    "updated": "2026-06-19",
+    "source": "easyscholar"
   },
   "Medical mycology case reports": {
     "IF": 1.3,
@@ -3008,10 +3008,10 @@
     "source": "ablesci"
   },
   "The patient": {
-    "IF": 0.0,
+    "IF": 0,
     "CAS": null,
-    "updated": "2026-06-10",
-    "source": "ablesci"
+    "updated": "2026-06-19",
+    "source": "easyscholar"
   },
   "The veterinary clinics of North America. Exotic animal practice": {
     "IF": 1.5,
@@ -3110,10 +3110,10 @@
     "source": "easyscholar"
   },
   "Advanced science (Weinheim, Baden-Wurttemberg, Germany)": {
-    "IF": 0.0,
+    "IF": 14.1,
     "CAS": null,
-    "updated": "2026-06-10",
-    "source": "ablesci"
+    "updated": "2026-06-19",
+    "source": "easyscholar"
   },
   "Annals of thoracic and cardiovascular surgery : official journal of the Association of Thoracic and Cardiovascular Surgeons of Asia": {
     "IF": 1.3,
@@ -3284,10 +3284,10 @@
     "source": "easyscholar"
   },
   "Clinical trials (London, England)": {
-    "IF": 0.0,
-    "CAS": null,
-    "updated": "2026-06-10",
-    "source": "ablesci"
+    "IF": 2.4,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
   },
   "Continuum (Minneapolis, Minn.)": {
     "IF": 0,
@@ -3320,10 +3320,10 @@
     "source": "easyscholar"
   },
   "FASEB journal : official publication of the Federation of American Societies for Experimental Biology": {
-    "IF": 0.0,
+    "IF": 0,
     "CAS": null,
-    "updated": "2026-06-10",
-    "source": "ablesci"
+    "updated": "2026-06-19",
+    "source": "easyscholar"
   },
   "Gan to kagaku ryoho. Cancer & chemotherapy": {
     "IF": 0,
@@ -3332,10 +3332,10 @@
     "source": "easyscholar"
   },
   "General thoracic and cardiovascular surgery cases": {
-    "IF": 0.0,
+    "IF": 0.4,
     "CAS": null,
-    "updated": "2026-06-10",
-    "source": "ablesci"
+    "updated": "2026-06-19",
+    "source": "easyscholar"
   },
   "Global advances in integrative medicine and health": {
     "IF": 2.1,
@@ -3362,10 +3362,10 @@
     "source": "easyscholar"
   },
   "International journal of obesity (2005)": {
-    "IF": 0.0,
-    "CAS": null,
-    "updated": "2026-06-10",
-    "source": "ablesci"
+    "IF": 5.4,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
   },
   "International journal of urology : official journal of the Japanese Urological Association": {
     "IF": 0,
@@ -3446,10 +3446,10 @@
     "source": "easyscholar"
   },
   "La Radiologia medica": {
-    "IF": 0.0,
+    "IF": 0,
     "CAS": null,
-    "updated": "2026-06-10",
-    "source": "ablesci"
+    "updated": "2026-06-19",
+    "source": "easyscholar"
   },
   "Lung cancer (Amsterdam, Netherlands)": {
     "IF": 5.3,
@@ -3464,10 +3464,10 @@
     "source": "easyscholar"
   },
   "Medical sciences (Basel, Switzerland)": {
-    "IF": 0.0,
+    "IF": 5.9,
     "CAS": null,
-    "updated": "2026-06-10",
-    "source": "ablesci"
+    "updated": "2026-06-19",
+    "source": "easyscholar"
   },
   "Medicina (Kaunas, Lithuania)": {
     "IF": 0,
@@ -3482,10 +3482,10 @@
     "source": "easyscholar"
   },
   "Mikrochimica acta": {
-    "IF": 0.0,
+    "IF": 0,
     "CAS": null,
-    "updated": "2026-06-10",
-    "source": "ablesci"
+    "updated": "2026-06-19",
+    "source": "easyscholar"
   },
   "Molecular therapy : the journal of the American Society of Gene Therapy": {
     "IF": 0,
@@ -3530,10 +3530,10 @@
     "source": "easyscholar"
   },
   "Rhode Island medical journal (2013)": {
-    "IF": 0.0,
+    "IF": 0,
     "CAS": null,
-    "updated": "2026-06-10",
-    "source": "ablesci"
+    "updated": "2026-06-19",
+    "source": "easyscholar"
   },
   "Sisli Etfal Hastanesi tip bulteni": {
     "IF": 0,
@@ -3542,10 +3542,10 @@
     "source": "easyscholar"
   },
   "Structure (London, England : 1993)": {
-    "IF": 0.0,
-    "CAS": null,
-    "updated": "2026-06-10",
-    "source": "ablesci"
+    "IF": 4.6,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
   },
   "The Journal of pharmacy technology : jPT : official publication of the Association of Pharmacy Technicians": {
     "IF": 0,
@@ -3572,10 +3572,10 @@
     "source": "easyscholar"
   },
   "Turkish journal of haematology : official journal of Turkish Society of Haematology": {
-    "IF": 0.0,
+    "IF": 0,
     "CAS": null,
-    "updated": "2026-06-10",
-    "source": "ablesci"
+    "updated": "2026-06-19",
+    "source": "easyscholar"
   },
   "Value in health : the journal of the International Society for Pharmacoeconomics and Outcomes Research": {
     "IF": 0,
@@ -3632,10 +3632,10 @@
     "source": "ablesci"
   },
   "bioRxiv : the preprint server for biology": {
-    "IF": 0.0,
+    "IF": 0,
     "CAS": null,
-    "updated": "2026-06-10",
-    "source": "ablesci"
+    "updated": "2026-06-19",
+    "source": "easyscholar"
   },
   "medRxiv : the preprint server for health sciences": {
     "IF": 0,
@@ -10143,6 +10143,2100 @@
   },
   "mAbs": {
     "IF": 7.9,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "ACP journal club": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Academic pathology": {
+    "IF": 2.0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Acta gastro-enterologica Belgica": {
+    "IF": 1.2,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Acta medica Iranica": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Acta naturae": {
+    "IF": 1.5,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Acta neurobiologiae experimentalis": {
+    "IF": 1.9,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Acta otorhinolaryngologica Italica : organo ufficiale della Societa italiana di otorinolaringologia e chirurgia cervico-facciale": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Acta pharmacologica Sinica": {
+    "IF": 10.4,
+    "CAS": "1区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Acta physiologica (Oxford, England)": {
+    "IF": 5.7,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Advance for nurse practitioners": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Advances in gerontology = Uspekhi gerontologii": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Advances in physiology education": {
+    "IF": 1.9,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Advances in respiratory medicine": {
+    "IF": 4.5,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Alternative therapies in health and medicine": {
+    "IF": null,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "American journal of clinical oncology": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "American journal of human genetics": {
+    "IF": 7.7,
+    "CAS": "1区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "American journal of lifestyle medicine": {
+    "IF": 1.9,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "American journal of physiology. Cell physiology": {
+    "IF": 5.4,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "American journal of respiratory and critical care medicine": {
+    "IF": 21.7,
+    "CAS": "1区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Anales del sistema sanitario de Navarra": {
+    "IF": 1.1,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Analytica chimica acta": {
+    "IF": 6.1,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Andes pediatrica : revista Chilena de pediatria": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Animal genetics": {
+    "IF": 2.2,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Annals of Ibadan postgraduate medicine": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Annals of biomedical engineering": {
+    "IF": 5.2,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Annals of diagnostic pathology": {
+    "IF": 1.6,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Annals of oncology : official journal of the European Society for Medical Oncology": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Annals of plastic surgery": {
+    "IF": 1.6,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Annals of rehabilitation medicine": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Annals of thoracic medicine": {
+    "IF": 2.3,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Antibiotiki i khimioterapiia = Antibiotics and chemoterapy [sic]": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Antimicrobial agents and chemotherapy": {
+    "IF": 4.2,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Antioxidants (Basel, Switzerland)": {
+    "IF": 8.2,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Aorta (Stamford, Conn.)": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Applied microbiology and biotechnology": {
+    "IF": 4.7,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Applied nursing research : ANR": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Archives of ophthalmology (Chicago, Ill. : 1960)": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Arthritis and rheumatism": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Arthritis research & therapy": {
+    "IF": 5.4,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Artificial cells, blood substitutes, and immobilization biotechnology": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Artificial organs": {
+    "IF": 2.2,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "BBA clinical": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "BMC bioinformatics": {
+    "IF": 4.4,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "BMC genomics": {
+    "IF": 3.9,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "BMC health services research": {
+    "IF": 3.3,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "BMC medical genomics": {
+    "IF": 2.6,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "BMC research notes": {
+    "IF": 1.7,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "BMJ medicine": {
+    "IF": 9.3,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "BMJ open ophthalmology": {
+    "IF": 2.7,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Behavioural neurology": {
+    "IF": 4.0,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "BioFactors (Oxford, England)": {
+    "IF": 5.2,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Bioengineered": {
+    "IF": null,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Bioinformatics (Oxford, England)": {
+    "IF": 5.5,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Bioinformatics and biology insights": {
+    "IF": 2.0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Biomedical chromatography : BMC": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Biomedical engineering letters": {
+    "IF": 3.4,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Bioorganic & medicinal chemistry": {
+    "IF": 3.5,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Bioorganic & medicinal chemistry letters": {
+    "IF": 2.3,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Bioorganic chemistry": {
+    "IF": 5.1,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Bioscience reports": {
+    "IF": 4.5,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Biotechnology & genetic engineering reviews": {
+    "IF": 2.4,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Bone marrow transplantation": {
+    "IF": 5.1,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Brain, behavior, & immunity - health": {
+    "IF": 3.8,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Breastfeeding medicine : the official journal of the Academy of Breastfeeding Medicine": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Bulletin of experimental biology and medicine": {
+    "IF": 0.7,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "CEN case reports": {
+    "IF": 1.0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "CMAJ : Canadian Medical Association journal = journal de l'Association medicale canadienne": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Canadian Urological Association journal = Journal de l'Association des urologues du Canada": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Canadian journal of neuroscience nursing": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Cancer cell": {
+    "IF": 56.1,
+    "CAS": "1区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Cancer gene therapy": {
+    "IF": 6.4,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Cancer imaging : the official publication of the International Cancer Imaging Society": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Case reports in gastrointestinal medicine": {
+    "IF": 0.6,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Cell": {
+    "IF": 45.1,
+    "CAS": "1区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Cell biology international": {
+    "IF": 3.5,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Cell communication and signaling : CCS": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Cell stem cell": {
+    "IF": 23.3,
+    "CAS": "1区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Central-European journal of immunology": {
+    "IF": 1.5,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Cerebellum & ataxias": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Ceskoslovenska patologie": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Chemical research in toxicology": {
+    "IF": 4.1,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Chemical science": {
+    "IF": 8.1,
+    "CAS": "1区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Chinese journal of integrative medicine": {
+    "IF": 3.1,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Chinese medicine": {
+    "IF": 7.4,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Circulation journal : official journal of the Japanese Circulation Society": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Clinical & experimental neuroimmunology": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Clinical and experimental pharmacology & physiology": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Clinical and investigative medicine. Medecine clinique et experimentale": {
+    "IF": null,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Clinical calcium": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Clinical chemistry and laboratory medicine": {
+    "IF": 4.4,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Clinical epidemiology and global health": {
+    "IF": 1.9,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Clinical hemorheology and microcirculation": {
+    "IF": 1.7,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Clinical journal of oncology nursing": {
+    "IF": 0.9,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Clinical laboratory": {
+    "IF": 0.7,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Clinical microbiology and infection : the official publication of the European Society of Clinical Microbiology and Infectious Diseases": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Clinical pediatric emergency medicine": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Clinics (Sao Paulo, Brazil)": {
+    "IF": 2.4,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Computational and structural biotechnology journal": {
+    "IF": 4.8,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Computational biology and chemistry": {
+    "IF": 3.4,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Computers in biology and medicine": {
+    "IF": null,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Contemporary oncology (Poznan, Poland)": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Cryobiology": {
+    "IF": 2.6,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Current infectious disease reports": {
+    "IF": 2.4,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Current protocols in immunology": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Current protocols in neuroscience": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Cytometry. Part B, Clinical cytometry": {
+    "IF": 2.9,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Cytotechnology": {
+    "IF": 2.2,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Dementia & neuropsychologia": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Dental update": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Der Internist": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Dermato-endocrinology": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Dermatology practical & conceptual": {
+    "IF": 2.4,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Developmental biology": {
+    "IF": 2.1,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "EMBO molecular medicine": {
+    "IF": 7.9,
+    "CAS": "1区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "ERJ open research": {
+    "IF": 4.4,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Endocrine connections": {
+    "IF": 3.4,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Endocrinologia y nutricion : organo de la Sociedad Espanola de Endocrinologia y Nutricion": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Endocrinology, diabetes & metabolism case reports": {
+    "IF": 0.9,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Entropy (Basel, Switzerland)": {
+    "IF": 2.1,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "European cytokine network": {
+    "IF": 1.5,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "European journal of cancer prevention : the official journal of the European Cancer Prevention Organisation (ECP)": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "European journal of drug metabolism and pharmacokinetics": {
+    "IF": 2.3,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "European journal of epidemiology": {
+    "IF": 6.6,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "European journal of gynaecological oncology": {
+    "IF": null,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "European journal of pharmacology": {
+    "IF": 5.7,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "European journal of translational myology": {
+    "IF": 2.0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "European thyroid journal": {
+    "IF": 4.9,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "European urology": {
+    "IF": 29.1,
+    "CAS": "1区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Experimental neurobiology": {
+    "IF": 2.4,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Expert review of molecular diagnostics": {
+    "IF": 4.3,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "FEBS open bio": {
+    "IF": 2.7,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Federal practitioner : for the health care professionals of the VA, DoD, and PHS": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Fetal and pediatric pathology": {
+    "IF": 0.8,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Folia medica Cracoviensia": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Food and chemical toxicology : an international journal published for the British Industrial Biological Research Association": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Food science & nutrition": {
+    "IF": 5.0,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Frontiers in psychology": {
+    "IF": 3.8,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "G3 (Bethesda, Md.)": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Geburtshilfe und Frauenheilkunde": {
+    "IF": 2.6,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Gene": {
+    "IF": 2.7,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Genes": {
+    "IF": 3.1,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Genes & cancer": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Genes to cells : devoted to molecular & cellular mechanisms": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Genetics and molecular research : GMR": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Ginekologia polska": {
+    "IF": 1.6,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Handbook of experimental pharmacology": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Health science reports": {
+    "IF": 2.9,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Hematology (Amsterdam, Netherlands)": {
+    "IF": 2.0,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Hepatology research : the official journal of the Japan Society of Hepatology": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "High altitude medicine & biology": {
+    "IF": 1.3,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Hospital pharmacy": {
+    "IF": 0.9,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Human molecular genetics": {
+    "IF": 3.1,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "IDrugs : the investigational drugs journal": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Immunity": {
+    "IF": 30.6,
+    "CAS": "1区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Indian journal of anaesthesia": {
+    "IF": 2.2,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Indian journal of clinical biochemistry : IJCB": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Indian journal of dermatology": {
+    "IF": 1.7,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Indian journal of nuclear medicine : IJNM : the official journal of the Society of Nuclear Medicine, India": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Indian journal of psychiatry": {
+    "IF": 2.4,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Inflammation": {
+    "IF": 5.4,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Inflammation research : official journal of the European Histamine Research Society ... [et al.]": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Influenza and other respiratory viruses": {
+    "IF": 3.9,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Innovations in pharmacy": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Intensive & critical care nursing": {
+    "IF": 5.1,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Interdisciplinary toxicology": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "International archives of allergy and immunology": {
+    "IF": 2.3,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "International journal of Alzheimer's disease": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "International journal of analytical chemistry": {
+    "IF": 2.8,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "International journal of behavioral medicine": {
+    "IF": 2.3,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "International journal of biological macromolecules": {
+    "IF": 8.7,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "International journal of endocrinology": {
+    "IF": 2.5,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "International journal of health sciences": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "International journal of immunogenetics": {
+    "IF": 1.3,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "International journal of peptide research and therapeutics": {
+    "IF": 2.5,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "International journal of pharmaceutical compounding": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "International journal of rehabilitation research. Internationale Zeitschrift fur Rehabilitationsforschung. Revue internationale de recherches de readaptation": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "International journal of speech-language pathology": {
+    "IF": 1.6,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "International journal of surgery (London, England)": {
+    "IF": 9.0,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Investigative ophthalmology & visual science": {
+    "IF": 5.5,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Investigative radiology": {
+    "IF": 7.9,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Iranian journal of immunology : IJI": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Iranian journal of pharmaceutical research : IJPR": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "JAMA": {
+    "IF": 65.4,
+    "CAS": "1区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "JAMA dermatology": {
+    "IF": 10.9,
+    "CAS": "1区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "JIMD reports": {
+    "IF": 1.6,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "JMIR formative research": {
+    "IF": 2.4,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "JMIR neurotechnology": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of AOAC International": {
+    "IF": 1.8,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of biochemical and molecular toxicology": {
+    "IF": 3.6,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of biomedical materials research. Part A": {
+    "IF": 3.8,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of biomedical research": {
+    "IF": 3.7,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of cellular and molecular medicine": {
+    "IF": 4.7,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of cellular biochemistry": {
+    "IF": 3.0,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of chemical information and modeling": {
+    "IF": 6.4,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of children's orthopaedics": {
+    "IF": 1.8,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of chromatographic science": {
+    "IF": 1.8,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of clinical & translational endocrinology": {
+    "IF": 4.9,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of clinical laboratory analysis": {
+    "IF": 2.5,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of clinical medicine research": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of clinical pharmacology": {
+    "IF": 2.2,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of computational biology : a journal of computational molecular cell biology": {
+    "IF": null,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of computer assisted tomography": {
+    "IF": 1.4,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of controlled release : official journal of the Controlled Release Society": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of endocrinological investigation": {
+    "IF": 4.0,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of enzyme inhibition and medicinal chemistry": {
+    "IF": 5.3,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of fungi (Basel, Switzerland)": {
+    "IF": 4.3,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of gerontological nursing": {
+    "IF": 1.1,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of hand therapy : official journal of the American Society of Hand Therapists": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of human genetics": {
+    "IF": 2.3,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of inflammation (London, England)": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of innate immunity": {
+    "IF": 4.6,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of medical Internet research": {
+    "IF": 8.2,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of medical biography": {
+    "IF": 0.3,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of negative results in biomedicine": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of neurophysiology": {
+    "IF": 2.3,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of neuroscience methods": {
+    "IF": 2.5,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of neurosurgery. Case lessons": {
+    "IF": 0.7,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of peptide science : an official publication of the European Peptide Society": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of perianesthesia nursing : official journal of the American Society of PeriAnesthesia Nurses": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of the National Medical Association": {
+    "IF": 2.3,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of the advanced practitioner in oncology": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of the history of the neurosciences": {
+    "IF": 0.5,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of veterinary science": {
+    "IF": 1.8,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Journal of women's health (2002)": {
+    "IF": 1.8,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Korean journal of anesthesiology": {
+    "IF": 4.0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Korean journal of pathology": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Langenbeck's archives of surgery": {
+    "IF": 2.2,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "MMWR. Morbidity and mortality weekly report": {
+    "IF": 16.2,
+    "CAS": "1区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "MMWR. Recommendations and reports : Morbidity and mortality weekly report. Recommendations and reports": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Magyar sebeszet": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "MedEdPublish (2016)": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Medecine tropicale et sante internationale": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Medical & biological engineering & computing": {
+    "IF": 3.1,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Medical archives (Sarajevo, Bosnia and Herzegovina)": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Medical journal of the Islamic Republic of Iran": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Medicina intensiva": {
+    "IF": 2.5,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "MicroRNA (Shariqah, United Arab Emirates)": {
+    "IF": 1.6,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Molecular and cellular neurosciences": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Molecular pharmacology": {
+    "IF": 3.0,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Molecular therapy. Methods & clinical development": {
+    "IF": 5.0,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Molecular therapy. Nucleic acids": {
+    "IF": 6.5,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Molecules (Basel, Switzerland)": {
+    "IF": 5.1,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Mutation research. Genetic toxicology and environmental mutagenesis": {
+    "IF": 2.8,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "NMR in biomedicine": {
+    "IF": 2.8,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "NPJ precision oncology": {
+    "IF": 9.9,
+    "CAS": "1区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Nanomedicine : nanotechnology, biology, and medicine": {
+    "IF": 4.3,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Natural product research": {
+    "IF": 1.8,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Nature": {
+    "IF": 56.1,
+    "CAS": "1区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Nature biotechnology": {
+    "IF": 44.5,
+    "CAS": "1区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Nature reviews. Drug discovery": {
+    "IF": 91.2,
+    "CAS": "1区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "NeoReviews": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Nephrology, dialysis, transplantation : official publication of the European Dialysis and Transplant Association - European Renal Association": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Neurogastroenterology and motility": {
+    "IF": 3.0,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Neuroimmunomodulation": {
+    "IF": 3.7,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Neurology perspectives": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Neurology. Genetics": {
+    "IF": 3.3,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Neuropathology and applied neurobiology": {
+    "IF": 3.0,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Neuroreport": {
+    "IF": 2.1,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Neuroscience research": {
+    "IF": 3.2,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Neurotoxicity research": {
+    "IF": 3.9,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Neurotoxicology and teratology": {
+    "IF": 3.7,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Nigerian journal of medicine : journal of the National Association of Resident Doctors of Nigeria": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Nihon Shokakibyo Gakkai zasshi = The Japanese journal of gastro-enterology": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Non-coding RNA research": {
+    "IF": 5.6,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Nuclear medicine communications": {
+    "IF": 1.4,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Nucleosides, nucleotides & nucleic acids": {
+    "IF": 1.0,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Nursing for women's health": {
+    "IF": 1.0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Nursing older people": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Nursing standard (Royal College of Nursing (Great Britain) : 1987)": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "OTJR : occupation, participation and health": {
+    "IF": null,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Oligonucleotides": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Oman journal of ophthalmology": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Oncogenesis": {
+    "IF": 6.0,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Oncoimmunology": {
+    "IF": 6.2,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Open medicine (Warsaw, Poland)": {
+    "IF": 1.8,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Oral surgery, oral medicine, oral pathology, oral radiology, and endodontics": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Organic & biomolecular chemistry": {
+    "IF": 2.8,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "PLoS biology": {
+    "IF": 6.9,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Pakistan journal of biological sciences : PJBS": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Pakistan journal of pharmaceutical sciences": {
+    "IF": 0.6,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Panminerva medica": {
+    "IF": null,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Pediatric reports": {
+    "IF": 1.9,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Pediatrics": {
+    "IF": 6.1,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Peptides": {
+    "IF": 3.5,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Pharmaceutical medicine": {
+    "IF": 4.7,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Pharmacoepidemiology and drug safety": {
+    "IF": 2.6,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Physiological reports": {
+    "IF": 2.1,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Physiological research": {
+    "IF": 2.8,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Phytomedicine : international journal of phytotherapy and phytopharmacology": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Plant physiology": {
+    "IF": 8.2,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Progress in brain research": {
+    "IF": null,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Proteomics. Clinical applications": {
+    "IF": 2.9,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Psychiatry investigation": {
+    "IF": 2.0,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Psychology, health & medicine": {
+    "IF": 2.2,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "RSC advances": {
+    "IF": 6.1,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Rapid communications in mass spectrometry : RCM": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Reports of practical oncology and radiotherapy : journal of Greatpoland Cancer Center in Poznan and Polish Society of Radiation Oncology": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Reproductive sciences (Thousand Oaks, Calif.)": {
+    "IF": 2.8,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Research in health services & regions": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Research in veterinary science": {
+    "IF": 2.1,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Revista brasileira de hematologia e hemoterapia": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Revista de salud publica (Bogota, Colombia)": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Scandinavian journal of clinical and laboratory investigation": {
+    "IF": 1.4,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Science (New York, N.Y.)": {
+    "IF": 47.3,
+    "CAS": "1区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Sensors (Basel, Switzerland)": {
+    "IF": 4.0,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Skeletal radiology": {
+    "IF": 2.5,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Surgery": {
+    "IF": 3.2,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Terapevticheskii arkhiv": {
+    "IF": 0.3,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "The American journal of nursing": {
+    "IF": 2.1,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "The American journal of pathology": {
+    "IF": 4.9,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "The Biochemical journal": {
+    "IF": 3.9,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "The British journal of psychiatry : the journal of mental science": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "The Clinical neuropsychologist": {
+    "IF": 2.6,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "The Indian journal of surgery": {
+    "IF": 0.3,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "The International journal of risk & safety in medicine": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "The Journal of biological chemistry": {
+    "IF": 4.1,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "The Journal of cell biology": {
+    "IF": 6.1,
+    "CAS": "1区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "The Journal of clinical endocrinology and metabolism": {
+    "IF": 5.4,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "The Journal of experimental medicine": {
+    "IF": 11.6,
+    "CAS": "1区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "The Journal of infectious diseases": {
+    "IF": 4.1,
+    "CAS": "2区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "The Journal of neuroscience : the official journal of the Society for Neuroscience": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "The Journal of neuroscience nursing : journal of the American Association of Neuroscience Nurses": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "The Journal of pediatrics": {
+    "IF": 3.6,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "The Journal of pharmacy and pharmacology": {
+    "IF": 3.7,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "The Journal of physiology": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "The Malaysian journal of pathology": {
+    "IF": 1.1,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "The New Zealand medical journal": {
+    "IF": 1.2,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "The Nurse practitioner": {
+    "IF": 1.1,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "The Practitioner": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "The Spanish journal of psychology": {
+    "IF": 2.8,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "The Veterinary clinics of North America. Small animal practice": {
+    "IF": 2.0,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "The journal of vascular access": {
+    "IF": 2.0,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "The open cardiovascular medicine journal": {
+    "IF": 0.5,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "The protein journal": {
+    "IF": 1.9,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Therapeutic advances in rare disease": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Toxicology letters": {
+    "IF": 3.1,
+    "CAS": "3区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Toxicology reports": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Translational pediatrics": {
+    "IF": 2.0,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Trials": {
+    "IF": 2.1,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Twin research and human genetics : the official journal of the International Society for Twin Studies": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Urologic oncology": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Vestnik Rossiiskoi akademii meditsinskikh nauk": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Veterinary clinical pathology": {
+    "IF": 1.0,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Viral immunology": {
+    "IF": 1.5,
+    "CAS": "4区",
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Vnitrni lekarstvi": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Zeitschrift fur Evidenz, Fortbildung und Qualitat im Gesundheitswesen": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Zhen ci yan jiu = Acupuncture research": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "Zhong xi yi jie he xue bao = Journal of Chinese integrative medicine": {
+    "IF": 0,
+    "CAS": null,
+    "updated": "2026-06-19",
+    "source": "easyscholar"
+  },
+  "eLife": {
+    "IF": null,
     "CAS": "2区",
     "updated": "2026-06-19",
     "source": "easyscholar"
