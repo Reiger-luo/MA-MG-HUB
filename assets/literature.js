@@ -667,7 +667,7 @@
     }
     el.chinaSourceList.innerHTML =
       sourceHtml;
-    bindRankToggles();
+    bindRankLinks();
 
     renderChinaCharts(chinaArticles, chinaPayload);
   }
@@ -721,13 +721,13 @@
     for (var i = 0; i < Math.min(items.length, limit); i++) {
       var item = items[i];
       var articles = item.articles || [];
-      var panelId = 'rank-' + groupType + '-' + i;
+      var payloadId = 'rank-payload-' + groupType + '-' + i;
       html += '<li class="rank-list-item">' +
-        '<button class="rank-toggle" type="button" data-rank-target="' + panelId + '" aria-expanded="false">' +
-          '<span>' + escapeHtml(item.name || '') + '</span>' +
-          '<strong>' + (item.count || 0) + '</strong>' +
+        '<span class="rank-name">' + escapeHtml(item.name || '') + '</span>' +
+        '<button class="rank-count-link" type="button" data-rank-target="' + payloadId + '" data-rank-title="' + escapeHtml(item.name || '') + '" data-rank-count="' + (item.count || 0) + '">' +
+          (item.count || 0) +
         '</button>' +
-        '<div class="rank-articles" id="' + panelId + '" hidden>' + renderRankArticles(articles) + '</div>' +
+        '<div class="rank-modal-payload" id="' + payloadId + '" hidden>' + renderRankArticles(articles) + '</div>' +
       '</li>';
     }
     html += '</ol>';
@@ -743,19 +743,50 @@
     return html;
   }
 
-  function bindRankToggles() {
+  function bindRankLinks() {
     if (!el.chinaSourceList) return;
-    var toggles = el.chinaSourceList.querySelectorAll('.rank-toggle');
-    for (var i = 0; i < toggles.length; i++) {
-      toggles[i].addEventListener('click', function() {
+    var links = el.chinaSourceList.querySelectorAll('.rank-count-link');
+    for (var i = 0; i < links.length; i++) {
+      links[i].addEventListener('click', function() {
         var targetId = this.getAttribute('data-rank-target');
         var panel = targetId ? document.getElementById(targetId) : null;
         if (!panel) return;
-        var expanded = this.getAttribute('aria-expanded') === 'true';
-        this.setAttribute('aria-expanded', expanded ? 'false' : 'true');
-        panel.hidden = expanded;
+        openRankModal(this, panel.innerHTML);
       });
     }
+  }
+
+  function openRankModal(trigger, contentHtml) {
+    var title = trigger.getAttribute('data-rank-title') || '';
+    var count = trigger.getAttribute('data-rank-count') || '0';
+    var overlay = document.createElement('div');
+    overlay.className = 'modal-overlay open';
+    overlay.innerHTML =
+      '<div class="modal rank-modal" role="dialog" aria-modal="true">' +
+        '<button class="modal-close" type="button" data-modal-close="1">\u2715</button>' +
+        '<div class="rank-modal-head">' +
+          '<h2>' + escapeHtml(title) + '</h2>' +
+          '<span>' + escapeHtml(count) + ' 篇中国证据文献</span>' +
+        '</div>' +
+        '<div class="rank-modal-list">' + contentHtml + '</div>' +
+      '</div>';
+    document.body.appendChild(overlay);
+
+    function closeModal() {
+      document.removeEventListener('keydown', handleKeydown);
+      overlay.remove();
+    }
+
+    function handleKeydown(event) {
+      if (event.key === 'Escape') closeModal();
+    }
+
+    overlay.addEventListener('click', function(event) {
+      if (event.target === overlay || event.target.getAttribute('data-modal-close') === '1') {
+        closeModal();
+      }
+    });
+    document.addEventListener('keydown', handleKeydown);
   }
 
   function renderChinaCharts(chinaArticles, chinaPayload) {

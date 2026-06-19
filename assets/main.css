@@ -261,44 +261,51 @@ body {
 .rank-list {
   list-style: none; display: flex; flex-direction: column; gap: 0.34rem;
 }
-.rank-list li:not(.rank-list-item) {
+.rank-list li {
   display: flex; justify-content: space-between; gap: 0.65rem;
   color: var(--fg2); font-size: 0.8rem;
 }
-.rank-list li:not(.rank-list-item) span {
+.rank-list li span,
+.rank-name {
   min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .rank-list li strong { color: var(--fg); font-weight: 600; }
 .rank-list-item {
-  color: var(--fg2); font-size: 0.8rem;
+  align-items: center; padding: 0.08rem 0;
 }
-.rank-toggle {
-  width: 100%; display: flex; justify-content: space-between; align-items: center;
-  gap: 0.65rem; border: 1px solid transparent; background: transparent;
-  color: var(--fg2); font: inherit; text-align: left; cursor: pointer;
-  border-radius: 6px; padding: 0.2rem 0.25rem;
+.rank-count-link {
+  flex: 0 0 auto; border: none; background: transparent;
+  color: var(--accent); font: inherit; font-weight: 600;
+  text-decoration: underline; text-underline-offset: 2px;
+  cursor: pointer; padding: 0.05rem 0.12rem; border-radius: 4px;
 }
-.rank-toggle:hover {
-  background: var(--bg); border-color: var(--bg3);
+.rank-count-link:hover {
+  background: rgba(37,99,235,0.08);
 }
-.rank-toggle span {
-  min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+.rank-modal-payload {
+  display: none;
 }
-.rank-toggle::before {
-  content: "▸"; color: var(--fg3); flex: 0 0 auto;
+.rank-modal {
+  max-width: 860px; width: min(860px, calc(100vw - 2rem));
 }
-.rank-toggle[aria-expanded="true"]::before {
-  content: "▾";
+.rank-modal-head {
+  padding-right: 2rem; margin-bottom: 0.8rem;
 }
-.rank-articles {
-  margin: 0.3rem 0 0.45rem 1.05rem;
-  padding-left: 0.7rem; border-left: 1px solid var(--bg3);
+.rank-modal-head h2 {
+  margin-bottom: 0.2rem; line-height: 1.35;
 }
-.rank-articles .compact-article {
-  padding: 0.55rem 0;
+.rank-modal-head span {
+  color: var(--fg3); font-size: 0.82rem;
 }
-.rank-articles .compact-article a {
-  font-size: 0.82rem;
+.rank-modal-list {
+  border-top: 1px solid var(--bg3);
+  max-height: 58vh; overflow-y: auto;
+}
+.rank-modal-list .compact-article {
+  padding: 0.75rem 0;
+}
+.rank-modal-list .compact-article a {
+  font-size: 0.9rem;
 }
 
 /* ── 工作流页面通用组件 ── */
