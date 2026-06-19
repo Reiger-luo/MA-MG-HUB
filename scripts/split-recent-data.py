@@ -60,7 +60,7 @@ def main():
 
     recent_js_path = DATA_DIR / "literature-recent.js"
     with open(recent_js_path, "w") as f:
-        f.write(f"window.MG_TOTAL_COUNT = {len(articles):,};\n")
+        f.write(f"window.MG_TOTAL_COUNT = {len(articles)};\n")
         f.write("window.MG_LITERATURE_DATA = ")
         json.dump(recent, f, ensure_ascii=False)
         f.write(";\n")

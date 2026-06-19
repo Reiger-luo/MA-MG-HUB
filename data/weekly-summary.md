@@ -1,10 +1,10 @@
 # MA-MG-HUB 周更
 
-生成时间：2026-06-18 14:07:58
+生成时间：2026-06-19 10:46:58
 
 ## 数据状态
 
-- 近1年文献：1160
+- 近1年文献：1154
 - 中国相关：206
 - 候选信号：27
 - 专家画像：160
@@ -14,7 +14,7 @@
 
 1. [强] Proteomic and machine learning analysis predicts treatment response signatures in Myasthenia Gravis.（PMID 42304472） - 高等级证据 · 中高影响期刊 · 最新入库
 2. [强] Comparing Efficacy and Safety of Various Monoclonal Antibodies in Myasthenia Gravis: A Systematic Review and Network Meta-Analysis of Randomized Controlled Trials.（PMID 42304705） - 高等级证据 · 最新入库
-3. [强] Real-world study of efgartigimod in AChR antibody-positive generalized myasthenia gravis: thymus status, multi-domain symptom improvement and steroid-sparing effect.（PMID 42254001） - 高等级证据 · 中高影响期刊 · 中国相关
+3. [强] Thromboembolic risk in subcutaneous versus intravenous immunoglobulin therapy: a systematic review and narrative meta-synthesis.（PMID 42268448） - 高等级证据 · 中国相关 · 最新入库
 
 ## 中国情报 Top 3
 

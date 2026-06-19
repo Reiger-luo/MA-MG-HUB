@@ -68,6 +68,15 @@
         </div>
 
         <div class="filter-group">
+          <label class="filter-label">结果排序</label>
+          <select class="filter-input" id="sortMode">
+            <option value="date">最新入库优先</option>
+            <option value="if">影响因子优先</option>
+            <option value="evidence">证据等级优先</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
           <label class="filter-label">时间范围（多选）</label>
           <div class="filter-checkbox-list" id="filterTimeList"></div>
         </div>

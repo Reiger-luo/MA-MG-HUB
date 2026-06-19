@@ -19,6 +19,7 @@
     filterCount: $('filterCount'),
     statTotal: $('statTotal'),
     filterKeyword: $('filterKeyword'),
+    sortMode: $('sortMode'),
     filterTimeList: $('filterTimeList'),
     chinaAll: $('chinaAll'),
     chinaOnly: $('chinaOnly'),
@@ -40,6 +41,46 @@
     if (m) return new Date(+m[1], +m[2]-1, +m[3]);
     var d = new Date(dateStr);
     return isNaN(d) ? null : d;
+  }
+
+  function toNumber(value) {
+    var number = Number(value);
+    return isNaN(number) ? 0 : number;
+  }
+
+  function formatImpactFactor(value) {
+    if (value === null || value === undefined || value === '') return '';
+    var number = Number(value);
+    if (isNaN(number)) return '';
+    return number.toFixed(1).replace(/\.0$/, '');
+  }
+
+  function evidenceRank(level) {
+    return { I: 6, II: 5, III: 4, IV: 3, V: 2, VI: 1 }[level || ''] || 0;
+  }
+
+  function articleTimeValue(article) {
+    var date = parseDate(article.entry_date);
+    return date ? date.getTime() : 0;
+  }
+
+  function sortFilteredResults() {
+    var mode = el.sortMode ? el.sortMode.value : 'date';
+    filteredResults.sort(function(a, b) {
+      if (mode === 'if') {
+        var ifDiff = toNumber(b.journal_if) - toNumber(a.journal_if);
+        if (ifDiff !== 0) return ifDiff;
+        var ifEvidenceDiff = evidenceRank(b.evidence_level) - evidenceRank(a.evidence_level);
+        if (ifEvidenceDiff !== 0) return ifEvidenceDiff;
+      }
+      if (mode === 'evidence') {
+        var evidenceDiff = evidenceRank(b.evidence_level) - evidenceRank(a.evidence_level);
+        if (evidenceDiff !== 0) return evidenceDiff;
+        var evidenceIfDiff = toNumber(b.journal_if) - toNumber(a.journal_if);
+        if (evidenceIfDiff !== 0) return evidenceIfDiff;
+      }
+      return articleTimeValue(b) - articleTimeValue(a);
+    });
   }
 
   function getSelectedMonths() {
@@ -221,6 +262,7 @@
       filteredResults.push(a);
     }
 
+    sortFilteredResults();
     el.filterCount.textContent = filteredResults.length;
     if (resetPage) currentPage = 0;
     renderResults();
@@ -286,6 +328,9 @@
     if (evLevel) tagsHTML += '<span class="badge-evidence">证据等级 ' + evLevel + '</span>';
     else if (studyTypes.length > 0 && studyTypes[0] !== 'Unclassified')
       tagsHTML += '<span class="badge-pending">' + studyTypes[0] + '</span>';
+    var impactFactor = formatImpactFactor(article.journal_if);
+    if (impactFactor) tagsHTML += '<span class="badge-metric">IF ' + impactFactor + '</span>';
+    if (article.journal_quartile) tagsHTML += '<span class="badge-metric">CAS ' + escapeHtml(String(article.journal_quartile)) + '</span>';
 
     div.innerHTML =
       '<a class="article-card-title" href="' + article.url + '" target="_blank">' + (article.title || '(无标题)') + '</a>' +
@@ -447,6 +492,17 @@
     };
   }
 
+  function signalStrengthRank(strength) {
+    return { '强': 3, '中': 2, '弱': 1 }[strength || ''] || 0;
+  }
+
+  function compareSignals(a, b) {
+    var strengthDiff = signalStrengthRank(b.strength) - signalStrengthRank(a.strength);
+    if (strengthDiff !== 0) return strengthDiff;
+    if (b.score !== a.score) return b.score - a.score;
+    return (b.date || 0) - (a.date || 0);
+  }
+
   function buildSignals() {
     if (window.MG_SIGNALS_DATA && window.MG_SIGNALS_DATA.signals) {
       signalItems = window.MG_SIGNALS_DATA.signals.map(function(signal) {
@@ -462,10 +518,7 @@
           age: 0
         };
       });
-      signalItems.sort(function(a, b) {
-        if (b.score !== a.score) return b.score - a.score;
-        return (b.date || 0) - (a.date || 0);
-      });
+      signalItems.sort(compareSignals);
       return;
     }
     var latest = maxEntryDate(allArticles);
@@ -474,10 +527,7 @@
       var item = inferSignal(allArticles[i], latest);
       if (item) signalItems.push(item);
     }
-    signalItems.sort(function(a, b) {
-      if (b.score !== a.score) return b.score - a.score;
-      return b.date - a.date;
-    });
+    signalItems.sort(compareSignals);
   }
 
   function renderSignals() {
@@ -560,15 +610,22 @@
 
   function renderChinaInsights() {
     if (!el.chinaRecentList || !el.chinaSourceList) return;
-    var chinaArticles = [];
-    for (var i = 0; i < allArticles.length; i++) {
-      if (allArticles[i].china_related) chinaArticles.push(allArticles[i]);
+    var chinaPayload = window.MG_CHINA_DATA || null;
+    var chinaArticles = chinaPayload && chinaPayload.pubmed_articles ? chinaPayload.pubmed_articles.slice() : [];
+    if (chinaArticles.length === 0) {
+      for (var i = 0; i < allArticles.length; i++) {
+        if (allArticles[i].china_related) chinaArticles.push(allArticles[i]);
+      }
     }
     chinaArticles.sort(function(a, b) {
       return (parseDate(b.entry_date) || 0) - (parseDate(a.entry_date) || 0);
     });
 
-    if (el.chinaBadge) el.chinaBadge.textContent = '近1年 ' + chinaArticles.length + ' 篇';
+    if (el.chinaBadge) {
+      var label = chinaPayload && chinaPayload.summary ? '近1年证据文献 ' : '近1年 ';
+      var chinaTotal = chinaPayload && chinaPayload.summary ? chinaPayload.summary.recent_year_articles : chinaArticles.length;
+      el.chinaBadge.textContent = label + chinaTotal + ' 篇';
+    }
 
     var recentHtml = '';
     for (var r = 0; r < Math.min(chinaArticles.length, 10); r++) {
@@ -577,33 +634,44 @@
     }
     el.chinaRecentList.innerHTML = recentHtml || '<div class="empty-state"><h3>暂无中国相关文献</h3></div>';
 
-    var journalCounts = {};
-    var institutionCounts = {};
-    for (var j = 0; j < chinaArticles.length; j++) {
-      var art = chinaArticles[j];
-      var journal = art.journal || 'Unknown';
-      journalCounts[journal] = (journalCounts[journal] || 0) + 1;
-      var affs = art.affiliations || [];
-      for (var k = 0; k < affs.length; k++) {
-        var inst = normalizeInstitution(affs[k]);
-        if (inst) institutionCounts[inst] = (institutionCounts[inst] || 0) + 1;
+    var sourceHtml = '';
+    if (chinaPayload && chinaPayload.top_journals && chinaPayload.top_journals.length) {
+      sourceHtml += '<div class="source-block"><h4>主要期刊</h4>' + renderRankItems(chinaPayload.top_journals, 8) + '</div>';
+      sourceHtml += '<div class="source-block"><h4>机构线索</h4>' + renderRankItems(chinaPayload.top_institutions || [], 8) + '</div>';
+    } else {
+      var journalCounts = {};
+      var institutionCounts = {};
+      for (var j = 0; j < chinaArticles.length; j++) {
+        var art = chinaArticles[j];
+        var journal = art.journal || 'Unknown';
+        journalCounts[journal] = (journalCounts[journal] || 0) + 1;
+        var affs = art.affiliations || [];
+        for (var k = 0; k < affs.length; k++) {
+          var inst = normalizeInstitution(affs[k]);
+          if (inst) institutionCounts[inst] = (institutionCounts[inst] || 0) + 1;
+        }
       }
+      sourceHtml += '<div class="source-block"><h4>主要期刊</h4>' + renderRankList(journalCounts, 8) + '</div>';
+      sourceHtml += '<div class="source-block"><h4>机构线索</h4>' + renderRankList(institutionCounts, 8) + '</div>';
     }
-
     el.chinaSourceList.innerHTML =
-      '<div class="source-block"><h4>主要期刊</h4>' + renderRankList(journalCounts, 8) + '</div>' +
-      '<div class="source-block"><h4>机构线索</h4>' + renderRankList(institutionCounts, 8) + '</div>';
+      sourceHtml;
 
-    renderChinaCharts(chinaArticles);
+    renderChinaCharts(chinaArticles, chinaPayload);
   }
 
   function renderCompactArticle(article) {
     var d = parseDate(article.entry_date);
     var dateStr = d ? d.toLocaleDateString('zh-CN') : (article.pub_date || '');
+    var meta = [escapeHtml(article.journal || 'Unknown'), dateStr, 'PMID ' + escapeHtml(article.pmid || '-')];
+    if (article.evidence_level) meta.push('证据等级 ' + escapeHtml(article.evidence_level));
+    var impactFactor = formatImpactFactor(article.journal_if);
+    if (impactFactor) meta.push('IF ' + impactFactor);
+    if (article.journal_quartile) meta.push('CAS ' + escapeHtml(String(article.journal_quartile)));
     return '' +
       '<article class="compact-article">' +
         '<a href="' + article.url + '" target="_blank">' + escapeHtml(article.title || '(无标题)') + '</a>' +
-        '<div>' + escapeHtml(article.journal || 'Unknown') + ' · ' + dateStr + ' · PMID ' + escapeHtml(article.pmid || '-') + '</div>' +
+        '<div>' + meta.join(' · ') + '</div>' +
       '</article>';
   }
 
@@ -635,7 +703,17 @@
     return html;
   }
 
-  function renderChinaCharts(chinaArticles) {
+  function renderRankItems(items, limit) {
+    if (!items || !items.length) return '<div class="muted">暂无数据</div>';
+    var html = '<ol class="rank-list">';
+    for (var i = 0; i < Math.min(items.length, limit); i++) {
+      html += '<li><span>' + escapeHtml(items[i].name || '') + '</span><strong>' + (items[i].count || 0) + '</strong></li>';
+    }
+    html += '</ol>';
+    return html;
+  }
+
+  function renderChinaCharts(chinaArticles, chinaPayload) {
     if (typeof echarts === 'undefined') {
       var monthlyEl = document.getElementById('chinaMonthlyChart');
       var evidenceEl = document.getElementById('chinaEvidenceChart');
@@ -645,7 +723,14 @@
     }
 
     var allMonths = groupByMonth(allArticles);
-    var chinaMonths = groupByMonth(chinaArticles);
+    var chinaMonths = {};
+    if (chinaPayload && chinaPayload.monthly && chinaPayload.monthly.length) {
+      for (var m = 0; m < chinaPayload.monthly.length; m++) {
+        chinaMonths[chinaPayload.monthly[m].month] = chinaPayload.monthly[m].count;
+      }
+    } else {
+      chinaMonths = groupByMonth(chinaArticles);
+    }
     var monthKeys = Object.keys(allMonths).sort();
     if (monthKeys.length > 12) monthKeys = monthKeys.slice(monthKeys.length - 12);
     var monthLabels = [];
@@ -675,9 +760,15 @@
     }
 
     var evidenceCounts = {};
-    for (var j = 0; j < chinaArticles.length; j++) {
-      var ev = chinaArticles[j].evidence_level || '未分类';
-      evidenceCounts[ev] = (evidenceCounts[ev] || 0) + 1;
+    if (chinaPayload && chinaPayload.evidence && chinaPayload.evidence.length) {
+      for (var evIdx = 0; evIdx < chinaPayload.evidence.length; evIdx++) {
+        evidenceCounts[chinaPayload.evidence[evIdx].level] = chinaPayload.evidence[evIdx].count;
+      }
+    } else {
+      for (var j = 0; j < chinaArticles.length; j++) {
+        var ev = chinaArticles[j].evidence_level || '未分类';
+        evidenceCounts[ev] = (evidenceCounts[ev] || 0) + 1;
+      }
     }
     var evOrder = ['I', 'II', 'III', 'IV', 'V', 'VI', '未分类'];
     var evValues = [];
@@ -725,6 +816,7 @@
 
       // 事件监听
       el.filterKeyword.addEventListener('input', applyFilters);
+      if (el.sortMode) el.sortMode.addEventListener('change', applyFilters);
       el.chinaAll.addEventListener('change', applyFilters);
       el.chinaOnly.addEventListener('change', applyFilters);
       wireCheckboxAll('filterIFList');
@@ -794,8 +886,15 @@
     for (var i = 0; i < Math.min(articles.length, 50); i++) {
       var a = articles[i];
       var authors = (a.authors || []).slice(0, 3).join(', ');
+      var tags = [];
+      if (a.evidence_level) tags.push('证据等级 ' + a.evidence_level);
+      var impactFactor = formatImpactFactor(a.journal_if);
+      if (impactFactor) tags.push('IF ' + impactFactor);
+      if (a.journal_quartile) tags.push('CAS ' + a.journal_quartile);
+      if (a.china_related) tags.push('中国相关');
       md += (i+1) + '. ' + a.title + '\n';
       md += '   作者: ' + (authors || '未知') + ' · 期刊: ' + (a.journal || '未知') + '\n';
+      md += '   PMID: ' + (a.pmid || '-') + (tags.length ? ' · ' + tags.join(' · ') : '') + '\n';
       md += '   ' + a.url + '\n\n';
     }
     if (articles.length > 50) md += '… 以及 ' + (articles.length - 50) + ' 篇\n';
