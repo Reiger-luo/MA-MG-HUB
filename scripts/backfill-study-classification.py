@@ -4,86 +4,26 @@ backfill-study-classification.py — 证据等级分类回填（任务 B）
 
 遍历 literature-full.json（全量），对每篇文章：
   1. 读取 pub_types（PubMed Publication Type）和 abstract
-  2. 调用 pubmed-study-classifier 的 classify_study_type() 分类
+  2. 调用本项目 studyClassifier 统一分类
   3. 回填到 study_types（数组）和 evidence_level（字符串）
 
 输出：直接更新 literature-full.json
 """
 
-import json, sys, os
+import json
 from pathlib import Path
 
-# 把 classify.py 所在的路径加入 sys.path
-_CLASSIFY_DIR = os.path.expanduser(
-    "~/.hermes/skills/research/pubmed-study-classifier/scripts"
-)
-if _CLASSIFY_DIR not in sys.path:
-    sys.path.insert(0, _CLASSIFY_DIR)
-
-from classify import classify_study_type
+from studyClassifier import classifyEvidence
 
 PROJECT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT / "data"
 
-# 证据等级映射（classifier 输出 → 证据等级数字）
-LEVEL_MAP = {
-    "ITC": "I",
-    "Systematic Review": "I",
-    "RCT": "II",
-    "Non-randomized controlled cohort": "III",
-    "Case-Control": "IV",
-    "Historical Control": "IV",
-    "Single Arm": "IV",
-    "Case Report": "V",
-    "Review": "VI",
-    "Protocol": None,
-    "HEOR": None,
-    "Guideline/Consensus": None,
-    "Animal Study": None,
-    "In Vitro": None,
-    "Comment": None,
-    "Letter": None,
-    "Editorial": None,
-    "Unclassified": None,
-    # 其他非证据类
-    "Historical Article": None,
-    "Biography": None,
-    "News": None,
-    "Lecture": None,
-    "Patient Education": None,
-    "Technical Report": None,
-    "Conference Abstract": None,
-    "Introductory Editorial": None,
-    "Practice Guideline": None,
-    "Consensus Statement": None,
-    "Government Document": None,
-    "Personal Narrative": None,
-    "Fictional Work": None,
-    "Webcast": None,
-    "Portrait": None,
-}
-
-# 需要 LLM 二次判断的 Unclassified → 手动标记
-# 目前 classifier 已覆盖大部分场景，Unclassified 先保留
-
-
 def classify_article(article):
     """对一篇文章返回分类结果"""
-    pub_types = article.get("pub_types", [])
-    abstract = article.get("abstract", "") or ""
-    title = article.get("title", "") or ""
-
-    pt_str = "; ".join(pub_types) if pub_types else ""
-
-    # 调用 classifier
-    result = classify_study_type(pt_str, abstract, title)
-
-    # 映射证据等级
-    level = LEVEL_MAP.get(result, None)
-
+    studyTypes, evidenceLevel = classifyEvidence(article)
     return {
-        "study_types": [result] if result else [],
-        "evidence_level": level,
+        "study_types": studyTypes,
+        "evidence_level": evidenceLevel,
     }
 
 
@@ -99,10 +39,10 @@ def backfill_file(filepath, label):
     classified = 0
     no_change = 0
     for a in articles:
-        # 默认跳过已分类条目；但证据等级 III 需要按新标准重跑
+        # 默认跳过已分类条目；但证据等级 II/III/VI 需要按新标准重跑
         st = a.get("study_types")
         ev = a.get("evidence_level")
-        if ev == "III":
+        if ev in {"II", "III", "VI"}:
             result = classify_article(a)
             a["study_types"] = result["study_types"]
             a["evidence_level"] = result["evidence_level"]
