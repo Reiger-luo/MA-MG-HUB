@@ -142,7 +142,18 @@ def classifyStudy(article):
     ]):
         if "case-control" in combined:
             return ["Case-Control"], "IV"
-        return ["Non-randomized controlled cohort"], "III"
+        if matchAny(combined, [
+            r"\bcontrol\b", r"\bcontrols\b", r"\bcontrolled\b",
+            r"\bcontrol group\b", r"\bcontrol arm\b",
+            r"\bcomparison group\b", r"\bcomparison arm\b",
+            r"\bcomparator\b", r"\breference group\b",
+            r"\bplacebo\b", r"\bparallel\b",
+            r"\bstandard of care\b", r"\bstandard treatment\b",
+            r"\bstandard therapy\b", r"\busual care\b",
+            r"\bsupportive care\b", r"\bbest supportive care\b"
+        ]):
+            return ["Non-randomized controlled cohort"], "III"
+        return ["Single Arm"], "IV"
     if matchAny(combined, [r"\bsingle-arm\b", r"\bopen-label\b", r"\bextension study\b"]):
         return ["Single Arm"], "IV"
     if matchAny(combined, [r"\bcase report\b", r"\bcase reports\b", r"\bcase series\b"]):
@@ -172,11 +183,12 @@ def classifyArticle(article):
 
     hasStudyTypes = bool(article.get("study_types"))
     hasEvidenceLevel = bool(article.get("evidence_level"))
-    if not hasStudyTypes and not hasEvidenceLevel:
+    needsReclassify = article.get("evidence_level") == "III"
+    if needsReclassify or (not hasStudyTypes and not hasEvidenceLevel):
         studyTypes, evidenceLevel = classifyStudy(article)
         article["study_types"] = studyTypes
         article["evidence_level"] = evidenceLevel
-        classificationFilled = bool(studyTypes)
+        classificationFilled = bool(studyTypes) or needsReclassify
 
     return classificationFilled
 

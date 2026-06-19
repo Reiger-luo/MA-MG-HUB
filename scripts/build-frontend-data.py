@@ -37,7 +37,7 @@ TOPIC_DEFS = [
     ("补体", ["complement", "zilucoplan", "ravulizumab", "eculizumab", "c5 inhibitor"]),
     ("B细胞", ["b cell", "b-cell", "rituximab", "inebilizumab", "cd20", "cd19"]),
     ("抗体分型", ["seronegative", "musk", "achr", "lrp4", "autoantibody"]),
-    ("真实世界", ["real-world", "registry", "observational", "retrospective"]),
+    ("真实世界", ["real-world", "registry", "observational", "retrospective", "control", "comparison", "comparative", "parallel", "comparator"]),
     ("安全性", ["safety", "adverse", "infection", "tolerability"]),
     ("疗效", ["efficacy", "outcome", "improvement", "response"]),
     ("机制", ["pathogenesis", "mechanism", "biomarker", "cytokine", "receptor"]),

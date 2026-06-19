@@ -99,9 +99,15 @@ def backfill_file(filepath, label):
     classified = 0
     no_change = 0
     for a in articles:
-        # 跳过已分类的（有证据等级且 study_types 非空且不是 Unclassified）
+        # 默认跳过已分类条目；但证据等级 III 需要按新标准重跑
         st = a.get("study_types")
         ev = a.get("evidence_level")
+        if ev == "III":
+            result = classify_article(a)
+            a["study_types"] = result["study_types"]
+            a["evidence_level"] = result["evidence_level"]
+            classified += 1
+            continue
         if ev and st and st != ["Unclassified"]:
             no_change += 1
             continue

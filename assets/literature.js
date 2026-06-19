@@ -816,7 +816,7 @@
     var allValues = [];
     var chinaValues = [];
     for (var i = 0; i < monthKeys.length; i++) {
-      monthLabels.push(monthKeys[i].replace('-', '/'));
+      monthLabels.push(monthKeys[i].replace('-', '\n'));
       allValues.push(allMonths[monthKeys[i]] || 0);
       chinaValues.push(chinaMonths[monthKeys[i]] || 0);
     }
@@ -828,8 +828,8 @@
         color: ['#93c5fd', '#22c55e'],
         tooltip: { trigger: 'axis' },
         legend: { top: 0, textStyle: { color: '#6b7280' } },
-        grid: { left: 36, right: 16, top: 42, bottom: 34 },
-        xAxis: { type: 'category', data: monthLabels, axisLabel: { color: '#6b7280', interval: 0, fontSize: 10 } },
+        grid: { left: 36, right: 16, top: 42, bottom: 42 },
+        xAxis: { type: 'category', data: monthLabels, axisLabel: { color: '#6b7280', interval: 0, fontSize: 9, lineHeight: 11 } },
         yAxis: { type: 'value', axisLabel: { color: '#6b7280' }, splitLine: { lineStyle: { color: '#e5e7eb' } } },
         series: [
           { name: '全部文献', type: 'line', smooth: true, data: allValues, symbolSize: 6 },
