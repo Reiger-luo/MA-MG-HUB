@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
-"""Reclassify only records currently marked evidence_level == 'III'.
+"""Reclassify all records in selected evidence buckets after classifier updates.
 
 Targets:
 - data/literature-full.json
-- data/literature-weekly.json
 
-Uses the current pubmed-study-classifier and updates only existing III-level
-records. Other records are left untouched.
+Modes:
+- III: recheck existing evidence_level == 'III'
+- IV: recheck existing evidence_level == 'IV'
+- NONE: recheck records with empty/None evidence_level
+
+Other records are left untouched unless matched by the selected mode(s).
 """
 
 from __future__ import annotations
 
+import argparse
 import json
 import os
 import subprocess
@@ -28,9 +32,7 @@ from classify import classify_study_type
 
 PROJECT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT / "data"
-TARGETS = [
-    DATA_DIR / "literature-full.json",
-]
+TARGETS = [DATA_DIR / "literature-full.json"]
 
 LEVEL_MAP = {
     "ITC": "I",
@@ -78,7 +80,18 @@ def classify_article(article: dict) -> tuple[str | None, str | None]:
     return study_type, LEVEL_MAP.get(study_type)
 
 
-def process_file(path: Path) -> dict:
+def should_recheck(article: dict, modes: set[str]) -> bool:
+    level = article.get("evidence_level")
+    if "III" in modes and level == "III":
+        return True
+    if "IV" in modes and level == "IV":
+        return True
+    if "NONE" in modes and not level:
+        return True
+    return False
+
+
+def process_file(path: Path, modes: set[str]) -> dict:
     with open(path) as f:
         articles = json.load(f)
 
@@ -86,7 +99,7 @@ def process_file(path: Path) -> dict:
     changed_examples = []
 
     for article in articles:
-        if article.get("evidence_level") != "III":
+        if not should_recheck(article, modes):
             continue
         stats["rechecked"] += 1
         old_type = ", ".join(article.get("study_types") or []) or None
@@ -97,12 +110,7 @@ def process_file(path: Path) -> dict:
             article["study_types"] = [new_type] if new_type else []
             article["evidence_level"] = new_level
             stats["changed"] += 1
-            if new_level == "IV":
-                stats["to_iv"] += 1
-            elif new_level == "III":
-                stats["stay_iii_changed_label"] += 1
-            else:
-                stats[f"to_{new_level or 'none'}"] += 1
+            stats[f"to_{new_level or 'none'}"] += 1
             if len(changed_examples) < 20:
                 changed_examples.append({
                     "pmid": article.get("pmid"),
@@ -126,12 +134,22 @@ def process_file(path: Path) -> dict:
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser(description="Reclassify selected evidence buckets")
+    parser.add_argument(
+        "--modes",
+        default="III,IV,NONE",
+        help="Comma-separated buckets to recheck: III,IV,NONE",
+    )
+    args = parser.parse_args()
+    modes = {m.strip().upper() for m in args.modes.split(",") if m.strip()}
+
     reports = []
     for path in TARGETS:
         if path.exists():
-            reports.append(process_file(path))
+            reports.append(process_file(path, modes))
 
-    print("=== Reclassify existing III only ===")
+    print("=== Reclassify selected evidence buckets ===")
+    print(f"modes={sorted(modes)}")
     for report in reports:
         print(report["path"])
         print(json.dumps(report["stats"], ensure_ascii=False, indent=2))
