@@ -347,6 +347,7 @@ def build_china(recent):
     articles = [a for a in recent if a.get("china_related") and a.get("evidence_level")]
     monthly = Counter()
     evidence = Counter()
+    quartiles = Counter()
     journals = Counter()
     institutions = Counter()
     journal_articles = defaultdict(list)
@@ -356,6 +357,11 @@ def build_china(recent):
         if dt:
             monthly[dt.strftime("%Y-%m")] += 1
         evidence[article.get("evidence_level") or "未分类"] += 1
+        quartile = article.get("journal_quartile")
+        if quartile:
+            match = re.match(r"([1-4])", str(quartile))
+            if match:
+                quartiles[f"{match.group(1)}区"] += 1
         journal = article.get("journal") or "Unknown"
         journals[journal] += 1
         journal_articles[journal].append(article)
@@ -373,7 +379,8 @@ def build_china(recent):
             "top_journal": journals.most_common(1)[0][0] if journals else "",
         },
         "monthly": [{"month": k, "count": monthly[k]} for k in sorted(monthly)],
-        "evidence": [{"level": k, "count": evidence[k]} for k in ["I", "II", "III", "IV", "V", "VI", "未分类"] if evidence[k]],
+        "evidence": [{"level": k, "count": evidence[k]} for k in ["I", "II", "III", "IV", "V", "VI"] if evidence[k]],
+        "quartile": [{"level": k, "count": quartiles[k]} for k in ["1区", "2区", "3区", "4区"] if quartiles[k]],
         "top_journals": build_rank_items(journals, journal_articles, limit=10),
         "top_institutions": build_rank_items(institutions, institution_articles, limit=12),
         "pubmed_articles": [compact_article(a) for a in articles[:120]],

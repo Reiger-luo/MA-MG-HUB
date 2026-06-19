@@ -224,7 +224,7 @@ body {
 .muted { color: var(--fg3); font-size: 0.82rem; }
 
 .china-grid {
-  display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.75fr);
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem; margin-bottom: 1rem;
 }
 .chart-title {

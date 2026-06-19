@@ -8,6 +8,7 @@
   let signalFilter = 'all';
   let chinaMonthlyChart = null;
   let chinaEvidenceChart = null;
+  let chinaQuartileChart = null;
   let currentPage = 0;
   const PAGE_SIZE = 10;
   const SIGNAL_WINDOW_DAYS = 14;
@@ -793,8 +794,10 @@
     if (typeof echarts === 'undefined') {
       var monthlyEl = document.getElementById('chinaMonthlyChart');
       var evidenceEl = document.getElementById('chinaEvidenceChart');
+      var quartileEl = document.getElementById('chinaQuartileChart');
       if (monthlyEl) monthlyEl.innerHTML = '<div class="chart-fallback">图表库未加载</div>';
       if (evidenceEl) evidenceEl.innerHTML = '<div class="chart-fallback">图表库未加载</div>';
+      if (quartileEl) quartileEl.innerHTML = '<div class="chart-fallback">图表库未加载</div>';
       return;
     }
 
@@ -825,8 +828,8 @@
         color: ['#93c5fd', '#22c55e'],
         tooltip: { trigger: 'axis' },
         legend: { top: 0, textStyle: { color: '#6b7280' } },
-        grid: { left: 36, right: 16, top: 42, bottom: 28 },
-        xAxis: { type: 'category', data: monthLabels, axisLabel: { color: '#6b7280' } },
+        grid: { left: 36, right: 16, top: 42, bottom: 34 },
+        xAxis: { type: 'category', data: monthLabels, axisLabel: { color: '#6b7280', interval: 0, fontSize: 10 } },
         yAxis: { type: 'value', axisLabel: { color: '#6b7280' }, splitLine: { lineStyle: { color: '#e5e7eb' } } },
         series: [
           { name: '全部文献', type: 'line', smooth: true, data: allValues, symbolSize: 6 },
@@ -842,11 +845,11 @@
       }
     } else {
       for (var j = 0; j < chinaArticles.length; j++) {
-        var ev = chinaArticles[j].evidence_level || '未分类';
-        evidenceCounts[ev] = (evidenceCounts[ev] || 0) + 1;
+        var ev = chinaArticles[j].evidence_level;
+        if (ev) evidenceCounts[ev] = (evidenceCounts[ev] || 0) + 1;
       }
     }
-    var evOrder = ['I', 'II', 'III', 'IV', 'V', 'VI', '未分类'];
+    var evOrder = ['I', 'II', 'III', 'IV', 'V', 'VI'];
     var evValues = [];
     for (var e = 0; e < evOrder.length; e++) evValues.push(evidenceCounts[evOrder[e]] || 0);
 
@@ -862,12 +865,45 @@
         series: [{ name: '篇数', type: 'bar', data: evValues, barMaxWidth: 22 }]
       });
     }
+
+    var quartileCounts = {};
+    if (chinaPayload && chinaPayload.quartile && chinaPayload.quartile.length) {
+      for (var qIdx = 0; qIdx < chinaPayload.quartile.length; qIdx++) {
+        quartileCounts[chinaPayload.quartile[qIdx].level] = chinaPayload.quartile[qIdx].count;
+      }
+    } else {
+      for (var qArticleIdx = 0; qArticleIdx < chinaArticles.length; qArticleIdx++) {
+        var quartile = chinaArticles[qArticleIdx].journal_quartile;
+        if (!quartile) continue;
+        var quartileKey = String(quartile).charAt(0) + '区';
+        if (['1区', '2区', '3区', '4区'].indexOf(quartileKey) !== -1) {
+          quartileCounts[quartileKey] = (quartileCounts[quartileKey] || 0) + 1;
+        }
+      }
+    }
+    var quartileOrder = ['1区', '2区', '3区', '4区'];
+    var quartileValues = [];
+    for (var q = 0; q < quartileOrder.length; q++) quartileValues.push(quartileCounts[quartileOrder[q]] || 0);
+
+    var quartileEl = document.getElementById('chinaQuartileChart');
+    if (quartileEl) {
+      chinaQuartileChart = chinaQuartileChart || echarts.init(quartileEl);
+      chinaQuartileChart.setOption({
+        color: ['#38bdf8'],
+        tooltip: { trigger: 'axis' },
+        grid: { left: 36, right: 16, top: 20, bottom: 28 },
+        xAxis: { type: 'category', data: quartileOrder, axisLabel: { color: '#6b7280', interval: 0 } },
+        yAxis: { type: 'value', axisLabel: { color: '#6b7280' }, splitLine: { lineStyle: { color: '#e5e7eb' } } },
+        series: [{ name: '篇数', type: 'bar', data: quartileValues, barMaxWidth: 22 }]
+      });
+    }
   }
 
   function resizeChinaCharts() {
     setTimeout(function() {
       if (chinaMonthlyChart) chinaMonthlyChart.resize();
       if (chinaEvidenceChart) chinaEvidenceChart.resize();
+      if (chinaQuartileChart) chinaQuartileChart.resize();
     }, 60);
   }
 
