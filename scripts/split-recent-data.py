@@ -70,8 +70,8 @@ def main():
     if js_path.exists():
         js = js_path.read_text("utf-8")
         new_js = re.sub(
-            r"document\.getElementById\('statTotal'\)\.textContent = '[0-9,]+'",
-            f"document.getElementById('statTotal').textContent = '{len(articles):,}'",
+            r"document\.getElementById\('statTotal'\)\.textContent = '[0-9,]+'.*",
+            f"document.getElementById('statTotal').textContent = '{len(articles):,}';  // 全库文献总量（由 split-recent-data.py 更新）",
             js
         )
         if new_js != js:
