@@ -261,14 +261,45 @@ body {
 .rank-list {
   list-style: none; display: flex; flex-direction: column; gap: 0.34rem;
 }
-.rank-list li {
+.rank-list li:not(.rank-list-item) {
   display: flex; justify-content: space-between; gap: 0.65rem;
   color: var(--fg2); font-size: 0.8rem;
 }
-.rank-list li span {
+.rank-list li:not(.rank-list-item) span {
   min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .rank-list li strong { color: var(--fg); font-weight: 600; }
+.rank-list-item {
+  color: var(--fg2); font-size: 0.8rem;
+}
+.rank-toggle {
+  width: 100%; display: flex; justify-content: space-between; align-items: center;
+  gap: 0.65rem; border: 1px solid transparent; background: transparent;
+  color: var(--fg2); font: inherit; text-align: left; cursor: pointer;
+  border-radius: 6px; padding: 0.2rem 0.25rem;
+}
+.rank-toggle:hover {
+  background: var(--bg); border-color: var(--bg3);
+}
+.rank-toggle span {
+  min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.rank-toggle::before {
+  content: "▸"; color: var(--fg3); flex: 0 0 auto;
+}
+.rank-toggle[aria-expanded="true"]::before {
+  content: "▾";
+}
+.rank-articles {
+  margin: 0.3rem 0 0.45rem 1.05rem;
+  padding-left: 0.7rem; border-left: 1px solid var(--bg3);
+}
+.rank-articles .compact-article {
+  padding: 0.55rem 0;
+}
+.rank-articles .compact-article a {
+  font-size: 0.82rem;
+}
 
 /* ── 工作流页面通用组件 ── */
 .workbench-grid {

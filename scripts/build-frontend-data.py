@@ -327,22 +327,43 @@ def normalize_institution(affiliation):
     return re.sub(r"^the\s+", "", parts[0], flags=re.I)[:90] if parts else ""
 
 
+def build_rank_items(counts, article_map, limit=10, article_limit=10):
+    items = []
+    for name, count in counts.most_common(limit):
+        refs = sorted(
+            article_map.get(name, []),
+            key=lambda a: parse_date(a.get("entry_date")) or datetime.min,
+            reverse=True,
+        )
+        items.append({
+            "name": name,
+            "count": count,
+            "articles": [compact_article(a) for a in refs[:article_limit]],
+        })
+    return items
+
+
 def build_china(recent):
     articles = [a for a in recent if a.get("china_related") and a.get("evidence_level")]
     monthly = Counter()
     evidence = Counter()
     journals = Counter()
     institutions = Counter()
+    journal_articles = defaultdict(list)
+    institution_articles = defaultdict(list)
     for article in articles:
         dt = parse_date(article.get("entry_date"))
         if dt:
             monthly[dt.strftime("%Y-%m")] += 1
         evidence[article.get("evidence_level") or "未分类"] += 1
-        journals[article.get("journal") or "Unknown"] += 1
+        journal = article.get("journal") or "Unknown"
+        journals[journal] += 1
+        journal_articles[journal].append(article)
         for affiliation in article.get("affiliations") or []:
             inst = normalize_institution(affiliation)
             if inst:
                 institutions[inst] += 1
+                institution_articles[inst].append(article)
     articles.sort(key=lambda a: parse_date(a.get("entry_date")) or datetime.min, reverse=True)
     return {
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -353,8 +374,8 @@ def build_china(recent):
         },
         "monthly": [{"month": k, "count": monthly[k]} for k in sorted(monthly)],
         "evidence": [{"level": k, "count": evidence[k]} for k in ["I", "II", "III", "IV", "V", "VI", "未分类"] if evidence[k]],
-        "top_journals": [{"name": k, "count": v} for k, v in journals.most_common(12)],
-        "top_institutions": [{"name": k, "count": v} for k, v in institutions.most_common(12)],
+        "top_journals": build_rank_items(journals, journal_articles, limit=10),
+        "top_institutions": build_rank_items(institutions, institution_articles, limit=12),
         "pubmed_articles": [compact_article(a) for a in articles[:120]],
         "manual_updates": load_manual_china_updates(),
     }

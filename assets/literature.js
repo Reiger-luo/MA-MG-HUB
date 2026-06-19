@@ -647,8 +647,8 @@
 
     var sourceHtml = '';
     if (chinaPayload && chinaPayload.top_journals && chinaPayload.top_journals.length) {
-      sourceHtml += '<div class="source-block"><h4>主要期刊</h4>' + renderRankItems(chinaPayload.top_journals, 8) + '</div>';
-      sourceHtml += '<div class="source-block"><h4>机构线索</h4>' + renderRankItems(chinaPayload.top_institutions || [], 8) + '</div>';
+      sourceHtml += '<div class="source-block"><h4>主要期刊</h4>' + renderRankItems(chinaPayload.top_journals, 10, 'journal') + '</div>';
+      sourceHtml += '<div class="source-block"><h4>机构线索</h4>' + renderRankItems(chinaPayload.top_institutions || [], 8, 'institution') + '</div>';
     } else {
       var journalCounts = {};
       var institutionCounts = {};
@@ -662,11 +662,12 @@
           if (inst) institutionCounts[inst] = (institutionCounts[inst] || 0) + 1;
         }
       }
-      sourceHtml += '<div class="source-block"><h4>主要期刊</h4>' + renderRankList(journalCounts, 8) + '</div>';
+      sourceHtml += '<div class="source-block"><h4>主要期刊</h4>' + renderRankList(journalCounts, 10) + '</div>';
       sourceHtml += '<div class="source-block"><h4>机构线索</h4>' + renderRankList(institutionCounts, 8) + '</div>';
     }
     el.chinaSourceList.innerHTML =
       sourceHtml;
+    bindRankToggles();
 
     renderChinaCharts(chinaArticles, chinaPayload);
   }
@@ -714,14 +715,47 @@
     return html;
   }
 
-  function renderRankItems(items, limit) {
+  function renderRankItems(items, limit, groupType) {
     if (!items || !items.length) return '<div class="muted">暂无数据</div>';
     var html = '<ol class="rank-list">';
     for (var i = 0; i < Math.min(items.length, limit); i++) {
-      html += '<li><span>' + escapeHtml(items[i].name || '') + '</span><strong>' + (items[i].count || 0) + '</strong></li>';
+      var item = items[i];
+      var articles = item.articles || [];
+      var panelId = 'rank-' + groupType + '-' + i;
+      html += '<li class="rank-list-item">' +
+        '<button class="rank-toggle" type="button" data-rank-target="' + panelId + '" aria-expanded="false">' +
+          '<span>' + escapeHtml(item.name || '') + '</span>' +
+          '<strong>' + (item.count || 0) + '</strong>' +
+        '</button>' +
+        '<div class="rank-articles" id="' + panelId + '" hidden>' + renderRankArticles(articles) + '</div>' +
+      '</li>';
     }
     html += '</ol>';
     return html;
+  }
+
+  function renderRankArticles(articles) {
+    if (!articles || !articles.length) return '<div class="muted">暂无关联文献</div>';
+    var html = '';
+    for (var i = 0; i < articles.length; i++) {
+      html += renderCompactArticle(articles[i]);
+    }
+    return html;
+  }
+
+  function bindRankToggles() {
+    if (!el.chinaSourceList) return;
+    var toggles = el.chinaSourceList.querySelectorAll('.rank-toggle');
+    for (var i = 0; i < toggles.length; i++) {
+      toggles[i].addEventListener('click', function() {
+        var targetId = this.getAttribute('data-rank-target');
+        var panel = targetId ? document.getElementById(targetId) : null;
+        if (!panel) return;
+        var expanded = this.getAttribute('aria-expanded') === 'true';
+        this.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+        panel.hidden = expanded;
+      });
+    }
   }
 
   function renderChinaCharts(chinaArticles, chinaPayload) {
