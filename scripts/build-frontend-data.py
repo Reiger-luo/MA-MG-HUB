@@ -344,7 +344,7 @@ def build_rank_items(counts, article_map, limit=10, article_limit=10):
 
 
 def build_china(recent):
-    articles = [a for a in recent if a.get("china_related") and a.get("evidence_level")]
+    articles = [a for a in recent if a.get("china_related")]
     monthly = Counter()
     evidence = Counter()
     quartiles = Counter()
@@ -468,10 +468,11 @@ def build_experts(full):
 
 def match_articles(articles, keywords, limit=12):
     scored = []
+    min_hits = max(2, len(keywords) - 1)  # at most 1 keyword can miss
     for article in articles:
         text = text_of(article)
         hits = sum(1 for word in keywords if word in text)
-        if not hits:
+        if hits < min_hits:
             continue
         if_val = float(article.get("journal_if") or 0)
         score = hits * 5 + evidence_score(article.get("evidence_level")) + if_val / 2
