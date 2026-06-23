@@ -13,6 +13,7 @@
   function renderStats() {
     var stats = data.stats || {};
     document.getElementById('dashboardStats').innerHTML = [
+      ['全库文献', stats.total_articles || 0],
       ['近1年文献', stats.recent_articles || 0],
       ['中国相关', stats.china_articles || 0],
       ['14 天信号', stats.signals || 0],

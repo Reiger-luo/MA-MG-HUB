@@ -110,15 +110,24 @@ def load_articles_for_frontend(use_full_experts=False):
     else:
         raise FileNotFoundError("需要 data/literature-recent.js")
 
+    full = None
     if use_full_experts and FULL_PATH.exists():
         full = load_json(FULL_PATH)
     elif use_full_experts:
         print("⚠️  请求从 full 重建专家画像，但 literature-full.json 不存在，将复用已提交专家画像。")
-        full = None
     else:
         print("ℹ️  周更模式不读取 literature-full.json，将复用已提交的专家画像数据。")
-        full = None
-    return recent, full
+
+    # 全库文献计数：直接从 literature-recent.js 中读取 MG_TOTAL_COUNT
+    total_count = 0
+    if RECENT_JS_PATH.exists():
+        m = re.search(r"window\.MG_TOTAL_COUNT\s*=\s*(\d+)", RECENT_JS_PATH.read_text(encoding="utf-8"))
+        if m:
+            total_count = int(m.group(1))
+    if not total_count:
+        total_count = len(recent)
+
+    return recent, full, total_count
 
 
 def load_or_build_experts(full, recent):
@@ -581,10 +590,11 @@ def build_modules(recent, landscape):
     }
 
 
-def build_dashboard(recent, signals, experts, china, landscape, modules):
+def build_dashboard(recent, signals, experts, china, landscape, modules, total_count):
     return {
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "stats": {
+            "total_articles": total_count,
             "recent_articles": len(recent),
             "china_articles": china["summary"]["recent_year_articles"],
             "signals": len(signals["signals"]),
@@ -606,13 +616,13 @@ def main():
     parser.add_argument("--rebuild-experts-from-full", action="store_true", help="手动从本地 full 快照重建专家画像")
     args = parser.parse_args()
 
-    recent, full = load_articles_for_frontend(use_full_experts=args.rebuild_experts_from_full)
+    recent, full, total_count = load_articles_for_frontend(use_full_experts=args.rebuild_experts_from_full)
     signals = build_signals(recent)
     china = build_china(recent)
     experts = load_or_build_experts(full, recent)
     landscape = build_landscape(recent)
     modules = build_modules(recent, landscape)
-    dashboard = build_dashboard(recent, signals, experts, china, landscape, modules)
+    dashboard = build_dashboard(recent, signals, experts, china, landscape, modules, total_count)
 
     write_js("signals-weekly.js", "MG_SIGNALS_DATA", signals)
     write_js("china-intelligence.js", "MG_CHINA_DATA", china)

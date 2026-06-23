@@ -134,8 +134,10 @@ def writeFullJson(articles):
     )
 
 
-def writeRecentJs(articles):
+def writeRecentJs(articles, totalCount=None):
     with RECENT_JS_PATH.open("w", encoding="utf-8") as f:
+        if totalCount is not None:
+            f.write(f"window.MG_TOTAL_COUNT = {totalCount};\n")
         f.write("window.MG_LITERATURE_DATA = ")
         json.dump(articles, f, ensure_ascii=False)
         f.write(";\n")
@@ -194,7 +196,7 @@ def main():
         writeFullJson(mergedBase)
 
     recent, dropped = buildRecentArticles(mergedBase)
-    writeRecentJs(recent)
+    writeRecentJs(recent, totalCount=len(mergedBase))
     if args.write_json_cache:
         writeRecentJson(recent)
     elif RECENT_JSON_CACHE_PATH.exists():
