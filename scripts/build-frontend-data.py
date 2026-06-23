@@ -281,11 +281,11 @@ def build_signals(recent):
         if not high_value_signal and not drug_signal and not article.get("china_related"):
             continue
         # 强度分级
-        #   强（任一）：证据 I/II 级；IF ≥ 10
+        #   强（任一）：证据 I/II 级；IF ≥ 10 且不是 V/VI 级低证据
         #   中（任一）：IF ≥ 5；证据 III/IV 级；中国相关
         #   弱：其余入选条目
         strength = "弱"
-        if level in {"I", "II"} or if_val >= 10:
+        if level in {"I", "II"} or (if_val >= 10 and level not in {"V", "VI"}):
             strength = "强"
         elif if_val >= 5 or level in {"III", "IV"} or article.get("china_related"):
             strength = "中"

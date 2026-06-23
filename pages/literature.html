@@ -145,17 +145,27 @@
         证据等级分类说明 <span id="evidenceArrow">▸</span>
       </button>
       <div class="evidence-ref-content" id="evidenceContent">
-        <p>文献证据等级基于 <strong>PubMed Publication Type</strong> + <strong>标题/摘要</strong> 综合判定；优先识别真实研究设计，避免仅因 subgroup analysis、既往 RCT 提及或 disease control 等词汇误升格。</p>
+        <p>文献证据等级参考 <strong>Oxford CEBM 2011</strong> 的问题域思路，先区分治疗/伤害、预后/预测模型、诊断/监测、机制/遗传，再按标题/摘要中的真实研究设计判定。</p>
         <table class="evidence-table">
           <tr><th>等级</th><th>分类</th><th>说明</th></tr>
-          <tr><td><strong>I</strong></td><td>Systematic Review / Meta-Analysis</td><td>系统综述 / 荟萃分析 / 间接治疗比较</td></tr>
-          <tr><td><strong>II</strong></td><td>Randomized Controlled Trial</td><td>本研究存在随机分组或随机分配的临床对照试验</td></tr>
-          <tr><td rowspan="2"><strong>III</strong></td><td>Non-randomized Controlled Cohort</td><td>前瞻性对照队列 / 非随机对照临床研究</td></tr>
+          <tr><td><strong>I</strong></td><td>Systematic Review / Meta-Analysis</td><td>随机试验系统综述 / 荟萃分析 / 间接治疗比较；或预后 inception cohort 系统综述</td></tr>
+          <tr><td rowspan="2"><strong>II</strong></td><td>Randomized Controlled Trial</td><td>本研究存在随机分组或随机分配的临床对照试验</td></tr>
+          <tr><td>Prognostic Inception Cohort</td><td>预后问题中的 inception cohort</td></tr>
+          <tr><td rowspan="5"><strong>III</strong></td><td>Non-randomized Controlled Cohort</td><td>前瞻性对照队列 / 非随机对照临床研究</td></tr>
           <tr><td>Adjusted Retrospective Cohort</td><td>回顾性对照 + 统计校正（PSM/IPTW 等）</td></tr>
-          <tr><td rowspan="3"><strong>IV</strong></td><td>Historical Control / Case-Control</td><td>回顾性对照（未校正）/ 病例对照</td></tr>
+          <tr><td>Prognostic Cohort</td><td>预后 / 风险因素 / 进展结局队列研究</td></tr>
+          <tr><td>Biomarker / Prediction External Validation</td><td>生物标志物预测研究 / 外部验证预测模型</td></tr>
+          <tr><td>Diagnostic Accuracy Study</td><td>诊断/监测准确性研究（无法确认连续入组与盲法时按保守等级）</td></tr>
+          <tr><td rowspan="8"><strong>IV</strong></td><td>Historical Control / Case-Control</td><td>回顾性对照（未校正）/ 病例对照</td></tr>
           <tr><td>Cross-Sectional / Survey / DCE</td><td>横断面、问卷、患者偏好或离散选择实验</td></tr>
           <tr><td>Single Arm</td><td>单臂研究（含无真实外部对照的真实世界 / 回顾性研究）</td></tr>
-          <tr><td><strong>V</strong></td><td>Case Report</td><td>病例报告</td></tr>
+          <tr><td>Poor-quality Prognostic Cohort</td><td>回顾性、质量受限或无法确认入组质量的预后队列</td></tr>
+          <tr><td>Prediction Model Development</td><td>预测模型开发 / 内部验证模型</td></tr>
+          <tr><td>Diagnostic Case-Control / Scale Validation</td><td>诊断病例对照 / 量表或监测工具验证</td></tr>
+          <tr><td>Pharmacovigilance</td><td>药物警戒 / FAERS / 上市后监测</td></tr>
+          <tr><td>Systematic Review of Case Reports</td><td>病例报告或病例系列的系统综述</td></tr>
+          <tr><td rowspan="2"><strong>V</strong></td><td>Case Report</td><td>病例报告</td></tr>
+          <tr><td>Mechanistic / Genetic Association</td><td>机制推理、遗传关联、GWAS / omics 等探索性证据</td></tr>
           <tr><td><strong>VI</strong></td><td>Narrative Review</td><td>叙述性综述</td></tr>
           <tr><td><strong>—</strong></td><td>Protocol / HEOR / Guideline / Consensus / Editorial / Letter / Comment / Animal / In Vitro</td><td>非原始临床证据类</td></tr>
         </table>
@@ -210,7 +220,7 @@
           <div class="signal-spec-block">
             <h4>④ 强度分级</h4>
             <ul>
-              <li><strong>强</strong>（任一）：证据 I 或 II 级；IF ≥ 10。</li>
+              <li><strong>强</strong>（任一）：证据 I 或 II 级；IF ≥ 10 且证据不是 V/VI 级。</li>
               <li><strong>中</strong>（任一）：IF ≥ 5；证据 III 或 IV 级；中国相关。</li>
               <li><strong>弱</strong>：其余入选条目。</li>
             </ul>

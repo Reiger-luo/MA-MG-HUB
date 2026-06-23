@@ -5,7 +5,8 @@ studyClassifier.py — MG 文献研究类型与证据等级统一分类器。
 原则：
   1. 先识别真实研究设计，再映射证据等级。
   2. RCT 需要本研究存在随机分组/随机分配，不能只因摘要提到既往 RCT 或 subgroup analysis 升级。
-  3. 横断面、问卷、DCE、单臂真实世界、无外部对照的回顾性研究统一按 IV 级处理。
+  3. 先区分问题域：治疗/伤害、预后/预测模型、诊断/监测、机制/遗传不能混用同一条治疗证据梯子。
+  4. 横断面、问卷、DCE、单臂真实世界、无外部对照的回顾性研究统一按 IV 级处理。
 """
 
 from __future__ import annotations
@@ -16,14 +17,26 @@ import re
 levelMap = {
     "ITC": "I",
     "Systematic Review": "I",
+    "Systematic Review of Case Reports": "IV",
     "RCT": "II",
     "Non-randomized controlled cohort": "III",
     "Adjusted Retrospective Cohort": "III",
+    "Prognostic Inception Cohort": "II",
+    "Prognostic Cohort": "III",
+    "Poor-quality Prognostic Cohort": "IV",
+    "Biomarker Prognostic Study": "III",
+    "Prediction Model External Validation": "III",
+    "Prediction Model Development": "IV",
+    "Diagnostic Accuracy Study": "III",
+    "Diagnostic Case-Control": "IV",
+    "Scale Validation": "IV",
+    "Pharmacovigilance": "IV",
     "Historical Control": "IV",
     "Case-Control": "IV",
     "Cross-Sectional": "IV",
     "Single Arm": "IV",
     "Case Report": "V",
+    "Mechanistic/Genetic Association": "V",
     "Review": "VI",
     "Protocol": None,
     "HEOR": None,
@@ -123,6 +136,128 @@ observationalTerms = [
     "postmarketing surveillance",
     "pilot study",
     "pilot trial",
+]
+
+prognosisTerms = [
+    "prognosis",
+    "prognostic",
+    "risk factor",
+    "risk factors",
+    "predictor",
+    "predictors",
+    "progression",
+    "generalization",
+    "generalisation",
+    "mortality",
+    "survival",
+    "complication",
+    "complications",
+]
+
+treatmentEffectTerms = [
+    "efficacy",
+    "effectiveness",
+    "safety",
+    "therapeutic response",
+    "treatment response",
+    "clinical response",
+    "clinical improvement",
+    "treated with",
+    "received",
+    "retreatment",
+    "steroid-sparing",
+    "steroid sparing",
+]
+
+predictionModelTerms = [
+    "prediction model",
+    "predictive model",
+    "prognostic model",
+    "risk model",
+    "nomogram",
+    "score model",
+    "machine learning model",
+    "machine-learning model",
+    "model development",
+    "development and validation",
+]
+
+externalValidationTerms = [
+    "external validation",
+    "externally validated",
+    "validation cohort",
+    "independent cohort",
+    "independent validation",
+]
+
+diagnosticTerms = [
+    "diagnostic accuracy",
+    "sensitivity",
+    "specificity",
+    "reference standard",
+    "receiver operating characteristic",
+    "roc curve",
+    "auc",
+    "monitoring test",
+    "screening test",
+]
+
+scaleValidationTerms = [
+    "scale validation",
+    "questionnaire validation",
+    "validation and clinical utility",
+    "clinical utility",
+]
+
+pharmacovigilanceTerms = [
+    "pharmacovigilance",
+    "faers",
+    "disproportionality",
+    "post-marketing surveillance",
+    "postmarketing surveillance",
+]
+
+mechanisticGeneticTerms = [
+    "genome-wide",
+    "gwas",
+    "genetic association",
+    "polymorphism",
+    "polymorphisms",
+    "genomic",
+    "polygenic",
+    "mendelian randomization",
+    "mendelian randomisation",
+    "locus-level",
+    "proteomic",
+    "proteomics",
+    "multi-omic",
+    "multiomic",
+    "microbiota",
+    "microbiome",
+    "flora",
+    "metabolite",
+    "metabolites",
+    "cytokine",
+    "pathogenesis",
+    "mechanistic",
+    "mechanism",
+    "biomarker",
+    "biomarkers",
+]
+
+biomarkerOutcomeTerms = [
+    "treatment response",
+    "clinical response",
+    "clinical improvement",
+    "clinical outcome",
+    "clinical outcomes",
+    "predictive biomarker",
+    "predictive biomarkers",
+    "predictive proteins",
+    "response signature",
+    "response signatures",
+    "associated with response",
+    "associate with clinical response",
 ]
 
 singleArmTerms = [
@@ -348,6 +483,127 @@ def isObservational(text: str) -> bool:
     return hasAny(text, observationalTerms) or isCrossSectional(text) or isSingleArmExplicit(text)
 
 
+def isSystematicReviewOfCaseEvidence(text: str) -> bool:
+    if not word("systematic review", text):
+        return False
+    if hasPattern(text, r"\bsystematic review of\b.{0,100}\b(case reports?|case series)\b"):
+        return True
+    case_review_patterns = [
+        r"\beligible studies included\b.{0,120}\b(case reports?|case series|single[- ]case)\b",
+        r"\bincluded\b.{0,80}\b(case reports?|case series|single[- ]case)\b",
+        r"\b(case reports?|case series)\b.{0,80}\bwere included\b",
+    ]
+    return any(hasPattern(text, pattern) for pattern in case_review_patterns)
+
+
+def isCaseReport(text: str, pubTypeText: str = "") -> bool:
+    if "CASE REPORTS" in pubTypeText or hasAny(text, caseTerms):
+        return True
+    return bool(re.search(r"\bwe report (a|an|the)?\s*\d{0,3}[- ]?year[- ]old\b", text, re.I))
+
+
+def isScaleValidation(text: str) -> bool:
+    return (
+        hasAny(text, scaleValidationTerms)
+        or hasPattern(text, r"\b(validation|validate|validated|validating)\b.{0,90}\b(scale|questionnaire|omgrate|mg-qol|qol15|mg-qol15)\b")
+        or hasPattern(text, r"\b(scale|questionnaire|omgrate|mg-qol|qol15|mg-qol15)\b.{0,90}\b(validation|validate|validated|validating)\b")
+    )
+
+
+def isPharmacovigilance(text: str) -> bool:
+    return hasAny(text, pharmacovigilanceTerms)
+
+
+def isTreatmentEffectQuestion(text: str) -> bool:
+    return hasAny(text, treatmentEffectTerms)
+
+
+def isSingleArmTreatmentStudy(text: str, pubTypeText: str = "") -> bool:
+    if hasTrueComparator(text) or hasOwnRandomization(text):
+        return False
+    if not isTreatmentEffectQuestion(text):
+        return False
+    return (
+        isRetrospective(text, pubTypeText)
+        or isSingleArmExplicit(text)
+        or hasPattern(text, r"\bpatients\b.{0,80}\b(treated with|received|underwent)\b")
+        or hasPattern(text, r"\b(received|treated with)\b.{0,80}\b(efgartigimod|eculizumab|ravulizumab|telitacicept|rituximab|satralizumab|ivig)\b")
+    )
+
+
+def isPredictionModel(text: str) -> bool:
+    return hasAny(text, predictionModelTerms) or (
+        hasAny(text, ["predictive", "prediction"])
+        and hasAny(text, ["model", "models", "nomogram", "machine learning", "machine-learning", "validation", "roc", "auc"])
+    )
+
+
+def isPrognosticQuestion(text: str) -> bool:
+    if isPredictionModel(text):
+        return True
+    if hasAny(text, ["risk factor", "risk factors", "predictor", "predictors", "prognosis", "prognostic", "generalization", "generalisation"]):
+        return True
+    if hasAny(text, ["mortality", "survival", "complication", "complications", "hazard ratio"]):
+        return True
+    return word("progression", text) and hasAny(text, ["risk", "predict", "associated with", "determinant", "determinants", "follow-up", "follow up", "longitudinal"])
+
+
+def isDiagnosticQuestion(text: str) -> bool:
+    if isScaleValidation(text):
+        return True
+    if hasAny(text, diagnosticTerms):
+        return True
+    return hasAny(text, ["repetitive nerve stimulation", "electrophysiological", "electrophysiology"]) and (
+        hasAny(text, ["diagnostic", "distinguish", "differenti", "compare", "compared"])
+        or hasTrueComparator(text)
+    )
+
+
+def isMechanisticGeneticQuestion(text: str) -> bool:
+    return hasAny(text, mechanisticGeneticTerms)
+
+
+def isBiomarkerPrognosticQuestion(text: str) -> bool:
+    return isMechanisticGeneticQuestion(text) and (
+        hasAny(text, biomarkerOutcomeTerms)
+        or hasPattern(text, r"\bpredict\w*\s+.+\b(response|outcome|improvement)\b")
+    )
+
+
+def classifyPredictionModel(text: str, pubTypeText: str) -> str:
+    if hasAny(text, externalValidationTerms) and not isRetrospective(text, pubTypeText):
+        return "Prediction Model External Validation"
+    if hasAny(text, externalValidationTerms) and hasPattern(text, r"\b(multi[- ]?center|multicentre|multicenter)\b"):
+        return "Prediction Model External Validation"
+    return "Prediction Model Development"
+
+
+def classifyPrognosis(text: str, pubTypeText: str) -> str:
+    if isPredictionModel(text):
+        return classifyPredictionModel(text, pubTypeText)
+    if word("inception cohort", text):
+        return "Prognostic Inception Cohort"
+    if isRetrospective(text, pubTypeText) and not hasAny(text, ["multicenter", "multi-center", "multicentre"]):
+        return "Poor-quality Prognostic Cohort"
+    if hasAny(text, ["cohort", "follow-up", "follow up", "longitudinal", "cox regression", "survival analysis"]):
+        return "Prognostic Cohort" if not isCrossSectional(text) else "Cross-Sectional"
+    if hasAny(text, ["progression-free survival", "overall survival", "hazard ratio"]):
+        return "Prognostic Cohort"
+    if isRetrospective(text, pubTypeText):
+        return "Poor-quality Prognostic Cohort"
+    return "Single Arm"
+
+
+def classifyDiagnosis(text: str) -> str:
+    if word("case-control", text) or hasPattern(text, r"\bpatients with .+ and .+ controls\b"):
+        return "Diagnostic Case-Control"
+    if isRetrospective(text) or hasAny(text, ["age-matched", "matched patients", "matched controls"]):
+        return "Diagnostic Case-Control"
+    if isScaleValidation(text):
+        return "Scale Validation"
+    return "Diagnostic Accuracy Study"
+
+
 def pubTypeLastResort(pubTypeText: str) -> str:
     namedPubTypes = {
         "COMMENT": "Comment",
@@ -401,6 +657,9 @@ def classifyStudyType(pubTypes, abstract: str | None = "", title: str | None = "
     if isRetraction(text):
         return "Comment"
 
+    if isSystematicReviewOfCaseEvidence(text):
+        return "Systematic Review of Case Reports"
+
     # PubType 明确且不依赖摘要时先处理。
     if "META-ANALYSIS" in pubTypeText:
         return "ITC"
@@ -425,15 +684,38 @@ def classifyStudyType(pubTypes, abstract: str | None = "", title: str | None = "
         return "Protocol"
     if hasAny(text, animalTerms):
         return "Animal Study"
-    if word("meta-analysis", text) or isItc(text):
-        return "ITC"
-    if word("systematic review", text):
-        return "Systematic Review"
-
+    if isSystematicReviewOfCaseEvidence(text):
+        return "Systematic Review of Case Reports"
+    if isCaseReport(text, pubTypeText):
+        return "Case Report"
+    if isBiomarkerPrognosticQuestion(text):
+        return "Biomarker Prognostic Study"
     if "RANDOMIZED CONTROLLED TRIAL" in pubTypeText:
         return "RCT"
     if isRctAbstract(text, pubTypeIsRct=False):
         return "RCT"
+    if isDiagnosticQuestion(text) and isScaleValidation(text):
+        return classifyDiagnosis(text)
+    if isPharmacovigilance(text):
+        return "Pharmacovigilance"
+    if isCrossSectional(text):
+        return "Cross-Sectional"
+    if isSingleArmTreatmentStudy(text, pubTypeText):
+        return "Single Arm"
+    if isMechanisticGeneticQuestion(text) and not word("systematic review", text):
+        return "Mechanistic/Genetic Association"
+    if word("meta-analysis", text) or isItc(text):
+        return "ITC"
+    if word("systematic review", text):
+        return "Systematic Review"
+    if word("narrative review", text) or word("review", text):
+        return "Review"
+    if isPrognosticQuestion(text):
+        return classifyPrognosis(text, pubTypeText)
+    if isDiagnosticQuestion(text):
+        return classifyDiagnosis(text)
+    if isMechanisticGeneticQuestion(text):
+        return "Mechanistic/Genetic Association"
 
     if "CASE REPORTS" in pubTypeText:
         if isCohortUpgrade(text) or (isRetrospective(text, pubTypeText) and hasAdjustment(text)):
@@ -448,8 +730,6 @@ def classifyStudyType(pubTypes, abstract: str | None = "", title: str | None = "
         return "Adjusted Retrospective Cohort"
     if word("case-control", text) or word("nested case", text) or "CASE-CONTROL" in pubTypeText or "CASE CONTROL" in pubTypeText:
         return "Case-Control"
-    if isCrossSectional(text):
-        return "Cross-Sectional"
     if isCohortUpgrade(text):
         return "Non-randomized controlled cohort"
     if isRetrospective(text, pubTypeText):
@@ -458,8 +738,6 @@ def classifyStudyType(pubTypes, abstract: str | None = "", title: str | None = "
         return "Single Arm"
     if isObservational(text):
         return "Non-randomized controlled cohort" if isCohortUpgrade(text) else "Single Arm"
-    if hasAny(text, caseTerms):
-        return "Case Report"
     if isHeor(text):
         return "HEOR"
     if hasAny(text, guidelineTerms):
