@@ -48,6 +48,7 @@ def main():
     print("   本地有 data/literature-full.json 时会 upsert 到 full；静态站使用 data/literature-recent.js。")
 
     run_step("前端数据产物生成", [sys.executable, "scripts/build-frontend-data.py"])
+    run_step("知识库图谱与证据矩阵生成", [sys.executable, "scripts/build-knowledge-data.py"])
     run_step("当前通讯渠道周报生成", [sys.executable, "scripts/generate-weekly-summary.py"])
     run_step("管线状态生成", [sys.executable, "scripts/generate-pipeline-status.py"])
 

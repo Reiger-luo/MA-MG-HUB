@@ -1,319 +1,325 @@
-/* MA-MG-HUB 知识库 — 私有知识图谱浏览器
- * 数据来源: efgartigimod-wiki Obsidian vault（经 build-knowledge-data.py 提取）
- * 纯 vanilla JS + SVG，零外部依赖。
+/* MA-MG-HUB 知识库
+ * 数据来源: full PubMed abstract 派生知识图谱。
+ * 关系代表标题、摘要与元数据层面的证据线索，不替代全文判断。
  */
 (function () {
   'use strict';
 
-  var data = window.MG_KNOWLEDGE_GRAPH || { nodes: [], edges: [], study_links: {}, stats: {} };
-  var questions = (window.MG_LANDSCAPE_DATA && window.MG_LANDSCAPE_DATA.evidence_questions) || [];
+  var graphData = window.MG_KNOWLEDGE_GRAPH || {};
+  var nodes = graphData.nodes || [];
+  var edges = graphData.edges || [];
+  var nodeRefs = graphData.node_references || {};
+  var edgeRefs = graphData.edge_references || {};
+  var matrixRows = graphData.evidence_matrix || [];
   var articles = window.MG_LITERATURE_DATA || [];
   var experts = (window.MG_EXPERT_PROFILES && window.MG_EXPERT_PROFILES.experts) || [];
 
-  // ── DOM 引用 ──
   var elBadge = document.getElementById('knowledgeBadge');
+  var elStats = document.getElementById('knowledgeStats');
   var elCanvas = document.getElementById('knowledgeGraph');
   var elDetail = document.getElementById('knowledgeDetail');
   var elZoomLabel = document.getElementById('kgZoomLabel');
-  var elQList = document.getElementById('knowledgeQuestions');
+  var elNodeSearch = document.getElementById('knowledgeNodeSearch');
+  var elTypeFilter = document.getElementById('knowledgeTypeFilter');
+  var elMatrix = document.getElementById('knowledgeMatrix');
+  var elMatrixCount = document.getElementById('matrixCount');
+  var elMatrixSearch = document.getElementById('knowledgeMatrixSearch');
+  var elMatrixType = document.getElementById('knowledgeMatrixType');
+  var elMatrixLevel = document.getElementById('knowledgeMatrixLevel');
   var elSearch = document.getElementById('knowledgeSearch');
   var elSearchResults = document.getElementById('knowledgeSearchResults');
 
-  // ── 视图状态（缩放 + 平移）──
-  var VB = { x: 0, y: 0, w: 1100, h: 720 };  // viewBox 初始
-  var scale = 1;
-  var SCALE_MIN = 0.4;
-  var SCALE_MAX = 3;
+  var svgNamespace = 'http://www.w3.org/2000/svg';
+  var viewBox = { x: 0, y: 0, w: 1100, h: 720 };
+  var zoomScale = 1;
+  var scaleMin = 0.45;
+  var scaleMax = 3.2;
+  var activeNodeId = null;
 
   var nodesById = {};
-  data.nodes.forEach(function (n) { nodesById[n.id] = n; });
-  var neighbors = {};  // id -> { id: true }
-  data.nodes.forEach(function (n) { neighbors[n.id] = {}; });
-  data.edges.forEach(function (e) {
-    neighbors[e.from] = neighbors[e.from] || {};
-    neighbors[e.to] = neighbors[e.to] || {};
-    neighbors[e.from][e.to] = true;
-    neighbors[e.to][e.from] = true;
+  var edgesById = {};
+  var neighborMap = {};
+  nodes.forEach(function (node) {
+    nodesById[node.id] = node;
+    neighborMap[node.id] = {};
+  });
+  edges.forEach(function (edge) {
+    edgesById[edge.id] = edge;
+    neighborMap[edge.from] = neighborMap[edge.from] || {};
+    neighborMap[edge.to] = neighborMap[edge.to] || {};
+    neighborMap[edge.from][edge.to] = true;
+    neighborMap[edge.to][edge.from] = true;
   });
 
-  var TYPE_LABEL = {
-    'entity': '实体',
-    'concept': '概念',
-    'data-point': '数据点',
-    'comparison': '对比'
+  var typeLabel = {
+    disease: '疾病',
+    drug: '药物/干预',
+    mechanism: '机制',
+    population: '人群/亚型',
+    outcome: '结局',
+    evidence: '证据类型'
   };
 
-  function escapeHtml(v) {
-    var d = document.createElement('div');
-    d.textContent = v == null ? '' : String(v);
-    return d.innerHTML;
+  var confidenceLabel = {
+    high: '高覆盖',
+    medium: '中覆盖',
+    low: '低覆盖'
+  };
+
+  var sourceTypeLabel = {
+    metadataConfirmed: '元数据确认',
+    abstractMentioned: '摘要提及',
+    llmInferred: '模型推断',
+    curated: '人工策展'
+  };
+
+  function escapeHtml(value) {
+    var div = document.createElement('div');
+    div.textContent = value == null ? '' : String(value);
+    return div.innerHTML;
   }
 
-  // ════════════════════════════════════════════════
-  //  1. 顶部 badge
-  // ════════════════════════════════════════════════
-  function renderBadge() {
-    if (!elBadge) return;
-    var s = data.stats || {};
-    elBadge.textContent =
-      (s.total_nodes || 0) + ' 核心节点 · ' +
-      (s.high_confidence || 0) + ' 高置信 · ' +
-      (s.contested || 0) + ' 争议 · ' +
-      (s.edges || 0) + ' 条关联';
+  function cssEscape(value) {
+    if (window.CSS && window.CSS.escape) return window.CSS.escape(value);
+    return String(value).replace(/"/g, '\\"');
   }
 
-  // ════════════════════════════════════════════════
-  //  2. SVG 图谱渲染
-  // ════════════════════════════════════════════════
-  var SVG_NS = 'http://www.w3.org/2000/svg';
+  function compactNumber(value) {
+    var n = Number(value || 0);
+    if (n >= 10000) return (n / 10000).toFixed(1).replace(/\.0$/, '') + '万';
+    return String(n);
+  }
 
   function svgEl(tag, attrs) {
-    var e = document.createElementNS(SVG_NS, tag);
+    var el = document.createElementNS(svgNamespace, tag);
     if (attrs) {
-      for (var k in attrs) {
-        if (k === 'text') e.textContent = attrs[k];
-        else e.setAttribute(k, attrs[k]);
-      }
+      Object.keys(attrs).forEach(function (key) {
+        if (key === 'text') el.textContent = attrs[key];
+        else el.setAttribute(key, attrs[key]);
+      });
     }
-    return e;
+    return el;
   }
 
-  function nodeRadius(n) {
-    // 基础 + 关联研究数 + 高置信加成
-    var r = 9 + Math.min((n.study_count || 0) * 0.5, 9);
-    if (n.confidence === 'high') r += 2;
-    return r;
+  function renderBadge() {
+    if (!elBadge) return;
+    var stats = graphData.stats || {};
+    elBadge.textContent = compactNumber(stats.matched_articles) + ' 篇 abstract · ' +
+      (stats.total_nodes || 0) + ' 节点 · ' +
+      (stats.edges || 0) + ' 关系';
+  }
+
+  function renderStats() {
+    if (!elStats) return;
+    var stats = graphData.stats || {};
+    var cards = [
+      { label: '命中文献', value: compactNumber(stats.matched_articles), note: 'full PubMed abstract' },
+      { label: '有证据等级', value: compactNumber(stats.evidence_articles), note: 'I-VI 或已分级' },
+      { label: '图谱节点', value: stats.total_nodes || 0, note: '疾病/药物/机制/结局' },
+      { label: '证据矩阵', value: stats.evidence_matrix_rows || 0, note: '可回链 PMID 的关系' }
+    ];
+    elStats.innerHTML = cards.map(function (card) {
+      return '<article class="knowledge-stat-card">' +
+        '<span>' + escapeHtml(card.label) + '</span>' +
+        '<strong>' + escapeHtml(card.value) + '</strong>' +
+        '<em>' + escapeHtml(card.note) + '</em>' +
+      '</article>';
+    }).join('');
+  }
+
+  function nodeRadius(node) {
+    return 8 + Math.min(Math.log((node.article_count || 0) + 1) * 2.2, 17);
+  }
+
+  function edgeWidth(edge) {
+    return 0.8 + Math.min(Math.log((edge.article_count || 0) + 1) * 0.26, 2.4);
+  }
+
+  function truncateLabel(title) {
+    var text = String(title || '');
+    if (text.length <= 20) return text;
+    return text.slice(0, 19) + '…';
   }
 
   function buildGraph() {
     if (!elCanvas) return;
-    elCanvas.setAttribute('viewBox', VB.x + ' ' + VB.y + ' ' + VB.w + ' ' + VB.h);
+    elCanvas.innerHTML = '';
+    elCanvas.setAttribute('viewBox', viewBox.x + ' ' + viewBox.y + ' ' + viewBox.w + ' ' + viewBox.h);
 
-    // 边层
-    var edgeLayer = svgEl('g', { 'class': 'kg-edge-layer' });
-    data.edges.forEach(function (e) {
-      var a = nodesById[e.from], b = nodesById[e.to];
-      if (!a || !b) return;
+    var edgeLayer = svgEl('g', { class: 'kg-edge-layer' });
+    edges.forEach(function (edge) {
+      var source = nodesById[edge.from];
+      var target = nodesById[edge.to];
+      if (!source || !target) return;
       var line = svgEl('line', {
-        'class': 'kg-edge',
-        x1: a.x, y1: a.y, x2: b.x, y2: b.y,
-        'data-from': e.from, 'data-to': e.to
+        class: 'kg-edge source-' + edge.source_type,
+        x1: source.x,
+        y1: source.y,
+        x2: target.x,
+        y2: target.y,
+        'data-id': edge.id,
+        'data-from': edge.from,
+        'data-to': edge.to,
+        'stroke-width': edgeWidth(edge)
       });
       edgeLayer.appendChild(line);
     });
     elCanvas.appendChild(edgeLayer);
 
-    // 节点层
-    var nodeLayer = svgEl('g', { 'class': 'kg-node-layer' });
-    data.nodes.forEach(function (n) {
-      var g = svgEl('g', {
-        'class': 'kg-node type-' + n.type + (n.contested ? ' contested' : ''),
-        'data-id': n.id,
-        transform: 'translate(' + n.x + ',' + n.y + ')'
+    var nodeLayer = svgEl('g', { class: 'kg-node-layer' });
+    nodes.forEach(function (node) {
+      var group = svgEl('g', {
+        class: 'kg-node type-' + node.type + ' conf-' + node.confidence,
+        'data-id': node.id,
+        'data-type': node.type,
+        transform: 'translate(' + node.x + ',' + node.y + ')'
       });
-      var r = nodeRadius(n);
-      g.appendChild(svgEl('circle', { r: r }));
-      // 争议角标
-      if (n.contested) {
-        g.appendChild(svgEl('text', {
-          'class': 'kg-contest-mark',
-          x: r * 0.72, y: -r * 0.72,
-          text: '!'
-        }));
-      }
-      // 节点标签文字（在节点下方）
-      var label = truncateLabel(n.title, n.type);
-      g.appendChild(svgEl('text', { y: r + 13, text: label }));
-      nodeLayer.appendChild(g);
+      var radius = nodeRadius(node);
+      group.appendChild(svgEl('circle', { r: radius }));
+      group.appendChild(svgEl('text', { y: radius + 13, text: truncateLabel(node.title) }));
+      nodeLayer.appendChild(group);
     });
     elCanvas.appendChild(nodeLayer);
   }
 
-  function truncateLabel(title, type) {
-    // 实体类型用短名，其他截断
-    var max = type === 'entity' ? 22 : 18;
-    var t = title.replace(/^Efgartigimod\s+/i, 'Efg ');
-    if (t.length <= max) return t;
-    return t.slice(0, max - 1) + '…';
-  }
-
-  // ════════════════════════════════════════════════
-  //  3. 缩放 + 平移
-  // ════════════════════════════════════════════════
   function applyViewBox() {
-    var cx = VB.x + VB.w / 2, cy = VB.y + VB.h / 2;
-    var newW = 1100 / scale, newH = 720 / scale;
-    VB.w = newW; VB.h = newH;
-    VB.x = cx - newW / 2; VB.y = cy - newH / 2;
-    elCanvas.setAttribute('viewBox', VB.x + ' ' + VB.y + ' ' + VB.w + ' ' + VB.h);
-    if (elZoomLabel) elZoomLabel.textContent = Math.round(scale * 100) + '%';
+    var centerX = viewBox.x + viewBox.w / 2;
+    var centerY = viewBox.y + viewBox.h / 2;
+    viewBox.w = 1100 / zoomScale;
+    viewBox.h = 720 / zoomScale;
+    viewBox.x = centerX - viewBox.w / 2;
+    viewBox.y = centerY - viewBox.h / 2;
+    elCanvas.setAttribute('viewBox', viewBox.x + ' ' + viewBox.y + ' ' + viewBox.w + ' ' + viewBox.h);
+    if (elZoomLabel) elZoomLabel.textContent = Math.round(zoomScale * 100) + '%';
   }
 
   function zoomTo(newScale, focusX, focusY) {
-    newScale = Math.max(SCALE_MIN, Math.min(SCALE_MAX, newScale));
+    if (!elCanvas) return;
+    newScale = Math.max(scaleMin, Math.min(scaleMax, newScale));
     if (focusX != null && focusY != null) {
-      // 以鼠标位置为锚点缩放
-      var worldX = VB.x + (focusX / elCanvas.clientWidth) * VB.w;
-      var worldY = VB.y + (focusY / elCanvas.clientHeight) * VB.h;
-      scale = newScale;
-      VB.w = 1100 / scale; VB.h = 720 / scale;
-      VB.x = worldX - (focusX / elCanvas.clientWidth) * VB.w;
-      VB.y = worldY - (focusY / elCanvas.clientHeight) * VB.h;
-      elCanvas.setAttribute('viewBox', VB.x + ' ' + VB.y + ' ' + VB.w + ' ' + VB.h);
+      var worldX = viewBox.x + (focusX / elCanvas.clientWidth) * viewBox.w;
+      var worldY = viewBox.y + (focusY / elCanvas.clientHeight) * viewBox.h;
+      zoomScale = newScale;
+      viewBox.w = 1100 / zoomScale;
+      viewBox.h = 720 / zoomScale;
+      viewBox.x = worldX - (focusX / elCanvas.clientWidth) * viewBox.w;
+      viewBox.y = worldY - (focusY / elCanvas.clientHeight) * viewBox.h;
+      elCanvas.setAttribute('viewBox', viewBox.x + ' ' + viewBox.y + ' ' + viewBox.w + ' ' + viewBox.h);
     } else {
-      scale = newScale;
+      zoomScale = newScale;
       applyViewBox();
     }
-    if (elZoomLabel) elZoomLabel.textContent = Math.round(scale * 100) + '%';
+    if (elZoomLabel) elZoomLabel.textContent = Math.round(zoomScale * 100) + '%';
   }
 
   function resetView() {
-    scale = 1;
-    VB = { x: 0, y: 0, w: 1100, h: 720 };
-    elCanvas.setAttribute('viewBox', '0 0 1100 720');
+    zoomScale = 1;
+    viewBox = { x: 0, y: 0, w: 1100, h: 720 };
+    if (elCanvas) elCanvas.setAttribute('viewBox', '0 0 1100 720');
     if (elZoomLabel) elZoomLabel.textContent = '100%';
   }
 
   function attachPanZoom() {
     if (!elCanvas) return;
-
-    // 滚轮缩放
-    elCanvas.addEventListener('wheel', function (ev) {
-      ev.preventDefault();
+    elCanvas.addEventListener('wheel', function (event) {
+      event.preventDefault();
       var rect = elCanvas.getBoundingClientRect();
-      var fx = ev.clientX - rect.left;
-      var fy = ev.clientY - rect.top;
-      var factor = ev.deltaY < 0 ? 1.15 : 1 / 1.15;
-      zoomTo(scale * factor, fx, fy);
+      var focusX = event.clientX - rect.left;
+      var focusY = event.clientY - rect.top;
+      zoomTo(zoomScale * (event.deltaY < 0 ? 1.15 : 1 / 1.15), focusX, focusY);
     }, { passive: false });
 
-    // 拖拽平移
     var dragging = false;
-    var start = { x: 0, y: 0, vbx: 0, vby: 0 };
+    var start = { x: 0, y: 0, viewX: 0, viewY: 0 };
 
-    elCanvas.addEventListener('mousedown', function (ev) {
-      if (ev.target.closest('.kg-node')) return;  // 节点交给 click 处理
+    elCanvas.addEventListener('mousedown', function (event) {
+      if (event.target.closest('.kg-node')) return;
       dragging = true;
-      start.x = ev.clientX; start.y = ev.clientY;
-      start.vbx = VB.x; start.vby = VB.y;
+      start.x = event.clientX;
+      start.y = event.clientY;
+      start.viewX = viewBox.x;
+      start.viewY = viewBox.y;
       elCanvas.classList.add('grabbing');
     });
 
-    window.addEventListener('mousemove', function (ev) {
+    window.addEventListener('mousemove', function (event) {
       if (!dragging) return;
-      var dx = ev.clientX - start.x;
-      var dy = ev.clientY - start.y;
-      var scaleX = VB.w / elCanvas.clientWidth;
-      var scaleY = VB.h / elCanvas.clientHeight;
-      VB.x = start.vbx - dx * scaleX;
-      VB.y = start.vby - dy * scaleY;
-      elCanvas.setAttribute('viewBox', VB.x + ' ' + VB.y + ' ' + VB.w + ' ' + VB.h);
+      var dx = event.clientX - start.x;
+      var dy = event.clientY - start.y;
+      viewBox.x = start.viewX - dx * (viewBox.w / elCanvas.clientWidth);
+      viewBox.y = start.viewY - dy * (viewBox.h / elCanvas.clientHeight);
+      elCanvas.setAttribute('viewBox', viewBox.x + ' ' + viewBox.y + ' ' + viewBox.w + ' ' + viewBox.h);
     });
 
     window.addEventListener('mouseup', function () {
-      if (dragging) {
-        dragging = false;
-        elCanvas.classList.remove('grabbing');
-      }
+      dragging = false;
+      elCanvas.classList.remove('grabbing');
     });
 
-    // 触屏支持（单指平移）
-    elCanvas.addEventListener('touchstart', function (ev) {
-      if (ev.touches.length !== 1) return;
-      if (ev.target.closest('.kg-node')) return;
-      dragging = true;
-      var t = ev.touches[0];
-      start.x = t.clientX; start.y = t.clientY;
-      start.vbx = VB.x; start.vby = VB.y;
-    }, { passive: true });
-    elCanvas.addEventListener('touchmove', function (ev) {
-      if (!dragging || ev.touches.length !== 1) return;
-      var t = ev.touches[0];
-      var dx = t.clientX - start.x;
-      var dy = t.clientY - start.y;
-      var scaleX = VB.w / elCanvas.clientWidth;
-      var scaleY = VB.h / elCanvas.clientHeight;
-      VB.x = start.vbx - dx * scaleX;
-      VB.y = start.vby - dy * scaleY;
-      elCanvas.setAttribute('viewBox', VB.x + ' ' + VB.y + ' ' + VB.w + ' ' + VB.h);
-    }, { passive: true });
-    elCanvas.addEventListener('touchend', function () { dragging = false; });
-
-    // 工具栏按钮
     var btnIn = document.getElementById('kgZoomIn');
     var btnOut = document.getElementById('kgZoomOut');
     var btnReset = document.getElementById('kgZoomReset');
-    if (btnIn) btnIn.addEventListener('click', function () { zoomTo(scale * 1.25); });
-    if (btnOut) btnOut.addEventListener('click', function () { zoomTo(scale / 1.25); });
+    if (btnIn) btnIn.addEventListener('click', function () { zoomTo(zoomScale * 1.25); });
+    if (btnOut) btnOut.addEventListener('click', function () { zoomTo(zoomScale / 1.25); });
     if (btnReset) btnReset.addEventListener('click', resetView);
   }
 
-  // ════════════════════════════════════════════════
-  //  4. 节点交互（悬停高亮 + 点击详情）
-  // ════════════════════════════════════════════════
-  var activeId = null;
-
-  function attachNodeInteraction() {
+  function attachGraphInteraction() {
     if (!elCanvas) return;
-    var nodeEls = elCanvas.querySelectorAll('.kg-node');
-
-    Array.prototype.forEach.call(nodeEls, function (nodeEl) {
+    Array.prototype.forEach.call(elCanvas.querySelectorAll('.kg-node'), function (nodeEl) {
       var id = nodeEl.getAttribute('data-id');
-
       nodeEl.addEventListener('mouseenter', function () {
-        if (activeId) return;  // 有选中节点时不响应悬停高亮
-        highlightNeighborhood(id);
+        if (!activeNodeId) highlightNeighborhood(id);
       });
       nodeEl.addEventListener('mouseleave', function () {
-        if (activeId) return;
-        clearHighlight();
+        if (!activeNodeId) clearHighlight();
       });
-
-      nodeEl.addEventListener('click', function (ev) {
-        ev.stopPropagation();
+      nodeEl.addEventListener('click', function (event) {
+        event.stopPropagation();
         selectNode(id);
       });
     });
 
-    // 点击空白取消选中
     elCanvas.addEventListener('click', function () {
-      if (activeId) {
-        activeId = null;
-        clearActive();
-        clearHighlight();
-        var defaultId = nodesById['efgartigimod'] ? 'efgartigimod' : (data.nodes[0] && data.nodes[0].id);
-        if (defaultId) renderDetail(defaultId);
-      }
+      activeNodeId = null;
+      clearActive();
+      clearHighlight();
     });
   }
 
   function highlightNeighborhood(id) {
-    var nb = neighbors[id] || {};
+    if (!elCanvas) return;
+    var neighbors = neighborMap[id] || {};
     Array.prototype.forEach.call(elCanvas.querySelectorAll('.kg-edge'), function (line) {
-      var f = line.getAttribute('data-from');
-      var t = line.getAttribute('data-to');
-      if (f === id || t === id) line.classList.add('hl');
+      var source = line.getAttribute('data-from');
+      var target = line.getAttribute('data-to');
+      if (source === id || target === id) line.classList.add('hl');
       else line.classList.add('dim');
     });
-    Array.prototype.forEach.call(elCanvas.querySelectorAll('.kg-node'), function (n) {
-      var nid = n.getAttribute('data-id');
-      if (nid === id || nb[nid]) { /* keep visible */ }
-      else n.classList.add('dim');
+    Array.prototype.forEach.call(elCanvas.querySelectorAll('.kg-node'), function (nodeEl) {
+      var nodeId = nodeEl.getAttribute('data-id');
+      if (nodeId !== id && !neighbors[nodeId]) nodeEl.classList.add('dim');
     });
   }
 
   function clearHighlight() {
-    Array.prototype.forEach.call(elCanvas.querySelectorAll('.kg-edge.hl'), function (e) { e.classList.remove('hl'); });
-    Array.prototype.forEach.call(elCanvas.querySelectorAll('.kg-edge.dim'), function (e) { e.classList.remove('dim'); });
-    Array.prototype.forEach.call(elCanvas.querySelectorAll('.kg-node.dim'), function (n) { n.classList.remove('dim'); });
+    if (!elCanvas) return;
+    Array.prototype.forEach.call(elCanvas.querySelectorAll('.kg-edge.hl,.kg-edge.dim,.kg-node.dim'), function (el) {
+      el.classList.remove('hl');
+      el.classList.remove('dim');
+    });
   }
 
   function clearActive() {
-    Array.prototype.forEach.call(elCanvas.querySelectorAll('.kg-node.active'), function (n) { n.classList.remove('active'); });
+    if (!elCanvas) return;
+    Array.prototype.forEach.call(elCanvas.querySelectorAll('.kg-node.active'), function (nodeEl) {
+      nodeEl.classList.remove('active');
+    });
   }
 
   function selectNode(id) {
-    activeId = id;
+    if (!nodesById[id]) return;
+    activeNodeId = id;
     clearActive();
     clearHighlight();
     var nodeEl = elCanvas.querySelector('.kg-node[data-id="' + cssEscape(id) + '"]');
@@ -322,102 +328,176 @@
     renderDetail(id);
   }
 
-  function cssEscape(s) {
-    return String(s).replace(/"/g, '\\"');
-  }
-
-  // ════════════════════════════════════════════════
-  //  5. 详情面板
-  // ════════════════════════════════════════════════
   function renderDetail(id) {
     if (!elDetail) return;
-    var n = nodesById[id];
-    if (!n) { elDetail.innerHTML = '<div class="kg-empty-hint">未选中节点</div>'; return; }
-
-    var studies = data.study_links[id] || [];
-
-    var badgesHtml = '';
-    var conf = (n.confidence || 'unknown');
-    var confText = { high: '高置信', medium: '中置信', low: '低置信', unknown: '置信度未知' }[conf] || '置信度未知';
-    badgesHtml += '<span class="kg-badge conf-' + (conf === 'unknown' ? 'low' : conf) + '">' + escapeHtml(confText) + '</span>';
-    if (n.contested) badgesHtml += '<span class="kg-badge contested">⚠ 存在争议</span>';
-    badgesHtml += '<span class="kg-badge">' + escapeHtml(TYPE_LABEL[n.type] || n.type) + '</span>';
-    if (n.study_count) badgesHtml += '<span class="kg-badge">' + n.study_count + ' 项关联研究</span>';
-    if (n.updated) badgesHtml += '<span class="kg-badge">更新 ' + escapeHtml(n.updated) + '</span>';
-
-    var contradictionHtml = '';
-    if (n.contradictions && n.contradictions.length) {
-      contradictionHtml = '<div class="kg-detail-contradiction">⚠ 与以下笔记存在矛盾：<br>' +
-        n.contradictions.map(function (c) { return '· ' + escapeHtml(c); }).join('<br>') +
-        '</div>';
-    }
-
-    var tagsHtml = '';
-    if (n.tags && n.tags.length) {
-      tagsHtml = '<div class="kg-detail-section"><h4>标签</h4><div class="kg-tags">' +
-        n.tags.map(function (t) { return '<span class="mini-chip">' + escapeHtml(t) + '</span>'; }).join('') +
-        '</div></div>';
-    }
-
-    var studyHtml = '';
-    if (studies.length) {
-      studyHtml = '<div class="kg-detail-section"><h4>关联研究 (' + studies.length + ')</h4><ul class="kg-study-list">' +
-        studies.map(function (s) {
-          return '<li>' + escapeHtml(s.title) + '</li>';
-        }).join('') + '</ul></div>';
-    }
-
-    elDetail.innerHTML =
-      '<div class="kg-detail-type">' + escapeHtml(TYPE_LABEL[n.type] || n.type) + '</div>' +
-      '<h2>' + escapeHtml(n.title) + '</h2>' +
-      '<div class="kg-badges">' + badgesHtml + '</div>' +
-      contradictionHtml +
-      '<div class="kg-detail-summary">' + escapeHtml(n.summary) + '</div>' +
-      tagsHtml +
-      studyHtml +
-      '<div class="kg-detail-actions">' +
-        '<a class="kg-obsidian-btn" href="' + escapeHtml(n.obsidian_url) + '">📓 在 Obsidian 中打开</a>' +
-      '</div>';
-  }
-
-  // ════════════════════════════════════════════════
-  //  6. 折叠区：临床问答证据状态
-  // ════════════════════════════════════════════════
-  function renderQuestions() {
-    if (!elQList) return;
-    var qCountEl = document.getElementById('knowledgeQCount');
-    if (qCountEl) qCountEl.textContent = '· ' + questions.length + ' 个';
-    if (!questions.length) {
-      elQList.innerHTML = '<div class="empty-state small"><h3>暂无临床问答</h3></div>';
+    var node = nodesById[id];
+    if (!node) {
+      elDetail.innerHTML = '<div class="kg-empty-hint">点击图谱节点查看详情</div>';
       return;
     }
-    elQList.innerHTML = questions.map(function (q) {
-      var refs = q.evidence_matrix || q.references || [];
-      var verified = q.verified;
-      var statusLabel = verified ? '✅ 已有证据支持' : '🔍 证据待确认';
-      var statusClass = verified ? 'verified' : 'unverified';
-      var supportCount = (q.evidence_matrix || []).filter(function (e) { return e.type === '支持'; }).length;
-      var meta = '';
-      if (q.evidence_matrix && q.evidence_matrix.length) {
-        meta = '<div class="chip-row">' +
-          '<span class="mini-chip">' + q.evidence_matrix.length + ' 条证据</span>' +
-          '<span class="mini-chip">' + supportCount + ' 条支持</span>' +
-          '</div>';
-      } else if (refs.length) {
-        meta = '<div class="chip-row"><span class="mini-chip">' + refs.length + ' 篇引用</span></div>';
-      }
-      return '<article class="evidence-question-card">' +
-        '<div class="question-head"><strong>' + escapeHtml(q.question) + '</strong>' +
-        '<span class="eq-status ' + statusClass + '">' + statusLabel + '</span></div>' +
-        (q.summary ? '<p>' + escapeHtml(q.summary) + '</p>' : '') +
-        meta +
-        '</article>';
+    var refs = nodeRefs[id] || [];
+    var relatedEdges = edges.filter(function (edge) {
+      return edge.from === id || edge.to === id;
+    }).sort(function (a, b) {
+      return (b.article_count || 0) - (a.article_count || 0);
+    }).slice(0, 8);
+
+    var levelHtml = Object.keys(node.evidence_levels || {}).map(function (level) {
+      return '<span class="mini-chip">Level ' + escapeHtml(level) + ' · ' + escapeHtml(node.evidence_levels[level]) + '</span>';
     }).join('');
+
+    var relatedHtml = relatedEdges.map(function (edge) {
+      var otherId = edge.from === id ? edge.to : edge.from;
+      var otherNode = nodesById[otherId] || {};
+      return '<button class="kg-relation-row" type="button" data-node="' + escapeHtml(otherId) + '">' +
+        '<span>' + escapeHtml(edge.relation) + '</span>' +
+        '<strong>' + escapeHtml(otherNode.title || otherId) + '</strong>' +
+        '<em>' + escapeHtml(edge.article_count || 0) + ' 篇</em>' +
+      '</button>';
+    }).join('');
+
+    var refsHtml = refs.length ? refs.map(renderReferenceItem).join('') : '<li>暂无 PMID 引用</li>';
+
+    elDetail.innerHTML =
+      '<div class="kg-detail-type">' + escapeHtml(typeLabel[node.type] || node.type) + '</div>' +
+      '<h2>' + escapeHtml(node.title) + '</h2>' +
+      '<div class="kg-badges">' +
+        '<span class="kg-badge conf-' + escapeHtml(node.confidence || 'low') + '">' + escapeHtml(confidenceLabel[node.confidence] || '覆盖未知') + '</span>' +
+        '<span class="kg-badge">' + escapeHtml(node.article_count || 0) + ' 篇 abstract</span>' +
+        '<span class="kg-badge">' + escapeHtml(sourceTypeLabel[node.source_type] || '摘要提及') + '</span>' +
+      '</div>' +
+      '<div class="kg-detail-summary">' + escapeHtml(node.summary || '') + '</div>' +
+      '<div class="kg-detail-section"><h4>证据等级分布</h4><div class="kg-tags">' + levelHtml + '</div></div>' +
+      '<div class="kg-detail-section"><h4>关联关系</h4><div class="kg-relation-list">' + relatedHtml + '</div></div>' +
+      '<div class="kg-detail-section"><h4>代表 PMID</h4><ul class="kg-study-list">' + refsHtml + '</ul></div>';
+
+    Array.prototype.forEach.call(elDetail.querySelectorAll('[data-node]'), function (button) {
+      button.addEventListener('click', function () {
+        selectNode(button.getAttribute('data-node'));
+      });
+    });
   }
 
-  // ════════════════════════════════════════════════
-  //  7. 折叠区：辅助检索（跨图谱节点 + 文献 + 专家）
-  // ════════════════════════════════════════════════
+  function renderReferenceItem(ref) {
+    var meta = [
+      ref.journal || '',
+      ref.pub_date || '',
+      ref.evidence_level ? 'Level ' + ref.evidence_level : '',
+      (ref.study_types || []).slice(0, 2).join(' / ')
+    ].filter(Boolean).join(' · ');
+    return '<li><a class="text-link" href="' + escapeHtml(ref.url) + '" target="_blank" rel="noopener">PMID ' +
+      escapeHtml(ref.pmid) + '</a> ' + escapeHtml(ref.title || '') +
+      '<br><span class="kg-ref-meta">' + escapeHtml(meta) + '</span></li>';
+  }
+
+  function attachNodeFilters() {
+    if (elNodeSearch) elNodeSearch.addEventListener('input', applyNodeFilters);
+    if (elTypeFilter) elTypeFilter.addEventListener('change', applyNodeFilters);
+    applyNodeFilters();
+  }
+
+  function applyNodeFilters() {
+    if (!elCanvas) return;
+    var keyword = (elNodeSearch && elNodeSearch.value || '').trim().toLowerCase();
+    var type = (elTypeFilter && elTypeFilter.value) || 'all';
+    var visible = {};
+
+    nodes.forEach(function (node) {
+      var text = [node.title, node.summary, node.type, (node.top_study_types || []).join(' ')].join(' ').toLowerCase();
+      var okKeyword = !keyword || text.indexOf(keyword) !== -1;
+      var okType = type === 'all' || node.type === type;
+      visible[node.id] = okKeyword && okType;
+    });
+
+    Array.prototype.forEach.call(elCanvas.querySelectorAll('.kg-node'), function (nodeEl) {
+      var id = nodeEl.getAttribute('data-id');
+      nodeEl.classList.toggle('filtered-out', !visible[id]);
+    });
+    Array.prototype.forEach.call(elCanvas.querySelectorAll('.kg-edge'), function (line) {
+      var source = line.getAttribute('data-from');
+      var target = line.getAttribute('data-to');
+      line.classList.toggle('filtered-out', !visible[source] || !visible[target]);
+    });
+  }
+
+  function renderMatrix() {
+    if (!elMatrix) return;
+    var keyword = (elMatrixSearch && elMatrixSearch.value || '').trim().toLowerCase();
+    var type = (elMatrixType && elMatrixType.value) || 'all';
+    var level = (elMatrixLevel && elMatrixLevel.value) || 'all';
+    var rows = matrixRows.filter(function (row) {
+      var text = [
+        row.source, row.target, row.relation, row.best_evidence_level,
+        (row.key_pmids || []).join(' ')
+      ].join(' ').toLowerCase();
+      var typeMatch = type === 'all' || row.source_type === type || row.target_type === type;
+      var levelMatch = level === 'all' || row.best_evidence_level === level;
+      return (!keyword || text.indexOf(keyword) !== -1) && typeMatch && levelMatch;
+    });
+    if (elMatrixCount) elMatrixCount.textContent = rows.length + ' 行';
+
+    if (!rows.length) {
+      elMatrix.innerHTML = '<div class="kg-empty-hint">没有匹配的证据关系。</div>';
+      return;
+    }
+
+    var tableRows = rows.map(function (row) {
+      var pmids = (row.references || []).map(function (ref) {
+        return '<a class="kg-pmid-link" href="' + escapeHtml(ref.url) + '" target="_blank" rel="noopener">' +
+          escapeHtml(ref.pmid) + '</a>';
+      }).join(' ');
+      return '<tr>' +
+        '<td><button class="matrix-node-link" type="button" data-node="' + escapeHtml(row.source_id) + '">' + escapeHtml(row.source) + '</button></td>' +
+        '<td>' + escapeHtml(row.relation) + '</td>' +
+        '<td><button class="matrix-node-link" type="button" data-node="' + escapeHtml(row.target_id) + '">' + escapeHtml(row.target) + '</button></td>' +
+        '<td><span class="kg-badge conf-' + escapeHtml(row.confidence || 'low') + '">' + escapeHtml(confidenceLabel[row.confidence] || row.confidence || '未知') + '</span></td>' +
+        '<td>' + escapeHtml(row.article_count || 0) + '</td>' +
+        '<td>' + escapeHtml(row.best_evidence_level || '未分级') + '</td>' +
+        '<td>' + pmids + '</td>' +
+        '<td>' + escapeHtml(row.limitation || '') + '</td>' +
+      '</tr>';
+    }).join('');
+
+    elMatrix.innerHTML = '<table><thead><tr>' +
+      '<th>来源节点</th><th>关系</th><th>目标节点</th><th>覆盖</th><th>文献量</th><th>最高等级</th><th>PMID</th><th>边界</th>' +
+      '</tr></thead><tbody>' + tableRows + '</tbody></table>';
+
+    Array.prototype.forEach.call(elMatrix.querySelectorAll('[data-node]'), function (button) {
+      button.addEventListener('click', function () {
+        activateTab('graph');
+        selectNode(button.getAttribute('data-node'));
+      });
+    });
+  }
+
+  function attachMatrixFilters() {
+    [elMatrixSearch, elMatrixType, elMatrixLevel].forEach(function (el) {
+      if (el) el.addEventListener(el.tagName === 'SELECT' ? 'change' : 'input', renderMatrix);
+    });
+    renderMatrix();
+  }
+
+  function activateTab(key) {
+    var tabs = document.querySelectorAll('[data-knowledge-tab]');
+    var panels = document.querySelectorAll('.intel-tab-panel');
+    Array.prototype.forEach.call(tabs, function (tab) {
+      tab.classList.toggle('active', tab.getAttribute('data-knowledge-tab') === key);
+    });
+    Array.prototype.forEach.call(panels, function (panel) {
+      panel.classList.remove('active');
+    });
+    var panel = document.getElementById('knowledge-' + key + '-panel');
+    if (panel) panel.classList.add('active');
+  }
+
+  function attachTabs() {
+    Array.prototype.forEach.call(document.querySelectorAll('[data-knowledge-tab]'), function (tab) {
+      tab.addEventListener('click', function () {
+        activateTab(tab.getAttribute('data-knowledge-tab'));
+      });
+    });
+  }
+
   function attachSearch() {
     if (!elSearch || !elSearchResults) return;
     elSearch.addEventListener('input', renderSearch);
@@ -425,93 +505,64 @@
   }
 
   function renderSearch() {
-    if (!elSearchResults) return;
-    var kw = (elSearch.value || '').trim().toLowerCase();
-    var hasKw = !!kw;
-
-    // 图谱节点
-    var nodeHits = data.nodes.filter(function (n) {
-      if (!hasKw) return false;
-      return [n.title, n.summary, (n.tags || []).join(' ')].join(' ').toLowerCase().indexOf(kw) !== -1;
-    }).slice(0, 5);
-
-    // 文献
-    var artHits = articles.filter(function (a) {
-      if (!hasKw) return false;
-      return [a.title, a.abstract, a.journal, (a.authors || []).join(' ')].join(' ').toLowerCase().indexOf(kw) !== -1;
-    }).slice(0, 5);
-
-    // 专家
-    var expHits = experts.filter(function (e) {
-      if (!hasKw) return false;
-      return [e.name_en, e.affiliation, (e.public_tags || []).join(' ')].join(' ').toLowerCase().indexOf(kw) !== -1;
-    }).slice(0, 4);
-
-    if (!hasKw) {
-      elSearchResults.innerHTML = '<div class="kg-empty-hint">输入关键词检索知识图谱节点、文献、专家。聚焦检索请前往情报中心 / MSL 工作台。</div>';
+    var keyword = (elSearch.value || '').trim().toLowerCase();
+    if (!keyword) {
+      elSearchResults.innerHTML = '<div class="kg-empty-hint">输入关键词检索知识图谱节点、近一年文献和专家公开画像。</div>';
       return;
     }
 
+    var nodeHits = nodes.filter(function (node) {
+      return [node.title, node.summary, node.type, (node.top_study_types || []).join(' ')].join(' ').toLowerCase().indexOf(keyword) !== -1;
+    }).slice(0, 8);
+    var articleHits = articles.filter(function (article) {
+      return [article.title, article.abstract, article.journal, (article.authors || []).join(' ')].join(' ').toLowerCase().indexOf(keyword) !== -1;
+    }).slice(0, 8);
+    var expertHits = experts.filter(function (expert) {
+      return [expert.name_en, expert.name_zh, expert.affiliation, (expert.public_tags || []).join(' ')].join(' ').toLowerCase().indexOf(keyword) !== -1;
+    }).slice(0, 5);
+
     var html = '';
-    if (nodeHits.length) {
-      html += '<div class="kg-detail-section"><h4>知识节点 (' + nodeHits.length + ')</h4><ul class="kg-study-list">' +
-        nodeHits.map(function (n) {
-          return '<li><a class="text-link" data-node="' + escapeHtml(n.id) + '">' + escapeHtml(n.title) + '</a></li>';
-        }).join('') + '</ul></div>';
-    }
-    if (artHits.length) {
-      html += '<div class="kg-detail-section"><h4>文献 (' + artHits.length + ')</h4><ul class="kg-study-list">' +
-        artHits.map(function (a) {
-          return '<li><a class="text-link" href="' + escapeHtml(a.url) + '" target="_blank">' + escapeHtml(a.title) + '</a><br><span style="color:var(--fg3);font-size:0.75rem">' + escapeHtml(a.journal || '') + ' · PMID ' + escapeHtml(a.pmid || '-') + '</span></li>';
-        }).join('') + '</ul></div>';
-    }
-    if (expHits.length) {
-      html += '<div class="kg-detail-section"><h4>专家 (' + expHits.length + ')</h4><ul class="kg-study-list">' +
-        expHits.map(function (e) {
-          return '<li><a class="text-link" href="/MA-MG-HUB/pages/msl.html">' + escapeHtml(e.name_en) + '</a><br><span style="color:var(--fg3);font-size:0.75rem">' + escapeHtml(e.affiliation || '') + '</span></li>';
-        }).join('') + '</ul></div>';
-    }
+    html += renderSearchGroup('知识节点', nodeHits, function (node) {
+      return '<li><button class="matrix-node-link" type="button" data-node="' + escapeHtml(node.id) + '">' +
+        escapeHtml(node.title) + '</button><br><span class="kg-ref-meta">' + escapeHtml(typeLabel[node.type]) +
+        ' · ' + escapeHtml(node.article_count) + ' 篇 abstract</span></li>';
+    });
+    html += renderSearchGroup('近一年文献', articleHits, function (article) {
+      return '<li><a class="text-link" href="' + escapeHtml(article.url) + '" target="_blank" rel="noopener">' +
+        escapeHtml(article.title) + '</a><br><span class="kg-ref-meta">' +
+        escapeHtml(article.journal || '') + ' · PMID ' + escapeHtml(article.pmid || '-') + '</span></li>';
+    });
+    html += renderSearchGroup('专家公开画像', expertHits, function (expert) {
+      return '<li><a class="text-link" href="/MA-MG-HUB/pages/msl.html">' + escapeHtml(expert.name_en || expert.name_zh || '') +
+        '</a><br><span class="kg-ref-meta">' + escapeHtml(expert.affiliation || '') + '</span></li>';
+    });
 
-    elSearchResults.innerHTML = html || '<div class="kg-empty-hint">无匹配结果，换个关键词试试。</div>';
-
-    // 绑定节点点击 → 跳到图谱并选中
-    Array.prototype.forEach.call(elSearchResults.querySelectorAll('[data-node]'), function (a) {
-      a.addEventListener('click', function () {
-        var id = a.getAttribute('data-node');
-        if (id && nodesById[id]) {
-          selectNode(id);
-          var wrap = document.querySelector('.kg-canvas-wrap');
-          if (wrap) wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
+    elSearchResults.innerHTML = html || '<div class="kg-empty-hint">无匹配结果。</div>';
+    Array.prototype.forEach.call(elSearchResults.querySelectorAll('[data-node]'), function (button) {
+      button.addEventListener('click', function () {
+        activateTab('graph');
+        selectNode(button.getAttribute('data-node'));
       });
     });
   }
 
-  // ════════════════════════════════════════════════
-  //  8. 折叠区开关
-  // ════════════════════════════════════════════════
-  function attachCollapse() {
-    Array.prototype.forEach.call(document.querySelectorAll('.kg-collapse-head'), function (head) {
-      head.addEventListener('click', function () {
-        head.parentElement.classList.toggle('open');
-      });
-    });
+  function renderSearchGroup(title, items, renderer) {
+    if (!items.length) return '';
+    return '<div class="kg-detail-section"><h4>' + escapeHtml(title) + ' (' + items.length + ')</h4>' +
+      '<ul class="kg-study-list">' + items.map(renderer).join('') + '</ul></div>';
   }
 
-  // ════════════════════════════════════════════════
-  //  init
-  // ════════════════════════════════════════════════
   function init() {
     renderBadge();
+    renderStats();
+    attachTabs();
     buildGraph();
     attachPanZoom();
-    attachNodeInteraction();
-    attachCollapse();
-    renderQuestions();
+    attachGraphInteraction();
+    attachNodeFilters();
+    attachMatrixFilters();
     attachSearch();
-    // 默认选中核心药物实体
-    var defaultId = nodesById['efgartigimod'] ? 'efgartigimod' : (data.nodes[0] && data.nodes[0].id);
-    if (defaultId) renderDetail(defaultId);
+    selectNode(nodesById.fcrnInhibition ? 'fcrnInhibition' : (nodes[0] && nodes[0].id));
   }
 
   if (document.readyState === 'loading') {

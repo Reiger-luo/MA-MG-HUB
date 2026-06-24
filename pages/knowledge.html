@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>知识库 · MA-MG-HUB</title>
+<link rel="icon" href="data:,">
 <link rel="stylesheet" href="/MA-MG-HUB/assets/main.css">
 </head>
 <body>
@@ -31,63 +32,113 @@
     </div>
   </div>
 
-  <p style="color:var(--fg2);font-size:0.86rem;margin:-0.4rem 0 1rem;">
-    efgartigimod-wiki 私有知识图谱 · 点击节点查看详情，滚轮缩放，拖拽平移。
+  <p class="page-subtitle">
+    基于 full PubMed abstract 库生成的 MG 学术情报图谱。关系来自标题、摘要与元数据共现，详细判断需回到 PMID 原文。
   </p>
 
-  <div class="kg-layout">
-    <div>
-      <div class="kg-canvas-wrap">
-        <svg id="knowledgeGraph" class="kg-canvas" xmlns="http://www.w3.org/2000/svg"></svg>
-        <div class="kg-controls">
-          <button class="kg-ctrl-btn" id="kgZoomIn" title="放大" type="button">+</button>
-          <button class="kg-ctrl-btn" id="kgZoomOut" title="缩小" type="button">−</button>
-          <button class="kg-ctrl-btn" id="kgZoomReset" title="重置视图" type="button">⟲</button>
+  <section class="knowledge-stat-grid" id="knowledgeStats"></section>
+
+  <div class="intel-tabs" role="tablist" aria-label="知识库视图">
+    <button class="intel-tab active" type="button" data-knowledge-tab="graph">知识图谱</button>
+    <button class="intel-tab" type="button" data-knowledge-tab="matrix">证据矩阵</button>
+    <button class="intel-tab" type="button" data-knowledge-tab="search">跨库检索</button>
+  </div>
+
+  <section class="intel-tab-panel active" id="knowledge-graph-panel">
+    <div class="kg-filter-bar">
+      <div class="knowledge-search compact">
+        <input id="knowledgeNodeSearch" placeholder="筛选节点，例如 FcRn / efgartigimod / AChR / safety">
+      </div>
+      <select class="filter-input compact-select" id="knowledgeTypeFilter">
+        <option value="all">全部节点类型</option>
+        <option value="disease">疾病</option>
+        <option value="drug">药物/干预</option>
+        <option value="mechanism">机制</option>
+        <option value="population">人群/亚型</option>
+        <option value="outcome">结局</option>
+        <option value="evidence">证据类型</option>
+      </select>
+    </div>
+
+    <div class="kg-layout">
+      <div>
+        <div class="kg-canvas-wrap">
+          <svg id="knowledgeGraph" class="kg-canvas" xmlns="http://www.w3.org/2000/svg"></svg>
+          <div class="kg-controls">
+            <button class="kg-ctrl-btn" id="kgZoomIn" title="放大" type="button">+</button>
+            <button class="kg-ctrl-btn" id="kgZoomOut" title="缩小" type="button">−</button>
+            <button class="kg-ctrl-btn" id="kgZoomReset" title="重置视图" type="button">⟲</button>
+          </div>
+          <span class="kg-zoom-label" id="kgZoomLabel">100%</span>
         </div>
-        <span class="kg-zoom-label" id="kgZoomLabel">100%</span>
+        <div class="kg-legend">
+          <span class="kg-legend-item"><span class="kg-legend-dot disease"></span>疾病</span>
+          <span class="kg-legend-item"><span class="kg-legend-dot drug"></span>药物/干预</span>
+          <span class="kg-legend-item"><span class="kg-legend-dot mechanism"></span>机制</span>
+          <span class="kg-legend-item"><span class="kg-legend-dot population"></span>人群/亚型</span>
+          <span class="kg-legend-item"><span class="kg-legend-dot outcome"></span>结局</span>
+          <span class="kg-legend-item"><span class="kg-legend-dot evidence"></span>证据类型</span>
+          <span class="kg-legend-item" style="color:var(--fg3)">节点大小 = abstract 命中文献量</span>
+        </div>
       </div>
-      <div class="kg-legend">
-        <span class="kg-legend-item"><span class="kg-legend-dot entity"></span>实体</span>
-        <span class="kg-legend-item"><span class="kg-legend-dot concept"></span>概念</span>
-        <span class="kg-legend-item"><span class="kg-legend-dot data-point"></span>数据点</span>
-        <span class="kg-legend-item"><span class="kg-legend-dot comparison"></span>对比</span>
-        <span class="kg-legend-item"><span class="kg-legend-dot contested"></span>⚠ 争议节点</span>
-        <span class="kg-legend-item" style="color:var(--fg3)">节点大小 = 关联研究数</span>
+
+      <aside class="kg-detail" id="knowledgeDetail">
+        <div class="kg-empty-hint">点击图谱节点查看详情</div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="intel-tab-panel" id="knowledge-matrix-panel">
+    <div class="workspace-panel">
+      <div class="panel-head">
+        <div>
+          <h2>证据矩阵</h2>
+          <p class="panel-caption">每一行代表一个摘要级关系，按 PMID 回链查看来源。矩阵用于定位证据，不直接给出全文级结论。</p>
+        </div>
+        <span class="update-badge" id="matrixCount">0 行</span>
       </div>
+      <div class="kg-filter-bar">
+        <div class="knowledge-search compact">
+          <input id="knowledgeMatrixSearch" placeholder="筛选关系、药物、机制、人群或 PMID">
+        </div>
+        <select class="filter-input compact-select" id="knowledgeMatrixType">
+          <option value="all">全部关系类型</option>
+          <option value="drug">药物相关</option>
+          <option value="mechanism">机制相关</option>
+          <option value="population">人群相关</option>
+          <option value="outcome">结局相关</option>
+        </select>
+        <select class="filter-input compact-select" id="knowledgeMatrixLevel">
+          <option value="all">全部证据等级</option>
+          <option value="I">I</option>
+          <option value="II">II</option>
+          <option value="III">III</option>
+          <option value="IV">IV</option>
+          <option value="V">V</option>
+          <option value="VI">VI</option>
+        </select>
+      </div>
+      <div class="knowledge-matrix-table" id="knowledgeMatrix"></div>
     </div>
+  </section>
 
-    <aside class="kg-detail" id="knowledgeDetail">
-      <div class="kg-empty-hint">点击图谱节点查看详情</div>
-    </aside>
-  </div>
-
-  <div class="kg-collapse">
-    <button class="kg-collapse-head" type="button">
-      ▍临床问答证据状态
-      <span class="kg-collapse-count" id="knowledgeQCount"></span>
-      <span class="kg-collapse-arrow">▶</span>
-    </button>
-    <div class="kg-collapse-body">
-      <div id="knowledgeQuestions"></div>
-    </div>
-  </div>
-
-  <div class="kg-collapse">
-    <button class="kg-collapse-head" type="button">
-      ▍跨库检索（图谱节点 · 文献 · 专家）
-      <span class="kg-collapse-arrow">▶</span>
-    </button>
-    <div class="kg-collapse-body">
+  <section class="intel-tab-panel" id="knowledge-search-panel">
+    <div class="workspace-panel">
+      <div class="panel-head">
+        <div>
+          <h2>跨库检索</h2>
+          <p class="panel-caption">同时检索图谱节点、近一年公开文献和专家公开画像。</p>
+        </div>
+      </div>
       <div class="knowledge-search">
         <input id="knowledgeSearch" placeholder="检索关键词，例如 FcRn safety / seronegative / efgartigimod">
       </div>
       <div id="knowledgeSearchResults"></div>
     </div>
-  </div>
+  </section>
 </main>
 
 <script src="/MA-MG-HUB/data/knowledge-graph.js"></script>
-<script src="/MA-MG-HUB/data/landscape-data.js"></script>
 <script src="/MA-MG-HUB/data/literature-recent.js"></script>
 <script src="/MA-MG-HUB/data/expert-profiles.js"></script>
 <script src="/MA-MG-HUB/assets/knowledge.js"></script>
