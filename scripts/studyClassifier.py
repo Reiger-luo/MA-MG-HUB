@@ -18,6 +18,7 @@ levelMap = {
     "ITC": "I",
     "Systematic Review": "I",
     "Systematic Review of Case Reports": "IV",
+    "Systematic Review of Uncontrolled Studies": "IV",
     "RCT": "II",
     "Non-randomized controlled cohort": "III",
     "Adjusted Retrospective Cohort": "III",
@@ -162,8 +163,6 @@ treatmentEffectTerms = [
     "treatment response",
     "clinical response",
     "clinical improvement",
-    "treated with",
-    "received",
     "retreatment",
     "steroid-sparing",
     "steroid sparing",
@@ -174,8 +173,11 @@ predictionModelTerms = [
     "predictive model",
     "prognostic model",
     "risk model",
+    "immune model",
     "nomogram",
     "score model",
+    "risk score",
+    "online calculator",
     "machine learning model",
     "machine-learning model",
     "model development",
@@ -185,9 +187,23 @@ predictionModelTerms = [
 externalValidationTerms = [
     "external validation",
     "externally validated",
-    "validation cohort",
     "independent cohort",
     "independent validation",
+]
+
+internalValidationTerms = [
+    "internal validation",
+    "leave-one-out cross-validation",
+    "leave one out cross validation",
+    "loocv",
+    "cross-validation",
+    "cross validation",
+    "training cohort",
+    "modeling cohort",
+    "modelling cohort",
+    "randomly divided",
+    "random split",
+    "split into",
 ]
 
 diagnosticTerms = [
@@ -218,6 +234,8 @@ pharmacovigilanceTerms = [
 ]
 
 mechanisticGeneticTerms = [
+    "functional profiling",
+    "antibody profiling",
     "genome-wide",
     "gwas",
     "genetic association",
@@ -246,6 +264,10 @@ mechanisticGeneticTerms = [
 ]
 
 biomarkerOutcomeTerms = [
+    "therapeutic outcome",
+    "therapeutic outcomes",
+    "treatment outcome",
+    "treatment outcomes",
     "treatment response",
     "clinical response",
     "clinical improvement",
@@ -258,6 +280,12 @@ biomarkerOutcomeTerms = [
     "response signatures",
     "associated with response",
     "associate with clinical response",
+    "progression-free survival",
+    "progression free survival",
+    "pfs",
+    "unfavourable prognosis",
+    "unfavorable prognosis",
+    "prognosis",
 ]
 
 singleArmTerms = [
@@ -496,8 +524,24 @@ def isSystematicReviewOfCaseEvidence(text: str) -> bool:
     return any(hasPattern(text, pattern) for pattern in case_review_patterns)
 
 
+def isSystematicReviewOfUncontrolledEvidence(text: str) -> bool:
+    if not (word("systematic review", text) or word("meta-analysis", text)):
+        return False
+    if hasPattern(text, r"\bmeta-analysis of proportions\b"):
+        return True
+    uncontrolled_patterns = [
+        r"\bsystematic review\b.{0,140}\b(single[- ]arm|uncontrolled|case reports?|case series)\b",
+        r"\bmeta-analysis\b.{0,140}\b(single[- ]arm|uncontrolled|case reports?|case series)\b",
+        r"\bincluded\b.{0,120}\b(single[- ]arm|uncontrolled|case reports?|case series)\b",
+        r"\beligible studies\b.{0,120}\b(single[- ]arm|uncontrolled|case reports?|case series)\b",
+    ]
+    return any(hasPattern(text, pattern) for pattern in uncontrolled_patterns)
+
+
 def isCaseReport(text: str, pubTypeText: str = "") -> bool:
     if "CASE REPORTS" in pubTypeText or hasAny(text, caseTerms):
+        return True
+    if hasPattern(text, r"\bin (a|an|one) patient with\b"):
         return True
     return bool(re.search(r"\bwe report (a|an|the)?\s*\d{0,3}[- ]?year[- ]old\b", text, re.I))
 
@@ -533,8 +577,8 @@ def isSingleArmTreatmentStudy(text: str, pubTypeText: str = "") -> bool:
 
 def isPredictionModel(text: str) -> bool:
     return hasAny(text, predictionModelTerms) or (
-        hasAny(text, ["predictive", "prediction"])
-        and hasAny(text, ["model", "models", "nomogram", "machine learning", "machine-learning", "validation", "roc", "auc"])
+        hasAny(text, ["predictive", "prediction", "predict", "predicts", "predicting"])
+        and hasAny(text, ["model", "models", "nomogram", "machine learning", "machine-learning", "random forest", "lasso", "validation", "roc", "auc", "calculator"])
     )
 
 
@@ -564,16 +608,58 @@ def isMechanisticGeneticQuestion(text: str) -> bool:
 
 
 def isBiomarkerPrognosticQuestion(text: str) -> bool:
+    if isPredictionModel(text):
+        return False
+    if isSingleArmTreatmentStudy(text):
+        return False
     return isMechanisticGeneticQuestion(text) and (
         hasAny(text, biomarkerOutcomeTerms)
         or hasPattern(text, r"\bpredict\w*\s+.+\b(response|outcome|improvement)\b")
     )
 
 
+def hasExternalValidation(text: str) -> bool:
+    if hasAny(text, externalValidationTerms):
+        return True
+    if word("validation cohort", text) and not hasAny(text, internalValidationTerms):
+        return hasAny(text, ["external", "independent", "prospective", "multicenter", "multi-center", "multicentre"])
+    return False
+
+
+def isHighQualityPrognosticCohort(text: str) -> bool:
+    if isCrossSectional(text):
+        return False
+    if not hasAny(text, ["cohort", "follow-up", "follow up", "longitudinal", "mortality", "survival"]):
+        return False
+    if hasAny(text, [
+        "nationwide",
+        "population-based",
+        "population based",
+        "matched controls",
+        "matched cohort",
+        "propensity score",
+        "cox proportional hazards",
+        "multivariable cox",
+        "multivariate cox",
+    ]):
+        return True
+    multicenter_patterns = [
+        r"\bmulticente?r retrospective cohort\b",
+        r"\bmulticentre retrospective cohort\b",
+        r"\bmulticente?r cohort study\b",
+        r"\bmulticentre cohort study\b",
+        r"\bconducted a multicente?r retrospective cohort\b",
+        r"\bconducted a multicentre retrospective cohort\b",
+    ]
+    return any(hasPattern(text, pattern) for pattern in multicenter_patterns)
+
+
 def classifyPredictionModel(text: str, pubTypeText: str) -> str:
-    if hasAny(text, externalValidationTerms) and not isRetrospective(text, pubTypeText):
+    if hasAny(text, internalValidationTerms):
+        return "Prediction Model Development"
+    if hasExternalValidation(text) and not isRetrospective(text, pubTypeText):
         return "Prediction Model External Validation"
-    if hasAny(text, externalValidationTerms) and hasPattern(text, r"\b(multi[- ]?center|multicentre|multicenter)\b"):
+    if hasExternalValidation(text) and hasPattern(text, r"\b(multi[- ]?center|multicentre|multicenter)\b"):
         return "Prediction Model External Validation"
     return "Prediction Model Development"
 
@@ -583,6 +669,8 @@ def classifyPrognosis(text: str, pubTypeText: str) -> str:
         return classifyPredictionModel(text, pubTypeText)
     if word("inception cohort", text):
         return "Prognostic Inception Cohort"
+    if isHighQualityPrognosticCohort(text):
+        return "Prognostic Cohort"
     if isRetrospective(text, pubTypeText) and not hasAny(text, ["multicenter", "multi-center", "multicentre"]):
         return "Poor-quality Prognostic Cohort"
     if hasAny(text, ["cohort", "follow-up", "follow up", "longitudinal", "cox regression", "survival analysis"]):
@@ -657,6 +745,8 @@ def classifyStudyType(pubTypes, abstract: str | None = "", title: str | None = "
     if isRetraction(text):
         return "Comment"
 
+    if isSystematicReviewOfUncontrolledEvidence(text):
+        return "Systematic Review of Uncontrolled Studies"
     if isSystematicReviewOfCaseEvidence(text):
         return "Systematic Review of Case Reports"
 
@@ -684,10 +774,16 @@ def classifyStudyType(pubTypes, abstract: str | None = "", title: str | None = "
         return "Protocol"
     if hasAny(text, animalTerms):
         return "Animal Study"
+    if isSystematicReviewOfUncontrolledEvidence(text):
+        return "Systematic Review of Uncontrolled Studies"
     if isSystematicReviewOfCaseEvidence(text):
         return "Systematic Review of Case Reports"
     if isCaseReport(text, pubTypeText):
         return "Case Report"
+    if word("narrative review", titleText) or hasPattern(titleText, r"\(review\)"):
+        return "Review"
+    if isPredictionModel(text):
+        return classifyPredictionModel(text, pubTypeText)
     if isBiomarkerPrognosticQuestion(text):
         return "Biomarker Prognostic Study"
     if "RANDOMIZED CONTROLLED TRIAL" in pubTypeText:
@@ -700,6 +796,8 @@ def classifyStudyType(pubTypes, abstract: str | None = "", title: str | None = "
         return "Pharmacovigilance"
     if isCrossSectional(text):
         return "Cross-Sectional"
+    if isRetrospective(text, pubTypeText) and hasAdjustment(text):
+        return "Adjusted Retrospective Cohort"
     if isSingleArmTreatmentStudy(text, pubTypeText):
         return "Single Arm"
     if isMechanisticGeneticQuestion(text) and not word("systematic review", text):
