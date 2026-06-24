@@ -25,6 +25,8 @@ PUBLIC_ARTIFACTS = [
     ("china-intelligence.js", "中国情报", "MG_CHINA_DATA"),
     ("expert-profiles.js", "专家画像", "MG_EXPERT_PROFILES"),
     ("landscape-data.js", "诊治格局", "MG_LANDSCAPE_DATA"),
+    ("knowledge-graph.js", "知识库图谱", "MG_KNOWLEDGE_GRAPH"),
+    ("curated-topics.js", "专题策展层", "MG_CURATED_TOPICS"),
     ("content-modules.js", "内容模块", "MG_CONTENT_MODULES"),
     ("weekly-summary.md", "当前通讯渠道周报", None),
 ]
@@ -56,7 +58,7 @@ def countPayload(payload):
     if isinstance(payload, list):
         return len(payload)
     if isinstance(payload, dict):
-        for key in ("signals", "articles", "pubmed_articles", "experts", "modules", "items"):
+        for key in ("signals", "articles", "pubmed_articles", "experts", "modules", "topics", "nodes", "items"):
             value = payload.get(key)
             if isinstance(value, list):
                 return len(value)

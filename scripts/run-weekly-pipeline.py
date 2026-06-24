@@ -49,6 +49,7 @@ def main():
 
     run_step("前端数据产物生成", [sys.executable, "scripts/build-frontend-data.py"])
     run_step("知识库图谱与证据矩阵生成", [sys.executable, "scripts/build-knowledge-data.py"])
+    run_step("本地 wiki 专题策展层生成", [sys.executable, "scripts/build-curated-topic-data.py"])
     run_step("当前通讯渠道周报生成", [sys.executable, "scripts/generate-weekly-summary.py"])
     run_step("管线状态生成", [sys.executable, "scripts/generate-pipeline-status.py"])
 

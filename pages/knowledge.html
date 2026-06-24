@@ -41,6 +41,7 @@
   <div class="intel-tabs" role="tablist" aria-label="知识库视图">
     <button class="intel-tab active" type="button" data-knowledge-tab="graph">知识图谱</button>
     <button class="intel-tab" type="button" data-knowledge-tab="matrix">证据矩阵</button>
+    <button class="intel-tab" type="button" data-knowledge-tab="topics">专题策展</button>
     <button class="intel-tab" type="button" data-knowledge-tab="search">跨库检索</button>
   </div>
 
@@ -122,6 +123,34 @@
     </div>
   </section>
 
+  <section class="intel-tab-panel" id="knowledge-topics-panel">
+    <div class="workspace-panel">
+      <div class="panel-head">
+        <div>
+          <h2>专题策展</h2>
+          <p class="panel-caption">每周管线自动读取本地 wiki，生成医学事务专题层。专题内容用于解释和转译，全库图谱负责发现和更新。</p>
+        </div>
+        <span class="update-badge" id="topicCount">0 个专题</span>
+      </div>
+      <div class="kg-filter-bar">
+        <div class="knowledge-search compact">
+          <input id="curatedTopicSearch" placeholder="筛选专题，例如 steroid / safety / China RWE / complement">
+        </div>
+        <select class="filter-input compact-select" id="curatedTopicImpact">
+          <option value="all">全部专题</option>
+          <option value="updatedEvidence">本周有新证据</option>
+          <option value="quiet">本周无明显变化</option>
+        </select>
+      </div>
+      <div class="curated-topic-layout">
+        <div class="curated-topic-list" id="curatedTopicList"></div>
+        <aside class="curated-topic-detail" id="curatedTopicDetail">
+          <div class="kg-empty-hint">选择一个专题查看 claim、PMID 和全库锚点。</div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
   <section class="intel-tab-panel" id="knowledge-search-panel">
     <div class="workspace-panel">
       <div class="panel-head">
@@ -139,6 +168,7 @@
 </main>
 
 <script src="/MA-MG-HUB/data/knowledge-graph.js"></script>
+<script src="/MA-MG-HUB/data/curated-topics.js"></script>
 <script src="/MA-MG-HUB/data/literature-recent.js"></script>
 <script src="/MA-MG-HUB/data/expert-profiles.js"></script>
 <script src="/MA-MG-HUB/assets/knowledge.js"></script>
