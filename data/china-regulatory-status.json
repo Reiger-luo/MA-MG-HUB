@@ -1,0 +1,126 @@
+{
+  "generated_at": "2026-06-25",
+  "source_note": "China regulatory status seed for MG competitive matrix. Maintained from NMPA/CDE/NHSA/company primary or near-primary public sources; Hermes can replace this file with scraped NMPA/CDE results later.",
+  "drugs": [
+    {
+      "name": "Efgartigimod",
+      "china_status": "NMPA approved",
+      "status_label": "已获批",
+      "status_date": "2023-06 IV; 2024-07 SC",
+      "china_indication": "与常规治疗药物联合，用于 AChR 抗体阳性的成人 gMG 患者；IV 与 SC 剂型均已获批。",
+      "cde_status": "Approved after BLA review",
+      "source_type": "NMPA / company",
+      "source_url": "https://www.nmpa.gov.cn/directory/web/nmpa/images/1707039824076019627.pdf",
+      "secondary_url": "https://ir.zailaboratory.com/zh-hans/news-releases/news-release-details-63",
+      "last_verified": "2026-06-25"
+    },
+    {
+      "name": "Rozanolixizumab",
+      "china_status": "NMPA approved",
+      "status_label": "已获批",
+      "status_date": "2025-03",
+      "china_indication": "与常规治疗药物联合，用于 AChR 或 MuSK 抗体阳性的成人 gMG 患者。",
+      "cde_status": "Approved after BLA review",
+      "source_type": "NMPA / NHSA / company",
+      "source_url": "https://www.nhsa.gov.cn/attach/Ypsn2025/YPSW202500124/YPSW202500124%28ppt%29.pdf",
+      "secondary_url": "https://www.phirda.com/artilce_38383.html?module=trackingCodeGenerator",
+      "last_verified": "2026-06-25"
+    },
+    {
+      "name": "Nipocalimab",
+      "china_status": "NMPA approved",
+      "status_label": "已获批",
+      "status_date": "2026-05",
+      "china_indication": "国家药监局通过优先审评审批程序批准尼卡利单抗注射液上市；用于 gMG 的具体人群需以正式说明书为准。",
+      "cde_status": "Priority review; approved",
+      "source_type": "NMPA",
+      "source_url": "https://www.nmpa.gov.cn/zhuanti/cxylqx/cxypxx/20260521165534114.html?m=&type=pc",
+      "secondary_url": "https://raredisease.cn/News/Info/23982",
+      "last_verified": "2026-06-25"
+    },
+    {
+      "name": "Batoclimab",
+      "china_status": "BLA under review",
+      "status_label": "审评中",
+      "status_date": "2024-06 resubmission; 2024-07 accepted",
+      "china_indication": "巴托利单抗治疗 gMG 的 BLA 已向 NMPA 重新递交并获受理；截至本次核对未记录 NMPA gMG 获批。",
+      "cde_status": "BLA resubmitted / accepted",
+      "source_type": "company / NMPA acceptance report",
+      "source_url": "https://www.harbourbiomed.com/news/222.html",
+      "secondary_url": "https://www.phirda.com/artilce_35789.html?cId=1&module=trackingCodeGenerator",
+      "last_verified": "2026-06-25"
+    },
+    {
+      "name": "Zilucoplan",
+      "china_status": "NMPA approved",
+      "status_label": "已获批",
+      "status_date": "2025-10",
+      "china_indication": "与常规治疗药物联合，用于 AChR 抗体阳性的成人 gMG 患者。",
+      "cde_status": "Approved after BLA review",
+      "source_type": "company press release",
+      "source_url": "https://www.prnasia.com/story/506734-1.shtml",
+      "secondary_url": "https://www.raredisease.cn/News/Info/24337?labelId=10324",
+      "last_verified": "2026-06-25"
+    },
+    {
+      "name": "Ravulizumab",
+      "china_status": "NMPA approved",
+      "status_label": "已获批",
+      "status_date": "2025-04",
+      "china_indication": "与常规治疗药物联合，用于 AChR 抗体阳性的成人 gMG 患者。",
+      "cde_status": "Approved after BLA review",
+      "source_type": "company",
+      "source_url": "https://www.astrazeneca.com/content/az-cn-zh/media/press-releases/2025/04-22-02.html",
+      "secondary_url": "",
+      "last_verified": "2026-06-25"
+    },
+    {
+      "name": "Eculizumab",
+      "china_status": "NMPA approved",
+      "status_label": "已获批",
+      "status_date": "2023-06 adult; 2026-01 pediatric 6+",
+      "china_indication": "成人 AChR 抗体阳性难治性 gMG；2026 年扩展至 6 岁及以上 AChR 抗体阳性难治性 gMG 儿童患者。",
+      "cde_status": "Approved; pediatric indication expansion approved",
+      "source_type": "company",
+      "source_url": "https://www.astrazeneca.com/content/az-cn-zh/media/press-releases/2023/06-13-01.html",
+      "secondary_url": "https://www.astrazeneca.com/content/az-cn-zh/media/press-releases/2026/01-26-01.html",
+      "last_verified": "2026-06-25"
+    },
+    {
+      "name": "Telitacicept",
+      "china_status": "NMPA approved",
+      "status_label": "已获批",
+      "status_date": "2025-05",
+      "china_indication": "与常规治疗药物联合，用于 AChR 抗体阳性的成人 gMG 患者。",
+      "cde_status": "Breakthrough therapy / priority review; approved",
+      "source_type": "company / NHSA",
+      "source_url": "https://www.remegen.com/index.php?cid=68&v=listing",
+      "secondary_url": "https://www.nhsa.gov.cn/attach/Ypsn2025/YPSN202500169/YPSN202500169.pdf",
+      "last_verified": "2026-06-25"
+    },
+    {
+      "name": "Rituximab",
+      "china_status": "No NMPA MG indication found",
+      "status_label": "无 MG 适应症",
+      "status_date": "2026-06 verification",
+      "china_indication": "未记录中国 gMG 获批适应症；临床使用需按说明书和院内规范确认。",
+      "cde_status": "Not tracked for MG approval in current source set",
+      "source_type": "manual verification",
+      "source_url": "",
+      "secondary_url": "",
+      "last_verified": "2026-06-25"
+    },
+    {
+      "name": "Inebilizumab",
+      "china_status": "No NMPA MG indication found",
+      "status_label": "无 MG 适应症",
+      "status_date": "2026-06 verification",
+      "china_indication": "未记录中国 gMG 获批适应症；全球状态和中国注册需继续跟踪。",
+      "cde_status": "Not tracked for MG approval in current source set",
+      "source_type": "manual verification",
+      "source_url": "",
+      "secondary_url": "",
+      "last_verified": "2026-06-25"
+    }
+  ]
+}

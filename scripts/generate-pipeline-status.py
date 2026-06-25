@@ -104,12 +104,20 @@ def buildStatus():
     stats = dashboard.get("stats") or {}
     fullPath = DATA_DIR / "literature-full.json"
     weeklyPath = DATA_DIR / "literature-weekly.json"
+    regulatoryPath = DATA_DIR / "china-regulatory-status.json"
+    clinicalTrialsPath = DATA_DIR / "clinicaltrials-pipeline-cache.json"
     fullCount = None
     weeklyCount = None
+    regulatoryPayload = {}
+    clinicalTrialsPayload = {}
     if fullPath.exists():
         fullCount = len(loadJson(fullPath))
     if weeklyPath.exists():
         weeklyCount = len(loadJson(weeklyPath))
+    if regulatoryPath.exists():
+        regulatoryPayload = loadJson(regulatoryPath)
+    if clinicalTrialsPath.exists():
+        clinicalTrialsPayload = loadJson(clinicalTrialsPath)
 
     recentCount = len(literature)
     signalCount = len(signals.get("signals") or [])
@@ -145,16 +153,24 @@ def buildStatus():
         {
             "id": "clinicalTrials",
             "name": "ClinicalTrials.gov",
-            "meta": "暂不作为自动数据源；需要竞品专题时按需抓取",
-            "status": "manual",
-            "status_label": "按需",
+            "meta": (
+                f"MG 研究缓存 {len(clinicalTrialsPayload.get('studies') or [])} 项 · 更新时间 {clinicalTrialsPayload.get('generated_at') or '待更新'}"
+                if clinicalTrialsPayload
+                else "等待 ClinicalTrials.gov 缓存"
+            ),
+            "status": "ok" if clinicalTrialsPayload else "manual",
+            "status_label": "已接入" if clinicalTrialsPayload else "待接入",
         },
         {
             "id": "regulatory",
-            "name": "监管动态 (FDA/NMPA)",
-            "meta": "不与 PubMed 周更混合；后续由公开来源和手动维护补充",
-            "status": "manual",
-            "status_label": "手动",
+            "name": "中国监管状态 (NMPA/CDE)",
+            "meta": (
+                f"{len(regulatoryPayload.get('drugs') or [])} 个 MG 相关治疗对象 · 核对 {regulatoryPayload.get('generated_at') or '待核对'}"
+                if regulatoryPayload
+                else "等待 data/china-regulatory-status.json"
+            ),
+            "status": "ok" if regulatoryPayload else "manual",
+            "status_label": "已接入" if regulatoryPayload else "待接入",
         },
         {
             "id": "frontendArtifacts",

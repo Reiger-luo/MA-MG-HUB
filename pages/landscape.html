@@ -32,40 +32,104 @@
   </div>
 
   <div class="intel-tabs" role="tablist" aria-label="诊治格局视图">
-    <button class="intel-tab active" type="button" data-landscape-tab="evidence">证据矩阵</button>
-    <button class="intel-tab" type="button" data-landscape-tab="tracks">治疗进展</button>
-    <button class="intel-tab" type="button" data-landscape-tab="china">中外差异</button>
-    <button class="intel-tab" type="button" data-landscape-tab="competitive">竞争格局</button>
+    <button class="intel-tab active" type="button" data-landscape-tab="overview">总览</button>
+    <button class="intel-tab" type="button" data-landscape-tab="answers">Living Answers</button>
   </div>
 
-  <section class="intel-tab-panel active" id="landscape-evidence">
-    <div class="landscape-grid" id="evidenceMatrix"></div>
-  </section>
+  <section class="intel-tab-panel active" id="landscape-overview">
+    <section class="landscape-hero">
+      <div>
+        <span class="eyebrow">Strategic Treatment Landscape</span>
+        <h2>本月格局变化</h2>
+        <p id="landscapePositioning">把近期证据、全库关系和竞争定位转成 MSL 可扫描的治疗格局判断。</p>
+      </div>
+      <div class="landscape-stat-grid" id="landscapeStats"></div>
+    </section>
 
-  <section class="intel-tab-panel" id="landscape-tracks">
-    <div class="chart-panel">
-      <div class="chart-title">通路文献热度</div>
-      <div class="chart-canvas" id="trackChart"></div>
-    </div>
-    <div class="landscape-grid" id="trackList"></div>
-  </section>
+    <section class="workspace-panel">
+      <div class="panel-head">
+        <div>
+          <h2>本月格局变化</h2>
+          <p class="panel-caption">每条变化都保留 PMID 入口，定位为拜访准备与阅读全文线索。</p>
+        </div>
+      </div>
+      <div class="landscape-change-grid" id="monthlyChangeList"></div>
+    </section>
 
-  <section class="intel-tab-panel" id="landscape-china">
     <div class="workspace-panel">
-      <h2>中外差异</h2>
-      <div class="comparison-table" id="chinaDiff"></div>
+      <div class="panel-head">
+        <div>
+          <h2>竞争格局矩阵</h2>
+          <p class="panel-caption">中国已获批治疗选择：按靶点/剂型、获批情况、适应症和近一年 abstract 证据厚度横向扫描。</p>
+        </div>
+      </div>
+      <div class="pipeline-table landscape-matrix-table" id="competitiveMatrix"></div>
+    </div>
+
+    <div class="workspace-panel">
+      <div class="panel-head">
+        <div>
+          <h2>临床开发管线矩阵</h2>
+          <p class="panel-caption">ClinicalTrials.gov 中仍在招募、进行或尚未招募的 MG Phase II+ 药物/生物制剂，按靶点、人群、关键试验、开发阶段与开始/Readout/结束时间轴扫描。</p>
+        </div>
+        <span class="update-badge" id="clinicalPipelineMeta">Loading...</span>
+      </div>
+      <div class="pipeline-table landscape-matrix-table clinical-pipeline-table" id="clinicalPipelineMatrix"></div>
+    </div>
+
+    <div class="workspace-panel">
+      <div class="panel-head">
+        <div>
+          <h2>中外证据与诊治差异</h2>
+          <p class="panel-caption">情报中心追踪新增中国证据；诊治格局只沉淀能改变诊疗路径理解的结构性差异。</p>
+        </div>
+      </div>
+      <div class="china-landscape-note" id="chinaLandscapePrinciple"></div>
+      <div class="china-landscape-grid">
+        <section>
+          <h3>指南/共识与路径差异</h3>
+          <div id="guidelineConsensusSlot"></div>
+        </section>
+        <section>
+          <div class="china-section-head">
+            <h3>证据方向</h3>
+            <span id="chinaEvidenceMeta"></span>
+          </div>
+          <div class="china-direction-list" id="chinaEvidenceDirections"></div>
+        </section>
+      </div>
     </div>
   </section>
 
-  <section class="intel-tab-panel" id="landscape-competitive">
+  <section class="intel-tab-panel" id="landscape-answers">
     <div class="workspace-panel">
-      <h2>竞争管线</h2>
-      <div class="pipeline-table" id="pipelineTable"></div>
+      <div class="panel-head">
+        <div>
+          <h2>Living Evidence Answers</h2>
+          <p class="panel-caption">基于 PubMed abstract 的基础提纲和要点，详细结论仍需阅读全文后整合。</p>
+        </div>
+        <span class="update-badge" id="answerCount">0 个问题</span>
+      </div>
+      <div class="kg-filter-bar">
+        <div class="knowledge-search compact">
+          <input id="answerSearch" placeholder="筛选问题、要点、PMID 或机制">
+        </div>
+        <select class="filter-input compact-select" id="answerCategory">
+          <option value="all">全部场景</option>
+        </select>
+        <select class="filter-input compact-select" id="answerStance">
+          <option value="all">全部回答姿态</option>
+          <option value="可积极回答">可积极回答</option>
+          <option value="可谨慎回答">可谨慎回答</option>
+          <option value="证据不足">证据不足</option>
+          <option value="仅供提纲">仅供提纲</option>
+        </select>
+      </div>
+      <div class="living-answer-grid" id="answerList"></div>
     </div>
   </section>
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
 <script src="/MA-MG-HUB/data/landscape-data.js"></script>
 <script src="/MA-MG-HUB/assets/landscape.js"></script>
 </body>
