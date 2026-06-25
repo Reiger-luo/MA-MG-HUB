@@ -84,13 +84,14 @@ animalTerms = [
     "rodent",
 ]
 
-caseTerms = ["case report", "case reports", "case series"]
+caseTerms = ["case report", "case reports", "case series", "a case of"]
 guidelineTerms = ["consensus", "guideline", "delphi"]
 retractionTerms = [
     "retraction:",
     "retraction of:",
     "retraction note",
     "retracted article",
+    "correction to:",
 ]
 
 retroAdjustTerms = [
@@ -261,6 +262,16 @@ mechanisticGeneticTerms = [
     "mechanism",
     "biomarker",
     "biomarkers",
+    "microarray",
+    "rna microarray",
+    "mirna",
+    "microrna",
+    "circrna",
+    "cerna",
+    "qpcr",
+    "rt-pcr",
+    "western blot",
+    "luciferase",
 ]
 
 biomarkerOutcomeTerms = [
@@ -383,6 +394,12 @@ def isHeor(text: str) -> bool:
         "quality adjusted life year",
         "qaly",
         "icer",
+        "qualitative design",
+        "individual interviews",
+        "healthcare professionals' perspectives",
+        "healthcare professionals perspectives",
+        "barriers and facilitators",
+        "interpretive description",
     ])
 
 
@@ -479,10 +496,43 @@ def hasDerivedRctAnalysis(text: str) -> bool:
     return True
 
 
+def isRealWorldNonInterventional(text: str) -> bool:
+    return hasAny(text, [
+        "non-interventional",
+        "real-world study",
+        "real world study",
+        "claims data",
+        "claims database",
+        "healthcare resource utilization",
+        "hcru",
+    ])
+
+
+def hasProspectivePhaseTrialContext(text: str) -> bool:
+    phasePattern = r"\bphase\s*(2|3|ii|iii|2/3|ii/iii|3/4|iii/iv)\b"
+    for match in re.finditer(phasePattern, text, re.I):
+        window = text[max(0, match.start() - 90):match.end() + 180]
+        if hasAny(window, priorTrialContextTerms) and not hasAny(window, [
+            "phase 2 trial",
+            "phase ii trial",
+            "phase 3 trial",
+            "phase iii trial",
+            "phase 2/3 trial",
+            "phase ii/iii trial",
+        ]):
+            continue
+        if hasAny(window, ["study", "studies"]) and not hasAny(window, ["trial", "randomized", "placebo"]):
+            continue
+        return True
+    return False
+
+
 def isRctAbstract(text: str, pubTypeIsRct: bool = False) -> bool:
     if pubTypeIsRct:
         return True
     if isSingleArmExplicit(text):
+        return False
+    if isRetrospective(text) and isRealWorldNonInterventional(text):
         return False
     if hasDerivedRctAnalysis(text):
         return True
@@ -491,8 +541,7 @@ def isRctAbstract(text: str, pubTypeIsRct: bool = False) -> bool:
     if hasRandomization and hasRctComparator(text) and hasAny(text, rctContextTerms):
         return True
 
-    phasePattern = r"\bphase\s*(2|3|ii|iii|2/3|ii/iii|3/4|iii/iv)\b"
-    if hasPattern(text, phasePattern) and hasRctComparator(text):
+    if hasProspectivePhaseTrialContext(text) and hasRctComparator(text):
         return True
     return False
 
@@ -757,6 +806,8 @@ def classifyStudyType(pubTypes, abstract: str | None = "", title: str | None = "
         return "Systematic Review"
     if "CLINICAL TRIAL PROTOCOL" in pubTypeText:
         return "Protocol"
+    if "PUBLISHED ERRATUM" in pubTypeText:
+        return "Comment"
     if "REVIEW" in pubTypeText and "SYSTEMATIC" not in pubTypeText:
         if hasAbstract and (word("meta-analysis", text) or isItc(text)):
             return "ITC"
