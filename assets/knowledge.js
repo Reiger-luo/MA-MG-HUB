@@ -126,7 +126,7 @@
       { label: '有证据等级', value: compactNumber(stats.evidence_articles), note: 'I-VI 或已分级' },
       { label: '图谱节点', value: stats.total_nodes || 0, note: '疾病/药物/机制/结局' },
       { label: '证据矩阵', value: stats.evidence_matrix_rows || 0, note: '可回链 PMID 的关系' },
-      { label: '专题策展', value: (curatedData.stats && curatedData.stats.topics) || 0, note: 'wiki 自动同步' }
+      { label: '专题', value: (curatedData.stats && curatedData.stats.topics) || 0, note: 'wiki 自动同步' }
     ];
     elStats.innerHTML = cards.map(function (card) {
       return '<article class="knowledge-stat-card">' +
@@ -486,12 +486,11 @@
         '<td>' + escapeHtml(row.article_count || 0) + '</td>' +
         '<td>' + escapeHtml(row.best_evidence_level || '未分级') + '</td>' +
         '<td>' + pmids + '</td>' +
-        '<td>' + escapeHtml(row.limitation || '') + '</td>' +
       '</tr>';
     }).join('');
 
     elMatrix.innerHTML = '<table><thead><tr>' +
-      '<th>来源节点</th><th>关系</th><th>目标节点</th><th>覆盖</th><th>文献量</th><th>最高等级</th><th>PMID</th><th>边界</th>' +
+      '<th>来源节点</th><th>关系</th><th>目标节点</th><th>覆盖</th><th>文献量</th><th>最高等级</th><th>PMID</th>' +
       '</tr></thead><tbody>' + tableRows + '</tbody></table>';
 
     Array.prototype.forEach.call(elMatrix.querySelectorAll('[data-node]'), function (button) {
@@ -685,7 +684,7 @@
         escapeHtml(node.title) + '</button><br><span class="kg-ref-meta">' + escapeHtml(typeLabel[node.type]) +
         ' · ' + escapeHtml(node.article_count) + ' 篇 abstract</span></li>';
     });
-    html += renderSearchGroup('专题策展', topicHits, function (topic) {
+    html += renderSearchGroup('专题', topicHits, function (topic) {
       return '<li><button class="matrix-node-link" type="button" data-topic="' + escapeHtml(topic.id) + '">' +
         escapeHtml(topic.title) + '</button><br><span class="kg-ref-meta">' +
         escapeHtml(sourceTypeLabelForTopic(topic.source_type)) + ' · ' + escapeHtml((topic.evidence_refs || []).length) + ' PMID</span></li>';

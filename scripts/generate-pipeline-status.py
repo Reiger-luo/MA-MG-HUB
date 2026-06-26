@@ -26,7 +26,7 @@ PUBLIC_ARTIFACTS = [
     ("expert-profiles.js", "专家画像", "MG_EXPERT_PROFILES"),
     ("landscape-data.js", "诊治格局", "MG_LANDSCAPE_DATA"),
     ("knowledge-graph.js", "知识库图谱", "MG_KNOWLEDGE_GRAPH"),
-    ("curated-topics.js", "专题策展层", "MG_CURATED_TOPICS"),
+    ("curated-topics.js", "专题层", "MG_CURATED_TOPICS"),
     ("content-modules.js", "内容模块", "MG_CONTENT_MODULES"),
     ("weekly-summary.md", "当前通讯渠道周报", None),
 ]
