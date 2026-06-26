@@ -17,6 +17,23 @@
   curatedTopics.forEach(function (topic) { topicsById[topic.id] = topic; });
   var articles = window.MG_LITERATURE_DATA || [];
   var experts = (window.MG_EXPERT_PROFILES && window.MG_EXPERT_PROFILES.experts) || [];
+  var searchDepsLoaded = !!(articles.length || experts.length);
+
+  function loadSearchDeps(callback) {
+    if (searchDepsLoaded) { callback(); return; }
+    var remaining = 2;
+    function done() { if (--remaining === 0) { searchDepsLoaded = true; callback(); } }
+    var s1 = document.createElement('script');
+    s1.src = '/MA-MG-HUB/data/literature-recent.js';
+    s1.onload = done;
+    s1.onerror = done;
+    document.head.appendChild(s1);
+    var s2 = document.createElement('script');
+    s2.src = '/MA-MG-HUB/data/expert-profiles.js';
+    s2.onload = done;
+    s2.onerror = done;
+    document.head.appendChild(s2);
+  }
 
   var elBadge = document.getElementById('knowledgeBadge');
   var elStats = document.getElementById('knowledgeStats');
@@ -648,7 +665,18 @@
 
   function attachSearch() {
     if (!elSearch || !elSearchResults) return;
-    elSearch.addEventListener('input', renderSearch);
+    elSearch.addEventListener('input', function () {
+      if (!searchDepsLoaded) {
+        elSearchResults.innerHTML = '<div class="kg-empty-hint">正在加载跨库数据…</div>';
+        loadSearchDeps(function () {
+          articles = window.MG_LITERATURE_DATA || [];
+          experts = (window.MG_EXPERT_PROFILES && window.MG_EXPERT_PROFILES.experts) || [];
+          renderSearch();
+        });
+      } else {
+        renderSearch();
+      }
+    });
     renderSearch();
   }
 

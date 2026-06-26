@@ -113,9 +113,9 @@
     <div class="log-line">正在加载管线状态...</div>
   </div>
 
-  <script src="/MA-MG-HUB/data/dashboard-data.js"></script>
-  <script src="/MA-MG-HUB/data/pipeline-status.js"></script>
-  <script>
+  <script src="/MA-MG-HUB/data/dashboard-data.js" defer></script>
+  <script src="/MA-MG-HUB/data/pipeline-status.js" defer></script>
+  <script defer>
   (function(){
     const dashboard = window.MG_DASHBOARD_DATA || {};
     const stats = dashboard.stats || {};

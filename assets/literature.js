@@ -13,6 +13,36 @@
   let currentPage = 0;
   const PAGE_SIZE = 10;
   const SIGNAL_WINDOW_DAYS = 14;
+  var echartsLoading = false;
+  var chinaDataLoading = false;
+
+  function loadScript(src, callback) {
+    var s = document.createElement('script');
+    s.src = src;
+    s.onload = callback;
+    s.onerror = callback;
+    document.head.appendChild(s);
+  }
+
+  function loadEcharts(cb) {
+    if (typeof echarts !== 'undefined') { cb(); return; }
+    if (echartsLoading) return;
+    echartsLoading = true;
+    loadScript('https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js', function () {
+      echartsLoading = false;
+      cb();
+    });
+  }
+
+  function loadChinaData(cb) {
+    if (window.MG_CHINA_DATA) { cb(); return; }
+    if (chinaDataLoading) return;
+    chinaDataLoading = true;
+    loadScript('/MA-MG-HUB/data/china-intelligence.js', function () {
+      chinaDataLoading = false;
+      cb();
+    });
+  }
 
   const $ = id => document.getElementById(id);
   const el = {
@@ -651,48 +681,51 @@
 
   function renderChinaInsights() {
     if (!el.chinaSourceList) return;
-    var chinaPayload = window.MG_CHINA_DATA || null;
-    var chinaArticles = chinaPayload && chinaPayload.pubmed_articles ? chinaPayload.pubmed_articles.slice() : [];
-    if (chinaArticles.length === 0) {
-      for (var i = 0; i < allArticles.length; i++) {
-        if (allArticles[i].china_related) chinaArticles.push(allArticles[i]);
-      }
-    }
-    chinaArticles.sort(function(a, b) {
-      return (parseDate(b.entry_date) || 0) - (parseDate(a.entry_date) || 0);
-    });
-
-    if (el.chinaBadge) {
-      var label = chinaPayload && chinaPayload.summary ? '近1年证据文献 ' : '近1年 ';
-      var chinaTotal = chinaPayload && chinaPayload.summary ? chinaPayload.summary.recent_year_articles : chinaArticles.length;
-      el.chinaBadge.textContent = label + chinaTotal + ' 篇';
-    }
-
-    var sourceHtml = '';
-    if (chinaPayload && chinaPayload.top_journals && chinaPayload.top_journals.length) {
-      sourceHtml += '<div class="source-block"><h4>主要期刊</h4>' + renderRankItems(chinaPayload.top_journals, 10, 'journal') + '</div>';
-      sourceHtml += '<div class="source-block"><h4>机构线索（第一作者机构出现频次排序）</h4>' + renderRankItems(chinaPayload.top_institutions || [], 8, 'institution') + '</div>';
-    } else {
-      var journalCounts = {};
-      var institutionCounts = {};
-      for (var j = 0; j < chinaArticles.length; j++) {
-        var art = chinaArticles[j];
-        var journal = art.journal || 'Unknown';
-        journalCounts[journal] = (journalCounts[journal] || 0) + 1;
-        var affs = art.affiliations || [];
-        for (var k = 0; k < affs.length; k++) {
-          var inst = normalizeInstitution(affs[k]);
-          if (inst) institutionCounts[inst] = (institutionCounts[inst] || 0) + 1;
+    loadChinaData(function () {
+      var chinaPayload = window.MG_CHINA_DATA || null;
+      var chinaArticles = chinaPayload && chinaPayload.pubmed_articles ? chinaPayload.pubmed_articles.slice() : [];
+      if (chinaArticles.length === 0) {
+        for (var i = 0; i < allArticles.length; i++) {
+          if (allArticles[i].china_related) chinaArticles.push(allArticles[i]);
         }
       }
-      sourceHtml += '<div class="source-block"><h4>主要期刊</h4>' + renderRankList(journalCounts, 10) + '</div>';
-      sourceHtml += '<div class="source-block"><h4>机构线索（第一作者机构出现频次排序）</h4>' + renderRankList(institutionCounts, 8) + '</div>';
-    }
-    el.chinaSourceList.innerHTML =
-      sourceHtml;
-    bindRankLinks();
+      chinaArticles.sort(function(a, b) {
+        return (parseDate(b.entry_date) || 0) - (parseDate(a.entry_date) || 0);
+      });
 
-    renderChinaCharts(chinaArticles, chinaPayload);
+      if (el.chinaBadge) {
+        var label = chinaPayload && chinaPayload.summary ? '近1年证据文献 ' : '近1年 ';
+        var chinaTotal = chinaPayload && chinaPayload.summary ? chinaPayload.summary.recent_year_articles : chinaArticles.length;
+        el.chinaBadge.textContent = label + chinaTotal + ' 篇';
+      }
+
+      var sourceHtml = '';
+      if (chinaPayload && chinaPayload.top_journals && chinaPayload.top_journals.length) {
+        sourceHtml += '<div class="source-block"><h4>主要期刊</h4>' + renderRankItems(chinaPayload.top_journals, 10, 'journal') + '</div>';
+        sourceHtml += '<div class="source-block"><h4>机构线索（第一作者机构出现频次排序）</h4>' + renderRankItems(chinaPayload.top_institutions || [], 8, 'institution') + '</div>';
+      } else {
+        var journalCounts = {};
+        var institutionCounts = {};
+        for (var j = 0; j < chinaArticles.length; j++) {
+          var art = chinaArticles[j];
+          var journal = art.journal || 'Unknown';
+          journalCounts[journal] = (journalCounts[journal] || 0) + 1;
+          var affs = art.affiliations || [];
+          for (var k = 0; k < affs.length; k++) {
+            var inst = normalizeInstitution(affs[k]);
+            if (inst) institutionCounts[inst] = (institutionCounts[inst] || 0) + 1;
+          }
+        }
+        sourceHtml += '<div class="source-block"><h4>主要期刊</h4>' + renderRankList(journalCounts, 10) + '</div>';
+        sourceHtml += '<div class="source-block"><h4>机构线索（第一作者机构出现频次排序）</h4>' + renderRankList(institutionCounts, 8) + '</div>';
+      }
+      el.chinaSourceList.innerHTML = sourceHtml;
+      bindRankLinks();
+
+      loadEcharts(function () {
+        renderChinaCharts(chinaArticles, chinaPayload);
+      });
+    });
   }
 
   function renderCompactArticle(article) {
@@ -808,15 +841,7 @@
   }
 
   function renderChinaCharts(chinaArticles, chinaPayload) {
-    if (typeof echarts === 'undefined') {
-      var monthlyEl = document.getElementById('chinaMonthlyChart');
-      var evidenceEl = document.getElementById('chinaEvidenceChart');
-      var quartileEl = document.getElementById('chinaQuartileChart');
-      if (monthlyEl) monthlyEl.innerHTML = '<div class="chart-fallback">图表库未加载</div>';
-      if (evidenceEl) evidenceEl.innerHTML = '<div class="chart-fallback">图表库未加载</div>';
-      if (quartileEl) quartileEl.innerHTML = '<div class="chart-fallback">图表库未加载</div>';
-      return;
-    }
+    if (typeof echarts === 'undefined') return;
 
     var allMonths = groupByMonth(allArticles);
     var chinaMonths = {};
