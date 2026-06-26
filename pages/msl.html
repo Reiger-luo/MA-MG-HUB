@@ -14,10 +14,9 @@
     <div class="nav-links">
       <a href="/MA-MG-HUB/" class="nav-link">工作台</a>
       <a href="/MA-MG-HUB/pages/literature.html" class="nav-link">情报中心</a>
+      <a href="/MA-MG-HUB/pages/landscape.html" class="nav-link">诊治格局</a>
       <a href="/MA-MG-HUB/pages/knowledge.html" class="nav-link">知识库</a>
       <a href="/MA-MG-HUB/pages/msl.html" class="nav-link active">MSL工作台</a>
-      <a href="/MA-MG-HUB/pages/materials.html" class="nav-link">内容工坊</a>
-      <a href="/MA-MG-HUB/pages/landscape.html" class="nav-link">诊治格局</a>
       <a href="/MA-MG-HUB/pages/data-ops.html" class="nav-link">数据状态</a>
     </div>
   </div>
@@ -32,17 +31,69 @@
   </div>
 
   <div class="intel-tabs" role="tablist" aria-label="MSL 工作台视图">
-    <button class="intel-tab active" type="button" data-msl-tab="experts">专家画像</button>
-    <button class="intel-tab" type="button" data-msl-tab="visit">拜访助手</button>
-    <button class="intel-tab" type="button" data-msl-tab="followup">Follow-up</button>
+    <button class="intel-tab active" type="button" data-msl-tab="visit">拜访助手</button>
+    <button class="intel-tab" type="button" data-msl-tab="experts">专家画像</button>
   </div>
 
-  <section class="intel-tab-panel active" id="msl-experts">
+  <section class="intel-tab-panel active" id="msl-visit">
+    <div class="msl-assistant-layout">
+      <div class="msl-builder-col">
+        <section class="workspace-panel">
+          <div class="panel-head">
+            <div>
+              <h2>选择专家</h2>
+              <p class="panel-caption" id="visitExpertMeta">Loading...</p>
+            </div>
+          </div>
+          <div class="expert-search-box">
+            <input class="filter-input" id="visitExpertSearch" placeholder="姓名 / 拼音 / 医院 / 研究方向">
+          </div>
+          <div class="expert-search-results" id="visitChinaMatches"></div>
+          <details class="foreign-expert-collapse" id="foreignExpertCollapse">
+            <summary>国外专家 <span id="foreignExpertCount">0</span></summary>
+            <div class="expert-search-results" id="visitForeignMatches"></div>
+          </details>
+        </section>
+
+        <section class="workspace-panel">
+          <div class="panel-head">
+            <div>
+              <h2>产品研究信息</h2>
+              <p class="panel-caption" id="moduleMeta">Loading...</p>
+            </div>
+          </div>
+          <div class="module-list compact" id="visitModuleList"></div>
+          <div class="compliance-box compact" id="visitCompliance"></div>
+        </section>
+      </div>
+
+      <section class="workspace-panel msl-brief-panel">
+        <div class="panel-head">
+          <div>
+            <h2>拜访话题建议</h2>
+            <p class="panel-caption" id="selectedExpertLine">请选择专家</p>
+          </div>
+          <button class="btn primary" id="btnGenerateBrief">生成建议</button>
+        </div>
+        <div class="brief-preview msl-brief-output" id="visitBrief"></div>
+      </section>
+    </div>
+  </section>
+
+  <section class="intel-tab-panel" id="msl-experts">
     <div class="workbench-grid">
       <aside class="sidebar-filters">
         <div class="filter-group">
           <label class="filter-label">搜索专家</label>
           <input class="filter-input" id="expertSearch" placeholder="姓名 / 机构 / 研究主题">
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">专家组</label>
+          <div class="filter-radio-list" id="regionFilters">
+            <label class="filter-checkbox-item"><input type="radio" name="region" value="china" checked> 中国专家</label>
+            <label class="filter-checkbox-item"><input type="radio" name="region" value="international"> 国外专家</label>
+            <label class="filter-checkbox-item"><input type="radio" name="region" value="all"> 全部</label>
+          </div>
         </div>
         <div class="filter-group">
           <label class="filter-label">研究方向</label>
@@ -54,55 +105,11 @@
       <aside class="workspace-detail" id="expertDetail"></aside>
     </div>
   </section>
-
-  <section class="intel-tab-panel" id="msl-visit">
-    <div class="workspace-two-col">
-      <section class="workspace-panel">
-        <h2>新建拜访简报</h2>
-        <div class="form-grid">
-          <label>
-            <span>选择专家</span>
-            <select id="visitExpert"></select>
-          </label>
-          <label>
-            <span>拜访类型</span>
-            <select id="visitType">
-              <option value="新拜访">新拜访</option>
-              <option value="回访">回访</option>
-            </select>
-          </label>
-        </div>
-        <button class="btn primary" id="btnGenerateBrief">生成拜访简报</button>
-        <div class="brief-preview" id="visitBrief"></div>
-      </section>
-
-      <section class="workspace-panel">
-        <h2>拜访后结构化录入</h2>
-        <div class="form-grid single">
-          <label><span>讨论主题</span><input id="visitTopic" placeholder="例如：FcRn 长期安全性"></label>
-          <label><span>专家观点 / 反馈</span><textarea id="expertView" rows="4" placeholder="记录专家明确表达的观点、疑问或证据缺口"></textarea></label>
-          <label><span>需跟进材料</span><input id="materialRequest" placeholder="例如：提供 2 年随访数据"></label>
-          <label><span>截止日期</span><input id="followDeadline" type="date"></label>
-        </div>
-        <button class="btn primary" id="btnSaveVisit">保存到本地工作台</button>
-        <div class="save-note" id="visitSaveNote">拜访记录仅保存在当前浏览器 localStorage，不进入公开仓库。</div>
-      </section>
-    </div>
-  </section>
-
-  <section class="intel-tab-panel" id="msl-followup">
-    <div class="workspace-panel">
-      <div class="panel-head">
-        <h2>Follow-up 追踪</h2>
-        <button class="btn" id="btnClearClosed">清理已关闭</button>
-      </div>
-      <div class="followup-list" id="followupList"></div>
-    </div>
-  </section>
 </main>
 
 <script src="/MA-MG-HUB/data/expert-profiles.js"></script>
 <script src="/MA-MG-HUB/data/signals-weekly.js"></script>
+<script src="/MA-MG-HUB/data/content-modules.js"></script>
 <script src="/MA-MG-HUB/assets/msl.js"></script>
 </body>
 </html>

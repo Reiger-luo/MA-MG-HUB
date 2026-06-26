@@ -110,11 +110,24 @@ def parse_article_xml(article_elem, edat_map):
     abstract = "\n".join(abstract_parts)
 
     authors = []
-    for author in medline.findall(".//Author"):
-        last = author.findtext("LastName", "")
-        fore = author.findtext("ForeName", "")
-        if last:
-            authors.append(f"{last} {fore}" if fore else last)
+    author_affiliations = []
+    affiliations = []
+    for position, author in enumerate(medline.findall(".//Author"), 1):
+        name = extract_author_name(author)
+        if not name:
+            continue
+        authors.append(name)
+        author_affs = []
+        for aff in author.findall("./AffiliationInfo/Affiliation"):
+            if aff.text and aff.text.strip():
+                author_affs.append(aff.text.strip())
+        author_affs = unique_list(author_affs)
+        affiliations.extend(author_affs)
+        author_affiliations.append({
+            "position": position,
+            "name": name,
+            "affiliations": author_affs,
+        })
     # 期刊：优先全称（Title），次选 ISO 缩写
     journal_title = medline.findtext(".//Journal/Title", "")
     journal_iso = medline.findtext(".//Journal/ISOAbbreviation", "")
@@ -146,10 +159,7 @@ def parse_article_xml(article_elem, edat_map):
             doi = eid.text or ""
             break
 
-    affiliations = []
-    first_aff = medline.find(".//Author[1]/AffiliationInfo/Affiliation")
-    if first_aff is not None and first_aff.text:
-        affiliations.append(first_aff.text.strip())
+    affiliations = unique_list(affiliations)
 
     # Publication Types
     pub_types = []
@@ -164,6 +174,7 @@ def parse_article_xml(article_elem, edat_map):
         "title": title.strip(),
         "abstract": abstract.strip(),
         "authors": authors,
+        "author_affiliations": author_affiliations,
         "journal": journal,
         "entry_date": entry_date,
         "pub_date": pub_date,
@@ -175,6 +186,26 @@ def parse_article_xml(article_elem, edat_map):
         "study_types": [],
         "evidence_level": None,
     }
+
+
+def extract_author_name(author_elem):
+    last = author_elem.findtext("LastName", "")
+    fore = author_elem.findtext("ForeName", "")
+    collective = author_elem.findtext("CollectiveName", "")
+    if last:
+        return f"{last} {fore}".strip() if fore else last.strip()
+    return collective.strip()
+
+
+def unique_list(values):
+    seen = set()
+    result = []
+    for value in values:
+        if value in seen:
+            continue
+        seen.add(value)
+        result.append(value)
+    return result
 
 
 def efetch_pmids(pmids, edat_map):

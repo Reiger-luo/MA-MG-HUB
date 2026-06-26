@@ -7,6 +7,7 @@ node_modules/
 # 大体积本地数据（公开前端 .js 产物入仓库，原始 json 留本地）
 data/literature-full.json
 data/literature-recent.json
+data/pubmed-author-institution-index.json
 data/archive/
 
 # LLM 引擎层（阶段 0）— 密钥、缓存、成本日志不入仓库

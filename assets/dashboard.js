@@ -40,26 +40,9 @@
     document.getElementById('dashboardSignals').innerHTML = html || '<div class="empty-state small"><h3>暂无信号</h3></div>';
   }
 
-  function renderWork() {
-    document.getElementById('dashboardWork').innerHTML = (data.work_items || []).map(function(item) {
-      return '<a class="work-item" href="' + item.href + '"><span>' + escapeHtml(item.type) + '</span><strong>' + escapeHtml(item.label) + '</strong><em>' + item.count + '</em></a>';
-    }).join('');
-  }
-
-  function renderTeam() {
-    var stats = data.stats || {};
-    document.getElementById('teamOverview').innerHTML =
-      '<div class="overview-row"><span>MSL 闭环</span><strong>本地 MVP 已就绪</strong></div>' +
-      '<div class="overview-row"><span>专家候选池</span><strong>' + (stats.experts || 0) + ' 位</strong></div>' +
-      '<div class="overview-row"><span>待确认模块</span><strong>' + (stats.modules || 0) + ' 个</strong></div>' +
-      '<div class="overview-row"><span>更新时间</span><strong>' + escapeHtml(data.generated_at || '-') + '</strong></div>';
-  }
-
   function init() {
     renderStats();
     renderSignals();
-    renderWork();
-    renderTeam();
     var badge = document.getElementById('dashboardBadge');
     if (badge) badge.textContent = '数据更新 ' + (data.generated_at || '-');
   }
