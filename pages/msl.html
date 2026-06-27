@@ -76,19 +76,56 @@
   </section>
 
   <section class="intel-tab-panel active" id="msl-experts">
-    <div class="workbench-grid">
+    <div class="workbench-grid msl-profile-grid">
       <aside class="sidebar-filters">
         <div class="filter-group">
           <label class="filter-label">搜索专家</label>
-          <input class="filter-input" id="expertSearch" placeholder="姓名 / 机构 / 研究主题">
+          <input class="filter-input" id="expertSearch" placeholder="姓名 / 拼音 / 医院 / 城市 / 方向">
         </div>
         <div class="filter-group">
           <label class="filter-label">研究方向</label>
           <div class="filter-radio-list" id="topicFilters"></div>
         </div>
+        <div class="filter-group">
+          <label class="filter-label" for="institutionFilter">机构</label>
+          <input class="filter-input" id="institutionFilter" list="institutionOptions" placeholder="输入医院或大学关键词">
+          <datalist id="institutionOptions"></datalist>
+        </div>
+        <div class="filter-grid-two">
+          <div class="filter-group">
+            <label class="filter-label" for="provinceFilter">省份</label>
+            <select class="filter-input" id="provinceFilter">
+              <option value="all">全部</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label class="filter-label" for="productivityFilter">发文量</label>
+            <select class="filter-input" id="productivityFilter">
+              <option value="all">全部</option>
+              <option value="ge20">≥20 篇</option>
+              <option value="ge10">10-19 篇</option>
+              <option value="lt10">&lt;10 篇</option>
+            </select>
+          </div>
+        </div>
+        <div class="filter-group">
+          <label class="filter-label" for="activeFilter">近 3 年活跃</label>
+          <select class="filter-input" id="activeFilter">
+            <option value="all">全部</option>
+            <option value="ge10">≥10 篇</option>
+            <option value="ge5">5-9 篇</option>
+            <option value="lt5">&lt;5 篇</option>
+          </select>
+        </div>
         <div class="filter-stats">候选专家 <strong id="expertCount">0</strong> 位</div>
       </aside>
-      <section class="workspace-list" id="expertList"></section>
+      <section class="workspace-list">
+        <div class="result-panel-head">
+          <h2>匹配结果</h2>
+          <span id="expertResultMeta">Loading...</span>
+        </div>
+        <div id="expertList"></div>
+      </section>
       <aside class="workspace-detail" id="expertDetail"></aside>
     </div>
   </section>

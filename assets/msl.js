@@ -2,7 +2,10 @@
 (function() {
   'use strict';
 
-  var profiles = (window.MG_EXPERT_PROFILES && window.MG_EXPERT_PROFILES.experts) || [];
+  var expertPayload = window.MG_EXPERT_PROFILES || {};
+  var profiles = expertPayload.experts || [];
+  var expertIndex = expertPayload.china_expert_index || [];
+  var expertPool = buildExpertPool();
   var signals = (window.MG_SIGNALS_DATA && window.MG_SIGNALS_DATA.signals) || [];
   var contentPayload = window.MG_CONTENT_MODULES || { modules: [], templates: [], compliance_rules: [] };
   var modules = contentPayload.modules || [];
@@ -10,7 +13,16 @@
   var selectedExpertId = '';
   var selectedTopic = 'all';
   var selectedRegion = 'china';
+  var selectedProvince = 'all';
+  var selectedProductivity = 'all';
+  var selectedActive = 'all';
   var selectedModuleIds = initialModuleIds();
+  var expertResultLimit = 12;
+
+  var researchTopicOrder = [
+    '真实世界', '疗效', '安全性', '机制', '抗体分型',
+    'FcRn', '补体', 'B细胞', '诊疗策略'
+  ];
 
   var chinaInstitutionTerms = [
     'china', 'chinese', 'taiwan', 'hong kong', 'macau', 'beijing', 'shanghai',
@@ -25,7 +37,13 @@
     search: document.getElementById('expertSearch'),
     topicFilters: document.getElementById('topicFilters'),
     regionFilters: document.getElementById('regionFilters'),
+    institutionFilter: document.getElementById('institutionFilter'),
+    institutionOptions: document.getElementById('institutionOptions'),
+    provinceFilter: document.getElementById('provinceFilter'),
+    productivityFilter: document.getElementById('productivityFilter'),
+    activeFilter: document.getElementById('activeFilter'),
     expertCount: document.getElementById('expertCount'),
+    expertResultMeta: document.getElementById('expertResultMeta'),
     expertList: document.getElementById('expertList'),
     expertDetail: document.getElementById('expertDetail'),
     visitSearch: document.getElementById('visitExpertSearch'),
@@ -46,6 +64,32 @@
 
   function initialModuleIds() {
     return [];
+  }
+
+  function buildExpertPool() {
+    var fullByProfileKey = {};
+    profiles.forEach(function(expert) {
+      if (expert.profile_key) fullByProfileKey[expert.profile_key] = expert;
+    });
+    var merged = [];
+    var seen = {};
+    expertIndex.forEach(function(expert) {
+      var key = expert.profile_key || expert.id;
+      var full = fullByProfileKey[key];
+      var item = full ? Object.assign({}, expert, full, { in_full_profile: true, is_compact: false }) : expert;
+      if (!seen[key]) {
+        merged.push(item);
+        seen[key] = true;
+      }
+    });
+    profiles.forEach(function(expert) {
+      var key = expert.profile_key || expert.id;
+      if (!seen[key]) {
+        merged.push(expert);
+        seen[key] = true;
+      }
+    });
+    return merged;
   }
 
   function normalizeText(value) {
@@ -70,7 +114,7 @@
   function isChinaExpert(expert) {
     var metrics = expert.metrics || {};
     var region = normalizeText(expert.region || expert.country || expert.group || '');
-    if (expert.profile_scope === 'china_author_identity' || expert.profile_scope === 'china_author_institution') return true;
+    if (expert.profile_scope === 'china_author_identity' || expert.profile_scope === 'china_author_identity_index' || expert.profile_scope === 'china_author_institution') return true;
     return region === 'china' || region === 'cn' || Boolean(expert.name_zh) || hasChinaInstitution(expert) || (metrics.china_related || 0) >= 8;
   }
 
@@ -103,12 +147,16 @@
   function expertSearchBlob(expert) {
     var interests = (expert.interests || []).map(function(item) { return item.term; }).join(' ');
     var aliases = (expert.aliases || expert.name_aliases || []).join(' ');
+    var institutionAliases = (expert.institution_aliases || []).map(function(item) { return item.name || ''; }).join(' ');
     return normalizeText([
       expert.name_en,
       compactName(expert.name_en),
       expert.name_zh,
       aliases,
       expert.affiliation,
+      institutionAliases,
+      expert.province,
+      expert.city,
       (expert.public_tags || []).join(' '),
       interests
     ].join(' '));
@@ -139,7 +187,7 @@
   }
 
   function sortedExperts(query, region) {
-    return profiles.map(function(expert) {
+    return expertPool.map(function(expert) {
       return { expert: expert, score: expertScore(expert, query) };
     }).filter(function(item) {
       if (item.score < 0) return false;
@@ -169,15 +217,15 @@
 
   function topTopics() {
     var counts = {};
-    for (var i = 0; i < profiles.length; i++) {
+    for (var i = 0; i < expertPool.length; i++) {
       var regionOk = selectedRegion === 'all' ||
-        (selectedRegion === 'china' && isChinaExpert(profiles[i])) ||
-        (selectedRegion === 'international' && !isChinaExpert(profiles[i]));
+        (selectedRegion === 'china' && isChinaExpert(expertPool[i])) ||
+        (selectedRegion === 'international' && !isChinaExpert(expertPool[i]));
       if (!regionOk) continue;
-      var tags = profiles[i].public_tags || [];
+      var tags = expertPool[i].public_tags || [];
       for (var j = 0; j < tags.length; j++) counts[tags[j]] = (counts[tags[j]] || 0) + 1;
     }
-    return Object.keys(counts).sort(function(a, b) { return counts[b] - counts[a]; }).slice(0, 10);
+    return researchTopicOrder.filter(function(topic) { return counts[topic]; });
   }
 
   function renderTopicFilters() {
@@ -189,6 +237,38 @@
     el.topicFilters.innerHTML = html;
   }
 
+  function renderExpertFilterOptions() {
+    if (el.provinceFilter) {
+      var provinceCounts = {};
+      expertPool.forEach(function(expert) {
+        if (!isChinaExpert(expert)) return;
+        var province = expert.province || '未识别';
+        provinceCounts[province] = (provinceCounts[province] || 0) + 1;
+      });
+      var provinces = Object.keys(provinceCounts).sort(function(a, b) {
+        if (a === '未识别') return 1;
+        if (b === '未识别') return -1;
+        return provinceCounts[b] - provinceCounts[a] || a.localeCompare(b, 'zh-Hans-CN');
+      });
+      el.provinceFilter.innerHTML = '<option value="all">全部</option>' + provinces.map(function(province) {
+        return '<option value="' + escapeHtml(province) + '">' + escapeHtml(province) + ' · ' + provinceCounts[province] + '</option>';
+      }).join('');
+    }
+    if (el.institutionOptions) {
+      var institutionCounts = {};
+      expertPool.forEach(function(expert) {
+        if (!isChinaExpert(expert) || !expert.affiliation) return;
+        institutionCounts[expert.affiliation] = (institutionCounts[expert.affiliation] || 0) + 1;
+      });
+      var institutions = Object.keys(institutionCounts).sort(function(a, b) {
+        return institutionCounts[b] - institutionCounts[a] || a.localeCompare(b);
+      }).slice(0, 120);
+      el.institutionOptions.innerHTML = institutions.map(function(name) {
+        return '<option value="' + escapeHtml(name) + '">';
+      }).join('');
+    }
+  }
+
   function bindTopicFilters() {
     el.topicFilters.addEventListener('change', function(e) {
       if (e.target && e.target.name === 'topic') {
@@ -196,19 +276,40 @@
         renderExperts();
       }
     });
-    if (!el.regionFilters) return;
-    el.regionFilters.addEventListener('change', function(e) {
-      if (e.target && e.target.name === 'region') {
-        selectedRegion = e.target.value;
-        selectedTopic = 'all';
-        renderTopicFilters();
+    if (el.regionFilters) {
+      el.regionFilters.addEventListener('change', function(e) {
+        if (e.target && e.target.name === 'region') {
+          selectedRegion = e.target.value;
+          selectedTopic = 'all';
+          renderTopicFilters();
+          renderExperts();
+        }
+      });
+    }
+    if (el.institutionFilter) el.institutionFilter.addEventListener('input', renderExperts);
+    if (el.provinceFilter) {
+      el.provinceFilter.addEventListener('change', function() {
+        selectedProvince = el.provinceFilter.value || 'all';
         renderExperts();
-      }
-    });
+      });
+    }
+    if (el.productivityFilter) {
+      el.productivityFilter.addEventListener('change', function() {
+        selectedProductivity = el.productivityFilter.value || 'all';
+        renderExperts();
+      });
+    }
+    if (el.activeFilter) {
+      el.activeFilter.addEventListener('change', function() {
+        selectedActive = el.activeFilter.value || 'all';
+        renderExperts();
+      });
+    }
   }
 
   function filteredExperts() {
     var keyword = el.search ? (el.search.value || '').trim() : '';
+    var institutionKeyword = el.institutionFilter ? (el.institutionFilter.value || '').trim() : '';
     var list = sortedExperts(keyword, selectedRegion);
     if (selectedTopic !== 'all') {
       list = list.filter(function(expert) {
@@ -216,7 +317,55 @@
         return text.indexOf(normalizeText(selectedTopic)) !== -1;
       });
     }
+    if (institutionKeyword) {
+      var institutionQuery = normalizeText(institutionKeyword);
+      list = list.filter(function(expert) {
+        return normalizeText([
+          expert.affiliation,
+          expert.primary_institution,
+          (expert.institution_aliases || []).map(function(item) { return item.name || ''; }).join(' ')
+        ].join(' ')).indexOf(institutionQuery) !== -1;
+      });
+    }
+    if (selectedProvince !== 'all') {
+      list = list.filter(function(expert) {
+        return (expert.province || '未识别') === selectedProvince;
+      });
+    }
+    list = list.filter(matchesProductivityFilter).filter(matchesActiveFilter);
+    var exactMatches = exactNameMatches(list, keyword);
+    if (exactMatches.length) return exactMatches;
     return list;
+  }
+
+  function exactNameMatches(list, keyword) {
+    var query = normalizeText(keyword);
+    var compactQuery = compactName(keyword);
+    if (!query || query.length < 3) return [];
+    return list.filter(function(expert) {
+      var names = [
+        normalizeText(expert.name_en),
+        compactName(expert.name_en),
+        normalizeText(expert.name_zh)
+      ];
+      return names.indexOf(query) !== -1 || names.indexOf(compactQuery) !== -1;
+    });
+  }
+
+  function matchesProductivityFilter(expert) {
+    var total = (expert.metrics || {}).total_publications || 0;
+    if (selectedProductivity === 'ge20') return total >= 20;
+    if (selectedProductivity === 'ge10') return total >= 10 && total < 20;
+    if (selectedProductivity === 'lt10') return total < 10;
+    return true;
+  }
+
+  function matchesActiveFilter(expert) {
+    var recent = (expert.metrics || {}).recent_3y_publications || 0;
+    if (selectedActive === 'ge10') return recent >= 10;
+    if (selectedActive === 'ge5') return recent >= 5 && recent < 10;
+    if (selectedActive === 'lt5') return recent < 5;
+    return true;
   }
 
   function renderExperts() {
@@ -225,10 +374,18 @@
     if (!list.length) {
       el.expertList.innerHTML = '<div class="empty-state"><h3>暂无匹配专家</h3></div>';
       el.expertDetail.innerHTML = '<div class="empty-state"><h3>暂无专家数据</h3></div>';
+      if (el.expertResultMeta) el.expertResultMeta.textContent = '无匹配结果';
       return;
     }
     if (!selectedExpertId) selectedExpertId = list[0].id;
-    el.expertList.innerHTML = list.slice(0, 80).map(renderExpertRow).join('');
+    if (!list.some(function(item) { return item.id === selectedExpertId; })) selectedExpertId = list[0].id;
+    var visibleList = list.slice(0, expertResultLimit);
+    el.expertList.innerHTML = visibleList.map(renderExpertRow).join('');
+    if (el.expertResultMeta) {
+      el.expertResultMeta.textContent = list.length > visibleList.length
+        ? '显示前 ' + visibleList.length + ' / 共 ' + list.length + ' 位'
+        : '共 ' + list.length + ' 位';
+    }
     var cards = el.expertList.querySelectorAll('.expert-row');
     for (var i = 0; i < cards.length; i++) {
       cards[i].addEventListener('click', function() {
@@ -248,16 +405,21 @@
     var tags = (expert.public_tags || []).slice(0, 3).map(function(tag) {
       return '<span class="mini-chip">' + escapeHtml(tag) + '</span>';
     }).join('');
+    var location = [expert.province, expert.city].filter(Boolean).join(' · ');
+    var compactLabel = expert.is_compact ? '<span class="identity-badge foreign">精简</span>' : '';
     return '<article class="expert-row ' + (expert.id === selectedExpertId ? 'active' : '') + '" data-expert-id="' + escapeHtml(expert.id) + '">' +
-      '<div class="expert-row-head"><strong>' + escapeHtml(displayName(expert)) + '</strong><span class="identity-badge ' + status.className + '">' + escapeHtml(status.label) + '</span></div>' +
+      '<div class="expert-row-head"><strong>' + escapeHtml(displayName(expert)) + '</strong><span class="expert-row-badges"><span class="identity-badge ' + status.className + '">' + escapeHtml(status.label) + '</span>' + compactLabel + '</span></div>' +
       '<div>' + escapeHtml(expert.affiliation || '机构待识别') + '</div>' +
-      '<div class="metric-line">发文 ' + (metrics.total_publications || 0) + ' · 近3年 ' + (metrics.recent_3y_publications || 0) + '</div>' +
+      '<div class="metric-line">发文 ' + (metrics.total_publications || 0) + ' · 近3年 ' + (metrics.recent_3y_publications || 0) + (location ? ' · ' + escapeHtml(location) : '') + '</div>' +
       '<div class="chip-row">' + tags + '</div>' +
     '</article>';
   }
 
   function getSelectedExpert() {
-    return profiles.find(function(item) { return item.id === selectedExpertId; }) || profiles[0];
+    return profiles.find(function(item) { return item.id === selectedExpertId; }) ||
+      expertPool.find(function(item) { return item.id === selectedExpertId; }) ||
+      expertPool[0] ||
+      profiles[0];
   }
 
   function renderExpertDetail() {
@@ -268,6 +430,7 @@
     }
     var metrics = expert.metrics || {};
     var status = identityStatus(expert);
+    var location = [expert.province, expert.city].filter(Boolean).join(' · ');
     var interests = (expert.interests || []).slice(0, 8).map(function(item) {
       var width = Math.min(100, Math.max(12, item.count * 8));
       return '<div class="interest-bar"><span>' + escapeHtml(item.term) + '</span><div><i style="width:' + width + '%"></i></div><strong>' + item.count + '</strong></div>';
@@ -278,12 +441,20 @@
     var collaborators = (expert.collaborators || []).slice(0, 6).map(function(item) {
       return '<span class="mini-chip">' + escapeHtml(item.name) + ' ' + item.count + '</span>';
     }).join('');
+    var journals = (expert.top_journals || []).slice(0, 4).map(function(item) {
+      return '<span class="mini-chip">' + escapeHtml(item.name) + ' ' + item.count + '</span>';
+    }).join('');
+    var compactNote = expert.is_compact
+      ? '<div class="identity-note foreign"><strong>精简画像</strong><span>该专家来自全量中国专家检索索引，右侧展示公开发文聚合摘要；如需完整时间线，可后续提升为重点画像。</span></div>'
+      : '';
     el.expertDetail.innerHTML =
       '<div class="detail-title">' +
         '<h2>' + escapeHtml(displayName(expert)) + '</h2>' +
         '<p>' + escapeHtml(expert.affiliation || '机构待识别') + '</p>' +
+        (location ? '<p>' + escapeHtml(location) + '</p>' : '') +
       '</div>' +
       '<div class="identity-note ' + status.className + '"><strong>' + escapeHtml(status.label) + '</strong><span>' + escapeHtml(status.note) + '</span></div>' +
+      compactNote +
       '<div class="metric-grid">' +
         '<div><span>总发文</span><strong>' + (metrics.total_publications || 0) + '</strong></div>' +
         '<div><span>近3年</span><strong>' + (metrics.recent_3y_publications || 0) + '</strong></div>' +
@@ -291,15 +462,16 @@
         '<div><span>期刊数</span><strong>' + (metrics.journal_count || 0) + '</strong></div>' +
       '</div>' +
       '<h3>研究兴趣向量</h3>' + (interests || '<div class="muted">暂无主题</div>') +
+      '<h3>主要期刊</h3><div class="chip-row">' + (journals || '<span class="muted">暂无数据</span>') + '</div>' +
       '<h3>主要合作者</h3><div class="chip-row">' + (collaborators || '<span class="muted">暂无数据</span>') + '</div>' +
-      '<h3>近期文献时间线</h3><ol class="timeline-list">' + timeline + '</ol>';
+      '<h3>近期文献时间线</h3>' + (timeline ? '<ol class="timeline-list">' + timeline + '</ol>' : '<div class="muted">暂无近期文献</div>');
   }
 
   function renderVisitExpertMatches() {
     var query = (el.visitSearch.value || '').trim();
     var matches = sortedVisitExperts(query);
     var chinaExperts = matches.slice(0, 10);
-    var totalChina = profiles.filter(isChinaExpert).length;
+    var totalChina = expertPool.filter(isChinaExpert).length;
     var note = query
       ? '搜索结果 ' + matches.length + ' 位，显示前 ' + chinaExperts.length + ' 位；点击专家卡片后才会切换右侧建议。'
       : '示例候选：按总发文量展示前 10 位中国专家；可输入姓名、拼音、医院或研究方向搜索全部 ' + totalChina + ' 位中国专家画像。';
@@ -314,7 +486,7 @@
 
   function sortedVisitExperts(query) {
     var normalizedQuery = normalizeText(query);
-    return profiles.filter(function(expert) {
+    return expertPool.filter(function(expert) {
       if (!isChinaExpert(expert)) return false;
       if (!normalizedQuery) return true;
       return expertScore(expert, query) >= 0;
@@ -744,13 +916,14 @@
 
   function initSelectedExpert() {
     var chinaExperts = sortedExperts('', 'china');
-    selectedExpertId = (chinaExperts[0] || profiles[0] || {}).id || '';
+    selectedExpertId = (chinaExperts[0] || expertPool[0] || profiles[0] || {}).id || '';
   }
 
   function init() {
     bindTabs();
     initSelectedExpert();
     renderTopicFilters();
+    renderExpertFilterOptions();
     bindTopicFilters();
     renderExperts();
     renderVisitExpertMatches();
@@ -759,8 +932,8 @@
     if (el.search) el.search.addEventListener('input', renderExperts);
     if (el.visitSearch) el.visitSearch.addEventListener('input', renderVisitExpertMatches);
     if (el.update) {
-      var chinaCount = profiles.filter(isChinaExpert).length;
-      el.update.textContent = '中国专家 ' + chinaCount + ' 位 · 专家画像 ' + profiles.length + ' 位 · 内容模块 ' + modules.length + ' 个';
+      var chinaCount = expertPool.filter(isChinaExpert).length;
+      el.update.textContent = '中国专家索引 ' + chinaCount + ' 位 · 完整画像 ' + profiles.length + ' 位 · 内容模块 ' + modules.length + ' 个';
     }
     if (el.moduleMeta) {
       var academicCount = modules.filter(function(module) { return module.category === '纯学术探讨'; }).length;

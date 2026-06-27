@@ -48,6 +48,37 @@ CHINA_PROFILE_TERMS = [
     "jiangsu", "hunan", "hubei", "guangdong", "pla general",
 ]
 
+CHINA_LOCATION_RULES = [
+    ("上海", "上海", ["shanghai", "fudan", "huashan", "ruijin", "zhongshan hospital"]),
+    ("北京", "北京", ["beijing", "peking", "xuanwu", "capital medical", "pumch", "peking union"]),
+    ("广东", "广州", ["guangzhou", "guangdong", "sun yat-sen", "sun yat sen", "southern medical"]),
+    ("湖南", "长沙", ["changsha", "hunan", "xiangya", "central south university"]),
+    ("陕西", "西安", ["xian", "xi'an", "shaanxi", "tangdu", "air force medical", "fourth military"]),
+    ("江苏", "徐州", ["xuzhou", "jiangsu"]),
+    ("湖北", "武汉", ["wuhan", "hubei", "tongji hospital", "union hospital tongji medical"]),
+    ("四川", "成都", ["chengdu", "sichuan", "west china"]),
+    ("黑龙江", "哈尔滨", ["harbin", "heilongjiang"]),
+    ("河南", "郑州", ["zhengzhou", "henan"]),
+    ("山东", "济南", ["jinan", "shandong"]),
+    ("浙江", "杭州", ["hangzhou", "zhejiang"]),
+    ("天津", "天津", ["tianjin"]),
+    ("重庆", "重庆", ["chongqing"]),
+    ("辽宁", "沈阳", ["shenyang", "liaoning"]),
+    ("吉林", "长春", ["changchun", "jilin"]),
+    ("河北", "石家庄", ["shijiazhuang", "hebei"]),
+    ("山西", "太原", ["taiyuan", "shanxi"]),
+    ("安徽", "合肥", ["hefei", "anhui"]),
+    ("福建", "福州", ["fuzhou", "fujian"]),
+    ("江西", "南昌", ["nanchang", "jiangxi"]),
+    ("广西", "南宁", ["nanning", "guangxi"]),
+    ("云南", "昆明", ["kunming", "yunnan"]),
+    ("贵州", "贵阳", ["guiyang", "guizhou"]),
+    ("新疆", "乌鲁木齐", ["urumqi", "xinjiang"]),
+    ("甘肃", "兰州", ["lanzhou", "gansu"]),
+    ("台湾", "台湾", ["taiwan"]),
+    ("香港", "香港", ["hong kong"]),
+]
+
 CANONICAL_INSTITUTION_RULES = [
     {
         "id": "huashan_hospital_fudan_university",
@@ -661,8 +692,6 @@ def has_any(text, words):
 def infer_topics(article):
     text = text_of(article)
     topics = [label for label, words in TOPIC_DEFS if has_any(text, words)]
-    if not topics and article.get("study_types"):
-        topics.append(article["study_types"][0])
     return topics[:5]
 
 
@@ -982,6 +1011,16 @@ def canonicalize_institution(institution, raw_affiliations):
     }
 
 
+def infer_china_location(institution, raw_affiliation_counter):
+    """从机构名和 affiliation 中粗略提取中国省份/城市，供前端筛选。"""
+    raw_items = raw_affiliation_counter.keys() if hasattr(raw_affiliation_counter, "keys") else (raw_affiliation_counter or [])
+    text = normalize_alias_text(" ".join([institution or ""] + list(raw_items)))
+    for province, city, terms in CHINA_LOCATION_RULES:
+        if any(term in text for term in terms):
+            return {"province": province, "city": city}
+    return {"province": "未识别", "city": ""}
+
+
 def unique(values):
     seen = set()
     result = []
@@ -1144,6 +1183,7 @@ def build_experts(full, write_backend_index=False):
         display_name = profile_names[profile_key].most_common(1)[0][0]
         institution = profile_affiliations[profile_key].most_common(1)[0][0] if profile_affiliations[profile_key] else ""
         is_china_profile = is_china_author_institution_profile(institution, profile_raw_affiliations[profile_key])
+        location = infer_china_location(institution, profile_raw_affiliations[profile_key])
         china_profile_flags[profile_key] = is_china_profile
         all_profile_summaries.append({
             "profile_key": profile_key,
@@ -1153,6 +1193,8 @@ def build_experts(full, write_backend_index=False):
             "name_en": display_name,
             "primary_institution": institution,
             "affiliation": institution,
+            "province": location["province"],
+            "city": location["city"],
             "publications": len(articles),
             "china_related": sum(1 for a in articles if a.get("china_related")),
             "is_china_profile": is_china_profile,
@@ -1170,11 +1212,13 @@ def build_experts(full, write_backend_index=False):
         item for item in sorted_profiles
         if china_profile_flags.get(item[0])
     ][:EXPERT_PROFILE_LIMIT]
+    candidate_profile_keys = {profile_key for profile_key, _ in candidates}
 
     for idx, (profile_key, article_map) in enumerate(candidates, 1):
         articles = list(article_map.values())
         author = profile_names[profile_key].most_common(1)[0][0]
         institution = profile_affiliations[profile_key].most_common(1)[0][0] if profile_affiliations[profile_key] else ""
+        location = infer_china_location(institution, profile_raw_affiliations[profile_key])
         articles_sorted = sorted(articles, key=lambda a: parse_date(a.get("entry_date")) or datetime.min, reverse=True)
         now = datetime.now()
         recent_3y = [a for a in articles if (parse_date(a.get("entry_date")) or datetime.min) >= now - timedelta(days=365 * 3)]
@@ -1191,7 +1235,7 @@ def build_experts(full, write_backend_index=False):
         for article in articles:
             for topic in infer_topics(article):
                 topic_hits[topic] += 1
-        interests = [{"term": k, "count": v} for k, v in (topic_hits or words).most_common(10)]
+        interests = [{"term": k, "count": v} for k, v in topic_hits.most_common(10)]
         institution_aliases = [{"name": k, "count": v} for k, v in profile_institution_aliases[profile_key].most_common(8)]
         raw_affiliations = [{"name": k, "count": v} for k, v in profile_raw_affiliations[profile_key].most_common(8)]
         normalization_rules = [{"rule_id": k, "count": v} for k, v in profile_normalization_rules[profile_key].most_common(5)]
@@ -1209,6 +1253,8 @@ def build_experts(full, write_backend_index=False):
             "name_zh": "",
             "affiliation": institution,
             "primary_institution": institution,
+            "province": location["province"],
+            "city": location["city"],
             "institution_aliases": institution_aliases,
             "institution_normalization": {
                 "strategy": "rule_based_canonical_institution",
@@ -1229,6 +1275,71 @@ def build_experts(full, write_backend_index=False):
             "public_tags": [item["term"] for item in interests[:4]],
         })
 
+    full_profile_ids = {profile["profile_key"]: profile["id"] for profile in profiles}
+    china_expert_index = []
+    now = datetime.now()
+    for index_idx, (profile_key, article_map) in enumerate(
+        [item for item in sorted_profiles if china_profile_flags.get(item[0])],
+        1,
+    ):
+        articles = list(article_map.values())
+        author = profile_names[profile_key].most_common(1)[0][0]
+        institution = profile_affiliations[profile_key].most_common(1)[0][0] if profile_affiliations[profile_key] else ""
+        location = infer_china_location(institution, profile_raw_affiliations[profile_key])
+        articles_sorted = sorted(articles, key=lambda a: parse_date(a.get("entry_date")) or datetime.min, reverse=True)
+        recent_3y = [a for a in articles if (parse_date(a.get("entry_date")) or datetime.min) >= now - timedelta(days=365 * 3)]
+        journals = Counter(a.get("journal") or "Unknown" for a in articles)
+        highest_if = max(float(a.get("journal_if") or 0) for a in articles)
+        topic_hits = Counter()
+        for article in articles:
+            for topic in infer_topics(article):
+                topic_hits[topic] += 1
+        interests = [{"term": k, "count": v} for k, v in topic_hits.most_common(8)]
+        full_profile_id = full_profile_ids.get(profile_key)
+        china_expert_index.append({
+            "id": full_profile_id or f"expert_index_{index_idx:04d}",
+            "profile_key": profile_key,
+            "person_id": f"pubmed_person_{profile_key}",
+            "author_key": profile_key.split("::", 1)[0],
+            "institution_key": profile_key.split("::", 1)[1],
+            "canonical_institution_key": profile_key.split("::", 1)[1],
+            "identity_basis": "pubmed_author_canonical_institution",
+            "identity_status": "pubmed_unverified",
+            "profile_scope": "china_author_identity_index",
+            "is_compact": profile_key not in candidate_profile_keys,
+            "in_full_profile": bool(full_profile_id),
+            "name_en": author,
+            "name_zh": "",
+            "affiliation": institution,
+            "primary_institution": institution,
+            "province": location["province"],
+            "city": location["city"],
+            "institution_aliases": [
+                {"name": k, "count": v}
+                for k, v in profile_institution_aliases[profile_key].most_common(2)
+            ],
+            "metrics": {
+                "total_publications": len(articles),
+                "recent_3y_publications": len(recent_3y),
+                "highest_if": round(highest_if, 1),
+                "journal_count": len(journals),
+                "china_related": sum(1 for a in articles if a.get("china_related")),
+            },
+            "interests": interests,
+            "top_journals": [{"name": k, "count": v} for k, v in journals.most_common(2)],
+            "timeline": [
+                {
+                    "pmid": a.get("pmid", ""),
+                    "title": a.get("title", ""),
+                    "journal": a.get("journal", ""),
+                    "pub_date": a.get("pub_date") or a.get("entry_date", ""),
+                    "url": a.get("url", ""),
+                }
+                for a in articles_sorted[:1]
+            ],
+            "public_tags": [item["term"] for item in interests[:4]],
+        })
+
     if write_backend_index:
         write_author_institution_index(full, all_profile_summaries, institution_articles)
         write_entity_normalization_index(all_profile_summaries, institution_articles)
@@ -1245,10 +1356,12 @@ def build_experts(full, write_backend_index=False):
             "china_author_institution_profiles": sum(1 for value in china_profile_flags.values() if value),
             "institutions": len(institution_articles),
             "profiled_authors": len(profiles),
+            "indexed_china_experts": len(china_expert_index),
             "profiles_ge_10": sum(1 for v in profile_articles.values() if len(v) >= 10),
             "profiles_ge_20": sum(1 for v in profile_articles.values() if len(v) >= 20),
         },
         "experts": profiles,
+        "china_expert_index": china_expert_index,
     }
 
 
