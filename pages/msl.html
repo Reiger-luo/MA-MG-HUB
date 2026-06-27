@@ -31,11 +31,11 @@
   </div>
 
   <div class="intel-tabs" role="tablist" aria-label="MSL 工作台视图">
-    <button class="intel-tab active" type="button" data-msl-tab="visit">拜访助手</button>
-    <button class="intel-tab" type="button" data-msl-tab="experts">专家画像</button>
+    <button class="intel-tab active" type="button" data-msl-tab="experts">专家画像</button>
+    <button class="intel-tab" type="button" data-msl-tab="visit">拜访助手</button>
   </div>
 
-  <section class="intel-tab-panel active" id="msl-visit">
+  <section class="intel-tab-panel" id="msl-visit">
     <div class="msl-assistant-layout">
       <div class="msl-builder-col">
         <section class="workspace-panel">
@@ -49,10 +49,6 @@
             <input class="filter-input" id="visitExpertSearch" placeholder="姓名 / 拼音 / 医院 / 研究方向">
           </div>
           <div class="expert-search-results" id="visitChinaMatches"></div>
-          <details class="foreign-expert-collapse" id="foreignExpertCollapse">
-            <summary>国外专家 <span id="foreignExpertCount">0</span></summary>
-            <div class="expert-search-results" id="visitForeignMatches"></div>
-          </details>
         </section>
 
         <section class="workspace-panel">
@@ -73,27 +69,18 @@
             <h2>拜访话题建议</h2>
             <p class="panel-caption" id="selectedExpertLine">请选择专家</p>
           </div>
-          <button class="btn primary" id="btnGenerateBrief">生成建议</button>
         </div>
         <div class="brief-preview msl-brief-output" id="visitBrief"></div>
       </section>
     </div>
   </section>
 
-  <section class="intel-tab-panel" id="msl-experts">
+  <section class="intel-tab-panel active" id="msl-experts">
     <div class="workbench-grid">
       <aside class="sidebar-filters">
         <div class="filter-group">
           <label class="filter-label">搜索专家</label>
           <input class="filter-input" id="expertSearch" placeholder="姓名 / 机构 / 研究主题">
-        </div>
-        <div class="filter-group">
-          <label class="filter-label">专家组</label>
-          <div class="filter-radio-list" id="regionFilters">
-            <label class="filter-checkbox-item"><input type="radio" name="region" value="china" checked> 中国专家</label>
-            <label class="filter-checkbox-item"><input type="radio" name="region" value="international"> 国外专家</label>
-            <label class="filter-checkbox-item"><input type="radio" name="region" value="all"> 全部</label>
-          </div>
         </div>
         <div class="filter-group">
           <label class="filter-label">研究方向</label>
