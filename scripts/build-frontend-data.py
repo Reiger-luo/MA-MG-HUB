@@ -33,7 +33,7 @@ AUTHOR_INSTITUTION_INDEX_PATH = DATA_DIR / "pubmed-author-institution-index.json
 ENTITY_NORMALIZATION_INDEX_PATH = DATA_DIR / "pubmed-entity-normalization-index.json"
 CHINA_REGULATORY_PATH = DATA_DIR / "china-regulatory-status.json"
 CLINICALTRIALS_CACHE_PATH = DATA_DIR / "clinicaltrials-pipeline-cache.json"
-EXPERT_PROFILE_LIMIT = 100
+FRONTEND_QUICK_EXPERT_LIMIT = 20
 
 CHINA_PROFILE_TERMS = [
     "china", "chinese", "people's republic of china", "pr china",
@@ -1258,76 +1258,6 @@ def build_experts(full, write_backend_index=False):
             ],
         })
 
-    candidates = [
-        item for item in sorted_profiles
-        if china_profile_flags.get(item[0])
-    ][:EXPERT_PROFILE_LIMIT]
-    candidate_profile_keys = {profile_key for profile_key, _ in candidates}
-
-    for idx, (profile_key, article_map) in enumerate(candidates, 1):
-        articles = list(article_map.values())
-        author = profile_names[profile_key].most_common(1)[0][0]
-        institution = profile_affiliations[profile_key].most_common(1)[0][0] if profile_affiliations[profile_key] else ""
-        location = infer_china_location(institution, profile_raw_affiliations[profile_key])
-        articles_sorted = sorted(articles, key=lambda a: parse_date(a.get("entry_date")) or datetime.min, reverse=True)
-        now = datetime.now()
-        recent_3y = [a for a in articles if (parse_date(a.get("entry_date")) or datetime.min) >= now - timedelta(days=365 * 3)]
-        journals = Counter(a.get("journal") or "Unknown" for a in articles)
-        highest_if = max(float(a.get("journal_if") or 0) for a in articles)
-        coauthors = Counter()
-        words = Counter()
-        for article in articles:
-            for co in article.get("authors") or []:
-                if co and co != author:
-                    coauthors[co] += 1
-            words.update(tokenize((article.get("title") or "") + " " + (article.get("abstract") or "")))
-        topic_hits = Counter()
-        for article in articles:
-            for topic in infer_topics(article):
-                topic_hits[topic] += 1
-        interests = [{"term": k, "count": v} for k, v in topic_hits.most_common(10)]
-        institution_aliases = [{"name": k, "count": v} for k, v in profile_institution_aliases[profile_key].most_common(8)]
-        raw_affiliations = [{"name": k, "count": v} for k, v in profile_raw_affiliations[profile_key].most_common(8)]
-        normalization_rules = [{"rule_id": k, "count": v} for k, v in profile_normalization_rules[profile_key].most_common(5)]
-        profiles.append({
-            "id": f"expert_{idx:03d}",
-            "profile_key": profile_key,
-            "person_id": f"pubmed_person_{profile_key}",
-            "author_key": profile_key.split("::", 1)[0],
-            "institution_key": profile_key.split("::", 1)[1],
-            "canonical_institution_key": profile_key.split("::", 1)[1],
-            "identity_basis": "pubmed_author_canonical_institution",
-            "identity_status": "pubmed_unverified",
-            "profile_scope": "china_author_identity",
-            "region": "china",
-            "country": "中国",
-            "name_en": author,
-            "name_zh": "",
-            "affiliation": institution,
-            "primary_institution": institution,
-            "province": location["province"],
-            "city": location["city"],
-            "institution_aliases": institution_aliases,
-            "institution_normalization": {
-                "strategy": "rule_based_canonical_institution",
-                "rules": normalization_rules,
-            },
-            "raw_affiliations": raw_affiliations,
-            "metrics": {
-                "total_publications": len(articles),
-                "recent_3y_publications": len(recent_3y),
-                "highest_if": round(highest_if, 1),
-                "journal_count": len(journals),
-                "china_related": sum(1 for a in articles if a.get("china_related")),
-            },
-            "interests": interests,
-            "top_journals": [{"name": k, "count": v} for k, v in journals.most_common(6)],
-            "collaborators": [{"name": k, "count": v} for k, v in coauthors.most_common(8)],
-            "timeline": [compact_article(a) for a in articles_sorted[:8]],
-            "public_tags": [item["term"] for item in interests[:4]],
-        })
-
-    full_profile_ids = {profile["profile_key"]: profile["id"] for profile in profiles}
     now = datetime.now()
 
     def build_compact_expert(profile_key, article_map, index_idx, region):
@@ -1346,53 +1276,36 @@ def build_experts(full, write_backend_index=False):
         for article in articles:
             for topic in infer_topics(article):
                 topic_hits[topic] += 1
-        interests = [{"term": k, "count": v} for k, v in topic_hits.most_common(8)]
-        full_profile_id = full_profile_ids.get(profile_key)
+        interests = [[k, v] for k, v in topic_hits.most_common(8)]
         id_prefix = "expert_index" if is_china_region else "expert_global"
+        recent_article = articles_sorted[0] if articles_sorted else {}
         return {
-            "id": full_profile_id or f"{id_prefix}_{index_idx:05d}",
-            "profile_key": profile_key,
-            "person_id": f"pubmed_person_{profile_key}",
-            "author_key": profile_key.split("::", 1)[0],
-            "institution_key": profile_key.split("::", 1)[1],
-            "canonical_institution_key": profile_key.split("::", 1)[1],
-            "identity_basis": "pubmed_author_canonical_institution",
-            "identity_status": "pubmed_unverified",
-            "profile_scope": "china_author_identity_index" if is_china_region else "international_author_identity_index",
+            "id": f"{id_prefix}_{index_idx:05d}",
             "region": region,
-            "country": country,
-            "is_compact": profile_key not in candidate_profile_keys,
-            "in_full_profile": bool(full_profile_id),
             "name_en": author,
-            "name_zh": "",
             "affiliation": institution,
-            "primary_institution": institution,
+            **({"country": country} if not is_china_region else {}),
             "province": location["province"],
             "city": location["city"],
             "institution_aliases": [
-                {"name": k, "count": v}
-                for k, v in profile_institution_aliases[profile_key].most_common(2)
+                k for k, _ in profile_institution_aliases[profile_key].most_common(2)
             ],
-            "metrics": {
-                "total_publications": len(articles),
-                "recent_3y_publications": len(recent_3y),
-                "highest_if": round(highest_if, 1),
-                "journal_count": len(journals),
-                "china_related": sum(1 for a in articles if a.get("china_related")),
-            },
+            "metrics": [
+                len(articles),
+                len(recent_3y),
+                round(highest_if, 1),
+                len(journals),
+                sum(1 for a in articles if a.get("china_related")),
+            ],
             "interests": interests,
-            "top_journals": [{"name": k, "count": v} for k, v in journals.most_common(2)],
+            "top_journals": [[k, v] for k, v in journals.most_common(2)],
             "timeline": [
-                {
-                    "pmid": a.get("pmid", ""),
-                    "title": a.get("title", ""),
-                    "journal": a.get("journal", ""),
-                    "pub_date": a.get("pub_date") or a.get("entry_date", ""),
-                    "url": a.get("url", ""),
-                }
-                for a in articles_sorted[:1]
+                recent_article.get("pmid", ""),
+                recent_article.get("title", ""),
+                recent_article.get("journal", ""),
+                recent_article.get("pub_date") or recent_article.get("entry_date", ""),
+                recent_article.get("url", ""),
             ],
-            "public_tags": [item["term"] for item in interests[:4]],
         }
 
     china_profile_items = [item for item in sorted_profiles if china_profile_flags.get(item[0])]
@@ -1406,6 +1319,24 @@ def build_experts(full, write_backend_index=False):
         for index_idx, (profile_key, article_map) in enumerate(international_profile_items, 1)
     ]
 
+    def quick_expert_ids(items):
+        ranked = sorted(
+            items,
+            key=lambda item: (
+                item["metrics"][1],
+                item["metrics"][0],
+                item["metrics"][2],
+            ),
+            reverse=True,
+        )
+        return [item["id"] for item in ranked[:FRONTEND_QUICK_EXPERT_LIMIT]]
+
+    quick_ids = {
+        "china": quick_expert_ids(china_expert_index),
+        "international": quick_expert_ids(international_expert_index),
+        "all": quick_expert_ids(china_expert_index + international_expert_index),
+    }
+
     if write_backend_index:
         write_author_institution_index(full, all_profile_summaries, institution_articles)
         write_entity_normalization_index(all_profile_summaries, institution_articles)
@@ -1413,8 +1344,8 @@ def build_experts(full, write_backend_index=False):
     return {
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "summary": {
-            "profile_scope": "china_author_identity_top_publications_global_compact_index",
-            "profile_limit": EXPERT_PROFILE_LIMIT,
+            "profile_scope": "global_lightweight_author_institution_index",
+            "frontend_quick_expert_limit": FRONTEND_QUICK_EXPERT_LIMIT,
             "total_authors": len(author_name_keys),
             "normalized_person_profiles": len(profile_articles),
             "author_institution_profiles": len(profile_articles),
@@ -1422,14 +1353,15 @@ def build_experts(full, write_backend_index=False):
             "international_author_identity_profiles": sum(1 for value in china_profile_flags.values() if not value),
             "china_author_institution_profiles": sum(1 for value in china_profile_flags.values() if value),
             "institutions": len(institution_articles),
-            "profiled_authors": len(profiles),
+            "profiled_authors": 0,
             "indexed_experts": len(china_expert_index) + len(international_expert_index),
             "indexed_china_experts": len(china_expert_index),
             "indexed_international_experts": len(international_expert_index),
             "profiles_ge_10": sum(1 for v in profile_articles.values() if len(v) >= 10),
             "profiles_ge_20": sum(1 for v in profile_articles.values() if len(v) >= 20),
         },
-        "experts": profiles,
+        "experts": [],
+        "quick_expert_ids": quick_ids,
         "china_expert_index": china_expert_index,
         "international_expert_index": international_expert_index,
     }
@@ -2283,6 +2215,7 @@ def build_modules(recent, landscape):
 
 
 def build_dashboard(recent, signals, experts, china, landscape, modules, total_count):
+    expert_count = experts.get("summary", {}).get("indexed_experts", len(experts.get("experts", [])))
     return {
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "stats": {
@@ -2290,13 +2223,13 @@ def build_dashboard(recent, signals, experts, china, landscape, modules, total_c
             "recent_articles": len(recent),
             "china_articles": china["summary"]["recent_year_articles"],
             "signals": len(signals["signals"]),
-            "experts": len(experts["experts"]),
+            "experts": expert_count,
             "modules": len(modules["modules"]),
         },
         "top_signals": signals["signals"][:5],
         "work_items": [
             {"type": "文献", "label": "近 14 天信号", "count": len(signals["signals"]), "href": "/MA-MG-HUB/pages/literature.html"},
-            {"type": "专家", "label": "已构建专家画像", "count": len(experts["experts"]), "href": "/MA-MG-HUB/pages/msl.html"},
+            {"type": "专家", "label": "已构建专家画像", "count": expert_count, "href": "/MA-MG-HUB/pages/msl.html"},
             {"type": "模块", "label": "MSL 内容模块", "count": sum(1 for m in modules["modules"] if not m["verified"]), "href": "/MA-MG-HUB/pages/msl.html"},
             {"type": "证据", "label": "待确认证据矩阵", "count": len(landscape["evidence_questions"]), "href": "/MA-MG-HUB/pages/landscape.html"},
         ],
