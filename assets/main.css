@@ -459,35 +459,24 @@ body {
 }
 
 .msl-assistant-layout {
-  display: grid; grid-template-columns: minmax(340px, 0.72fr) minmax(0, 1.28fr);
+  display: flex; flex-direction: column; gap: 1rem;
+}
+.msl-setup-grid {
+  display: grid; grid-template-columns: minmax(360px, 0.92fr) minmax(520px, 1.08fr);
   gap: 1rem; align-items: start;
 }
 .msl-builder-col {
   display: flex; flex-direction: column; gap: 1rem;
+}
+.msl-expert-picker,
+.msl-module-picker {
+  min-width: 0;
 }
 .expert-search-box {
   margin-bottom: 0.7rem;
 }
 .expert-search-results {
   display: flex; flex-direction: column; gap: 0.5rem;
-}
-.foreign-expert-collapse {
-  margin-top: 0.8rem; border-top: 1px solid var(--bg3);
-  padding-top: 0.65rem;
-}
-.foreign-expert-collapse summary {
-  color: var(--fg2); font-size: 0.84rem; cursor: pointer;
-  list-style: none; display: flex; align-items: center; gap: 0.4rem;
-}
-.foreign-expert-collapse summary::-webkit-details-marker { display: none; }
-.foreign-expert-collapse summary::before {
-  content: "›"; color: var(--fg3); transition: transform 0.15s;
-}
-.foreign-expert-collapse[open] summary::before {
-  transform: rotate(90deg);
-}
-.foreign-expert-collapse summary span {
-  color: var(--fg3); font-size: 0.74rem;
 }
 .visit-expert-card {
   width: 100%; text-align: left; cursor: pointer;
@@ -546,6 +535,7 @@ body {
 }
 .module-list.compact {
   max-height: none; overflow: visible; padding-right: 0;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.62rem;
 }
 .module-card.compact {
   padding: 0.72rem; margin-bottom: 0;
@@ -560,10 +550,10 @@ body {
   border-radius: 8px; padding: 0.58rem 0.68rem;
 }
 .msl-brief-panel {
-  min-height: 640px;
+  min-height: 0;
 }
 .msl-brief-output {
-  display: block; margin-top: 0; min-height: 560px;
+  display: block; margin-top: 0; min-height: 360px;
 }
 .brief-section + .brief-section {
   margin-top: 0.95rem; padding-top: 0.78rem; border-top: 1px solid var(--bg3);
@@ -1721,7 +1711,7 @@ body {
   .signal-list, .signal-side, .china-chart-pair, .china-source-panel { grid-column: auto; }
   .chart-canvas { height: 240px; }
   .chart-panel-wide .chart-canvas, .china-chart-pair .chart-canvas { height: 240px; }
-  .workbench-grid, .workspace-two-col, .msl-assistant-layout { grid-template-columns: 1fr; }
+  .workbench-grid, .workspace-two-col, .msl-setup-grid { grid-template-columns: 1fr; }
   .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .form-grid { grid-template-columns: 1fr; }
   .followup-card { grid-template-columns: 1fr; }
@@ -1743,7 +1733,7 @@ body {
   .kg-detail { max-height: none; }
   .dashboard-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .compliance-box, .compliance-box.compact { grid-template-columns: 1fr; }
-  .module-list.compact { max-height: none; }
+  .module-list.compact { max-height: none; grid-template-columns: 1fr; }
   .msl-brief-panel { min-height: 0; }
   .msl-brief-output { min-height: 0; }
 }
