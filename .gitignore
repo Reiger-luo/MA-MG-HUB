@@ -8,6 +8,7 @@ node_modules/
 data/literature-full.json
 data/literature-recent.json
 data/pubmed-author-institution-index.json
+data/pubmed-entity-normalization-index.json
 data/archive/
 
 # LLM 引擎层（阶段 0）— 密钥、缓存、成本日志不入仓库

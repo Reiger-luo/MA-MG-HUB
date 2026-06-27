@@ -73,7 +73,7 @@
   function isChinaExpert(expert) {
     var metrics = expert.metrics || {};
     var region = normalizeText(expert.region || expert.country || expert.group || '');
-    if (expert.profile_scope === 'china_author_institution') return true;
+    if (expert.profile_scope === 'china_author_identity' || expert.profile_scope === 'china_author_institution') return true;
     return region === 'china' || region === 'cn' || Boolean(expert.name_zh) || hasChinaInstitution(expert) || (metrics.china_related || 0) >= 8;
   }
 

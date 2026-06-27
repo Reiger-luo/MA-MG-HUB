@@ -30,6 +30,7 @@ RECENT_JS_PATH = DATA_DIR / "literature-recent.js"
 RECENT_JSON_CACHE_PATH = DATA_DIR / "literature-recent.json"
 EXPERT_JS_PATH = DATA_DIR / "expert-profiles.js"
 AUTHOR_INSTITUTION_INDEX_PATH = DATA_DIR / "pubmed-author-institution-index.json"
+ENTITY_NORMALIZATION_INDEX_PATH = DATA_DIR / "pubmed-entity-normalization-index.json"
 CHINA_REGULATORY_PATH = DATA_DIR / "china-regulatory-status.json"
 CLINICALTRIALS_CACHE_PATH = DATA_DIR / "clinicaltrials-pipeline-cache.json"
 EXPERT_PROFILE_LIMIT = 100
@@ -45,6 +46,79 @@ CHINA_PROFILE_TERMS = [
     "tangdu", "tongji", "west china", "sun yat-sen", "capital medical",
     "zhejiang university", "sichuan university", "shandong", "henan",
     "jiangsu", "hunan", "hubei", "guangdong", "pla general",
+]
+
+CANONICAL_INSTITUTION_RULES = [
+    {
+        "id": "huashan_hospital_fudan_university",
+        "canonical": "Huashan Hospital, Fudan University",
+        "terms": [
+            "huashan hospital", "huashan rare disease", "national center for neurological disorders",
+            "national centre for neurological disorders", "national center for neurological diseases",
+            "national centre for neurological diseases", "national center for neurological disorders (ncnd)",
+            "jing'an district centre hospital",
+        ],
+    },
+    {
+        "id": "tangdu_hospital_air_force_medical_university",
+        "canonical": "Tangdu Hospital, Air Force Medical University",
+        "terms": [
+            "tangdu hospital",
+            "second affiliated hospital of air force medical university",
+            "second affiliated hospital of the air force medical university",
+            "second affiliated hospital of fourth military medical university",
+        ],
+    },
+    {
+        "id": "xiangya_hospital_central_south_university",
+        "canonical": "Xiangya Hospital, Central South University",
+        "terms": ["xiangya hospital"],
+    },
+    {
+        "id": "affiliated_hospital_xuzhou_medical_university",
+        "canonical": "Affiliated Hospital of Xuzhou Medical University",
+        "terms": ["xuzhou medical university"],
+    },
+    {
+        "id": "first_affiliated_hospital_sun_yat_sen_university",
+        "canonical": "First Affiliated Hospital of Sun Yat-sen University",
+        "terms": ["first affiliated hospital of sun yat-sen university", "first affiliated hospital, sun yat-sen university"],
+    },
+    {
+        "id": "second_affiliated_hospital_harbin_medical_university",
+        "canonical": "Second Affiliated Hospital of Harbin Medical University",
+        "terms": ["second affiliated hospital of harbin medical university"],
+    },
+    {
+        "id": "west_china_hospital_sichuan_university",
+        "canonical": "West China Hospital, Sichuan University",
+        "terms": ["west china hospital", "west china school of nursing"],
+    },
+    {
+        "id": "peking_university_first_hospital",
+        "canonical": "Peking University First Hospital",
+        "terms": ["peking university first hospital"],
+    },
+    {
+        "id": "xuanwu_hospital_capital_medical_university",
+        "canonical": "Xuanwu Hospital, Capital Medical University",
+        "terms": ["xuanwu hospital"],
+    },
+    {
+        "id": "tongji_hospital",
+        "canonical": "Tongji Hospital",
+        "terms": ["tongji hospital"],
+    },
+    {
+        "id": "henan_institute_medical_pharmaceutical_sciences",
+        "canonical": "Henan Institute of Medical and Pharmaceutical Sciences",
+        "terms": ["henan institute of medical and pharmaceutical sciences"],
+    },
+    {
+        "id": "peking_union_medical_college_hospital",
+        "canonical": "Peking Union Medical College Hospital",
+        "terms": ["peking union medical college hospital"],
+    },
 ]
 
 STOPWORDS = {
@@ -513,12 +587,12 @@ def load_articles_for_frontend(use_full_experts=False):
         raise FileNotFoundError("需要 data/literature-recent.js")
 
     full = None
-    if use_full_experts and FULL_PATH.exists():
+    if FULL_PATH.exists():
         full = load_json(FULL_PATH)
     elif use_full_experts:
         print("⚠️  请求从 full 重建专家画像，但 literature-full.json 不存在，将复用已提交专家画像。")
     else:
-        print("ℹ️  周更模式不读取 literature-full.json，将复用已提交的专家画像数据。")
+        print("ℹ️  literature-full.json 不存在，将复用已提交的专家画像数据。")
 
     # 全库文献计数：直接从 literature-recent.js 中读取 MG_TOTAL_COUNT
     total_count = 0
@@ -878,6 +952,36 @@ def normalize_institution_key(name):
     return value or "institution_unresolved"
 
 
+def normalize_alias_text(value):
+    return re.sub(r"\s+", " ", (value or "").lower()).strip()
+
+
+def canonicalize_institution(institution, raw_affiliations):
+    """将 PubMed 机构碎片映射到可稳定复用的机构实体。"""
+    text = normalize_alias_text(" ".join([institution or ""] + (raw_affiliations or [])))
+    for rule in CANONICAL_INSTITUTION_RULES:
+        if any(term in text for term in rule["terms"]):
+            return {
+                "name": rule["canonical"],
+                "key": normalize_institution_key(rule["canonical"]),
+                "rule_id": rule["id"],
+                "confidence": "high",
+            }
+    if institution:
+        return {
+            "name": institution,
+            "key": normalize_institution_key(institution),
+            "rule_id": "fallback_normalized_institution",
+            "confidence": "medium",
+        }
+    return {
+        "name": "",
+        "key": "institution_unresolved",
+        "rule_id": "unresolved",
+        "confidence": "low",
+    }
+
+
 def unique(values):
     seen = set()
     result = []
@@ -889,6 +993,19 @@ def unique(values):
     return result
 
 
+def institution_raw_affiliation_groups(raw_affiliations):
+    """保留机构碎片和来源 affiliation 的对应关系，避免多机构作者被误合并。"""
+    groups = {}
+    for raw_affiliation in raw_affiliations or []:
+        institution = normalize_institution(raw_affiliation)
+        if not institution:
+            continue
+        groups.setdefault(institution, []).append(raw_affiliation)
+    if not groups:
+        return [("", raw_affiliations or [])]
+    return list(groups.items())
+
+
 def article_author_rows(article):
     details = article.get("author_affiliations") or []
     if details:
@@ -897,15 +1014,17 @@ def article_author_rows(article):
             if not name:
                 continue
             raw_affiliations = detail.get("affiliations") or []
-            institutions = unique(normalize_institution(aff) for aff in raw_affiliations)
-            if not institutions:
-                institutions = [""]
-            for institution in institutions:
+            for institution, source_affiliations in institution_raw_affiliation_groups(raw_affiliations):
+                canonical = canonicalize_institution(institution, source_affiliations)
                 yield {
                     "name": name,
                     "position": detail.get("position"),
                     "institution": institution,
-                    "raw_affiliations": raw_affiliations,
+                    "canonical_institution": canonical["name"],
+                    "canonical_institution_key": canonical["key"],
+                    "institution_rule_id": canonical["rule_id"],
+                    "institution_confidence": canonical["confidence"],
+                    "raw_affiliations": source_affiliations,
                 }
         return
 
@@ -914,13 +1033,17 @@ def article_author_rows(article):
     first_author_affiliations = article.get("affiliations") or []
     for idx, name in enumerate(authors, 1):
         raw_affiliations = first_author_affiliations if idx == 1 else []
-        institutions = unique(normalize_institution(aff) for aff in raw_affiliations) or [""]
-        for institution in institutions:
+        for institution, source_affiliations in institution_raw_affiliation_groups(raw_affiliations):
+            canonical = canonicalize_institution(institution, source_affiliations)
             yield {
                 "name": name,
                 "position": idx,
                 "institution": institution,
-                "raw_affiliations": raw_affiliations,
+                "canonical_institution": canonical["name"],
+                "canonical_institution_key": canonical["key"],
+                "institution_rule_id": canonical["rule_id"],
+                "institution_confidence": canonical["confidence"],
+                "raw_affiliations": source_affiliations,
             }
 
 
@@ -932,21 +1055,69 @@ def is_china_author_institution_profile(institution, raw_affiliation_counter):
     return any(term in text for term in CHINA_PROFILE_TERMS)
 
 
+def build_author_dominant_institutions(full):
+    """为少量无机构作者行回填压倒性主机构，避免同一人被拆出空画像。"""
+    article_sets = defaultdict(lambda: defaultdict(set))
+    institution_names = defaultdict(lambda: defaultdict(Counter))
+    for article in full:
+        article_id = article.get("pmid") or id(article)
+        seen = set()
+        for row in article_author_rows(article):
+            author_key = normalize_author_key(row["name"])
+            institution_key = row.get("canonical_institution_key") or normalize_institution_key(row["institution"])
+            if not author_key or institution_key == "institution_unresolved":
+                continue
+            pair = (author_key, institution_key)
+            if pair in seen:
+                continue
+            seen.add(pair)
+            article_sets[author_key][institution_key].add(article_id)
+            institution_names[author_key][institution_key][row.get("canonical_institution") or row["institution"]] += 1
+
+    dominant = {}
+    for author_key, institution_map in article_sets.items():
+        if not institution_map:
+            continue
+        resolved_pmids = set()
+        for pmids in institution_map.values():
+            resolved_pmids.update(pmids)
+        ranked = sorted(institution_map.items(), key=lambda item: len(item[1]), reverse=True)
+        top_key, top_pmids = ranked[0]
+        top_count = len(top_pmids)
+        if top_count >= 5 and top_count / max(1, len(resolved_pmids)) >= 0.75:
+            dominant[author_key] = {
+                "name": institution_names[author_key][top_key].most_common(1)[0][0],
+                "key": top_key,
+                "resolved_publications": top_count,
+                "resolved_share": round(top_count / max(1, len(resolved_pmids)), 3),
+            }
+    return dominant
+
+
 def build_experts(full, write_backend_index=False):
     profile_articles = defaultdict(dict)
     profile_names = defaultdict(Counter)
     profile_affiliations = defaultdict(Counter)
+    profile_institution_aliases = defaultdict(Counter)
+    profile_normalization_rules = defaultdict(Counter)
     profile_raw_affiliations = defaultdict(Counter)
     author_name_keys = Counter()
     institution_articles = defaultdict(dict)
+    dominant_institutions = build_author_dominant_institutions(full)
 
     for article in full:
         seen_profile_keys = set()
         for row in article_author_rows(article):
             name = row["name"]
             author_key = normalize_author_key(name)
-            institution = row["institution"]
-            institution_key = normalize_institution_key(institution)
+            institution = row.get("canonical_institution") or row["institution"]
+            institution_key = row.get("canonical_institution_key") or normalize_institution_key(institution)
+            rule_id = row.get("institution_rule_id")
+            if institution_key == "institution_unresolved" and author_key in dominant_institutions:
+                dominant = dominant_institutions[author_key]
+                institution = dominant["name"]
+                institution_key = dominant["key"]
+                rule_id = "dominant_author_institution_backfill"
             profile_key = f"{author_key}::{institution_key}"
             author_name_keys[author_key] += 1
             if profile_key in seen_profile_keys:
@@ -957,6 +1128,10 @@ def build_experts(full, write_backend_index=False):
             if institution:
                 profile_affiliations[profile_key][institution] += 1
                 institution_articles[institution_key][article.get("pmid") or id(article)] = article
+            if row.get("institution"):
+                profile_institution_aliases[profile_key][row["institution"]] += 1
+            if rule_id:
+                profile_normalization_rules[profile_key][rule_id] += 1
             for raw_aff in row["raw_affiliations"]:
                 profile_raw_affiliations[profile_key][raw_aff] += 1
 
@@ -972,11 +1147,23 @@ def build_experts(full, write_backend_index=False):
         china_profile_flags[profile_key] = is_china_profile
         all_profile_summaries.append({
             "profile_key": profile_key,
+            "person_id": f"pubmed_person_{profile_key}",
+            "author_key": profile_key.split("::", 1)[0],
+            "canonical_institution_key": profile_key.split("::", 1)[1],
             "name_en": display_name,
+            "primary_institution": institution,
             "affiliation": institution,
             "publications": len(articles),
             "china_related": sum(1 for a in articles if a.get("china_related")),
             "is_china_profile": is_china_profile,
+            "institution_aliases": [
+                {"name": k, "count": v}
+                for k, v in profile_institution_aliases[profile_key].most_common(12)
+            ],
+            "normalization_rules": [
+                {"rule_id": k, "count": v}
+                for k, v in profile_normalization_rules[profile_key].most_common(5)
+            ],
         })
 
     candidates = [
@@ -1005,20 +1192,28 @@ def build_experts(full, write_backend_index=False):
             for topic in infer_topics(article):
                 topic_hits[topic] += 1
         interests = [{"term": k, "count": v} for k, v in (topic_hits or words).most_common(10)]
-        institution_aliases = [{"name": k, "count": v} for k, v in profile_affiliations[profile_key].most_common(8)]
+        institution_aliases = [{"name": k, "count": v} for k, v in profile_institution_aliases[profile_key].most_common(8)]
         raw_affiliations = [{"name": k, "count": v} for k, v in profile_raw_affiliations[profile_key].most_common(8)]
+        normalization_rules = [{"rule_id": k, "count": v} for k, v in profile_normalization_rules[profile_key].most_common(5)]
         profiles.append({
             "id": f"expert_{idx:03d}",
             "profile_key": profile_key,
+            "person_id": f"pubmed_person_{profile_key}",
             "author_key": profile_key.split("::", 1)[0],
             "institution_key": profile_key.split("::", 1)[1],
-            "identity_basis": "pubmed_author_institution",
+            "canonical_institution_key": profile_key.split("::", 1)[1],
+            "identity_basis": "pubmed_author_canonical_institution",
             "identity_status": "pubmed_unverified",
-            "profile_scope": "china_author_institution",
+            "profile_scope": "china_author_identity",
             "name_en": author,
             "name_zh": "",
             "affiliation": institution,
+            "primary_institution": institution,
             "institution_aliases": institution_aliases,
+            "institution_normalization": {
+                "strategy": "rule_based_canonical_institution",
+                "rules": normalization_rules,
+            },
             "raw_affiliations": raw_affiliations,
             "metrics": {
                 "total_publications": len(articles),
@@ -1036,14 +1231,17 @@ def build_experts(full, write_backend_index=False):
 
     if write_backend_index:
         write_author_institution_index(full, all_profile_summaries, institution_articles)
+        write_entity_normalization_index(all_profile_summaries, institution_articles)
 
     return {
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "summary": {
-            "profile_scope": "china_author_institution_top_publications",
+            "profile_scope": "china_author_identity_top_publications",
             "profile_limit": EXPERT_PROFILE_LIMIT,
             "total_authors": len(author_name_keys),
+            "normalized_person_profiles": len(profile_articles),
             "author_institution_profiles": len(profile_articles),
+            "china_author_identity_profiles": sum(1 for value in china_profile_flags.values() if value),
             "china_author_institution_profiles": sum(1 for value in china_profile_flags.values() if value),
             "institutions": len(institution_articles),
             "profiled_authors": len(profiles),
@@ -1063,8 +1261,8 @@ def write_author_institution_index(articles, profile_summaries, institution_arti
         names = Counter()
         for article in refs:
             for row in article_author_rows(article):
-                if normalize_institution_key(row["institution"]) == institution_key:
-                    names[row["institution"]] += 1
+                if (row.get("canonical_institution_key") or normalize_institution_key(row["institution"])) == institution_key:
+                    names[row.get("canonical_institution") or row["institution"]] += 1
         institutions.append({
             "institution_key": institution_key,
             "name": names.most_common(1)[0][0] if names else "",
@@ -1088,6 +1286,38 @@ def write_author_institution_index(articles, profile_summaries, institution_arti
         encoding="utf-8",
     )
     print(f"✅ {AUTHOR_INSTITUTION_INDEX_PATH.relative_to(PROJECT)}")
+
+
+def write_entity_normalization_index(profile_summaries, institution_articles):
+    institutions = []
+    for institution_key, article_map in institution_articles.items():
+        if institution_key == "institution_unresolved":
+            continue
+        refs = list(article_map.values())
+        institutions.append({
+            "institution_key": institution_key,
+            "publication_count": len(refs),
+            "china_related": sum(1 for article in refs if article.get("china_related")),
+        })
+    institutions.sort(key=lambda item: item["publication_count"], reverse=True)
+    payload = {
+        "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "source": "data/literature-full.json",
+        "strategy": "author_key + canonical_institution_key",
+        "normalization_rules": CANONICAL_INSTITUTION_RULES,
+        "summary": {
+            "person_profiles": len(profile_summaries),
+            "china_person_profiles": sum(1 for item in profile_summaries if item.get("is_china_profile")),
+            "canonical_institutions": len(institutions),
+        },
+        "person_profiles": profile_summaries,
+        "canonical_institutions": institutions,
+    }
+    ENTITY_NORMALIZATION_INDEX_PATH.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    print(f"✅ {ENTITY_NORMALIZATION_INDEX_PATH.relative_to(PROJECT)}")
 
 
 def match_articles(articles, keywords, limit=12):
