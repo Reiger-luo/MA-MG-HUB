@@ -46,7 +46,7 @@
             </div>
           </div>
           <div class="expert-search-box">
-            <input class="filter-input" id="visitExpertSearch" placeholder="搜索全部中国专家：姓名 / 拼音 / 医院 / 研究方向">
+            <input class="filter-input" id="visitExpertSearch" placeholder="搜索全部作者：姓名 / 拼音 / 机构 / 国家 / 研究方向">
           </div>
           <div class="expert-search-results" id="visitChinaMatches"></div>
         </section>
@@ -80,7 +80,15 @@
       <aside class="sidebar-filters">
         <div class="filter-group">
           <label class="filter-label">搜索专家</label>
-          <input class="filter-input" id="expertSearch" placeholder="姓名 / 拼音 / 医院 / 城市 / 方向">
+          <input class="filter-input" id="expertSearch" placeholder="姓名 / 拼音 / 机构 / 国家 / 方向">
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">专家范围</label>
+          <div class="filter-radio-list" id="regionFilters">
+            <label class="filter-checkbox-item"><input type="radio" name="region" value="china" checked> 中国</label>
+            <label class="filter-checkbox-item"><input type="radio" name="region" value="international"> 国外</label>
+            <label class="filter-checkbox-item"><input type="radio" name="region" value="all"> 全部</label>
+          </div>
         </div>
         <div class="filter-group">
           <label class="filter-label">研究方向</label>
@@ -88,12 +96,12 @@
         </div>
         <div class="filter-group">
           <label class="filter-label" for="institutionFilter">机构</label>
-          <input class="filter-input" id="institutionFilter" list="institutionOptions" placeholder="输入医院或大学关键词">
+          <input class="filter-input" id="institutionFilter" list="institutionOptions" placeholder="输入医院、大学或研究机构关键词">
           <datalist id="institutionOptions"></datalist>
         </div>
         <div class="filter-grid-two">
           <div class="filter-group">
-            <label class="filter-label" for="provinceFilter">省份</label>
+            <label class="filter-label" for="provinceFilter" id="locationFilterLabel">省份</label>
             <select class="filter-input" id="provinceFilter">
               <option value="all">全部</option>
             </select>

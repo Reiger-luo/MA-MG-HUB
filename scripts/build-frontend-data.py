@@ -79,6 +79,42 @@ CHINA_LOCATION_RULES = [
     ("香港", "香港", ["hong kong"]),
 ]
 
+INTERNATIONAL_LOCATION_RULES = [
+    ("美国", ["united states", "u.s.a", "america", "mayo clinic", "harvard", "stanford", "duke university", "johns hopkins", "nih", "boston", "new york"]),
+    ("日本", ["japan", "tokyo", "osaka", "nagoya", "keio", "kyoto", "chiba", "tohoku", "kyushu"]),
+    ("德国", ["germany", "berlin", "munich", "heidelberg", "hamburg", "hannover", "essen"]),
+    ("英国", ["united kingdom", "england", "scotland", "london", "oxford", "cambridge", "manchester", "newcastle"]),
+    ("法国", ["france", "paris", "marseille", "lyon", "strasbourg"]),
+    ("意大利", ["italy", "rome", "milan", "pavia", "naples", "padua", "bologna"]),
+    ("荷兰", ["netherlands", "amsterdam", "leiden", "rotterdam", "utrecht", "maastricht"]),
+    ("加拿大", ["canada", "toronto", "montreal", "vancouver", "ottawa", "calgary"]),
+    ("西班牙", ["spain", "barcelona", "madrid", "valencia", "seville"]),
+    ("韩国", ["korea", "seoul", "yonsei", "sungkyunkwan", "hanyang"]),
+    ("澳大利亚", ["australia", "sydney", "melbourne", "brisbane", "monash"]),
+    ("瑞典", ["sweden", "stockholm", "gothenburg", "uppsala", "karolinska"]),
+    ("丹麦", ["denmark", "copenhagen", "aarhus"]),
+    ("比利时", ["belgium", "brussels", "leuven", "ghent"]),
+    ("瑞士", ["switzerland", "zurich", "basel", "geneva", "lausanne"]),
+    ("挪威", ["norway", "oslo", "bergen"]),
+    ("芬兰", ["finland", "helsinki", "turku"]),
+    ("奥地利", ["austria", "vienna", "innsbruck", "graz"]),
+    ("希腊", ["greece", "athens", "thessaloniki"]),
+    ("土耳其", ["turkey", "istanbul", "ankara", "izmir"]),
+    ("以色列", ["israel", "jerusalem", "tel aviv", "haifa"]),
+    ("印度", ["india", "delhi", "mumbai", "bangalore", "chennai"]),
+    ("新加坡", ["singapore"]),
+    ("泰国", ["thailand", "bangkok"]),
+    ("巴西", ["brazil", "sao paulo", "rio de janeiro"]),
+    ("墨西哥", ["mexico", "mexico city"]),
+    ("阿根廷", ["argentina", "buenos aires"]),
+    ("波兰", ["poland", "warsaw", "krakow"]),
+    ("捷克", ["czech", "prague"]),
+    ("俄罗斯", ["russia", "moscow", "st petersburg"]),
+    ("伊朗", ["iran", "tehran"]),
+    ("沙特阿拉伯", ["saudi arabia", "riyadh", "jeddah"]),
+    ("埃及", ["egypt", "cairo"]),
+]
+
 CANONICAL_INSTITUTION_RULES = [
     {
         "id": "huashan_hospital_fudan_university",
@@ -1021,6 +1057,16 @@ def infer_china_location(institution, raw_affiliation_counter):
     return {"province": "未识别", "city": ""}
 
 
+def infer_international_country(institution, raw_affiliation_counter):
+    """从国外机构名和 affiliation 中提取国家，供前端国家筛选。"""
+    raw_items = raw_affiliation_counter.keys() if hasattr(raw_affiliation_counter, "keys") else (raw_affiliation_counter or [])
+    text = normalize_alias_text(" ".join([institution or ""] + list(raw_items)))
+    for country, terms in INTERNATIONAL_LOCATION_RULES:
+        if any(term in text for term in terms):
+            return country
+    return "未识别"
+
+
 def unique(values):
     seen = set()
     result = []
@@ -1183,7 +1229,9 @@ def build_experts(full, write_backend_index=False):
         display_name = profile_names[profile_key].most_common(1)[0][0]
         institution = profile_affiliations[profile_key].most_common(1)[0][0] if profile_affiliations[profile_key] else ""
         is_china_profile = is_china_author_institution_profile(institution, profile_raw_affiliations[profile_key])
-        location = infer_china_location(institution, profile_raw_affiliations[profile_key])
+        region = "china" if is_china_profile else "international"
+        country = "中国" if is_china_profile else infer_international_country(institution, profile_raw_affiliations[profile_key])
+        location = infer_china_location(institution, profile_raw_affiliations[profile_key]) if is_china_profile else {"province": "", "city": ""}
         china_profile_flags[profile_key] = is_china_profile
         all_profile_summaries.append({
             "profile_key": profile_key,
@@ -1193,6 +1241,8 @@ def build_experts(full, write_backend_index=False):
             "name_en": display_name,
             "primary_institution": institution,
             "affiliation": institution,
+            "region": region,
+            "country": country,
             "province": location["province"],
             "city": location["city"],
             "publications": len(articles),
@@ -1249,6 +1299,8 @@ def build_experts(full, write_backend_index=False):
             "identity_basis": "pubmed_author_canonical_institution",
             "identity_status": "pubmed_unverified",
             "profile_scope": "china_author_identity",
+            "region": "china",
+            "country": "中国",
             "name_en": author,
             "name_zh": "",
             "affiliation": institution,
@@ -1276,16 +1328,16 @@ def build_experts(full, write_backend_index=False):
         })
 
     full_profile_ids = {profile["profile_key"]: profile["id"] for profile in profiles}
-    china_expert_index = []
     now = datetime.now()
-    for index_idx, (profile_key, article_map) in enumerate(
-        [item for item in sorted_profiles if china_profile_flags.get(item[0])],
-        1,
-    ):
+
+    def build_compact_expert(profile_key, article_map, index_idx, region):
+        """生成前端检索用精简画像，覆盖全部作者-机构画像。"""
         articles = list(article_map.values())
         author = profile_names[profile_key].most_common(1)[0][0]
         institution = profile_affiliations[profile_key].most_common(1)[0][0] if profile_affiliations[profile_key] else ""
-        location = infer_china_location(institution, profile_raw_affiliations[profile_key])
+        is_china_region = region == "china"
+        country = "中国" if is_china_region else infer_international_country(institution, profile_raw_affiliations[profile_key])
+        location = infer_china_location(institution, profile_raw_affiliations[profile_key]) if is_china_region else {"province": "", "city": ""}
         articles_sorted = sorted(articles, key=lambda a: parse_date(a.get("entry_date")) or datetime.min, reverse=True)
         recent_3y = [a for a in articles if (parse_date(a.get("entry_date")) or datetime.min) >= now - timedelta(days=365 * 3)]
         journals = Counter(a.get("journal") or "Unknown" for a in articles)
@@ -1296,8 +1348,9 @@ def build_experts(full, write_backend_index=False):
                 topic_hits[topic] += 1
         interests = [{"term": k, "count": v} for k, v in topic_hits.most_common(8)]
         full_profile_id = full_profile_ids.get(profile_key)
-        china_expert_index.append({
-            "id": full_profile_id or f"expert_index_{index_idx:04d}",
+        id_prefix = "expert_index" if is_china_region else "expert_global"
+        return {
+            "id": full_profile_id or f"{id_prefix}_{index_idx:05d}",
             "profile_key": profile_key,
             "person_id": f"pubmed_person_{profile_key}",
             "author_key": profile_key.split("::", 1)[0],
@@ -1305,7 +1358,9 @@ def build_experts(full, write_backend_index=False):
             "canonical_institution_key": profile_key.split("::", 1)[1],
             "identity_basis": "pubmed_author_canonical_institution",
             "identity_status": "pubmed_unverified",
-            "profile_scope": "china_author_identity_index",
+            "profile_scope": "china_author_identity_index" if is_china_region else "international_author_identity_index",
+            "region": region,
+            "country": country,
             "is_compact": profile_key not in candidate_profile_keys,
             "in_full_profile": bool(full_profile_id),
             "name_en": author,
@@ -1338,7 +1393,18 @@ def build_experts(full, write_backend_index=False):
                 for a in articles_sorted[:1]
             ],
             "public_tags": [item["term"] for item in interests[:4]],
-        })
+        }
+
+    china_profile_items = [item for item in sorted_profiles if china_profile_flags.get(item[0])]
+    international_profile_items = [item for item in sorted_profiles if not china_profile_flags.get(item[0])]
+    china_expert_index = [
+        build_compact_expert(profile_key, article_map, index_idx, "china")
+        for index_idx, (profile_key, article_map) in enumerate(china_profile_items, 1)
+    ]
+    international_expert_index = [
+        build_compact_expert(profile_key, article_map, index_idx, "international")
+        for index_idx, (profile_key, article_map) in enumerate(international_profile_items, 1)
+    ]
 
     if write_backend_index:
         write_author_institution_index(full, all_profile_summaries, institution_articles)
@@ -1347,21 +1413,25 @@ def build_experts(full, write_backend_index=False):
     return {
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "summary": {
-            "profile_scope": "china_author_identity_top_publications",
+            "profile_scope": "china_author_identity_top_publications_global_compact_index",
             "profile_limit": EXPERT_PROFILE_LIMIT,
             "total_authors": len(author_name_keys),
             "normalized_person_profiles": len(profile_articles),
             "author_institution_profiles": len(profile_articles),
             "china_author_identity_profiles": sum(1 for value in china_profile_flags.values() if value),
+            "international_author_identity_profiles": sum(1 for value in china_profile_flags.values() if not value),
             "china_author_institution_profiles": sum(1 for value in china_profile_flags.values() if value),
             "institutions": len(institution_articles),
             "profiled_authors": len(profiles),
+            "indexed_experts": len(china_expert_index) + len(international_expert_index),
             "indexed_china_experts": len(china_expert_index),
+            "indexed_international_experts": len(international_expert_index),
             "profiles_ge_10": sum(1 for v in profile_articles.values() if len(v) >= 10),
             "profiles_ge_20": sum(1 for v in profile_articles.values() if len(v) >= 20),
         },
         "experts": profiles,
         "china_expert_index": china_expert_index,
+        "international_expert_index": international_expert_index,
     }
 
 
