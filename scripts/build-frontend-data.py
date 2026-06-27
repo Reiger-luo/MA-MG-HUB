@@ -1369,6 +1369,36 @@ def match_articles_flexible(articles, keywords, limit=8, min_hits=1, within_days
     return [compact_article(item[2]) for item in scored[:limit]]
 
 
+def select_module_references(articles, spec, used_pmids):
+    """按模块边界挑选文献，尽量避免不同模块复用同一 PMID。"""
+    scored = score_articles_flexible(
+        articles,
+        spec["keywords"],
+        min_hits=spec.get("min_hits", 1),
+        within_days=spec.get("within_days"),
+    )
+    excludes = spec.get("exclude_keywords", [])
+    required_any = spec.get("required_keywords", [])
+    required_all = spec.get("required_all_keywords", [])
+    refs = []
+    for _, _, article in scored:
+        text = text_of(article)
+        pmid = article.get("pmid") or re.sub(r"\W+", "", article.get("title", "").lower())
+        if pmid in used_pmids:
+            continue
+        if required_any and not any(term in text for term in required_any):
+            continue
+        if required_all and any(term not in text for term in required_all):
+            continue
+        if excludes and any(term in text for term in excludes):
+            continue
+        refs.append(compact_article(article))
+        used_pmids.add(pmid)
+        if len(refs) >= spec.get("limit", 8):
+            break
+    return refs
+
+
 def best_evidence_level(refs):
     rank = {"I": 1, "II": 2, "III": 3, "IV": 4, "V": 5, "VI": 6}
     levels = [ref.get("evidence_level") for ref in refs if ref.get("evidence_level") in rank]
@@ -1948,23 +1978,97 @@ def build_landscape(recent):
 def build_modules(recent, landscape):
     modules = []
     specs = [
-        ("module_pharmacology_fcrn", "药理机制", "FcRn 通路机制", ["fcrn", "efgartigimod", "rozanolixizumab", "mechanism"]),
-        ("module_clinical_efgartigimod", "临床数据", "Efgartigimod 临床证据", ["efgartigimod", "efficacy", "adapt"]),
-        ("module_safety_fcrn", "安全性", "FcRn 拮抗剂安全性", ["fcrn", "safety", "infection", "adverse"]),
-        ("module_competitive_fcrn", "竞品对比", "FcRn 产品对比", ["efgartigimod", "rozanolixizumab", "nipocalimab", "batoclimab"]),
-        ("module_real_world", "真实世界", "MG 真实世界证据", ["real-world", "registry", "observational", "retrospective"]),
-        ("module_guideline", "指南比较", "MG 指南与共识", ["guideline", "consensus", "recommendation"]),
+        {
+            "id": "module_academic_mechanism",
+            "category": "纯学术探讨",
+            "type": "机制分型",
+            "title": "抗体分型与发病机制",
+            "keywords": ["autoantibody", "achr", "musk", "lrp4", "pathogenic", "biomarker", "mechanism", "pathogenesis"],
+            "required_keywords": ["autoantibody", "achr", "musk", "lrp4", "pathogenic", "biomarker", "mechanism", "pathogenesis"],
+            "exclude_keywords": [
+                "efgartigimod", "rozanolixizumab", "nipocalimab", "batoclimab", "eculizumab", "ravulizumab", "zilucoplan",
+                "trial", "efficacy", "safety", "treatment", "therapeutic", "inhibitor", "phase 2", "phase 3",
+            ],
+            "purpose": "用于非产品化学术开场，讨论 AChR/MuSK/LRP4、抗体功能和潜在生物标志物。",
+            "boundary": "不承担具体产品疗效或竞品比较结论。",
+        },
+        {
+            "id": "module_academic_china_rwe",
+            "category": "纯学术探讨",
+            "type": "中国实践",
+            "title": "中国真实世界与患者价值",
+            "keywords": ["china", "chinese", "real-world", "preference", "willingness", "cohort", "registry", "burden"],
+            "required_keywords": ["china", "chinese"],
+            "exclude_keywords": [
+                "efgartigimod", "rozanolixizumab", "nipocalimab", "batoclimab", "eculizumab", "ravulizumab", "zilucoplan",
+                "phase 2", "phase 3", "placebo-controlled", "randomized", "randomised", "car-t", "bcma",
+            ],
+            "purpose": "用于讨论中国患者路径、偏好、负担和本土真实世界证据缺口。",
+            "boundary": "不直接引申为产品获益或准入结论。",
+        },
+        {
+            "id": "module_academic_guideline",
+            "category": "纯学术探讨",
+            "type": "诊疗路径",
+            "title": "诊疗路径与共识问题",
+            "keywords": ["guideline", "consensus", "recommendation", "delphi", "clinical practice"],
+            "required_keywords": ["guideline", "consensus", "recommendation", "delphi"],
+            "exclude_keywords": ["stroke unit", "plasma exchange", "dysphagia"],
+            "purpose": "用于梳理指南、共识和临床路径中的未决问题，适合做开放式探访。",
+            "boundary": "不替代指南原文解读，不做超适应症推荐。",
+        },
+        {
+            "id": "module_product_efg_efficacy",
+            "category": "产品相关",
+            "type": "疗效与人群",
+            "title": "Efgartigimod 疗效与适用人群",
+            "keywords": ["efgartigimod", "efficacy", "response", "adapt", "clinical effectiveness", "subgroup", "steroid-sparing"],
+            "required_all_keywords": ["efgartigimod"],
+            "required_keywords": ["efficacy", "response", "adapt", "clinical effectiveness", "subgroup", "steroid-sparing"],
+            "exclude_keywords": ["melanoma", "pembrolizumab", "car t", "car-t", "bcma", "autoimmune encephalitis"],
+            "purpose": "用于把 efgartigimod 疗效、应答特征和患者选择问题接入专家兴趣。",
+            "boundary": "不与安全性模块重复展开不良事件管理。",
+        },
+        {
+            "id": "module_product_efg_safety",
+            "category": "产品相关",
+            "type": "安全性与管理",
+            "title": "Efgartigimod 安全性与用药管理",
+            "keywords": ["efgartigimod", "safety", "infection", "adverse", "tolerability", "monitoring", "immunoglobulin", "ivig", "pharmacovigilance", "faers"],
+            "required_all_keywords": ["efgartigimod"],
+            "required_keywords": ["safety", "infection", "adverse", "tolerability", "monitoring", "immunoglobulin", "ivig", "pharmacovigilance", "faers"],
+            "exclude_keywords": ["melanoma", "pembrolizumab", "car t", "car-t", "bcma", "autoimmune encephalitis"],
+            "min_hits": 2,
+            "purpose": "用于讨论感染、IgG 变化、停药/再治疗和真实世界用药管理。",
+            "boundary": "不重复疗效终点和竞品定位。",
+        },
+        {
+            "id": "module_product_landscape",
+            "category": "产品相关",
+            "type": "治疗格局",
+            "title": "靶向治疗格局与竞品定位",
+            "keywords": ["rozanolixizumab", "nipocalimab", "batoclimab", "ravulizumab", "eculizumab", "zilucoplan", "complement", "fcrn", "indirect comparison"],
+            "required_keywords": ["rozanolixizumab", "nipocalimab", "batoclimab", "ravulizumab", "eculizumab", "zilucoplan", "complement", "fcrn"],
+            "exclude_keywords": ["dysphagia", "speech-language"],
+            "purpose": "用于讨论 FcRn、补体和其他靶向治疗在证据层级、机制和定位上的差异。",
+            "boundary": "不替代头对头研究，不做未证实优劣断言。",
+        },
     ]
-    for mid, mtype, title, keywords in specs:
-        refs = match_articles(recent, keywords, limit=8)
+    used_pmids = set()
+    for spec in specs:
+        refs = select_module_references(recent, spec, used_pmids)
         modules.append({
-            "id": mid,
-            "type": mtype,
-            "title": title,
+            "id": spec["id"],
+            "category": spec["category"],
+            "type": spec["type"],
+            "title": spec["title"],
             "updated_at": datetime.now().strftime("%Y-%m-%d"),
             "verified": False,
             "placeholder": len(refs) == 0,
-            "summary": "自动从近一年文献提取的模块草稿，请核对引用原文后使用。",
+            "summary": spec["purpose"],
+            "purpose": spec["purpose"],
+            "boundary": spec["boundary"],
+            "keywords": spec["keywords"],
             "claims": [
                 {"text": ref.get("title", ""), "pmid": ref.get("pmid", ""), "evidence_level": ref.get("evidence_level") or "未分类"}
                 for ref in refs[:4]
@@ -1972,13 +2076,18 @@ def build_modules(recent, landscape):
             "references": refs,
         })
     templates = [
-        {"id": "weekly_brief", "name": "文献速递简报", "modules": ["module_clinical_efgartigimod", "module_safety_fcrn", "module_real_world"]},
-        {"id": "visit_material", "name": "拜访材料", "modules": ["module_pharmacology_fcrn", "module_clinical_efgartigimod", "module_competitive_fcrn"]},
-        {"id": "competitive_response", "name": "竞品应对", "modules": ["module_competitive_fcrn", "module_safety_fcrn"]},
-        {"id": "internal_strategy", "name": "医学部内部", "modules": ["module_guideline", "module_real_world", "module_competitive_fcrn"]},
+        {"id": "weekly_brief", "name": "文献速递简报", "modules": ["module_academic_china_rwe", "module_product_efg_efficacy", "module_product_efg_safety"]},
+        {"id": "visit_material", "name": "拜访材料", "modules": ["module_academic_mechanism", "module_product_efg_efficacy", "module_product_landscape"]},
+        {"id": "academic_probe", "name": "纯学术探访", "modules": ["module_academic_mechanism", "module_academic_china_rwe", "module_academic_guideline"]},
+        {"id": "product_discussion", "name": "产品相关沟通", "modules": ["module_product_efg_efficacy", "module_product_efg_safety", "module_product_landscape"]},
     ]
     return {
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "summary": {
+            "design": "6 个模块按医学事务场景拆分为 3 个纯学术探讨和 3 个产品相关，文献 PMID 尽量不跨模块重复。",
+            "academic_modules": 3,
+            "product_modules": 3,
+        },
         "modules": modules,
         "templates": templates,
         "compliance_rules": [

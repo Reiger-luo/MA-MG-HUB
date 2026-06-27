@@ -45,10 +45,7 @@
   }
 
   function initialModuleIds() {
-    var visitTemplate = templates.find(function(template) {
-      return template.id === 'visit_material';
-    }) || templates[0] || { modules: [] };
-    return (visitTemplate.modules || []).slice();
+    return [];
   }
 
   function normalizeText(value) {
@@ -230,7 +227,7 @@
       el.expertDetail.innerHTML = '<div class="empty-state"><h3>暂无专家数据</h3></div>';
       return;
     }
-    if (!list.some(function(item) { return item.id === selectedExpertId; })) selectedExpertId = list[0].id;
+    if (!selectedExpertId) selectedExpertId = list[0].id;
     el.expertList.innerHTML = list.slice(0, 80).map(renderExpertRow).join('');
     var cards = el.expertList.querySelectorAll('.expert-row');
     for (var i = 0; i < cards.length; i++) {
@@ -300,11 +297,16 @@
 
   function renderVisitExpertMatches() {
     var query = (el.visitSearch.value || '').trim();
-    var chinaExperts = sortedVisitExperts(query).slice(0, 10);
-    if (chinaExperts.length && !chinaExperts.some(function(item) { return item.id === selectedExpertId; })) {
-      selectedExpertId = chinaExperts[0].id;
-    }
-    el.visitChinaMatches.innerHTML = chinaExperts.map(renderVisitExpertCard).join('') || '<div class="empty-state small"><h3>暂无中国专家匹配</h3></div>';
+    var matches = sortedVisitExperts(query);
+    var chinaExperts = matches.slice(0, 10);
+    var totalChina = profiles.filter(isChinaExpert).length;
+    var note = query
+      ? '搜索结果 ' + matches.length + ' 位，显示前 ' + chinaExperts.length + ' 位；点击专家卡片后才会切换右侧建议。'
+      : '示例候选：按总发文量展示前 10 位中国专家；可输入姓名、拼音、医院或研究方向搜索全部 ' + totalChina + ' 位中国专家画像。';
+    if (el.visitMeta) el.visitMeta.textContent = note;
+    el.visitChinaMatches.innerHTML =
+      '<div class="visit-result-note">' + escapeHtml(note) + '</div>' +
+      (chinaExperts.map(renderVisitExpertCard).join('') || '<div class="empty-state small"><h3>暂无中国专家匹配</h3><p>请尝试姓名拼音、英文名或医院关键词。</p></div>');
     bindVisitExpertCards();
     renderSelectedExpertLine();
     renderBriefPreview();
@@ -329,11 +331,12 @@
     var metrics = expert.metrics || {};
     var status = identityStatus(expert);
     var active = expert.id === selectedExpertId ? ' active' : '';
+    var action = active ? '已选择' : '点击选择';
     var tags = (expert.public_tags || []).slice(0, 3).map(function(tag) {
       return '<span class="mini-chip">' + escapeHtml(tag) + '</span>';
     }).join('');
-    return '<button class="visit-expert-card' + active + '" type="button" data-expert-id="' + escapeHtml(expert.id) + '">' +
-      '<span class="visit-expert-top"><strong>' + escapeHtml(displayName(expert)) + '</strong><em class="identity-badge ' + status.className + '">' + escapeHtml(status.label) + '</em></span>' +
+    return '<button class="visit-expert-card' + active + '" type="button" data-expert-id="' + escapeHtml(expert.id) + '" aria-pressed="' + (active ? 'true' : 'false') + '">' +
+      '<span class="visit-expert-top"><strong>' + escapeHtml(displayName(expert)) + '</strong><span class="visit-card-badges"><em class="identity-badge ' + status.className + '">' + escapeHtml(status.label) + '</em><em class="visit-card-action">' + escapeHtml(action) + '</em></span></span>' +
       '<span>' + escapeHtml(expert.affiliation || '机构待识别') + '</span>' +
       '<span class="visit-expert-meta">发文 ' + (metrics.total_publications || 0) + ' · 近3年 ' + (metrics.recent_3y_publications || 0) + '</span>' +
       '<span class="chip-row">' + tags + '</span>' +
@@ -369,14 +372,19 @@
     }
     el.moduleList.innerHTML = modules.map(function(module) {
       var checked = selectedModuleIds.indexOf(module.id) !== -1 ? 'checked' : '';
+      var active = checked ? ' selected' : '';
+      var categoryClass = module.category === '纯学术探讨' ? ' academic' : ' product';
+      var state = checked ? '已纳入' : '点击纳入';
       var claims = (module.claims || []).slice(0, 2).map(function(claim) {
         return '<li>' + escapeHtml(claim.text) + '<span>PMID ' + escapeHtml(claim.pmid || '-') + ' · ' + escapeHtml(claim.evidence_level || '未分类') + '</span></li>';
       }).join('');
-      return '<article class="module-card compact">' +
-        '<label class="module-check"><input type="checkbox" value="' + escapeHtml(module.id) + '" ' + checked + '> <strong>' + escapeHtml(module.title) + '</strong></label>' +
-        '<div class="module-meta">' + escapeHtml(module.type) + ' · 更新 ' + escapeHtml(module.updated_at || '-') + '</div>' +
+      return '<label class="module-card compact visit-module-card' + active + '" data-module-id="' + escapeHtml(module.id) + '">' +
+        '<span class="module-check"><input type="checkbox" value="' + escapeHtml(module.id) + '" ' + checked + '> <span><strong>' + escapeHtml(module.title) + '</strong><small>' + escapeHtml(module.type) + '</small></span><em>' + escapeHtml(state) + '</em></span>' +
+        '<div class="module-meta"><span class="module-category' + categoryClass + '">' + escapeHtml(module.category || '内容模块') + '</span><span>更新 ' + escapeHtml(module.updated_at || '-') + '</span></div>' +
+        '<p class="module-purpose">' + escapeHtml(module.purpose || module.summary || '') + '</p>' +
+        '<p class="module-boundary">边界：' + escapeHtml(module.boundary || '正式使用前需核对原文。') + '</p>' +
         '<ul>' + claims + '</ul>' +
-      '</article>';
+      '</label>';
     }).join('');
     var inputs = el.moduleList.querySelectorAll('input[type="checkbox"]');
     for (var i = 0; i < inputs.length; i++) {
@@ -384,7 +392,7 @@
         selectedModuleIds = Array.from(el.moduleList.querySelectorAll('input[type="checkbox"]:checked')).map(function(input) {
           return input.value;
         });
-        renderCompliance();
+        renderModulePicker();
         renderBriefPreview();
       });
     }
@@ -401,27 +409,137 @@
     var selected = selectedModules();
     if (!el.compliance) return;
     el.compliance.innerHTML = selected.length
-      ? '<span>' + selected.length + ' 个产品研究信息已纳入右侧话题建议</span>'
-      : '<span>请选择产品研究信息，右侧建议会自动更新</span>';
+      ? '<span>' + selected.length + ' 个模块已纳入话题建议；纯学术与产品相关内容会分别处理。</span>'
+      : '<span>点击上方模块卡片纳入建议；至少选择 1 个模块后，下方会即时生成话题和文献清单。</span>';
   }
 
-  function relatedSignalsForExpert(expert) {
-    var tags = (expert.public_tags || []).map(normalizeText);
-    var interests = (expert.interests || []).slice(0, 6).map(function(item) {
-      return normalizeText(item.term);
+  function shortText(value, maxLength) {
+    var text = String(value || '').replace(/\s+/g, ' ').trim();
+    if (text.length <= maxLength) return text;
+    return text.slice(0, maxLength - 1) + '…';
+  }
+
+  function uniqueItems(values) {
+    var seen = {};
+    return values.filter(function(value) {
+      if (!value || seen[value]) return false;
+      seen[value] = true;
+      return true;
     });
-    var keys = tags.concat(interests);
+  }
+
+  function expertInterestItems(expert) {
+    return (expert.interests || []).filter(function(item) {
+      return item && item.term;
+    }).sort(function(a, b) {
+      return (b.count || 0) - (a.count || 0);
+    });
+  }
+
+  function expertContext(expert) {
+    var metrics = expert.metrics || {};
+    var interests = expertInterestItems(expert);
+    var timeline = expert.timeline || [];
+    var collaborators = expert.collaborators || [];
+    return {
+      topInterest: interests[0] || { term: 'MG 研究', count: 0 },
+      secondInterest: interests[1] || null,
+      thirdInterest: interests[2] || null,
+      recentArticle: timeline[0] || null,
+      secondArticle: timeline[1] || null,
+      collaborator: collaborators[0] || null,
+      metrics: metrics
+    };
+  }
+
+  function moduleSearchText(module) {
+    return normalizeText([
+      module.title,
+      module.type,
+      module.category,
+      module.summary,
+      module.purpose,
+      (module.keywords || []).join(' ')
+    ].join(' '));
+  }
+
+  function moduleFitScore(module, expert) {
+    var text = moduleSearchText(module);
+    var score = 0;
+    expertInterestItems(expert).slice(0, 8).forEach(function(item, index) {
+      var term = normalizeText(item.term);
+      if (term && text.indexOf(term) !== -1) score += Math.max(1, 8 - index) + (item.count || 0) / 12;
+    });
+    (expert.public_tags || []).forEach(function(tag) {
+      var term = normalizeText(tag);
+      if (term && text.indexOf(term) !== -1) score += 2;
+    });
+    return score;
+  }
+
+  function matchedExpertInterest(module, expert) {
+    var text = moduleSearchText(module);
+    var matched = expertInterestItems(expert).slice(0, 8).find(function(item) {
+      var term = normalizeText(item.term);
+      return term && text.indexOf(term) !== -1;
+    });
+    if (matched) return matched.term;
+    return (expert.public_tags || []).find(function(tag) {
+      var term = normalizeText(tag);
+      return term && text.indexOf(term) !== -1;
+    }) || '';
+  }
+
+  function rankModulesForExpert(expert, moduleList) {
+    return moduleList.slice().sort(function(a, b) {
+      return moduleFitScore(b, expert) - moduleFitScore(a, expert);
+    });
+  }
+
+  function moduleFitReason(module, expert) {
+    var matched = matchedExpertInterest(module, expert);
+    if (matched) {
+      return '与该专家兴趣谱中的“' + matched + '”有连接';
+    }
+    if (module.category === '纯学术探讨') {
+      return '适合作为非产品化开放式探访入口';
+    }
+    return '适合作为产品相关证据补充入口';
+  }
+
+  function relatedSignalsForExpert(expert, moduleList) {
+    var weightedKeys = [];
+    expertInterestItems(expert).slice(0, 8).forEach(function(item, index) {
+      weightedKeys.push({
+        key: normalizeText(item.term),
+        weight: Math.max(2, 8 - index) + Math.min(4, (item.count || 0) / 12)
+      });
+    });
+    (expert.public_tags || []).forEach(function(tag) {
+      weightedKeys.push({ key: normalizeText(tag), weight: 2 });
+    });
+    (moduleList || []).forEach(function(module) {
+      (module.keywords || []).forEach(function(keyword) {
+        weightedKeys.push({ key: normalizeText(keyword), weight: module.category === '产品相关' ? 1.8 : 1.3 });
+      });
+    });
+    var recentText = normalizeText((expert.timeline || []).slice(0, 3).map(function(article) {
+      return article.title || '';
+    }).join(' '));
     var scored = signals.map(function(signal) {
       var text = normalizeText([
         signal.summary,
         (signal.keywords || []).join(' '),
         (signal.drugs || []).join(' ')
       ].join(' '));
-      var hits = keys.filter(function(key) { return key && text.indexOf(key) !== -1; }).length;
+      var hits = weightedKeys.reduce(function(total, item) {
+        return total + (item.key && text.indexOf(item.key) !== -1 ? item.weight : 0);
+      }, 0);
+      if (recentText && text && recentText.indexOf(text.split(' ')[0]) !== -1) hits += 1.5;
       var strengthBonus = signal.strength === '强' ? 3 : signal.strength === '中' ? 2 : 1;
-      return { signal: signal, score: hits * 4 + strengthBonus + (signal.score || 0) / 10 };
+      return { signal: signal, score: hits * 3 + strengthBonus + (signal.score || 0) / 12 };
     }).filter(function(item) {
-      return item.score > 1;
+      return item.score > 2;
     });
     scored.sort(function(a, b) { return b.score - a.score; });
     return scored.slice(0, 4).map(function(item) { return item.signal; });
@@ -470,8 +588,8 @@
     if (!expert || !selected.length) {
       el.visitBrief.innerHTML =
         '<div class="empty-state">' +
-          '<h3>选择专家和产品研究信息后生成建议</h3>' +
-          '<p>左侧选择 1 位专家，并勾选至少 1 个产品研究信息；右侧会即时生成拜访话题和对应文献清单。</p>' +
+          '<h3>选择专家和内容模块后生成建议</h3>' +
+          '<p>左侧选择 1 位专家，并勾选至少 1 个学术或产品模块；右侧会即时生成拜访话题和对应文献清单。</p>' +
         '</div>';
       return;
     }
@@ -483,26 +601,31 @@
     var selected = selectedModules();
     if (!expert) return;
     var expertTopics = (expert.public_tags || []).slice(0, 4);
-    var moduleTypes = selected.map(function(module) { return module.type; });
-    var signalList = relatedSignalsForExpert(expert);
+    var moduleTypes = selected.map(function(module) { return (module.category || '内容') + ' / ' + module.type; });
+    var signalList = relatedSignalsForExpert(expert, selected);
     if (!signalList.length) signalList = signals.slice(0, 3);
     var references = collectReferences(expert, selected, signalList);
+    var profileCues = buildProfileCues(expert);
     var openingTopics = buildOpeningTopics(expert, selected, signalList);
-    var bridgeItems = buildBridgeItems(selected);
+    var bridgeItems = buildBridgeItems(expert, selected);
     var questions = buildQuestions(expert, selected, signalList);
 
     el.visitBrief.innerHTML =
       '<div class="brief-section">' +
         '<h3>' + escapeHtml(displayName(expert)) + ' · 拜访话题建议</h3>' +
         '<p><strong>研究兴趣：</strong>' + escapeHtml(expertTopics.join('、') || 'MG 研究') + '</p>' +
-        '<p><strong>本次内容：</strong>' + escapeHtml(moduleTypes.join('、') || '未选择产品研究信息') + '</p>' +
+        '<p><strong>本次内容：</strong>' + escapeHtml(moduleTypes.join('、') || '未选择内容模块') + '</p>' +
+      '</div>' +
+      '<div class="brief-section">' +
+        '<h4>个体化依据</h4>' +
+        '<ul>' + profileCues.map(function(item) { return '<li>' + escapeHtml(item) + '</li>'; }).join('') + '</ul>' +
       '</div>' +
       '<div class="brief-section">' +
         '<h4>建议切入点</h4>' +
         '<ol>' + openingTopics.map(function(item) { return '<li>' + escapeHtml(item) + '</li>'; }).join('') + '</ol>' +
       '</div>' +
       '<div class="brief-section">' +
-        '<h4>产品研究信息接入</h4>' +
+        '<h4>内容模块接入</h4>' +
         '<ul>' + bridgeItems.map(function(item) { return '<li>' + escapeHtml(item) + '</li>'; }).join('') + '</ul>' +
       '</div>' +
       '<div class="brief-section">' +
@@ -522,44 +645,86 @@
       '<div class="brief-compliance">自动生成内容仅作拜访准备草稿；疗效、安全性、适应症和比较性表述需核对 PMID 原文后使用。</div>';
   }
 
+  function buildProfileCues(expert) {
+    var ctx = expertContext(expert);
+    var cues = [
+      '发文结构：总发文 ' + (ctx.metrics.total_publications || 0) + ' 篇，近 3 年 ' + (ctx.metrics.recent_3y_publications || 0) + ' 篇；最高频兴趣为“' + ctx.topInterest.term + '”（' + (ctx.topInterest.count || 0) + ' 次）。'
+    ];
+    if (ctx.secondInterest) {
+      cues.push('兴趣组合：' + ctx.topInterest.term + ' + ' + ctx.secondInterest.term + '，适合先做问题探访，再决定是否进入具体产品证据。');
+    }
+    if (ctx.recentArticle) {
+      cues.push('近期证据锚点：' + shortText(ctx.recentArticle.title, 92) + '（PMID ' + (ctx.recentArticle.pmid || '-') + '）。');
+    }
+    if (ctx.collaborator) {
+      cues.push('合作网络：与 ' + ctx.collaborator.name + ' 等共同发文较多，可追问该团队正在形成的研究问题。');
+    }
+    return cues.slice(0, 4);
+  }
+
   function buildOpeningTopics(expert, selected, signalList) {
-    var interests = (expert.public_tags || []).slice(0, 3);
+    var ctx = expertContext(expert);
+    var rankedModules = rankModulesForExpert(expert, selected);
     var topics = [];
-    if (interests.length) {
-      topics.push('从专家近期关注的 ' + interests.join('、') + ' 切入，确认当前临床证据缺口。');
+    if (ctx.recentArticle) {
+      topics.push('从其近期文章“' + shortText(ctx.recentArticle.title, 78) + '”切入，先询问该研究背后的临床问题是否仍是当前团队优先级。');
+    }
+    if (ctx.topInterest && ctx.secondInterest) {
+      topics.push('围绕“' + ctx.topInterest.term + ' / ' + ctx.secondInterest.term + '”这组高频兴趣，确认专家更希望讨论机制解释、患者选择还是实践路径。');
+    }
+    if (rankedModules[0]) {
+      topics.push('把“' + rankedModules[0].title + '”作为本次主线：' + moduleFitReason(rankedModules[0], expert) + '，先界定讨论边界再进入文献。');
     }
     if (signalList[0]) {
-      topics.push('结合近期信号“' + signalList[0].summary + '”，询问其对中国患者实践的可转化性判断。');
+      topics.push('结合近期信号“' + shortText(signalList[0].summary, 82) + '”，追问其对本土患者和本中心实践的可转化性判断。');
     }
-    if (selected[0]) {
-      topics.push('围绕“' + selected[0].title + '”中的关键 PMID，讨论哪些数据最适合进入后续材料。');
-    }
-    topics.push('最后收束到专家希望补充的证据类型：RCT、真实世界、安全性、特殊人群或竞品比较。');
+    topics.push('最后收束到下一次沟通需要补充的证据类型：机制、真实世界、安全性管理、特殊人群或治疗格局。');
     return topics.slice(0, 4);
   }
 
-  function buildBridgeItems(selected) {
-    if (!selected.length) return ['暂未选择产品研究信息，可先围绕专家兴趣和近期信号做开放式探访。'];
-    return selected.slice(0, 4).map(function(module) {
+  function buildBridgeItems(expert, selected) {
+    if (!selected.length) return ['暂未选择内容模块，可先围绕专家兴趣和近期信号做开放式探访。'];
+    return rankModulesForExpert(expert, selected).slice(0, 6).map(function(module) {
       var claim = (module.claims || [])[0];
-      var pmid = claim && claim.pmid ? 'PMID ' + claim.pmid : 'PMID 待补';
-      return module.title + '：以 ' + pmid + ' 作为证据锚点，先确认专家对该方向的关注度，再展开材料。';
+      var anchor = claim && claim.pmid ? 'PMID ' + claim.pmid : 'PMID 待补';
+      var prefix = module.category === '纯学术探讨' ? '学术入口' : '产品相关';
+      return prefix + '｜' + module.title + '：' + moduleFitReason(module, expert) + '。以 ' + anchor + ' 作为证据锚点；边界是“' + (module.boundary || '正式使用前核对原文') + '”。';
     });
   }
 
   function buildQuestions(expert, selected, signalList) {
-    var interests = (expert.public_tags || []).slice(0, 2).join('、') || 'MG 靶向治疗';
-    var questions = [
-      '您目前在 ' + interests + ' 方向最希望看到哪类中国本土证据？',
-      '对于近期新证据，您会优先关注疗效终点、安全性监测还是患者选择？',
-      '在真实世界使用中，哪些患者特征最影响治疗路径选择？'
-    ];
-    if (selected.some(function(module) { return module.type === '竞品对比'; })) {
-      questions.push('面对 FcRn、补体和 B 细胞方向的并行证据，您更认可怎样的机制区隔口径？');
-    } else if (signalList.length) {
-      questions.push('这些近期信号是否会改变您对下一次材料沟通重点的期待？');
+    var ctx = expertContext(expert);
+    var top = ctx.topInterest.term;
+    var second = ctx.secondInterest ? ctx.secondInterest.term : '临床实践';
+    var questions = [];
+    if (top === '真实世界') {
+      questions.push('您近期真实世界相关发文较多，目前最想补齐的是患者选择、疗程管理、结局指标，还是本土多中心数据？');
+    } else if (top === '机制') {
+      questions.push('围绕机制研究，您更希望看到抗体功能、补体/FcRn 通路，还是免疫细胞谱系变化与临床应答的连接？');
+    } else if (top === '安全性') {
+      questions.push('在安全性讨论中，您最关注感染、IgG 变化、合并用药，还是长期随访中的风险识别？');
+    } else if (top === '抗体分型') {
+      questions.push('抗体分型相关证据中，您认为哪些指标最可能影响治疗路径或患者分层？');
+    } else {
+      questions.push('您在“' + top + '”方向最希望下一步补充哪类可用于临床讨论的证据？');
     }
-    return questions.slice(0, 4);
+    questions.push('如果把“' + top + '”和“' + second + '”合并成一次沟通主线，您会建议先谈未满足需求，还是先谈近期证据？');
+    if (selected.some(function(module) { return module.category === '纯学术探讨'; })) {
+      questions.push('纯学术部分是否适合作为非产品化开场？哪些表述会更容易引出专家真实观点？');
+    }
+    if (selected.some(function(module) { return module.id === 'module_product_efg_efficacy'; })) {
+      questions.push('关于 efgartigimod 疗效和适用人群，您更希望看到哪类亚组、应答预测或真实世界补充数据？');
+    }
+    if (selected.some(function(module) { return module.id === 'module_product_efg_safety'; })) {
+      questions.push('如果进入用药管理讨论，哪些安全性监测点最值得在材料中提前准备？');
+    }
+    if (selected.some(function(module) { return module.id === 'module_product_landscape'; })) {
+      questions.push('面对 FcRn、补体和其他靶向治疗并行发展，您更认可按机制、患者分层还是证据层级来做定位讨论？');
+    }
+    if (signalList.length) {
+      questions.push('近期信号中哪一类最可能影响您下一阶段的研究或临床讨论重点？');
+    }
+    return uniqueItems(questions).slice(0, 5);
   }
 
   function renderReferenceTable(references) {
@@ -597,11 +762,10 @@
       var chinaCount = profiles.filter(isChinaExpert).length;
       el.update.textContent = '中国专家 ' + chinaCount + ' 位 · 专家画像 ' + profiles.length + ' 位 · 内容模块 ' + modules.length + ' 个';
     }
-    if (el.visitMeta) {
-      el.visitMeta.textContent = '按总发文量降序显示前 10 位中国专家';
-    }
     if (el.moduleMeta) {
-      el.moduleMeta.textContent = modules.length + ' 个模块可选';
+      var academicCount = modules.filter(function(module) { return module.category === '纯学术探讨'; }).length;
+      var productCount = modules.filter(function(module) { return module.category === '产品相关'; }).length;
+      el.moduleMeta.textContent = modules.length + ' 个模块：' + academicCount + ' 个纯学术探讨 + ' + productCount + ' 个产品相关；点击卡片纳入建议。';
     }
     renderBriefPreview();
   }

@@ -478,6 +478,11 @@ body {
 .expert-search-results {
   display: flex; flex-direction: column; gap: 0.5rem;
 }
+.visit-result-note {
+  border: 1px dashed var(--bg3); background: var(--bg2);
+  border-radius: 8px; padding: 0.52rem 0.62rem;
+  color: var(--fg3); font-size: 0.76rem; line-height: 1.45;
+}
 .visit-expert-card {
   width: 100%; text-align: left; cursor: pointer;
   border: 1px solid var(--bg3); background: var(--bg);
@@ -493,6 +498,17 @@ body {
 .expert-row-head {
   display: flex; justify-content: space-between; gap: 0.6rem;
   align-items: center;
+}
+.visit-card-badges {
+  display: inline-flex; align-items: center; gap: 0.32rem; flex-shrink: 0;
+}
+.visit-card-action {
+  display: inline-flex; align-items: center; white-space: nowrap;
+  border-radius: 999px; padding: 0.1rem 0.42rem;
+  background: var(--bg2); color: var(--fg3); font-size: 0.68rem; font-style: normal;
+}
+.visit-expert-card.active .visit-card-action {
+  background: rgba(37,99,235,0.1); color: var(--accent);
 }
 .visit-expert-top strong,
 .expert-row-head strong {
@@ -539,6 +555,44 @@ body {
 }
 .module-card.compact {
   padding: 0.72rem; margin-bottom: 0;
+}
+.visit-module-card {
+  display: block; cursor: pointer; transition: border-color 0.15s, background 0.15s;
+}
+.visit-module-card:hover,
+.visit-module-card.selected {
+  border-color: rgba(37,99,235,0.35); background: rgba(37,99,235,0.04);
+}
+.module-check span {
+  min-width: 0; flex: 1;
+}
+.module-check small {
+  display: block; color: var(--fg3); font-size: 0.72rem; margin-top: 0.08rem;
+}
+.module-check em {
+  flex-shrink: 0; font-style: normal; font-size: 0.68rem;
+  color: var(--fg3); background: var(--bg2); border-radius: 999px; padding: 0.1rem 0.42rem;
+}
+.visit-module-card.selected .module-check em {
+  color: var(--accent); background: rgba(37,99,235,0.1);
+}
+.module-category {
+  display: inline-flex; align-items: center; width: fit-content;
+  border-radius: 999px; padding: 0.08rem 0.42rem; margin-right: 0.35rem;
+  font-size: 0.68rem; border: 1px solid var(--bg3);
+}
+.module-category.academic {
+  color: #047857; background: rgba(5,150,105,0.08); border-color: rgba(5,150,105,0.20);
+}
+.module-category.product {
+  color: #1d4ed8; background: rgba(37,99,235,0.08); border-color: rgba(37,99,235,0.20);
+}
+.module-purpose,
+.module-boundary {
+  color: var(--fg2); font-size: 0.76rem; line-height: 1.5; margin-top: 0.42rem;
+}
+.module-boundary {
+  color: var(--fg3); margin-top: 0.22rem;
 }
 .module-card.compact ul {
   margin-top: 0.4rem;
