@@ -3,3 +3,8 @@ literature-full.json
 archive/
 literature-recent.json
 literature-weekly.json
+communityCorpusPack.jsonl
+communityCandidates.json
+communityAssignments.jsonl
+communityReviewQueue.json
+embeddingIndex.local.json
