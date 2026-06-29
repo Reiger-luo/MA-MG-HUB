@@ -852,7 +852,8 @@
       '<div class="kg-detail-section"><h4>证据结构</h4><div class="community-profile-grid">' + profileHtml + '</div></div>' +
       '<div class="kg-detail-section"><h4>代表 PMID</h4><ul class="kg-study-list">' + refsHtml + '</ul></div>' +
       '<div class="kg-detail-section"><h4>本周动态</h4><ul class="kg-study-list">' + recentHtml + '</ul></div>' +
-      '<div class="kg-detail-section"><h4>限制</h4><div class="kg-detail-summary">' + escapeHtml(row.limitations || '当前为 title/abstract/metadata 规则基线，后续需要 taxonomy review、LLM 仲裁和人工校准。') + '</div></div>';
+      '<div class="kg-detail-section"><h4>限制</h4><div class="kg-detail-summary">' + escapeHtml(row.limitations || '当前为 title/abstract/metadata 规则基线，后续需要 taxonomy review、LLM 仲裁和人工校准。') + '</div></div>' +
+      '<div class="kg-detail-actions"><a class="kg-obsidian-btn" href="/MA-MG-HUB/pages/literature.html?community=' + encodeURIComponent(row.id) + '">在情报中心查看近一年文献</a></div>';
 
     Array.prototype.forEach.call(elCommunityDetail.querySelectorAll('[data-node]'), function (button) {
       button.addEventListener('click', function () {

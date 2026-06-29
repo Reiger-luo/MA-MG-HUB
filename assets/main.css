@@ -1720,8 +1720,45 @@ body {
   font-size: 0.78rem; color: var(--fg3);
   margin-bottom: 0.5rem;
 }
+.filter-hint {
+  color: var(--fg3); font-size: 0.72rem;
+  line-height: 1.45; margin-top: 0.28rem;
+}
 .filter-checkbox-list {
   display: flex; flex-direction: column; gap: 0.2rem;
+}
+.community-filter-menu {
+  position: relative;
+}
+.community-filter-menu summary {
+  list-style: none;
+  width: 100%; padding: 0.42rem 0.55rem;
+  background: var(--bg); border: 1px solid var(--bg3);
+  border-radius: 6px; color: var(--fg); font-size: 0.82rem;
+  cursor: pointer;
+}
+.community-filter-menu summary::-webkit-details-marker { display: none; }
+.community-filter-menu summary::after {
+  content: "▾";
+  float: right;
+  color: var(--fg3);
+}
+.community-filter-menu[open] summary {
+  border-color: rgba(37,99,235,0.42);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.06);
+}
+.community-filter-list {
+  max-height: 240px; overflow-y: auto;
+  margin-top: 0.35rem; padding: 0.45rem;
+  background: var(--bg); border: 1px solid var(--bg3);
+  border-radius: 8px;
+}
+.community-filter-list .filter-checkbox-item {
+  align-items: flex-start;
+  line-height: 1.35;
+}
+.community-filter-list .filter-checkbox-item span {
+  display: block;
 }
 .filter-radio-list {
   display: flex; flex-wrap: wrap; gap: 0.3rem;
@@ -1852,6 +1889,12 @@ body {
   border-radius: 4px; font-size: 0.75rem;
   background: var(--bg); color: var(--fg2);
   border: 1px solid var(--bg3);
+}
+.badge-community {
+  display: inline-block; padding: 0.15rem 0.4rem;
+  border-radius: 4px; font-size: 0.75rem;
+  background: rgba(14,116,144,0.08); color: #0e7490;
+  border: 1px solid rgba(14,116,144,0.18);
 }
 
 /* ── 分页 ── */
