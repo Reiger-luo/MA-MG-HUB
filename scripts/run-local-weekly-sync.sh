@@ -7,6 +7,8 @@ LOG_DIR="${ROOT_DIR}/.hermes-audit"
 LOCK_DIR="${LOG_DIR}/weekly-sync.lock"
 STAMP="$(date '+%Y%m%d-%H%M%S')"
 LOG_FILE="${LOG_DIR}/weekly-sync-${STAMP}.log"
+DRY_RUN="${MG_WEEKLY_DRY_RUN:-0}"
+DRY_RUN_FULL_BACKUP=""
 
 mkdir -p "${LOG_DIR}"
 
@@ -16,7 +18,16 @@ if ! mkdir "${LOCK_DIR}" 2>/dev/null; then
 fi
 
 cleanup() {
+  local status=$?
+  if [ "${DRY_RUN}" = "1" ]; then
+    if [ -n "${DRY_RUN_FULL_BACKUP}" ] && [ -f "${DRY_RUN_FULL_BACKUP}" ]; then
+      cp "${DRY_RUN_FULL_BACKUP}" "${ROOT_DIR}/data/literature-full.json" || true
+      rm -f "${DRY_RUN_FULL_BACKUP}" || true
+    fi
+    git -C "${ROOT_DIR}" restore --staged --worktree -- data assets pages index.html 2>/dev/null || true
+  fi
   rmdir "${LOCK_DIR}" 2>/dev/null || true
+  return "${status}"
 }
 trap cleanup EXIT
 
@@ -40,6 +51,12 @@ if ! git diff --quiet || ! git diff --cached --quiet; then
   exit 3
 fi
 
+if [ "${DRY_RUN}" = "1" ]; then
+  DRY_RUN_FULL_BACKUP="$(mktemp "${LOG_DIR}/literature-full.dry-run.XXXXXX.json")"
+  cp "data/literature-full.json" "${DRY_RUN_FULL_BACKUP}"
+  echo "MG_WEEKLY_DRY_RUN=1：将完整执行管线和校验，但不 commit/push；退出时恢复本地 full 与 tracked 产物。"
+fi
+
 CURRENT_BRANCH="$(git branch --show-current)"
 if [ "${CURRENT_BRANCH}" != "main" ]; then
   echo "当前分支是 ${CURRENT_BRANCH}，本地周更只允许在 main 分支执行。" >&2
@@ -52,7 +69,6 @@ git pull --ff-only origin main
 python3 scripts/run-weekly-pipeline.py
 
 # 分类规则可能独立于周更变化；周更后重扫 recent，保证公开数据使用最新证据规则。
-python3 scripts/reclassify-existing-iii.py --modes ALL --recent-days 365
 python3 scripts/reclassify-existing-iii.py --modes ALL --recent-days 365
 
 # reclassify 会重建文献与前端数据；这里再刷新依赖证据等级的下游产物。
@@ -116,23 +132,23 @@ print(f"  latest_full: {full_item.get('pmid')} {full_item.get('entry_date')}")
 print(f"  latest_recent: {recent_item.get('pmid')} {recent_item.get('entry_date')}")
 PY
 
-git add \
-  data/*.js \
-  data/weekly-summary.md \
-  data/china-regulatory-status.json \
-  data/clinicaltrials-pipeline-cache.json \
-  assets/*.js \
-  assets/*.css \
-  pages/*.html \
-  index.html
-
-if git diff --cached --quiet; then
-  echo "没有公开数据变更需要提交。"
+if [ "${DRY_RUN}" = "1" ]; then
+  echo "MG_WEEKLY_DRY_RUN=1，跳过 git add/commit/push。"
 else
-  git commit -m "chore: update MG hub weekly data"
-  if [ "${MG_WEEKLY_DRY_RUN:-0}" = "1" ]; then
-    echo "MG_WEEKLY_DRY_RUN=1，跳过 git push。"
+  git add \
+    data/*.js \
+    data/weekly-summary.md \
+    data/china-regulatory-status.json \
+    data/clinicaltrials-pipeline-cache.json \
+    assets/*.js \
+    assets/*.css \
+    pages/*.html \
+    index.html
+
+  if git diff --cached --quiet; then
+    echo "没有公开数据变更需要提交。"
   else
+    git commit -m "chore: update MG hub weekly data"
     git push origin main
   fi
 fi
