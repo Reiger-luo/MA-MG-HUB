@@ -375,7 +375,7 @@ def isItc(text: str) -> bool:
     ])
 
 
-def isHeor(text: str) -> bool:
+def isEconomicHeor(text: str) -> bool:
     return hasAny(text, [
         "economic evaluation",
         "cost-effectiveness",
@@ -394,6 +394,20 @@ def isHeor(text: str) -> bool:
         "quality adjusted life year",
         "qaly",
         "icer",
+        "health care resource utilization",
+        "healthcare resource utilization",
+        "health resource utilization",
+        "hru",
+        "hcru",
+        "health care costs",
+        "healthcare costs",
+        "economic burden",
+        "burden of illness",
+    ])
+
+
+def isHeor(text: str) -> bool:
+    return isEconomicHeor(text) or hasAny(text, [
         "qualitative design",
         "individual interviews",
         "healthcare professionals' perspectives",
@@ -561,6 +575,8 @@ def isObservational(text: str) -> bool:
 
 
 def isSystematicReviewOfCaseEvidence(text: str) -> bool:
+    if hasPattern(text, r"\bcase report\b.{0,80}\b(literature|systematic|focused systematic)\s+review\b"):
+        return True
     if not word("systematic review", text):
         return False
     if hasPattern(text, r"\bsystematic review of\b.{0,100}\b(case reports?|case series)\b"):
@@ -833,6 +849,8 @@ def classifyStudyType(pubTypes, abstract: str | None = "", title: str | None = "
         return "Case Report"
     if word("narrative review", titleText) or hasPattern(titleText, r"\(review\)"):
         return "Review"
+    if isEconomicHeor(text):
+        return "HEOR"
     if isPredictionModel(text):
         return classifyPredictionModel(text, pubTypeText)
     if isBiomarkerPrognosticQuestion(text):
