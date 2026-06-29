@@ -29,6 +29,7 @@ PUBLIC_ARTIFACTS = [
     ("curated-topics.js", "专题层", "MG_CURATED_TOPICS"),
     ("communityTaxonomy.js", "社区 Taxonomy", "MG_COMMUNITY_TAXONOMY"),
     ("communityAssignmentIndex.js", "社区归类索引", "MG_COMMUNITY_ASSIGNMENT_INDEX"),
+    ("communityAssignmentsRecent.js", "近一年社区归类", "MG_COMMUNITY_RECENT_ASSIGNMENTS"),
     ("communityCards.js", "社区卡片", "MG_COMMUNITY_CARDS"),
     ("communityWeekly.js", "社区周更", "MG_COMMUNITY_WEEKLY"),
     ("communityAudit.js", "社区 Audit", "MG_COMMUNITY_AUDIT"),

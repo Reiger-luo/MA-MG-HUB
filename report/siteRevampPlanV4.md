@@ -321,6 +321,7 @@ full MG graph
 |---|---|
 | `data/communityTaxonomy.js` | 社区定义、边界、层级、facet |
 | `data/communityAssignmentIndex.js` | 社区归类轻量索引、recent assignments 和分片清单 |
+| `data/communityAssignmentsRecent.js` | 近一年社区归类明细，情报中心按需加载 |
 | `data/communityAssignments-*.js` | 按社区拆分的全量归类分片，必须懒加载 |
 | `data/communityCards.js` | 社区摘要、代表证据、MSL use case |
 | `data/communityWeekly.js` | 本周新增、升温、强信号、社区 drift |
@@ -623,7 +624,7 @@ MSL 工作台读取社区状态：
 2. 基于 concept co-occurrence + metadata 生成第一版 `communityCandidates.json`。
 3. 用 v2 建议中的 8-10 个顶层社区作为 seed taxonomy，但不写死，交给候选社区和人工 review 校正。
 4. 生成 `communityTaxonomy.js`、`communityCards.js`、`communityWeekly.js`、`communityAudit.js` 的最小可用版本。
-5. 生成 `communityAssignmentIndex.js` 和按社区拆分的 `communityAssignments-*.js`，避免首屏加载全量归类。
+5. 生成轻量 `communityAssignmentIndex.js`、按需 `communityAssignmentsRecent.js` 和按社区拆分的 `communityAssignments-*.js`，避免首屏加载全量归类。
 6. 再把知识库页面接入社区视图。
 7. 最后改诊治格局，让它读取社区变化和图谱变化生成动态洞察。
 
