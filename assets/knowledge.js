@@ -715,7 +715,8 @@
       existing.addEventListener('error', function () { callback(false); }, { once: true });
       return;
     }
-    var script = existing || document.createElement('script');
+    if (existing) existing.remove();
+    var script = document.createElement('script');
     script.src = src;
     script.setAttribute('data-loading', '1');
     script.onload = function () {
