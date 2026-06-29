@@ -1077,6 +1077,53 @@ body {
   display: block; width: var(--meter-value, 0%);
   height: 100%; background: rgba(37,99,235,0.52);
 }
+.community-assignment-panel {
+  border: 1px solid var(--bg3); background: var(--bg2);
+  border-radius: 8px; padding: 0.7rem;
+}
+.community-assignment-panel > span {
+  display: block; color: var(--fg3); font-size: 0.72rem;
+  line-height: 1.5; margin-top: 0.4rem;
+}
+.community-assignment-summary {
+  display: flex; flex-wrap: wrap; gap: 0.35rem;
+  margin-bottom: 0.55rem;
+}
+.community-assignment-summary span {
+  font-size: 0.72rem; color: var(--fg2);
+  border: 1px solid var(--bg3); background: var(--bg);
+  border-radius: 4px; padding: 0.12rem 0.45rem;
+}
+.community-assignment-list {
+  list-style: none; margin: 0; padding: 0;
+  max-height: 320px; overflow-y: auto;
+  border-top: 1px solid var(--bg3);
+}
+.community-assignment-row {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem;
+  padding: 0.42rem 0; border-bottom: 1px solid var(--border);
+  font-size: 0.76rem; color: var(--fg2);
+}
+.community-assignment-row a {
+  color: var(--accent); text-decoration: none; font-weight: 500;
+}
+.community-assignment-row a:hover { text-decoration: underline; }
+.community-assignment-row em {
+  flex-basis: 100%; color: var(--fg3); font-style: normal;
+  font-size: 0.72rem;
+}
+.community-assignment-flag {
+  display: inline-block; border-radius: 4px;
+  padding: 0.1rem 0.35rem; font-size: 0.7rem;
+  color: var(--yellow);
+  background: rgba(202,138,4,0.1);
+  border: 1px solid rgba(202,138,4,0.25);
+}
+.community-assignment-flag.china {
+  color: var(--green);
+  background: rgba(22,163,74,0.1);
+  border-color: rgba(22,163,74,0.25);
+}
 
 /* 折叠区 */
 .kg-collapse {

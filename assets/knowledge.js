@@ -86,6 +86,10 @@
   var scaleMax = 3.2;
   var activeNodeId = null;
   var activeCommunityId = null;
+  var communityAssignmentCache = {};
+  var communityAssignmentLoading = {};
+  var communityAssignmentErrors = {};
+  var communityAssignmentCallbacks = {};
 
   var nodesById = {};
   var edgesById = {};
@@ -142,6 +146,10 @@
   function cssEscape(value) {
     if (window.CSS && window.CSS.escape) return window.CSS.escape(value);
     return String(value).replace(/"/g, '\\"');
+  }
+
+  function attrSelectorEscape(value) {
+    return String(value).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
   }
 
   function compactNumber(value) {
@@ -696,6 +704,155 @@
     }).join(' ');
   }
 
+  function loadScriptOnce(src, callback) {
+    var existing = document.querySelector('script[src="' + attrSelectorEscape(src) + '"]');
+    if (existing && existing.getAttribute('data-loaded') === '1') {
+      callback(true);
+      return;
+    }
+    if (existing && existing.getAttribute('data-loading') === '1') {
+      existing.addEventListener('load', function () { callback(true); }, { once: true });
+      existing.addEventListener('error', function () { callback(false); }, { once: true });
+      return;
+    }
+    var script = existing || document.createElement('script');
+    script.src = src;
+    script.setAttribute('data-loading', '1');
+    script.onload = function () {
+      script.setAttribute('data-loaded', '1');
+      script.removeAttribute('data-loading');
+      callback(true);
+    };
+    script.onerror = function () {
+      script.removeAttribute('data-loading');
+      callback(false);
+    };
+    if (!existing) document.head.appendChild(script);
+  }
+
+  function loadCommunityAssignmentShard(communityId, callback) {
+    if (communityAssignmentCache[communityId]) {
+      callback(true, communityAssignmentCache[communityId]);
+      return;
+    }
+    if (communityAssignmentLoading[communityId]) {
+      communityAssignmentCallbacks[communityId].push(callback);
+      return;
+    }
+    communityAssignmentLoading[communityId] = true;
+    communityAssignmentCallbacks[communityId] = [callback];
+    loadScriptOnce('/MA-MG-HUB/data/communityAssignments-' + encodeURIComponent(communityId) + '.js', function (ok) {
+      var shards = window.MG_COMMUNITY_ASSIGNMENT_SHARDS || {};
+      var payload = shards[communityId] || null;
+      if (ok && payload) {
+        communityAssignmentCache[communityId] = payload;
+        delete communityAssignmentErrors[communityId];
+      } else {
+        communityAssignmentErrors[communityId] = true;
+      }
+      communityAssignmentLoading[communityId] = false;
+      var callbacks = communityAssignmentCallbacks[communityId] || [];
+      delete communityAssignmentCallbacks[communityId];
+      for (var i = 0; i < callbacks.length; i++) {
+        callbacks[i](ok && !!payload, payload);
+      }
+    });
+  }
+
+  function assignmentFlagLabel(flag) {
+    return {
+      lowConfidence: '低置信度',
+      crossCommunityConflict: '跨社区冲突'
+    }[flag] || flag;
+  }
+
+  function assignmentConfidenceLabel(value) {
+    return {
+      high: '高',
+      medium: '中',
+      low: '低',
+      unassigned: '未归类'
+    }[value] || value || '未知';
+  }
+
+  function renderAssignmentFlags(flags) {
+    return (flags || []).map(function (flag) {
+      return '<span class="community-assignment-flag">' + escapeHtml(assignmentFlagLabel(flag)) + '</span>';
+    }).join('');
+  }
+
+  function renderAssignmentSummary(items) {
+    var counts = { high: 0, medium: 0, low: 0, conflict: 0, china: 0 };
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i] || {};
+      if (counts[item.confidence] !== undefined) counts[item.confidence]++;
+      if ((item.flags || []).indexOf('crossCommunityConflict') !== -1) counts.conflict++;
+      if (item.china_related) counts.china++;
+    }
+    return '<div class="community-assignment-summary">' +
+      '<span>全量 ' + escapeHtml(compactNumber(items.length)) + '</span>' +
+      '<span>高 ' + escapeHtml(counts.high) + '</span>' +
+      '<span>中 ' + escapeHtml(counts.medium) + '</span>' +
+      '<span>低 ' + escapeHtml(counts.low) + '</span>' +
+      '<span>冲突 ' + escapeHtml(counts.conflict) + '</span>' +
+      '<span>中国 ' + escapeHtml(counts.china) + '</span>' +
+    '</div>';
+  }
+
+  function renderAssignmentList(communityId, payload) {
+    var panel = document.getElementById('communityAssignmentPanel');
+    if (!panel || panel.getAttribute('data-community') !== communityId) return;
+    var items = (payload && payload.items) || [];
+    if (!items.length) {
+      panel.innerHTML = '<div class="kg-empty-hint">该社区分片暂无归类记录。</div>';
+      return;
+    }
+    var rows = items.map(function (item) {
+      var flags = renderAssignmentFlags(item.flags || []);
+      var secondary = (item.secondary || []).slice(0, 2).map(function (entry) {
+        var title = getCommunityTitle(entry.community_id);
+        return title + ' ' + Number(entry.score || 0).toFixed(1).replace(/\.0$/, '');
+      }).join(' / ');
+      return '<li class="community-assignment-row">' +
+        '<a href="https://pubmed.ncbi.nlm.nih.gov/' + escapeHtml(item.pmid) + '/" target="_blank" rel="noopener">PMID ' + escapeHtml(item.pmid) + '</a>' +
+        '<span class="kg-badge conf-' + escapeHtml(item.confidence === 'high' ? 'high' : item.confidence === 'medium' ? 'medium' : 'low') + '">' + escapeHtml(assignmentConfidenceLabel(item.confidence)) + '</span>' +
+        '<span>' + escapeHtml(item.entry_date || item.pub_date || '-') + '</span>' +
+        '<span>' + escapeHtml(item.evidence_level ? 'Level ' + item.evidence_level : '未分级') + '</span>' +
+        (item.china_related ? '<span class="community-assignment-flag china">中国</span>' : '') +
+        flags +
+        (secondary ? '<em>' + escapeHtml(secondary) + '</em>' : '') +
+      '</li>';
+    }).join('');
+    panel.innerHTML = renderAssignmentSummary(items) +
+      '<ul class="community-assignment-list">' + rows + '</ul>';
+  }
+
+  function getCommunityTitle(communityId) {
+    var card = communityCardsById[communityId] || {};
+    var taxonomy = taxonomyById[communityId] || {};
+    return card.title || taxonomy.title || communityId;
+  }
+
+  function getInitialKnowledgeCommunityId() {
+    try {
+      var params = new URLSearchParams(window.location.search || '');
+      var communityId = params.get('community') || '';
+      if (communityId && taxonomyById[communityId]) return communityId;
+      return '';
+    } catch (err) {
+      return '';
+    }
+  }
+
+  function getInitialKnowledgeTab() {
+    try {
+      var params = new URLSearchParams(window.location.search || '');
+      return params.get('tab') || '';
+    } catch (err) {
+      return '';
+    }
+  }
+
   function renderCommunityAuditStrip() {
     if (!elCommunityAuditStrip) return;
     var summary = communityAuditData.summary || {};
@@ -852,6 +1009,10 @@
       '<div class="kg-detail-section"><h4>证据结构</h4><div class="community-profile-grid">' + profileHtml + '</div></div>' +
       '<div class="kg-detail-section"><h4>代表 PMID</h4><ul class="kg-study-list">' + refsHtml + '</ul></div>' +
       '<div class="kg-detail-section"><h4>本周动态</h4><ul class="kg-study-list">' + recentHtml + '</ul></div>' +
+      '<div class="kg-detail-section"><h4>全量归类文献</h4><div class="community-assignment-panel" id="communityAssignmentPanel" data-community="' + escapeHtml(row.id) + '">' +
+        '<button class="kg-obsidian-btn" type="button" data-load-community-assignments="' + escapeHtml(row.id) + '">加载全量 PMID</button>' +
+        '<span>按需加载该社区 assignment 分片；显示 primary community 的 PMID、置信度和质量标记。</span>' +
+      '</div></div>' +
       '<div class="kg-detail-section"><h4>限制</h4><div class="kg-detail-summary">' + escapeHtml(row.limitations || '当前为 title/abstract/metadata 规则基线，后续需要 taxonomy review、LLM 仲裁和人工校准。') + '</div></div>' +
       '<div class="kg-detail-actions"><a class="kg-obsidian-btn" href="/MA-MG-HUB/pages/literature.html?community=' + encodeURIComponent(row.id) + '">在情报中心查看近一年文献</a></div>';
 
@@ -861,6 +1022,28 @@
         selectNode(button.getAttribute('data-node'));
       });
     });
+
+    if (communityAssignmentCache[row.id]) {
+      renderAssignmentList(row.id, communityAssignmentCache[row.id]);
+    } else {
+      var loadButton = elCommunityDetail.querySelector('[data-load-community-assignments]');
+      if (loadButton) {
+        loadButton.addEventListener('click', function () {
+          var communityId = loadButton.getAttribute('data-load-community-assignments');
+          var panel = document.getElementById('communityAssignmentPanel');
+          if (panel) panel.innerHTML = '<div class="kg-empty-hint">正在加载社区 assignment 分片...</div>';
+          loadCommunityAssignmentShard(communityId, function (ok, payload) {
+            var currentPanel = document.getElementById('communityAssignmentPanel');
+            if (!currentPanel || currentPanel.getAttribute('data-community') !== communityId) return;
+            if (!ok || !payload) {
+              currentPanel.innerHTML = '<div class="kg-empty-hint">该社区分片加载失败，请稍后重试。</div>';
+              return;
+            }
+            renderAssignmentList(communityId, payload);
+          });
+        });
+      }
+    }
   }
 
   function attachCommunityFilters() {
@@ -1022,6 +1205,12 @@
     attachCommunityFilters();
     attachSearch();
     selectNode(nodesById.fcrnInhibition ? 'fcrnInhibition' : (nodes[0] && nodes[0].id));
+    var initialCommunityId = getInitialKnowledgeCommunityId();
+    if (initialCommunityId) {
+      openCommunity(initialCommunityId);
+    } else if (getInitialKnowledgeTab() === 'communities') {
+      activateTab('communities');
+    }
   }
 
   if (document.readyState === 'loading') {

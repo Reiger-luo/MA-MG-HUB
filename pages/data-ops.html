@@ -47,12 +47,17 @@
 .community-audit-card {
   background: var(--bg2); border: 1px solid var(--bg3); border-radius: 8px;
   padding: 0.8rem 0.9rem;
+  display: block; text-decoration: none;
+  transition: border-color 0.15s, background 0.15s;
 }
+.community-audit-card:hover { border-color: rgba(37,99,235,0.32); background: rgba(37,99,235,0.035); }
 .community-audit-card span { display: block; color: var(--fg3); font-size: 0.74rem; }
 .community-audit-card strong { display: block; color: var(--fg); font-size: 1.22rem; line-height: 1.25; margin-top: 0.12rem; }
 .community-audit-card em { display: block; color: var(--fg3); font-size: 0.72rem; font-style: normal; margin-top: 0.16rem; }
 .community-audit-card.warning strong { color: var(--yellow); }
 .community-audit-card.danger strong { color: var(--red); }
+.ops-inline-link { color: var(--accent); text-decoration: none; }
+.ops-inline-link:hover { text-decoration: underline; }
 .ops-note { font-size:0.78rem;color:var(--fg3);margin-top:0.3rem;line-height:1.7; }
 .section-divider { border: none; border-top: 1px solid var(--bg3); margin: 1.5rem 0; }
 @media (max-width: 640px) {
@@ -105,6 +110,7 @@
     <a class="ops-btn" href="/MA-MG-HUB/data/signals-weekly.js" target="_blank" style="text-decoration:none">查看信号数据</a>
     <a class="ops-btn" href="/MA-MG-HUB/data/pipeline-status.js" target="_blank" style="text-decoration:none">查看管线状态</a>
     <a class="ops-btn" href="/MA-MG-HUB/data/communityAudit.js" target="_blank" style="text-decoration:none">查看社区 Audit</a>
+    <a class="ops-btn" href="/MA-MG-HUB/pages/knowledge.html?tab=communities" style="text-decoration:none">查看社区视图</a>
   </div>
   <div class="ops-note" id="pipelineNote">
     本地更新命令：<code>python3 scripts/run-weekly-pipeline.py</code>。GitHub Actions 可手动触发 weekly-pipeline。
@@ -139,6 +145,7 @@
 
   <script src="/MA-MG-HUB/data/dashboard-data.js"></script>
   <script src="/MA-MG-HUB/data/pipeline-status.js"></script>
+  <script src="/MA-MG-HUB/data/communityTaxonomy.js"></script>
   <script src="/MA-MG-HUB/data/communityAudit.js"></script>
   <script>
   (function(){
@@ -146,6 +153,7 @@
     const stats = dashboard.stats || {};
     const status = window.MG_PIPELINE_STATUS || {};
     const communityAudit = window.MG_COMMUNITY_AUDIT || {};
+    const communityTaxonomy = window.MG_COMMUNITY_TAXONOMY || {};
     const sourceList = document.getElementById('sourceList');
     const artifactGrid = document.getElementById('artifactGrid');
     const communityAuditGrid = document.getElementById('communityAuditGrid');
@@ -153,6 +161,10 @@
     const opsLog = document.getElementById('opsLog');
     const pipelineNote = document.getElementById('pipelineNote');
     const colorMap = { ok: 'green', generated: 'green', planned: 'yellow', manual: 'yellow', missing: 'red' };
+    const communityTitleById = {};
+    (communityTaxonomy.communities || []).forEach(function(item) {
+      communityTitleById[item.id] = item.title || item.id;
+    });
 
     function escapeHtml(value) {
       return String(value ?? '').replace(/[&<>"']/g, function(char) {
@@ -171,6 +183,15 @@
       const denominator = Number(total || 0);
       if (!denominator) return '0%';
       return (number / denominator * 100).toFixed(1).replace(/\.0$/, '') + '%';
+    }
+
+    function communityTitle(communityId) {
+      return communityTitleById[communityId] || communityId;
+    }
+
+    function communityHref(communityId) {
+      if (communityId) return '/MA-MG-HUB/pages/knowledge.html?community=' + encodeURIComponent(communityId);
+      return '/MA-MG-HUB/pages/knowledge.html?tab=communities';
     }
 
     function renderSources() {
@@ -250,19 +271,20 @@
       ];
 
       communityAuditGrid.innerHTML = items.map(function(item) {
-        return '<div class="community-audit-card ' + escapeHtml(item.level || '') + '">' +
+        return '<a class="community-audit-card ' + escapeHtml(item.level || '') + '" href="' + communityHref('') + '">' +
           '<span>' + escapeHtml(item.label) + '</span>' +
           '<strong>' + escapeHtml(item.value) + '</strong>' +
           '<em>' + escapeHtml(item.note) + '</em>' +
-        '</div>';
+        '</a>';
       }).join('');
 
       const oversized = (communityAudit.oversized_communities || []).slice(0, 3).map(function(item) {
-        return item.community_id + ' ' + item.article_count + ' 篇';
+        return '<a class="ops-inline-link" href="' + communityHref(item.community_id) + '">' +
+          escapeHtml(communityTitle(item.community_id)) + ' ' + escapeHtml(item.article_count) + ' 篇</a>';
       }).join('；');
       const notes = (health.notes || []).join('；');
       communityAuditNote.innerHTML = escapeHtml(notes || '社区层 audit 已生成。') +
-        (oversized ? '<br>需优先 review 的过大社区：' + escapeHtml(oversized) : '');
+        (oversized ? '<br>需优先 review 的过大社区：' + oversized : '');
     }
 
     renderSources();
