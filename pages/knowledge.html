@@ -39,6 +39,7 @@
 
   <div class="intel-tabs" role="tablist" aria-label="知识库视图">
     <button class="intel-tab active" type="button" data-knowledge-tab="graph">知识图谱</button>
+    <button class="intel-tab" type="button" data-knowledge-tab="communities">社区视图</button>
     <button class="intel-tab" type="button" data-knowledge-tab="matrix">证据矩阵</button>
     <button class="intel-tab" type="button" data-knowledge-tab="topics">专题</button>
     <button class="intel-tab" type="button" data-knowledge-tab="search">跨库检索</button>
@@ -85,6 +86,36 @@
       <aside class="kg-detail" id="knowledgeDetail">
         <div class="kg-empty-hint">点击图谱节点查看详情</div>
       </aside>
+    </div>
+  </section>
+
+  <section class="intel-tab-panel" id="knowledge-communities-panel">
+    <div class="workspace-panel">
+      <div class="panel-head">
+        <div>
+          <h2>医学事务社区</h2>
+          <p class="panel-caption">基于全 MG PubMed abstract 的规则基线社区层；efgar-wiki 只作为策展方法样板和覆盖校验。</p>
+        </div>
+        <span class="update-badge" id="communityCount">0 个社区</span>
+      </div>
+      <div class="kg-filter-bar">
+        <div class="knowledge-search compact">
+          <input id="communitySearch" placeholder="筛选社区，例如 FcRn / safety / China / guideline">
+        </div>
+        <select class="filter-input compact-select" id="communitySignalFilter">
+          <option value="all">全部活跃度</option>
+          <option value="active">活跃社区</option>
+          <option value="watch">观察社区</option>
+          <option value="quiet">平稳社区</option>
+        </select>
+      </div>
+      <div class="community-audit-strip" id="communityAuditStrip"></div>
+      <div class="curated-topic-layout community-layout">
+        <div class="curated-topic-list community-list" id="communityList"></div>
+        <aside class="curated-topic-detail community-detail" id="communityDetail">
+          <div class="kg-empty-hint">选择一个社区查看定义、边界、代表证据和本周动态。</div>
+        </aside>
+      </div>
     </div>
   </section>
 
@@ -168,6 +199,10 @@
 
 <script src="/MA-MG-HUB/data/knowledge-graph.js"></script>
 <script src="/MA-MG-HUB/data/curated-topics.js"></script>
+<script src="/MA-MG-HUB/data/communityTaxonomy.js"></script>
+<script src="/MA-MG-HUB/data/communityCards.js"></script>
+<script src="/MA-MG-HUB/data/communityWeekly.js"></script>
+<script src="/MA-MG-HUB/data/communityAudit.js"></script>
 <script src="/MA-MG-HUB/assets/knowledge.js"></script>
 </body>
 </html>

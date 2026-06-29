@@ -43,12 +43,23 @@
 }
 .artifact-name { font-size: 0.84rem; color: var(--fg); font-weight: 500; }
 .artifact-meta { font-size: 0.76rem; color: var(--fg3); margin-top: 0.2rem; line-height: 1.5; }
+.community-audit-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; }
+.community-audit-card {
+  background: var(--bg2); border: 1px solid var(--bg3); border-radius: 8px;
+  padding: 0.8rem 0.9rem;
+}
+.community-audit-card span { display: block; color: var(--fg3); font-size: 0.74rem; }
+.community-audit-card strong { display: block; color: var(--fg); font-size: 1.22rem; line-height: 1.25; margin-top: 0.12rem; }
+.community-audit-card em { display: block; color: var(--fg3); font-size: 0.72rem; font-style: normal; margin-top: 0.16rem; }
+.community-audit-card.warning strong { color: var(--yellow); }
+.community-audit-card.danger strong { color: var(--red); }
 .ops-note { font-size:0.78rem;color:var(--fg3);margin-top:0.3rem;line-height:1.7; }
 .section-divider { border: none; border-top: 1px solid var(--bg3); margin: 1.5rem 0; }
 @media (max-width: 640px) {
   .source-card { align-items: flex-start; gap: 0.7rem; }
   .source-status { white-space: nowrap; }
   .artifact-grid { grid-template-columns: 1fr; }
+  .community-audit-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -93,6 +104,7 @@
     <a class="ops-btn" href="/MA-MG-HUB/data/dashboard-data.js" target="_blank" style="text-decoration:none">查看 Dashboard 数据</a>
     <a class="ops-btn" href="/MA-MG-HUB/data/signals-weekly.js" target="_blank" style="text-decoration:none">查看信号数据</a>
     <a class="ops-btn" href="/MA-MG-HUB/data/pipeline-status.js" target="_blank" style="text-decoration:none">查看管线状态</a>
+    <a class="ops-btn" href="/MA-MG-HUB/data/communityAudit.js" target="_blank" style="text-decoration:none">查看社区 Audit</a>
   </div>
   <div class="ops-note" id="pipelineNote">
     本地更新命令：<code>python3 scripts/run-weekly-pipeline.py</code>。GitHub Actions 可手动触发 weekly-pipeline。
@@ -106,21 +118,38 @@
 
   <hr class="section-divider">
 
+  <!-- 社区语义层审计 -->
+  <div class="ops-section-title">社区语义层 Audit</div>
+  <div class="community-audit-grid" id="communityAuditGrid">
+    <div class="community-audit-card">
+      <span>读取中</span>
+      <strong>--</strong>
+      <em>正在加载社区审计数据</em>
+    </div>
+  </div>
+  <div class="ops-note" id="communityAuditNote"></div>
+
+  <hr class="section-divider">
+
   <!-- 更新日志 -->
   <div class="ops-section-title">更新日志</div>
   <div id="opsLog">
     <div class="log-line">正在加载管线状态...</div>
   </div>
 
-  <script src="/MA-MG-HUB/data/dashboard-data.js" defer></script>
-  <script src="/MA-MG-HUB/data/pipeline-status.js" defer></script>
-  <script defer>
+  <script src="/MA-MG-HUB/data/dashboard-data.js"></script>
+  <script src="/MA-MG-HUB/data/pipeline-status.js"></script>
+  <script src="/MA-MG-HUB/data/communityAudit.js"></script>
+  <script>
   (function(){
     const dashboard = window.MG_DASHBOARD_DATA || {};
     const stats = dashboard.stats || {};
     const status = window.MG_PIPELINE_STATUS || {};
+    const communityAudit = window.MG_COMMUNITY_AUDIT || {};
     const sourceList = document.getElementById('sourceList');
     const artifactGrid = document.getElementById('artifactGrid');
+    const communityAuditGrid = document.getElementById('communityAuditGrid');
+    const communityAuditNote = document.getElementById('communityAuditNote');
     const opsLog = document.getElementById('opsLog');
     const pipelineNote = document.getElementById('pipelineNote');
     const colorMap = { ok: 'green', generated: 'green', planned: 'yellow', manual: 'yellow', missing: 'red' };
@@ -129,6 +158,19 @@
       return String(value ?? '').replace(/[&<>"']/g, function(char) {
         return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char];
       });
+    }
+
+    function compactNumber(value) {
+      const number = Number(value || 0);
+      if (number >= 10000) return (number / 10000).toFixed(1).replace(/\.0$/, '') + '万';
+      return String(number);
+    }
+
+    function formatRate(value, total) {
+      const number = Number(value || 0);
+      const denominator = Number(total || 0);
+      if (!denominator) return '0%';
+      return (number / denominator * 100).toFixed(1).replace(/\.0$/, '') + '%';
     }
 
     function renderSources() {
@@ -186,9 +228,47 @@
       }).join('');
     }
 
+    function renderCommunityAudit() {
+      const summary = communityAudit.summary || {};
+      const health = communityAudit.health || {};
+      const total = Number(summary.total_articles || 0);
+      if (!Object.keys(summary).length) {
+        communityAuditGrid.innerHTML = '<div class="community-audit-card warning"><span>社区层</span><strong>未生成</strong><em>等待 communityAudit.js</em></div>';
+        communityAuditNote.textContent = '社区语义层尚未生成；运行周更管线后会自动重建。';
+        return;
+      }
+
+      const statusLabel = { ok: '正常', needsReview: '待 Review', warning: '关注', missing: '缺失' }[health.status] || (health.status || '未知');
+      const items = [
+        { label: '总文献', value: compactNumber(total), note: 'PubMed full abstract 基线' },
+        { label: '已归类', value: compactNumber(summary.assigned_articles), note: formatRate(summary.assigned_articles, total) },
+        { label: '未归类', value: compactNumber(summary.unassigned_articles), note: formatRate(summary.unassigned_articles, total) },
+        { label: '低置信度', value: compactNumber(summary.low_confidence_articles), note: formatRate(summary.low_confidence_articles, total), level: 'warning' },
+        { label: '冲突归类', value: compactNumber(summary.conflict_articles), note: formatRate(summary.conflict_articles, total), level: 'warning' },
+        { label: '近14天未归类', value: compactNumber(summary.recent_unassigned_articles), note: '新文献覆盖检查', level: summary.recent_unassigned_articles ? 'danger' : '' },
+        { label: '审计状态', value: statusLabel, note: '规则基线需持续校准', level: health.status === 'needsReview' ? 'warning' : '' }
+      ];
+
+      communityAuditGrid.innerHTML = items.map(function(item) {
+        return '<div class="community-audit-card ' + escapeHtml(item.level || '') + '">' +
+          '<span>' + escapeHtml(item.label) + '</span>' +
+          '<strong>' + escapeHtml(item.value) + '</strong>' +
+          '<em>' + escapeHtml(item.note) + '</em>' +
+        '</div>';
+      }).join('');
+
+      const oversized = (communityAudit.oversized_communities || []).slice(0, 3).map(function(item) {
+        return item.community_id + ' ' + item.article_count + ' 篇';
+      }).join('；');
+      const notes = (health.notes || []).join('；');
+      communityAuditNote.innerHTML = escapeHtml(notes || '社区层 audit 已生成。') +
+        (oversized ? '<br>需优先 review 的过大社区：' + escapeHtml(oversized) : '');
+    }
+
     renderSources();
     renderPipelineNote();
     renderArtifacts();
+    renderCommunityAudit();
     renderLogs();
   })();
   </script>
