@@ -76,6 +76,15 @@
         </div>
 
         <div class="filter-group">
+          <label class="filter-label">医学事务社区</label>
+          <details class="community-filter-menu" id="communityFilterMenu">
+            <summary id="communityFilterSummary">全部社区</summary>
+            <div class="filter-checkbox-list community-filter-list" id="filterCommunityList"></div>
+          </details>
+          <div class="filter-hint" id="communityFilterStatus">按需加载社区分片，不增加首屏负担。</div>
+        </div>
+
+        <div class="filter-group">
           <label class="filter-label">时间范围（多选）</label>
           <div class="filter-checkbox-list" id="filterTimeList"></div>
         </div>
@@ -271,6 +280,7 @@
 <!-- 数据脚本（gzip 压缩，比 fetch JSON 快） -->
 <script src="/MA-MG-HUB/data/literature-recent.js?v=20260619"></script>
 <script src="/MA-MG-HUB/data/signals-weekly.js"></script>
+<script src="/MA-MG-HUB/data/communityTaxonomy.js"></script>
 <script src="/MA-MG-HUB/assets/literature.js"></script>
 </body>
 </html>

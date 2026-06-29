@@ -10,6 +10,13 @@
   let chinaMonthlyChart = null;
   let chinaEvidenceChart = null;
   let chinaQuartileChart = null;
+  let communityTaxonomy = window.MG_COMMUNITY_TAXONOMY || { communities: [] };
+  let communityAssignmentsById = {};
+  let communityAssignmentLoading = {};
+  let communityAssignmentCallbacks = {};
+  let communityAssignmentErrors = {};
+  let articleCommunityByPmid = {};
+  let communityOptionById = {};
   let currentPage = 0;
   const PAGE_SIZE = 10;
   const SIGNAL_WINDOW_DAYS = 14;
@@ -19,8 +26,8 @@
   function loadScript(src, callback) {
     var s = document.createElement('script');
     s.src = src;
-    s.onload = callback;
-    s.onerror = callback;
+    s.onload = function() { if (callback) callback(true); };
+    s.onerror = function() { if (callback) callback(false); };
     document.head.appendChild(s);
   }
 
@@ -58,6 +65,9 @@
     filterIFList: $('filterIFList'),
     filterQuartileList: $('filterQuartileList'),
     filterEvidenceList: $('filterEvidenceList'),
+    filterCommunityList: $('filterCommunityList'),
+    communityFilterSummary: $('communityFilterSummary'),
+    communityFilterStatus: $('communityFilterStatus'),
     btnExport: $('btnExport'),
     signalSummary: $('signalSummary'),
     signalList: $('signalList'),
@@ -131,6 +141,225 @@
     }
     var allCb = container.querySelector('input[value="all"]');
     return { values: vals, isAll: allCb ? allCb.checked : false };
+  }
+
+  function normalizePmid(value) {
+    return String(value || '').trim();
+  }
+
+  function getCommunityTitle(communityId) {
+    var item = communityOptionById[communityId] || {};
+    return item.title || communityId;
+  }
+
+  function getInitialCommunityIds() {
+    var requested = [];
+    try {
+      var params = new URLSearchParams(window.location.search || '');
+      var value = params.get('community') || '';
+      requested = value.split(',').map(function(item) { return item.trim(); }).filter(Boolean);
+    } catch (err) {
+      requested = [];
+    }
+    return requested.filter(function(communityId) { return !!communityOptionById[communityId]; });
+  }
+
+  function getSelectedCommunityIds() {
+    if (!el.filterCommunityList) return [];
+    var allCb = el.filterCommunityList.querySelector('input[value="all"]');
+    if (allCb && allCb.checked) return [];
+    var checked = el.filterCommunityList.querySelectorAll('input[type="checkbox"]:checked:not([value="all"])');
+    var ids = [];
+    for (var i = 0; i < checked.length; i++) ids.push(checked[i].value);
+    return ids;
+  }
+
+  function updateCommunityFilterSummary() {
+    if (!el.communityFilterSummary) return;
+    var ids = getSelectedCommunityIds();
+    if (!ids.length) {
+      el.communityFilterSummary.textContent = '全部社区';
+      return;
+    }
+    if (ids.length === 1) {
+      el.communityFilterSummary.textContent = getCommunityTitle(ids[0]);
+      return;
+    }
+    el.communityFilterSummary.textContent = ids.length + ' 个社区';
+  }
+
+  function updateCommunityFilterStatus(selectedIds, resultCount) {
+    if (!el.communityFilterStatus) return;
+    var ids = selectedIds || getSelectedCommunityIds();
+    if (!ids.length) {
+      el.communityFilterStatus.textContent = '按需加载社区分片，不增加首屏负担。';
+      return;
+    }
+    var loading = [];
+    var failed = [];
+    for (var i = 0; i < ids.length; i++) {
+      if (communityAssignmentLoading[ids[i]]) loading.push(getCommunityTitle(ids[i]));
+      if (communityAssignmentErrors[ids[i]]) failed.push(getCommunityTitle(ids[i]));
+    }
+    if (loading.length) {
+      el.communityFilterStatus.textContent = '正在加载：' + loading.join('、');
+      return;
+    }
+    if (failed.length) {
+      el.communityFilterStatus.textContent = '部分社区分片加载失败：' + failed.join('、');
+      return;
+    }
+    var text = '已加载 ' + ids.length + ' 个社区分片，按 primary community 筛选';
+    if (typeof resultCount === 'number') text += ' · 当前 ' + resultCount + ' 篇';
+    el.communityFilterStatus.textContent = text;
+  }
+
+  function buildCommunityAssignmentCache(communityId, payload) {
+    var items = payload && Array.isArray(payload.items) ? payload.items : [];
+    var pmids = new Set();
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i] || {};
+      var pmid = normalizePmid(item.pmid);
+      if (!pmid) continue;
+      pmids.add(pmid);
+      articleCommunityByPmid[pmid] = item;
+    }
+    communityAssignmentsById[communityId] = {
+      pmids: pmids,
+      items: items
+    };
+  }
+
+  function loadCommunityAssignments(communityId, callback) {
+    if (!communityOptionById[communityId]) {
+      if (callback) callback(false);
+      return;
+    }
+    if (communityAssignmentsById[communityId]) {
+      if (callback) callback(true);
+      return;
+    }
+    if (communityAssignmentLoading[communityId]) {
+      communityAssignmentCallbacks[communityId].push(callback);
+      return;
+    }
+
+    communityAssignmentLoading[communityId] = true;
+    communityAssignmentCallbacks[communityId] = [callback];
+    updateCommunityFilterStatus();
+    loadScript('/MA-MG-HUB/data/communityAssignments-' + encodeURIComponent(communityId) + '.js', function(ok) {
+      var shards = window.MG_COMMUNITY_ASSIGNMENT_SHARDS || {};
+      var payload = shards[communityId];
+      if (ok && payload) {
+        buildCommunityAssignmentCache(communityId, payload);
+        delete communityAssignmentErrors[communityId];
+      } else {
+        communityAssignmentErrors[communityId] = true;
+        buildCommunityAssignmentCache(communityId, { items: [] });
+      }
+      communityAssignmentLoading[communityId] = false;
+      var callbacks = communityAssignmentCallbacks[communityId] || [];
+      delete communityAssignmentCallbacks[communityId];
+      for (var i = 0; i < callbacks.length; i++) {
+        if (callbacks[i]) callbacks[i](ok && !!payload);
+      }
+      updateCommunityFilterStatus();
+    });
+  }
+
+  function areCommunityAssignmentsReady(communityIds) {
+    for (var i = 0; i < communityIds.length; i++) {
+      if (!communityAssignmentsById[communityIds[i]]) return false;
+    }
+    return true;
+  }
+
+  function ensureSelectedCommunityAssignments(communityIds, callback) {
+    var pending = [];
+    for (var i = 0; i < communityIds.length; i++) {
+      if (!communityAssignmentsById[communityIds[i]]) pending.push(communityIds[i]);
+    }
+    if (!pending.length) {
+      callback();
+      return;
+    }
+    var remaining = pending.length;
+    function done() {
+      remaining--;
+      if (remaining === 0) callback();
+    }
+    for (var j = 0; j < pending.length; j++) {
+      loadCommunityAssignments(pending[j], done);
+    }
+  }
+
+  function matchesCommunityFilter(article, communityIds) {
+    if (!communityIds.length) return true;
+    var pmid = normalizePmid(article.pmid);
+    if (!pmid) return false;
+    for (var i = 0; i < communityIds.length; i++) {
+      var assignment = communityAssignmentsById[communityIds[i]];
+      if (assignment && assignment.pmids.has(pmid)) return true;
+    }
+    return false;
+  }
+
+  function renderArticleCommunityBadge(article) {
+    var selectedIds = getSelectedCommunityIds();
+    if (!selectedIds.length) return '';
+    var assignment = articleCommunityByPmid[normalizePmid(article.pmid)];
+    if (!assignment || selectedIds.indexOf(assignment.primary) === -1) return '';
+    return '<span class="badge-community">社区 ' + escapeHtml(getCommunityTitle(assignment.primary)) + '</span>';
+  }
+
+  function populateCommunityFilters() {
+    if (!el.filterCommunityList) return;
+    var communities = communityTaxonomy.communities || [];
+    communityOptionById = {};
+    for (var i = 0; i < communities.length; i++) {
+      communityOptionById[communities[i].id] = communities[i];
+    }
+    if (!communities.length) {
+      el.filterCommunityList.innerHTML = '<div class="filter-hint">社区 taxonomy 尚未生成。</div>';
+      updateCommunityFilterSummary();
+      return;
+    }
+
+    var initialIds = getInitialCommunityIds();
+    var html = '<label class="filter-checkbox-item"><input type="checkbox" value="all"' + (initialIds.length ? '' : ' checked') + '> <span>全部社区</span></label>';
+    for (var j = 0; j < communities.length; j++) {
+      var community = communities[j];
+      var checked = initialIds.indexOf(community.id) !== -1 ? ' checked' : '';
+      html += '<label class="filter-checkbox-item"><input type="checkbox" value="' + escapeHtml(community.id) + '"' + checked + '> <span>' + escapeHtml(community.title || community.id) + '</span></label>';
+    }
+    el.filterCommunityList.innerHTML = html;
+    el.filterCommunityList.addEventListener('change', function(event) {
+      var cb = event.target;
+      if (!cb || cb.type !== 'checkbox') return;
+      var allCb = el.filterCommunityList.querySelector('input[value="all"]');
+      var others = el.filterCommunityList.querySelectorAll('input[type="checkbox"]:not([value="all"])');
+      if (cb.value === 'all') {
+        if (cb.checked) {
+          for (var k = 0; k < others.length; k++) others[k].checked = false;
+        } else {
+          var anySelected = false;
+          for (var m = 0; m < others.length; m++) {
+            if (others[m].checked) { anySelected = true; break; }
+          }
+          if (!anySelected) cb.checked = true;
+        }
+      } else {
+        if (cb.checked && allCb) allCb.checked = false;
+        var hasSelected = false;
+        for (var x = 0; x < others.length; x++) {
+          if (others[x].checked) { hasSelected = true; break; }
+        }
+        if (!hasSelected && allCb) allCb.checked = true;
+      }
+      updateCommunityFilterSummary();
+      applyFilters();
+    });
+    updateCommunityFilterSummary();
   }
 
   // checkbox 全选联动（通用）
@@ -219,6 +448,13 @@
   function applyFilters(resetPage) {
     if (resetPage === undefined) resetPage = true;
     var keyword = (el.filterKeyword.value || '').toLowerCase().trim();
+    var selectedCommunityIds = getSelectedCommunityIds();
+    if (selectedCommunityIds.length && !areCommunityAssignmentsReady(selectedCommunityIds)) {
+      ensureSelectedCommunityAssignments(selectedCommunityIds, function() {
+        applyFilters(resetPage);
+      });
+      return;
+    }
     var selectedMonths = getSelectedMonths();
     var chinaVal = el.chinaOnly.checked ? 'china' : 'all';
 
@@ -246,6 +482,8 @@
     filteredResults = [];
     for (var i = 0; i < allArticles.length; i++) {
       var a = allArticles[i];
+
+      if (!matchesCommunityFilter(a, selectedCommunityIds)) continue;
 
       if (keyword) {
         var inTitle = (a.title || '').toLowerCase().indexOf(keyword) !== -1;
@@ -295,6 +533,7 @@
 
     sortFilteredResults();
     el.filterCount.textContent = filteredResults.length;
+    updateCommunityFilterStatus(selectedCommunityIds, filteredResults.length);
     if (resetPage) currentPage = 0;
     renderResults();
   }
@@ -363,6 +602,7 @@
     var impactFactor = formatImpactFactor(article.journal_if);
     if (impactFactor) tagsHTML += '<span class="badge-metric">IF ' + impactFactor + '</span>';
     if (article.journal_quartile) tagsHTML += '<span class="badge-metric">CAS ' + escapeHtml(String(article.journal_quartile)) + '</span>';
+    tagsHTML += renderArticleCommunityBadge(article);
 
     div.innerHTML =
       '<a class="article-card-title" href="' + article.url + '" target="_blank">' + escapeHtml(article.title || '(无标题)') + '</a>' +
@@ -967,6 +1207,7 @@
 
       el.loading.style.display = 'none';
       populateMonths(allArticles);
+      populateCommunityFilters();
 
       // 事件监听
       el.filterKeyword.addEventListener('input', applyFilters);

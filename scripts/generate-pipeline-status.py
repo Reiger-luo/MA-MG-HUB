@@ -27,6 +27,12 @@ PUBLIC_ARTIFACTS = [
     ("landscape-data.js", "诊治格局", "MG_LANDSCAPE_DATA"),
     ("knowledge-graph.js", "知识库图谱", "MG_KNOWLEDGE_GRAPH"),
     ("curated-topics.js", "专题层", "MG_CURATED_TOPICS"),
+    ("communityTaxonomy.js", "社区 Taxonomy", "MG_COMMUNITY_TAXONOMY"),
+    ("communityAssignmentIndex.js", "社区归类索引", "MG_COMMUNITY_ASSIGNMENT_INDEX"),
+    ("communityAssignmentsRecent.js", "近一年社区归类", "MG_COMMUNITY_RECENT_ASSIGNMENTS"),
+    ("communityCards.js", "社区卡片", "MG_COMMUNITY_CARDS"),
+    ("communityWeekly.js", "社区周更", "MG_COMMUNITY_WEEKLY"),
+    ("communityAudit.js", "社区 Audit", "MG_COMMUNITY_AUDIT"),
     ("content-modules.js", "内容模块", "MG_CONTENT_MODULES"),
     ("weekly-summary.md", "当前通讯渠道周报", None),
 ]
@@ -58,7 +64,7 @@ def countPayload(payload):
     if isinstance(payload, list):
         return len(payload)
     if isinstance(payload, dict):
-        for key in ("signals", "articles", "pubmed_articles", "experts", "modules", "topics", "nodes", "items"):
+        for key in ("signals", "articles", "pubmed_articles", "experts", "modules", "topics", "nodes", "items", "communities", "cards", "shards"):
             value = payload.get(key)
             if isinstance(value, list):
                 return len(value)

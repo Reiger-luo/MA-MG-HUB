@@ -33,6 +33,7 @@ def main():
     parser = argparse.ArgumentParser(description="Run MA-MG-HUB weekly data pipeline")
     parser.add_argument("--skip-fetch", action="store_true", help="跳过 PubMed 增量抓取")
     parser.add_argument("--skip-llm", action="store_true", help="跳过未来 LLM 提取步骤")
+    parser.add_argument("--skip-status", action="store_true", help="跳过管线状态生成，供本地总入口最后统一刷新")
     args = parser.parse_args()
 
     print("MA-MG-HUB weekly pipeline")
@@ -50,8 +51,10 @@ def main():
     run_step("前端数据产物生成", [sys.executable, "scripts/build-frontend-data.py"])
     run_step("知识库图谱与证据矩阵生成", [sys.executable, "scripts/build-knowledge-data.py"])
     run_step("本地 wiki 专题层生成", [sys.executable, "scripts/build-curated-topic-data.py"])
+    run_step("医学事务社区语义层生成", [sys.executable, "scripts/buildCommunityData.py"])
     run_step("当前通讯渠道周报生成", [sys.executable, "scripts/generate-weekly-summary.py"])
-    run_step("管线状态生成", [sys.executable, "scripts/generate-pipeline-status.py"])
+    if not args.skip_status:
+        run_step("管线状态生成", [sys.executable, "scripts/generate-pipeline-status.py"])
 
     print("\n✅ Pipeline finished:", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
