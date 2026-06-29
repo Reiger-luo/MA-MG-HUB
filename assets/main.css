@@ -1470,6 +1470,44 @@ body {
   display: grid; grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 0.75rem; margin-bottom: 1rem;
 }
+.dashboard-stat-card em {
+  display: block; color: var(--fg3); font-size: 0.72rem; font-style: normal;
+  margin-top: 0.18rem; line-height: 1.35;
+}
+.dashboard-section-grid {
+  display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.75rem; margin-bottom: 1rem;
+}
+.dashboard-section-card {
+  display: flex; flex-direction: column; gap: 0.55rem; min-height: 178px;
+  color: inherit; text-decoration: none;
+  background: var(--bg2); border: 1px solid var(--bg3);
+  border-radius: 8px; padding: 0.85rem;
+  transition: border-color 0.15s, background 0.15s;
+}
+.dashboard-section-card:hover {
+  border-color: rgba(37,99,235,0.35); background: rgba(37,99,235,0.04);
+}
+.dashboard-section-top {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 0.6rem;
+}
+.dashboard-section-top strong {
+  color: var(--fg); font-size: 0.98rem;
+}
+.dashboard-section-top em {
+  color: var(--accent); font-size: 0.74rem; font-style: normal; white-space: nowrap;
+}
+.dashboard-section-card p {
+  color: var(--fg2); font-size: 0.78rem; line-height: 1.55; margin: 0;
+}
+.dashboard-section-facts {
+  display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: auto;
+}
+.dashboard-section-facts span {
+  border: 1px solid var(--bg3); border-radius: 4px;
+  background: var(--bg); color: var(--fg3);
+  padding: 0.12rem 0.38rem; font-size: 0.7rem;
+}
 .dashboard-grid {
   display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);
   gap: 1rem; align-items: start;
@@ -1482,6 +1520,43 @@ body {
 }
 .dashboard-grid-single .dashboard-signals {
   grid-row: auto;
+}
+.dashboard-side-stack {
+  display: grid; gap: 1rem;
+}
+.dashboard-workflow-item {
+  display: grid; gap: 0.16rem; color: inherit; text-decoration: none;
+  border: 1px solid var(--bg3); border-radius: 8px; background: var(--bg);
+  padding: 0.7rem; margin-bottom: 0.55rem;
+}
+.dashboard-workflow-item:hover {
+  border-color: rgba(37,99,235,0.35); background: rgba(37,99,235,0.04);
+}
+.dashboard-workflow-item span {
+  color: var(--fg3); font-size: 0.72rem;
+}
+.dashboard-workflow-item strong {
+  color: var(--fg); font-size: 0.9rem;
+}
+.dashboard-workflow-item em {
+  color: var(--fg2); font-size: 0.74rem; font-style: normal; line-height: 1.45;
+}
+.dashboard-health-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 0.7rem;
+  border: 1px solid var(--bg3); border-radius: 8px; background: var(--bg);
+  padding: 0.62rem 0.68rem; margin-bottom: 0.48rem;
+}
+.dashboard-health-row span {
+  color: var(--fg2); font-size: 0.78rem;
+}
+.dashboard-health-row strong {
+  color: var(--fg); font-size: 0.8rem; text-align: right;
+}
+.dashboard-health-row.ok {
+  border-left: 4px solid rgba(22,163,74,0.4);
+}
+.dashboard-health-row.warn {
+  border-left: 4px solid rgba(202,138,4,0.45);
 }
 .work-item {
   display: grid; grid-template-columns: 44px minmax(0, 1fr) auto;
@@ -1785,6 +1860,7 @@ body {
 /* ── 响应式 ── */
 @media (max-width: 1180px) {
   .landscape-change-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dashboard-section-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 @media (max-width: 800px) {
   .content-layout { flex-direction: column; }
@@ -1823,9 +1899,13 @@ body {
   .curated-topic-list, .curated-topic-detail { max-height: none; }
   .kg-canvas-wrap { height: 440px; }
   .kg-detail { max-height: none; }
-  .dashboard-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dashboard-stats, .dashboard-section-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .compliance-box, .compliance-box.compact { grid-template-columns: 1fr; }
   .module-list.compact { max-height: none; grid-template-columns: 1fr; }
   .msl-brief-panel { min-height: 0; }
   .msl-brief-output { min-height: 0; }
+}
+@media (max-width: 520px) {
+  .dashboard-stats, .dashboard-section-grid { grid-template-columns: 1fr; }
+  .dashboard-section-card { min-height: 0; }
 }

@@ -2214,8 +2214,108 @@ def build_modules(recent, landscape):
     }
 
 
+def load_knowledge_dashboard_stats():
+    """读取知识库已生成统计；失败时返回空值，避免 dashboard 强依赖知识图谱构建顺序。"""
+    path = DATA_DIR / "knowledge-graph.js"
+    if not path.exists():
+        return {}
+    text = path.read_text(encoding="utf-8")
+    match = re.search(r"window\.MG_KNOWLEDGE_GRAPH\s*=\s*(\{.*\});\s*$", text, re.S)
+    if not match:
+        return {}
+    try:
+        payload = json.loads(match.group(1))
+    except json.JSONDecodeError:
+        return {}
+    stats = payload.get("stats", {})
+    return {
+        "generated_at": payload.get("generated_at", ""),
+        "matched_articles": stats.get("matched_articles", 0),
+        "evidence_articles": stats.get("evidence_articles", 0),
+        "nodes": stats.get("total_nodes", 0),
+        "edges": stats.get("edges", 0),
+        "matrix_rows": stats.get("evidence_matrix_rows", 0),
+    }
+
+
 def build_dashboard(recent, signals, experts, china, landscape, modules, total_count):
     expert_count = experts.get("summary", {}).get("indexed_experts", len(experts.get("experts", [])))
+    expert_summary = experts.get("summary", {})
+    module_summary = modules.get("summary", {})
+    landscape_overview = landscape.get("overview", {})
+    knowledge_stats = load_knowledge_dashboard_stats()
+    expert_payload_mb = round(
+        len(json.dumps(experts, ensure_ascii=False, separators=(",", ":"))) / 1024 / 1024,
+        1,
+    )
+    pipeline_policy = {
+        "label": "周更管线",
+        "value": "每周日 23:00",
+        "note": "PubMed 周更、证据分级、IF/CAS、前端数据同步",
+        "href": "/MA-MG-HUB/pages/data-ops.html",
+    }
+    section_cards = [
+        {
+            "id": "literature",
+            "title": "情报中心",
+            "href": "/MA-MG-HUB/pages/literature.html",
+            "metric": f"{len(signals['signals'])} 条信号",
+            "summary": "近一年文献、近 14 天信号、主题热点和中国相关证据。",
+            "facts": [
+                f"近一年 {len(recent)} 篇",
+                f"中国相关 {china['summary']['recent_year_articles']} 篇",
+                f"强信号 {sum(1 for item in signals['signals'] if item.get('strength') == '强')} 条",
+            ],
+        },
+        {
+            "id": "landscape",
+            "title": "诊治格局",
+            "href": "/MA-MG-HUB/pages/landscape.html",
+            "metric": f"{landscape_overview.get('living_answer_count', len(landscape.get('living_answers', [])))} 个判断",
+            "summary": landscape_overview.get("positioning", "将近期证据转译成治疗格局、竞争定位和中国实践差异。"),
+            "facts": [
+                f"格局变化 {landscape_overview.get('month_change_count', len(landscape.get('monthly_changes', [])))} 条",
+                f"临床管线 {landscape_overview.get('clinical_pipeline_count', len(landscape.get('clinical_pipeline_matrix', [])))} 项",
+                f"证据问题 {len(landscape.get('evidence_questions', []))} 个",
+            ],
+        },
+        {
+            "id": "knowledge",
+            "title": "知识库",
+            "href": "/MA-MG-HUB/pages/knowledge.html",
+            "metric": f"{knowledge_stats.get('nodes', 0)} 个节点",
+            "summary": "基于 PubMed abstract 的知识图谱、证据矩阵和专题层。",
+            "facts": [
+                f"命中文献 {knowledge_stats.get('matched_articles', 0)} 篇",
+                f"关系 {knowledge_stats.get('edges', 0)} 条",
+                f"证据矩阵 {knowledge_stats.get('matrix_rows', 0)} 行",
+            ],
+        },
+        {
+            "id": "msl",
+            "title": "MSL 工作台",
+            "href": "/MA-MG-HUB/pages/msl.html",
+            "metric": f"{expert_count} 位作者画像",
+            "summary": "专家画像、拜访助手、学术/产品信息模块和文献清单生成。",
+            "facts": [
+                f"中国 {expert_summary.get('indexed_china_experts', 0)} 位",
+                f"国外 {expert_summary.get('indexed_international_experts', 0)} 位",
+                f"内容模块 {len(modules.get('modules', []))} 个",
+            ],
+        },
+        {
+            "id": "data",
+            "title": "数据状态",
+            "href": "/MA-MG-HUB/pages/data-ops.html",
+            "metric": "周更可追踪",
+            "summary": "数据源、构建产物、运行日志和前端数据文件状态。",
+            "facts": [
+                "GitHub Pages 数据产物",
+                "PubMed + ClinicalTrials",
+                "公开数据不含拜访记录",
+            ],
+        },
+    ]
     return {
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "stats": {
@@ -2225,7 +2325,39 @@ def build_dashboard(recent, signals, experts, china, landscape, modules, total_c
             "signals": len(signals["signals"]),
             "experts": expert_count,
             "modules": len(modules["modules"]),
+            "landscape_questions": len(landscape.get("evidence_questions", [])),
+            "knowledge_nodes": knowledge_stats.get("nodes", 0),
         },
+        "stat_cards": [
+            {"label": "近一年文献", "value": len(recent), "note": f"全库 {total_count} 篇"},
+            {"label": "14 天信号", "value": len(signals["signals"]), "note": "规则评分候选"},
+            {"label": "中国证据", "value": china["summary"]["recent_year_articles"], "note": f"高等级 {china['summary'].get('high_evidence', 0)} 篇"},
+            {"label": "作者画像", "value": expert_count, "note": f"中国 {expert_summary.get('indexed_china_experts', 0)} / 国外 {expert_summary.get('indexed_international_experts', 0)}"},
+            {"label": "MSL 模块", "value": len(modules["modules"]), "note": f"学术 {module_summary.get('academic_modules', 0)} / 产品 {module_summary.get('product_modules', 0)}"},
+            {"label": "知识节点", "value": knowledge_stats.get("nodes", 0), "note": f"矩阵 {knowledge_stats.get('matrix_rows', 0)} 行"},
+        ],
+        "sections": section_cards,
+        "workflows": [
+            pipeline_policy,
+            {
+                "label": "专家画像",
+                "value": f"{expert_summary.get('frontend_quick_expert_limit', 20)} 位快捷候选",
+                "note": "首页和 MSL 默认只渲染快捷候选，搜索时进入全量索引。",
+                "href": "/MA-MG-HUB/pages/msl.html",
+            },
+            {
+                "label": "内容模块",
+                "value": f"{module_summary.get('academic_modules', 0)} 学术 + {module_summary.get('product_modules', 0)} 产品",
+                "note": "拜访助手将专家兴趣、近期信号和模块文献合并生成建议。",
+                "href": "/MA-MG-HUB/pages/msl.html",
+            },
+        ],
+        "data_health": [
+            {"label": "专家前端索引", "value": f"{expert_payload_mb} MB", "state": "ok"},
+            {"label": "知识图谱", "value": f"{knowledge_stats.get('nodes', 0)} 节点", "state": "ok" if knowledge_stats.get("nodes") else "warn"},
+            {"label": "证据矩阵", "value": f"{knowledge_stats.get('matrix_rows', 0)} 行", "state": "ok" if knowledge_stats.get("matrix_rows") else "warn"},
+            {"label": "周更策略", "value": "增量更新", "state": "ok"},
+        ],
         "top_signals": signals["signals"][:5],
         "work_items": [
             {"type": "文献", "label": "近 14 天信号", "count": len(signals["signals"]), "href": "/MA-MG-HUB/pages/literature.html"},

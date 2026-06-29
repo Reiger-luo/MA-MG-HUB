@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>工作台 · MA-MG-HUB</title>
+<link rel="icon" href="data:,">
 <link rel="stylesheet" href="/MA-MG-HUB/assets/main.css">
 </head>
 <body>
@@ -30,13 +31,31 @@
     </div>
   </div>
 
+  <p class="page-subtitle">
+    MG 学术情报工作站当前由情报中心、诊治格局、知识库、MSL 工作台和数据状态组成；本页汇总各模块的最新数据状态。
+  </p>
+
   <section class="dashboard-stats" id="dashboardStats"></section>
 
-  <div class="dashboard-grid dashboard-grid-single">
+  <section class="dashboard-section-grid" id="dashboardSections"></section>
+
+  <div class="dashboard-grid">
     <section class="workspace-panel dashboard-signals">
       <div class="panel-head"><h2>近 14 天信号</h2><a class="text-link" href="/MA-MG-HUB/pages/literature.html">查看全部</a></div>
       <div id="dashboardSignals"></div>
     </section>
+
+    <aside class="dashboard-side-stack">
+      <section class="workspace-panel">
+        <div class="panel-head"><h2>当前工作流</h2><a class="text-link" href="/MA-MG-HUB/pages/data-ops.html">数据状态</a></div>
+        <div id="dashboardWorkflows"></div>
+      </section>
+
+      <section class="workspace-panel">
+        <div class="panel-head"><h2>数据健康</h2></div>
+        <div id="dashboardHealth"></div>
+      </section>
+    </aside>
   </div>
 </main>
 
