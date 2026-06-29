@@ -18,7 +18,7 @@ import math
 import re
 import sys
 from collections import Counter, defaultdict
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 
@@ -27,6 +27,11 @@ dataDir = projectPath / "data"
 defaultInputPath = dataDir / "literature-full.json"
 recentJsPath = dataDir / "literature-recent.js"
 defaultOutputPath = dataDir / "knowledge-graph.js"
+graphHealthJsPath = dataDir / "graphHealth.js"
+communityAssignmentsJsonlPath = dataDir / "communityAssignments.jsonl"
+communityTaxonomyJsPath = dataDir / "communityTaxonomy.js"
+communityCardsJsPath = dataDir / "communityCards.js"
+communityRecentAssignmentsJsPath = dataDir / "communityAssignmentsRecent.js"
 
 levelScore = {"I": 7, "II": 5, "III": 4, "IV": 3, "V": 2, "VI": 1}
 levelRank = {"I": 1, "II": 2, "III": 3, "IV": 4, "V": 5, "VI": 6}
@@ -375,6 +380,73 @@ def loadArticles(inputPath: Path) -> tuple[list[dict], str]:
     raise FileNotFoundError(f"找不到输入数据: {inputPath}")
 
 
+def loadJsPayload(path: Path, globalName: str) -> dict:
+    """读取前端 JS 产物中的 JSON payload。"""
+    text = path.read_text(encoding="utf-8")
+    match = re.search(rf"window\.{re.escape(globalName)}\s*=\s*(.*?);\s*$", text, re.S)
+    if not match:
+        raise ValueError(f"无法解析 {path.relative_to(projectPath)}")
+    return json.loads(match.group(1))
+
+
+def loadCommunityContext() -> dict:
+    """读取社区 taxonomy、卡片和 full 级别 assignment 中间产物。"""
+    taxonomy = {}
+    cardsPayload = {}
+    if communityTaxonomyJsPath.exists():
+        try:
+            taxonomy = loadJsPayload(communityTaxonomyJsPath, "MG_COMMUNITY_TAXONOMY")
+        except Exception as exc:
+            print(f"⚠️  无法读取 communityTaxonomy.js，图谱社区标题将降级: {exc}", file=sys.stderr)
+    if communityCardsJsPath.exists():
+        try:
+            cardsPayload = loadJsPayload(communityCardsJsPath, "MG_COMMUNITY_CARDS")
+        except Exception as exc:
+            print(f"⚠️  无法读取 communityCards.js，图谱健康社区计数将降级: {exc}", file=sys.stderr)
+
+    communities = taxonomy.get("communities") or []
+    titles = {item.get("id"): item.get("title") or item.get("id") for item in communities if item.get("id")}
+    order = [item.get("id") for item in communities if item.get("id")]
+    cardCounts = {
+        item.get("id"): item.get("article_count") or 0
+        for item in (cardsPayload.get("cards") or [])
+        if item.get("id")
+    }
+
+    assignmentsByPmid = {}
+    assignmentSource = "none"
+    if communityAssignmentsJsonlPath.exists():
+        with communityAssignmentsJsonlPath.open("r", encoding="utf-8") as inputFile:
+            for line in inputFile:
+                line = line.strip()
+                if not line:
+                    continue
+                item = json.loads(line)
+                pmid = str(item.get("pmid") or "").strip()
+                if pmid:
+                    assignmentsByPmid[pmid] = item
+        assignmentSource = str(communityAssignmentsJsonlPath.relative_to(projectPath))
+    elif communityRecentAssignmentsJsPath.exists():
+        try:
+            recentPayload = loadJsPayload(communityRecentAssignmentsJsPath, "MG_COMMUNITY_RECENT_ASSIGNMENTS")
+            for item in recentPayload.get("items") or []:
+                pmid = str(item.get("pmid") or "").strip()
+                if pmid:
+                    assignmentsByPmid[pmid] = item
+            assignmentSource = str(communityRecentAssignmentsJsPath.relative_to(projectPath))
+        except Exception as exc:
+            print(f"⚠️  无法读取 communityAssignmentsRecent.js，图谱社区映射将为空: {exc}", file=sys.stderr)
+
+    return {
+        "taxonomy": taxonomy,
+        "community_titles": titles,
+        "community_order": order,
+        "community_card_counts": cardCounts,
+        "assignments_by_pmid": assignmentsByPmid,
+        "assignment_source": assignmentSource,
+    }
+
+
 def compilePatterns():
     """预编译概念词典中的正则。"""
     compiled = {}
@@ -504,8 +576,9 @@ def relationConfidence(articleCount: int, bestLevel: str | None, highLevelCount:
     return "low"
 
 
-def buildGraph(articles: list[dict]) -> dict:
+def buildGraph(articles: list[dict], communityContext: dict | None = None) -> dict:
     """生成节点、边、证据矩阵和引用索引。"""
+    communityContext = communityContext or {}
     compiledPatterns = compilePatterns()
     conceptsById = {item["id"]: item for item in conceptDefs}
     nodeArticleIds = defaultdict(list)
@@ -621,9 +694,11 @@ def buildGraph(articles: list[dict]) -> dict:
         for edge in edges
     }
 
+    annotateCommunityLayer(nodes, edges, nodeArticleIds, edgeArticleIds, communityContext)
     applyLayout(nodes)
     matrixRows = buildEvidenceMatrix(edges, nodeReferences, edgeReferences, conceptsById, edgeIds)
     stats = buildStats(articles, nodes, edges, matrixRows, articleByPmid)
+    stats["community_assignment_source"] = communityContext.get("assignment_source") or "none"
 
     return {
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -667,6 +742,62 @@ def uniqueList(items: list[str]) -> list[str]:
             seen.add(item)
             output.append(item)
     return output
+
+
+def communityProfileForPmids(pmids: list[str], communityContext: dict) -> dict:
+    """根据 PMID assignment 计算节点或边的 dominant community。"""
+    assignmentsByPmid = communityContext.get("assignments_by_pmid") or {}
+    titles = communityContext.get("community_titles") or {}
+    uniquePmids = uniqueList([str(pmid) for pmid in pmids if pmid])
+    counter = Counter()
+    for pmid in uniquePmids:
+        assignment = assignmentsByPmid.get(pmid) or {}
+        primary = assignment.get("primary")
+        if primary and primary != "unassigned":
+            counter[primary] += 1
+
+    total = len(uniquePmids)
+    mapped = sum(counter.values())
+    if not counter:
+        return {
+            "dominant_community_id": None,
+            "dominant_community_title": "",
+            "community_profile": [],
+            "community_mapped_articles": 0,
+            "community_coverage_ratio": 0,
+            "community_confidence": "unmapped",
+        }
+
+    topId, topCount = counter.most_common(1)[0]
+    dominantShare = topCount / max(mapped, 1)
+    confidence = "high" if topCount >= 10 and dominantShare >= 0.45 else "medium" if topCount >= 3 else "low"
+    profile = [
+        {
+            "community_id": communityId,
+            "title": titles.get(communityId, communityId),
+            "count": count,
+            "mapped_ratio": round(count / max(mapped, 1), 3),
+            "total_ratio": round(count / max(total, 1), 3),
+        }
+        for communityId, count in counter.most_common(4)
+    ]
+    return {
+        "dominant_community_id": topId,
+        "dominant_community_title": titles.get(topId, topId),
+        "community_profile": profile,
+        "community_mapped_articles": mapped,
+        "community_coverage_ratio": round(mapped / max(total, 1), 3),
+        "community_confidence": confidence,
+    }
+
+
+def annotateCommunityLayer(nodes: list[dict], edges: list[dict], nodeArticleIds: dict, edgeArticleIds: dict, communityContext: dict) -> None:
+    """把社区语义层写回图谱节点和关系。"""
+    for node in nodes:
+        node.update(communityProfileForPmids(nodeArticleIds.get(node["id"], []), communityContext))
+    for edge in edges:
+        edgeKey = tuple(sorted((edge["from"], edge["to"])))
+        edge.update(communityProfileForPmids(edgeArticleIds.get(edgeKey, []), communityContext))
 
 
 def topReferences(pmids: list[str], articleByPmid: dict[str, dict], limit: int) -> list[dict]:
@@ -763,6 +894,10 @@ def buildEvidenceMatrix(edges: list[dict], nodeReferences: dict, edgeReferences:
             "best_evidence_level": edge["best_evidence_level"],
             "key_pmids": [ref["pmid"] for ref in refs[:4]],
             "references": refs[:4],
+            "dominant_community_id": edge.get("dominant_community_id"),
+            "dominant_community_title": edge.get("dominant_community_title"),
+            "community_profile": edge.get("community_profile") or [],
+            "community_ids": [item["community_id"] for item in edge.get("community_profile") or []],
             "limitation": "基于 PubMed 标题/摘要和元数据共现；疗效数值、亚组与安全性发生率需阅读全文确认。",
         })
     rows.sort(key=lambda item: (
@@ -815,8 +950,140 @@ def buildStats(articles: list[dict], nodes: list[dict], edges: list[dict], matri
         "total_nodes": len(nodes),
         "edges": len(edges),
         "evidence_matrix_rows": len(matrixRows),
+        "community_mapped_nodes": sum(1 for node in nodes if node.get("dominant_community_id")),
+        "community_mapped_edges": sum(1 for edge in edges if edge.get("dominant_community_id")),
         "latest_entry_date": latestEntry,
         "abstract_source": True,
+    }
+
+
+def parseDateValue(value: str | None):
+    """宽松解析 entry_date / pub_date，用于图谱健康度。"""
+    if not value:
+        return None
+    value = str(value).strip()
+    for pattern in ("%Y/%m/%d %H:%M", "%Y/%m/%d", "%Y-%m-%d", "%Y-%m", "%Y"):
+        try:
+            return datetime.strptime(value, pattern)
+        except ValueError:
+            pass
+    match = re.search(r"((?:19|20)\d{2})[-/](\d{1,2})(?:[-/](\d{1,2}))?", value)
+    if match:
+        year, month, day = match.groups()
+        return datetime(int(year), int(month), int(day or 1))
+    match = re.search(r"(19|20)\d{2}", value)
+    if match:
+        return datetime(int(match.group(0)), 1, 1)
+    return None
+
+
+def buildGraphHealth(graphData: dict, communityContext: dict) -> dict:
+    """生成图谱健康度摘要，供数据状态页和后续诊治格局读取。"""
+    nodes = graphData.get("nodes") or []
+    edges = graphData.get("edges") or []
+    stats = graphData.get("stats") or {}
+    matchedArticles = stats.get("matched_articles") or 0
+    communityTitles = communityContext.get("community_titles") or {}
+    communityOrder = communityContext.get("community_order") or []
+    cardCounts = communityContext.get("community_card_counts") or {}
+
+    nodeCommunityCounts = Counter(node.get("dominant_community_id") for node in nodes if node.get("dominant_community_id"))
+    edgeCommunityCounts = Counter(edge.get("dominant_community_id") for edge in edges if edge.get("dominant_community_id"))
+
+    oversizedNodes = [
+        {
+            "node_id": node["id"],
+            "title": node["title"],
+            "type": node["type"],
+            "article_count": node.get("article_count") or 0,
+            "corpus_ratio": round((node.get("article_count") or 0) / max(matchedArticles, 1), 3),
+            "dominant_community_id": node.get("dominant_community_id"),
+            "dominant_community_title": node.get("dominant_community_title"),
+        }
+        for node in nodes
+        if node.get("type") != "disease" and (node.get("article_count") or 0) / max(matchedArticles, 1) >= 0.18
+    ]
+    oversizedNodes.sort(key=lambda item: item["article_count"], reverse=True)
+
+    weakEdges = [
+        {
+            "edge_id": edge["id"],
+            "from": edge["from"],
+            "to": edge["to"],
+            "relation": edge.get("relation"),
+            "article_count": edge.get("article_count") or 0,
+            "confidence": edge.get("confidence"),
+            "dominant_community_id": edge.get("dominant_community_id"),
+            "dominant_community_title": edge.get("dominant_community_title"),
+        }
+        for edge in edges
+        if edge.get("confidence") == "low" or (edge.get("article_count") or 0) <= 3
+    ]
+    weakEdges.sort(key=lambda item: (item["article_count"], item["edge_id"]))
+
+    staleCutoff = datetime.now() - timedelta(days=365)
+    staleNodes = []
+    for node in nodes:
+        updated = parseDateValue(node.get("updated"))
+        if updated and updated < staleCutoff:
+            staleNodes.append({
+                "node_id": node["id"],
+                "title": node["title"],
+                "type": node["type"],
+                "updated": node.get("updated") or "",
+                "dominant_community_id": node.get("dominant_community_id"),
+                "dominant_community_title": node.get("dominant_community_title"),
+            })
+    staleNodes.sort(key=lambda item: item["updated"])
+
+    communityCoverage = []
+    for communityId in communityOrder:
+        communityCoverage.append({
+            "community_id": communityId,
+            "title": communityTitles.get(communityId, communityId),
+            "article_count": cardCounts.get(communityId, 0),
+            "dominant_node_count": nodeCommunityCounts.get(communityId, 0),
+            "dominant_edge_count": edgeCommunityCounts.get(communityId, 0),
+        })
+    communityCoverage.sort(key=lambda item: (-item["dominant_node_count"], -item["dominant_edge_count"], item["title"]))
+
+    unmappedNodes = [node for node in nodes if not node.get("dominant_community_id")]
+    unmappedEdges = [edge for edge in edges if not edge.get("dominant_community_id")]
+    return {
+        "generated_at": graphData.get("generated_at"),
+        "method": "communityAnnotatedAbstractGraph",
+        "assignment_source": communityContext.get("assignment_source") or "none",
+        "summary": {
+            "total_nodes": len(nodes),
+            "community_mapped_nodes": len(nodes) - len(unmappedNodes),
+            "unmapped_nodes": len(unmappedNodes),
+            "total_edges": len(edges),
+            "community_mapped_edges": len(edges) - len(unmappedEdges),
+            "unmapped_edges": len(unmappedEdges),
+            "oversized_nodes": len(oversizedNodes),
+            "weak_edges": len(weakEdges),
+            "stale_nodes": len(staleNodes),
+        },
+        "health": {
+            "status": "needsReview" if oversizedNodes or unmappedNodes else "ok",
+            "notes": [
+                "图谱为 abstract-level 关系，社区映射来自后台 community assignment，不代表全文级因果关系。",
+                "过大节点提示概念词典或社区边界需要 review；弱边适合作为后续 GraphRAG / 人工策展候选。",
+            ],
+        },
+        "oversized_nodes": oversizedNodes[:10],
+        "weak_edges": weakEdges[:12],
+        "stale_nodes": staleNodes[:12],
+        "community_coverage": communityCoverage,
+        "unmapped_node_samples": [
+            {
+                "node_id": node["id"],
+                "title": node["title"],
+                "type": node["type"],
+                "article_count": node.get("article_count") or 0,
+            }
+            for node in sorted(unmappedNodes, key=lambda item: -(item.get("article_count") or 0))[:10]
+        ],
     }
 
 
@@ -836,6 +1103,20 @@ def writeJs(data: dict, outputPath: Path, sourceLabel: str) -> None:
     print(f"✅ 已生成 {outputPath.relative_to(projectPath)} ({outputPath.stat().st_size // 1024} KB)")
 
 
+def writeGraphHealthJs(data: dict) -> None:
+    """写出图谱健康度前端产物。"""
+    payload = json.dumps(data, ensure_ascii=False, separators=(",", ":"))
+    header = (
+        "/* AUTO-GENERATED by scripts/build-knowledge-data.py\n"
+        f" * 生成时间: {data.get('generated_at', '')}\n"
+        " * 说明: 图谱健康度和社区覆盖摘要，供数据状态页和诊治格局使用。\n"
+        " * 请勿手动编辑；运行脚本重新生成。\n"
+        " */\n"
+    )
+    graphHealthJsPath.write_text(header + f"window.MG_GRAPH_HEALTH = {payload};\n", encoding="utf-8")
+    print(f"✅ 已生成 {graphHealthJsPath.relative_to(projectPath)} ({graphHealthJsPath.stat().st_size // 1024} KB)")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--input", default=str(defaultInputPath), help="输入 full PubMed JSON，默认 data/literature-full.json")
@@ -851,16 +1132,20 @@ def main() -> int:
 
     try:
         articles, sourceLabel = loadArticles(inputPath)
-        graphData = buildGraph(articles)
+        communityContext = loadCommunityContext()
+        graphData = buildGraph(articles, communityContext)
+        graphHealth = buildGraphHealth(graphData, communityContext)
         writeJs(graphData, outputPath, sourceLabel)
+        writeGraphHealthJs(graphHealth)
         stats = graphData["stats"]
         print(
-            "   文献: {matched}/{total} 命中 · 节点: {nodes} · 关系: {edges} · 矩阵: {matrix}".format(
+            "   文献: {matched}/{total} 命中 · 节点: {nodes} · 关系: {edges} · 矩阵: {matrix} · 社区节点: {communityNodes}".format(
                 matched=stats["matched_articles"],
                 total=stats["total_articles"],
                 nodes=stats["total_nodes"],
                 edges=stats["edges"],
                 matrix=stats["evidence_matrix_rows"],
+                communityNodes=stats.get("community_mapped_nodes", 0),
             )
         )
         return 0

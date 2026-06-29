@@ -137,6 +137,19 @@
 
   <hr class="section-divider">
 
+  <!-- 图谱健康 -->
+  <div class="ops-section-title">图谱健康</div>
+  <div class="community-audit-grid" id="graphHealthGrid">
+    <div class="community-audit-card">
+      <span>读取中</span>
+      <strong>--</strong>
+      <em>正在加载图谱健康数据</em>
+    </div>
+  </div>
+  <div class="ops-note" id="graphHealthNote"></div>
+
+  <hr class="section-divider">
+
   <!-- 更新日志 -->
   <div class="ops-section-title">更新日志</div>
   <div id="opsLog">
@@ -147,17 +160,21 @@
   <script src="/MA-MG-HUB/data/pipeline-status.js"></script>
   <script src="/MA-MG-HUB/data/communityTaxonomy.js"></script>
   <script src="/MA-MG-HUB/data/communityAudit.js"></script>
+  <script src="/MA-MG-HUB/data/graphHealth.js"></script>
   <script>
   (function(){
     const dashboard = window.MG_DASHBOARD_DATA || {};
     const stats = dashboard.stats || {};
     const status = window.MG_PIPELINE_STATUS || {};
     const communityAudit = window.MG_COMMUNITY_AUDIT || {};
+    const graphHealth = window.MG_GRAPH_HEALTH || {};
     const communityTaxonomy = window.MG_COMMUNITY_TAXONOMY || {};
     const sourceList = document.getElementById('sourceList');
     const artifactGrid = document.getElementById('artifactGrid');
     const communityAuditGrid = document.getElementById('communityAuditGrid');
     const communityAuditNote = document.getElementById('communityAuditNote');
+    const graphHealthGrid = document.getElementById('graphHealthGrid');
+    const graphHealthNote = document.getElementById('graphHealthNote');
     const opsLog = document.getElementById('opsLog');
     const pipelineNote = document.getElementById('pipelineNote');
     const colorMap = { ok: 'green', generated: 'green', planned: 'yellow', manual: 'yellow', missing: 'red' };
@@ -287,10 +304,46 @@
         (oversized ? '<br>需优先 review 的过大社区：' + oversized : '');
     }
 
+    function renderGraphHealth() {
+      const summary = graphHealth.summary || {};
+      const health = graphHealth.health || {};
+      if (!Object.keys(summary).length) {
+        graphHealthGrid.innerHTML = '<div class="community-audit-card warning"><span>图谱健康</span><strong>未生成</strong><em>等待 graphHealth.js</em></div>';
+        graphHealthNote.textContent = '图谱健康层尚未生成；运行 build-knowledge-data.py 后会自动重建。';
+        return;
+      }
+      const graphHref = '/MA-MG-HUB/pages/knowledge.html';
+      const statusLabel = { ok: '正常', needsReview: '待 Review', warning: '关注', missing: '缺失' }[health.status] || (health.status || '未知');
+      const items = [
+        { label: '社区映射节点', value: compactNumber(summary.community_mapped_nodes) + '/' + compactNumber(summary.total_nodes), note: 'dominant community' },
+        { label: '社区映射关系', value: compactNumber(summary.community_mapped_edges) + '/' + compactNumber(summary.total_edges), note: '证据矩阵可过滤' },
+        { label: '过大节点', value: compactNumber(summary.oversized_nodes), note: '概念或边界需 review', level: summary.oversized_nodes ? 'warning' : '' },
+        { label: '弱关系', value: compactNumber(summary.weak_edges), note: '低覆盖或低置信度', level: summary.weak_edges ? 'warning' : '' },
+        { label: '陈旧节点', value: compactNumber(summary.stale_nodes), note: '365 天未更新', level: summary.stale_nodes ? 'warning' : '' },
+        { label: '图谱状态', value: statusLabel, note: 'abstract-level graph', level: health.status === 'needsReview' ? 'warning' : '' }
+      ];
+      graphHealthGrid.innerHTML = items.map(function(item) {
+        return '<a class="community-audit-card ' + escapeHtml(item.level || '') + '" href="' + graphHref + '">' +
+          '<span>' + escapeHtml(item.label) + '</span>' +
+          '<strong>' + escapeHtml(item.value) + '</strong>' +
+          '<em>' + escapeHtml(item.note) + '</em>' +
+        '</a>';
+      }).join('');
+
+      const oversizedNodes = (graphHealth.oversized_nodes || []).slice(0, 4).map(function(item) {
+        const suffix = item.dominant_community_title ? ' · ' + item.dominant_community_title : '';
+        return escapeHtml(item.title + ' ' + item.article_count + ' 篇' + suffix);
+      }).join('；');
+      const notes = (health.notes || []).join('；');
+      graphHealthNote.innerHTML = escapeHtml(notes || '图谱健康层已生成。') +
+        (oversizedNodes ? '<br>过大节点样本：' + oversizedNodes : '');
+    }
+
     renderSources();
     renderPipelineNote();
     renderArtifacts();
     renderCommunityAudit();
+    renderGraphHealth();
     renderLogs();
   })();
   </script>

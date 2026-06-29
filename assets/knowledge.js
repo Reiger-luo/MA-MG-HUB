@@ -6,6 +6,7 @@
   'use strict';
 
   var graphData = window.MG_KNOWLEDGE_GRAPH || {};
+  var graphHealthData = window.MG_GRAPH_HEALTH || { summary: {}, health: {} };
   var nodes = graphData.nodes || [];
   var edges = graphData.edges || [];
   var nodeRefs = graphData.node_references || {};
@@ -60,11 +61,15 @@
   var elZoomLabel = document.getElementById('kgZoomLabel');
   var elNodeSearch = document.getElementById('knowledgeNodeSearch');
   var elTypeFilter = document.getElementById('knowledgeTypeFilter');
+  var elGraphCommunityFilter = document.getElementById('knowledgeCommunityFilter');
+  var elGraphColorMode = document.getElementById('knowledgeGraphColorMode');
+  var elGraphLegend = document.getElementById('knowledgeGraphLegend');
   var elMatrix = document.getElementById('knowledgeMatrix');
   var elMatrixCount = document.getElementById('matrixCount');
   var elMatrixSearch = document.getElementById('knowledgeMatrixSearch');
   var elMatrixType = document.getElementById('knowledgeMatrixType');
   var elMatrixLevel = document.getElementById('knowledgeMatrixLevel');
+  var elMatrixCommunity = document.getElementById('knowledgeMatrixCommunity');
   var elTopicCount = document.getElementById('topicCount');
   var elTopicSearch = document.getElementById('curatedTopicSearch');
   var elTopicImpact = document.getElementById('curatedTopicImpact');
@@ -90,10 +95,19 @@
   var communityAssignmentLoading = {};
   var communityAssignmentErrors = {};
   var communityAssignmentCallbacks = {};
+  var graphColorMode = 'type';
+  var communityPalette = [
+    '#2563eb', '#0891b2', '#16a34a', '#ca8a04', '#7c3aed',
+    '#dc2626', '#0f766e', '#4f46e5', '#9333ea', '#64748b'
+  ];
+  var communityColorById = {};
 
   var nodesById = {};
   var edgesById = {};
   var neighborMap = {};
+  communityRows.forEach(function (community, index) {
+    communityColorById[community.id] = communityPalette[index % communityPalette.length];
+  });
   nodes.forEach(function (node) {
     nodesById[node.id] = node;
     neighborMap[node.id] = {};
@@ -158,6 +172,55 @@
     return String(n);
   }
 
+  function communityColor(communityId) {
+    return communityColorById[communityId] || '#64748b';
+  }
+
+  function populateCommunitySelect(selectEl, fallbackLabel) {
+    if (!selectEl) return;
+    selectEl.innerHTML = '<option value="all">' + escapeHtml(fallbackLabel) + '</option>' +
+      communityRows.map(function (community) {
+        return '<option value="' + escapeHtml(community.id) + '">' + escapeHtml(community.title || community.id) + '</option>';
+      }).join('');
+  }
+
+  function renderGraphLegend() {
+    if (!elGraphLegend) return;
+    if (graphColorMode === 'community') {
+      var activeCommunities = communityRows.filter(function (community) {
+        return nodes.some(function (node) { return node.dominant_community_id === community.id; });
+      });
+      elGraphLegend.innerHTML = activeCommunities.map(function (community) {
+        return '<span class="kg-legend-item"><span class="kg-legend-dot" style="background:' +
+          escapeHtml(communityColor(community.id)) + '"></span>' + escapeHtml(community.title || community.id) + '</span>';
+      }).join('') + '<span class="kg-legend-item"><span class="kg-legend-dot unmapped"></span>未映射</span>';
+      return;
+    }
+    elGraphLegend.innerHTML =
+      '<span class="kg-legend-item"><span class="kg-legend-dot disease"></span>疾病</span>' +
+      '<span class="kg-legend-item"><span class="kg-legend-dot drug"></span>药物/干预</span>' +
+      '<span class="kg-legend-item"><span class="kg-legend-dot mechanism"></span>机制</span>' +
+      '<span class="kg-legend-item"><span class="kg-legend-dot population"></span>人群/亚型</span>' +
+      '<span class="kg-legend-item"><span class="kg-legend-dot outcome"></span>结局</span>' +
+      '<span class="kg-legend-item"><span class="kg-legend-dot evidence"></span>证据类型</span>' +
+      '<span class="kg-legend-item" style="color:var(--fg3)">节点大小 = abstract 命中文献量</span>';
+  }
+
+  function initializeCommunityControls() {
+    populateCommunitySelect(elGraphCommunityFilter, '全部医学社区');
+    populateCommunitySelect(elMatrixCommunity, '全部医学社区');
+    graphColorMode = (elGraphColorMode && elGraphColorMode.value) || 'type';
+    renderGraphLegend();
+  }
+
+  function itemHasCommunity(item, communityId) {
+    if (!communityId || communityId === 'all') return true;
+    if (item.dominant_community_id === communityId) return true;
+    return (item.community_profile || []).some(function (profile) {
+      return profile.community_id === communityId;
+    });
+  }
+
   function svgEl(tag, attrs) {
     var el = document.createElementNS(svgNamespace, tag);
     if (attrs) {
@@ -184,6 +247,7 @@
       { label: '命中文献', value: compactNumber(stats.matched_articles), note: 'full PubMed abstract' },
       { label: '有证据等级', value: compactNumber(stats.evidence_articles), note: 'I-VI 或已分级' },
       { label: '图谱节点', value: stats.total_nodes || 0, note: '疾病/药物/机制/结局' },
+      { label: '社区映射', value: (stats.community_mapped_nodes || 0) + '/' + (stats.total_nodes || 0), note: '图谱 dominant community' },
       { label: '证据矩阵', value: stats.evidence_matrix_rows || 0, note: '可回链 PMID 的关系' },
       { label: '医学社区', value: communityRows.length || 0, note: '全 MG 语义层' },
       { label: '专题', value: (curatedData.stats && curatedData.stats.topics) || 0, note: 'wiki 自动同步' }
@@ -215,6 +279,7 @@
     if (!elCanvas) return;
     elCanvas.innerHTML = '';
     elCanvas.setAttribute('viewBox', viewBox.x + ' ' + viewBox.y + ' ' + viewBox.w + ' ' + viewBox.h);
+    elCanvas.classList.toggle('community-mode', graphColorMode === 'community');
 
     var edgeLayer = svgEl('g', { class: 'kg-edge-layer' });
     edges.forEach(function (edge) {
@@ -230,6 +295,7 @@
         'data-id': edge.id,
         'data-from': edge.from,
         'data-to': edge.to,
+        'data-community': edge.dominant_community_id || '',
         'stroke-width': edgeWidth(edge)
       });
       edgeLayer.appendChild(line);
@@ -239,9 +305,11 @@
     var nodeLayer = svgEl('g', { class: 'kg-node-layer' });
     nodes.forEach(function (node) {
       var group = svgEl('g', {
-        class: 'kg-node type-' + node.type + ' conf-' + node.confidence,
+        class: 'kg-node type-' + node.type + ' conf-' + node.confidence + (node.dominant_community_id ? ' community-mapped' : ' community-unmapped'),
         'data-id': node.id,
         'data-type': node.type,
+        'data-community': node.dominant_community_id || '',
+        style: '--community-color:' + communityColor(node.dominant_community_id),
         transform: 'translate(' + node.x + ',' + node.y + ')'
       });
       var radius = nodeRadius(node);
@@ -428,6 +496,10 @@
 
     var refsHtml = refs.length ? refs.map(renderReferenceItem).join('') : '<li>暂无 PMID 引用</li>';
     var topicHtml = renderRelatedTopics(id);
+    var communityHtml = renderCommunityProfileBlock(node, '社区映射');
+    var communityBadge = node.dominant_community_id ?
+      '<span class="kg-badge community-badge" style="--community-color:' + escapeHtml(communityColor(node.dominant_community_id)) + '">' + escapeHtml(node.dominant_community_title || getCommunityTitle(node.dominant_community_id)) + '</span>' :
+      '<span class="kg-badge">未映射社区</span>';
 
     elDetail.innerHTML =
       '<div class="kg-detail-type">' + escapeHtml(typeLabel[node.type] || node.type) + '</div>' +
@@ -436,8 +508,10 @@
         '<span class="kg-badge conf-' + escapeHtml(node.confidence || 'low') + '">' + escapeHtml(confidenceLabel[node.confidence] || '覆盖未知') + '</span>' +
         '<span class="kg-badge">' + escapeHtml(node.article_count || 0) + ' 篇 abstract</span>' +
         '<span class="kg-badge">' + escapeHtml(sourceTypeLabel[node.source_type] || '摘要提及') + '</span>' +
+        communityBadge +
       '</div>' +
       '<div class="kg-detail-summary">' + escapeHtml(node.summary || '') + '</div>' +
+      communityHtml +
       topicHtml +
       '<div class="kg-detail-section"><h4>证据等级分布</h4><div class="kg-tags">' + levelHtml + '</div></div>' +
       '<div class="kg-detail-section"><h4>关联关系</h4><div class="kg-relation-list">' + relatedHtml + '</div></div>' +
@@ -451,6 +525,11 @@
     Array.prototype.forEach.call(elDetail.querySelectorAll('[data-topic]'), function (button) {
       button.addEventListener('click', function () {
         openTopic(button.getAttribute('data-topic'));
+      });
+    });
+    Array.prototype.forEach.call(elDetail.querySelectorAll('[data-community]'), function (button) {
+      button.addEventListener('click', function () {
+        openCommunity(button.getAttribute('data-community'));
       });
     });
   }
@@ -470,6 +549,22 @@
       }).join('') + '</div></div>';
   }
 
+  function renderCommunityProfileBlock(item, title) {
+    var profile = item.community_profile || [];
+    if (!profile.length) {
+      return '<div class="kg-detail-section"><h4>' + escapeHtml(title) + '</h4><div class="kg-empty-hint">当前图谱关系尚未映射到稳定医学事务社区。</div></div>';
+    }
+    var rows = profile.map(function (community) {
+      return '<button class="kg-relation-row community-profile-link" type="button" data-community="' + escapeHtml(community.community_id) + '">' +
+        '<span><i style="background:' + escapeHtml(communityColor(community.community_id)) + '"></i>' + escapeHtml(Math.round((community.total_ratio || 0) * 100)) + '%</span>' +
+        '<strong>' + escapeHtml(community.title || community.community_id) + '</strong>' +
+        '<em>' + escapeHtml(community.count || 0) + ' PMID</em>' +
+      '</button>';
+    }).join('');
+    return '<div class="kg-detail-section"><h4>' + escapeHtml(title) + '</h4>' +
+      '<div class="kg-relation-list">' + rows + '</div></div>';
+  }
+
   function renderReferenceItem(ref) {
     var meta = [
       ref.journal || '',
@@ -485,6 +580,12 @@
   function attachNodeFilters() {
     if (elNodeSearch) elNodeSearch.addEventListener('input', applyNodeFilters);
     if (elTypeFilter) elTypeFilter.addEventListener('change', applyNodeFilters);
+    if (elGraphCommunityFilter) elGraphCommunityFilter.addEventListener('change', applyNodeFilters);
+    if (elGraphColorMode) elGraphColorMode.addEventListener('change', function () {
+      graphColorMode = elGraphColorMode.value || 'type';
+      if (elCanvas) elCanvas.classList.toggle('community-mode', graphColorMode === 'community');
+      renderGraphLegend();
+    });
     applyNodeFilters();
   }
 
@@ -492,13 +593,18 @@
     if (!elCanvas) return;
     var keyword = (elNodeSearch && elNodeSearch.value || '').trim().toLowerCase();
     var type = (elTypeFilter && elTypeFilter.value) || 'all';
+    var communityId = (elGraphCommunityFilter && elGraphCommunityFilter.value) || 'all';
     var visible = {};
 
     nodes.forEach(function (node) {
-      var text = [node.title, node.summary, node.type, (node.top_study_types || []).join(' ')].join(' ').toLowerCase();
+      var communityText = (node.community_profile || []).map(function (profile) {
+        return profile.title + ' ' + profile.community_id;
+      }).join(' ');
+      var text = [node.title, node.summary, node.type, node.dominant_community_title, communityText, (node.top_study_types || []).join(' ')].join(' ').toLowerCase();
       var okKeyword = !keyword || text.indexOf(keyword) !== -1;
       var okType = type === 'all' || node.type === type;
-      visible[node.id] = okKeyword && okType;
+      var okCommunity = itemHasCommunity(node, communityId);
+      visible[node.id] = okKeyword && okType && okCommunity;
     });
 
     Array.prototype.forEach.call(elCanvas.querySelectorAll('.kg-node'), function (nodeEl) {
@@ -512,19 +618,33 @@
     });
   }
 
+  function renderMatrixCommunityBadges(row) {
+    var profile = row.community_profile || [];
+    if (!profile.length) return '<span class="kg-ref-meta">未映射</span>';
+    return profile.slice(0, 2).map(function (community) {
+      return '<span class="kg-badge community-badge mini" style="--community-color:' + escapeHtml(communityColor(community.community_id)) + '">' +
+        escapeHtml(community.title || community.community_id) + '</span>';
+    }).join(' ');
+  }
+
   function renderMatrix() {
     if (!elMatrix) return;
     var keyword = (elMatrixSearch && elMatrixSearch.value || '').trim().toLowerCase();
     var type = (elMatrixType && elMatrixType.value) || 'all';
     var level = (elMatrixLevel && elMatrixLevel.value) || 'all';
+    var communityId = (elMatrixCommunity && elMatrixCommunity.value) || 'all';
     var rows = matrixRows.filter(function (row) {
+      var communityText = (row.community_profile || []).map(function (profile) {
+        return profile.title + ' ' + profile.community_id;
+      }).join(' ');
       var text = [
         row.source, row.target, row.relation, row.best_evidence_level,
-        (row.key_pmids || []).join(' ')
+        row.dominant_community_title, communityText, (row.key_pmids || []).join(' ')
       ].join(' ').toLowerCase();
       var typeMatch = type === 'all' || row.source_type === type || row.target_type === type;
       var levelMatch = level === 'all' || row.best_evidence_level === level;
-      return (!keyword || text.indexOf(keyword) !== -1) && typeMatch && levelMatch;
+      var communityMatch = itemHasCommunity(row, communityId);
+      return (!keyword || text.indexOf(keyword) !== -1) && typeMatch && levelMatch && communityMatch;
     });
     if (elMatrixCount) elMatrixCount.textContent = rows.length + ' 行';
 
@@ -543,6 +663,7 @@
         '<td>' + escapeHtml(row.relation) + '</td>' +
         '<td><button class="matrix-node-link" type="button" data-node="' + escapeHtml(row.target_id) + '">' + escapeHtml(row.target) + '</button></td>' +
         '<td><span class="kg-badge conf-' + escapeHtml(row.confidence || 'low') + '">' + escapeHtml(confidenceLabel[row.confidence] || row.confidence || '未知') + '</span></td>' +
+        '<td>' + renderMatrixCommunityBadges(row) + '</td>' +
         '<td>' + escapeHtml(row.article_count || 0) + '</td>' +
         '<td>' + escapeHtml(row.best_evidence_level || '未分级') + '</td>' +
         '<td>' + pmids + '</td>' +
@@ -550,7 +671,7 @@
     }).join('');
 
     elMatrix.innerHTML = '<table><thead><tr>' +
-      '<th>来源节点</th><th>关系</th><th>目标节点</th><th>覆盖</th><th>文献量</th><th>最高等级</th><th>PMID</th>' +
+      '<th>来源节点</th><th>关系</th><th>目标节点</th><th>覆盖</th><th>社区</th><th>文献量</th><th>最高等级</th><th>PMID</th>' +
       '</tr></thead><tbody>' + tableRows + '</tbody></table>';
 
     Array.prototype.forEach.call(elMatrix.querySelectorAll('[data-node]'), function (button) {
@@ -562,7 +683,7 @@
   }
 
   function attachMatrixFilters() {
-    [elMatrixSearch, elMatrixType, elMatrixLevel].forEach(function (el) {
+    [elMatrixSearch, elMatrixType, elMatrixLevel, elMatrixCommunity].forEach(function (el) {
       if (el) el.addEventListener(el.tagName === 'SELECT' ? 'change' : 'input', renderMatrix);
     });
     renderMatrix();
@@ -1015,12 +1136,26 @@
         '<span>按需加载该社区 assignment 分片；显示 primary community 的 PMID、置信度和质量标记。</span>' +
       '</div></div>' +
       '<div class="kg-detail-section"><h4>限制</h4><div class="kg-detail-summary">' + escapeHtml(row.limitations || '当前为 title/abstract/metadata 规则基线，后续需要 taxonomy review、LLM 仲裁和人工校准。') + '</div></div>' +
-      '<div class="kg-detail-actions"><a class="kg-obsidian-btn" href="/MA-MG-HUB/pages/literature.html?community=' + encodeURIComponent(row.id) + '">在情报中心查看近一年文献</a></div>';
+      '<div class="kg-detail-actions">' +
+        '<a class="kg-obsidian-btn" href="/MA-MG-HUB/pages/literature.html?community=' + encodeURIComponent(row.id) + '">在情报中心查看近一年文献</a>' +
+        '<button class="kg-obsidian-btn" type="button" data-community-graph="' + escapeHtml(row.id) + '">查看相关图谱节点</button>' +
+        '<button class="kg-obsidian-btn" type="button" data-community-matrix="' + escapeHtml(row.id) + '">查看证据矩阵关系</button>' +
+      '</div>';
 
     Array.prototype.forEach.call(elCommunityDetail.querySelectorAll('[data-node]'), function (button) {
       button.addEventListener('click', function () {
         activateTab('graph');
         selectNode(button.getAttribute('data-node'));
+      });
+    });
+    Array.prototype.forEach.call(elCommunityDetail.querySelectorAll('[data-community-graph]'), function (button) {
+      button.addEventListener('click', function () {
+        openCommunityGraph(button.getAttribute('data-community-graph'));
+      });
+    });
+    Array.prototype.forEach.call(elCommunityDetail.querySelectorAll('[data-community-matrix]'), function (button) {
+      button.addEventListener('click', function () {
+        openCommunityMatrix(button.getAttribute('data-community-matrix'));
       });
     });
 
@@ -1064,6 +1199,24 @@
     if (elCommunitySearch) elCommunitySearch.value = '';
     if (elCommunitySignal) elCommunitySignal.value = 'all';
     renderCommunities(communityId);
+  }
+
+  function openCommunityGraph(communityId) {
+    activateTab('graph');
+    if (elGraphCommunityFilter) elGraphCommunityFilter.value = communityId;
+    if (elGraphColorMode) elGraphColorMode.value = 'community';
+    graphColorMode = 'community';
+    if (elCanvas) elCanvas.classList.add('community-mode');
+    renderGraphLegend();
+    applyNodeFilters();
+    var firstNode = nodes.find(function (node) { return itemHasCommunity(node, communityId); });
+    if (firstNode) selectNode(firstNode.id);
+  }
+
+  function openCommunityMatrix(communityId) {
+    activateTab('matrix');
+    if (elMatrixCommunity) elMatrixCommunity.value = communityId;
+    renderMatrix();
   }
 
   function activateTab(key) {
@@ -1197,6 +1350,7 @@
     renderBadge();
     renderStats();
     attachTabs();
+    initializeCommunityControls();
     buildGraph();
     attachPanZoom();
     attachGraphInteraction();

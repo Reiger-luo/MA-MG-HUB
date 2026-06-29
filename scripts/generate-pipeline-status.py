@@ -26,6 +26,7 @@ PUBLIC_ARTIFACTS = [
     ("expert-profiles.js", "专家画像", "MG_EXPERT_PROFILES"),
     ("landscape-data.js", "诊治格局", "MG_LANDSCAPE_DATA"),
     ("knowledge-graph.js", "知识库图谱", "MG_KNOWLEDGE_GRAPH"),
+    ("graphHealth.js", "图谱健康", "MG_GRAPH_HEALTH"),
     ("curated-topics.js", "专题层", "MG_CURATED_TOPICS"),
     ("communityTaxonomy.js", "社区 Taxonomy", "MG_COMMUNITY_TAXONOMY"),
     ("communityAssignmentIndex.js", "社区归类索引", "MG_COMMUNITY_ASSIGNMENT_INDEX"),

@@ -72,9 +72,9 @@ python3 scripts/run-weekly-pipeline.py --skip-status
 python3 scripts/reclassify-existing-iii.py --modes ALL --recent-days 365
 
 # reclassify 会重建文献与前端数据；这里再刷新依赖证据等级的下游产物。
+python3 scripts/buildCommunityData.py
 python3 scripts/build-knowledge-data.py
 python3 scripts/build-curated-topic-data.py
-python3 scripts/buildCommunityData.py
 python3 scripts/generate-weekly-summary.py
 python3 scripts/generate-pipeline-status.py
 

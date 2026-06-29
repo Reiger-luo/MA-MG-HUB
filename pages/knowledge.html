@@ -59,6 +59,13 @@
         <option value="outcome">结局</option>
         <option value="evidence">证据类型</option>
       </select>
+      <select class="filter-input compact-select" id="knowledgeCommunityFilter">
+        <option value="all">全部医学社区</option>
+      </select>
+      <select class="filter-input compact-select" id="knowledgeGraphColorMode">
+        <option value="type">按节点类型染色</option>
+        <option value="community">按医学社区染色</option>
+      </select>
     </div>
 
     <div class="kg-layout">
@@ -72,7 +79,7 @@
           </div>
           <span class="kg-zoom-label" id="kgZoomLabel">100%</span>
         </div>
-        <div class="kg-legend">
+        <div class="kg-legend" id="knowledgeGraphLegend">
           <span class="kg-legend-item"><span class="kg-legend-dot disease"></span>疾病</span>
           <span class="kg-legend-item"><span class="kg-legend-dot drug"></span>药物/干预</span>
           <span class="kg-legend-item"><span class="kg-legend-dot mechanism"></span>机制</span>
@@ -148,6 +155,9 @@
           <option value="V">V</option>
           <option value="VI">VI</option>
         </select>
+        <select class="filter-input compact-select" id="knowledgeMatrixCommunity">
+          <option value="all">全部医学社区</option>
+        </select>
       </div>
       <div class="knowledge-matrix-table" id="knowledgeMatrix"></div>
     </div>
@@ -198,6 +208,7 @@
 </main>
 
 <script src="/MA-MG-HUB/data/knowledge-graph.js"></script>
+<script src="/MA-MG-HUB/data/graphHealth.js"></script>
 <script src="/MA-MG-HUB/data/curated-topics.js"></script>
 <script src="/MA-MG-HUB/data/communityTaxonomy.js"></script>
 <script src="/MA-MG-HUB/data/communityCards.js"></script>

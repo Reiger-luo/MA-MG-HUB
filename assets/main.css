@@ -790,6 +790,9 @@ body {
 .kg-node.type-population circle { fill: #ca8a04; }
 .kg-node.type-outcome circle { fill: #7c3aed; }
 .kg-node.type-evidence circle { fill: #64748b; }
+.kg-canvas.community-mode .kg-node.community-mapped circle { fill: var(--community-color); }
+.kg-canvas.community-mode .kg-node.community-mapped text { fill: var(--community-color); }
+.kg-canvas.community-mode .kg-node.community-unmapped circle { fill: #94a3b8; }
 /* 争议节点红色描边 + 角标 */
 .kg-node.contested circle { stroke: var(--red); stroke-width: 3; }
 .kg-node .kg-contest-mark {
@@ -836,6 +839,7 @@ body {
 .kg-legend-dot.population { background: #ca8a04; }
 .kg-legend-dot.outcome { background: #7c3aed; }
 .kg-legend-dot.evidence { background: #64748b; }
+.kg-legend-dot.unmapped { background: #94a3b8; }
 .kg-legend-dot.contested {
   background: var(--bg2); border: 2.5px solid var(--red);
 }
@@ -863,6 +867,12 @@ body {
 .kg-badge.conf-high { color: var(--green); background: rgba(22,163,74,0.1); border-color: rgba(22,163,74,0.3); }
 .kg-badge.conf-medium { color: var(--yellow); background: rgba(202,138,4,0.1); border-color: rgba(202,138,4,0.3); }
 .kg-badge.conf-low { color: var(--red); background: rgba(220,38,38,0.1); border-color: rgba(220,38,38,0.3); }
+.kg-badge.community-badge {
+  color: var(--community-color);
+  background: color-mix(in srgb, var(--community-color) 10%, #ffffff);
+  border-color: color-mix(in srgb, var(--community-color) 30%, #d7dee8);
+}
+.kg-badge.community-badge.mini { font-size: 0.68rem; padding: 0.14rem 0.38rem; margin-right: 0.18rem; }
 .kg-badge.contested { color: var(--red); background: rgba(220,38,38,0.1); border-color: rgba(220,38,38,0.3); font-weight: 600; }
 .kg-detail-summary {
   font-size: 0.85rem; color: var(--fg); line-height: 1.6;
@@ -900,6 +910,14 @@ body {
 .kg-relation-row strong {
   color: var(--fg); font-size: 0.78rem; font-weight: 500;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.community-profile-link i {
+  width: 0.58rem;
+  height: 0.58rem;
+  border-radius: 999px;
+  display: inline-block;
+  margin-right: 0.32rem;
+  vertical-align: -0.05rem;
 }
 .kg-study-list {
   list-style: none; margin: 0; padding: 0;
