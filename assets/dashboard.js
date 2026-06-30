@@ -3,6 +3,13 @@
   'use strict';
 
   var data = window.MG_DASHBOARD_DATA || { stats: {}, stat_cards: [], sections: [], top_signals: [], work_items: [] };
+  var communityCardsData = window.MG_COMMUNITY_CARDS || { cards: [] };
+  var communityWeeklyData = window.MG_COMMUNITY_WEEKLY || { communities: [], hot_communities: [] };
+  var topicCoverageData = window.MG_WIKI_TOPIC_COVERAGE || { community_coverage: [] };
+  var communityCardsById = {};
+  var topicCoverageByCommunityId = {};
+  (communityCardsData.cards || []).forEach(function(card) { communityCardsById[card.id] = card; });
+  (topicCoverageData.community_coverage || []).forEach(function(item) { topicCoverageByCommunityId[item.community_id] = item; });
 
   function escapeHtml(value) {
     var div = document.createElement('div');
@@ -91,8 +98,40 @@
     document.getElementById('dashboardSignals').innerHTML = html || '<div class="empty-state small"><h3>暂无信号</h3></div>';
   }
 
+  function renderCommunityDynamics() {
+    var target = document.getElementById('dashboardCommunityDynamics');
+    if (!target) return;
+    var source = (communityWeeklyData.hot_communities && communityWeeklyData.hot_communities.length) ?
+      communityWeeklyData.hot_communities : (communityWeeklyData.communities || []);
+    var rows = source.slice().sort(function(a, b) {
+      return (b.recent_count || 0) - (a.recent_count || 0) ||
+        (b.high_evidence_count || 0) - (a.high_evidence_count || 0);
+    }).slice(0, 4);
+    if (!rows.length) {
+      target.innerHTML = '<div class="empty-state small"><h3>暂无社区动态</h3></div>';
+      return;
+    }
+    target.innerHTML = '<div class="dashboard-community-list">' + rows.map(function(row) {
+      var communityId = row.community_id || row.id;
+      var card = communityCardsById[communityId] || {};
+      var coverage = topicCoverageByCommunityId[communityId] || {};
+      var topTopic = (coverage.top_topics || [])[0] || {};
+      var href = '/MA-MG-HUB/pages/knowledge.html?community=' + encodeURIComponent(communityId);
+      var meta = '本周 ' + compactNumber(row.recent_count || card.recent_14d_count || 0) +
+        ' · 高等级 ' + compactNumber(row.high_evidence_count || card.high_evidence_count || 0) +
+        ' · 专题 ' + compactNumber(coverage.topic_count || 0);
+      return '<a class="dashboard-community-row" href="' + href + '">' +
+        '<span>' + escapeHtml(row.signal_level === 'high' ? '活跃' : row.signal_level === 'medium' ? '观察' : '平稳') + '</span>' +
+        '<strong>' + escapeHtml(row.title || card.title || communityId) + '</strong>' +
+        '<em>' + escapeHtml(meta) + '</em>' +
+        (topTopic.title ? '<small>' + escapeHtml(topTopic.title) + '</small>' : '') +
+      '</a>';
+    }).join('') + '</div>';
+  }
+
   function init() {
     renderStats();
+    renderCommunityDynamics();
     renderSections();
     renderSignals();
     renderWorkflows();

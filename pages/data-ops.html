@@ -110,6 +110,7 @@
     <a class="ops-btn" href="/MA-MG-HUB/data/signals-weekly.js" target="_blank" style="text-decoration:none">查看信号数据</a>
     <a class="ops-btn" href="/MA-MG-HUB/data/pipeline-status.js" target="_blank" style="text-decoration:none">查看管线状态</a>
     <a class="ops-btn" href="/MA-MG-HUB/data/communityAudit.js" target="_blank" style="text-decoration:none">查看社区 Audit</a>
+    <a class="ops-btn" href="/MA-MG-HUB/data/wikiTopicCoverage.js" target="_blank" style="text-decoration:none">查看专题覆盖</a>
     <a class="ops-btn" href="/MA-MG-HUB/pages/knowledge.html?tab=communities" style="text-decoration:none">查看社区视图</a>
   </div>
   <div class="ops-note" id="pipelineNote">
@@ -150,6 +151,19 @@
 
   <hr class="section-divider">
 
+  <!-- 专题社区覆盖 -->
+  <div class="ops-section-title">专题社区覆盖</div>
+  <div class="community-audit-grid" id="topicCoverageGrid">
+    <div class="community-audit-card">
+      <span>读取中</span>
+      <strong>--</strong>
+      <em>正在加载专题覆盖数据</em>
+    </div>
+  </div>
+  <div class="ops-note" id="topicCoverageNote"></div>
+
+  <hr class="section-divider">
+
   <!-- 更新日志 -->
   <div class="ops-section-title">更新日志</div>
   <div id="opsLog">
@@ -161,6 +175,7 @@
   <script src="/MA-MG-HUB/data/communityTaxonomy.js"></script>
   <script src="/MA-MG-HUB/data/communityAudit.js"></script>
   <script src="/MA-MG-HUB/data/graphHealth.js"></script>
+  <script src="/MA-MG-HUB/data/wikiTopicCoverage.js"></script>
   <script>
   (function(){
     const dashboard = window.MG_DASHBOARD_DATA || {};
@@ -168,6 +183,7 @@
     const status = window.MG_PIPELINE_STATUS || {};
     const communityAudit = window.MG_COMMUNITY_AUDIT || {};
     const graphHealth = window.MG_GRAPH_HEALTH || {};
+    const topicCoverage = window.MG_WIKI_TOPIC_COVERAGE || {};
     const communityTaxonomy = window.MG_COMMUNITY_TAXONOMY || {};
     const sourceList = document.getElementById('sourceList');
     const artifactGrid = document.getElementById('artifactGrid');
@@ -175,6 +191,8 @@
     const communityAuditNote = document.getElementById('communityAuditNote');
     const graphHealthGrid = document.getElementById('graphHealthGrid');
     const graphHealthNote = document.getElementById('graphHealthNote');
+    const topicCoverageGrid = document.getElementById('topicCoverageGrid');
+    const topicCoverageNote = document.getElementById('topicCoverageNote');
     const opsLog = document.getElementById('opsLog');
     const pipelineNote = document.getElementById('pipelineNote');
     const colorMap = { ok: 'green', generated: 'green', planned: 'yellow', manual: 'yellow', missing: 'red' };
@@ -339,11 +357,46 @@
         (oversizedNodes ? '<br>过大节点样本：' + oversizedNodes : '');
     }
 
+    function renderTopicCoverage() {
+      const summary = topicCoverage.stats || {};
+      if (!Object.keys(summary).length) {
+        topicCoverageGrid.innerHTML = '<div class="community-audit-card warning"><span>专题覆盖</span><strong>未生成</strong><em>等待 wikiTopicCoverage.js</em></div>';
+        topicCoverageNote.textContent = '专题社区覆盖尚未生成；运行 buildWikiTopicCoverage.py 后会自动重建。';
+        return;
+      }
+      const totalCommunities = Number(summary.community_count || 0);
+      const coveredCommunities = Number(summary.covered_community_count || 0);
+      const uncoveredCommunities = Number(summary.uncovered_community_count || 0);
+      const items = [
+        { label: 'wiki 专题', value: compactNumber(summary.topic_count), note: 'curated-topics.js' },
+        { label: '覆盖社区', value: compactNumber(coveredCommunities) + '/' + compactNumber(totalCommunities), note: formatRate(coveredCommunities, totalCommunities) },
+        { label: '未覆盖社区', value: compactNumber(uncoveredCommunities), note: '策展补齐点', level: uncoveredCommunities ? 'warning' : '' },
+        { label: '未映射专题', value: compactNumber(summary.uncovered_topic_count), note: '缺锚点或 PMID', level: summary.uncovered_topic_count ? 'warning' : '' },
+        { label: '本周更新专题', value: compactNumber(summary.updated_topic_count), note: 'updatedEvidence' },
+        { label: '归类来源', value: summary.assignment_source || '-', note: '后台连接层' }
+      ];
+      topicCoverageGrid.innerHTML = items.map(function(item) {
+        return '<a class="community-audit-card ' + escapeHtml(item.level || '') + '" href="/MA-MG-HUB/pages/knowledge.html?tab=topics">' +
+          '<span>' + escapeHtml(item.label) + '</span>' +
+          '<strong>' + escapeHtml(item.value) + '</strong>' +
+          '<em>' + escapeHtml(item.note) + '</em>' +
+        '</a>';
+      }).join('');
+
+      const gaps = ((topicCoverage.gaps || {}).low_coverage_communities || []).slice(0, 4).map(function(item) {
+        return '<a class="ops-inline-link" href="' + communityHref(item.community_id) + '">' +
+          escapeHtml(item.title || communityTitle(item.community_id)) + ' ' + escapeHtml(item.topic_count || 0) + ' 个专题</a>';
+      }).join('；');
+      topicCoverageNote.innerHTML = '专题覆盖依据 wiki anchor nodes、PMID assignment 和 taxonomy 关键词生成。' +
+        (gaps ? '<br>待补齐社区：' + gaps : '');
+    }
+
     renderSources();
     renderPipelineNote();
     renderArtifacts();
     renderCommunityAudit();
     renderGraphHealth();
+    renderTopicCoverage();
     renderLogs();
   })();
   </script>

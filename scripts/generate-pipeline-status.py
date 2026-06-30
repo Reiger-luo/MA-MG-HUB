@@ -29,6 +29,7 @@ PUBLIC_ARTIFACTS = [
     ("knowledge-graph.js", "知识库图谱", "MG_KNOWLEDGE_GRAPH"),
     ("graphHealth.js", "图谱健康", "MG_GRAPH_HEALTH"),
     ("curated-topics.js", "专题层", "MG_CURATED_TOPICS"),
+    ("wikiTopicCoverage.js", "专题社区覆盖", "MG_WIKI_TOPIC_COVERAGE"),
     ("communityTaxonomy.js", "社区 Taxonomy", "MG_COMMUNITY_TAXONOMY"),
     ("communityAssignmentIndex.js", "社区归类索引", "MG_COMMUNITY_ASSIGNMENT_INDEX"),
     ("communityAssignmentsRecent.js", "近一年社区归类", "MG_COMMUNITY_RECENT_ASSIGNMENTS"),
@@ -66,7 +67,7 @@ def countPayload(payload):
     if isinstance(payload, list):
         return len(payload)
     if isinstance(payload, dict):
-        for key in ("signals", "articles", "pubmed_articles", "experts", "modules", "topics", "nodes", "items", "communities", "cards", "shards"):
+        for key in ("signals", "articles", "pubmed_articles", "experts", "modules", "topics", "topic_coverage", "nodes", "items", "communities", "cards", "shards"):
             value = payload.get(key)
             if isinstance(value, list):
                 return len(value)

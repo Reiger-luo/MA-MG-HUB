@@ -76,6 +76,7 @@ python3 scripts/buildFullLiteratureIndex.py
 python3 scripts/buildCommunityData.py
 python3 scripts/build-knowledge-data.py
 python3 scripts/build-curated-topic-data.py
+python3 scripts/buildWikiTopicCoverage.py
 python3 scripts/generate-weekly-summary.py
 python3 scripts/generate-pipeline-status.py
 
