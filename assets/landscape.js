@@ -3,6 +3,7 @@
   'use strict';
 
   var data = window.MG_LANDSCAPE_DATA || {};
+  var insightPayload = window.MG_LANDSCAPE_INSIGHTS || { insights: [], summary: {} };
 
   function $(id) {
     return document.getElementById(id);
@@ -17,6 +18,18 @@
   function compactNumber(value) {
     var num = Number(value || 0);
     return num >= 1000 ? (num / 1000).toFixed(1).replace(/\.0$/, '') + 'k' : String(num);
+  }
+
+  function activeInsights() {
+    var dynamic = insightPayload.insights || [];
+    return dynamic.length ? dynamic : (data.monthly_changes || []);
+  }
+
+  function confidenceLabel(value) {
+    if (value === 'high') return '高置信';
+    if (value === 'medium') return '中置信';
+    if (value === 'low') return '低置信';
+    return '待确认';
   }
 
   function bindTabs() {
@@ -37,21 +50,34 @@
   function renderBadge() {
     var badge = $('landscapeBadge');
     var overview = data.overview || {};
+    var insights = activeInsights();
     if (badge) {
-      badge.textContent = (overview.month_change_count || 0) + ' 条格局变化 · ' +
+      badge.textContent = insights.length + ' 条动态洞察 · ' +
         (overview.living_answer_count || 0) + ' 个 Living Answer';
     }
     var positioning = $('landscapePositioning');
     if (positioning && overview.positioning) positioning.textContent = overview.positioning;
+    var insightMeta = $('landscapeInsightMeta');
+    if (insightMeta) {
+      var summary = insightPayload.summary || {};
+      if ((insightPayload.insights || []).length) {
+        insightMeta.textContent = (insightPayload.method || 'dynamic') + ' · ' +
+          (summary.high_confidence_count || 0) + ' 条高置信';
+      } else {
+        insightMeta.textContent = 'fallback · 固定框架';
+      }
+    }
   }
 
   function renderStats() {
     var overview = data.overview || {};
+    var insights = activeInsights();
+    var insightSummary = insightPayload.summary || {};
     var stats = [
-      ['格局变化', overview.month_change_count || (data.monthly_changes || []).length, '本月影响提示'],
+      ['动态洞察', insights.length, (insightPayload.insights || []).length ? '社区/图谱驱动' : '固定框架回退'],
       ['已获批对象', overview.competitive_count || (data.approved_competitive_matrix || data.competitive_matrix || []).length, '中国监管 + 证据厚度'],
       ['临床管线', overview.clinical_pipeline_count || (data.clinical_pipeline_matrix || []).length, 'ClinicalTrials Phase II+'],
-      ['问题答案', overview.living_answer_count || (data.living_answers || []).length, 'abstract-based']
+      ['PMID 锚点', insightSummary.reference_count || 0, '动态洞察引用']
     ];
     var box = $('landscapeStats');
     if (!box) return;
@@ -59,6 +85,32 @@
       return '<article class="landscape-stat-card"><span>' + escapeHtml(item[0]) + '</span><strong>' +
         escapeHtml(compactNumber(item[1])) + '</strong><em>' + escapeHtml(item[2]) + '</em></article>';
     }).join('');
+  }
+
+  function renderChipList(items, className, emptyText) {
+    items = items || [];
+    if (!items.length) return '<span class="muted-text">' + escapeHtml(emptyText || '暂无') + '</span>';
+    return items.map(function(item) {
+      var label = typeof item === 'string' ? item : (item.title || item.id || item.topic_id || '');
+      var href = '';
+      if (item.id) href = '/MA-MG-HUB/pages/knowledge.html?node=' + encodeURIComponent(item.id);
+      if (item.community_id) href = '/MA-MG-HUB/pages/knowledge.html?community=' + encodeURIComponent(item.community_id);
+      if (href) {
+        return '<a class="' + escapeHtml(className || 'mini-chip') + '" href="' + href + '">' + escapeHtml(label) + '</a>';
+      }
+      return '<span class="' + escapeHtml(className || 'mini-chip') + '">' + escapeHtml(label) + '</span>';
+    }).join('');
+  }
+
+  function renderInsightEvidence(change) {
+    var summary = change.evidence_summary || {};
+    var parts = [
+      '新增 ' + (summary.recent_count || 0) + ' 篇',
+      '高等级 ' + (summary.high_evidence_count || 0) + ' 篇',
+      '中国相关 ' + (summary.china_count || 0) + ' 篇'
+    ];
+    if (summary.signal_level) parts.push('信号 ' + summary.signal_level);
+    return parts.join(' · ');
   }
 
   function renderRefLinks(refs, limit) {
@@ -101,7 +153,7 @@
   }
 
   function renderMonthlyChanges() {
-    var changes = data.monthly_changes || [];
+    var changes = activeInsights();
     var box = $('monthlyChangeList');
     if (!box) return;
     if (!changes.length) {
@@ -109,15 +161,30 @@
       return;
     }
     box.innerHTML = changes.map(function(change) {
+      var communities = (change.community_titles || []).map(function(title, index) {
+        return { title: title, community_id: (change.community_ids || [])[index] || '' };
+      });
+      var nodes = change.knowledge_nodes || [];
+      var topics = change.wiki_topics || [];
+      var confidence = change.confidence || '';
       return '<article class="landscape-change-card">' +
-        '<div class="change-card-head"><span>' + escapeHtml(change.type || '变化') + '</span><strong>' + escapeHtml(change.title) + '</strong></div>' +
-        '<p>' + escapeHtml(change.why_it_matters || '') + '</p>' +
+        '<div class="change-card-head"><span>' + escapeHtml(change.change_type || change.type || '变化') + '</span><em class="insight-confidence ' + escapeHtml(confidence || 'unknown') + '">' + escapeHtml(confidenceLabel(confidence)) + '</em></div>' +
+        '<strong class="change-title">' + escapeHtml(change.title) + '</strong>' +
+        '<p>' + escapeHtml(change.selection_reason || change.why_it_matters || '') + '</p>' +
+        (change.what_is_new ? '<div class="insight-new"><span>新在哪里</span><strong>' + escapeHtml(change.what_is_new) + '</strong></div>' : '') +
+        '<div class="insight-chip-row">' + renderChipList(communities, 'mini-chip chip-button', '暂无社区') + '</div>' +
+        '<div class="insight-evidence-line">' + escapeHtml(renderInsightEvidence(change)) + '</div>' +
         '<div class="change-meta-grid">' +
           '<div><span>影响位置</span><strong>' + escapeHtml(change.treatment_position || '-') + '</strong></div>' +
           '<div><span>竞争叙事</span><strong>' + escapeHtml(change.competitive_narrative || '-') + '</strong></div>' +
           '<div><span>MSL 准备</span><strong>' + escapeHtml(change.msl_action || '-') + '</strong></div>' +
         '</div>' +
+        '<div class="insight-support-grid">' +
+          '<div><span>图谱节点</span><div class="kg-tags">' + renderChipList(nodes, 'mini-chip chip-button', '暂无节点') + '</div></div>' +
+          '<div><span>wiki 专题</span><div class="kg-tags">' + renderChipList(topics, 'mini-chip', '暂无专题') + '</div></div>' +
+        '</div>' +
         '<div class="pmid-row">' + renderRefLinks(change.references, 3) + '</div>' +
+        '<p class="answer-limitation">' + escapeHtml(change.limitations || '基于 abstract 和元数据；正式使用前需阅读全文。') + '</p>' +
       '</article>';
     }).join('');
   }

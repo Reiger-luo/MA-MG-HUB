@@ -59,6 +59,7 @@ def main():
     run_step("知识库图谱与证据矩阵生成", [sys.executable, "scripts/build-knowledge-data.py"])
     run_step("本地 wiki 专题层生成", [sys.executable, "scripts/build-curated-topic-data.py"])
     run_step("wiki 专题社区覆盖生成", [sys.executable, "scripts/buildWikiTopicCoverage.py"])
+    run_step("动态诊治格局洞察生成", [sys.executable, "scripts/buildLandscapeInsights.py"])
     run_step("当前通讯渠道周报生成", [sys.executable, "scripts/generate-weekly-summary.py"])
     if not args.skip_status:
         run_step("管线状态生成", [sys.executable, "scripts/generate-pipeline-status.py"])
