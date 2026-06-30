@@ -35,23 +35,48 @@
     if (!communityCardsById[item.id]) communityRows.push(item);
   });
   var articles = window.MG_LITERATURE_DATA || [];
+  var fullIndexData = window.MG_LITERATURE_FULL_INDEX || { items: [] };
+  var fullIndexArticles = fullIndexData.items || [];
+  var searchArticles = fullIndexArticles.length ? fullIndexArticles : articles;
+  var searchArticleGroupTitle = fullIndexArticles.length ? '全库文献轻索引' : '近一年文献';
   var experts = (window.MG_EXPERT_PROFILES && window.MG_EXPERT_PROFILES.experts) || [];
-  var searchDepsLoaded = !!(articles.length || experts.length);
+  var searchDepsLoaded = !!((fullIndexArticles.length || articles.length) && experts.length);
 
   function loadSearchDeps(callback) {
     if (searchDepsLoaded) { callback(); return; }
     var remaining = 2;
-    function done() { if (--remaining === 0) { searchDepsLoaded = true; callback(); } }
-    var s1 = document.createElement('script');
-    s1.src = '/MA-MG-HUB/data/literature-recent.js';
-    s1.onload = done;
-    s1.onerror = done;
-    document.head.appendChild(s1);
-    var s2 = document.createElement('script');
-    s2.src = '/MA-MG-HUB/data/expert-profiles.js';
-    s2.onload = done;
-    s2.onerror = done;
-    document.head.appendChild(s2);
+    function done() {
+      if (--remaining === 0) {
+        refreshSearchSources();
+        searchDepsLoaded = true;
+        callback();
+      }
+    }
+    loadLiteratureSearchSource(done);
+    loadScriptOnce('/MA-MG-HUB/data/expert-profiles.js', done);
+  }
+
+  function loadLiteratureSearchSource(callback) {
+    if (window.MG_LITERATURE_FULL_INDEX || window.MG_LITERATURE_DATA) {
+      callback();
+      return;
+    }
+    loadScriptOnce('/MA-MG-HUB/data/literature-full-index.js', function (ok) {
+      if (ok && window.MG_LITERATURE_FULL_INDEX) {
+        callback();
+        return;
+      }
+      loadScriptOnce('/MA-MG-HUB/data/literature-recent.js', callback);
+    });
+  }
+
+  function refreshSearchSources() {
+    fullIndexData = window.MG_LITERATURE_FULL_INDEX || { items: [] };
+    fullIndexArticles = fullIndexData.items || [];
+    articles = window.MG_LITERATURE_DATA || articles || [];
+    experts = (window.MG_EXPERT_PROFILES && window.MG_EXPERT_PROFILES.experts) || [];
+    searchArticles = fullIndexArticles.length ? fullIndexArticles : articles;
+    searchArticleGroupTitle = fullIndexArticles.length ? '全库文献轻索引' : '近一年文献';
   }
 
   var elBadge = document.getElementById('knowledgeBadge');
@@ -1260,15 +1285,24 @@
   function renderSearch() {
     var keyword = (elSearch.value || '').trim().toLowerCase();
     if (!keyword) {
-      elSearchResults.innerHTML = '<div class="kg-empty-hint">输入关键词检索知识图谱节点、近一年文献和专家公开画像。</div>';
+      elSearchResults.innerHTML = '<div class="kg-empty-hint">输入关键词检索知识图谱节点、全库文献轻索引、医学事务社区和专家公开画像。</div>';
       return;
     }
 
     var nodeHits = nodes.filter(function (node) {
       return [node.title, node.summary, node.type, (node.top_study_types || []).join(' ')].join(' ').toLowerCase().indexOf(keyword) !== -1;
     }).slice(0, 8);
-    var articleHits = articles.filter(function (article) {
-      return [article.title, article.abstract, article.journal, (article.authors || []).join(' ')].join(' ').toLowerCase().indexOf(keyword) !== -1;
+    var articleHits = searchArticles.filter(function (article) {
+      return [
+        article.pmid,
+        article.title,
+        article.journal,
+        article.evidence_level,
+        (article.study_types || []).join(' '),
+        (article.pub_types || []).join(' '),
+        (article.first_authors || article.authors || []).join(' '),
+        (article.keywords || []).join(' ')
+      ].join(' ').toLowerCase().indexOf(keyword) !== -1;
     }).slice(0, 8);
     var expertHits = experts.filter(function (expert) {
       return [expert.name_en, expert.name_zh, expert.affiliation, (expert.public_tags || []).join(' ')].join(' ').toLowerCase().indexOf(keyword) !== -1;
@@ -1311,10 +1345,11 @@
         escapeHtml(community.title || community.id) + '</button><br><span class="kg-ref-meta">' +
         escapeHtml(communitySignalText(community.signal_level)) + ' · ' + escapeHtml(compactNumber(community.article_count || 0)) + ' 篇</span></li>';
     });
-    html += renderSearchGroup('近一年文献', articleHits, function (article) {
+    html += renderSearchGroup(searchArticleGroupTitle, articleHits, function (article) {
       return '<li><a class="text-link" href="' + escapeHtml(article.url) + '" target="_blank" rel="noopener">' +
         escapeHtml(article.title) + '</a><br><span class="kg-ref-meta">' +
-        escapeHtml(article.journal || '') + ' · PMID ' + escapeHtml(article.pmid || '-') + '</span></li>';
+        escapeHtml(article.journal || '') + ' · PMID ' + escapeHtml(article.pmid || '-') +
+        (article.evidence_level ? ' · Level ' + escapeHtml(article.evidence_level) : '') + '</span></li>';
     });
     html += renderSearchGroup('专家公开画像', expertHits, function (expert) {
       return '<li><a class="text-link" href="/MA-MG-HUB/pages/msl.html">' + escapeHtml(expert.name_en || expert.name_zh || '') +

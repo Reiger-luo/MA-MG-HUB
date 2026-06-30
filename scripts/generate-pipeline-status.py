@@ -21,6 +21,7 @@ SITE_URL = "https://reiger-luo.github.io/MA-MG-HUB/"
 PUBLIC_ARTIFACTS = [
     ("dashboard-data.js", "Dashboard 数据", "MG_DASHBOARD_DATA"),
     ("literature-recent.js", "近一年文献公开库", "MG_LITERATURE_DATA"),
+    ("literature-full-index.js", "全库文献轻索引", "MG_LITERATURE_FULL_INDEX"),
     ("signals-weekly.js", "候选信号", "MG_SIGNALS_DATA"),
     ("china-intelligence.js", "中国情报", "MG_CHINA_DATA"),
     ("expert-profiles.js", "专家画像", "MG_EXPERT_PROFILES"),
