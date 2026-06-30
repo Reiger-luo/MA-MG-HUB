@@ -113,7 +113,7 @@
     <a class="ops-btn" href="/MA-MG-HUB/pages/knowledge.html?tab=communities" style="text-decoration:none">查看社区视图</a>
   </div>
   <div class="ops-note" id="pipelineNote">
-    本地更新命令：<code>python3 scripts/run-weekly-pipeline.py</code>。GitHub Actions 可手动触发 weekly-pipeline。
+    本地更新命令：<code>bash scripts/run-local-weekly-sync.sh</code>。GitHub Actions 仅作为手动兜底。
   </div>
 
   <hr class="section-divider">
@@ -235,7 +235,7 @@
 
     function renderPipelineNote() {
       const pipeline = status.pipeline || {};
-      const command = pipeline.local_command || 'python3 scripts/run-weekly-pipeline.py';
+      const command = pipeline.local_command || 'bash scripts/run-local-weekly-sync.sh';
       const workflow = pipeline.workflow || 'weekly-pipeline';
       const schedule = pipeline.schedule || '每周';
       const policy = pipeline.policy || '周更只处理新增公开文献。';

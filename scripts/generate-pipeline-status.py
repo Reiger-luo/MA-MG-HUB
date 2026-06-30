@@ -215,7 +215,7 @@ def buildStatus():
             "local_command": "bash scripts/run-local-weekly-sync.sh",
             "workflow": "Hermes 本地周更主流程；GitHub Actions 仅手动兜底",
             "schedule": "建议每周日 23:00 Asia/Shanghai 由 Hermes/本机定时触发",
-            "policy": "以本地 full 为源头；weekly 新增先补证据等级，无证据等级则剔除；周更后重扫 recent 并推送公开产物。",
+            "policy": "以本地 full 为源头；weekly 先 upsert full/recent，再重扫 full 的近一年窗口，最后一次性生成 full-derived 公开产物。",
         },
         "sources": sources,
         "artifacts": artifacts,

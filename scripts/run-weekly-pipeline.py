@@ -34,6 +34,7 @@ def main():
     parser.add_argument("--skip-fetch", action="store_true", help="跳过 PubMed 增量抓取")
     parser.add_argument("--skip-llm", action="store_true", help="跳过未来 LLM 提取步骤")
     parser.add_argument("--skip-status", action="store_true", help="跳过管线状态生成，供本地总入口最后统一刷新")
+    parser.add_argument("--skip-downstream", action="store_true", help="只执行抓取/富集/存储同步，跳过公开前端产物生成")
     args = parser.parse_args()
 
     print("MA-MG-HUB weekly pipeline")
@@ -47,6 +48,10 @@ def main():
     print("\nℹ️  周更管线不执行历史全库回填。")
     print("   历史数据保持现状；weekly 新增先补证据等级，无证据等级则剔除；有等级后再补 IF/CAS。")
     print("   本地有 data/literature-full.json 时会 upsert 到 full；静态站使用 data/literature-recent.js。")
+
+    if args.skip_downstream:
+        print("\n✅ 已完成抓取、富集和存储同步；跳过下游公开产物生成。")
+        return
 
     run_step("前端数据产物生成", [sys.executable, "scripts/build-frontend-data.py"])
     run_step("全库文献轻索引生成", [sys.executable, "scripts/buildFullLiteratureIndex.py"])

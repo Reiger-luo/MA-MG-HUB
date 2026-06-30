@@ -66,12 +66,12 @@ fi
 git fetch origin main
 git pull --ff-only origin main
 
-python3 scripts/run-weekly-pipeline.py --skip-status
+python3 scripts/run-weekly-pipeline.py --skip-status --skip-downstream
 
-# 分类规则可能独立于周更变化；周更后重扫 recent，保证公开数据使用最新证据规则。
+# 分类规则可能独立于周更变化；周更后重扫 full 中的近一年窗口，并重建 recent 与基础前端产物。
 python3 scripts/reclassify-existing-iii.py --modes ALL --recent-days 365
 
-# reclassify 会重建文献与前端数据；这里再刷新依赖证据等级的下游产物。
+# reclassify 会重建 literature-recent.js 与基础前端数据；这里一次性刷新 full-derived 下游产物。
 python3 scripts/buildFullLiteratureIndex.py
 python3 scripts/buildCommunityData.py
 python3 scripts/build-knowledge-data.py
