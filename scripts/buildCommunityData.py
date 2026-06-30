@@ -34,8 +34,8 @@ reviewQueuePath = dataDir / "communityReviewQueue.json"
 
 levelScore = {"I": 7, "II": 6, "III": 4, "IV": 3, "V": 2, "VI": 1}
 levelRank = {"I": 1, "II": 2, "III": 3, "IV": 4, "V": 5, "VI": 6}
-semanticVersion = "2026.06-v4c-llm-reviewed"
-semanticMethod = "ruleBasedLlmReviewed"
+semanticVersion = "2026.06-v4d-p05-cleanup"
+semanticMethod = "ruleBasedLlmReviewedP05Cleanup"
 
 communitySpecs = [
     {
@@ -151,9 +151,9 @@ communitySpecs = [
         "title": "竞争格局与间接比较",
         "definition": "围绕 NMA、ITC、跨药物比较、治疗选择框架和竞争定位。",
         "boundary": "无比较框架的单药研究不作为本社区核心，除非被用于竞争定位。",
-        "strongTerms": ["network meta", "network meta-analysis", "nma", "indirect comparison", "comparative efficacy", "versus", "compared with"],
-        "terms": ["comparison", "comparative", "monoclonal antibodies", "rank", "treatment choice", "head-to-head"],
-        "weakTerms": ["competition", "positioning"],
+        "strongTerms": ["network meta", "network meta-analysis", "nma", "indirect comparison", "indirect treatment comparison", "head-to-head"],
+        "terms": ["comparative efficacy", "comparative effectiveness", "comparative safety", "active comparator", "monoclonal antibodies", "treatment choice", "treatment sequencing"],
+        "weakTerms": ["competition", "positioning", "versus", "compared with", "comparison", "comparative", "rank"],
         "representativeNodes": ["fcrnInhibition", "complementInhibition", "metaEvidence"],
         "facets": ["competition", "comparison", "evidenceSynthesis"],
         "mslUseCases": ["竞品定位", "医学策略", "间接比较局限说明"],
@@ -302,12 +302,15 @@ complementProductTerms = {
 }
 comparisonFrameworkTerms = {
     "network meta", "network meta-analysis", "nma", "indirect comparison",
-    "comparative efficacy", "compared with", "head-to-head",
+    "indirect treatment comparison", "comparative efficacy", "comparative effectiveness",
+    "comparative safety", "head-to-head", "active comparator",
 }
 comparisonGeneralTerms = {"versus", " vs ", "comparison", "comparative", "rank", "ranking"}
 targetedComparatorTerms = {
     "intravenous immunoglobulin", "ivig", "rituximab", "monoclonal antibodies",
     "biologics", "complement inhibitors", "fcrn blockers", "novel biologics",
+    "standard of care", "lymphoplasmapheresis", "plasmapheresis", "double-filtration",
+    "dfpp", "immunoglobulin", "corticosteroid", "steroid", "ofatumumab",
 }
 productEvidenceTerms = {
     "effectiveness", "efficacy", "safety", "response", "responses", "responder",
@@ -334,7 +337,13 @@ nonCompetitiveComparisonTerms = {
     "healthy controls", "healthy control", "versus healthy", "vs healthy",
     "thymectomy", "video-assisted", "thoracoscopic", "transsternal",
     "sternotomy", "robot-assisted", "robot assisted", "vats", "rats",
-    "surgery", "surgical", "plasma exchange", "daily versus alternate day",
+    "surgery", "surgical", "daily versus alternate day",
+    "ocular and generalized", "ocular vs generalized", "based on antibody subtypes",
+    "antibody subtypes", "healthy beliefs", "controlled study",
+    "adaptive trial design", "methods and application", "incomplete longitudinal",
+    "diagnostic yield", "antibody detection", "repetitive nerve stimulation findings",
+    "iatrogenic botulism", "botulism compared with myasthenia gravis",
+    "not an independent factor", "healthy controls",
 }
 safetySignalTerms = {
     "immune checkpoint inhibitor", "immune checkpoint inhibitors", "ici",
@@ -342,11 +351,37 @@ safetySignalTerms = {
     "myocarditis", "overlap syndrome", "faers", "pharmacovigilance",
     "mycophenolate mofetil", "mycophenolate", "immunosuppression",
     "cryptococcus", "cryptococcal", "opportunistic infection",
+    "steroid toxicity", "glucocorticoid toxicity", "pregnancy", "postpartum",
+    "exacerbation during pregnancy", "vaccine", "vaccination",
+    "rare adverse events", "thrombosis", "thromboembolic", "venous thromboembolism",
+    "pulmonary embolism", "infection", "tuberculosis", "cardiac herniation",
+    "drug-induced", "induced by", "complication", "complications",
+    "hypogammaglobulinemia", "covid-19 pneumonia",
+}
+diagnosisRoutingTerms = {
+    "diagnostic", "diagnosis", "antibody detection", "diagnostic yield",
+    "cell-based assay", "live cell-based assay", "repetitive nerve stimulation",
+    "botulism compared with myasthenia gravis",
+}
+subtypeRoutingTerms = {
+    "ocular and generalized", "ocular myasthenia", "generalized myasthenia",
+    "antibody subtypes", "achr and musk", "anti-achr and anti-musk",
+    "thymoma recurrence", "masaoka-koga", "subtypes",
+}
+incidentalScopeTerms = {
+    "multiple sclerosis", "neuromuscular diseases", "neurological disorders",
+    "autoimmune diseases", "skeletal muscle diseases", "lambert-eaton",
+    "botulism", "pulmonary embolism", "headache", "stroke unit",
+    "neurocritical care", "sexual health", "liposomes",
+}
+lowValuePublicationTerms = {
+    "correction:", "correction to:", "comment on", "erratum",
 }
 broadTherapyReviewTerms = {
     "therapeutic approaches", "novel therapeutic approaches",
     "targeting autoimmunity", "conventional to novel", "management of dysphagia",
     "pharmacological and speech-language pathology management", "new therapies",
+    "rescue therapy", "myasthenic crisis and emerging roles",
 }
 clinicalBroadPopulationTerms = {"achr", "acetylcholine receptor", "antibody-positive"}
 clinicalIntentTerms = {
@@ -420,12 +455,51 @@ def hasNonCompetitiveIntent(title: str, text: str) -> bool:
     })
 
 
+def hasDiagnosisRoutingIntent(title: str, text: str) -> bool:
+    return hasAnyTerm(title, diagnosisRoutingTerms) or hasAnyTerm(text, {
+        "diagnostic sensitivity", "diagnostic specificity", "diagnostic yield",
+        "differential diagnosis", "electrophysiological", "seronegative",
+    })
+
+
+def hasSubtypeRoutingIntent(title: str, text: str) -> bool:
+    return hasAnyTerm(title, subtypeRoutingTerms) or hasAnyTerm(text, {
+        "ocular versus generalized", "ocular and generalized",
+        "achr-mg", "musk-mg", "antibody-defined", "thymoma recurrence",
+    })
+
+
+def hasSafetyOverrideIntent(title: str, text: str) -> bool:
+    return hasAnyTerm(title, safetySignalTerms) or hasAnyTerm(text, {
+        "adverse event", "adverse events", "safety profile", "toxicity",
+        "infection risk", "postoperative complication", "complication after",
+    })
+
+
 def hasTargetedComparisonIntent(title: str, text: str, products: set[str]) -> bool:
     if len(products) >= 2:
         return True
     if products and hasAnyTerm(title, targetedComparatorTerms) and hasAnyTerm(title, comparisonGeneralTerms):
         return True
-    return hasAnyTerm(title, {"complement inhibitors and fcrn blockers", "novel biologics"})
+    return hasAnyTerm(title, {
+        "complement inhibitors and fcrn blockers",
+        "novel biologics",
+        "efgartigimod versus lymphoplasmapheresis",
+        "ravulizumab or efgartigimod",
+        "double-filtration plasmapheresis versus efgartigimod",
+    })
+
+
+def hasCompetitiveTreatmentIntent(title: str, text: str, products: set[str]) -> bool:
+    if hasAnyTerm(title, comparisonFrameworkTerms):
+        return True
+    if hasTargetedComparisonIntent(title, text, products):
+        return True
+    if products and hasAnyTerm(title, comparisonGeneralTerms) and hasAnyTerm(title, targetedComparatorTerms):
+        return True
+    if len(products) >= 2 and hasAnyTerm(text, {"meta-analysis", "systematic review", "treatment approaches"}):
+        return True
+    return False
 
 
 def hasMultiMechanismComparison(text: str, title: str, fcrnHits: list[str], complementHits: list[str]) -> bool:
@@ -433,6 +507,31 @@ def hasMultiMechanismComparison(text: str, title: str, fcrnHits: list[str], comp
         return False
     comparisonTerms = comparisonFrameworkTerms | comparisonGeneralTerms | {"meta-analysis", "systematic review"}
     return hasAnyTerm(title, comparisonTerms) or hasAnyTerm(text, {"network meta-analysis", "meta-analysis"})
+
+
+def hasMgFocusedTitle(title: str) -> bool:
+    return hasAnyTerm(title, {
+        "myasthenia gravis", "myasthenic", "gmg", "mg ", " mg", "achr-mg", "musk-mg",
+    })
+
+
+def isLowValuePublication(article: dict, title: str) -> bool:
+    abstract = str(article.get("abstract") or "").strip()
+    pubTypes = " ".join(article.get("pub_types") or article.get("publication_types") or []).lower()
+    return hasAnyTerm(title, lowValuePublicationTerms) and not abstract and "correction" in (title + " " + pubTypes)
+
+
+def isIncidentalMgScope(article: dict, title: str, text: str) -> bool:
+    if "lambert-eaton" in title and "myasthenia gravis" not in title:
+        return True
+    if hasMgFocusedTitle(title):
+        return False
+    if hasAnyTerm(title, incidentalScopeTerms):
+        return True
+    mgMentions = len(re.findall(r"\bmyasthenia gravis\b|\bmyasthenic\b", text, re.I))
+    if mgMentions <= 2 and hasAnyTerm(text, incidentalScopeTerms):
+        return True
+    return False
 
 
 def calibrateCommunityScore(article: dict, spec: dict, score: float, hits: list[str]) -> float:
@@ -456,6 +555,11 @@ def calibrateCommunityScore(article: dict, spec: dict, score: float, hits: list[
     multiMechanismComparison = hasMultiMechanismComparison(text, title, fcrnHits, complementHits)
     nonCompetitiveIntent = hasNonCompetitiveIntent(title, text)
     targetedComparisonIntent = hasTargetedComparisonIntent(title, text, products)
+    competitiveTreatmentIntent = hasCompetitiveTreatmentIntent(title, text, products)
+    diagnosisRoutingIntent = hasDiagnosisRoutingIntent(title, text)
+    subtypeRoutingIntent = hasSubtypeRoutingIntent(title, text)
+    safetyOverrideIntent = hasSafetyOverrideIntent(title, text)
+    incidentalMgScope = isIncidentalMgScope(article, title, text)
 
     if specId == "fcrnTargetedTherapy" and fcrnHits:
         score += 5 + min(len(fcrnHits), 3) * 1.5
@@ -465,6 +569,8 @@ def calibrateCommunityScore(article: dict, spec: dict, score: float, hits: list[
             score += 13
         elif titleFcrnProductHits and not (heorIntent or rweProtectionIntent):
             score += 4
+        if titleFcrnProductHits and hasAnyTerm(title, {"versus standard of care", "new-onset"}):
+            score += 16
         if heorIntent:
             score *= 0.55
         elif rweProtectionIntent and not productEvidenceIntent:
@@ -475,6 +581,10 @@ def calibrateCommunityScore(article: dict, spec: dict, score: float, hits: list[
             score *= 0.25
         if multiMechanismComparison:
             score *= 0.45
+        if targetedComparisonIntent and len(products) >= 2:
+            score *= 0.6
+        if incidentalMgScope and not titleFcrnProductHits:
+            score *= 0.35
 
     if specId == "complementAndNovelTargets" and complementHits:
         score += 5 + min(len(complementHits), 3) * 1.5
@@ -484,6 +594,8 @@ def calibrateCommunityScore(article: dict, spec: dict, score: float, hits: list[
             score += 13
         elif titleComplementProductHits and not (heorIntent or rweProtectionIntent):
             score += 4
+        if titleComplementProductHits and hasAnyTerm(title, {"real-life", "real-world", "observational study"}):
+            score += 8
         if heorIntent:
             score *= 0.6
         elif rweProtectionIntent and not (titleComplementProductHits and productEvidenceIntent):
@@ -494,7 +606,11 @@ def calibrateCommunityScore(article: dict, spec: dict, score: float, hits: list[
             score += 6
         if multiMechanismComparison:
             score *= 0.45
+        if targetedComparisonIntent and len(products) >= 2:
+            score *= 0.6
         if nonCompetitiveIntent and not titleComplementProductHits:
+            score *= 0.35
+        if incidentalMgScope and not titleComplementProductHits:
             score *= 0.35
 
     if specId == "competitiveLandscapeIndirectComparison":
@@ -502,9 +618,13 @@ def calibrateCommunityScore(article: dict, spec: dict, score: float, hits: list[
         generalHits = hitTerms(text, comparisonGeneralTerms)
         titleFrameworkHits = titleHitTerms(title, comparisonFrameworkTerms)
         titleGeneralHits = titleHitTerms(title, comparisonGeneralTerms)
-        if multiMechanismComparison:
+        if targetedComparisonIntent:
+            score += 20 + min(len(products), 2) * 2
+            if titleGeneralHits:
+                score += 2
+        elif multiMechanismComparison:
             score += 18
-        elif frameworkHits:
+        elif frameworkHits and competitiveTreatmentIntent:
             score += 8 + min(len(frameworkHits), 2) * 2
             if titleFrameworkHits:
                 score += 3
@@ -516,6 +636,16 @@ def calibrateCommunityScore(article: dict, spec: dict, score: float, hits: list[
             score += 4
         elif generalHits and not products:
             score *= 0.45
+        if not competitiveTreatmentIntent:
+            score *= 0.35
+        if (diagnosisRoutingIntent or subtypeRoutingIntent or incidentalMgScope) and not competitiveTreatmentIntent:
+            score *= 0.25
+        if safetyOverrideIntent and not competitiveTreatmentIntent:
+            score *= 0.2
+        if broadTherapyReviewIntent:
+            score *= 0.35
+        if rweProtectionIntent and hasAnyTerm(title, {"early versus late", "real-world cohort", "multicenter real-world"}):
+            score *= 0.6
         if nonCompetitiveIntent and not targetedComparisonIntent:
             score *= 0.2
         elif heorIntent and not targetedComparisonIntent:
@@ -533,10 +663,24 @@ def calibrateCommunityScore(article: dict, spec: dict, score: float, hits: list[
             score *= 0.5
         elif specificTherapyHit and not hasIntent:
             score *= 0.65
+        if subtypeRoutingIntent and not (titleFcrnProductHits or titleComplementProductHits):
+            score += 8
+        elif subtypeRoutingIntent:
+            score += 2
+        if hasAnyTerm(title, {"efficacy and safety", "randomized", "randomised", "placebo-controlled", "placebo controlled"}) and broadOnly:
+            score *= 0.45
+        if incidentalMgScope and not subtypeRoutingIntent:
+            score *= 0.35
 
     if specId == "efficacyBurdenOutcomes":
         if hasAnyTerm(title, {"long-term effect", "comparative efficacy", "efficacy"}):
             score += 4
+        if hasAnyTerm(title, {"randomized", "randomised", "placebo-controlled", "placebo controlled", "double-blind", "crossover trial"}):
+            score += 8
+        if safetyOverrideIntent and not hasAnyTerm(title, {"efficacy and safety", "effectiveness and safety"}):
+            score *= 0.45
+        if incidentalMgScope and not hasMgFocusedTitle(title):
+            score *= 0.45
 
     if specId == "rweClinicalPathway":
         if rweProtectionIntent:
@@ -545,6 +689,10 @@ def calibrateCommunityScore(article: dict, spec: dict, score: float, hits: list[
             score += 6
         if hasAnyTerm(title, {"real-world", "real world"}) and hasAnyTerm(title, {"cohort", "retrospective", "multicenter"}):
             score += 3
+        if hasAnyTerm(title, {"nationwide", "population-based", "registry", "register-based", "claims database"}):
+            score += 5
+        if incidentalMgScope and not (rweProtectionIntent or hasMgFocusedTitle(title)):
+            score *= 0.45
 
     if specId == "guidelineHeorAccess":
         if heorIntent:
@@ -553,14 +701,54 @@ def calibrateCommunityScore(article: dict, spec: dict, score: float, hits: list[
             score += 4
         if nonCompetitiveIntent and not hasAnyTerm(title, heorAccessTerms):
             score *= 0.45
+        if incidentalMgScope and not heorIntent:
+            score *= 0.35
+
+    if specId == "diagnosisMonitoringPrediction":
+        if diagnosisRoutingIntent:
+            score += 8
+        if hasAnyTerm(title, {"long-term effect", "randomized trial", "randomised trial"}):
+            score *= 0.45
+        if incidentalMgScope and not diagnosisRoutingIntent:
+            score *= 0.35
 
     if specId == "safetyMedicationManagement":
         if hasAnyTerm(title, safetySignalTerms):
-            score += 8
+            score += 12
         elif hasAnyTerm(text, safetySignalTerms):
-            score += 4
+            score += 6
+        if safetyOverrideIntent:
+            score += 8
+        if hasAnyTerm(title, {"faers", "pharmacovigilance", "safety profile"}):
+            score += 14
+        if competitiveTreatmentIntent and hasAnyTerm(title, comparisonGeneralTerms):
+            score *= 0.45
+        if hasAnyTerm(title, {"efficacy and safety", "effectiveness and safety"}) and not hasAnyTerm(title, {"faers", "pharmacovigilance", "safety profile"}):
+            score *= 0.45
+        if hasAnyTerm(title, {"long-term effect"}) and not hasAnyTerm(title, {"safety", "adverse", "toxicity"}):
+            score *= 0.45
+        if incidentalMgScope and not safetyOverrideIntent:
+            score *= 0.45
 
     return score
+
+
+def shouldForceUnassigned(article: dict, topId: str, topScore: float) -> bool:
+    title = titleText(article)
+    text = articleText(article)
+    if hasAnyTerm(title, {"adaptive trial design", "methods and application", "incomplete longitudinal"}) and topScore < 20:
+        return True
+    if "lambert-eaton" in title and "myasthenia gravis" not in title and topScore < 10:
+        return True
+    if isLowValuePublication(article, title) and topScore < 12:
+        return True
+    if not hasMgFocusedTitle(title) and hasAnyTerm(title, incidentalScopeTerms) and topScore < 18:
+        return True
+    if isIncidentalMgScope(article, title, text) and topScore < 8:
+        return True
+    if not hasMgFocusedTitle(title) and topScore < 6 and topId not in {"guidelineHeorAccess"}:
+        return True
+    return False
 
 
 def scoreCommunity(article: dict, spec: dict) -> tuple[float, list[str]]:
@@ -655,6 +843,18 @@ def assignArticle(article: dict) -> dict:
         }
 
     topId, topScore = scores[0]
+    if shouldForceUnassigned(article, topId, topScore):
+        return {
+            "pmid": pmid,
+            "primary": "unassigned",
+            "secondary": [],
+            "confidence": "unassigned",
+            "score": 0,
+            "matched_terms": [],
+            "facets": detectFacets(article, "unassigned"),
+            "flags": ["unassigned", "scopeReview"],
+        }
+
     secondary = [
         {"community_id": communityId, "score": round(score, 1)}
         for communityId, score in scores[1:3]

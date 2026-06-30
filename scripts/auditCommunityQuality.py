@@ -240,16 +240,16 @@ def buildAuditReport(outputPath: Path) -> dict:
         )
     else:
         issueLines.append(
-            f"4. `competitiveLandscapeIndirectComparison` 已扩展到 {competitiveCount} 篇、{competitiveTopicCount} 个相关专题。"
-            "v4c 已收窄外科术式、健康对照和非药物剂量比较，后续做小样本回归即可。"
+            f"4. `competitiveLandscapeIndirectComparison` 当前收敛到 {competitiveCount} 篇、{competitiveTopicCount} 个相关专题。"
+            "v4d 已收窄为严格治疗策略、跨产品比较、NMA/ITC 或 evidence synthesis；普通 versus / controlled study 不再自动进入竞争格局。"
         )
 
     nextStepLines = [
-        "1. v4c 已完成 LLM 抽样 review 后的 P0 规则回写；后续每次规则调整都应保留 30-50 篇固定回归样本。",
-        "2. P1：继续抽查 `clinicalSubtypesStratification`、`diagnosisMonitoringPrediction` 的低置信度样本，重点看 MG 只是背景/鉴别诊断的文献是否应进入 unassigned。",
+        "1. v4d 已完成第二轮 LLM review 后的 P0.5 cleanup：competitive 收窄、safety override 增强、MG 背景文献更积极进入 unassigned / review queue。",
+        "2. 由于 v4d 是质量优先版本，unassigned 占比升高是预期结果；后续重点抽查 recent high-evidence unassigned，而不是追求覆盖率最大化。",
         "3. P1：把 FcRn / complement 疑似漏归类样本拆成“合理 secondary”和“真实漏归类”两类，避免只看泄漏计数做误判。",
         "4. P1：为 `competitiveLandscapeIndirectComparison` 增加前端解释，说明该社区只代表药物、治疗策略、HEOR 或 evidence synthesis 的比较，不代表所有 versus 文献。",
-        "5. 若下一次周更后 low/conflict 未反弹，可进入 Phase 4 动态诊治格局，让 LLM 读取社区变化、图谱变化和 wiki 覆盖变化生成月度洞察。",
+        "5. 若下一次周更 recent unassigned 没有高等级 MG 核心文献，可进入 Phase 4 动态诊治格局。",
     ]
 
     lines = [
@@ -326,7 +326,7 @@ def buildAuditReport(outputPath: Path) -> dict:
         "",
         "## Phase 4 进入条件",
         "",
-        "动态诊治格局可以在 v4c 规则稳定后进入，但生成洞察时必须展示 PMID、证据等级、社区 primary/secondary、图谱节点和 abstract-level 局限。",
+        "动态诊治格局可以在 v4d 规则稳定后进入，但生成洞察时必须展示 PMID、证据等级、社区 primary/secondary、图谱节点和 abstract-level 局限；unassigned 文献只能作为待审信号，不能直接生成格局结论。",
         "",
     ])
 

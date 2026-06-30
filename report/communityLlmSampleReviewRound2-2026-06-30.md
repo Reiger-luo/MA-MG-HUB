@@ -148,3 +148,33 @@
 第二轮 review 不推翻 v4c 的总体方向，但说明 **Phase 4 动态诊治格局前最好先做一轮 P0.5 competitive cleanup**。
 
 如果现在直接进入 Phase 4，动态诊治格局可能会把一部分“疾病负担、安全风险、诊断研究、亚型研究”误读成竞争格局变化。建议先修 `competitiveLandscapeIndirectComparison` 和 safety override，再重跑数据产物和审计。
+
+## 9. v4d 落地结果
+
+2026-06-30 已将本轮 P0.5 cleanup 回写到 `scripts/buildCommunityData.py`，版本升级为 `2026.06-v4d-p05-cleanup`，方法标记为 `ruleBasedLlmReviewedP05Cleanup`。
+
+本次回写覆盖：
+
+1. `competitiveLandscapeIndirectComparison` 收窄为严格治疗策略、跨产品比较、NMA/ITC 或 evidence synthesis；普通 `versus` / `comparison` / `controlled study` 不再自动进入竞争格局。
+2. `safetyMedicationManagement` 增强 steroid toxicity、pregnancy/postpartum risk、vaccine rare AE、thrombosis、infection under immunosuppression、post-thymectomy complication、drug-induced exacerbation、FAERS/pharmacovigilance 等 override。
+3. MG 只是 differential diagnosis、并列病种、非 MG 主病 case history、方法学应用或无 abstract correction/comment 时，更积极进入 `unassigned` / review queue。
+
+重跑后的核心指标：
+
+| 指标 | v4c | v4d |
+| --- | ---: | ---: |
+| 已归类 | 8931 | 7890 |
+| 未归类 | 1704 | 2745 |
+| 低置信度 | 2433 | 1120 |
+| 冲突归类 | 1995 | 1481 |
+| 竞争格局与间接比较 | 453 | 55 |
+| 安全性与用药管理 | 1132 | 1646 |
+| 临床亚型与人群分层 | 2379 | 2055 |
+
+解释：
+
+- v4d 是质量优先版本，主动牺牲一部分覆盖率，把 MG 背景文献、长列表疾病综述和非核心方法学文章推入 `unassigned`。
+- 这不是数据丢失，而是把“可用于格局判断的社区 primary”与“待审弱信号”分开。
+- 固定回归集中，第一轮核心样本 38/38 命中，第二轮哨兵样本 18/18 命中。
+
+Phase 4 可以基于 v4d 进入，但动态诊治格局生成时应忽略 unassigned 文献的自动结论，只把它们作为待审信号池。
