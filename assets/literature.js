@@ -56,7 +56,6 @@
     loading: $('loading'),
     results: $('results'),
     filterCount: $('filterCount'),
-    statTotal: $('statTotal'),
     filterKeyword: $('filterKeyword'),
     sortMode: $('sortMode'),
     filterTimeList: $('filterTimeList'),
@@ -1219,7 +1218,6 @@
       wireCheckboxAll('filterEvidenceList');
 
       // 统计
-      document.getElementById('statTotal').textContent = window.MG_TOTAL_COUNT || allArticles.length;
       document.getElementById('statYear').textContent = allArticles.length;
 
       var chinaYear = 0;
