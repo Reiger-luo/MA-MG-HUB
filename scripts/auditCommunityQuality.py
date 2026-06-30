@@ -224,15 +224,15 @@ def buildAuditReport(outputPath: Path) -> dict:
     else:
         issueLines.append(
             f"1. `clinicalSubtypesStratification` 已低于 25% 阈值（{clinicalCount} 篇，{formatRate(clinicalCount, total)}），"
-            "但低置信度和冲突仍高，下一步应抽样 review 亚型/诊断/RWE 边界。"
+            "但低置信度和冲突仍高，后续应继续把亚型/诊断/RWE 边界作为长期回归抽查对象。"
         )
     issueLines.append(
         f"2. FcRn 疑似漏归类样本：{len(fcrnLeakage)} 篇 assignment 具有 FcRn 产品/术语信号但 primary 不是 FcRn 社区。"
-        "需要检查这些是否应保留为疗效/RWE/安全性 primary，还是应提升 FcRn 优先级。"
+        "其中包含疗效终点、RWE、HEOR 和 competitive 作为合理 primary 的文献，不能直接等同于错误。"
     )
     issueLines.append(
         f"3. 补体/新靶点疑似漏归类样本：{len(complementLeakage)} 篇 assignment 具有补体产品/术语信号但 primary 不是补体社区。"
-        "建议重点看联合比较、RWE 和 crisis/case report 的主语义。"
+        "其中联合比较、RWE、HEOR 和宽泛综述需要保留 secondary/facet 解释，而不是一律提升补体 primary。"
     )
     if competitiveTopicCount < 3:
         issueLines.append(
@@ -240,16 +240,16 @@ def buildAuditReport(outputPath: Path) -> dict:
         )
     else:
         issueLines.append(
-            f"4. `competitiveLandscapeIndirectComparison` 已扩展到 {competitiveCount} 篇、{competitiveTopicCount} 个相关专题。"
-            "下一步应抽样确认是否包含过多胸腺手术或非药物技术比较。"
+            f"4. `competitiveLandscapeIndirectComparison` 当前收敛到 {competitiveCount} 篇、{competitiveTopicCount} 个相关专题。"
+            "v4d 已收窄为严格治疗策略、跨产品比较、NMA/ITC 或 evidence synthesis；普通 versus / controlled study 不再自动进入竞争格局。"
         )
 
     nextStepLines = [
-        "1. 先做人工抽样 review，不直接上 LLM 仲裁。",
-        "2. P0：抽查 `clinicalSubtypesStratification`、`diagnosisMonitoringPrediction`、`safetyMedicationManagement` 的低置信度样本，决定是否继续收窄宽泛词。",
-        "3. P0：抽查 FcRn / complement 疑似漏归类样本，区分“治疗机制 primary”与“疗效/RWE/安全性 primary”。",
-        "4. P1：抽查 `competitiveLandscapeIndirectComparison` 扩展后的样本，必要时把外科路径比较降到 clinical/RWE。",
-        "5. P1：规则稳定后再考虑 LLM/人工仲裁剩余低置信度样本。",
+        "1. v4d 已完成第二轮 LLM review 后的 P0.5 cleanup：competitive 收窄、safety override 增强、MG 背景文献更积极进入 unassigned / review queue。",
+        "2. 由于 v4d 是质量优先版本，unassigned 占比升高是预期结果；后续重点抽查 recent high-evidence unassigned，而不是追求覆盖率最大化。",
+        "3. P1：把 FcRn / complement 疑似漏归类样本拆成“合理 secondary”和“真实漏归类”两类，避免只看泄漏计数做误判。",
+        "4. P1：为 `competitiveLandscapeIndirectComparison` 增加前端解释，说明该社区只代表药物、治疗策略、HEOR 或 evidence synthesis 的比较，不代表所有 versus 文献。",
+        "5. 若下一次周更 recent unassigned 没有高等级 MG 核心文献，可进入 Phase 4 动态诊治格局。",
     ]
 
     lines = [
@@ -324,9 +324,9 @@ def buildAuditReport(outputPath: Path) -> dict:
     lines.extend(nextStepLines)
     lines.extend([
         "",
-        "## 暂不进入 Phase 4",
+        "## Phase 4 进入条件",
         "",
-        "动态诊治格局应等待上述 taxonomy review 和重跑后的社区质量指标稳定，再读取社区变化、图谱变化和 wiki 覆盖变化生成洞察。",
+        "动态诊治格局可以在 v4d 规则稳定后进入，但生成洞察时必须展示 PMID、证据等级、社区 primary/secondary、图谱节点和 abstract-level 局限；unassigned 文献只能作为待审信号，不能直接生成格局结论。",
         "",
     ])
 
