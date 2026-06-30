@@ -1,6 +1,6 @@
 # 本地周更自动化方案
 
-更新时间：2026-06-29
+更新时间：2026-06-30
 
 ## 背景判断
 
@@ -30,11 +30,24 @@ bash scripts/run-local-weekly-sync.sh
 1. 检查 `data/literature-full.json` 是否存在。
 2. 检查 tracked 工作区是否干净，避免自动提交混入开发改动。
 3. `git pull --ff-only origin main`。
-4. 运行 PubMed weekly pipeline。
-5. 用最新证据分级规则重扫 recent。
-6. 重建知识库、专题层、周报和管线状态。
+4. 运行 PubMed weekly pipeline 的抓取、富集和 full/recent 存储同步，使用 `--skip-downstream` 跳过下游公开产物生成。
+5. 用最新证据分级规则重扫 `literature-full.json` 中的近一年窗口，并重建 `literature-recent.js` 与基础前端数据。
+6. 从 full 一次性重建公开派生产物：
+   - `literature-full-index.js`
+   - `community*.js`
+   - `knowledge-graph.js`
+   - `graphHealth.js`
+   - `curated-topics.js`
+   - `weekly-summary.md`
+   - `pipeline-status.js`
 7. 校验 full 与 recent 的总数和最新日期。
 8. 提交并推送公开数据产物。
+
+当前关键原则：
+
+- `literature-full.json` 仍只保留本地，不推 GitHub。
+- `knowledge-graph.js` 和 `literature-full-index.js` 都从本地 full 派生后推送。
+- GitHub Actions 没有 full，只能做手动兜底；主周更必须由本地/Hermes 入口执行。
 
 日志写入：
 

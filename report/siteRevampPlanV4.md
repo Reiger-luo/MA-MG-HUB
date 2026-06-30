@@ -180,6 +180,7 @@ LLM 和 embeddings 的职责：
 |---|---|---|
 | `data/literature-full.json` | 本地完整分析底座 | 否 |
 | `data/literature-recent.js` | 公开站近一年文献 | 是 |
+| `data/literature-full-index.js` | 全库轻索引，供知识库检索按需加载，不含 abstract | 是 |
 | `data/communityCorpusPack.jsonl` | 社区发现和 LLM 输入包 | 否 |
 | `data/articleConceptTags.jsonl` | 每篇文献的概念、实体、facet 标签 | 可聚合后推 |
 
@@ -329,6 +330,7 @@ full MG graph
 | `data/wikiTopicCoverage.js` | wiki 专题与 PubMed 社区覆盖关系 |
 | `data/landscapeInsights.js` | 动态诊治格局洞察，可合并进 `landscape-data.js` |
 | `data/graphHealth.js` | 图谱健康度、过大节点、弱边、陈旧关系 |
+| `data/literature-full-index.js` | 全库 PMID 轻索引，知识库跨库检索首次输入时懒加载 |
 
 ---
 
@@ -450,16 +452,15 @@ MSL 工作台读取社区状态：
 1. PubMed weekly fetch
 2. weekly enrichment：证据等级、IF/CAS、China flag
 3. merge full / derive recent
-4. article concept tagging
-5. knowledge graph rebuild
-6. community assignment update
-7. community weekly diff
-8. community audit
+4. reclassify full 中的近一年窗口
+5. split recent / frontend base data build
+6. full literature index rebuild
+7. community assignment / weekly diff / audit
+8. knowledge graph rebuild from full
 9. wiki topic coverage update
 10. dynamic landscape generation
-11. frontend data build
-12. weekly summary and pipeline status
-13. commit public artifacts
+11. weekly summary and pipeline status
+12. commit public artifacts
 ```
 
 模型调用策略：

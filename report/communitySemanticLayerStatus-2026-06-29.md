@@ -1,6 +1,7 @@
 # MA-MG-HUB v4.0 社区语义层状态记录
 
 记录时间：2026-06-29
+补充更新时间：2026-06-30
 
 ## 当前结论
 
@@ -13,6 +14,12 @@ v4.0 社区语义层的可用基础闭环已经完成并合入 `main`。
 - 首屏仍保持静态站轻量加载，不预加载全量 assignment。
 
 但如果把“信号板社区聚合”和“MSL 行动映射”也算入广义 Phase 2，则 Phase 2 Advanced 尚未完成。
+
+2026-06-30 补充：
+
+- 知识图谱已从 recent 口径切换为本地 full 口径：`knowledge-graph.js` 由 `data/literature-full.json` 派生；没有 full 时才 fallback `literature-recent.js`。
+- 新增 `data/literature-full-index.js` 作为全库轻索引，不包含 abstract，知识库跨库检索首次输入时按需加载。
+- 本地周更已去重：先 upsert full/recent，再重扫 full 的近一年窗口，最后一次性生成 full-derived 公开产物。
 
 ## 已完成
 
@@ -74,6 +81,25 @@ v4.0 社区语义层的可用基础闭环已经完成并合入 `main`。
   - URL 支持 `literature.html?community=<communityId>` 和多社区逗号分隔。
   - 勾选社区后按需加载对应分片，用 primary community PMID set 与近一年 `MG_LITERATURE_DATA` 求交集。
   - 文献卡片在社区筛选状态下显示 primary community badge。
+
+### Phase 2.5 / Full 图谱底座与全库轻索引
+
+- 新增 `scripts/buildFullLiteratureIndex.py`。
+- 新增公开产物 `data/literature-full-index.js`：
+  - 来源为本地 `literature-full.json`。
+  - 保留 PMID、标题、期刊、日期、证据等级、研究类型、关键词、前三作者等轻字段。
+  - 不包含 abstract、affiliation、grant 等大字段。
+  - 知识库跨库检索首次输入时按需加载。
+- `data/knowledge-graph.js` 已由 full 派生：
+  - 全库文献：10,635
+  - 图谱命中文献：9,127
+  - 节点：44
+  - 关系：241
+  - 社区映射节点：44
+- `scripts/run-local-weekly-sync.sh` 已优化为 canonical 周更入口：
+  - `run-weekly-pipeline.py --skip-status --skip-downstream` 只做抓取/富集/存储同步。
+  - `reclassify-existing-iii.py --recent-days 365` 重扫 full 中的近一年窗口。
+  - 随后一次性重建 full index、community、graph、curated topics、weekly summary 和 pipeline status。
 
 ## 尚未完成
 
