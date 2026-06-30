@@ -210,6 +210,48 @@ def buildAuditReport(outputPath: Path) -> dict:
         ])
     topicRows.sort(key=lambda row: (row[1], -row[4], row[0]))
 
+    clinicalCount = primaryCounts.get("clinicalSubtypesStratification", 0)
+    clinicalRate = clinicalCount / total if total else 0
+    competitiveCoverage = coverageById.get("competitiveLandscapeIndirectComparison") or {}
+    competitiveTopicCount = int(competitiveCoverage.get("topic_count") or 0)
+    competitiveCount = primaryCounts.get("competitiveLandscapeIndirectComparison", 0)
+    issueLines = []
+    if clinicalRate >= 0.25:
+        issueLines.append(
+            f"1. `clinicalSubtypesStratification` 仍超过 25% 阈值（{clinicalCount} 篇，{formatRate(clinicalCount, total)}）。"
+            "建议继续把宽泛抗体词作为 population facet，primary community 只保留明确亚型分层、预测、诊断或差异治疗意图。"
+        )
+    else:
+        issueLines.append(
+            f"1. `clinicalSubtypesStratification` 已低于 25% 阈值（{clinicalCount} 篇，{formatRate(clinicalCount, total)}），"
+            "但低置信度和冲突仍高，下一步应抽样 review 亚型/诊断/RWE 边界。"
+        )
+    issueLines.append(
+        f"2. FcRn 疑似漏归类样本：{len(fcrnLeakage)} 篇 assignment 具有 FcRn 产品/术语信号但 primary 不是 FcRn 社区。"
+        "需要检查这些是否应保留为疗效/RWE/安全性 primary，还是应提升 FcRn 优先级。"
+    )
+    issueLines.append(
+        f"3. 补体/新靶点疑似漏归类样本：{len(complementLeakage)} 篇 assignment 具有补体产品/术语信号但 primary 不是补体社区。"
+        "建议重点看联合比较、RWE 和 crisis/case report 的主语义。"
+    )
+    if competitiveTopicCount < 3:
+        issueLines.append(
+            "4. `competitiveLandscapeIndirectComparison` 专题覆盖仍弱，说明 wiki 和 taxonomy 已有比较语义，但前台策展专题需要补齐。"
+        )
+    else:
+        issueLines.append(
+            f"4. `competitiveLandscapeIndirectComparison` 已扩展到 {competitiveCount} 篇、{competitiveTopicCount} 个相关专题。"
+            "下一步应抽样确认是否包含过多胸腺手术或非药物技术比较。"
+        )
+
+    nextStepLines = [
+        "1. 先做人工抽样 review，不直接上 LLM 仲裁。",
+        "2. P0：抽查 `clinicalSubtypesStratification`、`diagnosisMonitoringPrediction`、`safetyMedicationManagement` 的低置信度样本，决定是否继续收窄宽泛词。",
+        "3. P0：抽查 FcRn / complement 疑似漏归类样本，区分“治疗机制 primary”与“疗效/RWE/安全性 primary”。",
+        "4. P1：抽查 `competitiveLandscapeIndirectComparison` 扩展后的样本，必要时把外科路径比较降到 clinical/RWE。",
+        "5. P1：规则稳定后再考虑 LLM/人工仲裁剩余低置信度样本。",
+    ]
+
     lines = [
         "# MA-MG-HUB 社区语义层质量审计",
         "",
@@ -258,16 +300,9 @@ def buildAuditReport(outputPath: Path) -> dict:
         "",
         "## 疑似边界问题",
         "",
-        "1. `clinicalSubtypesStratification` 仍是最大社区。建议把 `AChR` / `MuSK` 等抗体词更多作为 population facet，primary community 需要出现明确的亚型分层、预测、差异治疗或诊断路径意图。",
-        f"2. FcRn 疑似漏归类样本：{len(fcrnLeakage)} 篇 assignment 具有 FcRn 产品/术语信号但 primary 不是 FcRn 社区。需要检查这些是否被疗效、RWE 或安全性社区抢走。",
-        f"3. 补体/新靶点疑似漏归类样本：{len(complementLeakage)} 篇 assignment 具有补体产品/术语信号但 primary 不是补体社区。建议重点看联合比较和 case/report review。",
-        "4. `competitiveLandscapeIndirectComparison` 专题覆盖仍弱，说明 wiki 和 taxonomy 已有比较语义，但 assignment primary 仍容易被疗效或 FcRn 抢走。",
-        "",
-        "## 抽样入口",
-        "",
-        "### FcRn 疑似漏归类样本",
-        "",
     ])
+    lines.extend(issueLines)
+    lines.extend(["", "## 抽样入口", "", "### FcRn 疑似漏归类样本", ""])
     lines.extend([
         f"- {articleLabel(str(item.get('pmid')), articleByPmid)}；primary={titleById.get(item.get('primary'), item.get('primary'))}；confidence={item.get('confidence')}"
         for item in fcrnLeakage[:12]
@@ -285,11 +320,9 @@ def buildAuditReport(outputPath: Path) -> dict:
         "",
         "## 建议下一步",
         "",
-        "1. 先修 taxonomy 边界，不直接上 LLM 仲裁。",
-        "2. P0：收窄 `clinicalSubtypesStratification` 的 primary 判定条件。",
-        "3. P0：提高 FcRn / complement / competitive 在高特异产品词和比较词命中时的 primary 优先级。",
-        "4. P1：重跑 `buildCommunityData.py`，比较 unassigned、low-confidence、conflict 和社区体量变化。",
-        "5. P1：规则稳定后再考虑 LLM/人工仲裁低置信度样本。",
+    ])
+    lines.extend(nextStepLines)
+    lines.extend([
         "",
         "## 暂不进入 Phase 4",
         "",

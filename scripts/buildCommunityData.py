@@ -65,9 +65,9 @@ communitySpecs = [
         "title": "临床亚型与人群分层",
         "definition": "围绕 AChR、MuSK、LRP4、血清阴性、眼肌型、儿童、老年、胸腺相关等 MG 亚型和人群分层。",
         "boundary": "单纯病例描述只有在提示特定亚型路径、诊断或治疗问题时进入核心。",
-        "strongTerms": ["achr", "acetylcholine receptor", "musk", "lrp4", "seronegative", "ocular myasthenia", "juvenile", "pediatric", "paediatric", "thymoma", "thymectomy"],
-        "terms": ["late-onset", "early-onset", "elderly", "very-late-onset", "anti-titin", "antibody-positive", "antibody negative", "childhood"],
-        "weakTerms": ["subtype", "phenotype", "stratification"],
+        "strongTerms": ["musk", "lrp4", "seronegative", "ocular myasthenia", "juvenile", "pediatric", "paediatric", "thymoma", "thymectomy"],
+        "terms": ["achr", "acetylcholine receptor", "late-onset", "early-onset", "elderly", "very-late-onset", "anti-titin", "antibody-positive", "antibody negative", "childhood"],
+        "weakTerms": ["subtype", "phenotype", "stratification", "population"],
         "representativeNodes": ["achrPositive", "muskPositive", "lrp4Positive", "seronegativeMg", "ocularMg", "juvenileMg"],
         "facets": ["population", "diagnosis", "treatmentPosition"],
         "mslUseCases": ["专家拜访前准备", "分层治疗讨论", "特殊人群证据检索"],
@@ -283,6 +283,106 @@ def termHit(text: str, term: str) -> bool:
     return re.search(rf"\b{re.escape(term)}\b", text, re.I) is not None
 
 
+fcrnSpecificTerms = {
+    "fcrn", "efgartigimod", "vyvgart", "rozanolixizumab", "nipocalimab",
+    "batoclimab", "neonatal fc receptor", "argx-113",
+}
+complementSpecificTerms = {
+    "complement", "c5 inhibitor", "eculizumab", "ravulizumab", "zilucoplan",
+    "cemdisiran", "terminal complement", "c5 inhibition",
+}
+comparisonFrameworkTerms = {
+    "network meta", "network meta-analysis", "nma", "indirect comparison",
+    "comparative efficacy", "compared with", "head-to-head",
+}
+comparisonGeneralTerms = {"versus", " vs ", "comparison", "comparative", "rank", "ranking"}
+clinicalBroadPopulationTerms = {"achr", "acetylcholine receptor", "antibody-positive"}
+clinicalIntentTerms = {
+    "subtype", "subtypes", "phenotype", "phenotypes", "stratification",
+    "classification", "spectrum", "predictor", "predictors", "predictive",
+    "seronegative", "ocular", "juvenile", "pediatric", "paediatric",
+    "childhood", "elderly", "late-onset", "early-onset", "very-late-onset",
+    "thymoma", "thymectomy", "anti-titin", "musk", "lrp4",
+}
+
+
+def hitTerms(text: str, terms: set[str]) -> list[str]:
+    return sorted(term for term in terms if termHit(text, term))
+
+
+def titleHitTerms(title: str, terms: set[str]) -> list[str]:
+    return sorted(term for term in terms if termHit(title, term))
+
+
+def productHits(text: str) -> set[str]:
+    hits = set()
+    for drug, terms in drugTermMap.items():
+        if any(termHit(text, term) for term in terms):
+            hits.add(drug)
+    return hits
+
+
+def hasClinicalSubtypeIntent(text: str, title: str, hits: list[str]) -> bool:
+    if any(termHit(title, term) for term in clinicalIntentTerms):
+        return True
+    if any(termHit(text, term) for term in clinicalIntentTerms):
+        return True
+    return any(term not in clinicalBroadPopulationTerms for term in hits)
+
+
+def calibrateCommunityScore(article: dict, spec: dict, score: float, hits: list[str]) -> float:
+    """根据医学事务语义做可解释校准，避免宽泛关键词压过高特异治疗/比较信号。"""
+    if not score:
+        return score
+    specId = spec["id"]
+    text = articleText(article)
+    title = titleText(article)
+    products = productHits(text)
+    fcrnHits = hitTerms(text, fcrnSpecificTerms)
+    complementHits = hitTerms(text, complementSpecificTerms)
+    titleFcrnHits = titleHitTerms(title, fcrnSpecificTerms)
+    titleComplementHits = titleHitTerms(title, complementSpecificTerms)
+
+    if specId == "fcrnTargetedTherapy" and fcrnHits:
+        score += 5 + min(len(fcrnHits), 3) * 1.5
+        if titleFcrnHits:
+            score += 3
+
+    if specId == "complementAndNovelTargets" and complementHits:
+        score += 5 + min(len(complementHits), 3) * 1.5
+        if titleComplementHits:
+            score += 3
+
+    if specId == "competitiveLandscapeIndirectComparison":
+        frameworkHits = hitTerms(text, comparisonFrameworkTerms)
+        generalHits = hitTerms(text, comparisonGeneralTerms)
+        titleFrameworkHits = titleHitTerms(title, comparisonFrameworkTerms)
+        titleGeneralHits = titleHitTerms(title, comparisonGeneralTerms)
+        if frameworkHits:
+            score += 8 + min(len(frameworkHits), 2) * 2
+            if titleFrameworkHits:
+                score += 3
+        elif len(products) >= 2 and generalHits:
+            score += 7 + min(len(products), 3)
+            if titleGeneralHits:
+                score += 2
+        elif len(products) >= 2 and ("meta-analysis" in text or "systematic review" in text):
+            score += 4
+
+    if specId == "clinicalSubtypesStratification":
+        specificTherapyHit = bool(fcrnHits or complementHits)
+        hasIntent = hasClinicalSubtypeIntent(text, title, hits)
+        broadOnly = bool(hits) and all(term in clinicalBroadPopulationTerms for term in hits)
+        if broadOnly and specificTherapyHit:
+            score *= 0.35
+        elif broadOnly and not hasIntent:
+            score *= 0.5
+        elif specificTherapyHit and not hasIntent:
+            score *= 0.65
+
+    return score
+
+
 def scoreCommunity(article: dict, spec: dict) -> tuple[float, list[str]]:
     text = articleText(article)
     title = titleText(article)
@@ -306,6 +406,7 @@ def scoreCommunity(article: dict, spec: dict) -> tuple[float, list[str]]:
             hits.append(term)
     if article.get("evidence_level") in {"I", "II", "III"} and hits:
         score += 0.8
+    score = calibrateCommunityScore(article, spec, score, sorted(set(hits)))
     return score, sorted(set(hits))
 
 
@@ -420,8 +521,8 @@ def articleSortKey(article: dict):
 def buildTaxonomy(generatedAt: str) -> dict:
     return {
         "generated_at": generatedAt,
-        "version": "2026.06-v4a-rule-baseline",
-        "method": "ruleBasedBaseline",
+        "version": "2026.06-v4b-quality-tuned",
+        "method": "ruleBasedQualityTuned",
         "source_note": "医学事务社区 taxonomy 初版，基于 v4.0 规划和规则关键词；后续由候选社区、LLM 仲裁和人工 review 迭代。",
         "principles": [
             "全 MG PubMed full 为 source of truth；efgar-wiki 只作为策展样板和覆盖校验。",
@@ -497,8 +598,8 @@ def buildCards(articles: list[dict], assignmentsByPmid: dict, latest: datetime, 
     cards.sort(key=lambda item: (-item["recent_14d_count"], -item["high_evidence_count"], -item["article_count"]))
     return {
         "generated_at": generatedAt,
-        "version": "2026.06-v4a-rule-baseline",
-        "method": "ruleBasedBaseline",
+        "version": "2026.06-v4b-quality-tuned",
+        "method": "ruleBasedQualityTuned",
         "cards": cards,
     }
 
@@ -550,7 +651,7 @@ def buildWeekly(articles: list[dict], assignmentsByPmid: dict, latest: datetime,
         "generated_at": generatedAt,
         "window_start": windowStart.strftime("%Y-%m-%d"),
         "window_end": latest.strftime("%Y-%m-%d"),
-        "method": "ruleBasedBaseline",
+        "method": "ruleBasedQualityTuned",
         "recent_article_count": len(recentArticles),
         "unassigned_recent_count": len(groupedRecent.get("unassigned", [])),
         "communities": communityRows,
@@ -586,7 +687,7 @@ def buildAudit(articles: list[dict], assignments: list[dict], assignmentsByPmid:
     reviewItems = buildReviewQueue(recentUnassigned, lowConfidence, conflicts, articleByPmid)
     audit = {
         "generated_at": generatedAt,
-        "method": "ruleBasedBaseline",
+        "method": "ruleBasedQualityTuned",
         "summary": {
             "total_articles": len(articles),
             "assigned_articles": len(assignments) - len(unassigned),
@@ -706,7 +807,7 @@ def buildCandidates(cardsPayload: dict, auditPayload: dict, generatedAt: str) ->
         })
     return {
         "generated_at": generatedAt,
-        "method": "ruleBasedBaseline",
+        "method": "ruleBasedQualityTuned",
         "candidates": candidates,
     }
 
@@ -838,8 +939,8 @@ def buildAssignmentOutputs(assignments: list[dict], articles: list[dict], source
         })
         shardPayloads.append((communityId, {
             "generated_at": generatedAt,
-            "version": "2026.06-v4a-rule-baseline",
-            "method": "ruleBasedBaseline",
+            "version": "2026.06-v4b-quality-tuned",
+            "method": "ruleBasedQualityTuned",
             "community_id": communityId,
             "item_count": len(items),
             "items": items,
@@ -847,8 +948,8 @@ def buildAssignmentOutputs(assignments: list[dict], articles: list[dict], source
 
     indexPayload = {
         "generated_at": generatedAt,
-        "version": "2026.06-v4a-rule-baseline",
-        "method": "ruleBasedBaseline",
+        "version": "2026.06-v4b-quality-tuned",
+        "method": "ruleBasedQualityTuned",
         "source_mode": sourceMode,
         "source_file": sourceFile,
         "item_count": len(assignments),
@@ -872,8 +973,8 @@ def buildAssignmentOutputs(assignments: list[dict], articles: list[dict], source
     }
     recentPayload = {
         "generated_at": generatedAt,
-        "version": "2026.06-v4a-rule-baseline",
-        "method": "ruleBasedBaseline",
+        "version": "2026.06-v4b-quality-tuned",
+        "method": "ruleBasedQualityTuned",
         "source_mode": sourceMode,
         "source_file": sourceFile,
         "window_days": 365,
