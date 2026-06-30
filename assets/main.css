@@ -345,6 +345,396 @@ body {
   font-size: 0.9rem;
 }
 
+/* ── 会议资讯 ── */
+.conference-topline {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  gap: 1rem; margin-bottom: 1rem;
+}
+.conference-topline h2 {
+  font-size: 1.25rem; font-weight: 600;
+}
+.conference-dashboard {
+  display: grid; grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 1rem; align-items: start;
+}
+.conference-main,
+.conference-side {
+  min-width: 0; display: flex; flex-direction: column; gap: 1rem;
+}
+.conference-panel {
+  background: var(--bg2); border: 1px solid var(--bg3);
+  border-radius: 8px; padding: 1rem;
+}
+.conference-panel h3 {
+  font-size: 0.95rem; margin-bottom: 0.75rem;
+}
+.conference-stat-grid {
+  display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+.conference-stat-card {
+  border: 1px solid var(--bg3); background: var(--bg2);
+  border-radius: 8px; padding: 0.82rem 0.9rem;
+}
+.conference-stat-card span {
+  display: block; color: var(--fg3); font-size: 0.74rem;
+}
+.conference-stat-card strong {
+  display: block; color: var(--fg); font-size: 1.35rem;
+  line-height: 1.2; margin-top: 0.12rem;
+}
+.conference-stat-card em {
+  display: block; color: var(--fg3); font-size: 0.7rem;
+  font-style: normal; margin-top: 0.16rem;
+}
+.conference-analysis-grid {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+.conference-rank {
+  display: flex; flex-direction: column; gap: 0.42rem;
+}
+.conference-rank-row {
+  display: grid; grid-template-columns: minmax(80px, 0.78fr) minmax(90px, 1fr) 36px;
+  gap: 0.45rem; align-items: center;
+  color: var(--fg2); font-size: 0.78rem;
+}
+.conference-rank-row span {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.conference-rank-track {
+  height: 7px; border-radius: 999px; background: var(--bg);
+  border: 1px solid var(--bg3); overflow: hidden;
+}
+.conference-rank-track i {
+  display: block; height: 100%; width: var(--rank-width, 0%);
+  background: rgba(37,99,235,0.42);
+}
+.conference-rank-row strong {
+  color: var(--fg); text-align: right; font-size: 0.76rem;
+}
+.conference-toggle {
+  margin-top: 0.45rem;
+}
+.conference-late-list,
+.conference-future-list,
+.conference-source-list {
+  display: flex; flex-direction: column; gap: 0.55rem;
+}
+.conference-mini-card {
+  border: 1px solid var(--bg3); background: var(--bg);
+  border-radius: 8px; padding: 0.72rem;
+}
+.conference-mini-card strong {
+  display: block; color: var(--fg); font-size: 0.86rem; line-height: 1.35;
+}
+.conference-mini-card span,
+.conference-mini-card p,
+.conference-mini-card em {
+  display: block; color: var(--fg3); font-size: 0.74rem;
+  font-style: normal; line-height: 1.45; margin-top: 0.16rem;
+}
+.conference-mini-card a {
+  display: inline-block; color: var(--accent); text-decoration: none;
+  font-size: 0.76rem; margin-top: 0.35rem;
+}
+.conference-mini-card a:hover { text-decoration: underline; }
+.conference-source-status {
+  display: inline-flex; align-items: center;
+  width: fit-content; border: 1px solid rgba(37,99,235,0.18);
+  background: rgba(37,99,235,0.07); color: var(--accent);
+  border-radius: 4px; padding: 0.08rem 0.38rem;
+  font-size: 0.68rem; margin-bottom: 0.22rem;
+}
+.conference-source-status.warn {
+  color: var(--yellow); border-color: rgba(202,138,4,0.24);
+  background: rgba(202,138,4,0.08);
+}
+.conference-card {
+  border: 1px solid var(--bg3); background: var(--bg2);
+  border-radius: 8px; padding: 1rem;
+}
+.conference-card + .conference-card { margin-top: 0.65rem; }
+.conference-card-head {
+  display: flex; flex-wrap: wrap; gap: 0.35rem;
+  align-items: center; margin-bottom: 0.45rem;
+}
+.conference-card-title {
+  display: block; color: var(--accent); text-decoration: none;
+  font-size: 0.96rem; font-weight: 600; line-height: 1.42;
+}
+.conference-card-title:hover { text-decoration: underline; }
+.conference-card-meta {
+  color: var(--fg3); font-size: 0.76rem; margin-top: 0.28rem;
+}
+.conference-card-analysis {
+  margin-top: 0.55rem; color: var(--fg2);
+  font-size: 0.8rem; line-height: 1.55;
+}
+.conference-badge {
+  display: inline-flex; align-items: center;
+  border: 1px solid var(--bg3); background: var(--bg);
+  border-radius: 4px; padding: 0.1rem 0.42rem;
+  color: var(--fg2); font-size: 0.7rem;
+}
+.conference-badge.highlight {
+  color: #0f766e; background: rgba(15,118,110,0.08);
+  border-color: rgba(15,118,110,0.2);
+}
+.conference-badge.late {
+  color: var(--red); background: rgba(220,38,38,0.07);
+  border-color: rgba(220,38,38,0.2);
+}
+.conference-badge.china {
+  color: var(--green); background: rgba(22,163,74,0.08);
+  border-color: rgba(22,163,74,0.2);
+}
+.conference-abstract {
+  display: none; margin-top: 0.65rem;
+  border-top: 1px dashed var(--bg3); padding-top: 0.65rem;
+  color: var(--fg2); font-size: 0.82rem; line-height: 1.6;
+}
+.conference-abstract.open { display: block; }
+.conference-card-actions {
+  display: flex; flex-wrap: wrap; gap: 0.45rem;
+  margin-top: 0.7rem; align-items: center;
+}
+.conference-card-actions button,
+.conference-card-actions a {
+  border: 1px solid var(--bg3); background: var(--bg);
+  color: var(--fg2); border-radius: 6px; padding: 0.32rem 0.58rem;
+  font: inherit; font-size: 0.76rem; text-decoration: none; cursor: pointer;
+}
+.conference-card-actions button:hover,
+.conference-card-actions a:hover {
+  color: var(--accent); border-color: rgba(37,99,235,0.28);
+  background: rgba(37,99,235,0.06);
+}
+.conference-result-list .pagination {
+  margin-top: 1rem;
+}
+
+.conference-meeting-grid {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.85rem; margin-bottom: 1rem;
+}
+.conference-meeting-card {
+  height: 178px; text-align: left; cursor: pointer;
+  border: 1px solid var(--bg3); background: var(--bg2);
+  border-radius: 8px; padding: 0.9rem;
+  display: flex; flex-direction: column; gap: 0.48rem;
+  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.conference-meeting-card:hover,
+.conference-meeting-card.active {
+  border-color: rgba(37,99,235,0.32);
+  box-shadow: 0 8px 24px rgba(15,23,42,0.06);
+  background: #fbfdff;
+}
+.conference-meeting-status {
+  align-self: flex-start; border-radius: 4px;
+  padding: 0.12rem 0.42rem; font-size: 0.68rem;
+  border: 1px solid rgba(15,118,110,0.2);
+  background: rgba(15,118,110,0.07); color: #0f766e;
+}
+.conference-meeting-status.watch {
+  color: var(--yellow); border-color: rgba(202,138,4,0.26);
+  background: rgba(202,138,4,0.08);
+}
+.conference-meeting-card strong {
+  display: flex; align-items: baseline; gap: 0.38rem;
+  color: var(--fg); font-size: 1.1rem; line-height: 1.2;
+}
+.conference-meeting-card strong em {
+  color: var(--fg3); font-size: 0.74rem; font-style: normal;
+}
+.conference-meeting-card p {
+  color: var(--fg3); font-size: 0.77rem; line-height: 1.42;
+  min-height: 2.1em;
+}
+.conference-meeting-metrics {
+  margin-top: auto; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+.conference-meeting-metrics span {
+  border: 1px solid var(--bg3); background: var(--bg);
+  border-radius: 6px; padding: 0.38rem;
+  color: var(--fg3); font-size: 0.68rem;
+}
+.conference-meeting-metrics b {
+  display: block; color: var(--fg); font-size: 0.82rem; line-height: 1.1;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.conference-workspace {
+  display: grid; grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 1rem; align-items: start;
+}
+.conference-work-main,
+.conference-right-rail {
+  min-width: 0; display: flex; flex-direction: column; gap: 1rem;
+}
+.conference-brief,
+.conference-map-panel,
+.conference-late-focus,
+.conference-highlight-section,
+.conference-drilldown,
+.conference-side-panel {
+  background: var(--bg2); border: 1px solid var(--bg3);
+  border-radius: 8px; padding: 1rem;
+}
+.conference-brief-head {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  gap: 1rem; margin-bottom: 0.9rem;
+}
+.conference-brief-head h2 {
+  font-size: 1.22rem; line-height: 1.25; margin-bottom: 0.24rem;
+}
+.conference-brief-head p {
+  color: var(--fg2); font-size: 0.84rem; line-height: 1.6;
+  max-width: 76ch;
+}
+.conference-kpi-grid {
+  display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+.conference-kpi-card {
+  border: 1px solid var(--bg3); background: var(--bg);
+  border-radius: 8px; padding: 0.72rem;
+  min-height: 82px;
+}
+.conference-kpi-card span,
+.conference-kpi-card em {
+  display: block; color: var(--fg3); font-size: 0.7rem;
+  font-style: normal; line-height: 1.35;
+}
+.conference-kpi-card strong {
+  display: block; color: var(--fg); font-size: 1.18rem;
+  line-height: 1.2; margin: 0.14rem 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.conference-map-grid {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+.conference-topic-board,
+.conference-drug-board {
+  display: flex; flex-wrap: wrap; gap: 0.38rem;
+}
+.conference-drug-board {
+  border-top: 1px dashed var(--bg3);
+  margin-top: 0.72rem; padding-top: 0.72rem;
+}
+.conference-topic-pill,
+.conference-drug-chip {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  border: 1px solid var(--bg3); background: var(--bg);
+  color: var(--fg2); border-radius: 6px;
+  padding: 0.28rem 0.48rem; font-size: 0.74rem;
+}
+.conference-topic-pill {
+  cursor: pointer; font: inherit;
+}
+.conference-topic-pill.active {
+  color: var(--accent); border-color: rgba(37,99,235,0.28);
+  background: rgba(37,99,235,0.06);
+}
+.conference-topic-pill b,
+.conference-drug-chip b {
+  color: var(--fg3); font-size: 0.68rem;
+}
+.conference-late-grid {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+.conference-late-grid.compact {
+  margin-top: 0.75rem;
+}
+.conference-late-card {
+  border: 1px solid rgba(220,38,38,0.18);
+  background: rgba(220,38,38,0.035);
+  border-radius: 8px; padding: 0.82rem;
+}
+.conference-late-card span,
+.conference-late-card p,
+.conference-late-card em {
+  display: block; color: var(--fg3); font-size: 0.74rem;
+  font-style: normal; line-height: 1.45; margin-top: 0.18rem;
+}
+.conference-late-card strong {
+  display: block; color: var(--fg); font-size: 0.92rem; line-height: 1.35;
+}
+.conference-late-card a {
+  display: inline-block; margin-top: 0.42rem;
+  color: var(--accent); text-decoration: none; font-size: 0.76rem;
+}
+.conference-highlight-grid {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+.conference-highlight-card {
+  border: 1px solid var(--bg3); border-radius: 8px;
+  background: var(--bg); padding: 0.88rem;
+  min-height: 188px;
+}
+.conference-highlight-label {
+  display: inline-flex; color: #0f766e; background: rgba(15,118,110,0.08);
+  border: 1px solid rgba(15,118,110,0.18);
+  border-radius: 4px; padding: 0.08rem 0.36rem; font-size: 0.68rem;
+  margin-bottom: 0.4rem;
+}
+.conference-highlight-card a {
+  display: block; color: var(--accent); text-decoration: none;
+  font-weight: 600; font-size: 0.88rem; line-height: 1.42;
+}
+.conference-highlight-card a:hover { text-decoration: underline; }
+.conference-highlight-card p {
+  color: var(--fg2); font-size: 0.76rem; line-height: 1.5;
+  margin: 0.45rem 0 0.5rem;
+}
+.conference-filter-row {
+  display: grid; grid-template-columns: minmax(180px, 1fr) 170px 170px auto;
+  gap: 0.55rem; align-items: center; margin-bottom: 0.8rem;
+}
+.conference-result-table {
+  display: flex; flex-direction: column; gap: 0.55rem;
+}
+.conference-result-row {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(150px, 0.4fr) auto;
+  gap: 0.75rem; align-items: start;
+  border: 1px solid var(--bg3); border-radius: 8px;
+  background: var(--bg); padding: 0.75rem;
+}
+.conference-result-row p {
+  color: var(--fg3); font-size: 0.72rem; line-height: 1.45;
+  margin-top: 0.2rem;
+}
+.conference-result-row button {
+  border: 1px solid var(--bg3); background: var(--bg2);
+  color: var(--fg2); border-radius: 6px; padding: 0.3rem 0.5rem;
+  font: inherit; font-size: 0.74rem; cursor: pointer;
+}
+.conference-result-tags {
+  display: flex; flex-wrap: wrap; gap: 0.3rem; justify-content: flex-start;
+}
+.conference-empty-line,
+.conference-empty-focus {
+  color: var(--fg3); font-size: 0.8rem; line-height: 1.55;
+}
+.conference-empty-focus {
+  border: 1px dashed var(--bg3); border-radius: 8px;
+  background: var(--bg); padding: 0.9rem;
+}
+.conference-empty-focus strong {
+  display: block; color: var(--fg); margin-bottom: 0.18rem;
+}
+.conference-empty-focus.wide {
+  grid-column: 1 / -1;
+}
+.conference-future-list,
+.conference-source-list {
+  max-height: 300px; overflow-y: auto; padding-right: 0.2rem;
+}
+
 /* ── 工作流页面通用组件 ── */
 .workbench-grid {
   display: grid; grid-template-columns: 250px minmax(280px, 0.85fr) minmax(360px, 1.15fr);
@@ -2069,6 +2459,14 @@ body {
   .landscape-change-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .dashboard-section-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .dashboard-community-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .conference-dashboard { grid-template-columns: 1fr; }
+  .conference-side { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .conference-analysis-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .conference-meeting-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .conference-workspace { grid-template-columns: 1fr; }
+  .conference-right-rail { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .conference-map-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .conference-kpi-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 @media (max-width: 800px) {
   .content-layout { flex-direction: column; }
@@ -2113,8 +2511,23 @@ body {
   .module-list.compact { max-height: none; grid-template-columns: 1fr; }
   .msl-brief-panel { min-height: 0; }
   .msl-brief-output { min-height: 0; }
+  .conference-topline { flex-direction: column; }
+  .conference-stat-grid, .conference-analysis-grid, .conference-side { grid-template-columns: 1fr; }
+  .conference-rank-row { grid-template-columns: minmax(70px, 0.8fr) minmax(80px, 1fr) 34px; }
+  .conference-meeting-grid,
+  .conference-map-grid,
+  .conference-highlight-grid,
+  .conference-late-grid,
+  .conference-right-rail,
+  .conference-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+  .conference-meeting-card { height: auto; min-height: 164px; }
+  .conference-brief-head { flex-direction: column; }
+  .conference-filter-row { grid-template-columns: 1fr; }
+  .conference-result-row { grid-template-columns: 1fr; }
 }
 @media (max-width: 520px) {
-  .dashboard-stats, .dashboard-section-grid, .dashboard-community-list { grid-template-columns: 1fr; }
+  .dashboard-stats, .dashboard-section-grid, .dashboard-community-list, .conference-stat-grid { grid-template-columns: 1fr; }
   .dashboard-section-card { min-height: 0; }
 }

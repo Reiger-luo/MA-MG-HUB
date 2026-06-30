@@ -16,6 +16,7 @@ data/archive/
 *.env
 data/.llm_cache/
 data/.llm_cost.log
+data/.conference_cache/
 
 # 内部/敏感业务数据不入公开仓库
 data/experts-core.json
