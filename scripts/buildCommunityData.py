@@ -34,6 +34,8 @@ reviewQueuePath = dataDir / "communityReviewQueue.json"
 
 levelScore = {"I": 7, "II": 6, "III": 4, "IV": 3, "V": 2, "VI": 1}
 levelRank = {"I": 1, "II": 2, "III": 3, "IV": 4, "V": 5, "VI": 6}
+semanticVersion = "2026.06-v4c-llm-reviewed"
+semanticMethod = "ruleBasedLlmReviewed"
 
 communitySpecs = [
     {
@@ -78,8 +80,8 @@ communitySpecs = [
         "definition": "围绕 MG-ADL、QMG、MSE、生活质量、复发、危象、激素减量和疾病负担的证据社区。",
         "boundary": "只报告一般症状但没有清晰结局指标或负担指标的文献不作为核心。",
         "strongTerms": ["mg-adl", "qmg", "minimal symptom expression", "mse", "quality of life", "qol", "steroid-sparing", "prednisone"],
-        "terms": ["fatigue", "burden", "remission", "relapse", "exacerbation", "myasthenic crisis", "mg-qol", "eq-5d", "health utility"],
-        "weakTerms": ["outcome", "response", "improvement", "severity"],
+        "terms": ["fatigue", "burden", "remission", "relapse", "exacerbation", "myasthenic crisis", "mg-qol", "eq-5d", "health utility", "comparative efficacy", "long-term effect"],
+        "weakTerms": ["outcome", "response", "improvement", "severity", "efficacy"],
         "representativeNodes": ["efficacyOutcome", "safetyOutcome", "myasthenicCrisis", "steroidSparing"],
         "facets": ["outcome", "patientValue", "endpoint"],
         "mslUseCases": ["疗效证据解读", "材料更新", "患者价值沟通"],
@@ -90,7 +92,7 @@ communitySpecs = [
         "definition": "围绕 AE、感染、IgG、免疫原性、疫苗、妊娠、停药、换药和长期管理。",
         "boundary": "不把疗效主文献中的轻度 AE 提及自动升级为安全性核心证据。",
         "strongTerms": ["safety", "adverse", "infection", "tolerability", "hypogammaglobulinemia", "immunogenicity", "meningococcal"],
-        "terms": ["vaccine", "vaccination", "igg", "headache", "pregnancy", "lactation", "discontinuation", "switching", "toxicity"],
+        "terms": ["vaccine", "vaccination", "igg", "headache", "pregnancy", "lactation", "discontinuation", "switching", "toxicity", "immune checkpoint inhibitor", "triple-m", "triple m", "mycophenolate", "mycophenolate mofetil"],
         "weakTerms": ["risk", "monitoring", "long-term"],
         "representativeNodes": ["safetyOutcome", "fcrnInhibition", "complementInhibition"],
         "facets": ["safety", "monitoring", "longTerm"],
@@ -126,7 +128,7 @@ communitySpecs = [
         "definition": "围绕真实世界、注册队列、治疗路径、依从性、医疗资源和临床实践差异。",
         "boundary": "China 作为 geo facet，不自动把所有中国文献归入本社区；需要 RWE 或路径问题。",
         "strongTerms": ["real-world", "real world", "registry", "cohort", "observational", "retrospective", "treatment pattern", "clinical practice"],
-        "terms": ["claims", "adherence", "resource utilization", "hospitalization", "pathway", "standard of care", "prospective cohort"],
+        "terms": ["claims", "adherence", "resource utilization", "healthcare resource utilization", "hcru", "hospitalization", "pathway", "standard of care", "prospective cohort", "survey", "treatment characteristics", "current management", "single center experience"],
         "weakTerms": ["multicenter", "single-center", "follow-up"],
         "representativeNodes": ["realWorldEvidence", "chinaEvidence", "generalizedMg"],
         "facets": ["rwe", "clinicalPathway", "geo"],
@@ -138,7 +140,7 @@ communitySpecs = [
         "definition": "围绕指南、共识、推荐、偏好、支付、成本效果、准入和价值证据。",
         "boundary": "价值和准入证据不能混同为疗效结论。",
         "strongTerms": ["guideline", "consensus", "recommendation", "health economic", "cost-effectiveness", "willingness-to-pay", "preference"],
-        "terms": ["access", "reimbursement", "insurance", "value", "health utility", "resource utilization", "cost", "economic"],
+        "terms": ["access", "reimbursement", "insurance", "value", "multi-criteria", "mcda", "eligibility", "treatment program", "health utility", "resource utilization", "cost", "economic"],
         "weakTerms": ["policy", "standardization"],
         "representativeNodes": ["guidelineEvidence", "realWorldEvidence"],
         "facets": ["guideline", "heor", "access", "patientValue"],
@@ -287,15 +289,65 @@ fcrnSpecificTerms = {
     "fcrn", "efgartigimod", "vyvgart", "rozanolixizumab", "nipocalimab",
     "batoclimab", "neonatal fc receptor", "argx-113",
 }
+fcrnProductTerms = {
+    "efgartigimod", "vyvgart", "rozanolixizumab", "nipocalimab",
+    "batoclimab", "argx-113",
+}
 complementSpecificTerms = {
     "complement", "c5 inhibitor", "eculizumab", "ravulizumab", "zilucoplan",
     "cemdisiran", "terminal complement", "c5 inhibition",
+}
+complementProductTerms = {
+    "eculizumab", "ravulizumab", "zilucoplan", "cemdisiran",
 }
 comparisonFrameworkTerms = {
     "network meta", "network meta-analysis", "nma", "indirect comparison",
     "comparative efficacy", "compared with", "head-to-head",
 }
 comparisonGeneralTerms = {"versus", " vs ", "comparison", "comparative", "rank", "ranking"}
+targetedComparatorTerms = {
+    "intravenous immunoglobulin", "ivig", "rituximab", "monoclonal antibodies",
+    "biologics", "complement inhibitors", "fcrn blockers", "novel biologics",
+}
+productEvidenceTerms = {
+    "effectiveness", "efficacy", "safety", "response", "responses", "responder",
+    "disease control", "clinical benefit", "steroid-sparing", "case series",
+    "case report", "real-world", "real world", "meta-analysis", "phase 3",
+    "trial", "randomized", "randomised", "extension", "predictor", "predictors",
+    "therapeutic response", "rescue", "fast-acting", "observations under",
+}
+heorAccessTerms = {
+    "cost", "cost-effectiveness", "economic", "health economic", "mcda",
+    "multi-criteria", "value contribution", "value", "reimbursement", "access",
+    "insurance", "willingness-to-pay", "health utility", "eligibility",
+    "treatment program",
+}
+rweProtectionTerms = {
+    "claims", "healthcare resource utilization", "resource utilization", "hcru",
+    "treatment characteristics", "treatment pattern", "treatment patterns",
+    "treatment utilization", "current management", "management and treatment",
+    "clinical practice", "survey", "early versus late", "early vs late",
+    "add-on therapy", "insufficient immunosuppressive treatment",
+    "single center experience", "new therapies",
+}
+nonCompetitiveComparisonTerms = {
+    "healthy controls", "healthy control", "versus healthy", "vs healthy",
+    "thymectomy", "video-assisted", "thoracoscopic", "transsternal",
+    "sternotomy", "robot-assisted", "robot assisted", "vats", "rats",
+    "surgery", "surgical", "plasma exchange", "daily versus alternate day",
+}
+safetySignalTerms = {
+    "immune checkpoint inhibitor", "immune checkpoint inhibitors", "ici",
+    "durvalumab", "olaparib", "triple m", "triple-m", "myositis",
+    "myocarditis", "overlap syndrome", "faers", "pharmacovigilance",
+    "mycophenolate mofetil", "mycophenolate", "immunosuppression",
+    "cryptococcus", "cryptococcal", "opportunistic infection",
+}
+broadTherapyReviewTerms = {
+    "therapeutic approaches", "novel therapeutic approaches",
+    "targeting autoimmunity", "conventional to novel", "management of dysphagia",
+    "pharmacological and speech-language pathology management", "new therapies",
+}
 clinicalBroadPopulationTerms = {"achr", "acetylcholine receptor", "antibody-positive"}
 clinicalIntentTerms = {
     "subtype", "subtypes", "phenotype", "phenotypes", "stratification",
@@ -330,6 +382,59 @@ def hasClinicalSubtypeIntent(text: str, title: str, hits: list[str]) -> bool:
     return any(term not in clinicalBroadPopulationTerms for term in hits)
 
 
+def hasAnyTerm(text: str, terms: set[str]) -> bool:
+    return any(termHit(text, term) for term in terms)
+
+
+def hasHeorAccessIntent(title: str, text: str) -> bool:
+    return hasAnyTerm(title, heorAccessTerms) or hasAnyTerm(text, {
+        "cost-effectiveness", "health economic", "mcda", "multi-criteria",
+        "reimbursement", "willingness-to-pay", "treatment program",
+    })
+
+
+def hasRweProtectionIntent(title: str, text: str) -> bool:
+    return hasAnyTerm(title, rweProtectionTerms) or hasAnyTerm(text, {
+        "claims database", "healthcare resource utilization", "hcru",
+        "treatment characteristics", "current management",
+    })
+
+
+def hasProductEvidenceIntent(title: str, text: str) -> bool:
+    return hasAnyTerm(title, productEvidenceTerms) or hasAnyTerm(text, {
+        "primary endpoint", "secondary endpoint", "clinical improvement",
+        "clinically meaningful", "minimal symptom expression",
+    })
+
+
+def hasBroadTherapyReviewIntent(title: str, text: str) -> bool:
+    return hasAnyTerm(title, broadTherapyReviewTerms) or (
+        "review" in text and hasAnyTerm(title, {"therapeutic", "management", "approaches"})
+    )
+
+
+def hasNonCompetitiveIntent(title: str, text: str) -> bool:
+    return hasAnyTerm(title, nonCompetitiveComparisonTerms) or hasAnyTerm(text, {
+        "versus healthy controls", "vs healthy controls", "surgical approach",
+        "surgical technique", "video-assisted thoracoscopic", "robot-assisted",
+    })
+
+
+def hasTargetedComparisonIntent(title: str, text: str, products: set[str]) -> bool:
+    if len(products) >= 2:
+        return True
+    if products and hasAnyTerm(title, targetedComparatorTerms) and hasAnyTerm(title, comparisonGeneralTerms):
+        return True
+    return hasAnyTerm(title, {"complement inhibitors and fcrn blockers", "novel biologics"})
+
+
+def hasMultiMechanismComparison(text: str, title: str, fcrnHits: list[str], complementHits: list[str]) -> bool:
+    if not (fcrnHits and complementHits):
+        return False
+    comparisonTerms = comparisonFrameworkTerms | comparisonGeneralTerms | {"meta-analysis", "systematic review"}
+    return hasAnyTerm(title, comparisonTerms) or hasAnyTerm(text, {"network meta-analysis", "meta-analysis"})
+
+
 def calibrateCommunityScore(article: dict, spec: dict, score: float, hits: list[str]) -> float:
     """根据医学事务语义做可解释校准，避免宽泛关键词压过高特异治疗/比较信号。"""
     if not score:
@@ -342,32 +447,81 @@ def calibrateCommunityScore(article: dict, spec: dict, score: float, hits: list[
     complementHits = hitTerms(text, complementSpecificTerms)
     titleFcrnHits = titleHitTerms(title, fcrnSpecificTerms)
     titleComplementHits = titleHitTerms(title, complementSpecificTerms)
+    titleFcrnProductHits = titleHitTerms(title, fcrnProductTerms)
+    titleComplementProductHits = titleHitTerms(title, complementProductTerms)
+    heorIntent = hasHeorAccessIntent(title, text)
+    rweProtectionIntent = hasRweProtectionIntent(title, text)
+    productEvidenceIntent = hasProductEvidenceIntent(title, text)
+    broadTherapyReviewIntent = hasBroadTherapyReviewIntent(title, text)
+    multiMechanismComparison = hasMultiMechanismComparison(text, title, fcrnHits, complementHits)
+    nonCompetitiveIntent = hasNonCompetitiveIntent(title, text)
+    targetedComparisonIntent = hasTargetedComparisonIntent(title, text, products)
 
     if specId == "fcrnTargetedTherapy" and fcrnHits:
         score += 5 + min(len(fcrnHits), 3) * 1.5
         if titleFcrnHits:
             score += 3
+        if titleFcrnProductHits and productEvidenceIntent and not (heorIntent or rweProtectionIntent or multiMechanismComparison):
+            score += 13
+        elif titleFcrnProductHits and not (heorIntent or rweProtectionIntent):
+            score += 4
+        if heorIntent:
+            score *= 0.55
+        elif rweProtectionIntent and not productEvidenceIntent:
+            score *= 0.65
+        if broadTherapyReviewIntent and not titleFcrnProductHits:
+            score *= 0.3
+        if titleComplementProductHits and hasAnyTerm(text, {"poor response to efgartigimod", "poor early response to efgartigimod", "after efgartigimod"}):
+            score *= 0.25
+        if multiMechanismComparison:
+            score *= 0.45
 
     if specId == "complementAndNovelTargets" and complementHits:
         score += 5 + min(len(complementHits), 3) * 1.5
         if titleComplementHits:
             score += 3
+        if titleComplementProductHits and productEvidenceIntent and not (heorIntent or rweProtectionIntent or multiMechanismComparison):
+            score += 13
+        elif titleComplementProductHits and not (heorIntent or rweProtectionIntent):
+            score += 4
+        if heorIntent:
+            score *= 0.6
+        elif rweProtectionIntent and not (titleComplementProductHits and productEvidenceIntent):
+            score *= 0.7
+        if broadTherapyReviewIntent and not titleComplementProductHits:
+            score *= 0.3
+        if titleComplementProductHits and hasAnyTerm(text, {"poor response to efgartigimod", "after efgartigimod"}):
+            score += 6
+        if multiMechanismComparison:
+            score *= 0.45
+        if nonCompetitiveIntent and not titleComplementProductHits:
+            score *= 0.35
 
     if specId == "competitiveLandscapeIndirectComparison":
         frameworkHits = hitTerms(text, comparisonFrameworkTerms)
         generalHits = hitTerms(text, comparisonGeneralTerms)
         titleFrameworkHits = titleHitTerms(title, comparisonFrameworkTerms)
         titleGeneralHits = titleHitTerms(title, comparisonGeneralTerms)
-        if frameworkHits:
+        if multiMechanismComparison:
+            score += 18
+        elif frameworkHits:
             score += 8 + min(len(frameworkHits), 2) * 2
             if titleFrameworkHits:
                 score += 3
-        elif len(products) >= 2 and generalHits:
+        elif targetedComparisonIntent and generalHits:
             score += 7 + min(len(products), 3)
             if titleGeneralHits:
                 score += 2
         elif len(products) >= 2 and ("meta-analysis" in text or "systematic review" in text):
             score += 4
+        elif generalHits and not products:
+            score *= 0.45
+        if nonCompetitiveIntent and not targetedComparisonIntent:
+            score *= 0.2
+        elif heorIntent and not targetedComparisonIntent:
+            score *= 0.35
+        if hasAnyTerm(title, {"plasma exchange", "daily versus alternate day"}) and not products:
+            score *= 0.1
 
     if specId == "clinicalSubtypesStratification":
         specificTherapyHit = bool(fcrnHits or complementHits)
@@ -379,6 +533,32 @@ def calibrateCommunityScore(article: dict, spec: dict, score: float, hits: list[
             score *= 0.5
         elif specificTherapyHit and not hasIntent:
             score *= 0.65
+
+    if specId == "efficacyBurdenOutcomes":
+        if hasAnyTerm(title, {"long-term effect", "comparative efficacy", "efficacy"}):
+            score += 4
+
+    if specId == "rweClinicalPathway":
+        if rweProtectionIntent:
+            score += 7
+        if nonCompetitiveIntent and hasAnyTerm(title, {"thymectomy", "surgery", "surgical", "thoracoscopic", "robot-assisted", "vats", "rats"}):
+            score += 6
+        if hasAnyTerm(title, {"real-world", "real world"}) and hasAnyTerm(title, {"cohort", "retrospective", "multicenter"}):
+            score += 3
+
+    if specId == "guidelineHeorAccess":
+        if heorIntent:
+            score += 9
+        if hasAnyTerm(title, {"cost", "economic", "mcda", "multi-criteria", "value contribution"}):
+            score += 4
+        if nonCompetitiveIntent and not hasAnyTerm(title, heorAccessTerms):
+            score *= 0.45
+
+    if specId == "safetyMedicationManagement":
+        if hasAnyTerm(title, safetySignalTerms):
+            score += 8
+        elif hasAnyTerm(text, safetySignalTerms):
+            score += 4
 
     return score
 
@@ -521,8 +701,8 @@ def articleSortKey(article: dict):
 def buildTaxonomy(generatedAt: str) -> dict:
     return {
         "generated_at": generatedAt,
-        "version": "2026.06-v4b-quality-tuned",
-        "method": "ruleBasedQualityTuned",
+        "version": semanticVersion,
+        "method": semanticMethod,
         "source_note": "医学事务社区 taxonomy 初版，基于 v4.0 规划和规则关键词；后续由候选社区、LLM 仲裁和人工 review 迭代。",
         "principles": [
             "全 MG PubMed full 为 source of truth；efgar-wiki 只作为策展样板和覆盖校验。",
@@ -598,8 +778,8 @@ def buildCards(articles: list[dict], assignmentsByPmid: dict, latest: datetime, 
     cards.sort(key=lambda item: (-item["recent_14d_count"], -item["high_evidence_count"], -item["article_count"]))
     return {
         "generated_at": generatedAt,
-        "version": "2026.06-v4b-quality-tuned",
-        "method": "ruleBasedQualityTuned",
+        "version": semanticVersion,
+        "method": semanticMethod,
         "cards": cards,
     }
 
@@ -651,7 +831,7 @@ def buildWeekly(articles: list[dict], assignmentsByPmid: dict, latest: datetime,
         "generated_at": generatedAt,
         "window_start": windowStart.strftime("%Y-%m-%d"),
         "window_end": latest.strftime("%Y-%m-%d"),
-        "method": "ruleBasedQualityTuned",
+        "method": semanticMethod,
         "recent_article_count": len(recentArticles),
         "unassigned_recent_count": len(groupedRecent.get("unassigned", [])),
         "communities": communityRows,
@@ -687,7 +867,7 @@ def buildAudit(articles: list[dict], assignments: list[dict], assignmentsByPmid:
     reviewItems = buildReviewQueue(recentUnassigned, lowConfidence, conflicts, articleByPmid)
     audit = {
         "generated_at": generatedAt,
-        "method": "ruleBasedQualityTuned",
+        "method": semanticMethod,
         "summary": {
             "total_articles": len(articles),
             "assigned_articles": len(assignments) - len(unassigned),
@@ -807,7 +987,7 @@ def buildCandidates(cardsPayload: dict, auditPayload: dict, generatedAt: str) ->
         })
     return {
         "generated_at": generatedAt,
-        "method": "ruleBasedQualityTuned",
+        "method": semanticMethod,
         "candidates": candidates,
     }
 
@@ -939,8 +1119,8 @@ def buildAssignmentOutputs(assignments: list[dict], articles: list[dict], source
         })
         shardPayloads.append((communityId, {
             "generated_at": generatedAt,
-            "version": "2026.06-v4b-quality-tuned",
-            "method": "ruleBasedQualityTuned",
+            "version": semanticVersion,
+            "method": semanticMethod,
             "community_id": communityId,
             "item_count": len(items),
             "items": items,
@@ -948,8 +1128,8 @@ def buildAssignmentOutputs(assignments: list[dict], articles: list[dict], source
 
     indexPayload = {
         "generated_at": generatedAt,
-        "version": "2026.06-v4b-quality-tuned",
-        "method": "ruleBasedQualityTuned",
+        "version": semanticVersion,
+        "method": semanticMethod,
         "source_mode": sourceMode,
         "source_file": sourceFile,
         "item_count": len(assignments),
@@ -973,8 +1153,8 @@ def buildAssignmentOutputs(assignments: list[dict], articles: list[dict], source
     }
     recentPayload = {
         "generated_at": generatedAt,
-        "version": "2026.06-v4b-quality-tuned",
-        "method": "ruleBasedQualityTuned",
+        "version": semanticVersion,
+        "method": semanticMethod,
         "source_mode": sourceMode,
         "source_file": sourceFile,
         "window_days": 365,

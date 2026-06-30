@@ -128,3 +128,29 @@
 3. 指标稳定后，再进入 Phase 4 动态诊治格局，让 LLM 基于社区变化生成月度洞察。
 
 因此，本报告建议：下一步不是继续增加前端展示，而是先把上述 P0 规则落实为 `scripts/buildCommunityData.py` 的可解释规则，并重建数据产物。
+
+## 7. v4c 落实结果
+
+2026-06-30 已将本报告的 P0 规则回写到 `scripts/buildCommunityData.py`，版本升级为 `2026.06-v4c-llm-reviewed`，方法标记为 `ruleBasedLlmReviewed`。
+
+本次回写覆盖：
+
+1. 产品主语义优先级：FcRn / complement 产品 title-level evidence 会优先进入对应治疗社区。
+2. HEOR/RWE 保护：claims、HCRU、MCDA、value、access、eligibility、treatment program 不再被产品词自动抢走。
+3. competitive 收窄：外科术式、健康对照、单纯 PLEX 剂量比较不再作为竞争格局 primary。
+4. 安全性增强：ICI Triple-M、FAERS、mycophenolate、opportunistic infection 等用药风险信号可进入安全性社区。
+
+重跑后的核心指标：
+
+| 指标 | v4b | v4c |
+| --- | ---: | ---: |
+| 已归类 | 8847 | 8931 |
+| 未归类 | 1788 | 1704 |
+| 低置信度 | 2771 | 2433 |
+| 冲突归类 | 2118 | 1995 |
+| 临床亚型与人群分层 | 2584 | 2379 |
+| 竞争格局与间接比较 | 631 | 453 |
+| 安全性与用药管理 | 846 | 1132 |
+| 真实世界证据与临床路径 | 671 | 945 |
+
+固定抽样回归中，38 个明确期望 primary 的样本已全部命中。剩余没有设为硬期望的样本保留为人工 review / unassigned 策略讨论对象。
