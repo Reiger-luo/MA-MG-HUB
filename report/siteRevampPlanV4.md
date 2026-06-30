@@ -402,6 +402,171 @@ full MG graph
 - 信号板从单篇排序升级为社区聚合
 - 中国情报改为 geo facet 叠加，而不是孤立页面逻辑
 
+#### 9.2.1 会议资讯：会后 MG 摘要情报分析
+
+会议资讯仍然放在情报中心内，名称保持“会议资讯”。它不是参会指南，不回答“去哪里开会、怎么参会、日程怎么安排”，而是在会议摘要公开后回答医学事务问题：
+
+1. 这次会议中 MG 领域发生了什么变化？
+2. 哪些摘要改变了治疗、诊断、患者旅程或竞争叙事的判断？
+3. 哪些 late-breaking / 重点会话需要会后第一时间复盘？
+4. 哪些国家、机构和 KOL 在 MG 领域更活跃？
+5. 哪些内容可以进入 MSL briefing、KOL 拜访问题、内部 slide 和后续证据追踪？
+
+核心定位：
+
+> 会议资讯 = 会议摘要公开后的 MG 医学事务情报复盘页。摘要是原料，结构化洞察和行动建议才是页面主体。
+
+收录边界：
+
+- 只收录 MG / myasthenia gravis / gMG / ocular MG / AChR MG / MuSK MG / LRP4 MG / myasthenic crisis 等 MG 相关内容。
+- LEMS、CMS、先天性肌无力综合征、泛神经肌肉疾病不作为独立收录对象。
+- 如果 LEMS/CMS 只是在 MG 主研究中作为背景或对照出现，可以保留该 MG 主研究，但标签和解读必须说明主语是 MG。
+- 所有自动判断必须保留摘要来源、会议来源、presentation type 和官网链接，不把摘要级信息包装成全文级结论。
+
+##### 9.2.1.1 信息架构
+
+会议资讯采用“总览页 + 单会议工作区”的结构，但仍在同一个情报中心 tab 内完成，不额外变成参会型 microsite。
+
+总览层：
+
+| 区块 | 目的 | 当前可复用内容 |
+|---|---|---|
+| 四会议固定模块 | 固定展示 MGFA、AANEM、AAN、EAN 的收录状态和摘要量 | `conferenceMeetingCards` |
+| 会后信号摘要 | 用 5-8 条信号概括本轮会议中 MG 领域变化 | `conferenceHighlights` 可升级 |
+| Late-breaking / 重点会话 | 会议后优先复盘 late-breaking、late abstract 和高影响 oral | `conferenceLateBreakers`、AAN LS1/LS2 |
+| 源状态 / 待扫描 | 告诉用户哪些摘要源已抓取、哪些仍待补扫 | `conferenceSourceMonitor` |
+| 未来会议小窗 | 只作为摘要源预监控，不做参会指南 | `conferenceFutureMeetings` |
+
+单会议工作区：
+
+| 区块 | 应展示的问题 | 设计口径 |
+|---|---|---|
+| 会后速读 | 本会议 MG 内容一句话结论、摘要数、主导主题、关键药物/机制、中国相关数量 | 首屏 brief，不做长列表 |
+| 结构分析 | 国家/地区投稿排名、研究类型结构、主题与药物机制地图 | 使用图表/排行/标签，不用大段解释 |
+| 医学事务洞察 | 对治疗格局、诊断分型、安全性、中国机会、患者旅程、KOL 线索的解释 | 每张卡必须有“为什么重要”和“可用于什么” |
+| Late-breaking 复盘 | 是否有 MG late-breaking；若未公开，展示会话入口和待抓取状态 | 独立高优先级区，不和普通摘要混排 |
+| 摘要池下钻 | 给用户核查来源，支持关键词、国家、研究类型、药物/机制、中国相关筛选 | 放在后半屏，作为证据核查区 |
+
+##### 9.2.1.2 四个会议的差异化口径
+
+MGFA：
+
+- 定位：MG 疾病专题会议，会后复盘应看领域内部结构。
+- 重点：治疗机制、患者旅程、PRO/生活质量、真实世界、MGFA 专题趋势、中国机构线索。
+- 解读方式：更像疾病领域年度快照，不只看新药。
+
+AAN：
+
+- 定位：综合神经大会中的高影响 MG 信号。
+- 重点：late-breaking、phase 2/3、FcRn、补体、seronegative gMG、真实世界、安全性、竞争格局。
+- 解读方式：优先识别会后需要进入内部 briefing 的治疗和竞争信号。
+
+EAN：
+
+- 定位：欧洲多中心与 ePoster 体系中的 MG 证据池。
+- 重点：国家/地区协作网络、登记研究、治疗路径、安全性、真实世界和公开摘要完整度。
+- 解读方式：强调欧洲实践差异和多中心合作线索。
+
+AANEM：
+
+- 定位：神经肌肉临床实践会议。
+- 重点：诊断、电生理、危象管理、病例/真实世界经验、神经肌肉实践相关 MG 内容。
+- 解读方式：如果摘要集尚不能稳定结构化，先作为“源已定位 / 待结构化”的监控模块，不强行混入其他会议摘要。
+
+##### 9.2.1.3 与当前上线版本的关系
+
+当前已上线的会议资讯已经具备第一版骨架：
+
+| 已有资产 | 当前能力 | 下一步改造 |
+|---|---|---|
+| `data/conference-data.json` | 458 条 MG 摘要；MGFA 2025、AAN 2026、EAN 2026 已结构化；AANEM 2025 留监控口 | 增加 per-meeting brief、会后信号、MSL action、source limitation 字段 |
+| `assets/conference.js` | 四会议模块、KPI、国家/研究类型排行、主题药物、late-breaking、结构化解读、下钻筛选 | 把 `conferenceHighlights` 从摘要推荐升级为“医学事务洞察卡” |
+| `pages/literature.html` | 情报中心第四个 tab，标题仍为会议资讯 | 保留 tab 与浅色工作台风格，调整信息层级：洞察在前，摘要下钻在后 |
+| `conferenceSourceMonitor` | 展示 MGFA/AANEM/AAN/EAN 源状态 | 改名语义为“摘要源状态 / 待补扫”，避免像参会信息 |
+| `conferenceFutureMeetings` | 展示未来会议时间地点和官网 | 压缩为右侧小窗，仅用于摘要源预监控和后台扫描提醒 |
+
+当前数据也可直接支持第一轮会后分析：
+
+- 总结构化摘要：458 条。
+- 已结构化会议：MGFA 2025、AAN 2026、EAN 2026。
+- 待结构化监控：AANEM 2025 Abstract Guide。
+- 已知 AAN 2026 late-breaking 入口：LS1 / LS2。
+- 已有分析维度：国家/地区、研究类型、主题、药物/机制、中国相关、高优先级。
+
+##### 9.2.1.4 下一版前端改造方案
+
+第一步，不推倒现有页面，只重排信息优先级：
+
+1. 保留四张固定会议模块，继续作为会议切换入口。
+2. 将当前 `conference-brief` 升级为“会后速读”，展示 3 条自动生成的会议结论。
+3. 将当前 `conferenceHighlights` 改成“医学事务洞察”，每张卡包含：
+   - 洞察标题
+   - 对 MG 领域意味着什么
+   - MSL 可用场景
+   - 关联摘要数量
+   - 代表摘要链接
+   - 局限说明
+4. 将 `conferenceLateBreakers` 固定放在结构分析之前或紧随会后速读之后，保证 late-breaking 不被摘要列表淹没。
+5. 将 `conferenceResults` 明确命名为“摘要池下钻 / 来源核查”，视觉上弱于洞察区。
+6. 将未来会议小窗改为“会议源预监控”，只显示摘要集状态、预计公开节点和官网链接。
+
+第二步，补数据 schema：
+
+```json
+{
+  "conferenceInsights": [
+    {
+      "meetingId": "aan-2026",
+      "title": "FcRn 与补体仍是 AAN 2026 MG 治疗信号核心",
+      "dimension": "治疗格局",
+      "whyItMatters": "提示会后 briefing 应优先比较机制、适用人群和安全性叙事。",
+      "mslUseCase": "用于 KOL 拜访前准备和内部 slide 选题。",
+      "representativeAbstractIds": ["..."],
+      "relatedDrugs": ["efgartigimod", "ravulizumab"],
+      "relatedTopics": ["FcRn", "补体", "安全性"],
+      "confidence": "medium",
+      "limitations": "基于会议摘要；需等待全文或 presentation material 核查。"
+    }
+  ]
+}
+```
+
+摘要级字段建议补充：
+
+- `meetingModule`
+- `sessionType`
+- `sessionTitle`
+- `presentationDate`
+- `lateBreakerSessionId`
+- `medicalAffairsDimension`
+- `mslUseCase`
+- `sourceLimitation`
+- `communityId`
+- `representativeForInsight`
+
+第三步，与现有网站语义层打通：
+
+| 现有模块 | 会议资讯如何复用 |
+|---|---|
+| 文献速览 | 会议摘要转化为后续 PubMed/全文追踪清单 |
+| 信号板 | 会后重要摘要可以生成“会议来源信号”，但标明不是 PubMed 证据 |
+| 中国情报 | 会议中的中国机构/中国患者/中国作者作为 geo facet 进入中国线索 |
+| 知识库社区 | 会议摘要按医学事务社区归类，形成会后社区热度 |
+| 诊治格局 | 只有高置信度、可溯源的会议信号进入月度格局变化 |
+| MSL 工作台 | 输出 KOL 问题、拜访前 briefing、slide 选题和后续文献追踪 |
+
+##### 9.2.1.5 验收标准
+
+会议资讯下一版验收不以“展示多少摘要”为核心，而以是否支持医学事务会后复盘为核心：
+
+1. 用户进入会议资讯后，30 秒内能看懂本次会议 MG 领域的主要变化。
+2. 每个会议都有独立分析口径，不把 MGFA、AAN、EAN、AANEM 混成一个摘要列表。
+3. 国家/地区排名、研究类型结构、主题/药物机制、late-breaking、中国相关都能按会议单独查看。
+4. Late-breaking / 重点会话必须有独立模块；未公开 MG 摘要时显示“会话已定位、摘要待抓取”。
+5. 摘要池只作为下钻核查区，不作为页面主体。
+6. AANEM 等尚未结构化的会议必须显示源状态和后续扫描口，而不是空白或混入其他会议内容。
+7. 所有会后洞察必须能回链到摘要、会议源和自动判断局限。
+
 ### 9.3 知识库
 
 知识库成为 v4.0 核心页面：

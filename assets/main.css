@@ -573,6 +573,9 @@ body {
 .conference-right-rail {
   min-width: 0; display: flex; flex-direction: column; gap: 1rem;
 }
+.conference-right-rail {
+  position: sticky; top: 74px;
+}
 .conference-brief,
 .conference-map-panel,
 .conference-late-focus,
@@ -581,6 +584,9 @@ body {
 .conference-side-panel {
   background: var(--bg2); border: 1px solid var(--bg3);
   border-radius: 8px; padding: 1rem;
+}
+.conference-post-brief {
+  background: linear-gradient(180deg, #fbfdff 0%, var(--bg2) 100%);
 }
 .conference-brief-head {
   display: flex; justify-content: space-between; align-items: flex-start;
@@ -611,6 +617,29 @@ body {
   display: block; color: var(--fg); font-size: 1.18rem;
   line-height: 1.2; margin: 0.14rem 0;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.conference-brief-narrative {
+  margin-top: 0.85rem;
+}
+.conference-takeaway-list {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+.conference-takeaway-card {
+  display: grid; grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.55rem; align-items: start;
+  border: 1px solid rgba(37,99,235,0.14);
+  background: rgba(37,99,235,0.035);
+  border-radius: 8px; padding: 0.72rem;
+}
+.conference-takeaway-card span {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1.55rem; height: 1.55rem; border-radius: 6px;
+  background: rgba(37,99,235,0.09); color: var(--accent);
+  font-size: 0.68rem; font-weight: 700;
+}
+.conference-takeaway-card p {
+  margin: 0; color: var(--fg2); font-size: 0.8rem; line-height: 1.55;
 }
 .conference-map-grid {
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -676,6 +705,14 @@ body {
   background: var(--bg); padding: 0.88rem;
   min-height: 188px;
 }
+.conference-insight-card {
+  display: flex; flex-direction: column; gap: 0.58rem;
+  min-height: 260px;
+}
+.conference-insight-top strong {
+  display: block; color: var(--fg); font-size: 0.95rem;
+  line-height: 1.38;
+}
 .conference-highlight-label {
   display: inline-flex; color: #0f766e; background: rgba(15,118,110,0.08);
   border: 1px solid rgba(15,118,110,0.18);
@@ -690,6 +727,39 @@ body {
 .conference-highlight-card p {
   color: var(--fg2); font-size: 0.76rem; line-height: 1.5;
   margin: 0.45rem 0 0.5rem;
+}
+.conference-insight-card > p {
+  margin: 0; color: var(--fg2); line-height: 1.55;
+}
+.conference-insight-use,
+.conference-insight-refs {
+  border-top: 1px dashed var(--bg3);
+  padding-top: 0.5rem;
+}
+.conference-insight-use span,
+.conference-insight-refs span,
+.conference-source-note {
+  display: block; color: var(--fg3); font-size: 0.68rem;
+  font-style: normal; line-height: 1.4;
+}
+.conference-insight-use p {
+  margin: 0.16rem 0 0; color: var(--fg2);
+  font-size: 0.75rem; line-height: 1.45;
+}
+.conference-insight-refs {
+  display: grid; gap: 0.28rem;
+}
+.conference-insight-refs a {
+  display: block; color: var(--accent); text-decoration: none;
+  font-size: 0.74rem; line-height: 1.42;
+}
+.conference-insight-refs a:hover { text-decoration: underline; }
+.conference-insight-refs em {
+  color: var(--fg3); font-size: 0.74rem; font-style: normal;
+}
+.conference-source-note {
+  margin-top: auto; border-top: 1px dashed var(--bg3);
+  padding-top: 0.48rem;
 }
 .conference-filter-row {
   display: grid; grid-template-columns: minmax(180px, 1fr) 170px 170px auto;
@@ -707,6 +777,10 @@ body {
 .conference-result-row p {
   color: var(--fg3); font-size: 0.72rem; line-height: 1.45;
   margin-top: 0.2rem;
+}
+.conference-result-row .conference-result-analysis {
+  color: var(--fg2); font-size: 0.76rem; line-height: 1.5;
+  margin-top: 0.38rem;
 }
 .conference-result-row button {
   border: 1px solid var(--bg3); background: var(--bg2);
@@ -2464,7 +2538,7 @@ body {
   .conference-analysis-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .conference-meeting-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .conference-workspace { grid-template-columns: 1fr; }
-  .conference-right-rail { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .conference-right-rail { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); position: static; }
   .conference-map-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .conference-kpi-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
@@ -2518,6 +2592,7 @@ body {
   .conference-map-grid,
   .conference-highlight-grid,
   .conference-late-grid,
+  .conference-takeaway-list,
   .conference-right-rail,
   .conference-kpi-grid {
     grid-template-columns: 1fr;

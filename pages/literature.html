@@ -278,7 +278,7 @@
   <section class="intel-tab-panel" id="tab-conference">
     <div class="conference-topline">
       <div>
-        <div class="section-kicker">会议情报 · MG-only 摘要分析工作站</div>
+        <div class="section-kicker">会后复盘 · MG-only 摘要情报</div>
         <h2>会议资讯</h2>
       </div>
       <span class="update-badge" id="conferenceBadge">Loading…</span>
@@ -288,7 +288,7 @@
 
     <div class="conference-workspace">
       <section class="conference-work-main">
-        <section class="conference-brief">
+        <section class="conference-brief conference-post-brief">
           <div class="conference-brief-head">
             <div>
               <div class="section-kicker" id="conferenceModuleEyebrow">—</div>
@@ -298,11 +298,20 @@
             <a class="text-link" id="conferenceModuleLink" href="#" target="_blank">官网入口</a>
           </div>
           <div class="conference-kpi-grid" id="conferenceModuleKpis"></div>
+          <div class="conference-brief-narrative" id="conferenceBriefTakeaways"></div>
+        </section>
+
+        <section class="conference-late-focus">
+          <div class="panel-head">
+            <h2>Late-breaking / 重点会后复盘</h2>
+            <a class="text-link" href="https://www.aan.com/events/annual-meeting/abstracts" target="_blank">AAN Abstracts</a>
+          </div>
+          <div id="conferenceLateBreakers"></div>
         </section>
 
         <section class="conference-map-grid">
           <div class="conference-map-panel">
-            <div class="panel-head"><h2>国家/地区结构</h2></div>
+            <div class="panel-head"><h2>国家/地区投稿结构</h2></div>
             <div id="conferenceCountryRank"></div>
           </div>
           <div class="conference-map-panel">
@@ -316,17 +325,9 @@
           </div>
         </section>
 
-        <section class="conference-late-focus">
-          <div class="panel-head">
-            <h2>Late-breaking / 重点会话</h2>
-            <a class="text-link" href="https://www.aan.com/events/annual-meeting/abstracts" target="_blank">AAN Abstracts</a>
-          </div>
-          <div id="conferenceLateBreakers"></div>
-        </section>
-
         <section class="conference-highlight-section">
           <div class="result-panel-head">
-            <h2>结构化解读</h2>
+            <h2>医学事务洞察</h2>
             <span id="conferenceInsightCount">—</span>
           </div>
           <div class="conference-highlight-grid" id="conferenceHighlights"></div>
@@ -334,7 +335,7 @@
 
         <section class="conference-drilldown">
           <div class="result-panel-head">
-            <h2>摘要池下钻</h2>
+            <h2>摘要池下钻 / 来源核查</h2>
             <span id="conferenceResultCount">0 条</span>
           </div>
           <div class="conference-filter-row">
@@ -351,12 +352,12 @@
 
       <aside class="conference-right-rail">
         <section class="conference-side-panel">
-          <div class="panel-head"><h2>未来会议</h2></div>
+          <div class="panel-head"><h2>会议源预监控</h2></div>
           <div id="conferenceFutureMeetings"></div>
         </section>
 
         <section class="conference-side-panel">
-          <div class="panel-head"><h2>数据源状态</h2></div>
+          <div class="panel-head"><h2>摘要源状态</h2></div>
           <div id="conferenceSourceMonitor"></div>
         </section>
       </aside>
