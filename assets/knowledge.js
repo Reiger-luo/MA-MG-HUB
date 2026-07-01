@@ -488,11 +488,32 @@
     });
   }
 
+  function ensureNodeInView(id) {
+    if (!elCanvas || !nodesById[id]) return;
+    var node = nodesById[id];
+    var marginX = viewBox.w * 0.18;
+    var marginY = viewBox.h * 0.18;
+    var nextX = viewBox.x;
+    var nextY = viewBox.y;
+    if (node.x < viewBox.x + marginX || node.x > viewBox.x + viewBox.w - marginX) {
+      nextX = node.x - viewBox.w / 2;
+    }
+    if (node.y < viewBox.y + marginY || node.y > viewBox.y + viewBox.h - marginY) {
+      nextY = node.y - viewBox.h / 2;
+    }
+    if (nextX !== viewBox.x || nextY !== viewBox.y) {
+      viewBox.x = nextX;
+      viewBox.y = nextY;
+      elCanvas.setAttribute('viewBox', viewBox.x + ' ' + viewBox.y + ' ' + viewBox.w + ' ' + viewBox.h);
+    }
+  }
+
   function selectNode(id) {
     if (!nodesById[id]) return;
     activeNodeId = id;
     clearActive();
     clearHighlight();
+    ensureNodeInView(id);
     var nodeEl = elCanvas.querySelector('.kg-node[data-id="' + cssEscape(id) + '"]');
     if (nodeEl) nodeEl.classList.add('active');
     highlightNeighborhood(id);
@@ -628,17 +649,34 @@
     var type = (elTypeFilter && elTypeFilter.value) || 'all';
     var communityId = (elGraphCommunityFilter && elGraphCommunityFilter.value) || 'all';
     var visible = {};
+    var seeds = {};
 
     nodes.forEach(function (node) {
       var communityText = (node.community_profile || []).map(function (profile) {
         return profile.title + ' ' + profile.community_id;
       }).join(' ');
-      var text = [node.title, node.summary, node.type, node.dominant_community_title, communityText, (node.top_study_types || []).join(' ')].join(' ').toLowerCase();
+      var text = [node.id, node.title, node.summary, node.type, node.dominant_community_title, communityText, (node.top_study_types || []).join(' ')].join(' ').toLowerCase();
       var okKeyword = !keyword || text.indexOf(keyword) !== -1;
       var okType = type === 'all' || node.type === type;
       var okCommunity = itemHasCommunity(node, communityId);
-      visible[node.id] = okKeyword && okType && okCommunity;
+      if (!keyword) {
+        visible[node.id] = okType && okCommunity;
+        return;
+      }
+      if (okKeyword && okType && okCommunity) {
+        visible[node.id] = true;
+        seeds[node.id] = true;
+      }
     });
+
+    if (keyword) {
+      Object.keys(seeds).forEach(function (id) {
+        Object.keys(neighborMap[id] || {}).forEach(function (neighborId) {
+          var neighbor = nodesById[neighborId];
+          if (neighbor && itemHasCommunity(neighbor, communityId)) visible[neighborId] = true;
+        });
+      });
+    }
 
     Array.prototype.forEach.call(elCanvas.querySelectorAll('.kg-node'), function (nodeEl) {
       var id = nodeEl.getAttribute('data-id');
@@ -647,7 +685,8 @@
     Array.prototype.forEach.call(elCanvas.querySelectorAll('.kg-edge'), function (line) {
       var source = line.getAttribute('data-from');
       var target = line.getAttribute('data-to');
-      line.classList.toggle('filtered-out', !visible[source] || !visible[target]);
+      var edgeVisible = visible[source] && visible[target] && (!keyword || seeds[source] || seeds[target]);
+      line.classList.toggle('filtered-out', !edgeVisible);
     });
   }
 
@@ -1057,6 +1096,17 @@
     try {
       var params = new URLSearchParams(window.location.search || '');
       return params.get('tab') || '';
+    } catch (err) {
+      return '';
+    }
+  }
+
+  function getInitialKnowledgeTopicId() {
+    try {
+      var params = new URLSearchParams(window.location.search || '');
+      var topicId = params.get('topic') || '';
+      if (topicId && topicsById[topicId]) return topicId;
+      return '';
     } catch (err) {
       return '';
     }
@@ -1506,8 +1556,11 @@
     attachSearch();
     selectNode(nodesById.fcrnInhibition ? 'fcrnInhibition' : (nodes[0] && nodes[0].id));
     var initialCommunityId = getInitialKnowledgeCommunityId();
+    var initialTopicId = getInitialKnowledgeTopicId();
     var initialTab = getInitialKnowledgeTab();
-    if (initialCommunityId) {
+    if (initialTopicId) {
+      openTopic(initialTopicId);
+    } else if (initialCommunityId) {
       openCommunity(initialCommunityId);
     } else if (['graph', 'communities', 'matrix', 'topics', 'search'].indexOf(initialTab) !== -1) {
       activateTab(initialTab);

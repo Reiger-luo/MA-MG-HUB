@@ -1235,12 +1235,12 @@ body {
 }
 .kg-canvas.grabbing { cursor: grabbing; }
 .kg-canvas .kg-edge {
-  stroke: var(--bg3); stroke-width: 1;
+  stroke: rgba(100, 116, 139, 0.34); stroke-width: 1;
   transition: stroke 0.15s, stroke-opacity 0.15s, stroke-width 0.15s;
   stroke-linecap: round;
 }
-.kg-canvas .kg-edge.dim { stroke-opacity: 0.25; }
-.kg-canvas .kg-edge.hl { stroke: var(--accent); stroke-opacity: 0.55; stroke-width: 1.6; }
+.kg-canvas .kg-edge.dim { stroke-opacity: 0.16; }
+.kg-canvas .kg-edge.hl { stroke: var(--accent); stroke-opacity: 0.82; stroke-width: 2.6; }
 .kg-canvas .kg-edge.source-metadataConfirmed { stroke: rgba(22,163,74,0.36); }
 .kg-canvas .kg-edge.filtered-out,
 .kg-node.filtered-out { display: none; }
@@ -1257,7 +1257,7 @@ body {
   paint-order: stroke;
   stroke: var(--bg2); stroke-width: 3px; stroke-linejoin: round;
 }
-.kg-node.active circle { stroke: var(--accent); stroke-width: 3; }
+.kg-node.active circle { stroke: var(--accent); stroke-width: 4; }
 .kg-node.active text { fill: var(--fg); font-weight: 600; }
 .kg-node:hover text { fill: var(--fg); }
 /* 节点类型配色 */

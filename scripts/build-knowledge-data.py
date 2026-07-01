@@ -721,7 +721,7 @@ def buildGraph(articles: list[dict], communityContext: dict | None = None) -> di
             if nodeId in {edge["from"], edge["to"]}
             and conceptsById[edge["from"]]["type"] != "evidence"
             and conceptsById[edge["to"]]["type"] != "evidence"
-        ][:10]
+        ][:priorityEdgeLimit(nodeId)]
         priorityEdges.extend(nodeEdges)
     edges = uniqueEdges(nonEvidenceEdges + priorityEdges + evidenceEdges)
     edges = sorted(edges, key=lambda item: (-item["evidence_score"], -item["article_count"], item["from"], item["to"]))
@@ -760,6 +760,13 @@ def minNodeArticles(nodeType: str) -> int:
         "outcome": 4,
         "evidence": 8,
     }.get(nodeType, 5)
+
+
+def priorityEdgeLimit(nodeId: str) -> int:
+    """重点新增节点保留更多上下文边，避免前端看起来像孤立点。"""
+    if nodeId in {"telitacicept", "baffAprilModulation"}:
+        return 16
+    return 10
 
 
 def minEdgeArticles(sourceType: str, targetType: str) -> int:

@@ -4,6 +4,10 @@
 
   var data = window.MG_LANDSCAPE_DATA || {};
   var insightPayload = window.MG_LANDSCAPE_INSIGHTS || { insights: [], summary: {} };
+  var curatedTopicPayload = window.MG_CURATED_TOPICS || { topics: [] };
+  var curatedTopics = curatedTopicPayload.topics || [];
+  var topicById = {};
+  curatedTopics.forEach(function(topic) { topicById[topic.id] = topic; });
 
   function $(id) {
     return document.getElementById(id);
@@ -93,13 +97,97 @@
     return items.map(function(item) {
       var label = typeof item === 'string' ? item : (item.title || item.id || item.topic_id || '');
       var href = '';
-      if (item.id) href = '/MA-MG-HUB/pages/knowledge.html?node=' + encodeURIComponent(item.id);
+      if (item.topic_id) href = topicHref(item.topic_id);
+      else if (item.id) href = '/MA-MG-HUB/pages/knowledge.html?node=' + encodeURIComponent(item.id);
       if (item.community_id) href = '/MA-MG-HUB/pages/knowledge.html?community=' + encodeURIComponent(item.community_id);
       if (href) {
         return '<a class="' + escapeHtml(className || 'mini-chip') + '" href="' + href + '">' + escapeHtml(label) + '</a>';
       }
       return '<span class="' + escapeHtml(className || 'mini-chip') + '">' + escapeHtml(label) + '</span>';
     }).join('');
+  }
+
+  function topicHref(topicId) {
+    return '/MA-MG-HUB/pages/knowledge.html?tab=topics&topic=' + encodeURIComponent(topicId || '');
+  }
+
+  function toSet(items) {
+    var output = {};
+    (items || []).forEach(function(item) {
+      if (item != null && item !== '') output[String(item)] = true;
+    });
+    return output;
+  }
+
+  function countShared(a, b) {
+    var count = 0;
+    Object.keys(a || {}).forEach(function(key) {
+      if (b && b[key]) count += 1;
+    });
+    return count;
+  }
+
+  function answerSearchText(answer) {
+    return [
+      answer.question,
+      answer.short_answer,
+      (answer.key_points || []).join(' '),
+      (answer.anchor_nodes || []).join(' '),
+      (answer.source_pmids || []).join(' ')
+    ].join(' ').toLowerCase();
+  }
+
+  function relatedTopicsForAnswer(answer) {
+    var answerPmids = toSet(answer.source_pmids || []);
+    (answer.references || []).forEach(function(ref) {
+      if (ref.pmid) answerPmids[String(ref.pmid)] = true;
+    });
+    var answerNodes = toSet(answer.anchor_nodes || []);
+    var text = answerSearchText(answer);
+    return curatedTopics.map(function(topic) {
+      var topicPmids = toSet(topic.evidence_pmids || []);
+      var topicNodes = toSet(topic.anchor_nodes || []);
+      var sharedPmids = countShared(answerPmids, topicPmids);
+      var sharedNodes = countShared(answerNodes, topicNodes);
+      var textHit = 0;
+      [topic.title, topic.slug].forEach(function(value) {
+        value = String(value || '').toLowerCase();
+        if (value && text.indexOf(value) !== -1) textHit += 1;
+      });
+      var score = sharedPmids * 5 + sharedNodes * 2 + textHit;
+      return {
+        topic_id: topic.id,
+        title: topic.title || topic.id,
+        confidence: topic.confidence || 'unknown',
+        updated: topic.updated || '',
+        evidence_count: (topic.evidence_refs || []).length,
+        shared_pmids: sharedPmids,
+        shared_nodes: sharedNodes,
+        impact_status: (topic.impact || {}).status || 'quiet',
+        score: score
+      };
+    }).filter(function(item) {
+      return item.score > 0;
+    }).sort(function(a, b) {
+      return b.score - a.score ||
+        b.shared_pmids - a.shared_pmids ||
+        b.shared_nodes - a.shared_nodes ||
+        a.title.localeCompare(b.title);
+    }).slice(0, 4);
+  }
+
+  function renderAnswerTopics(answer) {
+    var topics = relatedTopicsForAnswer(answer);
+    if (!topics.length) {
+      return '<div class="answer-section"><span>相关知识库专题</span><span class="muted-text">暂无直接匹配专题</span></div>';
+    }
+    return '<div class="answer-section"><span>相关知识库专题</span><div class="kg-tags">' +
+      topics.map(function(topic) {
+        var meta = topic.shared_pmids ? topic.shared_pmids + ' PMID' : topic.shared_nodes + ' 锚点';
+        if (topic.impact_status === 'updatedEvidence') meta = '本周新证据 · ' + meta;
+        return '<a class="mini-chip chip-button" href="' + escapeHtml(topicHref(topic.topic_id)) + '" title="' +
+          escapeHtml(meta) + '">' + escapeHtml(topic.title) + '</a>';
+      }).join('') + '</div></div>';
   }
 
   function renderInsightEvidence(change) {
@@ -381,7 +469,8 @@
         answer.short_answer,
         (answer.key_points || []).join(' '),
         (answer.source_pmids || []).join(' '),
-        (answer.anchor_nodes || []).join(' ')
+        (answer.anchor_nodes || []).join(' '),
+        relatedTopicsForAnswer(answer).map(function(topic) { return topic.title + ' ' + topic.topic_id; }).join(' ')
       ].join(' ').toLowerCase();
       return (!keyword || text.indexOf(keyword) !== -1) &&
         (category === 'all' || answer.category === category) &&
@@ -421,6 +510,7 @@
         addedHtml +
         '<div class="answer-section"><span>关键 PMID</span><div class="pmid-row">' + renderRefLinks(answer.references, 5) + '</div></div>' +
         '<div class="answer-section"><span>知识库锚点</span><div class="kg-tags">' + anchors + '</div></div>' +
+        renderAnswerTopics(answer) +
         '<p class="answer-limitation">' + escapeHtml(answer.abstract_limitation || '') + '</p>' +
       '</article>';
     }).join('');
