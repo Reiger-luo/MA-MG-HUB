@@ -17,6 +17,14 @@
     return div.innerHTML;
   }
 
+  function escapeHref(value, fallback) {
+    var href = String(value || '').trim();
+    if (/^(https?:)?\/\//i.test(href) || href.indexOf('/MA-MG-HUB/') === 0) {
+      return escapeHtml(href);
+    }
+    return escapeHtml(fallback || '#');
+  }
+
   function compactNumber(value) {
     var n = Number(value || 0);
     if (n >= 10000) return (n / 10000).toFixed(1).replace(/\.0$/, '') + '万';
@@ -90,7 +98,7 @@
       }).join('');
       return '<article class="signal-card signal-' + escapeHtml(signal.strength) + '">' +
         '<div class="signal-card-head"><span class="signal-strength">' + escapeHtml(signal.strength) + '信号</span><span class="signal-type">' + escapeHtml(signal.type) + '</span></div>' +
-        '<a class="signal-title" href="' + (article.url || '#') + '" target="_blank">' + escapeHtml(signal.summary) + '</a>' +
+        '<a class="signal-title" href="' + escapeHref(article.url) + '" target="_blank" rel="noopener">' + escapeHtml(signal.summary) + '</a>' +
         '<div class="signal-meta">' + escapeHtml(article.journal || '') + ' · PMID ' + escapeHtml(article.pmid || '-') + '</div>' +
         (drugHtml ? '<div class="signal-topic-row">' + drugHtml + '</div>' : '') +
       '</article>';

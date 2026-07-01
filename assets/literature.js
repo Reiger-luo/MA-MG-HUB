@@ -595,23 +595,23 @@
 
     var tagsHTML = '';
     if (china) tagsHTML += '<span class="badge-china">🇨🇳 中国</span>';
-    if (evLevel) tagsHTML += '<span class="badge-evidence">证据等级 ' + evLevel + '</span>';
+    if (evLevel) tagsHTML += '<span class="badge-evidence">证据等级 ' + escapeHtml(evLevel) + '</span>';
     else if (studyTypes.length > 0 && studyTypes[0] !== 'Unclassified')
-      tagsHTML += '<span class="badge-pending">' + studyTypes[0] + '</span>';
+      tagsHTML += '<span class="badge-pending">' + escapeHtml(studyTypes[0]) + '</span>';
     var impactFactor = formatImpactFactor(article.journal_if);
     if (impactFactor) tagsHTML += '<span class="badge-metric">IF ' + impactFactor + '</span>';
     if (article.journal_quartile) tagsHTML += '<span class="badge-metric">CAS ' + escapeHtml(String(article.journal_quartile)) + '</span>';
     tagsHTML += renderArticleCommunityBadge(article);
 
     div.innerHTML =
-      '<a class="article-card-title" href="' + article.url + '" target="_blank">' + escapeHtml(article.title || '(无标题)') + '</a>' +
+      '<a class="article-card-title" href="' + escapeHref(article.url) + '" target="_blank" rel="noopener">' + escapeHtml(article.title || '(无标题)') + '</a>' +
       '<div class="article-card-meta">' + metaParts.join(' · ') + '</div>' +
       (article.abstract
         ? '<button class="abstract-toggle" data-pmid="' + article.pmid + '">显示摘要</button>' +
           '<div class="article-card-abstract" id="abs-' + article.pmid + '">' + escapeHtml(article.abstract.slice(0, 300)) + (article.abstract.length > 300 ? '…' : '') + '</div>'
         : '') +
       '<div class="article-card-links">' +
-        (article.doi ? '<a href="https://doi.org/' + article.doi + '" target="_blank">DOI</a>' : '') +
+        (article.doi ? '<a href="' + doiHref(article.doi) + '" target="_blank" rel="noopener">DOI</a>' : '') +
         tagsHTML +
       '</div>';
 
@@ -638,6 +638,20 @@
     var d = document.createElement('div');
     d.textContent = text;
     return d.innerHTML;
+  }
+
+  function escapeHref(value, fallback) {
+    var href = String(value || '').trim();
+    if (/^(https?:)?\/\//i.test(href) || href.indexOf('/MA-MG-HUB/') === 0) {
+      return escapeHtml(href);
+    }
+    return escapeHtml(fallback || '#');
+  }
+
+  function doiHref(doi) {
+    var value = String(doi || '').trim().replace(/^https?:\/\/(dx\.)?doi\.org\//i, '');
+    if (!value) return '#';
+    return 'https://doi.org/' + escapeHtml(value);
   }
 
   function buildArticleMeta(article, dateStr) {
@@ -686,6 +700,13 @@
       if (d && (!max || d > max)) max = d;
     }
     return max || new Date();
+  }
+
+  function rollingCutoffDate(articles, days) {
+    var latest = maxEntryDate(articles);
+    var cutoff = new Date(latest.getTime());
+    cutoff.setDate(cutoff.getDate() - days);
+    return cutoff;
   }
 
   function daysApart(a, b) {
@@ -895,12 +916,12 @@
     }
     var tagHtml = topicHtml + drugHtml + (a.china_related ? '<span class="signal-topic china">中国相关</span>' : '');
     return '' +
-      '<article class="signal-card signal-' + item.strength + '">' +
+      '<article class="signal-card signal-' + escapeHtml(item.strength) + '">' +
         '<div class="signal-card-head">' +
-          '<span class="signal-strength">' + item.strength + '信号</span>' +
-          '<span class="signal-type">' + item.type + '</span>' +
+          '<span class="signal-strength">' + escapeHtml(item.strength) + '信号</span>' +
+          '<span class="signal-type">' + escapeHtml(item.type) + '</span>' +
         '</div>' +
-        '<a class="signal-title" href="' + a.url + '" target="_blank">' + escapeHtml(a.title || '(无标题)') + '</a>' +
+        '<a class="signal-title" href="' + escapeHref(a.url) + '" target="_blank" rel="noopener">' + escapeHtml(a.title || '(无标题)') + '</a>' +
         '<div class="signal-meta">' + buildArticleMeta(a, dateStr) + '</div>' +
         '<div class="signal-topic-row">' + tagHtml + '</div>' +
       '</article>';
@@ -972,7 +993,7 @@
     var dateStr = d ? d.toLocaleDateString('zh-CN') : (article.pub_date || '');
     return '' +
       '<article class="compact-article">' +
-        '<a href="' + article.url + '" target="_blank">' + escapeHtml(article.title || '(无标题)') + '</a>' +
+        '<a href="' + escapeHref(article.url) + '" target="_blank" rel="noopener">' + escapeHtml(article.title || '(无标题)') + '</a>' +
         '<div>' + buildArticleMeta(article, dateStr) + '</div>' +
       '</article>';
   }
@@ -1226,7 +1247,7 @@
       }
       document.getElementById('statChinaYear').textContent = chinaYear;
 
-      var cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 30);
+      var cutoff = rollingCutoffDate(allArticles, 30);
       var recent30 = [];
       for (var i = 0; i < allArticles.length; i++) {
         var d = parseDate(allArticles[i].entry_date);
@@ -1295,25 +1316,29 @@
     // 双栏弹窗
     var d = document.createElement('div');
     d.className = 'modal-overlay open';
-    var closeBtn = '<button class="modal-close" onclick="this.parentElement.parentElement.classList.remove(\'open\')">\u2715</button>';
+    var closeBtn = '<button class="modal-close" type="button" data-brief-close="1">\u2715</button>';
     var preId = 'brief_' + Date.now();
     d.innerHTML =
-      '<div class="modal" style="max-width:900px">' +
+      '<div class="modal literature-brief-modal">' +
         closeBtn +
         '<h2>\uD83D\uDCCB 文献简报</h2>' +
-        '<div style="display:flex;gap:1rem;min-height:350px">' +
-          '<div style="flex:1;display:flex;flex-direction:column">' +
-            '<div style="font-size:0.78rem;color:var(--fg3);margin-bottom:0.3rem">预览</div>' +
-            '<pre id="' + preId + '" style="flex:1;font-size:0.8rem;line-height:1.5;white-space:pre-wrap;word-break:break-word;color:var(--fg2);background:var(--bg);padding:0.8rem;border-radius:6px;border:1px solid var(--bg3);overflow-y:auto">' + escapeHtml(md) + '</pre>' +
+        '<div class="literature-brief-layout">' +
+          '<div class="literature-brief-preview">' +
+            '<div class="literature-brief-label">预览</div>' +
+            '<pre id="' + preId + '" class="literature-brief-pre">' + escapeHtml(md) + '</pre>' +
           '</div>' +
-          '<div style="width:160px;flex-shrink:0">' +
-            '<div style="font-size:0.78rem;color:var(--fg3);margin-bottom:0.5rem">操作</div>' +
-            '<button class="btn" id="copy_' + preId + '" style="display:block;width:100%;margin-bottom:0.4rem;text-align:center">\uD83D\uDCCB 复制</button>' +
-            '<p style="font-size:0.72rem;color:var(--fg3)">复制后可粘贴到微信/飞书/邮件</p>' +
+          '<div class="literature-brief-actions">' +
+            '<div class="literature-brief-label">操作</div>' +
+            '<button class="btn literature-brief-copy" id="copy_' + preId + '">\uD83D\uDCCB 复制</button>' +
+            '<p>复制后可粘贴到微信/飞书/邮件</p>' +
           '</div>' +
         '</div>' +
       '</div>';
     document.body.appendChild(d);
+
+    d.querySelector('[data-brief-close]').addEventListener('click', function() {
+      d.classList.remove('open');
+    });
 
     document.getElementById('copy_' + preId).addEventListener('click', function() {
       var text = document.getElementById(preId).textContent;

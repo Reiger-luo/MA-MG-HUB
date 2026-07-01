@@ -72,6 +72,14 @@
     return div.innerHTML;
   }
 
+  function escapeHref(value, fallback) {
+    var href = String(value || '').trim();
+    if (/^(https?:)?\/\//i.test(href) || href.indexOf('/MA-MG-HUB/') === 0) {
+      return escapeHtml(href);
+    }
+    return escapeHtml(fallback || '#');
+  }
+
   function initialModuleIds() {
     return [];
   }
@@ -561,7 +569,7 @@
       return '<div class="interest-bar"><span>' + escapeHtml(item.term) + '</span><div><i style="width:' + width + '%"></i></div><strong>' + item.count + '</strong></div>';
     }).join('');
     var timeline = expertTimeline(expert).slice(0, 6).map(function(item) {
-      return '<li><a href="' + escapeHtml(item.url || '#') + '" target="_blank">' + escapeHtml(item.title) + '</a><span>' + escapeHtml(item.pub_date || item.entry_date || '') + ' · PMID ' + escapeHtml(item.pmid) + '</span></li>';
+      return '<li><a href="' + escapeHref(item.url) + '" target="_blank" rel="noopener">' + escapeHtml(item.title) + '</a><span>' + escapeHtml(item.pub_date || item.entry_date || '') + ' · PMID ' + escapeHtml(item.pmid) + '</span></li>';
     }).join('');
     var collaborators = (expert.collaborators || []).slice(0, 6).map(function(item) {
       return '<span class="mini-chip">' + escapeHtml(item.name) + ' ' + item.count + '</span>';
@@ -899,7 +907,7 @@
     }
     el.landscapeActionList.innerHTML = items.map(function(insight) {
       var refs = (insight.references || []).slice(0, 2).map(function(ref) {
-        return ref.pmid ? '<a class="pmid-chip" href="' + escapeHtml(ref.url || ('https://pubmed.ncbi.nlm.nih.gov/' + ref.pmid + '/')) + '" target="_blank">PMID ' + escapeHtml(ref.pmid) + '</a>' : '';
+        return ref.pmid ? '<a class="pmid-chip" href="' + escapeHref(ref.url || ('https://pubmed.ncbi.nlm.nih.gov/' + ref.pmid + '/')) + '" target="_blank" rel="noopener">PMID ' + escapeHtml(ref.pmid) + '</a>' : '';
       }).join('');
       return '<article class="landscape-action-card">' +
         '<span>' + escapeHtml(insight.change_type || insight.type || '格局洞察') + '</span>' +
@@ -1113,7 +1121,7 @@
     if (!references.length) return '<div class="muted">暂无可关联文献</div>';
     return '<div class="msl-reference-table"><table><thead><tr><th>PMID</th><th>文献</th><th>证据</th><th>来源</th></tr></thead><tbody>' +
       references.map(function(ref) {
-        var link = ref.url ? '<a href="' + escapeHtml(ref.url) + '" target="_blank">' + escapeHtml(ref.pmid || '-') + '</a>' : escapeHtml(ref.pmid || '-');
+        var link = ref.url ? '<a href="' + escapeHref(ref.url) + '" target="_blank" rel="noopener">' + escapeHtml(ref.pmid || '-') + '</a>' : escapeHtml(ref.pmid || '-');
         return '<tr>' +
           '<td>' + link + '</td>' +
           '<td><strong>' + escapeHtml(ref.title || '-') + '</strong><span>' + escapeHtml(ref.journal || '') + ' · ' + escapeHtml(ref.pub_date || '') + '</span></td>' +

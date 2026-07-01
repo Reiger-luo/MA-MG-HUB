@@ -123,6 +123,14 @@
     return div.innerHTML;
   }
 
+  function escapeHref(value, fallback) {
+    var href = String(value || '').trim();
+    if (/^(https?:)?\/\//i.test(href) || href.indexOf('/MA-MG-HUB/') === 0) {
+      return escapeHtml(href);
+    }
+    return escapeHtml(fallback || '#');
+  }
+
   function compactNumber(value) {
     if (value == null || value === '') return '0';
     var n = Number(value);
@@ -357,7 +365,7 @@
           '<strong>' + escapeHtml(session.session) + '</strong>' +
           '<p>' + escapeHtml(session.meeting + ' · ' + session.time) + '</p>' +
           '<em>' + escapeHtml(session.status) + '</em>' +
-          '<a href="' + escapeHtml(session.url) + '" target="_blank">查看官网会话</a>' +
+          '<a href="' + escapeHref(session.url) + '" target="_blank" rel="noopener">查看官网会话</a>' +
         '</article>';
       }).join('') + '</div>';
     }
@@ -368,7 +376,7 @@
           '<span>已入库 late-breaking</span>' +
           '<strong>' + escapeHtml(item.title) + '</strong>' +
           '<p>' + escapeHtml(item.researchType + ' · ' + item.conference) + '</p>' +
-          '<a href="' + escapeHtml(item.sourceUrl || item.pageUrl || '#') + '" target="_blank">查看摘要</a>' +
+          '<a href="' + escapeHref(item.sourceUrl || item.pageUrl) + '" target="_blank" rel="noopener">查看摘要</a>' +
         '</article>';
       }).join('') + '</div>';
     }
@@ -514,7 +522,7 @@
         '<div class="conference-insight-refs">' +
           '<span>代表摘要</span>' +
           (refs.length ? refs.map(function(item) {
-            return '<a href="' + escapeHtml(item.sourceUrl || item.pageUrl || '#') + '" target="_blank">' + escapeHtml(truncateText(item.title, 86)) + '</a>';
+            return '<a href="' + escapeHref(item.sourceUrl || item.pageUrl) + '" target="_blank" rel="noopener">' + escapeHtml(truncateText(item.title, 86)) + '</a>';
           }).join('') : '<em>暂无代表摘要，待源数据补充。</em>') +
         '</div>' +
         '<div class="conference-card-head">' + insight.tags.slice(0, 5).map(function(tag) {
@@ -583,7 +591,7 @@
     var tags = [item.researchType].concat(item.drugs || []).concat(item.topics || []).slice(0, 4);
     return '<article class="conference-result-row">' +
       '<div>' +
-        '<a class="conference-card-title" href="' + escapeHtml(item.sourceUrl || item.pageUrl || '#') + '" target="_blank">' + escapeHtml(item.title) + '</a>' +
+        '<a class="conference-card-title" href="' + escapeHref(item.sourceUrl || item.pageUrl) + '" target="_blank" rel="noopener">' + escapeHtml(item.title) + '</a>' +
         '<p>' + escapeHtml([item.conference, item.presentationType, (item.countries || []).slice(0, 4).join('、')].filter(Boolean).join(' · ')) + '</p>' +
         '<p class="conference-result-analysis">' + escapeHtml(item.analysisZh || '中文分析待生成；请展开摘要核查来源。') + '</p>' +
       '</div>' +
@@ -633,7 +641,7 @@
         '<strong>' + escapeHtml(item.meeting) + '</strong>' +
         '<span>' + escapeHtml(item.date + ' · ' + item.location) + '</span>' +
         '<em>' + escapeHtml(item.status || '') + '</em>' +
-        '<a href="' + escapeHtml(item.url || '#') + '" target="_blank">官网更新</a>' +
+        '<a href="' + escapeHref(item.url) + '" target="_blank" rel="noopener">官网更新</a>' +
       '</article>';
     }).join('') + '</div>';
   }
@@ -651,7 +659,7 @@
         '<strong>' + escapeHtml(item.organization || item.id) + '</strong>' +
         '<p>' + escapeHtml(item.evidence || '') + '</p>' +
         '<em>' + escapeHtml(item.nextAction || '') + '</em>' +
-        '<a href="' + escapeHtml(item.url || '#') + '" target="_blank">源页面</a>' +
+        '<a href="' + escapeHref(item.url) + '" target="_blank" rel="noopener">源页面</a>' +
       '</article>';
     }).join('') + '</div>';
   }

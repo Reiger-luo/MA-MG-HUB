@@ -2549,6 +2549,29 @@ body {
   border-radius: 8px; border: 1px solid var(--bg3);
 }
 .modal-actions { margin-top: 1rem; text-align: right; }
+.literature-brief-modal { max-width: 900px; }
+.literature-brief-layout {
+  display: flex; gap: 1rem; min-height: 350px;
+}
+.literature-brief-preview {
+  flex: 1; display: flex; flex-direction: column; min-width: 0;
+}
+.literature-brief-label {
+  font-size: 0.78rem; color: var(--fg3); margin-bottom: 0.4rem;
+}
+.literature-brief-pre {
+  flex: 1; font-size: 0.8rem; line-height: 1.5;
+  overflow-y: auto;
+}
+.literature-brief-actions {
+  width: 160px; flex-shrink: 0;
+}
+.literature-brief-copy {
+  display: block; width: 100%; margin-bottom: 0.4rem; text-align: center;
+}
+.literature-brief-actions p {
+  font-size: 0.72rem; color: var(--fg3);
+}
 
 /* ── 证据等级参考 ── */
 .evidence-ref {
@@ -2655,6 +2678,8 @@ body {
   .conference-brief-head { flex-direction: column; }
   .conference-filter-row { grid-template-columns: 1fr; }
   .conference-result-row { grid-template-columns: 1fr; }
+  .literature-brief-layout { flex-direction: column; min-height: 0; }
+  .literature-brief-actions { width: 100%; }
 }
 @media (max-width: 520px) {
   .dashboard-stats, .dashboard-section-grid, .dashboard-community-list, .conference-stat-grid { grid-template-columns: 1fr; }
