@@ -56,6 +56,20 @@
 .community-audit-card em { display: block; color: var(--fg3); font-size: 0.72rem; font-style: normal; margin-top: 0.16rem; }
 .community-audit-card.warning strong { color: var(--yellow); }
 .community-audit-card.danger strong { color: var(--red); }
+.backend-decision-card {
+  background: var(--bg2); border: 1px solid var(--bg3); border-radius: 8px;
+  padding: 0.9rem 1rem; margin-bottom: 0.7rem;
+}
+.backend-decision-card strong { display:block;color:var(--fg);font-size:1rem;margin-bottom:0.25rem; }
+.backend-decision-card p { color:var(--fg2);font-size:0.8rem;line-height:1.65;margin:0.25rem 0; }
+.backend-option-grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0.6rem; }
+.backend-option-card {
+  background: var(--bg2); border: 1px solid var(--bg3); border-radius: 8px;
+  padding: 0.78rem 0.9rem;
+}
+.backend-option-card span { display:block;color:var(--fg3);font-size:0.7rem;margin-bottom:0.16rem; }
+.backend-option-card strong { display:block;color:var(--fg);font-size:0.86rem;line-height:1.35; }
+.backend-option-card em { display:block;color:var(--fg3);font-size:0.72rem;font-style:normal;margin-top:0.22rem;line-height:1.45; }
 .ops-inline-link { color: var(--accent); text-decoration: none; }
 .ops-inline-link:hover { text-decoration: underline; }
 .ops-note { font-size:0.78rem;color:var(--fg3);margin-top:0.3rem;line-height:1.7; }
@@ -65,6 +79,7 @@
   .source-status { white-space: nowrap; }
   .artifact-grid { grid-template-columns: 1fr; }
   .community-audit-grid { grid-template-columns: 1fr; }
+  .backend-option-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -164,6 +179,20 @@
 
   <hr class="section-divider">
 
+  <!-- 后端选项评估 -->
+  <div class="ops-section-title">Phase 6 后端选项评估</div>
+  <div id="backendDecision">
+    <div class="backend-decision-card">
+      <strong>读取中</strong>
+      <p>正在加载 backendOptions.js</p>
+    </div>
+  </div>
+  <div class="community-audit-grid" id="backendTriggerGrid"></div>
+  <div class="backend-option-grid" id="backendOptionGrid"></div>
+  <div class="ops-note" id="backendOptionNote"></div>
+
+  <hr class="section-divider">
+
   <!-- 更新日志 -->
   <div class="ops-section-title">更新日志</div>
   <div id="opsLog">
@@ -176,6 +205,7 @@
   <script src="/MA-MG-HUB/data/communityAudit.js"></script>
   <script src="/MA-MG-HUB/data/graphHealth.js"></script>
   <script src="/MA-MG-HUB/data/wikiTopicCoverage.js"></script>
+  <script src="/MA-MG-HUB/data/backendOptions.js"></script>
   <script>
   (function(){
     const dashboard = window.MG_DASHBOARD_DATA || {};
@@ -184,6 +214,7 @@
     const communityAudit = window.MG_COMMUNITY_AUDIT || {};
     const graphHealth = window.MG_GRAPH_HEALTH || {};
     const topicCoverage = window.MG_WIKI_TOPIC_COVERAGE || {};
+    const backendOptions = window.MG_BACKEND_OPTIONS || {};
     const communityTaxonomy = window.MG_COMMUNITY_TAXONOMY || {};
     const sourceList = document.getElementById('sourceList');
     const artifactGrid = document.getElementById('artifactGrid');
@@ -193,9 +224,13 @@
     const graphHealthNote = document.getElementById('graphHealthNote');
     const topicCoverageGrid = document.getElementById('topicCoverageGrid');
     const topicCoverageNote = document.getElementById('topicCoverageNote');
+    const backendDecision = document.getElementById('backendDecision');
+    const backendTriggerGrid = document.getElementById('backendTriggerGrid');
+    const backendOptionGrid = document.getElementById('backendOptionGrid');
+    const backendOptionNote = document.getElementById('backendOptionNote');
     const opsLog = document.getElementById('opsLog');
     const pipelineNote = document.getElementById('pipelineNote');
-    const colorMap = { ok: 'green', generated: 'green', planned: 'yellow', manual: 'yellow', missing: 'red' };
+    const colorMap = { ok: 'green', generated: 'green', planned: 'yellow', manual: 'yellow', defer: 'yellow', missing: 'red' };
     const communityTitleById = {};
     (communityTaxonomy.communities || []).forEach(function(item) {
       communityTitleById[item.id] = item.title || item.id;
@@ -391,12 +426,51 @@
         (gaps ? '<br>待补齐社区：' + gaps : '');
     }
 
+    function renderBackendOptions() {
+      const summary = backendOptions.summary || {};
+      if (!Object.keys(summary).length) {
+        backendDecision.innerHTML = '<div class="backend-decision-card"><strong>后端选项未生成</strong><p>等待 backendOptions.js；运行周更管线后会自动重建。</p></div>';
+        backendTriggerGrid.innerHTML = '';
+        backendOptionGrid.innerHTML = '';
+        backendOptionNote.textContent = '';
+        return;
+      }
+
+      backendDecision.innerHTML = '<div class="backend-decision-card">' +
+        '<strong>' + escapeHtml(summary.status_label || '后端评估') + '：' + escapeHtml(summary.decision || '') + '</strong>' +
+        '<p>' + escapeHtml(summary.reason || '') + '</p>' +
+        '<p>触发条件：' + escapeHtml(summary.triggered_count || 0) + '/' + escapeHtml(summary.total_triggers || 0) +
+        ' · 首个候选：' + escapeHtml(summary.first_backend_candidate || '-') +
+        ' · 本地主控：' + escapeHtml(summary.operator_backend || '-') + '</p>' +
+      '</div>';
+
+      backendTriggerGrid.innerHTML = (backendOptions.triggers || []).map(function(item) {
+        return '<div class="community-audit-card ' + (item.triggered ? 'warning' : '') + '">' +
+          '<span>' + escapeHtml(item.label) + '</span>' +
+          '<strong>' + escapeHtml(item.triggered ? '已触发' : '未触发') + '</strong>' +
+          '<em>' + escapeHtml(item.evidence || '') + '</em>' +
+        '</div>';
+      }).join('');
+
+      backendOptionGrid.innerHTML = (backendOptions.options || []).map(function(item) {
+        return '<div class="backend-option-card">' +
+          '<span>' + escapeHtml(item.fit || 'option') + '</span>' +
+          '<strong>' + escapeHtml(item.name || item.id || '') + '</strong>' +
+          '<em>' + escapeHtml(item.recommendation || '') + '</em>' +
+        '</div>';
+      }).join('');
+
+      const rules = (backendOptions.decision_rules || []).slice(0, 3).join('；');
+      backendOptionNote.textContent = rules || 'Phase 6 后端评估已生成。';
+    }
+
     renderSources();
     renderPipelineNote();
     renderArtifacts();
     renderCommunityAudit();
     renderGraphHealth();
     renderTopicCoverage();
+    renderBackendOptions();
     renderLogs();
   })();
   </script>
