@@ -725,7 +725,8 @@ def buildGraph(articles: list[dict], communityContext: dict | None = None) -> di
         priorityEdges.extend(nodeEdges)
     selectedEdges = uniqueEdges(nonEvidenceEdges + priorityEdges + evidenceEdges)
     coverageEdges = coverageEdgesForNodes(includedIds, selectedEdges, edges, conceptsById)
-    edges = uniqueEdges(selectedEdges + coverageEdges)
+    bridgeEdges = semanticBridgeEdgesForNodes(includedIds, selectedEdges + coverageEdges, edges, conceptsById)
+    edges = uniqueEdges(selectedEdges + coverageEdges + bridgeEdges)
     edges = sorted(edges, key=lambda item: (-item["evidence_score"], -item["article_count"], item["from"], item["to"]))
     edgeIds = {edge["id"] for edge in edges}
     nodeReferences = {node["id"]: topReferences(uniqueList(nodeArticleIds[node["id"]]), articleByPmid, limit=10) for node in nodes}
@@ -776,6 +777,49 @@ def minGraphDegree(nodeType: str) -> int:
     if nodeType == "evidence":
         return 2
     return 4
+
+
+def requiredSemanticBridgeTypes(nodeType: str) -> tuple[str, ...]:
+    """需要优先保留药物/机制桥接的节点类型。"""
+    if nodeType in {"evidence", "outcome", "population"}:
+        return ("drug", "mechanism")
+    return ()
+
+
+def semanticBridgeEdgesForNodes(includedIds: list[str], selectedEdges: list[dict], allEdges: list[dict], conceptsById: dict) -> list[dict]:
+    """为证据、结局和人群节点补足药物/机制桥接边。"""
+    selectedIds = {edge["id"] for edge in selectedEdges}
+    linkedTargetTypes = defaultdict(set)
+    includedSet = set(includedIds)
+
+    for edge in selectedEdges:
+        sourceId = edge["from"]
+        targetId = edge["to"]
+        sourceType = conceptsById[sourceId]["type"]
+        targetType = conceptsById[targetId]["type"]
+        if targetType in requiredSemanticBridgeTypes(sourceType):
+            linkedTargetTypes[sourceId].add(targetType)
+        if sourceType in requiredSemanticBridgeTypes(targetType):
+            linkedTargetTypes[targetId].add(sourceType)
+
+    bridgeEdges = []
+    for nodeId in includedIds:
+        requiredTypes = requiredSemanticBridgeTypes(conceptsById[nodeId]["type"])
+        if not requiredTypes:
+            continue
+        missingTypes = [targetType for targetType in requiredTypes if targetType not in linkedTargetTypes[nodeId]]
+        for targetType in missingTypes:
+            for edge in allEdges:
+                if edge["id"] in selectedIds or nodeId not in {edge["from"], edge["to"]}:
+                    continue
+                otherId = edge["to"] if edge["from"] == nodeId else edge["from"]
+                if otherId not in includedSet or conceptsById[otherId]["type"] != targetType:
+                    continue
+                bridgeEdges.append(edge)
+                selectedIds.add(edge["id"])
+                linkedTargetTypes[nodeId].add(targetType)
+                break
+    return bridgeEdges
 
 
 def coverageEdgesForNodes(includedIds: list[str], selectedEdges: list[dict], allEdges: list[dict], conceptsById: dict) -> list[dict]:
@@ -1065,13 +1109,23 @@ def buildGraphHealth(graphData: dict, communityContext: dict) -> dict:
     communityTitles = communityContext.get("community_titles") or {}
     communityOrder = communityContext.get("community_order") or []
     cardCounts = communityContext.get("community_card_counts") or {}
+    nodesById = {node["id"]: node for node in nodes}
 
     nodeCommunityCounts = Counter(node.get("dominant_community_id") for node in nodes if node.get("dominant_community_id"))
     edgeCommunityCounts = Counter(edge.get("dominant_community_id") for edge in edges if edge.get("dominant_community_id"))
     nodeDegree = Counter()
+    semanticBridgeTypes = defaultdict(set)
     for edge in edges:
         nodeDegree[edge["from"]] += 1
         nodeDegree[edge["to"]] += 1
+        source = nodesById.get(edge["from"])
+        target = nodesById.get(edge["to"])
+        if not source or not target:
+            continue
+        if target["type"] in requiredSemanticBridgeTypes(source["type"]):
+            semanticBridgeTypes[source["id"]].add(target["type"])
+        if source["type"] in requiredSemanticBridgeTypes(target["type"]):
+            semanticBridgeTypes[target["id"]].add(source["type"])
 
     oversizedNodes = [
         {
@@ -1133,6 +1187,26 @@ def buildGraphHealth(graphData: dict, communityContext: dict) -> dict:
     ]
     lowConnectivityNodes.sort(key=lambda item: (item["degree"], -item["article_count"], item["node_id"]))
 
+    semanticBridgeGaps = [
+        {
+            "node_id": node["id"],
+            "title": node["title"],
+            "type": node["type"],
+            "missing_target_types": [
+                targetType
+                for targetType in requiredSemanticBridgeTypes(node["type"])
+                if targetType not in semanticBridgeTypes[node["id"]]
+            ],
+            "article_count": node.get("article_count") or 0,
+            "dominant_community_id": node.get("dominant_community_id"),
+            "dominant_community_title": node.get("dominant_community_title"),
+        }
+        for node in nodes
+        if requiredSemanticBridgeTypes(node["type"])
+    ]
+    semanticBridgeGaps = [item for item in semanticBridgeGaps if item["missing_target_types"]]
+    semanticBridgeGaps.sort(key=lambda item: (-item["article_count"], item["node_id"]))
+
     staleCutoff = datetime.now() - timedelta(days=365)
     staleNodes = []
     for node in nodes:
@@ -1176,18 +1250,20 @@ def buildGraphHealth(graphData: dict, communityContext: dict) -> dict:
             "weak_edges": len(weakEdges),
             "isolated_nodes": len(isolatedNodes),
             "low_connectivity_nodes": len(lowConnectivityNodes),
+            "semantic_bridge_gaps": len(semanticBridgeGaps),
             "stale_nodes": len(staleNodes),
         },
         "health": {
-            "status": "needsReview" if oversizedNodes or unmappedNodes or isolatedNodes else "ok",
+            "status": "needsReview" if oversizedNodes or unmappedNodes or isolatedNodes or semanticBridgeGaps else "ok",
             "notes": [
                 "图谱为 abstract-level 关系，社区映射来自后台 community assignment，不代表全文级因果关系。",
-                "过大节点、孤立节点或弱边提示概念词典、边裁剪或社区边界需要 review。",
+                "过大节点、孤立节点、语义桥接缺口或弱边提示概念词典、边裁剪或社区边界需要 review。",
             ],
         },
         "oversized_nodes": oversizedNodes[:10],
         "isolated_nodes": isolatedNodes[:12],
         "low_connectivity_nodes": lowConnectivityNodes[:12],
+        "semantic_bridge_gaps": semanticBridgeGaps[:12],
         "weak_edges": weakEdges[:12],
         "stale_nodes": staleNodes[:12],
         "community_coverage": communityCoverage,

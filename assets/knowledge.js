@@ -650,6 +650,7 @@
     var communityId = (elGraphCommunityFilter && elGraphCommunityFilter.value) || 'all';
     var visible = {};
     var seeds = {};
+    var hasFocusFilter = !!keyword || type !== 'all';
 
     nodes.forEach(function (node) {
       var communityText = (node.community_profile || []).map(function (profile) {
@@ -659,8 +660,8 @@
       var okKeyword = !keyword || text.indexOf(keyword) !== -1;
       var okType = type === 'all' || node.type === type;
       var okCommunity = itemHasCommunity(node, communityId);
-      if (!keyword) {
-        visible[node.id] = okType && okCommunity;
+      if (!hasFocusFilter) {
+        visible[node.id] = okCommunity;
         return;
       }
       if (okKeyword && okType && okCommunity) {
@@ -669,7 +670,7 @@
       }
     });
 
-    if (keyword) {
+    if (hasFocusFilter) {
       Object.keys(seeds).forEach(function (id) {
         Object.keys(neighborMap[id] || {}).forEach(function (neighborId) {
           var neighbor = nodesById[neighborId];
@@ -685,7 +686,7 @@
     Array.prototype.forEach.call(elCanvas.querySelectorAll('.kg-edge'), function (line) {
       var source = line.getAttribute('data-from');
       var target = line.getAttribute('data-to');
-      var edgeVisible = visible[source] && visible[target] && (!keyword || seeds[source] || seeds[target]);
+      var edgeVisible = visible[source] && visible[target] && (!hasFocusFilter || seeds[source] || seeds[target]);
       line.classList.toggle('filtered-out', !edgeVisible);
     });
   }
