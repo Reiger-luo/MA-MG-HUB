@@ -99,6 +99,7 @@
     moduleIntro: $('conferenceModuleIntro'),
     moduleLink: $('conferenceModuleLink'),
     moduleKpis: $('conferenceModuleKpis'),
+    briefTakeaways: $('conferenceBriefTakeaways'),
     countryRank: $('conferenceCountryRank'),
     typeRank: $('conferenceTypeRank'),
     topicCloud: $('conferenceTopicCloud'),
@@ -177,6 +178,68 @@
       topTopic: topics[0] ? topics[0].name : '待识别',
       topDrug: drugs[0] ? drugs[0].name : '待识别'
     };
+  }
+
+  function topNames(rows, limit) {
+    return (rows || []).slice(0, limit || 3).map(function(row) { return row.name; }).filter(Boolean);
+  }
+
+  function joinNames(names, fallback) {
+    var list = (names || []).filter(Boolean);
+    if (!list.length) return fallback || '待识别';
+    return list.join('、');
+  }
+
+  function hasTopic(item, topicName) {
+    return (item.topics || []).indexOf(topicName) !== -1;
+  }
+
+  function findRepresentativeItems(items, test, limit) {
+    return items.filter(test || function() { return true; }).slice().sort(function(a, b) {
+      return (b.priorityScore || 0) - (a.priorityScore || 0) || String(a.title || '').localeCompare(String(b.title || ''));
+    }).slice(0, limit || 2);
+  }
+
+  function truncateText(text, max) {
+    var value = String(text || '');
+    if (value.length <= max) return value;
+    return value.slice(0, max - 1) + '…';
+  }
+
+  function getMeetingSourceLimitation(module) {
+    if (module.id === 'aanem') return 'AANEM 2025 摘要源已定位，但稳定结构化字段尚待补抓。';
+    if (module.id === 'aan') return '基于 AAN Mirasmart 摘要页和公开 late-breaking 会话入口；presentation 细节仍需会后核查。';
+    if (module.id === 'ean') return '基于 EAN / European Journal of Neurology abstract book；部分 ePoster 信息可能缺少完整会话语境。';
+    return '基于 MGFA 公开 program / poster abstract guide；未公开全文或口头报告材料时仅作摘要级复盘。';
+  }
+
+  function renderBriefTakeaways(module, summary, items) {
+    if (!el.briefTakeaways) return;
+    var takeaways = [];
+    var countryNames = topNames(summary.countries, 3);
+    var mechanismNames = topNames(summary.drugs.length ? summary.drugs : summary.topics, 3);
+
+    if (!items.length) {
+      takeaways = [
+        module.emptyNote || '该会议暂未接入结构化 MG 摘要。',
+        '当前页面先保留会议入口、摘要源状态和后续扫描口，避免把其他会议内容混入本模块。',
+        getMeetingSourceLimitation(module)
+      ];
+    } else {
+      takeaways.push('本模块已结构化 ' + summary.total + ' 条 MG 摘要，主导主题为 ' + summary.topTopic + '，研究类型以 ' + summary.topType + ' 为主。');
+      takeaways.push('投稿/机构线索集中在 ' + joinNames(countryNames, '待识别国家/地区') + '；中国相关 ' + summary.chinaRelated + ' 条，可作为会后 KOL 与机构追踪入口。');
+      takeaways.push('药物/机制信号以 ' + joinNames(mechanismNames, '待识别机制') + ' 为核心；高优先级摘要 ' + summary.highPriority + ' 条，适合优先进入 MSL briefing 候选池。');
+      if (module.id === 'aan') {
+        takeaways.push('AAN LS1/LS2 late-breaking 会话已定位；MG 相关 late-breaking 摘要公开后应第一时间补入本模块复盘。');
+      }
+    }
+
+    el.briefTakeaways.innerHTML = '<div class="conference-takeaway-list">' + takeaways.slice(0, 4).map(function(text, index) {
+      return '<article class="conference-takeaway-card">' +
+        '<span>' + escapeHtml('0' + (index + 1)) + '</span>' +
+        '<p>' + escapeHtml(text) + '</p>' +
+      '</article>';
+    }).join('') + '</div>';
   }
 
   function renderMeetingCards() {
@@ -316,54 +379,148 @@
     el.lateBreakers.innerHTML = html;
   }
 
-  function selectHighlights(items) {
-    var buckets = [
-      { label: '治疗进展', test: function(item) { return (item.drugs || []).length > 0; } },
-      { label: '高等级/高优先级', test: function(item) { return (item.priorityScore || 0) >= 6 || item.researchType === '随机/对照试验'; } },
-      { label: '中国线索', test: function(item) { return item.isChinaRelated; } },
-      { label: '真实世界', test: function(item) { return item.researchType === '真实世界/队列'; } },
-      { label: '机制/转化', test: function(item) { return item.researchType === '机制/转化'; } },
-      { label: '患者结局', test: function(item) { return (item.topics || []).indexOf('PRO/生活质量') !== -1; } }
-    ];
-    var seen = {};
-    var output = [];
-    buckets.forEach(function(bucket) {
-      var candidate = items.filter(bucket.test).sort(function(a, b) {
-        return (b.priorityScore || 0) - (a.priorityScore || 0) || String(a.title).localeCompare(String(b.title));
-      })[0];
-      if (candidate && !seen[candidate.id]) {
-        seen[candidate.id] = true;
-        output.push({ label: bucket.label, item: candidate });
-      }
-    });
-    items.slice().sort(function(a, b) { return (b.priorityScore || 0) - (a.priorityScore || 0); }).forEach(function(item) {
-      if (output.length >= 6 || seen[item.id]) return;
-      seen[item.id] = true;
-      output.push({ label: '补充观察', item: item });
-    });
-    return output.slice(0, 6);
+  function buildInsight(dimension, title, why, mslUse, representatives, tags) {
+    return {
+      dimension: dimension,
+      title: title,
+      why: why,
+      mslUse: mslUse,
+      representatives: representatives || [],
+      tags: tags || []
+    };
+  }
+
+  function buildConferenceInsights(module, summary, items) {
+    if (!items.length) return [];
+    var insights = [];
+    var topCountries = topNames(summary.countries, 3);
+    var topDrugs = topNames(summary.drugs, 3);
+    var topTopics = topNames(summary.topics, 4);
+
+    var treatmentItems = findRepresentativeItems(items, function(item) {
+      return (item.drugs || []).length > 0 || hasTopic(item, 'FcRn') || hasTopic(item, '补体') || hasTopic(item, 'B细胞/免疫重置');
+    }, 2);
+    if (treatmentItems.length) {
+      insights.push(buildInsight(
+        '治疗格局',
+        joinNames(topDrugs.length ? topDrugs : topTopics.slice(0, 2), '治疗机制') + ' 是本会议 MG 治疗复盘主线',
+        '药物和机制类摘要集中出现，提示会后 brief 应优先比较机制、人群、终点和安全性叙事，而不是只摘录单篇结果。',
+        '用于内部 congress debrief、KOL 拜访前问题准备和竞争信息追踪。',
+        treatmentItems,
+        topDrugs.concat(topTopics.slice(0, 2)).slice(0, 5)
+      ));
+    }
+
+    var evidenceItems = findRepresentativeItems(items, function(item) {
+      return item.researchType === summary.topType || (item.priorityScore || 0) >= 6;
+    }, 2);
+    insights.push(buildInsight(
+      '证据结构',
+      summary.topType + ' 是主要证据形态',
+      '研究类型结构决定了这次会议内容适合形成何种医学判断：随机/对照更适合进入核心证据，真实世界和 PRO 更适合补充临床实践与患者负担。',
+      '用于区分“可进入材料的证据”和“仅适合趋势观察的摘要级线索”。',
+      evidenceItems,
+      [summary.topType, '高优先级 ' + summary.highPriority + ' 条']
+    ));
+
+    if (summary.chinaRelated > 0) {
+      var chinaItems = findRepresentativeItems(items, function(item) { return item.isChinaRelated; }, 2);
+      insights.push(buildInsight(
+        '中国线索',
+        '中国相关摘要 ' + summary.chinaRelated + ' 条，适合会后单独追踪',
+        '中国作者、机构或患者数据提示本地证据沟通和专家协作机会，但仍需要逐条核查机构、研究设计和患者来源。',
+        '用于中国 KOL mapping、本地证据 gap 梳理和后续全文/会议材料追踪。',
+        chinaItems,
+        ['中国相关'].concat(topCountries).slice(0, 5)
+      ));
+    }
+
+    var safetyItems = findRepresentativeItems(items, function(item) {
+      return item.researchType === '安全性' || hasTopic(item, '安全性');
+    }, 2);
+    if (safetyItems.length) {
+      insights.push(buildInsight(
+        '安全性与用药管理',
+        '安全性信号需要和疗效信号并行复盘',
+        '会议摘要中安全性常以开放标签延长期、真实世界或病例形式出现，适合形成用药管理问题清单，但不宜单独作为结论。',
+        '用于 MSL 准备安全性追问、患者管理讨论和后续全文核查清单。',
+        safetyItems,
+        ['安全性'].concat(topDrugs).slice(0, 5)
+      ));
+    }
+
+    var patientItems = findRepresentativeItems(items, function(item) {
+      return hasTopic(item, 'PRO/生活质量') || hasTopic(item, '数字监测');
+    }, 2);
+    if (patientItems.length) {
+      insights.push(buildInsight(
+        '患者旅程',
+        'PRO、生活质量和数字监测可补足治疗结果叙事',
+        '这类摘要适合解释患者负担、症状波动和治疗体验，能够把药物疗效讨论延伸到医学事务更常用的患者旅程语言。',
+        '用于患者负担 slide、疾病教育和 KOL 对真实世界 unmet need 的访谈。',
+        patientItems,
+        ['PRO/生活质量', '数字监测']
+      ));
+    }
+
+    var countryItems = findRepresentativeItems(items, function(item) {
+      return (item.countries || []).some(function(country) { return topCountries.indexOf(country) !== -1; });
+    }, 2);
+    if (topCountries.length) {
+      insights.push(buildInsight(
+        'KOL/机构线索',
+        joinNames(topCountries, '多国') + ' 是本会议主要投稿/机构线索',
+        '国家/地区排名可作为会后 KOL mapping 的第一层入口，但作者和机构仍需在摘要详情中逐条核查。',
+        '用于会后专家地图、区域证据布局和潜在合作机构筛选。',
+        countryItems,
+        topCountries
+      ));
+    }
+
+    if (module.id === 'aan') {
+      insights.unshift(buildInsight(
+        'Late-breaking 追踪',
+        'AAN LS1/LS2 已定位，MG late-breaking 需会后补扫',
+        'AAN late-breaking 会话通常是会后复盘的最高优先级入口。当前先保留官网会话入口，等 MG 相关摘要公开后再纳入结构化池。',
+        '用于会后第一轮 congress debrief 的待办清单和更新提醒。',
+        findRepresentativeItems(items, function(item) { return (item.priorityScore || 0) >= 6; }, 2),
+        ['late-breaking', 'AAN LS1/LS2']
+      ));
+    }
+
+    return insights.slice(0, 6);
   }
 
   function renderHighlights(module, items) {
     if (!el.highlights) return;
+    var summary = summarizeModule(items);
     if (el.insightCount) {
-      el.insightCount.textContent = items.length ? items.length + ' 条摘要形成结构化图谱' : module.status;
+      el.insightCount.textContent = items.length ? '基于 ' + items.length + ' 条摘要生成' : module.status;
     }
     if (!items.length) {
       el.highlights.innerHTML = '<div class="conference-empty-focus wide"><strong>' + escapeHtml(module.emptyNote || '暂无结构化摘要') + '</strong><p>当前模块先呈现入口、字段规划和监控状态；后台扫描口已保留。</p></div>';
       return;
     }
-    var highlights = selectHighlights(items);
-    el.highlights.innerHTML = highlights.map(function(entry) {
-      var item = entry.item;
-      var tags = [item.researchType].concat(item.topics || []).concat(item.drugs || []).slice(0, 4);
-      return '<article class="conference-highlight-card">' +
-        '<span class="conference-highlight-label">' + escapeHtml(entry.label) + '</span>' +
-        '<a href="' + escapeHtml(item.sourceUrl || item.pageUrl || '#') + '" target="_blank">' + escapeHtml(item.title) + '</a>' +
-        '<p>' + escapeHtml(item.analysisZh || '') + '</p>' +
-        '<div class="conference-card-head">' + tags.map(function(tag) {
+    var insights = buildConferenceInsights(module, summary, items);
+    el.highlights.innerHTML = insights.map(function(insight) {
+      var refs = insight.representatives.slice(0, 2);
+      return '<article class="conference-highlight-card conference-insight-card">' +
+        '<div class="conference-insight-top">' +
+          '<span class="conference-highlight-label">' + escapeHtml(insight.dimension) + '</span>' +
+          '<strong>' + escapeHtml(insight.title) + '</strong>' +
+        '</div>' +
+        '<p>' + escapeHtml(insight.why) + '</p>' +
+        '<div class="conference-insight-use"><span>MSL 用途</span><p>' + escapeHtml(insight.mslUse) + '</p></div>' +
+        '<div class="conference-insight-refs">' +
+          '<span>代表摘要</span>' +
+          (refs.length ? refs.map(function(item) {
+            return '<a href="' + escapeHtml(item.sourceUrl || item.pageUrl || '#') + '" target="_blank">' + escapeHtml(truncateText(item.title, 86)) + '</a>';
+          }).join('') : '<em>暂无代表摘要，待源数据补充。</em>') +
+        '</div>' +
+        '<div class="conference-card-head">' + insight.tags.slice(0, 5).map(function(tag) {
           return '<span class="conference-badge">' + escapeHtml(tag) + '</span>';
-        }).join('') + (item.isChinaRelated ? '<span class="conference-badge china">中国相关</span>' : '') + '</div>' +
+        }).join('') + '</div>' +
+        '<em class="conference-source-note">' + escapeHtml(getMeetingSourceLimitation(module)) + '</em>' +
       '</article>';
     }).join('');
   }
@@ -423,11 +580,12 @@
   }
 
   function renderResultRow(item) {
-    var tags = [item.researchType].concat(item.drugs || []).slice(0, 3);
+    var tags = [item.researchType].concat(item.drugs || []).concat(item.topics || []).slice(0, 4);
     return '<article class="conference-result-row">' +
       '<div>' +
         '<a class="conference-card-title" href="' + escapeHtml(item.sourceUrl || item.pageUrl || '#') + '" target="_blank">' + escapeHtml(item.title) + '</a>' +
         '<p>' + escapeHtml([item.conference, item.presentationType, (item.countries || []).slice(0, 4).join('、')].filter(Boolean).join(' · ')) + '</p>' +
+        '<p class="conference-result-analysis">' + escapeHtml(item.analysisZh || '中文分析待生成；请展开摘要核查来源。') + '</p>' +
       '</div>' +
       '<div class="conference-result-tags">' + tags.map(function(tag) {
         return '<span class="conference-badge">' + escapeHtml(tag) + '</span>';
@@ -542,6 +700,7 @@
 
     renderMeetingCards();
     renderKpis(module, summary);
+    renderBriefTakeaways(module, summary, currentItems);
     renderRank(el.countryRank, summary.countries, 8);
     renderRank(el.typeRank, summary.types, 8);
     renderTopics(summary);
