@@ -48,9 +48,10 @@
     <section class="workspace-panel">
       <div class="panel-head">
         <div>
-          <h2>本月格局变化</h2>
-          <p class="panel-caption">每条变化都保留 PMID 入口，定位为拜访准备与阅读全文线索。</p>
+          <h2>动态月度洞察</h2>
+          <p class="panel-caption">由社区周更、知识图谱和新增 PMID 离线生成；每条洞察都保留选择理由、证据锚点和 MSL action。</p>
         </div>
+        <span class="update-badge" id="landscapeInsightMeta">Loading...</span>
       </div>
       <div class="landscape-change-grid" id="monthlyChangeList"></div>
     </section>
@@ -130,6 +131,7 @@
 </main>
 
 <script src="/MA-MG-HUB/data/landscape-data.js"></script>
+<script src="/MA-MG-HUB/data/landscapeInsights.js"></script>
 <script src="/MA-MG-HUB/assets/landscape.js"></script>
 </body>
 </html>

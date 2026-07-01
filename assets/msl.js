@@ -11,6 +11,8 @@
   var expertPool = buildExpertPool();
   var expertById = buildExpertById();
   var signals = (window.MG_SIGNALS_DATA && window.MG_SIGNALS_DATA.signals) || [];
+  var landscapeInsights = (window.MG_LANDSCAPE_INSIGHTS && window.MG_LANDSCAPE_INSIGHTS.insights) || [];
+  var landscapeInsightSummary = (window.MG_LANDSCAPE_INSIGHTS && window.MG_LANDSCAPE_INSIGHTS.summary) || {};
   var contentPayload = window.MG_CONTENT_MODULES || { modules: [], templates: [], compliance_rules: [] };
   var modules = contentPayload.modules || [];
   var templates = contentPayload.templates || [];
@@ -58,6 +60,8 @@
     moduleMeta: document.getElementById('moduleMeta'),
     moduleList: document.getElementById('visitModuleList'),
     compliance: document.getElementById('visitCompliance'),
+    landscapeActionMeta: document.getElementById('landscapeActionMeta'),
+    landscapeActionList: document.getElementById('landscapeActionList'),
     selectedExpertLine: document.getElementById('selectedExpertLine'),
     visitBrief: document.getElementById('visitBrief')
   };
@@ -836,11 +840,81 @@
     return scored.slice(0, 4).map(function(item) { return item.signal; });
   }
 
+  function insightSearchText(insight) {
+    return normalizeText([
+      insight.title,
+      insight.change_type || insight.type,
+      insight.selection_reason,
+      insight.what_is_new,
+      insight.msl_action,
+      (insight.community_titles || []).join(' '),
+      (insight.knowledge_nodes || []).map(function(node) { return node.title || node.id || ''; }).join(' ')
+    ].join(' '));
+  }
+
+  function relatedLandscapeInsightsForExpert(expert, moduleList) {
+    if (!landscapeInsights.length) return [];
+    var weightedKeys = [];
+    expertInterestItems(expert).slice(0, 8).forEach(function(item, index) {
+      weightedKeys.push({
+        key: normalizeText(item.term),
+        weight: Math.max(2, 8 - index) + Math.min(4, (item.count || 0) / 12)
+      });
+    });
+    expertTags(expert).forEach(function(tag) {
+      weightedKeys.push({ key: normalizeText(tag), weight: 2 });
+    });
+    (moduleList || []).forEach(function(module) {
+      (module.keywords || []).forEach(function(keyword) {
+        weightedKeys.push({ key: normalizeText(keyword), weight: 1.5 });
+      });
+    });
+    var scored = landscapeInsights.map(function(insight, index) {
+      var text = insightSearchText(insight);
+      var hits = weightedKeys.reduce(function(total, item) {
+        return total + (item.key && text.indexOf(item.key) !== -1 ? item.weight : 0);
+      }, 0);
+      var confidenceBonus = insight.confidence === 'high' ? 4 : insight.confidence === 'medium' ? 2 : 0;
+      var evidence = insight.evidence_summary || {};
+      return {
+        insight: insight,
+        score: hits * 3 + confidenceBonus + (Number(evidence.high_evidence_count || 0) * 1.8) + Math.max(0, 6 - index) * 0.2
+      };
+    });
+    scored.sort(function(a, b) { return b.score - a.score; });
+    return scored.slice(0, 3).map(function(item) { return item.insight; });
+  }
+
+  function renderLandscapeActions() {
+    if (!el.landscapeActionList) return;
+    var items = landscapeInsights.slice(0, 3);
+    if (el.landscapeActionMeta) {
+      el.landscapeActionMeta.textContent = landscapeInsights.length ?
+        '动态洞察 ' + landscapeInsights.length + ' 条 · 高置信 ' + (landscapeInsightSummary.high_confidence_count || 0) + ' 条' :
+        '等待 landscapeInsights.js';
+    }
+    if (!items.length) {
+      el.landscapeActionList.innerHTML = '<div class="visit-result-note">暂无动态诊治格局洞察；拜访助手将回退到近期信号和内容模块。</div>';
+      return;
+    }
+    el.landscapeActionList.innerHTML = items.map(function(insight) {
+      var refs = (insight.references || []).slice(0, 2).map(function(ref) {
+        return ref.pmid ? '<a class="pmid-chip" href="' + escapeHtml(ref.url || ('https://pubmed.ncbi.nlm.nih.gov/' + ref.pmid + '/')) + '" target="_blank">PMID ' + escapeHtml(ref.pmid) + '</a>' : '';
+      }).join('');
+      return '<article class="landscape-action-card">' +
+        '<span>' + escapeHtml(insight.change_type || insight.type || '格局洞察') + '</span>' +
+        '<strong>' + escapeHtml(insight.title || '') + '</strong>' +
+        '<p>' + escapeHtml(insight.msl_action || '') + '</p>' +
+        '<div class="pmid-row">' + refs + '</div>' +
+      '</article>';
+    }).join('');
+  }
+
   function articleKey(article) {
     return article && article.pmid ? 'pmid:' + article.pmid : 'title:' + normalizeText(article && article.title);
   }
 
-  function collectReferences(expert, moduleList, signalList) {
+  function collectReferences(expert, moduleList, signalList, insightList) {
     var map = {};
     function add(article, source) {
       if (!article) return;
@@ -861,6 +935,9 @@
     }
     expertTimeline(expert).slice(0, 4).forEach(function(article) { add(article, '专家近期发文'); });
     signalList.forEach(function(signal) { add(signal.article, '近期信号'); });
+    (insightList || []).forEach(function(insight) {
+      (insight.references || []).slice(0, 4).forEach(function(article) { add(article, '动态格局洞察'); });
+    });
     moduleList.forEach(function(module) {
       (module.references || []).slice(0, 5).forEach(function(article) { add(article, module.title); });
     });
@@ -895,11 +972,12 @@
     var moduleTypes = selected.map(function(module) { return (module.category || '内容') + ' / ' + module.type; });
     var signalList = relatedSignalsForExpert(expert, selected);
     if (!signalList.length) signalList = signals.slice(0, 3);
-    var references = collectReferences(expert, selected, signalList);
+    var insightList = relatedLandscapeInsightsForExpert(expert, selected);
+    var references = collectReferences(expert, selected, signalList, insightList);
     var profileCues = buildProfileCues(expert);
-    var openingTopics = buildOpeningTopics(expert, selected, signalList);
+    var openingTopics = buildOpeningTopics(expert, selected, signalList, insightList);
     var bridgeItems = buildBridgeItems(expert, selected);
-    var questions = buildQuestions(expert, selected, signalList);
+    var questions = buildQuestions(expert, selected, signalList, insightList);
 
     el.visitBrief.innerHTML =
       '<div class="brief-section">' +
@@ -923,6 +1001,12 @@
         '<h4>可追问问题</h4>' +
         '<ul>' + questions.map(function(item) { return '<li>' + escapeHtml(item) + '</li>'; }).join('') + '</ul>' +
       '</div>' +
+      (insightList.length ? '<div class="brief-section">' +
+        '<h4>本月格局行动</h4>' +
+        '<ul>' + insightList.map(function(insight) {
+          return '<li>' + escapeHtml((insight.change_type || insight.type || '格局') + ' · ' + insight.title + '：' + (insight.msl_action || '准备对应 PMID 和限制说明。')) + '</li>';
+        }).join('') + '</ul>' +
+      '</div>' : '') +
       '<div class="brief-section">' +
         '<h4>近期信号</h4>' +
         '<ul>' + signalList.map(function(signal) {
@@ -953,7 +1037,7 @@
     return cues.slice(0, 4);
   }
 
-  function buildOpeningTopics(expert, selected, signalList) {
+  function buildOpeningTopics(expert, selected, signalList, insightList) {
     var ctx = expertContext(expert);
     var rankedModules = rankModulesForExpert(expert, selected);
     var practiceFrame = isChinaExpert(expert) ? '本土患者和本中心实践' : '目标患者和所在中心实践';
@@ -970,6 +1054,9 @@
     if (signalList[0]) {
       topics.push('结合近期信号“' + shortText(signalList[0].summary, 82) + '”，追问其对' + practiceFrame + '的可转化性判断。');
     }
+    if ((insightList || [])[0]) {
+      topics.push('连接本月格局洞察“' + shortText(insightList[0].title, 76) + '”，请专家判断其是否会改变' + practiceFrame + '中的治疗路径或证据需求。');
+    }
     topics.push('最后收束到下一次沟通需要补充的证据类型：机制、真实世界、安全性管理、特殊人群或治疗格局。');
     return topics.slice(0, 4);
   }
@@ -984,7 +1071,7 @@
     });
   }
 
-  function buildQuestions(expert, selected, signalList) {
+  function buildQuestions(expert, selected, signalList, insightList) {
     var ctx = expertContext(expert);
     var top = ctx.topInterest.term;
     var second = ctx.secondInterest ? ctx.secondInterest.term : '临床实践';
@@ -1015,6 +1102,9 @@
     }
     if (signalList.length) {
       questions.push('近期信号中哪一类最可能影响您下一阶段的研究或临床讨论重点？');
+    }
+    if ((insightList || []).length) {
+      questions.push('本月动态诊治格局里，哪条洞察最值得转化成下一次专家会或中心内讨论？还需要补哪类证据？');
     }
     return uniqueItems(questions).slice(0, 5);
   }
@@ -1047,6 +1137,7 @@
     renderTopicFilters();
     renderExpertFilterOptions();
     bindTopicFilters();
+    renderLandscapeActions();
     renderExperts();
     renderVisitExpertMatches();
     renderModulePicker();

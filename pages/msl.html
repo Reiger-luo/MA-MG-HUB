@@ -51,16 +51,28 @@
           <div class="expert-search-results" id="visitChinaMatches"></div>
         </section>
 
-        <section class="workspace-panel msl-module-picker">
-          <div class="panel-head">
-            <div>
-              <h2>学术 / 产品信息</h2>
-              <p class="panel-caption" id="moduleMeta">Loading...</p>
+        <div class="msl-builder-col">
+          <section class="workspace-panel msl-module-picker">
+            <div class="panel-head">
+              <div>
+                <h2>学术 / 产品信息</h2>
+                <p class="panel-caption" id="moduleMeta">Loading...</p>
+              </div>
             </div>
-          </div>
-          <div class="module-list compact" id="visitModuleList"></div>
-          <div class="compliance-box compact" id="visitCompliance"></div>
-        </section>
+            <div class="module-list compact" id="visitModuleList"></div>
+            <div class="compliance-box compact" id="visitCompliance"></div>
+          </section>
+
+          <section class="workspace-panel msl-landscape-actions">
+            <div class="panel-head">
+              <div>
+                <h2>本月格局行动</h2>
+                <p class="panel-caption" id="landscapeActionMeta">读取动态诊治格局洞察，作为拜访准备线索。</p>
+              </div>
+            </div>
+            <div class="landscape-action-list" id="landscapeActionList"></div>
+          </section>
+        </div>
       </div>
 
       <section class="workspace-panel msl-brief-panel">
@@ -142,6 +154,7 @@
 <script src="/MA-MG-HUB/data/expert-profiles.js"></script>
 <script src="/MA-MG-HUB/data/signals-weekly.js"></script>
 <script src="/MA-MG-HUB/data/content-modules.js"></script>
+<script src="/MA-MG-HUB/data/landscapeInsights.js"></script>
 <script src="/MA-MG-HUB/assets/msl.js"></script>
 </body>
 </html>
