@@ -8,19 +8,11 @@ fetch-pubmed-full.py — MG-HUB PubMed 全量初始化
 策略：先按年分批（MeSH），再用 TiAb 补漏。
 """
 
-import json, os, sys, time, ssl, xml.etree.ElementTree as ET
+import json, os, sys, time, xml.etree.ElementTree as ET
 from datetime import datetime
 from urllib.request import urlopen, Request
 from urllib.parse import quote
 from pathlib import Path
-
-# macOS SSL
-try:
-    _create_unverified_https_context = ssl._create_unverified_context
-except AttributeError:
-    pass
-else:
-    ssl._create_default_https_context = _create_unverified_https_context
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT_ROOT / "data"

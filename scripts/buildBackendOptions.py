@@ -8,11 +8,11 @@ Phase 6 当前不是启动真实后端，而是把“什么时候需要后端、
 
 from __future__ import annotations
 
-import json
-import re
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+
+from common.io import atomic_write_js_global, atomic_write_text, load_js_global
 
 
 PROJECT = Path(__file__).resolve().parent.parent
@@ -22,11 +22,7 @@ REPORT_DIR = PROJECT / "report"
 
 def load_js(filename: str, global_name: str) -> Any:
     path = DATA_DIR / filename
-    text = path.read_text(encoding="utf-8")
-    match = re.search(rf"window\.{re.escape(global_name)}\s*=\s*(.*);\s*$", text, re.S)
-    if not match:
-        raise ValueError(f"Cannot parse {path}")
-    return json.loads(match.group(1))
+    return load_js_global(path, global_name)
 
 
 def maybe_load_js(filename: str, global_name: str) -> Any:
@@ -256,18 +252,13 @@ def write_report(payload: dict[str, Any]) -> None:
     ])
     lines.extend(f"- {item}" for item in payload["guardrails"])
     lines.append("")
-    report_path.write_text("\n".join(lines), encoding="utf-8")
+    atomic_write_text(report_path, "\n".join(lines))
 
 
 def main() -> None:
     payload = build_payload()
     output = DATA_DIR / "backendOptions.js"
-    output.write_text(
-        "window.MG_BACKEND_OPTIONS = "
-        + json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
-        + ";\n",
-        encoding="utf-8",
-    )
+    atomic_write_js_global(output, "MG_BACKEND_OPTIONS", payload)
     write_report(payload)
     print(
         "✅ backend options written:",

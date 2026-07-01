@@ -16,21 +16,12 @@ import json
 import os
 import subprocess
 import shutil
-import ssl
 import time
 import xml.etree.ElementTree as ET
 from datetime import datetime
 from pathlib import Path
 from urllib.parse import quote
 from urllib.request import Request, urlopen
-
-
-try:
-    _create_unverified_https_context = ssl._create_unverified_context
-except AttributeError:
-    pass
-else:
-    ssl._create_default_https_context = _create_unverified_https_context
 
 
 PROJECT = Path(__file__).resolve().parent.parent

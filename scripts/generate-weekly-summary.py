@@ -6,10 +6,10 @@ generate-weekly-summary.py — 生成当前通讯渠道可直接使用的 MA-MG-
 from __future__ import annotations
 
 import argparse
-import json
-import re
 from datetime import datetime
 from pathlib import Path
+
+from common.io import atomic_write_text, load_js_global
 
 
 PROJECT = Path(__file__).resolve().parent.parent
@@ -18,12 +18,7 @@ SITE_URL = "https://reiger-luo.github.io/MA-MG-HUB/"
 
 
 def load_js_data(filename: str, global_name: str):
-    path = DATA_DIR / filename
-    text = path.read_text(encoding="utf-8")
-    match = re.search(rf"window\.{re.escape(global_name)}\s*=\s*(.*);\s*$", text, re.S)
-    if not match:
-        raise ValueError(f"Cannot parse {path}")
-    return json.loads(match.group(1))
+    return load_js_global(DATA_DIR / filename, global_name)
 
 
 def signal_line(signal: dict, index: int) -> str:
@@ -99,8 +94,7 @@ def main():
 
     summary = build_summary()
     output = PROJECT / args.output
-    output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(summary + "\n", encoding="utf-8")
+    atomic_write_text(output, summary + "\n")
     print(summary)
     try:
         display_path = output.relative_to(PROJECT)

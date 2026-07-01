@@ -17,6 +17,8 @@ from collections import Counter, defaultdict
 from datetime import datetime, timedelta
 from pathlib import Path
 
+from common.io import atomic_write_json, atomic_write_js_global, load_js_global, load_json as read_json
+
 try:
     import requests
 except ImportError:  # pragma: no cover - GitHub Actions 会安装 requests
@@ -29,6 +31,8 @@ FULL_PATH = DATA_DIR / "literature-full.json"
 RECENT_JS_PATH = DATA_DIR / "literature-recent.js"
 RECENT_JSON_CACHE_PATH = DATA_DIR / "literature-recent.json"
 EXPERT_JS_PATH = DATA_DIR / "expert-profiles.js"
+EXPERT_CHINA_JS_PATH = DATA_DIR / "expert-profiles-china.js"
+EXPERT_INTERNATIONAL_JS_PATH = DATA_DIR / "expert-profiles-international.js"
 AUTHOR_INSTITUTION_INDEX_PATH = DATA_DIR / "pubmed-author-institution-index.json"
 ENTITY_NORMALIZATION_INDEX_PATH = DATA_DIR / "pubmed-entity-normalization-index.json"
 CHINA_REGULATORY_PATH = DATA_DIR / "china-regulatory-status.json"
@@ -591,15 +595,11 @@ LIVING_ANSWER_SPECS = [
 def load_json(path: Path):
     if not path.exists():
         raise FileNotFoundError(path)
-    return json.loads(path.read_text(encoding="utf-8"))
+    return read_json(path)
 
 
 def load_public_js(path: Path, global_name: str):
-    text = path.read_text(encoding="utf-8")
-    match = re.search(rf"window\.{re.escape(global_name)}\s*=\s*(.*);\s*$", text, re.S)
-    if not match:
-        raise ValueError(f"Cannot parse {path}")
-    return json.loads(match.group(1))
+    return load_js_global(path, global_name)
 
 
 def regulatory_status_class(status: str):
@@ -776,12 +776,67 @@ def compact_article(article):
 
 def write_js(name, global_name, payload):
     path = DATA_DIR / name
-    text = "window.%s = %s;\n" % (
-        global_name,
-        json.dumps(payload, ensure_ascii=False, separators=(",", ":")),
-    )
-    path.write_text(text, encoding="utf-8")
+    atomic_write_js_global(path, global_name, payload)
     print(f"✅ {path.relative_to(PROJECT)}")
+
+
+def build_expert_manifest(experts):
+    """生成首屏可加载的专家画像 manifest。"""
+    summary = dict(experts.get("summary") or {})
+    china_index = experts.get("china_expert_index") or []
+    international_index = experts.get("international_expert_index") or []
+    existing_shards = experts.get("shards") or []
+    shards = existing_shards or [
+        {
+            "id": "china",
+            "label": "中国作者-机构索引",
+            "path": "data/expert-profiles-china.js",
+            "global": "MG_EXPERT_PROFILE_CHINA",
+            "count": len(china_index),
+            "loaded_by_default": True,
+        },
+        {
+            "id": "international",
+            "label": "国际作者-机构索引",
+            "path": "data/expert-profiles-international.js",
+            "global": "MG_EXPERT_PROFILE_INTERNATIONAL",
+            "count": len(international_index),
+            "loaded_by_default": False,
+        },
+    ]
+    summary["frontend_load_mode"] = "sharded_by_region"
+    summary["initial_shard"] = "china"
+    return {
+        "generated_at": experts.get("generated_at") or datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "summary": summary,
+        "experts": [],
+        "quick_expert_ids": experts.get("quick_expert_ids") or {},
+        "shards": shards,
+        "china_expert_index": [],
+        "international_expert_index": [],
+    }
+
+
+def write_expert_outputs(experts):
+    """写出专家画像 manifest 与按区域拆分的前端索引。"""
+    manifest = build_expert_manifest(experts)
+    write_js("expert-profiles.js", "MG_EXPERT_PROFILES", manifest)
+    china_index = experts.get("china_expert_index") or []
+    international_index = experts.get("international_expert_index") or []
+    if china_index:
+        write_js("expert-profiles-china.js", "MG_EXPERT_PROFILE_CHINA", {
+            "generated_at": manifest["generated_at"],
+            "region": "china",
+            "count": len(china_index),
+            "items": china_index,
+        })
+    if international_index:
+        write_js("expert-profiles-international.js", "MG_EXPERT_PROFILE_INTERNATIONAL", {
+            "generated_at": manifest["generated_at"],
+            "region": "international",
+            "count": len(international_index),
+            "items": international_index,
+        })
 
 
 def build_signals(recent):
@@ -1396,10 +1451,7 @@ def write_author_institution_index(articles, profile_summaries, institution_arti
         "author_institution_profiles": profile_summaries,
         "institutions": institutions,
     }
-    AUTHOR_INSTITUTION_INDEX_PATH.write_text(
-        json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
+    atomic_write_json(AUTHOR_INSTITUTION_INDEX_PATH, payload)
     print(f"✅ {AUTHOR_INSTITUTION_INDEX_PATH.relative_to(PROJECT)}")
 
 
@@ -1428,10 +1480,7 @@ def write_entity_normalization_index(profile_summaries, institution_articles):
         "person_profiles": profile_summaries,
         "canonical_institutions": institutions,
     }
-    ENTITY_NORMALIZATION_INDEX_PATH.write_text(
-        json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
+    atomic_write_json(ENTITY_NORMALIZATION_INDEX_PATH, payload)
     print(f"✅ {ENTITY_NORMALIZATION_INDEX_PATH.relative_to(PROJECT)}")
 
 
@@ -1709,7 +1758,7 @@ def load_clinicaltrials_studies():
             "source_url": source_url,
             "studies": studies,
         }
-        CLINICALTRIALS_CACHE_PATH.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+        atomic_write_json(CLINICALTRIALS_CACHE_PATH, payload)
         return studies, {
             "source": payload["source"],
             "source_url": source_url,
@@ -2219,13 +2268,9 @@ def load_knowledge_dashboard_stats():
     path = DATA_DIR / "knowledge-graph.js"
     if not path.exists():
         return {}
-    text = path.read_text(encoding="utf-8")
-    match = re.search(r"window\.MG_KNOWLEDGE_GRAPH\s*=\s*(\{.*\});\s*$", text, re.S)
-    if not match:
-        return {}
     try:
-        payload = json.loads(match.group(1))
-    except json.JSONDecodeError:
+        payload = load_js_global(path, "MG_KNOWLEDGE_GRAPH")
+    except ValueError:
         return {}
     stats = payload.get("stats", {})
     return {
@@ -2244,21 +2289,29 @@ def build_dashboard(recent, signals, experts, china, landscape, modules, total_c
     module_summary = modules.get("summary", {})
     landscape_overview = landscape.get("overview", {})
     knowledge_stats = load_knowledge_dashboard_stats()
+    expert_manifest = build_expert_manifest(experts)
+    initial_expert_payload = json.dumps(expert_manifest, ensure_ascii=False, separators=(",", ":"))
+    if experts.get("china_expert_index"):
+        initial_expert_payload += json.dumps(
+            {"items": experts.get("china_expert_index") or []},
+            ensure_ascii=False,
+            separators=(",", ":"),
+        )
     expert_payload_mb = round(
-        len(json.dumps(experts, ensure_ascii=False, separators=(",", ":"))) / 1024 / 1024,
+        len(initial_expert_payload) / 1024 / 1024,
         1,
     )
     pipeline_policy = {
         "label": "周更管线",
         "value": "每周日 23:00",
         "note": "PubMed 周更、证据分级、IF/CAS、前端数据同步",
-        "href": "/MA-MG-HUB/pages/data-ops.html",
+        "href": "pages/data-ops.html",
     }
     section_cards = [
         {
             "id": "literature",
             "title": "情报中心",
-            "href": "/MA-MG-HUB/pages/literature.html",
+            "href": "pages/literature.html",
             "metric": f"{len(signals['signals'])} 条信号",
             "summary": "近一年文献、近 14 天信号、主题热点和中国相关证据。",
             "facts": [
@@ -2270,7 +2323,7 @@ def build_dashboard(recent, signals, experts, china, landscape, modules, total_c
         {
             "id": "landscape",
             "title": "诊治格局",
-            "href": "/MA-MG-HUB/pages/landscape.html",
+            "href": "pages/landscape.html",
             "metric": f"{landscape_overview.get('living_answer_count', len(landscape.get('living_answers', [])))} 个判断",
             "summary": landscape_overview.get("positioning", "将近期证据转译成治疗格局、竞争定位和中国实践差异。"),
             "facts": [
@@ -2282,7 +2335,7 @@ def build_dashboard(recent, signals, experts, china, landscape, modules, total_c
         {
             "id": "knowledge",
             "title": "知识库",
-            "href": "/MA-MG-HUB/pages/knowledge.html",
+            "href": "pages/knowledge.html",
             "metric": f"{knowledge_stats.get('nodes', 0)} 个节点",
             "summary": "基于 PubMed abstract 的知识图谱、证据矩阵和专题层。",
             "facts": [
@@ -2294,7 +2347,7 @@ def build_dashboard(recent, signals, experts, china, landscape, modules, total_c
         {
             "id": "msl",
             "title": "MSL 工作台",
-            "href": "/MA-MG-HUB/pages/msl.html",
+            "href": "pages/msl.html",
             "metric": f"{expert_count} 位作者画像",
             "summary": "专家画像、拜访助手、学术/产品信息模块和文献清单生成。",
             "facts": [
@@ -2306,7 +2359,7 @@ def build_dashboard(recent, signals, experts, china, landscape, modules, total_c
         {
             "id": "data",
             "title": "数据状态",
-            "href": "/MA-MG-HUB/pages/data-ops.html",
+            "href": "pages/data-ops.html",
             "metric": "周更可追踪",
             "summary": "数据源、构建产物、运行日志和前端数据文件状态。",
             "facts": [
@@ -2343,27 +2396,27 @@ def build_dashboard(recent, signals, experts, china, landscape, modules, total_c
                 "label": "专家画像",
                 "value": f"{expert_summary.get('frontend_quick_expert_limit', 20)} 位快捷候选",
                 "note": "首页和 MSL 默认只渲染快捷候选，搜索时进入全量索引。",
-                "href": "/MA-MG-HUB/pages/msl.html",
+                "href": "pages/msl.html",
             },
             {
                 "label": "内容模块",
                 "value": f"{module_summary.get('academic_modules', 0)} 学术 + {module_summary.get('product_modules', 0)} 产品",
                 "note": "拜访助手将专家兴趣、近期信号和模块文献合并生成建议。",
-                "href": "/MA-MG-HUB/pages/msl.html",
+                "href": "pages/msl.html",
             },
         ],
         "data_health": [
-            {"label": "专家前端索引", "value": f"{expert_payload_mb} MB", "state": "ok"},
+            {"label": "专家前端索引", "value": f"首屏约 {expert_payload_mb} MB，按区域分片", "state": "ok"},
             {"label": "知识图谱", "value": f"{knowledge_stats.get('nodes', 0)} 节点", "state": "ok" if knowledge_stats.get("nodes") else "warn"},
             {"label": "证据矩阵", "value": f"{knowledge_stats.get('matrix_rows', 0)} 行", "state": "ok" if knowledge_stats.get("matrix_rows") else "warn"},
             {"label": "周更策略", "value": "增量更新", "state": "ok"},
         ],
         "top_signals": signals["signals"][:5],
         "work_items": [
-            {"type": "文献", "label": "近 14 天信号", "count": len(signals["signals"]), "href": "/MA-MG-HUB/pages/literature.html"},
-            {"type": "专家", "label": "已构建专家画像", "count": expert_count, "href": "/MA-MG-HUB/pages/msl.html"},
-            {"type": "模块", "label": "MSL 内容模块", "count": sum(1 for m in modules["modules"] if not m["verified"]), "href": "/MA-MG-HUB/pages/msl.html"},
-            {"type": "证据", "label": "待确认证据矩阵", "count": len(landscape["evidence_questions"]), "href": "/MA-MG-HUB/pages/landscape.html"},
+            {"type": "文献", "label": "近 14 天信号", "count": len(signals["signals"]), "href": "pages/literature.html"},
+            {"type": "专家", "label": "已构建专家画像", "count": expert_count, "href": "pages/msl.html"},
+            {"type": "模块", "label": "MSL 内容模块", "count": sum(1 for m in modules["modules"] if not m["verified"]), "href": "pages/msl.html"},
+            {"type": "证据", "label": "待确认证据矩阵", "count": len(landscape["evidence_questions"]), "href": "pages/landscape.html"},
         ],
     }
 
@@ -2383,7 +2436,7 @@ def main():
 
     write_js("signals-weekly.js", "MG_SIGNALS_DATA", signals)
     write_js("china-intelligence.js", "MG_CHINA_DATA", china)
-    write_js("expert-profiles.js", "MG_EXPERT_PROFILES", experts)
+    write_expert_outputs(experts)
     write_js("landscape-data.js", "MG_LANDSCAPE_DATA", landscape)
     write_js("content-modules.js", "MG_CONTENT_MODULES", modules)
     write_js("dashboard-data.js", "MG_DASHBOARD_DATA", dashboard)

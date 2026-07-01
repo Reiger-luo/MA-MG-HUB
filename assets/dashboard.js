@@ -2,6 +2,7 @@
 (function() {
   'use strict';
 
+  var hub = window.MgHub || {};
   var data = window.MG_DASHBOARD_DATA || { stats: {}, stat_cards: [], sections: [], top_signals: [], work_items: [] };
   var communityCardsData = window.MG_COMMUNITY_CARDS || { cards: [] };
   var communityWeeklyData = window.MG_COMMUNITY_WEEKLY || { communities: [], hot_communities: [] };
@@ -12,17 +13,19 @@
   (topicCoverageData.community_coverage || []).forEach(function(item) { topicCoverageByCommunityId[item.community_id] = item; });
 
   function escapeHtml(value) {
-    var div = document.createElement('div');
-    div.textContent = value == null ? '' : String(value);
-    return div.innerHTML;
+    if (hub.escapeText) return hub.escapeText(value);
+    return String(value == null ? '' : value).replace(/[&<>"']/g, function(char) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char];
+    });
   }
 
   function escapeHref(value, fallback) {
-    var href = String(value || '').trim();
-    if (/^(https?:)?\/\//i.test(href) || href.indexOf('/MA-MG-HUB/') === 0) {
-      return escapeHtml(href);
-    }
+    if (hub.safeUrl) return hub.safeUrl(value, fallback || '#');
     return escapeHtml(fallback || '#');
+  }
+
+  function pageUrl(path) {
+    return hub.pageUrl ? hub.pageUrl(path) : path;
   }
 
   function compactNumber(value) {
@@ -58,7 +61,7 @@
       var facts = (section.facts || []).map(function(item) {
         return '<span>' + escapeHtml(item) + '</span>';
       }).join('');
-      return '<a class="dashboard-section-card" href="' + escapeHtml(section.href || '#') + '">' +
+      return '<a class="dashboard-section-card" href="' + escapeHref(section.href || '#') + '">' +
         '<div class="dashboard-section-top"><strong>' + escapeHtml(section.title) + '</strong><em>' + escapeHtml(section.metric || '') + '</em></div>' +
         '<p>' + escapeHtml(section.summary || '') + '</p>' +
         '<div class="dashboard-section-facts">' + facts + '</div>' +
@@ -71,7 +74,7 @@
     if (!target) return;
     var workflows = data.workflows || [];
     target.innerHTML = workflows.map(function(item) {
-      return '<a class="dashboard-workflow-item" href="' + escapeHtml(item.href || '#') + '">' +
+      return '<a class="dashboard-workflow-item" href="' + escapeHref(item.href || '#') + '">' +
         '<span>' + escapeHtml(item.label) + '</span>' +
         '<strong>' + escapeHtml(item.value || '') + '</strong>' +
         '<em>' + escapeHtml(item.note || '') + '</em>' +
@@ -124,7 +127,7 @@
       var card = communityCardsById[communityId] || {};
       var coverage = topicCoverageByCommunityId[communityId] || {};
       var topTopic = (coverage.top_topics || [])[0] || {};
-      var href = '/MA-MG-HUB/pages/knowledge.html?community=' + encodeURIComponent(communityId);
+      var href = pageUrl('pages/knowledge.html?community=' + encodeURIComponent(communityId));
       var meta = '本周 ' + compactNumber(row.recent_count || card.recent_14d_count || 0) +
         ' · 高等级 ' + compactNumber(row.high_evidence_count || card.high_evidence_count || 0) +
         ' · 专题 ' + compactNumber(coverage.topic_count || 0);

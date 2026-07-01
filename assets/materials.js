@@ -2,6 +2,7 @@
 (function() {
   'use strict';
 
+  var hub = window.MgHub || {};
   var payload = window.MG_CONTENT_MODULES || { modules: [], templates: [], compliance_rules: [] };
   var modules = payload.modules || [];
   var templates = payload.templates || [];
@@ -16,14 +17,15 @@
   };
 
   function escapeHtml(value) {
-    var div = document.createElement('div');
-    div.textContent = value == null ? '' : String(value);
-    return div.innerHTML;
+    if (hub.escapeText) return hub.escapeText(value);
+    return String(value == null ? '' : value).replace(/[&<>"']/g, function(char) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char];
+    });
   }
 
   function init() {
     el.template.innerHTML = templates.map(function(t) {
-      return '<option value="' + t.id + '">' + escapeHtml(t.name) + '</option>';
+      return '<option value="' + escapeHtml(t.id) + '">' + escapeHtml(t.name) + '</option>';
     }).join('');
     el.template.value = selectedTemplateId;
     el.template.addEventListener('change', function() {
@@ -49,7 +51,7 @@
         return '<li>' + escapeHtml(claim.text) + '<span>PMID ' + escapeHtml(claim.pmid || '-') + ' · ' + escapeHtml(claim.evidence_level || '未分类') + '</span></li>';
       }).join('');
       return '<article class="module-card">' +
-        '<label class="module-check"><input type="checkbox" value="' + module.id + '" ' + checked + '> <strong>' + escapeHtml(module.title) + '</strong></label>' +
+        '<label class="module-check"><input type="checkbox" value="' + escapeHtml(module.id) + '" ' + checked + '> <strong>' + escapeHtml(module.title) + '</strong></label>' +
         '<div class="module-meta">' + escapeHtml(module.type) + ' · ' + escapeHtml(status) + ' · 更新 ' + escapeHtml(module.updated_at) + '</div>' +
         '<p>' + escapeHtml(module.summary || '') + '</p>' +
         '<ul>' + claims + '</ul>' +

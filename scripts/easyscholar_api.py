@@ -24,26 +24,27 @@ JSON 响应，无需反爬处理。速率限制：每秒最多 1 次请求。
 import json
 import os
 import re
-import ssl
 import time
 import urllib.request
 import urllib.parse
 import urllib.error
 
-# macOS Python 3.11+ SSL cert fix
-try:
-    ssl._create_default_https_context = ssl._create_unverified_context
-except AttributeError:
-    pass
-
 # ── 配置 ─────────────────────────────────────────────────────────────
 
-# 密钥（可被环境变量覆盖）
-SECRET_KEY = os.environ.get("EASYSCHOLAR_KEY", "28fc90c1db04461a9f51f72cfe9b8418")
 BASE_URL = "https://www.easyscholar.cc/open/getPublicationRank"
 
 # 速率限制：每秒最多 1 次请求（按 API 文档要求）
 MIN_INTERVAL = 1.0
+
+
+def load_secret_key(secret_key=None):
+    """从参数或环境变量读取 EasyScholar 密钥，避免代码内硬编码。"""
+    key = secret_key or os.environ.get("EASYSCHOLAR_KEY", "")
+    if not key:
+        raise RuntimeError(
+            "EASYSCHOLAR_KEY 未设置。请通过环境变量提供 EasyScholar API 密钥。"
+        )
+    return key
 
 
 # ── 核心 API ────────────────────────────────────────────────────────
@@ -75,7 +76,7 @@ class EasyScholarAPI:
     """
     
     def __init__(self, secret_key=None, min_interval=MIN_INTERVAL):
-        self.secret_key = secret_key or SECRET_KEY
+        self.secret_key = load_secret_key(secret_key)
         self._limiter = RateLimiter(min_interval)
         self._cache = {}  # journal_name → parsed result (in-memory dedup)
     

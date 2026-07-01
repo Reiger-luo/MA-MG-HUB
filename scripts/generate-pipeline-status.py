@@ -8,9 +8,10 @@ generate-pipeline-status.py — 生成 MA-MG-HUB 数据管线状态。
 from __future__ import annotations
 
 import json
-import re
 from datetime import datetime
 from pathlib import Path
+
+from common.io import atomic_write_js_global, load_js_global, load_json
 
 
 PROJECT = Path(__file__).resolve().parent.parent
@@ -44,16 +45,11 @@ PUBLIC_ARTIFACTS = [
 
 
 def loadJson(path: Path):
-    return json.loads(path.read_text(encoding="utf-8"))
+    return load_json(path)
 
 
 def loadJs(filename: str, globalName: str):
-    path = DATA_DIR / filename
-    text = path.read_text(encoding="utf-8")
-    match = re.search(rf"window\.{re.escape(globalName)}\s*=\s*(.*);\s*$", text, re.S)
-    if not match:
-        raise ValueError(f"Cannot parse {path}")
-    return json.loads(match.group(1))
+    return load_js_global(DATA_DIR / filename, globalName)
 
 
 def safeLoadJs(filename: str, globalName: str):
@@ -241,10 +237,7 @@ def buildStatus():
 def main():
     output = DATA_DIR / "pipeline-status.js"
     status = buildStatus()
-    with output.open("w", encoding="utf-8") as f:
-        f.write("window.MG_PIPELINE_STATUS = ")
-        json.dump(status, f, ensure_ascii=False)
-        f.write(";\n")
+    atomic_write_js_global(output, "MG_PIPELINE_STATUS", status)
     print(f"✅ pipeline status written: {output.relative_to(PROJECT)}")
 
 

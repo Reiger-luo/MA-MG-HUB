@@ -505,6 +505,16 @@ def hasDerivedRctAnalysis(text: str) -> bool:
     ]
     if not hasAny(text, derivedTerms) or not hasAny(text, trialTerms):
         return False
+    # 只复用既往 RCT 数据的亚组/事后分析，不按本研究 RCT 处理。
+    prior_only_patterns = [
+        r"\b(previous|prior|previously published|earlier)\b.{0,80}\brandomi[sz]ed\b",
+        r"\brandomi[sz]ed\b.{0,80}\b(previous|prior|previously published|earlier)\b",
+        r"\bwithout\b.{0,40}\bnew random\b",
+        r"\bno\b.{0,40}\bnew random\b",
+        r"\bdata from\b.{0,80}\b(previous|prior|previously published|earlier)\b",
+    ]
+    if any(hasPattern(text, pattern) for pattern in prior_only_patterns):
+        return False
     if isRetrospective(text) and hasAny(text, priorTrialContextTerms):
         return False
     return True

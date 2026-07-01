@@ -5,6 +5,7 @@
 (function () {
   'use strict';
 
+  var hub = window.MgHub || {};
   var graphData = window.MG_KNOWLEDGE_GRAPH || {};
   var graphHealthData = window.MG_GRAPH_HEALTH || { summary: {}, health: {} };
   var nodes = graphData.nodes || [];
@@ -60,7 +61,7 @@
       }
     }
     loadLiteratureSearchSource(done);
-    loadScriptOnce('/MA-MG-HUB/data/expert-profiles.js', done);
+    loadScriptOnce(assetUrl('data/expert-profiles.js'), done);
   }
 
   function loadLiteratureSearchSource(callback) {
@@ -68,12 +69,12 @@
       callback();
       return;
     }
-    loadScriptOnce('/MA-MG-HUB/data/literature-full-index.js', function (ok) {
+    loadScriptOnce(assetUrl('data/literature-full-index.js'), function (ok) {
       if (ok && window.MG_LITERATURE_FULL_INDEX) {
         callback();
         return;
       }
-      loadScriptOnce('/MA-MG-HUB/data/literature-recent.js', callback);
+      loadScriptOnce(assetUrl('data/literature-recent.js'), callback);
     });
   }
 
@@ -125,6 +126,7 @@
   var scaleMax = 3.2;
   var activeNodeId = null;
   var activeCommunityId = null;
+  var tabController = null;
   var communityAssignmentCache = {};
   var communityAssignmentLoading = {};
   var communityAssignmentErrors = {};
@@ -203,9 +205,27 @@
   };
 
   function escapeHtml(value) {
-    var div = document.createElement('div');
-    div.textContent = value == null ? '' : String(value);
-    return div.innerHTML;
+    if (hub.escapeText) return hub.escapeText(value);
+    return String(value == null ? '' : value).replace(/[&<>"']/g, function (char) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char];
+    });
+  }
+
+  function escapeHref(value, fallback) {
+    if (hub.safeUrl) return hub.safeUrl(value, fallback || '#');
+    return escapeHtml(fallback || '#');
+  }
+
+  function assetUrl(path) {
+    return hub.assetUrl ? hub.assetUrl(path) : path;
+  }
+
+  function pageUrl(path) {
+    return hub.pageUrl ? hub.pageUrl(path) : path;
+  }
+
+  function safeClassToken(value, fallback) {
+    return hub.safeClassToken ? hub.safeClassToken(value, fallback) : String(value || fallback || 'unknown').replace(/[^a-zA-Z0-9_-]+/g, '-');
   }
 
   function cssEscape(value) {
@@ -367,7 +387,7 @@
       var target = nodesById[edge.to];
       if (!source || !target) return;
       var line = svgEl('line', {
-        class: 'kg-edge source-' + edge.source_type + (coreEdgeIds[edge.id] ? ' core-edge' : ' secondary-edge'),
+        class: 'kg-edge source-' + safeClassToken(edge.source_type, 'unknown') + (coreEdgeIds[edge.id] ? ' core-edge' : ' secondary-edge'),
         x1: source.x,
         y1: source.y,
         x2: target.x,
@@ -385,7 +405,7 @@
     var nodeLayer = svgEl('g', { class: 'kg-node-layer' });
     nodes.forEach(function (node) {
       var group = svgEl('g', {
-        class: 'kg-node type-' + node.type + ' conf-' + node.confidence + (node.dominant_community_id ? ' community-mapped' : ' community-unmapped'),
+        class: 'kg-node type-' + safeClassToken(node.type, 'unknown') + ' conf-' + safeClassToken(node.confidence, 'low') + (node.dominant_community_id ? ' community-mapped' : ' community-unmapped'),
         'data-id': node.id,
         'data-type': node.type,
         'data-community': node.dominant_community_id || '',
@@ -673,7 +693,7 @@
       ref.evidence_level ? 'Level ' + ref.evidence_level : '',
       (ref.study_types || []).slice(0, 2).join(' / ')
     ].filter(Boolean).join(' · ');
-    return '<li><a class="text-link" href="' + escapeHtml(ref.url) + '" target="_blank" rel="noopener">PMID ' +
+    return '<li><a class="text-link" href="' + escapeHref(ref.url) + '" target="_blank" rel="noopener">PMID ' +
       escapeHtml(ref.pmid) + '</a> ' + escapeHtml(ref.title || '') +
       '<br><span class="kg-ref-meta">' + escapeHtml(meta) + '</span></li>';
   }
@@ -776,7 +796,7 @@
 
     var tableRows = rows.map(function (row) {
       var pmids = (row.references || []).map(function (ref) {
-        return '<a class="kg-pmid-link" href="' + escapeHtml(ref.url) + '" target="_blank" rel="noopener">' +
+        return '<a class="kg-pmid-link" href="' + escapeHref(ref.url) + '" target="_blank" rel="noopener">' +
           escapeHtml(ref.pmid) + '</a>';
       }).join(' ');
       return '<tr>' +
@@ -954,7 +974,7 @@
       '<div class="kg-detail-section"><h4>专题要点</h4>' + claimHtml + '</div>' +
       '<div class="kg-detail-section"><h4>专题 PMID</h4><ul class="kg-study-list">' + refsHtml + '</ul></div>' +
       '<div class="kg-detail-section"><h4>本周自动影响提示</h4><ul class="kg-study-list">' + impactHtml + '</ul></div>' +
-      '<div class="kg-detail-actions"><a class="kg-obsidian-btn" href="' + escapeHtml(topic.obsidian_url || '#') + '">在 Obsidian 中打开</a></div>';
+      '<div class="kg-detail-actions"><a class="kg-obsidian-btn" href="' + escapeHref(topic.obsidian_url || '#') + '">在 Obsidian 中打开</a></div>';
 
     Array.prototype.forEach.call(elTopicDetail.querySelectorAll('[data-node]'), function (button) {
       button.addEventListener('click', function () {
@@ -1038,7 +1058,7 @@
     }
     communityAssignmentLoading[communityId] = true;
     communityAssignmentCallbacks[communityId] = [callback];
-    loadScriptOnce('/MA-MG-HUB/data/communityAssignments-' + encodeURIComponent(communityId) + '.js', function (ok) {
+    loadScriptOnce(assetUrl('data/communityAssignments-' + encodeURIComponent(communityId) + '.js'), function (ok) {
       var shards = window.MG_COMMUNITY_ASSIGNMENT_SHARDS || {};
       var payload = shards[communityId] || null;
       if (ok && payload) {
@@ -1111,7 +1131,7 @@
         return title + ' ' + Number(entry.score || 0).toFixed(1).replace(/\.0$/, '');
       }).join(' / ');
       return '<li class="community-assignment-row">' +
-        '<a href="https://pubmed.ncbi.nlm.nih.gov/' + escapeHtml(item.pmid) + '/" target="_blank" rel="noopener">PMID ' + escapeHtml(item.pmid) + '</a>' +
+        '<a href="' + escapeHref('https://pubmed.ncbi.nlm.nih.gov/' + encodeURIComponent(item.pmid || '') + '/') + '" target="_blank" rel="noopener">PMID ' + escapeHtml(item.pmid) + '</a>' +
         '<span class="kg-badge conf-' + escapeHtml(item.confidence === 'high' ? 'high' : item.confidence === 'medium' ? 'medium' : 'low') + '">' + escapeHtml(assignmentConfidenceLabel(item.confidence)) + '</span>' +
         '<span>' + escapeHtml(item.entry_date || item.pub_date || '-') + '</span>' +
         '<span>' + escapeHtml(item.evidence_level ? 'Level ' + item.evidence_level : '未分级') + '</span>' +
@@ -1353,7 +1373,7 @@
       '</div></div>' +
       '<div class="kg-detail-section"><h4>限制</h4><div class="kg-detail-summary">' + escapeHtml(row.limitations || '当前为 title/abstract/metadata 规则基线，后续需要 taxonomy review 和人工校准。') + '</div></div>' +
       '<div class="kg-detail-actions">' +
-        '<a class="kg-obsidian-btn" href="/MA-MG-HUB/pages/literature.html?community=' + encodeURIComponent(row.id) + '">在情报中心查看近一年文献</a>' +
+        '<a class="kg-obsidian-btn" href="' + escapeHref(pageUrl('pages/literature.html?community=' + encodeURIComponent(row.id))) + '">在情报中心查看近一年文献</a>' +
         '<button class="kg-obsidian-btn" type="button" data-community-graph="' + escapeHtml(row.id) + '">查看相关图谱节点</button>' +
         '<button class="kg-obsidian-btn" type="button" data-community-matrix="' + escapeHtml(row.id) + '">查看证据矩阵关系</button>' +
         '<button class="kg-obsidian-btn" type="button" data-community-topics="' + escapeHtml(row.id) + '">查看相关专题</button>' +
@@ -1455,6 +1475,10 @@
   }
 
   function activateTab(key) {
+    if (tabController) {
+      tabController.activate(key, false);
+      return;
+    }
     var tabs = document.querySelectorAll('[data-knowledge-tab]');
     var panels = document.querySelectorAll('.intel-tab-panel');
     Array.prototype.forEach.call(tabs, function (tab) {
@@ -1468,6 +1492,13 @@
   }
 
   function attachTabs() {
+    if (hub.initTabs) {
+      tabController = hub.initTabs({
+        tabAttr: 'data-knowledge-tab',
+        panelFor: function(key) { return document.getElementById('knowledge-' + key + '-panel'); }
+      });
+      return;
+    }
     Array.prototype.forEach.call(document.querySelectorAll('[data-knowledge-tab]'), function (tab) {
       tab.addEventListener('click', function () {
         activateTab(tab.getAttribute('data-knowledge-tab'));
@@ -1565,13 +1596,13 @@
         ' 篇 · ' + escapeHtml(compactNumber(coverage.topic_count || 0)) + ' 专题</span></li>';
     }, communityMatches.length);
     html += renderSearchGroup(searchArticleGroupTitle, articleHits, function (article) {
-      return '<li><a class="text-link" href="' + escapeHtml(article.url) + '" target="_blank" rel="noopener">' +
+      return '<li><a class="text-link" href="' + escapeHref(article.url) + '" target="_blank" rel="noopener">' +
         escapeHtml(article.title) + '</a><br><span class="kg-ref-meta">' +
         escapeHtml(article.journal || '') + ' · PMID ' + escapeHtml(article.pmid || '-') +
         (article.evidence_level ? ' · Level ' + escapeHtml(article.evidence_level) : '') + '</span></li>';
     }, articleMatches.length);
     html += renderSearchGroup('专家公开画像', expertHits, function (expert) {
-      return '<li><a class="text-link" href="/MA-MG-HUB/pages/msl.html">' + escapeHtml(expert.name_en || expert.name_zh || '') +
+      return '<li><a class="text-link" href="' + escapeHref(pageUrl('pages/msl.html')) + '">' + escapeHtml(expert.name_en || expert.name_zh || '') +
         '</a><br><span class="kg-ref-meta">' + escapeHtml(expert.affiliation || '') + '</span></li>';
     }, expertMatches.length);
 

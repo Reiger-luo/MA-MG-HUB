@@ -8,11 +8,11 @@ buildLandscapeInsights.py — 生成动态诊治格局洞察。
 
 from __future__ import annotations
 
-import json
-import re
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+
+from common.io import atomic_write_js_global, load_js_global
 
 
 PROJECT = Path(__file__).resolve().parent.parent
@@ -109,11 +109,7 @@ SIGNAL_SCORE = {"high": 12, "medium": 6, "low": 2, "active": 10, "watch": 6, "qu
 
 def load_js(filename: str, global_name: str) -> Any:
     path = DATA_DIR / filename
-    text = path.read_text(encoding="utf-8")
-    match = re.search(rf"window\.{re.escape(global_name)}\s*=\s*(.*);\s*$", text, re.S)
-    if not match:
-        raise ValueError(f"Cannot parse {path}")
-    return json.loads(match.group(1))
+    return load_js_global(path, global_name)
 
 
 def maybe_load_js(filename: str, global_name: str) -> Any:
@@ -404,12 +400,7 @@ def build_payload() -> dict[str, Any]:
 def main() -> None:
     payload = build_payload()
     output = DATA_DIR / "landscapeInsights.js"
-    output.write_text(
-        "window.MG_LANDSCAPE_INSIGHTS = "
-        + json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
-        + ";\n",
-        encoding="utf-8",
-    )
+    atomic_write_js_global(output, "MG_LANDSCAPE_INSIGHTS", payload)
     print(
         "✅ landscape insights written:",
         output.relative_to(PROJECT),

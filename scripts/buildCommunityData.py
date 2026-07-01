@@ -15,6 +15,8 @@ from collections import Counter, defaultdict
 from datetime import datetime, timedelta
 from pathlib import Path
 
+from common.io import atomic_write_json, atomic_write_js_global, atomic_write_text, load_js_global, load_json as read_json
+
 
 projectPath = Path(__file__).resolve().parent.parent
 dataDir = projectPath / "data"
@@ -194,16 +196,11 @@ stopWords = {
 
 
 def loadJson(path: Path):
-    return json.loads(path.read_text(encoding="utf-8"))
+    return read_json(path)
 
 
 def loadPublicJs(path: Path, globalName: str):
-    text = path.read_text(encoding="utf-8")
-    pattern = rf"window\.{re.escape(globalName)}\s*=\s*(.*?);\s*(?:window\.|$)"
-    match = re.search(pattern, text, re.S)
-    if not match:
-        raise ValueError(f"Cannot parse {path}")
-    return json.loads(match.group(1))
+    return load_js_global(path, globalName)
 
 
 def loadArticles() -> tuple[list[dict], str, str]:
@@ -1331,7 +1328,7 @@ def writeAssignmentsJsonl(assignments: list[dict]) -> None:
 
 
 def writeJson(path: Path, payload: dict) -> None:
-    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    atomic_write_json(path, payload)
 
 
 def writeJs(path: Path, globalName: str, payload: dict) -> None:
@@ -1342,10 +1339,7 @@ def writeJs(path: Path, globalName: str, payload: dict) -> None:
         " * 请勿手动编辑；运行脚本重新生成。\n"
         " */\n"
     )
-    path.write_text(
-        header + f"window.{globalName} = {json.dumps(payload, ensure_ascii=False, separators=(',', ':'))};\n",
-        encoding="utf-8",
-    )
+    atomic_write_js_global(path, globalName, payload, header)
 
 
 def assignmentPublicItem(item: dict, article: dict) -> dict:
@@ -1377,12 +1371,12 @@ def writeAssignmentShard(path: Path, communityId: str, payload: dict) -> None:
         " * 请勿手动编辑；运行脚本重新生成。\n"
         " */\n"
     )
-    path.write_text(
+    atomic_write_text(
+        path,
         header +
         "window.MG_COMMUNITY_ASSIGNMENT_SHARDS = window.MG_COMMUNITY_ASSIGNMENT_SHARDS || {};\n" +
         f"window.MG_COMMUNITY_ASSIGNMENT_SHARDS[{json.dumps(communityId)}] = " +
         f"{json.dumps(payload, ensure_ascii=False, separators=(',', ':'))};\n",
-        encoding="utf-8",
     )
 
 
@@ -1394,10 +1388,7 @@ def writeRecentAssignments(path: Path, payload: dict) -> None:
         " * 请勿手动编辑；运行脚本重新生成。\n"
         " */\n"
     )
-    path.write_text(
-        header + f"window.MG_COMMUNITY_RECENT_ASSIGNMENTS = {json.dumps(payload, ensure_ascii=False, separators=(',', ':'))};\n",
-        encoding="utf-8",
-    )
+    atomic_write_js_global(path, "MG_COMMUNITY_RECENT_ASSIGNMENTS", payload, header)
 
 
 def buildAssignmentOutputs(assignments: list[dict], articles: list[dict], sourceMode: str, sourceFile: str, latest: datetime, generatedAt: str) -> tuple[dict, list[tuple[str, dict]], dict]:
@@ -1426,7 +1417,7 @@ def buildAssignmentOutputs(assignments: list[dict], articles: list[dict], source
         filename = assignmentShardFile(communityId)
         shards.append({
             "community_id": communityId,
-            "file": f"/MA-MG-HUB/data/{filename}",
+            "file": f"data/{filename}",
             "item_count": len(items),
             "size_hint": "lazy",
         })
@@ -1450,7 +1441,7 @@ def buildAssignmentOutputs(assignments: list[dict], articles: list[dict], source
         "primary_counts": primaryCounts.most_common(),
         "confidence_counts": confidenceCounts.most_common(),
         "shards": shards,
-        "recent_assignments_file": "/MA-MG-HUB/data/communityAssignmentsRecent.js",
+        "recent_assignments_file": "data/communityAssignmentsRecent.js",
         "recent_items_preview": [
             {
                 "pmid": item["pmid"],

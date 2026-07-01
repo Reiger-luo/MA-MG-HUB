@@ -14,20 +14,12 @@ fetch-pubmed-weekly.py — MG-HUB PubMed 数据管线
   - author_affiliations 为作者级机构，供专家画像和机构文献计量使用
 """
 
-import argparse, json, os, re, socket, sys, time, ssl, xml.etree.ElementTree as ET
+import argparse, json, os, re, socket, sys, time, xml.etree.ElementTree as ET
 from datetime import datetime, timedelta
 from urllib.error import HTTPError, URLError
 from urllib.request import urlopen, Request
 from urllib.parse import urlencode
 from pathlib import Path
-
-# macOS SSL 证书兼容（pubmed-search skill 已验证方案）
-try:
-    _create_unverified_https_context = ssl._create_unverified_context
-except AttributeError:
-    pass
-else:
-    ssl._create_default_https_context = _create_unverified_https_context
 
 # ── 配置 ──────────────────────────────────────────────
 BASE_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"

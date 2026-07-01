@@ -2,6 +2,7 @@
 (function() {
   'use strict';
 
+  var hub = window.MgHub || {};
   var data = window.MG_LANDSCAPE_DATA || {};
   var insightPayload = window.MG_LANDSCAPE_INSIGHTS || { insights: [], summary: {} };
   var curatedTopicPayload = window.MG_CURATED_TOPICS || { topics: [] };
@@ -14,9 +15,19 @@
   }
 
   function escapeHtml(value) {
-    var div = document.createElement('div');
-    div.textContent = value == null ? '' : String(value);
-    return div.innerHTML;
+    if (hub.escapeText) return hub.escapeText(value);
+    return String(value == null ? '' : value).replace(/[&<>"']/g, function(char) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char];
+    });
+  }
+
+  function escapeHref(value, fallback) {
+    if (hub.safeUrl) return hub.safeUrl(value, fallback || '#');
+    return escapeHtml(fallback || '#');
+  }
+
+  function pageUrl(path) {
+    return hub.pageUrl ? hub.pageUrl(path) : path;
   }
 
   function compactNumber(value) {
@@ -37,6 +48,13 @@
   }
 
   function bindTabs() {
+    if (hub.initTabs) {
+      hub.initTabs({
+        tabAttr: 'data-landscape-tab',
+        panelFor: function(key) { return $('landscape-' + key); }
+      });
+      return;
+    }
     var tabs = document.querySelectorAll('[data-landscape-tab]');
     var panels = document.querySelectorAll('.intel-tab-panel');
     Array.prototype.forEach.call(tabs, function(tab) {
@@ -98,17 +116,17 @@
       var label = typeof item === 'string' ? item : (item.title || item.id || item.topic_id || '');
       var href = '';
       if (item.topic_id) href = topicHref(item.topic_id);
-      else if (item.id) href = '/MA-MG-HUB/pages/knowledge.html?node=' + encodeURIComponent(item.id);
-      if (item.community_id) href = '/MA-MG-HUB/pages/knowledge.html?community=' + encodeURIComponent(item.community_id);
+      else if (item.id) href = pageUrl('pages/knowledge.html?node=' + encodeURIComponent(item.id));
+      if (item.community_id) href = pageUrl('pages/knowledge.html?community=' + encodeURIComponent(item.community_id));
       if (href) {
-        return '<a class="' + escapeHtml(className || 'mini-chip') + '" href="' + href + '">' + escapeHtml(label) + '</a>';
+        return '<a class="' + escapeHtml(className || 'mini-chip') + '" href="' + escapeHref(href) + '">' + escapeHtml(label) + '</a>';
       }
       return '<span class="' + escapeHtml(className || 'mini-chip') + '">' + escapeHtml(label) + '</span>';
     }).join('');
   }
 
   function topicHref(topicId) {
-    return '/MA-MG-HUB/pages/knowledge.html?tab=topics&topic=' + encodeURIComponent(topicId || '');
+    return pageUrl('pages/knowledge.html?tab=topics&topic=' + encodeURIComponent(topicId || ''));
   }
 
   function toSet(items) {
@@ -185,7 +203,7 @@
       topics.map(function(topic) {
         var meta = topic.shared_pmids ? topic.shared_pmids + ' PMID' : topic.shared_nodes + ' 锚点';
         if (topic.impact_status === 'updatedEvidence') meta = '本周新证据 · ' + meta;
-        return '<a class="mini-chip chip-button" href="' + escapeHtml(topicHref(topic.topic_id)) + '" title="' +
+        return '<a class="mini-chip chip-button" href="' + escapeHref(topicHref(topic.topic_id)) + '" title="' +
           escapeHtml(meta) + '">' + escapeHtml(topic.title) + '</a>';
       }).join('') + '</div></div>';
   }
@@ -206,7 +224,7 @@
     if (!refs.length) return '<span class="muted-text">暂无 PMID</span>';
     return refs.slice(0, limit || 3).map(function(ref) {
       var pmid = ref.pmid || '';
-      return '<a class="pmid-chip" href="' + escapeHtml(ref.url || ('https://pubmed.ncbi.nlm.nih.gov/' + pmid + '/')) +
+      return '<a class="pmid-chip" href="' + escapeHref(ref.url || ('https://pubmed.ncbi.nlm.nih.gov/' + pmid + '/')) +
         '" target="_blank" rel="noopener">PMID ' + escapeHtml(pmid) + '</a>';
     }).join('');
   }
@@ -215,10 +233,10 @@
     regulatory = regulatory || {};
     var links = [];
     if (regulatory.source_url) {
-      links.push('<a class="regulatory-source-link" href="' + escapeHtml(regulatory.source_url) + '" target="_blank" rel="noopener">来源 1</a>');
+      links.push('<a class="regulatory-source-link" href="' + escapeHref(regulatory.source_url) + '" target="_blank" rel="noopener">来源 1</a>');
     }
     if (regulatory.secondary_url) {
-      links.push('<a class="regulatory-source-link" href="' + escapeHtml(regulatory.secondary_url) + '" target="_blank" rel="noopener">来源 2</a>');
+      links.push('<a class="regulatory-source-link" href="' + escapeHref(regulatory.secondary_url) + '" target="_blank" rel="noopener">来源 2</a>');
     }
     if (!links.length) return '<span class="muted-text">待核对</span>';
     return links.join('');
@@ -301,7 +319,7 @@
     trials = trials || [];
     if (!trials.length) return '<span class="muted-text">暂无 NCT</span>';
     return trials.slice(0, limit || 3).map(function(trial) {
-      return '<a class="pmid-chip" href="' + escapeHtml(trial.url || ('https://clinicaltrials.gov/study/' + trial.nct_id)) +
+      return '<a class="pmid-chip" href="' + escapeHref(trial.url || ('https://clinicaltrials.gov/study/' + trial.nct_id)) +
         '" target="_blank" rel="noopener">' + escapeHtml(trial.nct_id || 'NCT') + '</a>';
     }).join('');
   }
@@ -492,7 +510,7 @@
         '<div class="answer-added"><span>新增证据</span>' + renderRefLinks(answer.added_papers, 3) + '</div>' :
         '<div class="answer-added"><span>新增证据</span><em>本轮未发现明确新增 PMID</em></div>';
       var anchors = (answer.anchor_nodes || []).map(function(node) {
-        return '<a class="mini-chip chip-button" href="/MA-MG-HUB/pages/knowledge.html?node=' + escapeHtml(node) + '">' + escapeHtml(node) + '</a>';
+        return '<a class="mini-chip chip-button" href="' + escapeHref(pageUrl('pages/knowledge.html?node=' + encodeURIComponent(node))) + '">' + escapeHtml(node) + '</a>';
       }).join('');
       return '<article class="living-answer-card">' +
         '<div class="answer-head">' +

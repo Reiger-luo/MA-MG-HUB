@@ -2,6 +2,7 @@
 (function() {
   'use strict';
 
+  var hub = window.MgHub || {};
   let allArticles = [];
   let filteredResults = [];
   let signalItems = [];
@@ -22,8 +23,14 @@
   const SIGNAL_WINDOW_DAYS = 14;
   var echartsLoading = false;
   var chinaDataLoading = false;
+  var echartsCallbacks = [];
+  var chinaDataCallbacks = [];
 
   function loadScript(src, callback) {
+    if (hub.loadScript) {
+      hub.loadScript(src, callback);
+      return;
+    }
     var s = document.createElement('script');
     s.src = src;
     s.onload = function() { if (callback) callback(true); };
@@ -32,22 +39,29 @@
   }
 
   function loadEcharts(cb) {
-    if (typeof echarts !== 'undefined') { cb(); return; }
+    if (typeof echarts !== 'undefined') { cb(true); return; }
+    echartsCallbacks.push(cb);
     if (echartsLoading) return;
     echartsLoading = true;
     loadScript('https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js', function () {
       echartsLoading = false;
-      cb();
+      var callbacks = echartsCallbacks.slice();
+      echartsCallbacks = [];
+      var ok = typeof echarts !== 'undefined';
+      callbacks.forEach(function(callback) { if (callback) callback(ok); });
     });
   }
 
   function loadChinaData(cb) {
-    if (window.MG_CHINA_DATA) { cb(); return; }
+    if (window.MG_CHINA_DATA) { cb(true); return; }
+    chinaDataCallbacks.push(cb);
     if (chinaDataLoading) return;
     chinaDataLoading = true;
-    loadScript('/MA-MG-HUB/data/china-intelligence.js', function () {
+    loadScript('data/china-intelligence.js', function (ok) {
       chinaDataLoading = false;
-      cb();
+      var callbacks = chinaDataCallbacks.slice();
+      chinaDataCallbacks = [];
+      callbacks.forEach(function(callback) { if (callback) callback(ok && !!window.MG_CHINA_DATA); });
     });
   }
 
@@ -246,7 +260,7 @@
     communityAssignmentLoading[communityId] = true;
     communityAssignmentCallbacks[communityId] = [callback];
     updateCommunityFilterStatus();
-    loadScript('/MA-MG-HUB/data/communityAssignments-' + encodeURIComponent(communityId) + '.js', function(ok) {
+    loadScript('data/communityAssignments-' + encodeURIComponent(communityId) + '.js', function(ok) {
       var shards = window.MG_COMMUNITY_ASSIGNMENT_SHARDS || {};
       var payload = shards[communityId];
       if (ok && payload) {
@@ -603,12 +617,14 @@
     if (article.journal_quartile) tagsHTML += '<span class="badge-metric">CAS ' + escapeHtml(String(article.journal_quartile)) + '</span>';
     tagsHTML += renderArticleCommunityBadge(article);
 
+    var pmidToken = safeIdToken(article.pmid || 'unknown');
+    var abstractId = 'abs-' + pmidToken;
     div.innerHTML =
       '<a class="article-card-title" href="' + escapeHref(article.url) + '" target="_blank" rel="noopener">' + escapeHtml(article.title || '(无标题)') + '</a>' +
       '<div class="article-card-meta">' + metaParts.join(' · ') + '</div>' +
       (article.abstract
-        ? '<button class="abstract-toggle" data-pmid="' + article.pmid + '">显示摘要</button>' +
-          '<div class="article-card-abstract" id="abs-' + article.pmid + '">' + escapeHtml(article.abstract.slice(0, 300)) + (article.abstract.length > 300 ? '…' : '') + '</div>'
+        ? '<button class="abstract-toggle" data-pmid="' + escapeHtml(normalizePmid(article.pmid)) + '">显示摘要</button>' +
+          '<div class="article-card-abstract" id="' + abstractId + '">' + escapeHtml(article.abstract.slice(0, 300)) + (article.abstract.length > 300 ? '…' : '') + '</div>'
         : '') +
       '<div class="article-card-links">' +
         (article.doi ? '<a href="' + doiHref(article.doi) + '" target="_blank" rel="noopener">DOI</a>' : '') +
@@ -617,9 +633,9 @@
 
     var toggle = div.querySelector('.abstract-toggle');
     if (toggle) {
-      (function(pmid, abstract) {
+      (function(targetId, abstract) {
         toggle.addEventListener('click', function() {
-          var abs = document.getElementById('abs-' + pmid);
+          var abs = document.getElementById(targetId);
           if (abs) {
             if (abs.getAttribute('data-fulltext') !== '1') {
               abs.innerHTML = escapeHtml(abstract);
@@ -629,29 +645,31 @@
             this.textContent = abs.classList.contains('open') ? '收起摘要' : '显示摘要';
           }
         });
-      })(article.pmid, article.abstract);
+      })(abstractId, article.abstract);
     }
     return div;
   }
 
   function escapeHtml(text) {
-    var d = document.createElement('div');
-    d.textContent = text;
-    return d.innerHTML;
+    if (hub.escapeText) return hub.escapeText(text);
+    return String(text == null ? '' : text).replace(/[&<>"']/g, function(char) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char];
+    });
   }
 
   function escapeHref(value, fallback) {
-    var href = String(value || '').trim();
-    if (/^(https?:)?\/\//i.test(href) || href.indexOf('/MA-MG-HUB/') === 0) {
-      return escapeHtml(href);
-    }
+    if (hub.safeUrl) return hub.safeUrl(value, fallback || '#');
     return escapeHtml(fallback || '#');
+  }
+
+  function safeIdToken(value) {
+    return hub.safeIdToken ? hub.safeIdToken(value, 'pmid') : String(value || 'pmid').replace(/[^a-zA-Z0-9_-]+/g, '-');
   }
 
   function doiHref(doi) {
     var value = String(doi || '').trim().replace(/^https?:\/\/(dx\.)?doi\.org\//i, '');
     if (!value) return '#';
-    return 'https://doi.org/' + escapeHtml(value);
+    return escapeHref('https://doi.org/' + value);
   }
 
   function buildArticleMeta(article, dateStr) {
@@ -666,6 +684,14 @@
   }
 
   function bindTabs() {
+    if (hub.initTabs) {
+      hub.initTabs({
+        tabAttr: 'data-tab',
+        panelFor: function(key) { return document.getElementById('tab-' + key); },
+        onChange: function(key) { if (key === 'china') resizeChinaCharts(); }
+      });
+      return;
+    }
     var tabs = document.querySelectorAll('.intel-tab');
     var panels = document.querySelectorAll('.intel-tab-panel');
     for (var i = 0; i < tabs.length; i++) {
@@ -941,7 +967,11 @@
 
   function renderChinaInsights() {
     if (!el.chinaSourceList) return;
-    loadChinaData(function () {
+    loadChinaData(function (ok) {
+      if (!ok) {
+        el.chinaSourceList.innerHTML = '<div class="empty-state"><h3>中国情报加载失败</h3><p>请稍后重试或检查数据产物。</p></div>';
+        return;
+      }
       var chinaPayload = window.MG_CHINA_DATA || null;
       var chinaArticles = chinaPayload && chinaPayload.pubmed_articles ? chinaPayload.pubmed_articles.slice() : [];
       if (chinaArticles.length === 0) {
@@ -982,8 +1012,8 @@
       el.chinaSourceList.innerHTML = sourceHtml;
       bindRankLinks();
 
-      loadEcharts(function () {
-        renderChinaCharts(chinaArticles, chinaPayload);
+      loadEcharts(function (chartOk) {
+        if (chartOk) renderChinaCharts(chinaArticles, chinaPayload);
       });
     });
   }

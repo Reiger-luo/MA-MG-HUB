@@ -1,0 +1,76 @@
+/* MA-MG-HUB 数据状态页样式 */
+.ops-main { max-width: 900px; margin: 0 auto; padding: 1.5rem; }
+.source-card {
+  background: var(--bg2); border-radius: 8px;
+  border: 1px solid var(--bg3); padding: 1rem 1.2rem;
+  margin-bottom: 0.6rem;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.source-info { flex: 1; }
+.source-name { font-size: 0.95rem; font-weight: 500; color: var(--fg); }
+.source-meta { font-size: 0.8rem; color: var(--fg3); margin-top: 0.15rem; }
+.source-status { font-size: 0.8rem; }
+.source-status .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 0.3rem; }
+.source-status .dot.green { background: var(--green); }
+.source-status .dot.yellow { background: var(--yellow); }
+.source-status .dot.gray { background: var(--bg3); }
+.source-status .dot.red { background: #d96c6c; }
+.ops-section-title { font-size: 0.9rem; font-weight: 500; color: var(--fg2); margin: 1.2rem 0 0.6rem; }
+.ops-btn {
+  padding: 0.4rem 0.8rem; border-radius: 6px;
+  background: var(--accent); color: #fff; border: none;
+  font-size: 0.82rem; cursor: pointer;
+  transition: opacity 0.15s;
+}
+.ops-btn:hover { opacity: 0.85; }
+.ops-btn:disabled { opacity: 0.4; cursor: default; }
+.log-line {
+  font-size: 0.8rem; color: var(--fg3); padding: 0.3rem 0;
+  border-bottom: 1px solid var(--bg3);
+  font-family: monospace;
+}
+.artifact-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; }
+.artifact-item {
+  background: var(--bg2); border: 1px solid var(--bg3); border-radius: 8px;
+  padding: 0.8rem 0.9rem;
+}
+.artifact-name { font-size: 0.84rem; color: var(--fg); font-weight: 500; }
+.artifact-meta { font-size: 0.76rem; color: var(--fg3); margin-top: 0.2rem; line-height: 1.5; }
+.community-audit-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; }
+.community-audit-card {
+  background: var(--bg2); border: 1px solid var(--bg3); border-radius: 8px;
+  padding: 0.8rem 0.9rem;
+  display: block; text-decoration: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+.community-audit-card:hover { border-color: rgba(37,99,235,0.32); background: rgba(37,99,235,0.035); }
+.community-audit-card span { display: block; color: var(--fg3); font-size: 0.74rem; }
+.community-audit-card strong { display: block; color: var(--fg); font-size: 1.22rem; line-height: 1.25; margin-top: 0.12rem; }
+.community-audit-card em { display: block; color: var(--fg3); font-size: 0.72rem; font-style: normal; margin-top: 0.16rem; }
+.community-audit-card.warning strong { color: var(--yellow); }
+.community-audit-card.danger strong { color: var(--red); }
+.backend-decision-card {
+  background: var(--bg2); border: 1px solid var(--bg3); border-radius: 8px;
+  padding: 0.9rem 1rem; margin-bottom: 0.7rem;
+}
+.backend-decision-card strong { display:block;color:var(--fg);font-size:1rem;margin-bottom:0.25rem; }
+.backend-decision-card p { color:var(--fg2);font-size:0.8rem;line-height:1.65;margin:0.25rem 0; }
+.backend-option-grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0.6rem; }
+.backend-option-card {
+  background: var(--bg2); border: 1px solid var(--bg3); border-radius: 8px;
+  padding: 0.78rem 0.9rem;
+}
+.backend-option-card span { display:block;color:var(--fg3);font-size:0.7rem;margin-bottom:0.16rem; }
+.backend-option-card strong { display:block;color:var(--fg);font-size:0.86rem;line-height:1.35; }
+.backend-option-card em { display:block;color:var(--fg3);font-size:0.72rem;font-style:normal;margin-top:0.22rem;line-height:1.45; }
+.ops-inline-link { color: var(--accent); text-decoration: none; }
+.ops-inline-link:hover { text-decoration: underline; }
+.ops-note { font-size:0.78rem;color:var(--fg3);margin-top:0.3rem;line-height:1.7; }
+.section-divider { border: none; border-top: 1px solid var(--bg3); margin: 1.5rem 0; }
+@media (max-width: 640px) {
+  .source-card { align-items: flex-start; gap: 0.7rem; }
+  .source-status { white-space: nowrap; }
+  .artifact-grid { grid-template-columns: 1fr; }
+  .community-audit-grid { grid-template-columns: 1fr; }
+  .backend-option-grid { grid-template-columns: 1fr; }
+}

@@ -5,20 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>工作台 · MA-MG-HUB</title>
 <link rel="icon" href="data:,">
-<link rel="stylesheet" href="/MA-MG-HUB/assets/main.css">
+<link rel="stylesheet" href="assets/main.css">
 </head>
 <body>
 
 <nav class="nav">
   <div class="nav-inner">
-    <a href="/MA-MG-HUB/" class="nav-brand">MA-MG-HUB</a>
+    <a href="./" class="nav-brand">MA-MG-HUB</a>
     <div class="nav-links">
-      <a href="/MA-MG-HUB/" class="nav-link active">工作台</a>
-      <a href="/MA-MG-HUB/pages/literature.html" class="nav-link">情报中心</a>
-      <a href="/MA-MG-HUB/pages/landscape.html" class="nav-link">诊治格局</a>
-      <a href="/MA-MG-HUB/pages/knowledge.html" class="nav-link">知识库</a>
-      <a href="/MA-MG-HUB/pages/msl.html" class="nav-link">MSL工作台</a>
-      <a href="/MA-MG-HUB/pages/data-ops.html" class="nav-link">数据状态</a>
+      <a href="./" class="nav-link active">工作台</a>
+      <a href="pages/literature.html" class="nav-link">情报中心</a>
+      <a href="pages/landscape.html" class="nav-link">诊治格局</a>
+      <a href="pages/knowledge.html" class="nav-link">知识库</a>
+      <a href="pages/msl.html" class="nav-link">MSL工作台</a>
+      <a href="pages/data-ops.html" class="nav-link">数据状态</a>
     </div>
   </div>
 </nav>
@@ -38,7 +38,7 @@
   <section class="dashboard-stats" id="dashboardStats"></section>
 
   <section class="workspace-panel dashboard-community-panel">
-    <div class="panel-head"><h2>本周社区动态</h2><a class="text-link" href="/MA-MG-HUB/pages/knowledge.html?tab=communities">社区视图</a></div>
+    <div class="panel-head"><h2>本周社区动态</h2><a class="text-link" href="pages/knowledge.html?tab=communities">社区视图</a></div>
     <div id="dashboardCommunityDynamics"></div>
   </section>
 
@@ -46,13 +46,13 @@
 
   <div class="dashboard-grid">
     <section class="workspace-panel dashboard-signals">
-      <div class="panel-head"><h2>近 14 天信号</h2><a class="text-link" href="/MA-MG-HUB/pages/literature.html">查看全部</a></div>
+      <div class="panel-head"><h2>近 14 天信号</h2><a class="text-link" href="pages/literature.html">查看全部</a></div>
       <div id="dashboardSignals"></div>
     </section>
 
     <aside class="dashboard-side-stack">
       <section class="workspace-panel">
-        <div class="panel-head"><h2>当前工作流</h2><a class="text-link" href="/MA-MG-HUB/pages/data-ops.html">数据状态</a></div>
+        <div class="panel-head"><h2>当前工作流</h2><a class="text-link" href="pages/data-ops.html">数据状态</a></div>
         <div id="dashboardWorkflows"></div>
       </section>
 
@@ -64,10 +64,11 @@
   </div>
 </main>
 
-<script src="/MA-MG-HUB/data/dashboard-data.js"></script>
-<script src="/MA-MG-HUB/data/communityCards.js"></script>
-<script src="/MA-MG-HUB/data/communityWeekly.js"></script>
-<script src="/MA-MG-HUB/data/wikiTopicCoverage.js"></script>
-<script src="/MA-MG-HUB/assets/dashboard.js"></script>
+<script src="assets/common.js"></script>
+<script src="data/dashboard-data.js"></script>
+<script src="data/communityCards.js"></script>
+<script src="data/communityWeekly.js"></script>
+<script src="data/wikiTopicCoverage.js"></script>
+<script src="assets/dashboard.js"></script>
 </body>
 </html>

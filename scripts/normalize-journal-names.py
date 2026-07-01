@@ -11,15 +11,10 @@ normalize-journal-names.py — 统一 literature-full.json 的期刊名为全称
   3. 找不到的保持原样（前端显示缩写不影响功能）
 """
 
-import json, time, ssl
+import json, time
 from urllib.request import urlopen, Request
 from urllib.parse import quote
 from pathlib import Path
-
-try:
-    ssl._create_default_https_context = ssl._create_unverified_context
-except:
-    pass
 
 PROJECT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT / "data"

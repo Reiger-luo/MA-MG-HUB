@@ -2,6 +2,7 @@
 (function() {
   'use strict';
 
+  var hub = window.MgHub || {};
   var payload = window.MG_CONFERENCE_DATA || {
     summary: {},
     abstracts: [],
@@ -118,16 +119,14 @@
   };
 
   function escapeHtml(value) {
-    var div = document.createElement('div');
-    div.textContent = value == null ? '' : String(value);
-    return div.innerHTML;
+    if (hub.escapeText) return hub.escapeText(value);
+    return String(value == null ? '' : value).replace(/[&<>"']/g, function(char) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char];
+    });
   }
 
   function escapeHref(value, fallback) {
-    var href = String(value || '').trim();
-    if (/^(https?:)?\/\//i.test(href) || href.indexOf('/MA-MG-HUB/') === 0) {
-      return escapeHtml(href);
-    }
+    if (hub.safeUrl) return hub.safeUrl(value, fallback || '#');
     return escapeHtml(fallback || '#');
   }
 
