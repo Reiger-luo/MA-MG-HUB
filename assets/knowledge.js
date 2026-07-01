@@ -169,17 +169,17 @@
   var sourceTypeLabel = {
     metadataConfirmed: '元数据确认',
     abstractMentioned: '摘要提及',
-    llmInferred: '模型推断',
+    llmInferred: '规则推断',
     curated: '人工策展'
   };
 
   var communitySignalLabel = {
-    active: '活跃',
+    active: '高活跃',
     watch: '观察',
     quiet: '平稳',
     high: '高活跃',
-    medium: '中活跃',
-    low: '低活跃'
+    medium: '观察',
+    low: '平稳'
   };
 
   function escapeHtml(value) {
@@ -1241,7 +1241,7 @@
         '<button class="kg-obsidian-btn" type="button" data-load-community-assignments="' + escapeHtml(row.id) + '">加载全量 PMID</button>' +
         '<span>按需加载该社区 assignment 分片；显示 primary community 的 PMID、置信度和质量标记。</span>' +
       '</div></div>' +
-      '<div class="kg-detail-section"><h4>限制</h4><div class="kg-detail-summary">' + escapeHtml(row.limitations || '当前为 title/abstract/metadata 规则基线，后续需要 taxonomy review、LLM 仲裁和人工校准。') + '</div></div>' +
+      '<div class="kg-detail-section"><h4>限制</h4><div class="kg-detail-summary">' + escapeHtml(row.limitations || '当前为 title/abstract/metadata 规则基线，后续需要 taxonomy review 和人工校准。') + '</div></div>' +
       '<div class="kg-detail-actions">' +
         '<a class="kg-obsidian-btn" href="/MA-MG-HUB/pages/literature.html?community=' + encodeURIComponent(row.id) + '">在情报中心查看近一年文献</a>' +
         '<button class="kg-obsidian-btn" type="button" data-community-graph="' + escapeHtml(row.id) + '">查看相关图谱节点</button>' +
@@ -1389,10 +1389,11 @@
       return;
     }
 
-    var nodeHits = nodes.filter(function (node) {
+    var nodeMatches = nodes.filter(function (node) {
       return [node.title, node.summary, node.type, (node.top_study_types || []).join(' ')].join(' ').toLowerCase().indexOf(keyword) !== -1;
-    }).slice(0, 8);
-    var articleHits = searchArticles.filter(function (article) {
+    });
+    var nodeHits = nodeMatches.slice(0, 8);
+    var articleMatches = searchArticles.filter(function (article) {
       return [
         article.pmid,
         article.title,
@@ -1403,11 +1404,13 @@
         (article.first_authors || article.authors || []).join(' '),
         (article.keywords || []).join(' ')
       ].join(' ').toLowerCase().indexOf(keyword) !== -1;
-    }).slice(0, 8);
-    var expertHits = experts.filter(function (expert) {
+    });
+    var articleHits = articleMatches.slice(0, 8);
+    var expertMatches = experts.filter(function (expert) {
       return [expert.name_en, expert.name_zh, expert.affiliation, (expert.public_tags || []).join(' ')].join(' ').toLowerCase().indexOf(keyword) !== -1;
-    }).slice(0, 5);
-    var topicHits = curatedTopics.filter(function (topic) {
+    });
+    var expertHits = expertMatches.slice(0, 5);
+    var topicMatches = curatedTopics.filter(function (topic) {
       return [
         topic.title,
         topic.summary,
@@ -1415,8 +1418,9 @@
         (topic.evidence_pmids || []).join(' '),
         (topic.msl_use || []).join(' ')
       ].join(' ').toLowerCase().indexOf(keyword) !== -1;
-    }).slice(0, 6);
-    var communityHits = communityRows.filter(function (row) {
+    });
+    var topicHits = topicMatches.slice(0, 6);
+    var communityMatches = communityRows.filter(function (row) {
       var taxonomy = taxonomyById[row.id] || {};
       return [
         row.title,
@@ -1427,38 +1431,39 @@
         (row.msl_use_cases || taxonomy.msl_use_cases || []).join(' '),
         communityTermsText(taxonomy.terms || row.terms)
       ].join(' ').toLowerCase().indexOf(keyword) !== -1;
-    }).slice(0, 6);
+    });
+    var communityHits = communityMatches.slice(0, 6);
 
     var html = '';
     html += renderSearchGroup('知识节点', nodeHits, function (node) {
       return '<li><button class="matrix-node-link" type="button" data-node="' + escapeHtml(node.id) + '">' +
         escapeHtml(node.title) + '</button><br><span class="kg-ref-meta">' + escapeHtml(typeLabel[node.type]) +
         ' · ' + escapeHtml(node.article_count) + ' 篇 abstract</span></li>';
-    });
+    }, nodeMatches.length);
     html += renderSearchGroup('专题', topicHits, function (topic) {
       var coverage = getTopicCoverage(topic.id);
       var primaryCommunity = coverage.primary_community_title ? ' · ' + coverage.primary_community_title : '';
       return '<li><button class="matrix-node-link" type="button" data-topic="' + escapeHtml(topic.id) + '">' +
         escapeHtml(topic.title) + '</button><br><span class="kg-ref-meta">' +
         escapeHtml(sourceTypeLabelForTopic(topic.source_type)) + ' · ' + escapeHtml((topic.evidence_refs || []).length) + ' PMID' + escapeHtml(primaryCommunity) + '</span></li>';
-    });
+    }, topicMatches.length);
     html += renderSearchGroup('医学事务社区', communityHits, function (community) {
       var coverage = communityCoverageById[community.id] || {};
       return '<li><button class="matrix-node-link" type="button" data-community="' + escapeHtml(community.id) + '">' +
         escapeHtml(community.title || community.id) + '</button><br><span class="kg-ref-meta">' +
         escapeHtml(communitySignalText(community.signal_level)) + ' · ' + escapeHtml(compactNumber(community.article_count || 0)) +
         ' 篇 · ' + escapeHtml(compactNumber(coverage.topic_count || 0)) + ' 专题</span></li>';
-    });
+    }, communityMatches.length);
     html += renderSearchGroup(searchArticleGroupTitle, articleHits, function (article) {
       return '<li><a class="text-link" href="' + escapeHtml(article.url) + '" target="_blank" rel="noopener">' +
         escapeHtml(article.title) + '</a><br><span class="kg-ref-meta">' +
         escapeHtml(article.journal || '') + ' · PMID ' + escapeHtml(article.pmid || '-') +
         (article.evidence_level ? ' · Level ' + escapeHtml(article.evidence_level) : '') + '</span></li>';
-    });
+    }, articleMatches.length);
     html += renderSearchGroup('专家公开画像', expertHits, function (expert) {
       return '<li><a class="text-link" href="/MA-MG-HUB/pages/msl.html">' + escapeHtml(expert.name_en || expert.name_zh || '') +
         '</a><br><span class="kg-ref-meta">' + escapeHtml(expert.affiliation || '') + '</span></li>';
-    });
+    }, expertMatches.length);
 
     elSearchResults.innerHTML = html || '<div class="kg-empty-hint">无匹配结果。</div>';
     Array.prototype.forEach.call(elSearchResults.querySelectorAll('[data-node]'), function (button) {
@@ -1479,9 +1484,10 @@
     });
   }
 
-  function renderSearchGroup(title, items, renderer) {
+  function renderSearchGroup(title, items, renderer, totalCount) {
     if (!items.length) return '';
-    return '<div class="kg-detail-section"><h4>' + escapeHtml(title) + ' (' + items.length + ')</h4>' +
+    var countLabel = totalCount && totalCount > items.length ? items.length + ' / ' + totalCount : items.length;
+    return '<div class="kg-detail-section"><h4>' + escapeHtml(title) + ' (' + escapeHtml(countLabel) + ')</h4>' +
       '<ul class="kg-study-list">' + items.map(renderer).join('') + '</ul></div>';
   }
 

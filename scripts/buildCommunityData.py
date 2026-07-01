@@ -2,8 +2,8 @@
 """
 buildCommunityData.py — 生成 MA-MG-HUB 医学事务社区语义层。
 
-第一版只使用规则、统计和可解释关键词，不依赖 LLM 或 embeddings。
-目标是先跑通可审计的数据层，再把模型和图算法作为后续增强接入。
+当前只使用规则、统计和可解释关键词，不依赖 LLM 或 embeddings。
+目标是保留可审计的数据层，通过医学事务 review 慢慢校准。
 """
 
 from __future__ import annotations
@@ -34,8 +34,8 @@ reviewQueuePath = dataDir / "communityReviewQueue.json"
 
 levelScore = {"I": 7, "II": 6, "III": 4, "IV": 3, "V": 2, "VI": 1}
 levelRank = {"I": 1, "II": 2, "III": 3, "IV": 4, "V": 5, "VI": 6}
-semanticVersion = "2026.06-v4d-p05-cleanup"
-semanticMethod = "ruleBasedLlmReviewedP05Cleanup"
+semanticVersion = "2026.07-v4e-medical-affairs-signal"
+semanticMethod = "ruleBasedMedicalAffairsReview"
 
 communitySpecs = [
     {
@@ -820,6 +820,110 @@ def evidenceMaturity(level: str) -> str:
     return "unclassified"
 
 
+def isGuidelineOrConsensus(article: dict) -> bool:
+    """判断新增文献是否属于指南/共识类医学事务高优先级更新。"""
+    text = " ".join([
+        article.get("title") or "",
+        " ".join(article.get("pub_types") or []),
+        " ".join(article.get("study_types") or []),
+    ]).lower()
+    return any(term in text for term in ["guideline", "consensus", "recommendation", "practice guideline"])
+
+
+def isRegulatoryOrAccessUpdate(article: dict) -> bool:
+    """判断新增文献是否提示监管、准入或支付相关变化。"""
+    titleMetaText = " ".join([
+        article.get("title") or "",
+        " ".join(article.get("pub_types") or []),
+        " ".join(article.get("study_types") or []),
+    ]).lower()
+    titleMetaPatterns = [
+        r"\bapproval\b",
+        r"\bapproved\b",
+        r"\bregulatory\b",
+        r"\blabel\b",
+        r"\bindication\b",
+        r"\bnmpa\b",
+        r"\bcde\b",
+        r"\bnhsa\b",
+        r"\breimbursement\b",
+        r"\binsurance\b",
+        r"\bnational reimbursement\b",
+        r"\bdrug list\b",
+        r"\bmarket access\b",
+        r"\bexpanded access\b",
+    ]
+    if any(re.search(pattern, titleMetaText) for pattern in titleMetaPatterns):
+        return True
+
+    text = articleText(article)
+    explicitAccessPatterns = [
+        r"\bnmpa\b",
+        r"\bcde\b",
+        r"\bnhsa\b",
+        r"\breimbursement\b",
+        r"\binsurance\b",
+        r"\bnational reimbursement\b",
+        r"\bdrug list\b",
+        r"\bmarket access\b",
+        r"\bexpanded access\b",
+    ]
+    return any(re.search(pattern, text) for pattern in explicitAccessPatterns)
+
+
+def isCaseReviewOrLowActionPublication(article: dict) -> bool:
+    """病例、综述、信件等通常作为观察信号，不仅凭期刊 IF 进入高活跃。"""
+    text = " ".join([
+        article.get("title") or "",
+        " ".join(article.get("pub_types") or []),
+        " ".join(article.get("study_types") or []),
+    ]).lower()
+    return any(term in text for term in [
+        "case report",
+        "case series",
+        "review",
+        "letter",
+        "comment",
+        "editorial",
+        "animal study",
+    ])
+
+
+def isImportantChinaEvidence(article: dict) -> bool:
+    """判断新增中国证据是否足以触发医学事务高活跃提示。"""
+    if not article.get("china_related"):
+        return False
+    evidenceLevel = article.get("evidence_level")
+    if isCaseReviewOrLowActionPublication(article):
+        return evidenceLevel in {"I", "II"}
+    if evidenceLevel in {"I", "II", "III", "IV"}:
+        return True
+    try:
+        journalIf = float(article.get("journal_if") or 0)
+    except (TypeError, ValueError):
+        journalIf = 0
+    return journalIf >= 8
+
+
+def isMedicalAffairsHighActivity(article: dict) -> bool:
+    """高活跃：高等级证据、指南/共识、监管/准入或重要中国证据。"""
+    return (
+        article.get("evidence_level") in {"I", "II"}
+        or isGuidelineOrConsensus(article)
+        or isRegulatoryOrAccessUpdate(article)
+        or isImportantChinaEvidence(article)
+    )
+
+
+def medicalAffairsSignalLevel(recentArticles: list[dict]) -> str:
+    """统一医学事务活跃度：高活跃 / 观察 / 平稳。"""
+    if any(isMedicalAffairsHighActivity(article) for article in recentArticles):
+        return "active"
+    if recentArticles:
+        return "watch"
+    return "quiet"
+
+
 def assignArticle(article: dict) -> dict:
     scores = []
     matchedTerms = {}
@@ -898,14 +1002,18 @@ def articleSortKey(article: dict):
     return (evidenceScore(article), parsedDate.timestamp())
 
 
+def signalSortRank(signalLevel: str) -> int:
+    return {"active": 0, "watch": 1, "quiet": 2}.get(signalLevel, 3)
+
+
 def buildTaxonomy(generatedAt: str) -> dict:
     return {
         "generated_at": generatedAt,
         "version": semanticVersion,
         "method": semanticMethod,
-        "source_note": "医学事务社区 taxonomy 初版，基于 v4.0 规划和规则关键词；后续由候选社区、LLM 仲裁和人工 review 迭代。",
+        "source_note": "医学事务社区 taxonomy 基于全 MG PubMed full、规则关键词和人工 review 渐进校准。",
         "principles": [
-            "全 MG PubMed full 为 source of truth；efgar-wiki 只作为策展样板和覆盖校验。",
+            "全 MG PubMed full 为 source of truth。",
             "China 默认作为 geo facet，不作为平行主社区。",
             "社区是医学事务语义层，不等同于图谱 cluster。",
             "低置信度文献允许进入 unassigned / review queue。",
@@ -953,7 +1061,7 @@ def buildCards(articles: list[dict], assignmentsByPmid: dict, latest: datetime, 
             for article in communityArticles
             for studyType in (article.get("study_types") or ["未标注"])
         )
-        signalLevel = "active" if len(recentArticles) >= 3 or any(a.get("evidence_level") in {"I", "II"} for a in recentArticles) else "watch" if recentArticles else "quiet"
+        signalLevel = medicalAffairsSignalLevel(recentArticles)
         cards.append({
             "id": spec["id"],
             "title": spec["title"],
@@ -972,10 +1080,15 @@ def buildCards(articles: list[dict], assignmentsByPmid: dict, latest: datetime, 
             "msl_use_cases": spec["mslUseCases"],
             "representative_refs": [compactArticle(article) for article in representativeArticles],
             "recent_refs": [compactArticle(article) for article in recentTopArticles],
-            "limitations": "基于 PubMed title/abstract/metadata 的规则归类；社区边界需结合 LLM 仲裁和人工 review 持续校准。",
+            "limitations": "基于 PubMed title/abstract/metadata 的规则归类；社区边界需结合人工 review 持续校准。",
         })
 
-    cards.sort(key=lambda item: (-item["recent_14d_count"], -item["high_evidence_count"], -item["article_count"]))
+    cards.sort(key=lambda item: (
+        signalSortRank(item["signal_level"]),
+        -item["high_evidence_count"],
+        -item["recent_14d_count"],
+        -item["article_count"],
+    ))
     return {
         "generated_at": generatedAt,
         "version": semanticVersion,
@@ -1013,7 +1126,7 @@ def buildWeekly(articles: list[dict], assignmentsByPmid: dict, latest: datetime,
         items = groupedRecent.get(spec["id"], [])
         highEvidenceItems = [article for article in items if article.get("evidence_level") in {"I", "II"}]
         chinaItems = [article for article in items if article.get("china_related")]
-        signalLevel = "high" if highEvidenceItems else "medium" if len(items) >= 3 else "low" if items else "quiet"
+        signalLevel = medicalAffairsSignalLevel(items)
         communityRows.append({
             "community_id": spec["id"],
             "title": spec["title"],
@@ -1024,7 +1137,7 @@ def buildWeekly(articles: list[dict], assignmentsByPmid: dict, latest: datetime,
             "top_refs": [compactArticle(article) for article in sorted(items, key=articleSortKey, reverse=True)[:4]],
         })
     communityRows.sort(key=lambda item: (
-        {"high": 0, "medium": 1, "low": 2, "quiet": 3}.get(item["signal_level"], 4),
+        signalSortRank(item["signal_level"]),
         -item["recent_count"],
     ))
     return {
@@ -1035,7 +1148,7 @@ def buildWeekly(articles: list[dict], assignmentsByPmid: dict, latest: datetime,
         "recent_article_count": len(recentArticles),
         "unassigned_recent_count": len(groupedRecent.get("unassigned", [])),
         "communities": communityRows,
-        "hot_communities": [item for item in communityRows if item["signal_level"] in {"high", "medium"}][:6],
+        "hot_communities": [item for item in communityRows if item["signal_level"] in {"active", "watch"}][:6],
     }
 
 
@@ -1079,7 +1192,7 @@ def buildAudit(articles: list[dict], assignments: list[dict], assignmentsByPmid:
         "health": {
             "status": "needsReview" if recentUnassigned or conflicts else "ok",
             "notes": [
-                "第一版为规则基线，taxonomy 和 assignment 需要后续 LLM / 人工 review。",
+                "当前为规则基线，taxonomy 和 assignment 需要后续医学事务 review。",
                 "unassigned 不视为失败，是为了避免低置信度文献被强行归类。",
             ],
         },

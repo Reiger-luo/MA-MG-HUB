@@ -40,6 +40,7 @@ priorityNodeIds = {
     "rozanolixizumab",
     "nipocalimab",
     "batoclimab",
+    "telitacicept",
     "eculizumab",
     "ravulizumab",
     "zilucoplan",
@@ -47,6 +48,7 @@ priorityNodeIds = {
     "rituximab",
     "fcrnInhibition",
     "complementInhibition",
+    "baffAprilModulation",
 }
 
 
@@ -157,6 +159,21 @@ conceptDefs = [
         "patterns": [r"\bB-cell\b", r"\bB cell\b", r"\bplasma cell\b", r"\bCD20\b", r"\bCD19\b", r"\bBCMA\b"],
     },
     {
+        "id": "baffAprilModulation",
+        "title": "BAFF / APRIL Modulation",
+        "type": "mechanism",
+        "summary": "靶向 BLyS/BAFF 与 APRIL 通路的 B 细胞生存信号调节策略，主要连接泰它西普等 TACI-Fc 类治疗证据。",
+        "patterns": [
+            r"\bBAFF\b",
+            r"\bBLyS\b",
+            r"\bB lymphocyte stimulator\b",
+            r"\bBAFF\s*/\s*APRIL\b",
+            r"\bAPRIL\s*/\s*BAFF\b",
+            r"\ba proliferation-inducing ligand\b",
+            r"\bTACI[- ]Fc\b",
+        ],
+    },
+    {
         "id": "conventionalImmunosuppression",
         "title": "Conventional Immunosuppression",
         "type": "mechanism",
@@ -204,6 +221,13 @@ conceptDefs = [
         "type": "drug",
         "summary": "FcRn 靶向候选药物，主要连接临床开发和机制类别证据。",
         "patterns": [r"\bbatoclimab\b"],
+    },
+    {
+        "id": "telitacicept",
+        "title": "Telitacicept / 泰它西普",
+        "type": "drug",
+        "summary": "BLyS/APRIL 双靶点 TACI-Fc 融合蛋白，连接 B 细胞通路、疗效、安全性和中国证据。",
+        "patterns": [r"\btelitacicept\b", r"\bRC18\b", r"\bRC-18\b", r"\bTai'?ai\b", r"泰它西普"],
     },
     {
         "id": "eculizumab",
@@ -507,6 +531,20 @@ def compactArticle(article: dict) -> dict:
     }
 
 
+def latestArticleDate(pmids: list[str], articleByPmid: dict[str, dict]) -> str:
+    """返回一组 PMID 中最新的 entry_date / pub_date 原始文本。"""
+    latest = None
+    latestText = ""
+    for pmid in pmids:
+        article = articleByPmid.get(pmid) or {}
+        rawDate = article.get("entry_date") or article.get("pub_date") or ""
+        parsedDate = parseDateValue(rawDate)
+        if parsedDate and (latest is None or parsedDate > latest):
+            latest = parsedDate
+            latestText = rawDate
+    return latestText
+
+
 def matchedConceptIds(article: dict, compiledPatterns: dict[str, list[re.Pattern]]) -> list[str]:
     """返回一篇文献命中的概念节点。"""
     text = articleText(article)
@@ -637,7 +675,7 @@ def buildGraph(articles: list[dict], communityContext: dict | None = None) -> di
             "top_study_types": [item[0] for item in studyTypes.most_common(4)],
             "confidence": nodeConfidence(len(pmids), levels),
             "source_type": "abstractMentioned",
-            "updated": refs[0]["entry_date"] if refs else "",
+            "updated": latestArticleDate(pmids, articleByPmid),
         })
 
     includedSet = {node["id"] for node in nodes}
