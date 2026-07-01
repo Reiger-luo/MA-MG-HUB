@@ -37,6 +37,7 @@ PUBLIC_ARTIFACTS = [
     ("communityCards.js", "社区卡片", "MG_COMMUNITY_CARDS"),
     ("communityWeekly.js", "社区周更", "MG_COMMUNITY_WEEKLY"),
     ("communityAudit.js", "社区 Audit", "MG_COMMUNITY_AUDIT"),
+    ("backendOptions.js", "Phase 6 后端选项评估", "MG_BACKEND_OPTIONS"),
     ("content-modules.js", "内容模块", "MG_CONTENT_MODULES"),
     ("weekly-summary.md", "当前通讯渠道周报", None),
 ]
@@ -68,7 +69,7 @@ def countPayload(payload):
     if isinstance(payload, list):
         return len(payload)
     if isinstance(payload, dict):
-        for key in ("signals", "insights", "articles", "pubmed_articles", "experts", "modules", "topics", "topic_coverage", "nodes", "items", "communities", "cards", "shards"):
+        for key in ("signals", "insights", "options", "triggers", "articles", "pubmed_articles", "experts", "modules", "topics", "topic_coverage", "nodes", "items", "communities", "cards", "shards"):
             value = payload.get(key)
             if isinstance(value, list):
                 return len(value)
@@ -110,6 +111,7 @@ def buildStatus():
     literature = safeLoadJs("literature-recent.js", "MG_LITERATURE_DATA") or []
     signals = safeLoadJs("signals-weekly.js", "MG_SIGNALS_DATA") or {}
     modules = safeLoadJs("content-modules.js", "MG_CONTENT_MODULES") or []
+    backendOptions = safeLoadJs("backendOptions.js", "MG_BACKEND_OPTIONS") or {}
 
     stats = dashboard.get("stats") or {}
     fullPath = DATA_DIR / "literature-full.json"
@@ -188,6 +190,17 @@ def buildStatus():
             "meta": f"{stats.get('experts', 0)} 位专家画像 · {stats.get('modules', countPayload(modules) or 0)} 个内容模块 · 更新时间 {dashboard.get('generated_at') or generatedAt}",
             "status": "ok",
             "status_label": "已生成",
+        },
+        {
+            "id": "backendOptions",
+            "name": "Phase 6 后端选项",
+            "meta": (
+                f"{(backendOptions.get('summary') or {}).get('decision', '等待 backendOptions.js')} · "
+                f"{(backendOptions.get('summary') or {}).get('triggered_count', 0)}/"
+                f"{(backendOptions.get('summary') or {}).get('total_triggers', 5)} 个触发条件"
+            ),
+            "status": (backendOptions.get("summary") or {}).get("status") or "manual",
+            "status_label": (backendOptions.get("summary") or {}).get("status_label") or "待评估",
         },
     ]
 
