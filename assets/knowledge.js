@@ -1112,6 +1112,17 @@
     }
   }
 
+  function getInitialKnowledgeNodeId() {
+    try {
+      var params = new URLSearchParams(window.location.search || '');
+      var nodeId = params.get('node') || '';
+      if (nodeId && nodesById[nodeId]) return nodeId;
+      return '';
+    } catch (err) {
+      return '';
+    }
+  }
+
   function renderCommunityAuditStrip() {
     if (!elCommunityAuditStrip) return;
     var summary = communityAuditData.summary || {};
@@ -1557,8 +1568,12 @@
     selectNode(nodesById.fcrnInhibition ? 'fcrnInhibition' : (nodes[0] && nodes[0].id));
     var initialCommunityId = getInitialKnowledgeCommunityId();
     var initialTopicId = getInitialKnowledgeTopicId();
+    var initialNodeId = getInitialKnowledgeNodeId();
     var initialTab = getInitialKnowledgeTab();
-    if (initialTopicId) {
+    if (initialNodeId) {
+      activateTab('graph');
+      selectNode(initialNodeId);
+    } else if (initialTopicId) {
       openTopic(initialTopicId);
     } else if (initialCommunityId) {
       openCommunity(initialCommunityId);

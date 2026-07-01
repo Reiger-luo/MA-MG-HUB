@@ -723,7 +723,9 @@ def buildGraph(articles: list[dict], communityContext: dict | None = None) -> di
             and conceptsById[edge["to"]]["type"] != "evidence"
         ][:priorityEdgeLimit(nodeId)]
         priorityEdges.extend(nodeEdges)
-    edges = uniqueEdges(nonEvidenceEdges + priorityEdges + evidenceEdges)
+    selectedEdges = uniqueEdges(nonEvidenceEdges + priorityEdges + evidenceEdges)
+    coverageEdges = coverageEdgesForNodes(includedIds, selectedEdges, edges, conceptsById)
+    edges = uniqueEdges(selectedEdges + coverageEdges)
     edges = sorted(edges, key=lambda item: (-item["evidence_score"], -item["article_count"], item["from"], item["to"]))
     edgeIds = {edge["id"] for edge in edges}
     nodeReferences = {node["id"]: topReferences(uniqueList(nodeArticleIds[node["id"]]), articleByPmid, limit=10) for node in nodes}
@@ -767,6 +769,38 @@ def priorityEdgeLimit(nodeId: str) -> int:
     if nodeId in {"telitacicept", "baffAprilModulation"}:
         return 16
     return 10
+
+
+def minGraphDegree(nodeType: str) -> int:
+    """前端图谱最少可见边数，防止重要节点被边裁剪成孤点。"""
+    if nodeType == "evidence":
+        return 2
+    return 4
+
+
+def coverageEdgesForNodes(includedIds: list[str], selectedEdges: list[dict], allEdges: list[dict], conceptsById: dict) -> list[dict]:
+    """为低连接节点补充最高分关系边。"""
+    selectedIds = {edge["id"] for edge in selectedEdges}
+    degree = Counter()
+    for edge in selectedEdges:
+        degree[edge["from"]] += 1
+        degree[edge["to"]] += 1
+
+    coverageEdges = []
+    for nodeId in includedIds:
+        targetDegree = minGraphDegree(conceptsById[nodeId]["type"])
+        if degree[nodeId] >= targetDegree:
+            continue
+        for edge in allEdges:
+            if edge["id"] in selectedIds or nodeId not in {edge["from"], edge["to"]}:
+                continue
+            coverageEdges.append(edge)
+            selectedIds.add(edge["id"])
+            degree[edge["from"]] += 1
+            degree[edge["to"]] += 1
+            if degree[nodeId] >= targetDegree:
+                break
+    return coverageEdges
 
 
 def minEdgeArticles(sourceType: str, targetType: str) -> int:
@@ -1034,6 +1068,10 @@ def buildGraphHealth(graphData: dict, communityContext: dict) -> dict:
 
     nodeCommunityCounts = Counter(node.get("dominant_community_id") for node in nodes if node.get("dominant_community_id"))
     edgeCommunityCounts = Counter(edge.get("dominant_community_id") for edge in edges if edge.get("dominant_community_id"))
+    nodeDegree = Counter()
+    for edge in edges:
+        nodeDegree[edge["from"]] += 1
+        nodeDegree[edge["to"]] += 1
 
     oversizedNodes = [
         {
@@ -1065,6 +1103,35 @@ def buildGraphHealth(graphData: dict, communityContext: dict) -> dict:
         if edge.get("confidence") == "low" or (edge.get("article_count") or 0) <= 3
     ]
     weakEdges.sort(key=lambda item: (item["article_count"], item["edge_id"]))
+
+    isolatedNodes = [
+        {
+            "node_id": node["id"],
+            "title": node["title"],
+            "type": node["type"],
+            "article_count": node.get("article_count") or 0,
+            "dominant_community_id": node.get("dominant_community_id"),
+            "dominant_community_title": node.get("dominant_community_title"),
+        }
+        for node in nodes
+        if nodeDegree[node["id"]] == 0
+    ]
+    isolatedNodes.sort(key=lambda item: (-item["article_count"], item["node_id"]))
+
+    lowConnectivityNodes = [
+        {
+            "node_id": node["id"],
+            "title": node["title"],
+            "type": node["type"],
+            "degree": nodeDegree[node["id"]],
+            "article_count": node.get("article_count") or 0,
+            "dominant_community_id": node.get("dominant_community_id"),
+            "dominant_community_title": node.get("dominant_community_title"),
+        }
+        for node in nodes
+        if 0 < nodeDegree[node["id"]] < minGraphDegree(node["type"])
+    ]
+    lowConnectivityNodes.sort(key=lambda item: (item["degree"], -item["article_count"], item["node_id"]))
 
     staleCutoff = datetime.now() - timedelta(days=365)
     staleNodes = []
@@ -1107,16 +1174,20 @@ def buildGraphHealth(graphData: dict, communityContext: dict) -> dict:
             "unmapped_edges": len(unmappedEdges),
             "oversized_nodes": len(oversizedNodes),
             "weak_edges": len(weakEdges),
+            "isolated_nodes": len(isolatedNodes),
+            "low_connectivity_nodes": len(lowConnectivityNodes),
             "stale_nodes": len(staleNodes),
         },
         "health": {
-            "status": "needsReview" if oversizedNodes or unmappedNodes else "ok",
+            "status": "needsReview" if oversizedNodes or unmappedNodes or isolatedNodes else "ok",
             "notes": [
                 "图谱为 abstract-level 关系，社区映射来自后台 community assignment，不代表全文级因果关系。",
-                "过大节点提示概念词典或社区边界需要 review；弱边适合作为后续 GraphRAG / 人工策展候选。",
+                "过大节点、孤立节点或弱边提示概念词典、边裁剪或社区边界需要 review。",
             ],
         },
         "oversized_nodes": oversizedNodes[:10],
+        "isolated_nodes": isolatedNodes[:12],
+        "low_connectivity_nodes": lowConnectivityNodes[:12],
         "weak_edges": weakEdges[:12],
         "stale_nodes": staleNodes[:12],
         "community_coverage": communityCoverage,
