@@ -177,8 +177,8 @@ conceptDefs = [
         "id": "conventionalImmunosuppression",
         "title": "Conventional Immunosuppression",
         "type": "mechanism",
-        "summary": "糖皮质激素和传统免疫抑制剂相关治疗策略。",
-        "patterns": [r"\bimmunosuppress", r"\bcorticosteroid", r"\bsteroid\b", r"\bazathioprine\b", r"\bmycophenolate\b", r"\btacrolimus\b", r"\bcyclosporine\b"],
+        "summary": "传统免疫抑制治疗策略的上位节点，具体药物由子节点承接。",
+        "patterns": [r"\bconventional immunosuppress", r"\bimmunosuppress(?:ion|ive|ant|ants)?\b", r"\bsteroid-sparing agent", r"\bnonsteroidal immunosuppress"],
     },
     {
         "id": "rapidRescue",
@@ -191,8 +191,29 @@ conceptDefs = [
         "id": "biomarkerPathogenesis",
         "title": "Biomarker & Pathogenesis",
         "type": "mechanism",
-        "summary": "抗体功能、免疫细胞、细胞因子、遗传和生物标志物相关机制研究。",
-        "patterns": [r"\bbiomarker\b", r"\bpathogenesis\b", r"\bcytokine\b", r"\bgenetic\b", r"\bautoantibod", r"\bsingle-cell\b"],
+        "summary": "生物标志物和疾病发生机制的上位节点，抗体、遗传和免疫细胞信号由子节点承接。",
+        "patterns": [r"\bbiomarker\b", r"\bpathogenesis\b"],
+    },
+    {
+        "id": "autoantibodyPathway",
+        "title": "Autoantibody Pathway",
+        "type": "mechanism",
+        "summary": "AChR、MuSK、LRP4 等自身抗体谱系、抗体滴度和抗体功能相关机制。",
+        "patterns": [r"\bautoantibod", r"\bantibody titer", r"\bantibody titre", r"\bserostatus\b", r"\bantibody-positive\b"],
+    },
+    {
+        "id": "cytokineImmuneSignature",
+        "title": "Cytokine / Immune Signature",
+        "type": "mechanism",
+        "summary": "细胞因子、免疫细胞谱系和单细胞免疫特征相关机制研究。",
+        "patterns": [r"\bcytokine\b", r"\bimmune cell", r"\bT-cell\b", r"\bT cell\b", r"\bsingle-cell\b", r"\binterleukin\b"],
+    },
+    {
+        "id": "geneticSusceptibility",
+        "title": "Genetic Susceptibility",
+        "type": "mechanism",
+        "summary": "遗传易感性、HLA、GWAS 和多态性相关 MG 机制证据。",
+        "patterns": [r"\bgenetic\b", r"\bHLA\b", r"\bGWAS\b", r"\bpolymorphism\b", r"\bgenotype\b"],
     },
     {
         "id": "efgartigimod",
@@ -279,6 +300,20 @@ conceptDefs = [
         "patterns": [r"\bcorticosteroid", r"\bsteroid\b", r"\bprednisone\b", r"\bprednisolone\b"],
     },
     {
+        "id": "azathioprineMycophenolate",
+        "title": "Azathioprine / Mycophenolate",
+        "type": "drug",
+        "summary": "硫唑嘌呤和麦考酚酸酯等常规免疫抑制剂，承接非激素长期维持治疗证据。",
+        "patterns": [r"\bazathioprine\b", r"\bmycophenolate\b", r"\bmycophenolic acid\b"],
+    },
+    {
+        "id": "calcineurinInhibitors",
+        "title": "Calcineurin Inhibitors",
+        "type": "drug",
+        "summary": "他克莫司、环孢素等钙调神经磷酸酶抑制剂相关 MG 治疗证据。",
+        "patterns": [r"\btacrolimus\b", r"\bcyclosporine\b", r"\bciclosporin\b", r"\bcalcineurin inhibitor"],
+    },
+    {
         "id": "ivig",
         "title": "IVIg",
         "type": "drug",
@@ -324,8 +359,22 @@ conceptDefs = [
         "id": "safetyOutcome",
         "title": "Safety / Adverse Events",
         "type": "outcome",
-        "summary": "安全性、不良事件、感染、免疫原性和药物警戒相关证据。",
-        "patterns": [r"\bsafety\b", r"\badverse event", r"\binfection\b", r"\btolerability\b", r"\bpharmacovigilance\b", r"\bFAERS\b"],
+        "summary": "总体安全性、不良事件、耐受性、免疫原性和药物警戒相关证据。",
+        "patterns": [r"\bsafety\b", r"\badverse event", r"\btolerability\b", r"\bpharmacovigilance\b", r"\bFAERS\b"],
+    },
+    {
+        "id": "infectionRisk",
+        "title": "Infection Risk",
+        "type": "outcome",
+        "summary": "感染、机会性感染、脑膜炎球菌风险和免疫抑制相关感染安全性。",
+        "patterns": [r"\binfection\b", r"\binfectious\b", r"\bopportunistic infection", r"\bmeningococcal\b"],
+    },
+    {
+        "id": "infusionInjectionReactions",
+        "title": "Infusion / Injection Reactions",
+        "type": "outcome",
+        "summary": "输注反应、注射部位反应、过敏和给药相关耐受性事件。",
+        "patterns": [r"\binfusion reaction", r"\binfusion-related", r"\binjection-site", r"\binjection site", r"\bhypersensitivity\b"],
     },
     {
         "id": "rapidOnset",
@@ -705,40 +754,43 @@ def buildGraph(articles: list[dict], communityContext: dict | None = None) -> di
             "pmids": [ref["pmid"] for ref in refs],
         })
 
-    edges = sorted(edges, key=lambda item: (-item["evidence_score"], -item["article_count"], item["from"], item["to"]))
+    allEdges = sorted(edges, key=lambda item: (-item["evidence_score"], -item["article_count"], item["from"], item["to"]))
     nonEvidenceEdges = [
-        edge for edge in edges
+        edge for edge in allEdges
         if conceptsById[edge["from"]]["type"] != "evidence" and conceptsById[edge["to"]]["type"] != "evidence"
     ][:120]
     evidenceEdges = [
-        edge for edge in edges
+        edge for edge in allEdges
         if conceptsById[edge["from"]]["type"] == "evidence" or conceptsById[edge["to"]]["type"] == "evidence"
     ][:25]
     priorityEdges = []
     for nodeId in priorityNodeIds:
         nodeEdges = [
-            edge for edge in edges
+            edge for edge in allEdges
             if nodeId in {edge["from"], edge["to"]}
             and conceptsById[edge["from"]]["type"] != "evidence"
             and conceptsById[edge["to"]]["type"] != "evidence"
         ][:priorityEdgeLimit(nodeId)]
         priorityEdges.extend(nodeEdges)
     selectedEdges = uniqueEdges(nonEvidenceEdges + priorityEdges + evidenceEdges)
-    coverageEdges = coverageEdgesForNodes(includedIds, selectedEdges, edges, conceptsById)
-    bridgeEdges = semanticBridgeEdgesForNodes(includedIds, selectedEdges + coverageEdges, edges, conceptsById)
-    edges = uniqueEdges(selectedEdges + coverageEdges + bridgeEdges)
-    edges = sorted(edges, key=lambda item: (-item["evidence_score"], -item["article_count"], item["from"], item["to"]))
-    edgeIds = {edge["id"] for edge in edges}
+    coverageEdges = coverageEdgesForNodes(includedIds, selectedEdges, allEdges, conceptsById)
+    bridgeEdges = semanticBridgeEdgesForNodes(includedIds, selectedEdges + coverageEdges, allEdges, conceptsById)
+    coreEdges = uniqueEdges(selectedEdges + coverageEdges + bridgeEdges)
+    coreEdges = sorted(coreEdges, key=lambda item: (-item["evidence_score"], -item["article_count"], item["from"], item["to"]))
+    coreEdgeIds = {edge["id"] for edge in coreEdges}
+    allEdgeIds = {edge["id"] for edge in allEdges}
+    for edge in allEdges:
+        edge["in_core_graph"] = edge["id"] in coreEdgeIds
     nodeReferences = {node["id"]: topReferences(uniqueList(nodeArticleIds[node["id"]]), articleByPmid, limit=10) for node in nodes}
     edgeReferences = {
         edge["id"]: topReferences(uniqueList(edgeArticleIds[tuple(sorted((edge["from"], edge["to"]))) ]), articleByPmid, limit=8)
-        for edge in edges
+        for edge in allEdges
     }
 
-    annotateCommunityLayer(nodes, edges, nodeArticleIds, edgeArticleIds, communityContext)
+    annotateCommunityLayer(nodes, allEdges, nodeArticleIds, edgeArticleIds, communityContext)
     applyLayout(nodes)
-    matrixRows = buildEvidenceMatrix(edges, nodeReferences, edgeReferences, conceptsById, edgeIds)
-    stats = buildStats(articles, nodes, edges, matrixRows, articleByPmid)
+    matrixRows = buildEvidenceMatrix(allEdges, nodeReferences, edgeReferences, conceptsById, allEdgeIds)
+    stats = buildStats(articles, nodes, coreEdges, matrixRows, articleByPmid, allEdges)
     stats["community_assignment_source"] = communityContext.get("assignment_source") or "none"
 
     return {
@@ -746,7 +798,8 @@ def buildGraph(articles: list[dict], communityContext: dict | None = None) -> di
         "source": "full PubMed abstract library",
         "stats": stats,
         "nodes": nodes,
-        "edges": edges,
+        "edges": coreEdges,
+        "all_edges": allEdges,
         "node_references": nodeReferences,
         "edge_references": edgeReferences,
         "evidence_matrix": matrixRows,
@@ -1060,8 +1113,9 @@ def normalizeMatrixDirection(sourceId: str, targetId: str, conceptsById: dict) -
     return targetId, sourceId
 
 
-def buildStats(articles: list[dict], nodes: list[dict], edges: list[dict], matrixRows: list[dict], articleByPmid: dict) -> dict:
+def buildStats(articles: list[dict], nodes: list[dict], graphEdges: list[dict], matrixRows: list[dict], articleByPmid: dict, allEdges: list[dict] | None = None) -> dict:
     """生成页面顶栏统计。"""
+    allEdges = allEdges or graphEdges
     evidenceArticles = [article for article in articleByPmid.values() if article.get("evidence_level")]
     highEvidence = [article for article in evidenceArticles if article.get("evidence_level") in {"I", "II"}]
     latestEntry = max((str(article.get("entry_date") or "") for article in articleByPmid.values()), default="")
@@ -1071,10 +1125,13 @@ def buildStats(articles: list[dict], nodes: list[dict], edges: list[dict], matri
         "evidence_articles": len(evidenceArticles),
         "high_evidence_articles": len(highEvidence),
         "total_nodes": len(nodes),
-        "edges": len(edges),
+        "edges": len(graphEdges),
+        "graph_edges": len(graphEdges),
+        "all_edges": len(allEdges),
         "evidence_matrix_rows": len(matrixRows),
         "community_mapped_nodes": sum(1 for node in nodes if node.get("dominant_community_id")),
-        "community_mapped_edges": sum(1 for edge in edges if edge.get("dominant_community_id")),
+        "community_mapped_edges": sum(1 for edge in allEdges if edge.get("dominant_community_id")),
+        "community_mapped_graph_edges": sum(1 for edge in graphEdges if edge.get("dominant_community_id")),
         "latest_entry_date": latestEntry,
         "abstract_source": True,
     }
@@ -1103,7 +1160,8 @@ def parseDateValue(value: str | None):
 def buildGraphHealth(graphData: dict, communityContext: dict) -> dict:
     """生成图谱健康度摘要，供数据状态页和后续诊治格局读取。"""
     nodes = graphData.get("nodes") or []
-    edges = graphData.get("edges") or []
+    graphEdges = graphData.get("edges") or []
+    edges = graphData.get("all_edges") or graphEdges
     stats = graphData.get("stats") or {}
     matchedArticles = stats.get("matched_articles") or 0
     communityTitles = communityContext.get("community_titles") or {}
@@ -1244,7 +1302,9 @@ def buildGraphHealth(graphData: dict, communityContext: dict) -> dict:
             "community_mapped_nodes": len(nodes) - len(unmappedNodes),
             "unmapped_nodes": len(unmappedNodes),
             "total_edges": len(edges),
+            "graph_edges": len(graphEdges),
             "community_mapped_edges": len(edges) - len(unmappedEdges),
+            "community_mapped_graph_edges": sum(1 for edge in graphEdges if edge.get("dominant_community_id")),
             "unmapped_edges": len(unmappedEdges),
             "oversized_nodes": len(oversizedNodes),
             "weak_edges": len(weakEdges),
@@ -1331,11 +1391,12 @@ def main() -> int:
         writeGraphHealthJs(graphHealth)
         stats = graphData["stats"]
         print(
-            "   文献: {matched}/{total} 命中 · 节点: {nodes} · 关系: {edges} · 矩阵: {matrix} · 社区节点: {communityNodes}".format(
+            "   文献: {matched}/{total} 命中 · 节点: {nodes} · 关系: {allEdges}/{graphEdges} 全量/主图 · 矩阵: {matrix} · 社区节点: {communityNodes}".format(
                 matched=stats["matched_articles"],
                 total=stats["total_articles"],
                 nodes=stats["total_nodes"],
-                edges=stats["edges"],
+                allEdges=stats.get("all_edges", stats["edges"]),
+                graphEdges=stats.get("graph_edges", stats["edges"]),
                 matrix=stats["evidence_matrix_rows"],
                 communityNodes=stats.get("community_mapped_nodes", 0),
             )

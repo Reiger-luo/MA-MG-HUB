@@ -8,7 +8,9 @@
   var graphData = window.MG_KNOWLEDGE_GRAPH || {};
   var graphHealthData = window.MG_GRAPH_HEALTH || { summary: {}, health: {} };
   var nodes = graphData.nodes || [];
-  var edges = graphData.edges || [];
+  var coreEdges = graphData.edges || [];
+  var allEdges = graphData.all_edges || coreEdges;
+  var edges = coreEdges;
   var nodeRefs = graphData.node_references || {};
   var edgeRefs = graphData.edge_references || {};
   var matrixRows = graphData.evidence_matrix || [];
@@ -92,6 +94,7 @@
   var elNodeSearch = document.getElementById('knowledgeNodeSearch');
   var elTypeFilter = document.getElementById('knowledgeTypeFilter');
   var elGraphCommunityFilter = document.getElementById('knowledgeCommunityFilter');
+  var elGraphDensity = document.getElementById('knowledgeGraphDensity');
   var elGraphColorMode = document.getElementById('knowledgeGraphColorMode');
   var elGraphLegend = document.getElementById('knowledgeGraphLegend');
   var elMatrix = document.getElementById('knowledgeMatrix');
@@ -127,6 +130,7 @@
   var communityAssignmentErrors = {};
   var communityAssignmentCallbacks = {};
   var graphColorMode = 'type';
+  var graphDensityMode = 'core';
   var communityPalette = [
     '#2563eb', '#0891b2', '#16a34a', '#ca8a04', '#7c3aed',
     '#dc2626', '#0f766e', '#4f46e5', '#9333ea', '#64748b'
@@ -135,6 +139,7 @@
 
   var nodesById = {};
   var edgesById = {};
+  var coreEdgeIds = {};
   var neighborMap = {};
   communityRows.forEach(function (community, index) {
     communityColorById[community.id] = communityPalette[index % communityPalette.length];
@@ -143,13 +148,28 @@
     nodesById[node.id] = node;
     neighborMap[node.id] = {};
   });
-  edges.forEach(function (edge) {
-    edgesById[edge.id] = edge;
-    neighborMap[edge.from] = neighborMap[edge.from] || {};
-    neighborMap[edge.to] = neighborMap[edge.to] || {};
-    neighborMap[edge.from][edge.to] = true;
-    neighborMap[edge.to][edge.from] = true;
+  coreEdges.forEach(function (edge) {
+    coreEdgeIds[edge.id] = true;
   });
+  allEdges.forEach(function (edge) {
+    edgesById[edge.id] = edge;
+  });
+
+  function rebuildNeighborMap(edgeList) {
+    neighborMap = {};
+    nodes.forEach(function (node) {
+      neighborMap[node.id] = {};
+    });
+    edgeList.forEach(function (edge) {
+      if (!nodesById[edge.from] || !nodesById[edge.to]) return;
+      neighborMap[edge.from] = neighborMap[edge.from] || {};
+      neighborMap[edge.to] = neighborMap[edge.to] || {};
+      neighborMap[edge.from][edge.to] = true;
+      neighborMap[edge.to][edge.from] = true;
+    });
+  }
+
+  rebuildNeighborMap(edges);
 
   var typeLabel = {
     disease: '疾病',
@@ -269,7 +289,7 @@
     var stats = graphData.stats || {};
     elBadge.textContent = compactNumber(stats.matched_articles) + ' 篇 abstract · ' +
       (stats.total_nodes || 0) + ' 节点 · ' +
-      (stats.edges || 0) + ' 关系';
+      (stats.all_edges || stats.edges || 0) + ' 关系';
   }
 
   function renderStats() {
@@ -279,6 +299,7 @@
       { label: '命中文献', value: compactNumber(stats.matched_articles), note: 'full PubMed abstract' },
       { label: '有证据等级', value: compactNumber(stats.evidence_articles), note: 'I-VI 或已分级' },
       { label: '图谱节点', value: stats.total_nodes || 0, note: '疾病/药物/机制/结局' },
+      { label: '图谱关系', value: (stats.all_edges || stats.edges || 0) + '/' + (stats.graph_edges || stats.edges || 0), note: '全量合格/默认主图' },
       { label: '社区映射', value: (stats.community_mapped_nodes || 0) + '/' + (stats.total_nodes || 0), note: '图谱 dominant community' },
       { label: '证据矩阵', value: stats.evidence_matrix_rows || 0, note: '可回链 PMID 的关系' },
       { label: '医学社区', value: communityRows.length || 0, note: '全 MG 语义层' },
@@ -308,11 +329,37 @@
     return text.slice(0, 19) + '…';
   }
 
+  function edgesForDensity(mode) {
+    if (mode === 'all') return allEdges;
+    if (mode === 'bridge') {
+      return allEdges.filter(function (edge) {
+        return coreEdgeIds[edge.id] || edge.confidence === 'high';
+      });
+    }
+    return coreEdges;
+  }
+
+  function refreshGraphDensity() {
+    graphDensityMode = (elGraphDensity && elGraphDensity.value) || 'core';
+    edges = edgesForDensity(graphDensityMode);
+    rebuildNeighborMap(edges);
+    buildGraph();
+    attachGraphInteraction();
+    applyNodeFilters();
+    if (activeNodeId && nodesById[activeNodeId]) {
+      var selectedId = activeNodeId;
+      activeNodeId = null;
+      selectNode(selectedId);
+    }
+  }
+
   function buildGraph() {
     if (!elCanvas) return;
     elCanvas.innerHTML = '';
     elCanvas.setAttribute('viewBox', viewBox.x + ' ' + viewBox.y + ' ' + viewBox.w + ' ' + viewBox.h);
     elCanvas.classList.toggle('community-mode', graphColorMode === 'community');
+    elCanvas.classList.toggle('density-all', graphDensityMode === 'all');
+    elCanvas.classList.toggle('density-bridge', graphDensityMode === 'bridge');
 
     var edgeLayer = svgEl('g', { class: 'kg-edge-layer' });
     edges.forEach(function (edge) {
@@ -320,7 +367,7 @@
       var target = nodesById[edge.to];
       if (!source || !target) return;
       var line = svgEl('line', {
-        class: 'kg-edge source-' + edge.source_type,
+        class: 'kg-edge source-' + edge.source_type + (coreEdgeIds[edge.id] ? ' core-edge' : ' secondary-edge'),
         x1: source.x,
         y1: source.y,
         x2: target.x,
@@ -451,11 +498,11 @@
       });
     });
 
-    elCanvas.addEventListener('click', function () {
+    elCanvas.onclick = function () {
       activeNodeId = null;
       clearActive();
       clearHighlight();
-    });
+    };
   }
 
   function highlightNeighborhood(id) {
@@ -528,11 +575,11 @@
       return;
     }
     var refs = nodeRefs[id] || [];
-    var relatedEdges = edges.filter(function (edge) {
+    var relatedEdges = allEdges.filter(function (edge) {
       return edge.from === id || edge.to === id;
     }).sort(function (a, b) {
-      return (b.article_count || 0) - (a.article_count || 0);
-    }).slice(0, 8);
+      return (b.evidence_score || 0) - (a.evidence_score || 0);
+    });
 
     var levelHtml = Object.keys(node.evidence_levels || {}).map(function (level) {
       return '<span class="mini-chip">Level ' + escapeHtml(level) + ' · ' + escapeHtml(node.evidence_levels[level]) + '</span>';
@@ -568,7 +615,7 @@
       communityHtml +
       topicHtml +
       '<div class="kg-detail-section"><h4>证据等级分布</h4><div class="kg-tags">' + levelHtml + '</div></div>' +
-      '<div class="kg-detail-section"><h4>关联关系</h4><div class="kg-relation-list">' + relatedHtml + '</div></div>' +
+      '<div class="kg-detail-section"><h4>关联关系 (' + escapeHtml(relatedEdges.length) + ')</h4><div class="kg-relation-list">' + relatedHtml + '</div></div>' +
       '<div class="kg-detail-section"><h4>代表 PMID</h4><ul class="kg-study-list">' + refsHtml + '</ul></div>';
 
     Array.prototype.forEach.call(elDetail.querySelectorAll('[data-node]'), function (button) {
@@ -635,6 +682,7 @@
     if (elNodeSearch) elNodeSearch.addEventListener('input', applyNodeFilters);
     if (elTypeFilter) elTypeFilter.addEventListener('change', applyNodeFilters);
     if (elGraphCommunityFilter) elGraphCommunityFilter.addEventListener('change', applyNodeFilters);
+    if (elGraphDensity) elGraphDensity.addEventListener('change', refreshGraphDensity);
     if (elGraphColorMode) elGraphColorMode.addEventListener('change', function () {
       graphColorMode = elGraphColorMode.value || 'type';
       if (elCanvas) elCanvas.classList.toggle('community-mode', graphColorMode === 'community');

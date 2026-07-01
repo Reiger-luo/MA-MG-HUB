@@ -1242,6 +1242,11 @@ body {
 .kg-canvas .kg-edge.dim { stroke-opacity: 0.16; }
 .kg-canvas .kg-edge.hl { stroke: var(--accent); stroke-opacity: 0.82; stroke-width: 2.6; }
 .kg-canvas .kg-edge.source-metadataConfirmed { stroke: rgba(22,163,74,0.36); }
+.kg-canvas .kg-edge.secondary-edge { stroke-opacity: 0.2; }
+.kg-canvas.density-bridge .kg-edge.secondary-edge,
+.kg-canvas.density-all .kg-edge.secondary-edge { stroke-opacity: 0.18; }
+.kg-canvas.density-all .kg-edge:not(.hl) { stroke-width: 0.9; }
+.kg-canvas .kg-edge.secondary-edge.hl { stroke-opacity: 0.82; }
 .kg-canvas .kg-edge.filtered-out,
 .kg-node.filtered-out { display: none; }
 .kg-node { cursor: pointer; }
