@@ -105,8 +105,6 @@
     topicCloud: $('conferenceTopicCloud'),
     drugBoard: $('conferenceDrugBoard'),
     breakthroughs: $('conferenceBreakthroughs'),
-    insightCount: $('conferenceInsightCount'),
-    highlights: $('conferenceHighlights'),
     futureMeetings: $('conferenceFutureMeetings'),
     sourceMonitor: $('conferenceSourceMonitor'),
     results: $('conferenceResults'),
@@ -367,12 +365,14 @@
     });
   }
 
-  function buildBreakthrough(dimension, title, conclusion, maUse, representatives, tags) {
+  function buildBreakthrough(dimension, title, conclusion, why, maUse, nextStep, representatives, tags) {
     return {
       dimension: dimension,
       title: title,
       conclusion: conclusion,
+      why: why,
       maUse: maUse,
+      nextStep: nextStep,
       representatives: representatives || [],
       tags: tags || []
     };
@@ -395,7 +395,9 @@
         '治疗范式',
         '靶向治疗从“有结果”进入“可定位”阶段',
         '高优先级摘要集中在 ' + joinNames(topDrugs.length ? topDrugs : topTopics.slice(0, 3), '核心机制') + '，真正的会后价值不是复述单篇结果，而是比较机制、人群、终点、给药便利性和安全性边界。',
+        '这类内容通常对应大会中最容易被 KOL 追问的“治疗选择”问题：同一患者路径中，FcRn、补体、B 细胞/免疫重置或其他机制分别解决什么痛点，证据强度是否足以改变讨论重心。医学事务复盘时应把药物结果放回治疗目标框架，而不是按药名逐条罗列。',
         '用于 congress debrief 的治疗格局页、竞品问题清单和 KOL 访谈主线。',
+        '优先核查研究设计、入组抗体分型、主要终点、随访长度、给药方式和安全性采集口径；再决定是否进入内部材料或仅作为趋势观察。',
         treatmentItems,
         topDrugs.concat(['高优先级 ' + summary.highPriority + ' 条']).slice(0, 5)
       ));
@@ -413,7 +415,9 @@
         '人群边界',
         '特殊亚群正在成为下一轮差异化证据入口',
         '血清分型、眼肌型、青少年/妊娠、MuSK/LRP4、胸腺瘤或危象相关线索提示，会议复盘要从“gMG 总体疗效”推进到“哪些患者最需要新策略”。',
+        '参考页里的 AAN/EAN 全景叙事都把特殊人群作为重要章节，这一点值得保留；但在工作台里更应该转成患者画像和证据缺口。若某一治疗在特定亚群中只有探索性摘要，不能直接外推为定位结论，却很适合生成专家访谈问题。',
         '用于专家拜访前的问题分层、患者画像 slide 和本地证据 gap 梳理。',
+        '逐条确认亚组是否预设、样本量是否足够、是否有对照组、终点是否与总体研究一致，并标出仍需全文或后续研究验证的部分。',
         subgroupItems,
         ['特殊人群', '抗体分型', '精准管理']
       ));
@@ -427,7 +431,9 @@
         '中国转化',
         '中国相关摘要应转成专家网络和本土证据机会',
         '中国作者、机构或患者数据不只是投稿统计；它们可以帮助医学事务判断哪些研究可跟进全文、哪些专家适合深访、哪些话题能补足中国路径证据。',
+        '这部分是本网站区别于普通资讯页的关键：会议报道只会说“中国参与度提高”，而医学事务需要知道参与的是全球多中心、真实世界、机制研究还是患者价值研究。不同类型对应不同后续动作，比如 KOL mapping、研究合作、证据 gap 或本土沟通材料。',
         '用于 KOL mapping、会后 follow-up、区域医学计划和本地数据生成假设。',
+        '核查作者机构、患者来源、是否包含中国数据、研究是否由中国团队主导，以及能否和现有中国情报、专家画像和内容模块相互引用。',
         chinaItems,
         ['中国相关', 'KOL mapping', '本土证据']
       ));
@@ -444,7 +450,9 @@
         '落地价值',
         '真实世界、PRO 与安全性正在重塑“理想治疗”语言',
         '会议摘要里关于激素减量、长期控制、患者负担、用药管理和数字监测的信号，能把药物结果转成临床实践更关心的治疗目标。',
+        '这一层并不一定是“最突破”的疗效结果，却常常最能进入 MSL 日常工作。真实世界和 PRO 可以把治疗讨论从评分改善延伸到激素减量、复发/危象、给药负担、生活质量和资源使用；安全性摘要则帮助提前准备更具体的临床管理追问。',
         '用于疾病教育、患者旅程、价值沟通和安全性追问清单。',
+        '区分 RCT 延长期、回顾性队列、登记研究、claims/HEOR 和病例报告的证据边界；价值或负担数据不能写成疗效结论，应作为临床实践语境补充。',
         valueItems,
         ['真实世界', 'PRO/生活质量', '安全性']
       ));
@@ -460,7 +468,9 @@
         '机制外溢',
         '机制与监测信号正在生成新的医学假设',
         'B 细胞、免疫重置、抗体功能、数字监测和生物标志物类摘要，适合从会议资讯升级为后续研究问题，而不是只作为背景知识收藏。',
+        '机制类摘要的价值在于帮助解释“为什么会有不同反应”和“下一步该监控什么”。它们通常还不能直接支撑临床定位，但可以连接知识库、诊治格局和后续文献监控，形成更连续的医学假设链。',
         '用于 advisory board 议题、机制教育材料和下一轮文献/试验监控关键词。',
+        '标记该信号属于体外/动物/探索性人群/转化研究中的哪一类，并把关键词写入后续监控列表，避免把机制推测包装成临床结论。',
         mechanismItems,
         ['机制/转化', '生物标志物', '研究假设']
       ));
@@ -484,8 +494,13 @@
           '<em>' + escapeHtml(signal.dimension) + '</em>' +
         '</div>' +
         '<strong>' + escapeHtml(signal.title) + '</strong>' +
-        '<p>' + escapeHtml(signal.conclusion) + '</p>' +
+        '<div class="conference-breakthrough-analysis">' +
+          '<span>洞察分析</span>' +
+          '<p>' + escapeHtml(signal.conclusion) + '</p>' +
+          '<p>' + escapeHtml(signal.why) + '</p>' +
+        '</div>' +
         '<div class="conference-breakthrough-work"><span>医学事务转化</span><p>' + escapeHtml(signal.maUse) + '</p></div>' +
+        '<div class="conference-breakthrough-work"><span>核查与落地</span><p>' + escapeHtml(signal.nextStep) + '</p></div>' +
         '<div class="conference-breakthrough-refs">' +
           '<span>优先核查摘要</span>' +
           (refs.length ? refs.map(function(item) {
@@ -498,141 +513,6 @@
         '<em class="conference-source-note">' + escapeHtml(getMeetingSourceLimitation(module)) + '</em>' +
       '</article>';
     }).join('') + '</div>';
-  }
-
-  function buildInsight(dimension, title, why, mslUse, representatives, tags) {
-    return {
-      dimension: dimension,
-      title: title,
-      why: why,
-      mslUse: mslUse,
-      representatives: representatives || [],
-      tags: tags || []
-    };
-  }
-
-  function buildConferenceInsights(module, summary, items) {
-    if (!items.length) return [];
-    var insights = [];
-    var topCountries = topNames(summary.countries, 3);
-    var topDrugs = topNames(summary.drugs, 3);
-    var topTopics = topNames(summary.topics, 4);
-
-    var treatmentItems = findRepresentativeItems(items, function(item) {
-      return (item.drugs || []).length > 0 || hasTopic(item, 'FcRn') || hasTopic(item, '补体') || hasTopic(item, 'B细胞/免疫重置');
-    }, 2);
-    if (treatmentItems.length) {
-      insights.push(buildInsight(
-        '治疗格局',
-        joinNames(topDrugs.length ? topDrugs : topTopics.slice(0, 2), '治疗机制') + ' 是本会议 MG 治疗复盘主线',
-        '药物和机制类摘要集中出现，提示会后 brief 应优先比较机制、人群、终点和安全性叙事，而不是只摘录单篇结果。',
-        '用于内部 congress debrief、KOL 拜访前问题准备和竞争信息追踪。',
-        treatmentItems,
-        topDrugs.concat(topTopics.slice(0, 2)).slice(0, 5)
-      ));
-    }
-
-    var evidenceItems = findRepresentativeItems(items, function(item) {
-      return item.researchType === summary.topType || (item.priorityScore || 0) >= 6;
-    }, 2);
-    insights.push(buildInsight(
-      '证据结构',
-      summary.topType + ' 是主要证据形态',
-      '研究类型结构决定了这次会议内容适合形成何种医学判断：随机/对照更适合进入核心证据，真实世界和 PRO 更适合补充临床实践与患者负担。',
-      '用于区分“可进入材料的证据”和“仅适合趋势观察的摘要级线索”。',
-      evidenceItems,
-      [summary.topType, '高优先级 ' + summary.highPriority + ' 条']
-    ));
-
-    if (summary.chinaRelated > 0) {
-      var chinaItems = findRepresentativeItems(items, function(item) { return item.isChinaRelated; }, 2);
-      insights.push(buildInsight(
-        '中国线索',
-        '中国相关摘要 ' + summary.chinaRelated + ' 条，适合会后单独追踪',
-        '中国作者、机构或患者数据提示本地证据沟通和专家协作机会，但仍需要逐条核查机构、研究设计和患者来源。',
-        '用于中国 KOL mapping、本地证据 gap 梳理和后续全文/会议材料追踪。',
-        chinaItems,
-        ['中国相关'].concat(topCountries).slice(0, 5)
-      ));
-    }
-
-    var safetyItems = findRepresentativeItems(items, function(item) {
-      return item.researchType === '安全性' || hasTopic(item, '安全性');
-    }, 2);
-    if (safetyItems.length) {
-      insights.push(buildInsight(
-        '安全性与用药管理',
-        '安全性信号需要和疗效信号并行复盘',
-        '会议摘要中安全性常以开放标签延长期、真实世界或病例形式出现，适合形成用药管理问题清单，但不宜单独作为结论。',
-        '用于 MSL 准备安全性追问、患者管理讨论和后续全文核查清单。',
-        safetyItems,
-        ['安全性'].concat(topDrugs).slice(0, 5)
-      ));
-    }
-
-    var patientItems = findRepresentativeItems(items, function(item) {
-      return hasTopic(item, 'PRO/生活质量') || hasTopic(item, '数字监测');
-    }, 2);
-    if (patientItems.length) {
-      insights.push(buildInsight(
-        '患者旅程',
-        'PRO、生活质量和数字监测可补足治疗结果叙事',
-        '这类摘要适合解释患者负担、症状波动和治疗体验，能够把药物疗效讨论延伸到医学事务更常用的患者旅程语言。',
-        '用于患者负担 slide、疾病教育和 KOL 对真实世界 unmet need 的访谈。',
-        patientItems,
-        ['PRO/生活质量', '数字监测']
-      ));
-    }
-
-    var countryItems = findRepresentativeItems(items, function(item) {
-      return (item.countries || []).some(function(country) { return topCountries.indexOf(country) !== -1; });
-    }, 2);
-    if (topCountries.length) {
-      insights.push(buildInsight(
-        'KOL/机构线索',
-        joinNames(topCountries, '多国') + ' 是本会议主要投稿/机构线索',
-        '国家/地区排名可作为会后 KOL mapping 的第一层入口，但作者和机构仍需在摘要详情中逐条核查。',
-        '用于会后专家地图、区域证据布局和潜在合作机构筛选。',
-        countryItems,
-        topCountries
-      ));
-    }
-
-    return insights.slice(0, 6);
-  }
-
-  function renderHighlights(module, items) {
-    if (!el.highlights) return;
-    var summary = summarizeModule(items);
-    if (el.insightCount) {
-      el.insightCount.textContent = items.length ? '基于 ' + items.length + ' 条摘要生成' : module.status;
-    }
-    if (!items.length) {
-      el.highlights.innerHTML = '<div class="conference-empty-focus wide"><strong>' + escapeHtml(module.emptyNote || '暂无结构化摘要') + '</strong><p>当前模块先呈现入口、字段规划和监控状态；后台扫描口已保留。</p></div>';
-      return;
-    }
-    var insights = buildConferenceInsights(module, summary, items);
-    el.highlights.innerHTML = insights.map(function(insight) {
-      var refs = insight.representatives.slice(0, 2);
-      return '<article class="conference-highlight-card conference-insight-card">' +
-        '<div class="conference-insight-top">' +
-          '<span class="conference-highlight-label">' + escapeHtml(insight.dimension) + '</span>' +
-          '<strong>' + escapeHtml(insight.title) + '</strong>' +
-        '</div>' +
-        '<p>' + escapeHtml(insight.why) + '</p>' +
-        '<div class="conference-insight-use"><span>MSL 用途</span><p>' + escapeHtml(insight.mslUse) + '</p></div>' +
-        '<div class="conference-insight-refs">' +
-          '<span>代表摘要</span>' +
-          (refs.length ? refs.map(function(item) {
-            return '<a href="' + escapeHref(item.sourceUrl || item.pageUrl) + '" target="_blank" rel="noopener">' + escapeHtml(truncateText(item.title, 86)) + '</a>';
-          }).join('') : '<em>暂无代表摘要，待源数据补充。</em>') +
-        '</div>' +
-        '<div class="conference-card-head">' + insight.tags.slice(0, 5).map(function(tag) {
-          return '<span class="conference-badge">' + escapeHtml(tag) + '</span>';
-        }).join('') + '</div>' +
-        '<em class="conference-source-note">' + escapeHtml(getMeetingSourceLimitation(module)) + '</em>' +
-      '</article>';
-    }).join('');
   }
 
   function populateSelect(select, options, allLabel, selectedValue) {
@@ -805,7 +685,6 @@
     renderRank(el.typeRank, summary.types, 8);
     renderTopics(summary);
     renderBreakthroughs(module, summary, currentItems);
-    renderHighlights(module, currentItems);
     renderSourceMonitor(module);
     updateFilters(currentItems);
     applyFilters();
