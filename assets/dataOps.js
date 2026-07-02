@@ -47,6 +47,10 @@
       return escapeHtml(value || fallback || '#');
     }
 
+    function pagePath(path) {
+      return hub.pageUrl ? hub.pageUrl(path) : path;
+    }
+
     function compactNumber(value) {
       const number = Number(value || 0);
       if (number >= 10000) return (number / 10000).toFixed(1).replace(/\.0$/, '') + '万';
@@ -65,8 +69,8 @@
     }
 
     function communityHref(communityId) {
-      if (communityId) return escapeHref('knowledge.html?community=' + encodeURIComponent(communityId));
-      return escapeHref('knowledge.html?tab=communities');
+      if (communityId) return escapeHref(pagePath('pages/knowledge.html?community=' + encodeURIComponent(communityId)));
+      return escapeHref(pagePath('pages/knowledge.html?tab=communities'));
     }
 
     function renderSources() {
@@ -216,7 +220,7 @@
         { label: '归类来源', value: summary.assignment_source || '-', note: '后台连接层' }
       ];
       topicCoverageGrid.innerHTML = items.map(function(item) {
-        return '<a class="community-audit-card ' + escapeClassToken(item.level || '', '') + '" href="' + escapeHref('knowledge.html?tab=topics') + '">' +
+        return '<a class="community-audit-card ' + escapeClassToken(item.level || '', '') + '" href="' + escapeHref(pagePath('pages/landscape.html?tab=answers')) + '">' +
           '<span>' + escapeHtml(item.label) + '</span>' +
           '<strong>' + escapeHtml(item.value) + '</strong>' +
           '<em>' + escapeHtml(item.note) + '</em>' +

@@ -102,30 +102,61 @@
   </section>
 
   <section class="intel-tab-panel" id="landscape-answers">
-    <div class="workspace-panel">
-      <div class="panel-head">
-        <div>
-          <h2>Living Evidence Answers</h2>
-          <p class="panel-caption">基于 PubMed abstract 的基础提纲和要点，详细结论仍需阅读全文后整合。</p>
+    <div class="landscape-answer-layout">
+      <div class="workspace-panel living-answer-panel">
+        <div class="panel-head">
+          <div>
+            <h2>Living Evidence Answers</h2>
+            <p class="panel-caption">基于 PubMed abstract 的基础提纲和要点，详细结论仍需阅读全文后整合；右侧专题负责承接 claim、PMID 和全库锚点。</p>
+          </div>
+          <span class="update-badge" id="answerCount">0 个问题</span>
         </div>
-        <span class="update-badge" id="answerCount">0 个问题</span>
-      </div>
-      <div class="kg-filter-bar">
-        <div class="knowledge-search compact">
-          <input id="answerSearch" placeholder="筛选问题、要点、PMID 或机制">
+        <div class="kg-filter-bar">
+          <div class="knowledge-search compact">
+            <input id="answerSearch" placeholder="筛选问题、要点、PMID 或机制">
+          </div>
+          <select class="filter-input compact-select" id="answerCategory">
+            <option value="all">全部场景</option>
+          </select>
+          <select class="filter-input compact-select" id="answerStance">
+            <option value="all">全部回答姿态</option>
+            <option value="可积极回答">可积极回答</option>
+            <option value="可谨慎回答">可谨慎回答</option>
+            <option value="证据不足">证据不足</option>
+            <option value="仅供提纲">仅供提纲</option>
+          </select>
         </div>
-        <select class="filter-input compact-select" id="answerCategory">
-          <option value="all">全部场景</option>
-        </select>
-        <select class="filter-input compact-select" id="answerStance">
-          <option value="all">全部回答姿态</option>
-          <option value="可积极回答">可积极回答</option>
-          <option value="可谨慎回答">可谨慎回答</option>
-          <option value="证据不足">证据不足</option>
-          <option value="仅供提纲">仅供提纲</option>
-        </select>
+        <div class="living-answer-grid" id="answerList"></div>
       </div>
-      <div class="living-answer-grid" id="answerList"></div>
+
+      <aside class="workspace-panel landscape-topic-panel">
+        <div class="panel-head">
+          <div>
+            <h2>专题证据包</h2>
+            <p class="panel-caption">专题从知识库独立页迁入 answer 工作流，用来解释一个回答背后的 claim、PMID、MSL 使用场景和本周影响提示。</p>
+          </div>
+          <span class="update-badge" id="answerTopicCount">0 个专题</span>
+        </div>
+        <div class="kg-filter-bar">
+          <div class="knowledge-search compact">
+            <input id="answerTopicSearch" placeholder="筛选专题，例如 steroid / safety / China RWE">
+          </div>
+          <select class="filter-input compact-select" id="answerTopicImpact">
+            <option value="all">全部专题</option>
+            <option value="updatedEvidence">本周有新证据</option>
+            <option value="quiet">本周无明显变化</option>
+          </select>
+          <select class="filter-input compact-select" id="answerTopicCommunity">
+            <option value="all">全部覆盖社区</option>
+          </select>
+        </div>
+        <div class="landscape-topic-layout">
+          <div class="curated-topic-list landscape-topic-list" id="answerTopicList"></div>
+          <aside class="curated-topic-detail landscape-topic-detail" id="answerTopicDetail">
+            <div class="kg-empty-hint">选择一个专题查看 claim、PMID 和全库锚点。</div>
+          </aside>
+        </div>
+      </aside>
     </div>
   </section>
 </main>

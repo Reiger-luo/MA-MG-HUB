@@ -217,11 +217,23 @@
   }
 
   function assetUrl(path) {
-    return hub.assetUrl ? hub.assetUrl(path) : path;
+    if (hub.assetUrl) return hub.assetUrl(path);
+    if (/\/pages\/[^/]*$/.test(window.location.pathname || '') && /^(assets|data|pages)\//.test(String(path || ''))) {
+      return '../' + path;
+    }
+    return path;
   }
 
   function pageUrl(path) {
-    return hub.pageUrl ? hub.pageUrl(path) : path;
+    if (hub.pageUrl) return hub.pageUrl(path);
+    if (/\/pages\/[^/]*$/.test(window.location.pathname || '') && /^(assets|data|pages)\//.test(String(path || ''))) {
+      return '../' + path;
+    }
+    return path;
+  }
+
+  function topicHref(topicId) {
+    return pageUrl('pages/landscape.html?tab=answers&topic=' + encodeURIComponent(topicId || ''));
   }
 
   function safeClassToken(value, fallback) {
@@ -1437,8 +1449,7 @@
   }
 
   function openTopic(topicId) {
-    activateTab('topics');
-    renderTopics(topicId);
+    window.location.href = topicHref(topicId);
   }
 
   function openCommunity(communityId) {
@@ -1467,11 +1478,7 @@
   }
 
   function openCommunityTopics(communityId) {
-    activateTab('topics');
-    if (elTopicSearch) elTopicSearch.value = '';
-    if (elTopicImpact) elTopicImpact.value = 'all';
-    if (elTopicCommunity) elTopicCommunity.value = communityId;
-    renderTopics();
+    window.location.href = pageUrl('pages/landscape.html?tab=answers&community=' + encodeURIComponent(communityId || ''));
   }
 
   function activateTab(key) {
@@ -1657,7 +1664,9 @@
       openTopic(initialTopicId);
     } else if (initialCommunityId) {
       openCommunity(initialCommunityId);
-    } else if (['graph', 'communities', 'matrix', 'topics', 'search'].indexOf(initialTab) !== -1) {
+    } else if (initialTab === 'topics') {
+      window.location.href = pageUrl('pages/landscape.html?tab=answers');
+    } else if (['graph', 'communities', 'matrix', 'search'].indexOf(initialTab) !== -1) {
       activateTab(initialTab);
     }
   }

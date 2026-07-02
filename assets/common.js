@@ -71,6 +71,9 @@
       return (basePath || '') + raw.slice('/MA-MG-HUB'.length);
     }
     if (raw.charAt(0) === '/') return raw;
+    if (!basePath && /\/pages\/[^/]*$/.test(window.location.pathname) && /^(assets|data|pages)\//.test(raw)) {
+      return '../' + raw;
+    }
     return (basePath ? basePath + '/' : '') + raw.replace(/^\.?\//, '');
   }
 
