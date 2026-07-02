@@ -174,9 +174,9 @@ SOURCE_MONITOR = [
         "id": "aan",
         "organization": "AAN Annual Meeting",
         "status": "已抓取 Mirasmart",
-        "nextAction": "持续重扫 myasthenia / MG 相关结果；重点监控 LS1/LS2 late-breaking science 与 Abstracts of Distinction。",
+        "nextAction": "持续重扫 myasthenia / MG 相关结果；重点抽取高优先级临床试验、机制转换和中国相关摘要。",
         "url": "https://index.mirasmart.com/AAN2026/",
-        "evidence": "AAN 2026 online abstract website 已上线，myasthenia 搜索结果可直接进入 abstract HTML；AAN 官网说明 Late-breaking embargo 随 presentation 开始解除。",
+        "evidence": "AAN 2026 online abstract website 已上线，myasthenia 搜索结果可直接进入 abstract HTML。",
     },
     {
         "id": "ean",
@@ -228,23 +228,6 @@ FUTURE_MEETINGS = [
         "location": "TBD",
         "status": "官网称日期地点将于年底前公布",
         "url": "https://myasthenia.org/mgfa-international-conference/",
-    },
-]
-
-LATE_BREAKER_SESSIONS = [
-    {
-        "meeting": "AAN Annual Meeting 2026",
-        "session": "LS1: Late-breaking Science 1",
-        "time": "2026-04-19 17:00 CT",
-        "status": "embargo 随 presentation 开始解除",
-        "url": "https://www.aan.com/msa/Public/Events/Details/23255",
-    },
-    {
-        "meeting": "AAN Annual Meeting 2026",
-        "session": "LS2: Late-breaking Science 2",
-        "time": "2026-04-21 17:45 CT",
-        "status": "embargo 随 presentation 开始解除",
-        "url": "https://www.aan.com/msa/Public/Events/Details/23256",
     },
 ]
 
@@ -633,10 +616,10 @@ def parse_aan_search_page(html: str, source: dict) -> tuple[list[dict], int]:
 
 def infer_aan_presentation_type(session: str, program: str) -> str:
     text = f"{session} {program}"
-    if re.search(r"late[- ]breaking|\bLS\d", text, re.I):
-        return "Late-breaking"
     if re.search(r"plenary|\bPL\d", text, re.I):
         return "Plenary"
+    if re.search(r"\bLS\d", text, re.I):
+        return "Scientific Session"
     if re.match(r"^P\d+", program or "", re.I):
         return "Poster"
     if re.match(r"^S\d+", program or "", re.I):
@@ -672,11 +655,10 @@ def parse_aan_abstract_record(record: dict, source: dict, refresh: bool) -> dict
     item["sessionName"] = record.get("session", "")
     item["programNumber"] = record.get("program", "")
     item["aanTopic"] = record.get("topic", "")
-    if presentation_type in {"Late-breaking", "Plenary"}:
+    if presentation_type == "Plenary":
         item["priorityScore"] += 2
     if re.search(r"abstracts? of distinction", record.get("session", ""), re.I):
         item["priorityScore"] += 1
-    item["isLateBreaker"] = item["isLateBreaker"] or presentation_type == "Late-breaking"
     item["analysisZh"] = make_zh_summary(item["title"], item["abstract"], item["topics"], item["researchType"], item["drugs"], item["countries"])
     return item
 
@@ -812,7 +794,7 @@ def priority_score(item: dict) -> int:
         score += 2
     if "中国" in item["countries"]:
         score += 2
-    if any(term in text for term in ["late-breaking", "phase 3", "pivotal", "final results"]):
+    if any(term in text for term in ["phase 3", "pivotal", "final results", "primary results"]):
         score += 2
     if item["presentationType"] == "Oral":
         score += 1
@@ -855,7 +837,6 @@ def make_abstract_item(
         "countries": countries,
         "researchType": research_type,
         "isChinaRelated": "中国" in countries,
-        "isLateBreaker": bool(re.search(r"late[- ]breaking", title + " " + abstract, re.I)),
         "sourceUrl": source["url"],
         "pageUrl": source["pageUrl"],
         "page": page,
@@ -887,7 +868,6 @@ def build_summary(abstracts: list[dict]) -> dict:
         "meetingCount": len(meeting_counter),
         "countryCount": country_count,
         "chinaRelated": sum(1 for item in abstracts if item["isChinaRelated"]),
-        "lateBreakerCount": sum(1 for item in abstracts if item["isLateBreaker"]),
         "highPriorityCount": sum(1 for item in abstracts if item["priorityScore"] >= 6),
         "byMeeting": rank_counter(meeting_counter, 10),
         "byCountry": rank_counter(country_counter, 20),
@@ -953,7 +933,6 @@ def build_payload(refresh: bool = False) -> dict:
         "sourceStats": source_stats,
         "sourceMonitor": SOURCE_MONITOR,
         "futureMeetings": FUTURE_MEETINGS,
-        "lateBreakerSessions": LATE_BREAKER_SESSIONS,
         "analysisSpec": {
             "dimensions": [
                 "会议/组织",
@@ -961,7 +940,7 @@ def build_payload(refresh: bool = False) -> dict:
                 "摘要类型/研究设计",
                 "主题/治疗机制",
                 "药物/靶点",
-                "Late-breaking",
+                "重大突破/转化价值",
                 "中国相关",
             ],
             "notes": "研究类型、国家和主题为规则自动判定，适合快速浏览；用于医学判断前需回到原始摘要核查。",
