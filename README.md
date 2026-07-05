@@ -1,6 +1,6 @@
 # MA-MG-HUB
 
-MG Intelligence Hub 是面向重症肌无力（myasthenia gravis, MG）医学事务工作的静态学术情报工作站。项目将 PubMed 文献、会议摘要、ClinicalTrials 管线、中国监管状态、知识图谱、医学事务社区层和 MSL 拜访准备整合到一个 GitHub Pages 网站中。
+MG Intelligence Hub 是面向重症肌无力（myasthenia gravis, MG）医学事务工作的静态学术情报工作站。项目将 PubMed 文献、可追溯会议摘要、ClinicalTrials 管线、中国监管状态、知识图谱、医学事务社区层和 MSL 拜访准备整合到一个 GitHub Pages 网站中。
 
 - 线上站点：[https://reiger-luo.github.io/MA-MG-HUB/](https://reiger-luo.github.io/MA-MG-HUB/)
 - 当前操作手册：[report/MG-Intelligence-Hub-操作手册-v5.md](report/MG-Intelligence-Hub-操作手册-v5.md)
@@ -22,7 +22,7 @@ MA-MG-HUB 不是单纯的文献列表，而是医学事务团队的 MG 情报工
 | 模块 | 页面 | 主要能力 |
 |---|---|---|
 | 工作台 | [index.html](index.html) | 统计卡片、社区动态、近期信号、工作流状态和数据健康 |
-| 情报中心 | [pages/literature.html](pages/literature.html) | 近一年文献、14 天信号、中国情报、会议摘要 |
+| 情报中心 | [pages/literature.html](pages/literature.html) | 近一年文献、14 天信号、中国情报、会议摘要；AAN / EAN 支持 MG-core 口径审计、逐条 MA 解读和 KOL 问题 |
 | 诊治格局 | [pages/landscape.html](pages/landscape.html) | 月度格局洞察、竞争矩阵、ClinicalTrials 管线、Living Answers |
 | 知识库 | [pages/knowledge.html](pages/knowledge.html) | 知识图谱、医学事务社区、证据矩阵、专题层、跨库检索 |
 | MSL 工作台 | [pages/msl.html](pages/msl.html) | 专家画像、内容模块、拜访话题建议、PMID 文献清单 |
@@ -54,7 +54,9 @@ Dashboard 与 `pipeline-status.js` 现在统一显示两套口径：`public_roll
 | `data/knowledge-graph.js` | 55 节点、334 核心边、180 行证据矩阵 | 知识图谱与证据矩阵 |
 | `data/expert-profiles-china.js` | 8,926 位 | 中国作者-机构画像 |
 | `data/expert-profiles-international.js` | 43,485 位 | 国际作者-机构画像 |
-| `data/conference-data.js` | 458 条摘要 | MGFA、AAN、EAN 等会议资讯 |
+| `data/conference-data.js` | 466 条摘要 | MGFA、AAN、EAN 等会议资讯；含会议级 narrative、覆盖审计和逐条 deepInsight |
+
+会议资讯当前结构化 466 条摘要：MGFA IC 2025 192 条、MGFA SS 2025 79 条、EAN 2026 104 条、AAN 2026 91 条。AAN 2026 保留 MiraSmart raw search 109 条与 curated MG-core 91 条的口径审计；EAN 2026 已纳入 acronym-only MG 标题条目，并对外部文章引用摘要完成覆盖核查。
 
 ## 数据流
 
@@ -178,6 +180,7 @@ python3 scripts/buildFullLiteratureIndex.py
 python3 scripts/buildCommunityData.py
 python3 scripts/build-knowledge-data.py
 python3 scripts/buildLandscapeInsights.py
+python3 scripts/build-conference-data.py
 python3 scripts/generate-pipeline-status.py
 ```
 
@@ -205,6 +208,8 @@ node --check assets/*.js
 - HTML / CSS / JS 保持零构建，可直接由 GitHub Pages 托管。
 - 页面导航变更需同步 6 个主页面，重定向页不算主导航。
 - 动态 HTML 必须 escape，外链必须通过 safe URL helper。
+- 会议摘要采用数据管线生成，禁止手改 `data/conference-data.js`。应修改 `scripts/build-conference-data.py` 后重建。
+- AAN / EAN 会议页必须保留原始来源、MG-core 口径、证据边界、MA 转化和 KOL 问题。
 - 大型数据文件优先使用分片或懒加载，例如 full index、国际专家画像和 community assignment shards。
 - Python 数据写入优先使用 `scripts/common/io.py` 中的原子写入工具。
 - API key 只从环境变量读取，例如 `EASYSCHOLAR_KEY` 和 `NCBI_API_KEY`。

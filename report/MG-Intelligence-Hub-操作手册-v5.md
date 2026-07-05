@@ -1,6 +1,6 @@
 # MG Intelligence Hub v5 — 架构设计与操作手册
 
-> 版本：v5（基于 2026-07-02 本地仓库与线上 GitHub Pages 公开产物）
+> 版本：v5.1（基于 2026-07-05 本地仓库与线上 GitHub Pages 公开产物）
 > 定位：MA-MG-HUB 医学事务 AI 变革引擎，围绕 MSL 工作流的主动赋能系统
 > 本手册是当前操作依据；`report/` 中旧规划文档仅作历史参考。
 
@@ -148,7 +148,7 @@ PubMed / ClinicalTrials.gov / EasyScholar / 中国监管状态 / 会议来源
 | `data/landscapeInsights.js` | 27 KB；6 条动态洞察 | 月度格局洞察、MSL action | 诊治格局 / MSL 同步加载 |
 | `data/curated-topics.js` | 117 KB；27 个专题 | 知识库专题层 | 知识库 / 诊治格局同步加载 |
 | `data/wikiTopicCoverage.js` | 64 KB；27 个专题覆盖 | wiki 专题与 PubMed 社区映射 | 多页面同步加载 |
-| `data/conference-data.js` / `.json` | 1.5 MB；458 条摘要 | 会议资讯 | 情报中心同步加载 |
+| `data/conference-data.js` / `.json` | 466 条摘要 | 会议资讯；含 meetingNarratives、coverageAudits 和逐条 deepInsight | 情报中心同步加载 |
 | `data/pipeline-status.js` | 6 KB | 数据状态页 | 数据状态同步加载 |
 | `data/backendOptions.js` | 5 KB | Phase 6 后端选项评估 | 数据状态同步加载 |
 | `data/china-regulatory-status.json` | — | NMPA/CDE/准入状态 | 构建脚本与诊治格局使用 |
@@ -258,17 +258,32 @@ PubMed / ClinicalTrials.gov / EasyScholar / 中国监管状态 / 会议来源
 
 ### 6.2 会议数据
 
-当前结构化会议摘要共 458 条：
+当前结构化会议摘要共 466 条。会议资讯不是新闻列表，而是面向医学事务（medical affairs, MA）和 MSL briefing 的摘要级情报工作台。
 
 | 来源 | 数量 | 当前状态 |
 |---|---:|---|
-| MGFA IC 2025 | 187 | 已结构化 |
+| MGFA IC 2025 | 192 | 已结构化 |
 | MGFA SS 2025 | 79 | 已结构化 |
-| AAN 2026 | 89 | 已结构化，含 late-breaking 标记 |
-| EAN 2026 | 103 | 已结构化 |
+| AAN 2026 | 91 | 已结构化；MiraSmart raw search 109 条，curated MG-core 91 条，规则剔除 18 条 |
+| EAN 2026 | 104 | 已结构化；已纳入 acronym-only MG 标题条目 |
 | AANEM | — | 已建立监控口，尚未进入结构化摘要库 |
 
-分析维度包括国家/地区、研究类型、主题、药物/机制、中国相关、高优先级等。
+分析维度包括国家/地区、研究类型、主题、药物/机制、中国相关、高优先级、行动标签、证据边界和 KOL 问题。
+
+### 6.3 AAN / EAN 会议资讯口径
+
+会议数据由 `scripts/build-conference-data.py` 生成。不要手改 `data/conference-data.js` 或 `data/conference-data.json`。
+
+| 字段 | 用途 |
+|---|---|
+| `meetingNarratives` | 会议级全景剖析，服务 congress debrief 和团队 briefing |
+| `coverageAudits` | 展示 raw search、curated MG-core、剔除数量和剔除原则 |
+| `deepInsight` | 每条摘要的临床读数、MA 转化、证据边界、关键数字、KOL 问题 |
+| `analysisZh` | 兼容旧前端的中文摘要字段 |
+
+AAN 2026 的公开对照页报告 106 篇 MG 直接相关摘要。本站保留更透明的工作流口径：MiraSmart `myasthenia` raw search 109 条，curated MG-core 91 条，剔除 18 条 CMS / LEMS / mimic / 非 MG 误命中。每条入库摘要保留原始链接，并增加 MA 转化与证据边界。
+
+EAN 2026 已完成外部文章引用核查。被引用的 31 条 EAN 摘要均已纳入本库并生成分析字段。当前 104 条包含 acronym-only MG 标题条目 `EPV-1203`。
 
 ---
 
@@ -486,7 +501,7 @@ node --check assets/*.js
 | P1 | 证据矩阵仍是 abstract-level 自动关系，可能混入跨疾病或弱相关 PMID | MSL 使用时需回到 PMID 原文核对 | 增加跨疾病排除规则和人工抽样 review |
 | P2 | MSL 拜访助手尚无持久化、导出和 follow-up 闭环 | 目前只能页面内生成建议，不能形成团队工作流 | 后续再设计本地存储或轻量后端 |
 | P3 | `data/china-manual.json` 不存在 | 中国情报缺少手动补充入口，但不影响 PubMed 自动部分 | 需要人工维护中国政策/指南时再创建 |
-| P3 | AANEM 仅有监控口，尚未进入结构化会议摘要库 | 会议资讯覆盖不完整 | 后续补结构化抓取/录入 |
+| P3 | AANEM 仅有监控口，尚未进入结构化会议摘要库 | AAN / EAN / MGFA 已结构化，AANEM 仍缺摘要级情报 | 后续补结构化抓取/录入 |
 
 ---
 
@@ -527,7 +542,27 @@ python3 scripts/buildCommunityData.py
 python3 scripts/build-knowledge-data.py
 ```
 
-### 12.7 手动触发 GitHub Actions
+### 12.7 仅重建会议资讯
+
+```bash
+python3 scripts/build-conference-data.py
+```
+
+需要刷新远端会议源时使用：
+
+```bash
+python3 scripts/build-conference-data.py --refresh
+```
+
+重建后至少运行：
+
+```bash
+python3 -m py_compile scripts/build-conference-data.py
+node --check assets/conference.js
+python3 -m pytest -q
+```
+
+### 12.8 手动触发 GitHub Actions
 
 GitHub 仓库 → Actions → `MA-MG-HUB Weekly Pipeline` → `Run workflow`
 
