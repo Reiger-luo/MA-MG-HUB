@@ -100,6 +100,7 @@
     moduleLink: $('conferenceModuleLink'),
     moduleKpis: $('conferenceModuleKpis'),
     briefTakeaways: $('conferenceBriefTakeaways'),
+    strategicNarrative: $('conferenceStrategicNarrative'),
     countryRank: $('conferenceCountryRank'),
     typeRank: $('conferenceTypeRank'),
     topicCloud: $('conferenceTopicCloud'),
@@ -243,6 +244,69 @@
     }).join('') + '</div>';
   }
 
+  function renderStrategicNarrative(module, items) {
+    if (!el.strategicNarrative) return;
+    var conferenceName = module.meetingKeys[0];
+    var narrative = conferenceName && payload.meetingNarratives ? payload.meetingNarratives[conferenceName] : null;
+    if (!items.length || !narrative) {
+      el.strategicNarrative.innerHTML = '';
+      return;
+    }
+    var depth = narrative.contentDepth || {};
+    var chapters = narrative.chapters || [];
+    var questions = narrative.briefingQuestions || [];
+    var sourceId = items[0] && items[0].sourceId;
+    var audit = sourceId && payload.coverageAudits ? payload.coverageAudits[sourceId] : null;
+    var comparison = narrative.competitiveComparison || null;
+    var auditHtml = audit ? '<div class="conference-audit-strip">' +
+      '<span><b>' + escapeHtml(audit.rawSearchResults || 0) + '</b>raw search</span>' +
+      '<span><b>' + escapeHtml(audit.curatedMgIncluded || 0) + '</b>MG-core</span>' +
+      '<span><b>' + escapeHtml(audit.excludedByRule || 0) + '</b>规则剔除</span>' +
+      '<p>' + escapeHtml(audit.exclusionPrinciple || '') + '</p>' +
+    '</div>' : '';
+    var comparisonHtml = comparison ? '<div class="conference-comparison-card">' +
+      '<div><span>竞品对照</span><a href="' + escapeHref(comparison.url || '#') + '" target="_blank" rel="noopener">' + escapeHtml(comparison.label || '参考页面') + '</a></div>' +
+      '<p>' + escapeHtml(comparison.verdict || '') + '</p>' +
+      '<ul>' + (comparison.advantages || []).slice(0, 4).map(function(item) { return '<li>' + escapeHtml(item) + '</li>'; }).join('') + '</ul>' +
+    '</div>' : '';
+    el.strategicNarrative.innerHTML =
+      '<section class="conference-narrative-panel">' +
+        '<div class="conference-narrative-head">' +
+          '<span>全景剖析 · MA 工作流版本</span>' +
+          '<strong>' + escapeHtml(narrative.headline || '') + '</strong>' +
+          '<p>' + escapeHtml(narrative.strategicRead || '') + '</p>' +
+        '</div>' +
+        '<div class="conference-depth-strip">' +
+          '<span><b>' + escapeHtml(depth.abstracts || 0) + '</b>摘要</span>' +
+          '<span><b>' + escapeHtml(depth.highPriority || 0) + '</b>优先核查</span>' +
+          '<span><b>' + escapeHtml(depth.chinaRelated || 0) + '</b>中国线索</span>' +
+          '<span><b>' + escapeHtml((depth.topDrugs || depth.topTopics || []).slice(0, 3).join(' / ') || '机制待识别') + '</b>核心机制</span>' +
+        '</div>' +
+        auditHtml +
+        comparisonHtml +
+        '<div class="conference-chapter-grid">' + chapters.map(function(chapter, idx) {
+          var refs = chapter.refs || [];
+          return '<article class="conference-chapter-card">' +
+            '<div class="conference-chapter-index">' + escapeHtml('线索 0' + (idx + 1)) + '</div>' +
+            '<h3>' + escapeHtml(chapter.title || '') + '</h3>' +
+            '<p>' + escapeHtml(chapter.takeaway || '') + '</p>' +
+            '<em>' + escapeHtml(chapter.maUse || '') + '</em>' +
+            '<div class="conference-chapter-refs">' + refs.slice(0, 3).map(function(ref) {
+              var metrics = (ref.keyMetrics || []).slice(0, 1).join('；');
+              return '<a href="' + escapeHref(ref.sourceUrl || '#') + '" target="_blank" rel="noopener">' +
+                '<strong>' + escapeHtml(truncateText(ref.title || 'Untitled', 72)) + '</strong>' +
+                (metrics ? '<span>' + escapeHtml(metrics) + '</span>' : '') +
+              '</a>';
+            }).join('') + '</div>' +
+          '</article>';
+        }).join('') + '</div>' +
+        '<div class="conference-briefing-questions">' +
+          '<span>MSL briefing 必答问题</span>' +
+          '<ol>' + questions.slice(0, 4).map(function(question) { return '<li>' + escapeHtml(question) + '</li>'; }).join('') + '</ol>' +
+        '</div>' +
+      '</section>';
+  }
+
   function renderMeetingCards() {
     if (!el.meetingCards) return;
     el.meetingCards.innerHTML = meetingModules.map(function(module) {
@@ -354,7 +418,11 @@
   function itemText(item) {
     return [
       item.title, item.abstract, item.analysisZh, item.sessionName,
-      item.programNumber, (item.topics || []).join(' '), (item.drugs || []).join(' ')
+      item.programNumber, (item.topics || []).join(' '), (item.drugs || []).join(' '),
+      item.deepInsight && item.deepInsight.clinicalReadoutZh,
+      item.deepInsight && item.deepInsight.maImplicationZh,
+      item.deepInsight && (item.deepInsight.actionTags || []).join(' '),
+      item.deepInsight && (item.deepInsight.kolQuestions || []).join(' ')
     ].join(' ').toLowerCase();
   }
 
@@ -537,7 +605,11 @@
     if (state.keyword) {
       var haystack = [
         item.title, item.authors, item.abstract, item.researchType,
-        (item.topics || []).join(' '), (item.drugs || []).join(' '), (item.countries || []).join(' ')
+        (item.topics || []).join(' '), (item.drugs || []).join(' '), (item.countries || []).join(' '),
+        item.deepInsight && item.deepInsight.clinicalReadoutZh,
+        item.deepInsight && item.deepInsight.maImplicationZh,
+        item.deepInsight && (item.deepInsight.actionTags || []).join(' '),
+        item.deepInsight && (item.deepInsight.kolQuestions || []).join(' ')
       ].join(' ').toLowerCase();
       if (haystack.indexOf(state.keyword) === -1) return false;
     }
@@ -570,16 +642,36 @@
   }
 
   function renderResultRow(item) {
+    var insight = item.deepInsight || {};
     var tags = [item.researchType].concat(item.drugs || []).concat(item.topics || []).slice(0, 4);
-    return '<article class="conference-result-row">' +
+    var actionTags = insight.actionTags || [];
+    var metrics = insight.keyMetrics || [];
+    var kolQuestions = insight.kolQuestions || [];
+    return '<article class="conference-result-row conference-result-row-deep">' +
       '<div>' +
         '<a class="conference-card-title" href="' + escapeHref(item.sourceUrl || item.pageUrl) + '" target="_blank" rel="noopener">' + escapeHtml(item.title) + '</a>' +
         '<p>' + escapeHtml([item.conference, item.presentationType, (item.countries || []).slice(0, 4).join('、')].filter(Boolean).join(' · ')) + '</p>' +
-        '<p class="conference-result-analysis">' + escapeHtml(item.analysisZh || '中文分析待生成；请展开摘要核查来源。') + '</p>' +
-        '<div class="conference-abstract open" id="conference-abs-' + escapeHtml(item.id) + '">' + escapeHtml(item.abstract || '摘要正文待公开。') + '</div>' +
+        '<div class="conference-deep-readout">' +
+          '<span>临床读数</span>' +
+          '<p>' + escapeHtml(insight.clinicalReadoutZh || item.analysisZh || '中文分析待生成；请展开摘要核查来源。') + '</p>' +
+        '</div>' +
+        '<div class="conference-ma-implication">' +
+          '<span>MA 转化</span>' +
+          '<p>' + escapeHtml(insight.maImplicationZh || '待补充医学事务转化判断。') + '</p>' +
+        '</div>' +
+        (metrics.length ? '<div class="conference-metric-list">' + metrics.slice(0, 3).map(function(metric) { return '<em>' + escapeHtml(metric) + '</em>'; }).join('') + '</div>' : '') +
+        '<details class="conference-evidence-detail">' +
+          '<summary>证据边界 / KOL 问题 / 原始摘要</summary>' +
+          '<p><strong>证据边界：</strong>' + escapeHtml(insight.evidenceBoundaryZh || '需回到原始摘要核查。') + '</p>' +
+          '<p><strong>下一步：</strong>' + escapeHtml(insight.evidenceNeed || '核查来源后再进入材料。') + '</p>' +
+          (kolQuestions.length ? '<ol>' + kolQuestions.slice(0, 4).map(function(q) { return '<li>' + escapeHtml(q) + '</li>'; }).join('') + '</ol>' : '') +
+          '<div class="conference-abstract open" id="conference-abs-' + escapeHtml(item.id) + '">' + escapeHtml(item.abstract || '摘要正文待公开。') + '</div>' +
+        '</details>' +
       '</div>' +
       '<div class="conference-result-tags">' + tags.map(function(tag) {
         return '<span class="conference-badge">' + escapeHtml(tag) + '</span>';
+      }).join('') + actionTags.map(function(tag) {
+        return '<span class="conference-badge highlight">' + escapeHtml(tag) + '</span>';
       }).join('') + '</div>' +
     '</article>';
   }
@@ -681,6 +773,7 @@
     renderMeetingCards();
     renderKpis(module, summary);
     renderBriefTakeaways(module, summary, currentItems);
+    renderStrategicNarrative(module, currentItems);
     renderRank(el.countryRank, summary.countries, 8);
     renderRank(el.typeRank, summary.types, 8);
     renderTopics(summary);

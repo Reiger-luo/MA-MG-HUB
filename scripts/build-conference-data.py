@@ -77,6 +77,9 @@ NON_MG_RELATED_RE = re.compile(
     r"congenital\s+myasthenic\s+disorders?|\bCMS\b|myasthenic\s+syndrome)",
     re.I,
 )
+MG_ABBREVIATION_TITLE_RE = re.compile(r"\bMG\b")
+ICI_MYASTHENIA_RE = re.compile(r"(immune checkpoint|\bICI\b).{0,80}(myasthenia|myositis/myasthenia)|myositis/myasthenia", re.I)
+SOURCE_COVERAGE_AUDITS: dict[str, dict] = {}
 EAN_DRUG_RE = re.compile(
     r"(efgartigimod|nipocalimab|rozanolixizumab|ravulizumab|eculizumab|zilucoplan|"
     r"cemdisiran|claseprubart|telitacicept|gefurulimab|inebilizumab)",
@@ -259,7 +262,8 @@ COUNTRY_RULES = [
 TOPIC_RULES = [
     ("FcRn", ["fcrn", "efgartigimod", "nipocalimab", "rozanolixizumab", "batoclimab"]),
     ("补体", ["complement", "eculizumab", "ravulizumab", "zilucoplan", "c5", "c1s", "claseprubart", "gefurulimab", "cemdisiran"]),
-    ("B细胞/免疫重置", ["b cell", "b-cell", "rituximab", "inebilizumab", "cd19", "car t", "telitacicept"]),
+    ("细胞治疗/免疫重置", ["car-t", "car t", "chimeric antigen receptor", "rese-cel", "resocabtagene", "kyv-101", "descartes-08", "kite-363", "bcma-directed", "cd19"]),
+    ("B细胞/免疫重置", ["b cell", "b-cell", "rituximab", "inebilizumab", "cd19", "telitacicept", "april", "blys"]),
     ("抗体分型", ["achr", "musk", "lrp4", "seronegative", "titin", "autoantibody"]),
     ("真实世界/登记", ["real-world", "real world", "registry", "claims", "retrospective", "observational", "cohort"]),
     ("安全性", ["safety", "adverse", "infection", "tolerability", "vaccination"]),
@@ -279,12 +283,18 @@ DRUG_RULES = [
     ("eculizumab", ["eculizumab"]),
     ("zilucoplan", ["zilucoplan"]),
     ("batoclimab", ["batoclimab"]),
-    ("telitacicept", ["telitacicept"]),
+    ("telitacicept", ["telitacicept", "rc18", "reme-mg", "rememg"]),
     ("rituximab", ["rituximab"]),
     ("inebilizumab", ["inebilizumab"]),
     ("gefurulimab", ["gefurulimab"]),
-    ("claseprubart", ["claseprubart"]),
+    ("claseprubart", ["claseprubart", "dnth103"]),
     ("cemdisiran", ["cemdisiran"]),
+    ("rese-cel", ["rese-cel", "resocabtagene autoleucel", "reset-mg"]),
+    ("KYV-101", ["kyv-101", "kysa-6"]),
+    ("Descartes-08", ["descartes-08"]),
+    ("KITE-363", ["kite-363"]),
+    ("MGAC-007", ["mgac-007"]),
+    ("BHV-1300", ["bhv-1300"]),
     ("tacrolimus", ["tacrolimus"]),
 ]
 
@@ -698,7 +708,24 @@ def parse_aan_mirasmart(source: dict, refresh: bool = False) -> list[dict]:
                 continue
             if item:
                 parsed.append(item)
-    return dedupe_items(parsed)
+    parsed = dedupe_items(parsed)
+    SOURCE_COVERAGE_AUDITS[source["id"]] = {
+        "sourceId": source["id"],
+        "meeting": source["shortTitle"],
+        "query": "myasthenia",
+        "rawSearchResults": total or len(deduped_records),
+        "recordsParsed": len(deduped_records),
+        "curatedMgIncluded": len(parsed),
+        "excludedByRule": max(len(deduped_records) - len(parsed), 0),
+        "exclusionPrinciple": "保留 MG 全称、AAN 标题大写 MG 缩写、ICI myositis/myasthenia 安全性条目；剔除 CMS/LEMS、单纯神经肌接头 mimic、mg 剂量单位或非 MG 疾病误命中。",
+        "externalBenchmark": {
+            "label": "huashanmuscle AAN 2026 panorama",
+            "reportedDirectMg": 106,
+            "url": "https://mg-intelligence-hub.huashanmuscle.com/pages/conferences/aan-2026-mg-panorama.html",
+            "note": "对照页按综述口径报告 106 篇；本站保留可追溯原始摘要链接，并透明展示 raw search 与 curated MG-core 的差异。",
+        },
+    }
+    return parsed
 
 
 def dedupe_items(items: list[dict]) -> list[dict]:
@@ -714,13 +741,19 @@ def dedupe_items(items: list[dict]) -> list[dict]:
 
 
 def is_mg_text(title: str, abstract: str = "") -> bool:
-    """只保留 MG 内容；LEMS/CMS 等相关疾病不作为 MG 收录。"""
+    """只保留 MG 核心内容；LEMS/CMS 等相关疾病不作为 MG 主库收录。"""
     title_text = title or ""
     abstract_text = abstract or ""
     early_abstract = abstract_text[:900]
     if NON_MG_RELATED_RE.search(title_text):
         return False
     if MG_TITLE_RE.search(title_text):
+        return True
+    # AAN 部分标题常用大写 MG 缩写；不能把全文里的小写 mg 剂量单位当作 MG。
+    if MG_ABBREVIATION_TITLE_RE.search(title_text):
+        return True
+    # ICI 相关 myositis/myasthenia 是神经免疫安全性中的 MG 临床管理问题。
+    if ICI_MYASTHENIA_RE.search(f"{title_text} {early_abstract}"):
         return True
     if NON_MG_RELATED_RE.search(early_abstract):
         return False
@@ -775,12 +808,175 @@ def infer_research_type(text: str) -> str:
     return "其他临床研究"
 
 
-def make_zh_summary(title: str, abstract: str, topics: list[str], research_type: str, drugs: list[str], countries: list[str]) -> str:
+def _first_sentence(text: str, max_len: int = 180) -> str:
+    text = re.sub(r"\s+", " ", text or "").strip()
+    if not text:
+        return ""
+    parts = re.split(r"(?<=[.;])\s+(?=[A-Z])", text)
+    sentence = parts[0] if parts else text
+    return sentence[:max_len].rstrip() + ("…" if len(sentence) > max_len else "")
+
+
+def _metric_snippets(text: str, limit: int = 4) -> list[str]:
+    """提取摘要中可进入医学事务讨论的关键数字。按句子/短句评分，避免小数点被截断。"""
+    text = re.sub(r"\s+", " ", text or "").replace("efgartigi- mod", "efgartigimod").replace("pla- cebo", "placebo")
+    if not text:
+        return []
+    sentences = re.split(r"(?<=[.;])\s+(?=[A-Z][a-z])", text)
+    anchors = re.compile(
+        r"(MG-ADL|QMG|MG-QOL15r|Neuro-QoL|MSE|minimum symptom expression|"
+        r"least squares mean|mean change|response|responder|reduction|improvement|"
+        r"steroid|corticosteroid|prednisone|p\s*[<=>]|OR\s*=|CI\)|%|mg/day|week|month)",
+        re.I,
+    )
+    has_number = re.compile(r"\d+(?:\.\d+)?\s*(?:%|mg/day|mg|weeks?|months?|years?|patients?|participants?)?|p\s*[<=>]\s*0?\.\d+|OR\s*=\s*\d+(?:\.\d+)?", re.I)
+    scored: list[tuple[int, str]] = []
+    for sentence in sentences:
+        sentence = sentence.strip(" ;")
+        if len(sentence) < 24:
+            continue
+        score = 0
+        if anchors.search(sentence):
+            score += 2
+        if has_number.search(sentence):
+            score += 2
+        if re.search(r"(primary endpoint|baseline|week 4|week 24|cycle|placebo|well tolerated|adverse)", sentence, re.I):
+            score += 1
+        if score >= 3:
+            cleaned = sentence[:220].rstrip() + ("…" if len(sentence) > 220 else "")
+            scored.append((score, cleaned))
+    scored.sort(key=lambda row: (-row[0], len(row[1])))
+    hits: list[str] = []
+    seen: set[str] = set()
+    for _, snippet in scored:
+        key = re.sub(r"\W+", " ", snippet.lower())[:80]
+        if key in seen:
+            continue
+        seen.add(key)
+        hits.append(snippet)
+        if len(hits) >= limit:
+            break
+    return hits
+
+
+def infer_patient_lens(text: str) -> list[str]:
+    lower = text.lower()
+    rules = [
+        ("血清阴性/MuSK/LRP4", ["seronegative", "musk", "lrp4", "anti-muscle-specific kinase"]),
+        ("青少年/妊娠", ["juvenile", "pediatric", "paediatric", "adolescent", "pregnancy", "postpartum"]),
+        ("早期病程", ["early disease", "disease duration", "newly diagnosed", "≤5", "<=5"]),
+        ("胸腺瘤相关", ["thymoma", "tamg"]),
+        ("真实世界长期管理", ["real-world", "real world", "registry", "retrospective", "extension", "long-term"]),
+        ("患者负担/生活质量", ["quality of life", "burden", "fatigue", "preference", "cost", "qol"]),
+    ]
+    out = [label for label, terms in rules if any(term in lower for term in terms)]
+    return out[:4] or ["总体 gMG 人群"]
+
+
+def infer_action_tags(text: str, research_type: str, drugs: list[str], countries: list[str]) -> list[str]:
+    lower = text.lower()
+    tags: list[str] = []
+    if research_type == "随机/对照试验" or any(term in lower for term in ["phase 3", "primary endpoint", "placebo"]):
+        tags.append("Congress debrief核心证据")
+    if any(term in lower for term in ["steroid", "corticosteroid", "prednisone", "taper"]):
+        tags.append("激素减量叙事")
+    if any(term in lower for term in ["quality of life", "burden", "preference", "fatigue", "cost"]):
+        tags.append("患者价值沟通")
+    if any(term in lower for term in ["infection", "adverse", "safety", "tolerability"]):
+        tags.append("安全性追问")
+    if any(term in lower for term in ["juvenile", "pediatric", "pregnancy", "seronegative", "musk", "lrp4", "thymoma"]):
+        tags.append("特殊人群KOL问题")
+    if "中国" in countries:
+        tags.append("中国专家/机构跟进")
+    if drugs:
+        tags.append("竞品机制比较")
+    return tags[:5] or ["摘要监控"]
+
+
+def make_deep_conference_insight(title: str, abstract: str, topics: list[str], research_type: str, drugs: list[str], countries: list[str]) -> dict:
+    """生成网站使用的医学事务深度解读字段。规则化、可复现，不替代人工医学判断。"""
+    text = f"{title} {abstract}"
+    lower = text.lower()
+    metrics = _metric_snippets(abstract)
     focus = "、".join(topics[:3])
-    drug_text = "；涉及药物：" + "、".join(drugs[:4]) if drugs else ""
-    country_text = "；国家/地区线索：" + "、".join([c for c in countries if c != "未识别"][:4]) if countries and countries != ["未识别"] else ""
-    clue = "摘要原文待公开，当前仅保留题名/作者用于监控。" if not abstract else "可展开英文摘要核查方法与结果。"
-    return f"中文分析：{research_type}，主题聚焦 {focus}{drug_text}{country_text}。{clue}"
+    drug_text = "、".join(drugs[:3]) if drugs else "相关机制"
+    patient_lens = infer_patient_lens(text)
+    action_tags = infer_action_tags(text, research_type, drugs, countries)
+
+    if not abstract:
+        return {
+            "clinicalReadoutZh": f"当前仅有题名/作者信息。题名提示该摘要属于{research_type}，主题聚焦 {focus}，需等待完整摘要或会后资料确认。",
+            "maImplicationZh": "适合作为会议源监控线索，不应直接进入对外材料；可先列入会后核查清单。",
+            "evidenceBoundaryZh": "证据边界：摘要正文缺失，无法判断样本量、终点、效应量、随访长度和安全性口径。",
+            "keyMetrics": [],
+            "patientLens": patient_lens,
+            "actionTags": action_tags,
+            "kolQuestions": ["该题名对应的研究设计、入组人群和核心终点是什么？", "是否有可核查的摘要全文、poster 或 oral slide？"],
+            "evidenceNeed": "补全文摘/海报后再判定医学事务优先级。",
+        }
+
+    if "steroid" in lower or "corticosteroid" in lower or "prednisone" in lower:
+        implication = "这条摘要的工作价值不止是疗效，而是把靶向治疗转成临床更关心的“激素负担下降、长期控制和治疗目标重构”。适合进入激素减量、患者旅程和长期管理讨论。"
+    elif any(term in lower for term in ["juvenile", "pediatric", "pregnancy", "seronegative", "musk", "lrp4", "thymoma"]):
+        implication = "这条摘要适合用于定义治疗边界：哪些特殊人群已有数据、哪些只是探索信号、哪些问题需要 KOL 访谈确认。它比单纯疗效新闻更适合作为精准管理议题入口。"
+    elif any(term in lower for term in ["quality of life", "burden", "preference", "fatigue", "cost"]):
+        implication = "这条摘要能把会议报道从“药物有效”推进到“患者感知获益和实践价值”。适合用于 MSL 拜访前准备患者价值、PRO 和资源负担相关问题。"
+    elif research_type == "随机/对照试验" or any(term in lower for term in ["phase 3", "placebo", "primary endpoint"]):
+        implication = "这是会后复盘应优先核查的核心证据。医学事务使用时应同时看机制定位、人群、终点、随访和安全性，而不是只摘录一个阳性结果。"
+    elif research_type == "真实世界/队列":
+        implication = "这条摘要适合补足 RCT 外部有效性和临床路径问题：真实世界患者如何选择、维持、减量、停药或转换治疗。它应作为实践场景证据，而非直接替代随机证据。"
+    else:
+        implication = "这条摘要适合作为主题雷达信号：用于生成专家追问、后续文献监控关键词，或补充会议全景叙事中的证据空白。"
+
+    boundary_parts = []
+    if research_type not in {"随机/对照试验", "试验设计/进行中"}:
+        boundary_parts.append("非随机证据需注意选择偏倚和因果外推")
+    if "post hoc" in lower or "subgroup" in lower:
+        boundary_parts.append("亚组/事后分析不能直接等同于预设结论")
+    if "retrospective" in lower or "chart review" in lower:
+        boundary_parts.append("回顾性资料适合提出实践假设，不宜包装成疗效定论")
+    if "trial in progress" in lower or "study design" in lower:
+        boundary_parts.append("进行中研究只能说明证据布局，不能用于疗效结论")
+    if not metrics:
+        boundary_parts.append("需回到原文核查具体样本量、效应量和安全性数据")
+    boundary = "；".join(boundary_parts) or "需核查入组标准、主要终点、效应量、随访长度和 AE 采集口径后再用于材料。"
+
+    kol_questions = []
+    if drugs:
+        kol_questions.append(f"在同类患者路径中，{drug_text}最适合解决什么未满足需求？")
+    if any(term in lower for term in ["steroid", "corticosteroid", "prednisone"]):
+        kol_questions.append("您在真实诊疗中会用哪些指标判断“可以减激素”，MG-ADL/MSE 是否足够？")
+    if any(term in lower for term in ["seronegative", "musk", "lrp4"]):
+        kol_questions.append("抗体分型会如何影响您对靶向治疗证据的信任和患者选择？")
+    if any(term in lower for term in ["quality of life", "burden", "preference", "fatigue"]):
+        kol_questions.append("患者价值数据中，哪些 PRO 最能改变您与患者的治疗目标沟通？")
+    if "中国" in countries:
+        kol_questions.append("中国参与机构的数据是全球多中心贡献，还是能形成独立的本土证据叙事？")
+    if not kol_questions:
+        kol_questions.append("这条摘要是否足以改变您的治疗讨论，还是只应作为趋势观察？")
+    kol_questions.append("如果要转化为中国医学事务行动，下一步最缺的是全文、专家反馈还是本土数据？")
+
+    clinical = f"{research_type}；聚焦 {focus}。"
+    if metrics:
+        clinical += "关键数据点：" + "；".join(metrics[:3]) + "。"
+    else:
+        clinical += _first_sentence(abstract, 180) or "需展开原文确认关键结果。"
+
+    return {
+        "clinicalReadoutZh": clinical,
+        "maImplicationZh": implication,
+        "evidenceBoundaryZh": "证据边界：" + boundary + "。",
+        "keyMetrics": metrics,
+        "patientLens": patient_lens,
+        "actionTags": action_tags,
+        "kolQuestions": kol_questions[:4],
+        "evidenceNeed": "核查研究设计、患者分型、主要终点、随访长度、安全性口径，并判断是否能进入内部 briefing / KOL 访谈 / 本土证据规划。",
+    }
+
+
+def make_zh_summary(title: str, abstract: str, topics: list[str], research_type: str, drugs: list[str], countries: list[str]) -> str:
+    insight = make_deep_conference_insight(title, abstract, topics, research_type, drugs, countries)
+    return " ".join([insight["clinicalReadoutZh"], insight["maImplicationZh"]])
 
 
 def priority_score(item: dict) -> int:
@@ -842,6 +1038,7 @@ def make_abstract_item(
         "page": page,
     }
     item["priorityScore"] = priority_score(item)
+    item["deepInsight"] = make_deep_conference_insight(title, abstract, topics, research_type, drugs, countries)
     item["analysisZh"] = make_zh_summary(title, abstract, topics, research_type, drugs, countries)
     return item
 
@@ -874,6 +1071,138 @@ def build_summary(abstracts: list[dict]) -> dict:
         "byTopic": rank_counter(topic_counter, 20),
         "byResearchType": rank_counter(type_counter, 20),
     }
+
+
+def _top_items(items: list[dict], predicate, limit: int = 3) -> list[dict]:
+    return sorted([item for item in items if predicate(item)], key=lambda item: (-item.get("priorityScore", 0), item.get("title", "")))[:limit]
+
+
+def _mini_ref(item: dict) -> dict:
+    return {
+        "id": item.get("id"),
+        "title": item.get("title"),
+        "presentationType": item.get("presentationType"),
+        "researchType": item.get("researchType"),
+        "drugs": item.get("drugs", []),
+        "topics": item.get("topics", []),
+        "countries": item.get("countries", []),
+        "sourceUrl": item.get("sourceUrl") or item.get("pageUrl"),
+        "keyMetrics": (item.get("deepInsight") or {}).get("keyMetrics", [])[:3],
+    }
+
+
+def build_meeting_narratives(abstracts: list[dict]) -> dict:
+    """按会议生成可直接在前端展示的医学事务全景叙事。"""
+    by_meeting: dict[str, list[dict]] = {}
+    for item in abstracts:
+        by_meeting.setdefault(item["conference"], []).append(item)
+
+    narratives: dict[str, dict] = {}
+    for conference, items in by_meeting.items():
+        topics = Counter(topic for item in items for topic in item.get("topics", []))
+        drugs = Counter(drug for item in items for drug in item.get("drugs", []))
+        types = Counter(item.get("researchType", "其他临床研究") for item in items)
+        china_count = sum(1 for item in items if item.get("isChinaRelated"))
+        high_count = sum(1 for item in items if item.get("priorityScore", 0) >= 6)
+        top_topics = [name for name, _ in topics.most_common(4)]
+        top_drugs = [name for name, _ in drugs.most_common(5)]
+        top_types = [name for name, _ in types.most_common(3)]
+
+        treatment_refs = _top_items(
+            items,
+            lambda item: item.get("researchType") == "随机/对照试验" or bool(item.get("drugs")) or item.get("priorityScore", 0) >= 8,
+            4,
+        )
+        practice_refs = _top_items(
+            items,
+            lambda item: item.get("researchType") in {"真实世界/队列", "PRO/HEOR", "安全性"}
+            or any(topic in item.get("topics", []) for topic in ["真实世界/登记", "PRO/生活质量", "安全性", "危象/急性加重"]),
+            4,
+        )
+        subgroup_refs = _top_items(
+            items,
+            lambda item: any(
+                term in f"{item.get('title','')} {item.get('abstract','')}".lower()
+                for term in ["seronegative", "musk", "lrp4", "juvenile", "pediatric", "pregnancy", "thymoma", "early disease"]
+            ),
+            4,
+        )
+        china_refs = _top_items(items, lambda item: item.get("isChinaRelated"), 4)
+
+        if conference == "EAN 2026":
+            headline = "EAN 2026 的 MG 信息密度不低于公开综述，但医学事务价值在于把 103 条摘要拆成治疗格局、特殊人群、真实世界价值和中国转化四条行动线。"
+            strategic_read = "公开文章按药物机制串讲已经足够完整；HUB 的升级目标是更进一步：每条摘要都回答“对 KOL 问题、内部 briefing、本土证据和竞品追问有什么用”。"
+        elif conference == "AAN 2026":
+            headline = "AAN 2026 的价值不在复述 106 篇新闻式综述，而在把原始 MiraSmart 检索、MG-core 口径、每条摘要证据边界和 MSL 行动问题放在同一工作台。"
+            strategic_read = "对照页已经给出完整叙事；HUB 的升级目标是更进一步：动态回链原始摘要、区分 raw search 与 curated MG-core、突出细胞治疗/补体/FcRn/B 细胞重置的证据边界，并把每条摘要转成 KOL 追问。"
+        elif conference.startswith("MGFA"):
+            headline = "MGFA 摘要更接近 MG 专病生态，适合连接患者旅程、基础机制、临床实践和专家网络。"
+            strategic_read = "医学事务使用时应优先识别能进入疾病教育、ad board 议题和本地研究假设的摘要。"
+        else:
+            headline = f"{conference} 已结构化为 MG 摘要情报模块。"
+            strategic_read = "当前以摘要监控和来源核查为主，待字段完整后再升级为会后复盘材料。"
+
+        narratives[conference] = {
+            "headline": headline,
+            "strategicRead": strategic_read,
+            "contentDepth": {
+                "abstracts": len(items),
+                "highPriority": high_count,
+                "chinaRelated": china_count,
+                "topTopics": top_topics,
+                "topDrugs": top_drugs,
+                "topResearchTypes": top_types,
+            },
+            "competitiveComparison": {
+                "label": "对照 huashanmuscle AAN 2026 panorama",
+                "url": "https://mg-intelligence-hub.huashanmuscle.com/pages/conferences/aan-2026-mg-panorama.html",
+                "verdict": "对照页优势是长文综述；本站优势是可追溯、可筛选、可复用的 MA/MSL 情报产品：每条摘要都有临床读数、MA 转化、证据边界、关键数字和 KOL 问题。",
+                "advantages": [
+                    "raw search 与 curated MG-core 口径透明",
+                    "每条摘要可回链 AAN MiraSmart 原文",
+                    "按机制/研究类型/国家/行动标签下钻",
+                    "将细胞治疗、补体、FcRn、B 细胞重置统一放入证据边界框架",
+                ],
+            } if conference == "AAN 2026" else None,
+            "chapters": [
+                {
+                    "title": "治疗格局：从阳性结果走向机制定位",
+                    "takeaway": f"核心药物/机制集中在{'、'.join(top_drugs[:4]) if top_drugs else '待识别机制'}；真正需要回答的是不同机制在患者路径中的位置，而不是谁有一条阳性摘要。",
+                    "maUse": "用于 congress debrief、竞品比较、KOL 访谈前问题树。",
+                    "refs": [_mini_ref(item) for item in treatment_refs],
+                },
+                {
+                    "title": "临床落地：真实世界、PRO 与安全性决定材料可用性",
+                    "takeaway": "激素减量、长期控制、生活质量、感染/安全性和给药负担，是会议摘要最容易转化为 MSL 日常对话的部分。",
+                    "maUse": "用于患者价值沟通、长期管理 slide、临床实践追问清单。",
+                    "refs": [_mini_ref(item) for item in practice_refs],
+                },
+                {
+                    "title": "人群边界：特殊亚群是下一轮差异化入口",
+                    "takeaway": "血清阴性、MuSK/LRP4、青少年、妊娠、早期病程和胸腺瘤相关 MG 等摘要，不应被压缩成“也有效”，而应转成患者画像和证据缺口。",
+                    "maUse": "用于精准管理议题、专家访谈和本土研究 gap。",
+                    "refs": [_mini_ref(item) for item in subgroup_refs],
+                },
+                {
+                    "title": "中国转化：中国相关不是计数，而是专家网络和证据机会",
+                    "takeaway": f"本会议中国相关 {china_count} 条；需要区分中国只是参与全球多中心，还是能形成独立的本土证据或 KOL 合作机会。",
+                    "maUse": "用于 KOL mapping、区域 follow-up、研究合作假设和本地化叙事。",
+                    "refs": [_mini_ref(item) for item in china_refs],
+                },
+            ],
+            "briefingQuestions": [
+                "AAN raw search、curated MG-core 与对照页 106 篇口径差异，是否会影响内部汇报的摘要总数表述？",
+                "细胞治疗、上游补体、FcRn 与 B 细胞重置分别解决的是哪类患者路径问题？",
+                "哪些摘要能进入 KOL follow-up，哪些只适合等待全文/poster 后再判断？",
+                "中国机构参与的是全球多中心贡献，还是能转化为本土证据或专家网络机会？",
+            ] if conference == "AAN 2026" else [
+                "哪些摘要可以进入内部 briefing，哪些只能作为趋势观察？",
+                "核心结果对应的是疗效、激素减量、长期控制、患者价值还是安全性管理？",
+                "是否存在中国机构/作者线索，能否转化为 KOL follow-up？",
+                "关键证据是否足以支持医学判断，还是需要等待全文/poster/后续研究？",
+            ],
+        }
+    return narratives
 
 
 def build_payload(refresh: bool = False) -> dict:
@@ -930,6 +1259,8 @@ def build_payload(refresh: bool = False) -> dict:
             for source in SOURCES
         ],
         "abstracts": abstracts,
+        "meetingNarratives": build_meeting_narratives(abstracts),
+        "coverageAudits": SOURCE_COVERAGE_AUDITS,
         "sourceStats": source_stats,
         "sourceMonitor": SOURCE_MONITOR,
         "futureMeetings": FUTURE_MEETINGS,
