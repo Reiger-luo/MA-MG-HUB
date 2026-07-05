@@ -135,9 +135,11 @@ def writeFullJson(articles):
 
 
 def writeRecentJs(articles, totalCount=None):
+    semanticFullCount = totalCount if totalCount is not None else len(articles)
     with RECENT_JS_PATH.open("w", encoding="utf-8") as f:
-        if totalCount is not None:
-            f.write(f"window.MG_TOTAL_COUNT = {totalCount};\n")
+        f.write(f"window.MG_PUBLIC_ROLLING_COUNT = {len(articles)};\n")
+        f.write(f"window.MG_SEMANTIC_FULL_COUNT = {semanticFullCount};\n")
+        f.write(f"window.MG_TOTAL_COUNT = {semanticFullCount};\n")
         f.write("window.MG_LITERATURE_DATA = ")
         json.dump(articles, f, ensure_ascii=False)
         f.write(";\n")

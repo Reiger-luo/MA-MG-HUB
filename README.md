@@ -39,7 +39,7 @@ MA-MG-HUB 不是单纯的文献列表，而是医学事务团队的 MG 情报工
 | 公开滚动层 | 近一年文献 1,154 篇；中国相关 323 篇；14 天候选信号 38 条 | 工作台、情报中心、信号板、中国情报 |
 | full / 语义底座 | full 轻索引与社区层 10,635 篇 | 知识图谱、社区归类、专家画像、跨库检索 |
 
-`dashboard-data.js.stats.total_articles` 和 `window.MG_TOTAL_COUNT` 当前显示 1,165，属于公开前端统计口径，不等同于 full / 语义底座的 10,635 篇。该口径差异是当前已知问题，后续应统一展示文案和同步校验逻辑。
+Dashboard 与 `pipeline-status.js` 现在统一显示两套口径：`public_rolling_count` 为 1,154 篇，`semantic_full_count` 为 10,635 篇。full 口径来自 raw full / full-index / community full 产物；recent 口径分别记录 `literature-recent.js` 与 `communityAssignmentsRecent.js`，当前生效的 active recent 以实际文件更新时间较新的那个为准。`MG_SEMANTIC_FULL_COUNT` 和 `MG_TOTAL_COUNT` 只作为 recent 文件头部的声明与兼容校验字段。
 
 核心数据产物：
 
@@ -200,8 +200,7 @@ node --check assets/*.js
 
 ## 后续重点
 
-1. 统一 public rolling count 与 semantic full count 的展示和校验逻辑。
-2. 修复 `pipeline-status.js` 对 expert shards、community shards 和生成时间的识别。
-3. 强化证据矩阵医学相关性抽样审核，降低 abstract-level 噪声。
-4. 将 MSL 拜访助手升级为可保存、可导出、可 follow-up 的工作流。
-5. 补齐 AANEM 结构化会议摘要数据。
+1. 强化证据矩阵医学相关性抽样审核，降低 abstract-level 噪声。
+2. 统一 `communityAssignmentsRecent.js` 与 `literature-recent.js` 的近一年 cutoff 边界。
+3. 将 MSL 拜访助手升级为可保存、可导出、可 follow-up 的工作流。
+4. 补齐 AANEM 结构化会议摘要数据。

@@ -111,18 +111,25 @@ def latest(items):
 
 full = json.loads(Path("data/literature-full.json").read_text(encoding="utf-8"))
 recent_text = Path("data/literature-recent.js").read_text(encoding="utf-8")
-total_match = re.search(r"window\.MG_TOTAL_COUNT\s*=\s*(\d+);", recent_text)
 data_match = re.search(r"window\.MG_LITERATURE_DATA\s*=\s*(.*);\s*$", recent_text, re.S)
-if not total_match or not data_match:
+
+def readWindowNumber(name):
+    match = re.search(rf"window\.{re.escape(name)}\s*=\s*(\d+);", recent_text)
+    return int(match.group(1)) if match else None
+
+if not data_match:
     raise SystemExit("无法解析 data/literature-recent.js")
 
 recent = json.loads(data_match.group(1))
-recent_total = int(total_match.group(1))
+publicRollingCount = readWindowNumber("MG_PUBLIC_ROLLING_COUNT")
+semanticFullCount = readWindowNumber("MG_SEMANTIC_FULL_COUNT") or readWindowNumber("MG_TOTAL_COUNT")
 full_dt, full_item = latest(full)
 recent_dt, recent_item = latest(recent)
 
-if recent_total != len(full):
-    raise SystemExit(f"MG_TOTAL_COUNT={recent_total} 与 full_count={len(full)} 不一致")
+if publicRollingCount is not None and publicRollingCount != len(recent):
+    raise SystemExit(f"MG_PUBLIC_ROLLING_COUNT={publicRollingCount} 与 recent_count={len(recent)} 不一致")
+if semanticFullCount != len(full):
+    raise SystemExit(f"MG_SEMANTIC_FULL_COUNT={semanticFullCount} 与 full_count={len(full)} 不一致")
 if full_dt and recent_dt and recent_dt < full_dt:
     raise SystemExit(
         f"recent 最新日期 {recent_item.get('entry_date')} 早于 full 最新日期 {full_item.get('entry_date')}"
@@ -131,6 +138,8 @@ if full_dt and recent_dt and recent_dt < full_dt:
 print("同步校验通过")
 print(f"  full_count: {len(full)}")
 print(f"  recent_count: {len(recent)}")
+print(f"  public_rolling_count: {publicRollingCount if publicRollingCount is not None else len(recent)}")
+print(f"  semantic_full_count: {semanticFullCount}")
 print(f"  latest_full: {full_item.get('pmid')} {full_item.get('entry_date')}")
 print(f"  latest_recent: {recent_item.get('pmid')} {recent_item.get('entry_date')}")
 PY

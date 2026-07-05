@@ -602,6 +602,40 @@ def load_public_js(path: Path, global_name: str):
     return load_js_global(path, global_name)
 
 
+def payloadCount(payload):
+    if isinstance(payload, list):
+        return len(payload)
+    if isinstance(payload, dict):
+        for key in ("item_count", "total_count", "count"):
+            value = payload.get(key)
+            if isinstance(value, int):
+                return value
+        items = payload.get("items")
+        if isinstance(items, list):
+            return len(items)
+    return None
+
+
+def semanticFullCountFromOutputs(full):
+    """full 口径优先使用 raw full / full-index / community full 层。"""
+    if full is not None:
+        return len(full)
+    candidates = [
+        (DATA_DIR / "literature-full-index.js", "MG_LITERATURE_FULL_INDEX"),
+        (DATA_DIR / "communityAssignmentIndex.js", "MG_COMMUNITY_ASSIGNMENT_INDEX"),
+    ]
+    for path, globalName in candidates:
+        if not path.exists():
+            continue
+        try:
+            count = payloadCount(load_public_js(path, globalName))
+        except Exception:
+            count = None
+        if count:
+            return count
+    return None
+
+
 def regulatory_status_class(status: str):
     low = (status or "").lower()
     if "approved" in low:
@@ -661,14 +695,8 @@ def load_articles_for_frontend(use_full_experts=False):
     else:
         print("ℹ️  literature-full.json 不存在，将复用已提交的专家画像数据。")
 
-    # 全库文献计数：直接从 literature-recent.js 中读取 MG_TOTAL_COUNT
-    total_count = 0
-    if RECENT_JS_PATH.exists():
-        m = re.search(r"window\.MG_TOTAL_COUNT\s*=\s*(\d+)", RECENT_JS_PATH.read_text(encoding="utf-8"))
-        if m:
-            total_count = int(m.group(1))
-    if not total_count:
-        total_count = len(recent)
+    # full 产物使用 full 口径；recent 产物使用从 full 派生出的 recent。
+    total_count = semanticFullCountFromOutputs(full) or len(recent)
 
     return recent, full, total_count
 
@@ -2382,7 +2410,7 @@ def build_dashboard(recent, signals, experts, china, landscape, modules, total_c
             "knowledge_nodes": knowledge_stats.get("nodes", 0),
         },
         "stat_cards": [
-            {"label": "近一年文献", "value": len(recent), "note": f"全库 {total_count} 篇"},
+            {"label": "近一年文献", "value": len(recent), "note": f"full {total_count} 篇"},
             {"label": "14 天信号", "value": len(signals["signals"]), "note": "规则评分候选"},
             {"label": "中国证据", "value": china["summary"]["recent_year_articles"], "note": f"高等级 {china['summary'].get('high_evidence', 0)} 篇"},
             {"label": "作者画像", "value": expert_count, "note": f"中国 {expert_summary.get('indexed_china_experts', 0)} / 国外 {expert_summary.get('indexed_international_experts', 0)}"},
