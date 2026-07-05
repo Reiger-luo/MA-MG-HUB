@@ -101,8 +101,11 @@
       const workflow = pipeline.workflow || 'weekly-pipeline';
       const schedule = pipeline.schedule || '每周';
       const policy = pipeline.policy || '周更只处理新增公开文献。';
+      const upstream = (pipeline.upstream_sync || []).map(function(item) {
+        return '<br>• <strong>' + escapeHtml(item.label || item.id) + '</strong>：' + escapeHtml(item.handoff || item.note || '');
+      }).join('');
       pipelineNote.innerHTML = '本地更新命令：<code>' + escapeHtml(command) + '</code>。GitHub Actions：' +
-        escapeHtml(workflow) + '（' + escapeHtml(schedule) + '）。<br>' + escapeHtml(policy);
+        escapeHtml(workflow) + '（' + escapeHtml(schedule) + '）。<br>' + escapeHtml(policy) + upstream;
     }
 
     function renderArtifacts() {

@@ -132,7 +132,25 @@ python3 -m http.server 8000
 
 ## 周更与构建
 
-本地完整周更入口：
+### 周更链路关系
+
+```text
+efgar-wiki 本地 cron
+  → 更新本地 Obsidian vault（深度策展、source、link、health、community）
+  → 不直接发布网站
+
+MA-MG-HUB Local Weekly Sync（每周一 03:15）
+  → 读取本地 efgar-wiki 的 concepts / entities / data-points / comparisons
+  → 生成 data/curated-topics.js
+  → 映射 full MG community，生成 data/wikiTopicCoverage.js
+  → 重建公开 data/*.js
+  → git commit && git push origin main
+  → GitHub Pages 上线
+```
+
+原则：efgar-wiki 是本地策展知识源；MA-MG-HUB 是发布系统。执行分离，状态页/周报合并观察。
+
+本地完整周更入口:
 
 ```bash
 bash scripts/run-local-weekly-sync.sh
@@ -163,7 +181,7 @@ python3 scripts/buildLandscapeInsights.py
 python3 scripts/generate-pipeline-status.py
 ```
 
-GitHub Actions 工作流为 `.github/workflows/weekly-pipeline.yml`，支持手动触发，并在每周日 23:00（Asia/Shanghai）执行轻量兜底周更。Actions 环境没有本地 full 文件，因此完整语义层仍以本地工作站/Hermes 为准。
+GitHub Actions 工作流为 `.github/workflows/weekly-pipeline.yml`，支持手动触发，仅作为轻量兜底。完整语义层与 efgar-wiki 融合以本地工作站/Hermes 周更为准；当前 Hermes 主周更排在每周一 03:15（Asia/Shanghai），位于 efgar-wiki 周更和社区摘要之后。
 
 ## 质量检查
 

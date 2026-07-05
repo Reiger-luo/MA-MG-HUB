@@ -636,8 +636,25 @@ def buildStatus():
         "pipeline": {
             "local_command": "bash scripts/run-local-weekly-sync.sh",
             "workflow": "Hermes 本地周更主流程；GitHub Actions 仅手动兜底",
-            "schedule": "建议每周日 23:00 Asia/Shanghai 由 Hermes/本机定时触发",
-            "policy": "以本地 full 为源头；weekly 先 upsert full/recent，再重扫 full 的近一年窗口，最后一次性生成 full-derived 公开产物。",
+            "schedule": "每周一 03:15 Asia/Shanghai；排在 efgar-wiki 周更/社区摘要之后读取本地 vault",
+            "policy": "以本地 full 为源头；weekly 先 upsert full/recent，再重扫 full 的近一年窗口，读取 efgar-wiki 策展层，最后一次性生成 full-derived 公开产物并 push。",
+            "upstream_sync": [
+                {
+                    "id": "efgar-wiki",
+                    "label": "efgar-wiki 本地策展源",
+                    "mode": "read_local_vault",
+                    "path": "~/Library/Mobile Documents/iCloud~md~obsidian/Documents/efgartigimod-wiki",
+                    "handoff": "build-curated-topic-data.py → curated-topics.js；buildWikiTopicCoverage.py → wikiTopicCoverage.js",
+                    "note": "wiki cron 先更新本地 vault；MG-HUB 周更随后读取，不让 wiki 任务直接阻断网站部署。"
+                },
+                {
+                    "id": "mg-hub-publish",
+                    "label": "MA-MG-HUB 发布链路",
+                    "mode": "commit_and_push",
+                    "handoff": "git commit → git push origin main → GitHub Pages",
+                    "note": "非 dry-run 且工作区干净时自动执行；若无公开产物变更则不提交。"
+                }
+            ],
         },
         "sources": sources,
         "artifacts": artifacts,
