@@ -218,7 +218,5 @@ node --check assets/*.js
 
 ## 后续重点
 
-1. 强化证据矩阵医学相关性抽样审核，降低 abstract-level 噪声。
-2. 统一 `communityAssignmentsRecent.js` 与 `literature-recent.js` 的近一年 cutoff 边界。
-3. 将 MSL 拜访助手升级为可保存、可导出、可 follow-up 的工作流。
-4. 补齐 AANEM 结构化会议摘要数据。
+1. 将 MSL 拜访助手升级为可保存、可导出、可 follow-up 的工作流。
+2. 补齐 AANEM 结构化会议摘要数据。

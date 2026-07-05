@@ -484,7 +484,6 @@ node --check assets/*.js
 | P0 | 公开统计口径与 full 语义底座口径并存：Dashboard / `MG_TOTAL_COUNT` 为 1,165，而 full/index/community 为 10,635 | 用户可能误以为“全库”只有 1,165 篇；本地 sync 校验也可能因 full/recent 口径变化失败 | 明确定义 public rolling count 与 semantic full count；同步修改展示文案与校验逻辑 |
 | P1 | `pipeline-status.js` 生成时间早于部分 2026-07-02 数据产物，且 expert split 后状态页仍把 manifest + shards 当成单文件 | 数据状态页个别 expert/size 信息不完全可信 | 让 `generate-pipeline-status.py` 识别 expert shards，并在所有前端产物重建后最后运行 |
 | P1 | 证据矩阵仍是 abstract-level 自动关系，可能混入跨疾病或弱相关 PMID | MSL 使用时需回到 PMID 原文核对 | 增加跨疾病排除规则和人工抽样 review |
-| P2 | `communityAssignmentsRecent.js` 为 1,155 条，而 `literature-recent.js` 为 1,154 篇 | 近一年社区筛选与文献主列表存在 1 条边界差异 | 统一生成时间窗口和 cutoff 逻辑 |
 | P2 | MSL 拜访助手尚无持久化、导出和 follow-up 闭环 | 目前只能页面内生成建议，不能形成团队工作流 | 后续再设计本地存储或轻量后端 |
 | P3 | `data/china-manual.json` 不存在 | 中国情报缺少手动补充入口，但不影响 PubMed 自动部分 | 需要人工维护中国政策/指南时再创建 |
 | P3 | AANEM 仅有监控口，尚未进入结构化会议摘要库 | 会议资讯覆盖不完整 | 后续补结构化抓取/录入 |
@@ -551,7 +550,6 @@ GitHub 仓库 → Actions → `MA-MG-HUB Weekly Pipeline` → `Run workflow`
 
 1. 统一 public rolling count 与 semantic full count 的展示和校验逻辑。
 2. 修复 pipeline-status 对 expert shards、community shards、生成时间的识别。
-3. 强化证据矩阵医学相关性审核，降低 abstract-level 噪声。
-4. 把 MSL 拜访助手从页面生成器升级为可保存、可导出、可 follow-up 的工作流。
-5. 补齐 AANEM 结构化会议数据。
-6. 在真正需要多人协作、权限和持久记录时，再评估轻量后端。
+3. 把 MSL 拜访助手从页面生成器升级为可保存、可导出、可 follow-up 的工作流。
+4. 补齐 AANEM 结构化会议数据。
+5. 在真正需要多人协作、权限和持久记录时，再评估轻量后端。

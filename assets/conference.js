@@ -12,36 +12,6 @@
 
   var meetingModules = [
     {
-      id: 'mgfa',
-      label: 'MGFA',
-      edition: '2025',
-      title: 'MGFA 2025 摘要集',
-      subtitle: 'International Conference + Scientific Session',
-      meetingKeys: ['MGFA IC 2025', 'MGFA SS 2025'],
-      monitorIds: ['mgfa-ic', 'mgfa-scientific'],
-      url: 'https://myasthenia.org/mgfa-international-conference/',
-      status: '已结构化',
-      statusTone: 'ready',
-      intro: 'MGFA 是本网站的核心会议源。本模块合并 2025 International Conference 与 2025 Scientific Session，优先看治疗机制、临床结局、患者旅程和中国机构线索。',
-      breakthroughNote: '基于高优先级药物、随机/对照试验、机制转化和中国相关线索，提炼可进入会后复盘的重大突破。',
-      emptyNote: ''
-    },
-    {
-      id: 'aanem',
-      label: 'AANEM',
-      edition: '2025',
-      title: 'AANEM Annual Meeting 2025',
-      subtitle: 'Abstracts Guide 已定位',
-      meetingKeys: [],
-      monitorIds: ['aanem'],
-      url: 'https://online.flippingbook.com/view/442003187/',
-      status: '待结构化',
-      statusTone: 'watch',
-      intro: 'AANEM 2025 官方 Abstracts Guide 位于 FlippingBook 阅读器。当前已定位 myasthenia 检索页段，待稳定文本层或 Wiley supplement 后接入完整摘要字段。',
-      breakthroughNote: 'AANEM 暂先作为摘要源监控；待结构化后再提炼临床路径、诊断监测和肌病交叉管理的突破线索。',
-      emptyNote: '已定位官方 2025 Abstracts Guide；阅读器内 myasthenia 搜索可见多个页段，下一步补抓题名、poster 编号、作者、机构和摘要正文。'
-    },
-    {
       id: 'aan',
       label: 'AAN',
       edition: '2026',
@@ -70,6 +40,36 @@
       intro: 'EAN 2026 以欧洲多中心数据、治疗结局和 ePoster Virtual 为主要内容。分析重点放在国家协作网络、治疗机制和公开摘要完整度。',
       breakthroughNote: '结合 EAN 摘要集的机制、长期管理、真实世界和患者价值研究，提炼可复用到医学事务工作的突破判断。',
       emptyNote: ''
+    },
+    {
+      id: 'mgfa',
+      label: 'MGFA',
+      edition: '2025',
+      title: 'MGFA 2025 摘要集',
+      subtitle: 'International Conference + Scientific Session',
+      meetingKeys: ['MGFA IC 2025', 'MGFA SS 2025'],
+      monitorIds: ['mgfa-ic', 'mgfa-scientific'],
+      url: 'https://myasthenia.org/mgfa-international-conference/',
+      status: '已结构化',
+      statusTone: 'ready',
+      intro: 'MGFA 是本网站的核心会议源。本模块合并 2025 International Conference 与 2025 Scientific Session，优先看治疗机制、临床结局、患者旅程和中国机构线索。',
+      breakthroughNote: '基于高优先级药物、随机/对照试验、机制转化和中国相关线索，提炼可进入会后复盘的重大突破。',
+      emptyNote: ''
+    },
+    {
+      id: 'aanem',
+      label: 'AANEM',
+      edition: '2025',
+      title: 'AANEM Annual Meeting 2025',
+      subtitle: 'Abstracts Guide 已定位',
+      meetingKeys: [],
+      monitorIds: ['aanem'],
+      url: 'https://online.flippingbook.com/view/442003187/',
+      status: '待结构化',
+      statusTone: 'watch',
+      intro: 'AANEM 2025 官方 Abstracts Guide 位于 FlippingBook 阅读器。当前已定位 myasthenia 检索页段，待稳定文本层或 Wiley supplement 后接入完整摘要字段。',
+      breakthroughNote: 'AANEM 暂先作为摘要源监控；待结构化后再提炼临床路径、诊断监测和肌病交叉管理的突破线索。',
+      emptyNote: '已定位官方 2025 Abstracts Guide；阅读器内 myasthenia 搜索可见多个页段，下一步补抓题名、poster 编号、作者、机构和摘要正文。'
     }
   ];
 

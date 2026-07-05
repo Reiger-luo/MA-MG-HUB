@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-02 09:30:15",
+  "generated_at": "2026-07-05 12:16:13",
   "summary": {
     "totalAbstracts": 458,
     "meetingCount": 4,
@@ -201,6 +201,26 @@
   },
   "meetings": [
     {
+      "id": "aan-2026",
+      "title": "2026 American Academy of Neurology Annual Meeting Abstracts",
+      "shortTitle": "AAN 2026",
+      "organization": "American Academy of Neurology",
+      "year": 2026,
+      "date": "2026-04-18 to 2026-04-22",
+      "location": "Chicago, Illinois / Online",
+      "url": "https://www.aan.com/events/annual-meeting"
+    },
+    {
+      "id": "ean-2026",
+      "title": "12th Congress of the European Academy of Neurology - Abstract Book",
+      "shortTitle": "EAN 2026",
+      "organization": "European Academy of Neurology",
+      "year": 2026,
+      "date": "2026-06-27 to 2026-06-30",
+      "location": "Geneva, Switzerland",
+      "url": "https://www.ean.org/congress2026/abstracts/important-information/ean-2026-congress-abstract-book"
+    },
+    {
       "id": "mgfa-ic-2025",
       "title": "15th International Conference on Myasthenia Gravis and Related Disorders",
       "shortTitle": "MGFA IC 2025",
@@ -219,26 +239,6 @@
       "date": "2025-10",
       "location": "AANEM Annual Meeting",
       "url": "https://myasthenia.org/events/2026-scientific-session/"
-    },
-    {
-      "id": "ean-2026",
-      "title": "12th Congress of the European Academy of Neurology - Abstract Book",
-      "shortTitle": "EAN 2026",
-      "organization": "European Academy of Neurology",
-      "year": 2026,
-      "date": "2026-06-27 to 2026-06-30",
-      "location": "Geneva, Switzerland",
-      "url": "https://www.ean.org/congress2026/abstracts/important-information/ean-2026-congress-abstract-book"
-    },
-    {
-      "id": "aan-2026",
-      "title": "2026 American Academy of Neurology Annual Meeting Abstracts",
-      "shortTitle": "AAN 2026",
-      "organization": "American Academy of Neurology",
-      "year": 2026,
-      "date": "2026-04-18 to 2026-04-22",
-      "location": "Chicago, Illinois / Online",
-      "url": "https://www.aan.com/events/annual-meeting"
     }
   ],
   "abstracts": [
@@ -16790,6 +16790,22 @@
   ],
   "sourceStats": [
     {
+      "id": "aan-2026-mirasmart",
+      "title": "AAN 2026",
+      "status": "ok",
+      "items": 89,
+      "rawItems": 89,
+      "cacheFile": "SearchResults-a8db299e9263.php"
+    },
+    {
+      "id": "ean-2026-abstract-book",
+      "title": "EAN 2026",
+      "status": "ok",
+      "items": 103,
+      "rawItems": 103,
+      "cacheFile": "ENE_v33_iS1_Congress_Abstract_Book-43b73027aab4.pdf"
+    },
+    {
       "id": "mgfa-international-2025",
       "title": "MGFA IC 2025",
       "status": "ok",
@@ -16804,25 +16820,25 @@
       "items": 79,
       "rawItems": 98,
       "cacheFile": "2025-MGFA-Scientific-Session-Posters-MGFA-Scientific-Session-6193a3ff4e3e.pdf"
-    },
-    {
-      "id": "ean-2026-abstract-book",
-      "title": "EAN 2026",
-      "status": "ok",
-      "items": 103,
-      "rawItems": 103,
-      "cacheFile": "ENE_v33_iS1_Congress_Abstract_Book-43b73027aab4.pdf"
-    },
-    {
-      "id": "aan-2026-mirasmart",
-      "title": "AAN 2026",
-      "status": "ok",
-      "items": 89,
-      "rawItems": 89,
-      "cacheFile": "SearchResults-a8db299e9263.php"
     }
   ],
   "sourceMonitor": [
+    {
+      "id": "aan",
+      "organization": "AAN Annual Meeting",
+      "status": "已抓取 Mirasmart",
+      "nextAction": "持续重扫 myasthenia / MG 相关结果；重点抽取高优先级临床试验、机制转换和中国相关摘要。",
+      "url": "https://index.mirasmart.com/AAN2026/",
+      "evidence": "AAN 2026 online abstract website 已上线，myasthenia 搜索结果可直接进入 abstract HTML。"
+    },
+    {
+      "id": "ean",
+      "organization": "European Academy of Neurology",
+      "status": "已抓取",
+      "nextAction": "按 MG 关键词筛选 Wiley/EAN abstract book，并保留 ePoster Virtual 仅题名作者的条目。",
+      "url": "https://www.ean.org/congress2026",
+      "evidence": "EAN 2026 abstract book 在线公开，官网说明 accepted abstracts 作为 European Journal of Neurology online supplement 发布。"
+    },
     {
       "id": "mgfa-ic",
       "organization": "MGFA International Conference",
@@ -16846,22 +16862,6 @@
       "nextAction": "AANEM 2025 guide 为 FlippingBook 签名阅读器；已定位 myasthenia 检索页段，待抽取稳定文本层或 Wiley supplement 后结构化补抓。",
       "url": "https://online.flippingbook.com/view/442003187/",
       "evidence": "AANEM abstract information 页面链接 2025 Abstracts Guide；阅读器内 myasthenia 搜索可定位 MG 页段。2026 年会继续作为未来会议监控。"
-    },
-    {
-      "id": "aan",
-      "organization": "AAN Annual Meeting",
-      "status": "已抓取 Mirasmart",
-      "nextAction": "持续重扫 myasthenia / MG 相关结果；重点抽取高优先级临床试验、机制转换和中国相关摘要。",
-      "url": "https://index.mirasmart.com/AAN2026/",
-      "evidence": "AAN 2026 online abstract website 已上线，myasthenia 搜索结果可直接进入 abstract HTML。"
-    },
-    {
-      "id": "ean",
-      "organization": "European Academy of Neurology",
-      "status": "已抓取",
-      "nextAction": "按 MG 关键词筛选 Wiley/EAN abstract book，并保留 ePoster Virtual 仅题名作者的条目。",
-      "url": "https://www.ean.org/congress2026",
-      "evidence": "EAN 2026 abstract book 在线公开，官网说明 accepted abstracts 作为 European Journal of Neurology online supplement 发布。"
     }
   ],
   "futureMeetings": [
