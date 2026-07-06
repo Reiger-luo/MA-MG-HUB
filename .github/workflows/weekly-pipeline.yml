@@ -2,8 +2,6 @@ name: MA-MG-HUB Weekly Pipeline
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 15 * * 0" # 每周日 23:00 Asia/Shanghai
 
 permissions:
   contents: write
@@ -29,7 +27,7 @@ jobs:
         run: |
           python -m py_compile scripts/*.py
           node --check assets/*.js
-          if grep -R "ssl\\._create_unverified_context\\|_create_unverified_https_context\\|28fc90c1db04461a9f51f72cfe9b8418" scripts assets pages .github; then
+          if grep -R "ssl\\._create_unverified_context\\|_create_unverified_https_context\\|28fc90c1db04461a9f51f72cfe9b8418" scripts assets pages; then
             echo "Unsafe secret or SSL bypass pattern found."
             exit 1
           fi
