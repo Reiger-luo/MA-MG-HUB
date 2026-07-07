@@ -594,7 +594,7 @@ body {
   max-width: 76ch;
 }
 .conference-kpi-grid {
-  display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0.65rem;
 }
 .conference-kpi-card {
@@ -716,17 +716,22 @@ body {
   display: grid; gap: 0.32rem; margin-top: 0.55rem; padding-top: 0.5rem;
   border-top: 1px dashed var(--bg3);
 }
-.conference-chapter-refs a {
-  display: block; text-decoration: none; color: var(--accent);
-  background: #fff; border: 1px solid var(--bg3); border-radius: 6px; padding: 0.45rem;
+.conference-chapter-refs > span {
+  display: block; color: var(--fg3); font-size: 0.68rem; line-height: 1.35;
 }
-.conference-chapter-refs a:hover { border-color: rgba(37,99,235,0.28); }
-.conference-chapter-refs strong {
-  display: block; font-size: 0.74rem; line-height: 1.38;
+.conference-chapter-refs > div {
+  display: flex; flex-wrap: wrap; gap: 0.32rem;
 }
-.conference-chapter-refs span {
-  display: block; margin-top: 0.22rem; color: var(--fg3); font-size: 0.68rem; line-height: 1.35;
+.conference-ref-chip,
+.conference-ref-empty {
+  display: inline-flex; align-items: center;
+  border: 1px solid rgba(37,99,235,0.18); background: rgba(37,99,235,0.045);
+  color: var(--accent); border-radius: 999px; padding: 0.22rem 0.5rem;
+  font: inherit; font-size: 0.7rem; line-height: 1.25; text-decoration: none;
 }
+button.conference-ref-chip { cursor: pointer; }
+button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); background: rgba(37,99,235,0.08); }
+.conference-ref-empty { color: var(--fg3); border-color: var(--bg3); background: var(--bg); }
 .conference-briefing-questions {
   margin-top: 0.75rem; border-top: 1px dashed rgba(15,118,110,0.2); padding-top: 0.7rem;
 }
@@ -735,8 +740,23 @@ body {
 }
 
 .conference-map-grid {
-  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
+}
+.conference-topic-filter-panel {
+  display: flex; flex-direction: column; gap: 0.65rem;
+}
+.conference-active-filter {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 0.5rem; border: 1px dashed var(--bg3); background: var(--bg);
+  border-radius: 8px; padding: 0.55rem 0.65rem;
+  color: var(--fg3); font-size: 0.76rem;
+}
+.conference-active-filter strong { color: var(--accent); }
+.conference-active-filter button {
+  border: 1px solid rgba(37,99,235,0.22); background: rgba(37,99,235,0.06);
+  color: var(--accent); border-radius: 6px; padding: 0.22rem 0.48rem;
+  font: inherit; font-size: 0.72rem; cursor: pointer;
 }
 .conference-topic-board,
 .conference-drug-board {
@@ -753,10 +773,12 @@ body {
   color: var(--fg2); border-radius: 6px;
   padding: 0.28rem 0.48rem; font-size: 0.74rem;
 }
-.conference-topic-pill {
+.conference-topic-pill,
+.conference-drug-chip {
   cursor: pointer; font: inherit;
 }
-.conference-topic-pill.active {
+.conference-topic-pill.active,
+.conference-drug-chip.active {
   color: var(--accent); border-color: rgba(37,99,235,0.28);
   background: rgba(37,99,235,0.06);
 }
@@ -819,11 +841,24 @@ body {
 .conference-breakthrough-refs {
   display: grid; gap: 0.28rem;
 }
-.conference-breakthrough-refs a {
-  display: block; color: var(--accent); text-decoration: none;
-  font-weight: 600; font-size: 0.74rem; line-height: 1.42;
+.conference-breakthrough-refs button {
+  display: grid; gap: 0.18rem; width: 100%; text-align: left;
+  border: 1px solid rgba(37,99,235,0.14); background: rgba(255,255,255,0.8);
+  border-radius: 7px; padding: 0.48rem; cursor: pointer;
 }
-.conference-breakthrough-refs a:hover { text-decoration: underline; }
+.conference-breakthrough-refs button:hover {
+  border-color: rgba(37,99,235,0.3); background: #fff;
+}
+.conference-breakthrough-refs button strong {
+  color: var(--accent); font-size: 0.72rem; line-height: 1.3;
+}
+.conference-breakthrough-refs button em {
+  color: var(--fg2); font-size: 0.72rem; line-height: 1.36; font-style: normal;
+}
+.conference-breakthrough-refs button span {
+  color: var(--fg3); font-size: 0.68rem; line-height: 1.4;
+  margin: 0;
+}
 .conference-breakthrough-refs em {
   color: var(--fg3); font-size: 0.74rem; font-style: normal;
 }
@@ -864,6 +899,10 @@ body {
 .conference-result-row-deep {
   background: linear-gradient(180deg, #fff 0%, var(--bg) 100%);
 }
+.conference-result-row.is-focused {
+  border-color: rgba(37,99,235,0.45);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+}
 .conference-deep-readout,
 .conference-ma-implication {
   margin-top: 0.55rem; border-left: 3px solid rgba(37,99,235,0.22);
@@ -902,6 +941,10 @@ body {
 .conference-evidence-detail ol {
   margin: 0.4rem 0 0; padding-left: 1.15rem;
 }
+.conference-source-link {
+  color: var(--accent); text-decoration: none; font-weight: 600;
+}
+.conference-source-link:hover { text-decoration: underline; }
 
 .conference-result-tags {
   display: flex; flex-wrap: wrap; gap: 0.3rem; justify-content: flex-start;

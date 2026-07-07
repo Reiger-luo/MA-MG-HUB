@@ -684,11 +684,15 @@
   }
 
   function bindTabs() {
+    function handleTabChange(key) {
+      if (key === 'china') resizeChinaCharts();
+      if (el.btnExport) el.btnExport.style.display = key === 'conference' ? 'none' : '';
+    }
     if (hub.initTabs) {
       hub.initTabs({
         tabAttr: 'data-tab',
         panelFor: function(key) { return document.getElementById('tab-' + key); },
-        onChange: function(key) { if (key === 'china') resizeChinaCharts(); }
+        onChange: handleTabChange
       });
       return;
     }
@@ -702,9 +706,11 @@
         this.classList.add('active');
         var panel = document.getElementById('tab-' + key);
         if (panel) panel.classList.add('active');
-        if (key === 'china') resizeChinaCharts();
+        handleTabChange(key);
       });
     }
+    var activeTab = document.querySelector('.intel-tab.active');
+    handleTabChange(activeTab ? activeTab.getAttribute('data-tab') : 'literature');
   }
 
   function bindSignalFilters() {
