@@ -54,9 +54,9 @@ Dashboard 与 `pipeline-status.js` 现在统一显示两套口径：`public_roll
 | `data/knowledge-graph.js` | 55 节点、334 核心边、180 行证据矩阵 | 知识图谱与证据矩阵 |
 | `data/expert-profiles-china.js` | 8,926 位 | 中国作者-机构画像 |
 | `data/expert-profiles-international.js` | 43,485 位 | 国际作者-机构画像 |
-| `data/conference-data.js` | 466 条摘要 | MGFA、AAN、EAN 等会议资讯；含会议级 narrative、覆盖审计和逐条 deepInsight |
+| `data/conference-data.js` | 195 条摘要 | AAN、EAN 会议资讯；含会议级 signal-to-kol narrative、覆盖审计和逐条 deepInsight / abstractZh。MGFA / AANEM 后台数据已清空，待新数据源链接后再接入 |
 
-会议资讯当前结构化 466 条摘要：MGFA IC 2025 192 条、MGFA SS 2025 79 条、EAN 2026 104 条、AAN 2026 91 条。AAN 2026 保留 MiraSmart raw search 109 条与 curated MG-core 91 条的口径审计；EAN 2026 已纳入 acronym-only MG 标题条目，并对外部文章引用摘要完成覆盖核查。
+会议资讯当前结构化 195 条摘要：EAN 2026 104 条、AAN 2026 91 条。AAN 2026 保留 MiraSmart 检索命中 109 条、MG 摘要 91 条、规则剔除 18 条的口径审计；EAN 2026 已纳入 acronym-only MG 标题条目，并对外部文章引用摘要完成覆盖核查。MGFA / AANEM 暂不保留历史后台数据，待后续提供稳定摘要链接后按同一流程复刻接入。
 
 ## 数据流
 
@@ -181,8 +181,12 @@ python3 scripts/buildCommunityData.py
 python3 scripts/build-knowledge-data.py
 python3 scripts/buildLandscapeInsights.py
 python3 scripts/build-conference-data.py
+python3 scripts/enrich-conference-zh.py
+python3 scripts/enrich-conference-narrative.py --force
 python3 scripts/generate-pipeline-status.py
 ```
+
+会议资讯的可复刻构建思路：`build-conference-data.py` 负责确定性抓取、清洗和基础字段；`enrich-conference-zh.py` 用 LLM 生成真正中文摘要与逐条 KOL key message；`enrich-conference-narrative.py` 用 signal-to-kol 模型生成会议线索和 KOL 交流点。线索回答“会议说明什么变化”，交流点回答“拿哪条证据去和 KOL 说什么/问什么”。交流点必须归属到某条线索下，并按 `efgar 数据优先 → 竞品应对解读 → 重要疾病进展` 排序。`build-conference-data.py` 会保留已有 `abstractZh`、`kolKeyMessageZh` 和 `llmCurated` narrative，避免确定性重建覆盖 LLM 结果。
 
 GitHub Actions 工作流为 `.github/workflows/weekly-pipeline.yml`，支持手动触发，仅作为轻量兜底。完整语义层与 efgar-wiki 融合以本地工作站/Hermes 周更为准；当前 Hermes 主周更排在每周一 03:15（Asia/Shanghai），位于 efgar-wiki 周更和社区摘要之后。
 
@@ -208,8 +212,8 @@ node --check assets/*.js
 - HTML / CSS / JS 保持零构建，可直接由 GitHub Pages 托管。
 - 页面导航变更需同步 6 个主页面，重定向页不算主导航。
 - 动态 HTML 必须 escape，外链必须通过 safe URL helper。
-- 会议摘要采用数据管线生成，禁止手改 `data/conference-data.js`。应修改 `scripts/build-conference-data.py` 后重建。
-- AAN / EAN 会议页必须保留原始来源、MG-core 口径、证据边界、MA 转化和 KOL 问题。
+- 会议摘要采用数据管线生成，禁止手改 `data/conference-data.js`。应修改 `scripts/build-conference-data.py` 或 LLM enrich 脚本后重建。
+- AAN / EAN 会议页采用 signal-to-kol 结构：会议线索是父层，KOL 交流点挂在线索下；efgar 数据优先传递，竞品数据从应对和区隔角度解读，非产品/非治疗疾病进展最后补充。
 - 大型数据文件优先使用分片或懒加载，例如 full index、国际专家画像和 community assignment shards。
 - Python 数据写入优先使用 `scripts/common/io.py` 中的原子写入工具。
 - API key 只从环境变量读取，例如 `EASYSCHOLAR_KEY` 和 `NCBI_API_KEY`。
@@ -224,4 +228,4 @@ node --check assets/*.js
 ## 后续重点
 
 1. 将 MSL 拜访助手升级为可保存、可导出、可 follow-up 的工作流。
-2. 补齐 AANEM 结构化会议摘要数据。
+2. 等待 MGFA / AANEM 稳定摘要链接，按会议资讯 signal-to-kol 流程重新接入。

@@ -90,6 +90,13 @@ body {
   color: var(--accent); background: rgba(37,99,235,0.08);
   font-weight: 500;
 }
+.intel-tab-separator {
+  width: 1px; align-self: stretch; min-height: 1.6rem;
+  background: var(--bg3); margin: 0 0.35rem;
+}
+.intel-tab-conference {
+  margin-left: 0.05rem;
+}
 .intel-tab-panel { display: none; }
 .intel-tab-panel.active { display: block; }
 
@@ -537,11 +544,24 @@ body {
   background: rgba(202,138,4,0.08);
 }
 .conference-meeting-card strong {
-  display: flex; align-items: baseline; gap: 0.38rem;
+  display: flex; align-items: center; gap: 0.38rem; flex-wrap: wrap;
   color: var(--fg); font-size: 1.1rem; line-height: 1.2;
 }
 .conference-meeting-card strong em {
   color: var(--fg3); font-size: 0.74rem; font-style: normal;
+}
+.conference-new-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 0.08rem 0.38rem; border-radius: 999px;
+  background: linear-gradient(135deg, #ef4444, #f97316);
+  color: #fff; font-size: 0.58rem; font-weight: 800;
+  letter-spacing: 0.06em; line-height: 1.15;
+  box-shadow: 0 4px 12px rgba(239,68,68,0.22);
+}
+.conference-new-badge::before {
+  content: ''; width: 0.34rem; height: 0.34rem;
+  margin-right: 0.22rem; border-radius: 50%; background: #fff;
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.28);
 }
 .conference-meeting-card p {
   color: var(--fg3); font-size: 0.77rem; line-height: 1.42;
@@ -698,11 +718,19 @@ body {
   border: 1px solid var(--bg3); background: var(--bg);
   border-radius: 8px; padding: 0.78rem;
 }
+.conference-chapter-top {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 0.35rem; margin-bottom: 0.35rem;
+}
 .conference-chapter-index {
   display: inline-flex; color: #0f766e; background: rgba(15,118,110,0.08);
   border: 1px solid rgba(15,118,110,0.18); border-radius: 4px;
   padding: 0.08rem 0.38rem; font-size: 0.68rem; font-weight: 700;
-  margin-bottom: 0.35rem;
+}
+.conference-score-pill {
+  display: inline-flex; align-items: center;
+  color: var(--fg3); background: var(--bg2); border: 1px solid var(--bg3);
+  border-radius: 999px; padding: 0.08rem 0.4rem; font-size: 0.66rem;
 }
 .conference-chapter-card h3 {
   font-size: 0.9rem; line-height: 1.35; color: var(--fg); margin-bottom: 0.35rem;
@@ -712,6 +740,33 @@ body {
   display: block; color: var(--fg2); font-size: 0.76rem; line-height: 1.52; font-style: normal;
 }
 .conference-chapter-card em { color: var(--fg3); margin-top: 0.35rem; }
+.conference-signal-reason,
+.conference-signal-boundary,
+.conference-signal-kol {
+  border-top: 1px dashed var(--bg3); padding-top: 0.48rem; margin-top: 0.52rem;
+}
+.conference-signal-reason span,
+.conference-signal-boundary span,
+.conference-signal-kol > span {
+  display: block; color: var(--fg3); font-size: 0.68rem;
+  margin-bottom: 0.2rem; line-height: 1.35;
+}
+.conference-signal-boundary {
+  background: rgba(202,138,4,0.055); border-radius: 8px;
+  border: 1px dashed rgba(202,138,4,0.22); padding: 0.48rem;
+}
+.conference-signal-use { color: var(--fg3) !important; margin-top: 0.45rem; }
+.conference-nested-kol-list {
+  display: grid; gap: 0.45rem;
+}
+.conference-nested-kol-card {
+  display: flex; flex-direction: column; gap: 0.45rem;
+  border: 1px solid rgba(37,99,235,0.14); background: rgba(37,99,235,0.035);
+  border-radius: 8px; padding: 0.62rem;
+}
+.conference-nested-kol-card strong {
+  font-size: 0.8rem; line-height: 1.35;
+}
 .conference-chapter-refs {
   display: grid; gap: 0.32rem; margin-top: 0.55rem; padding-top: 0.5rem;
   border-top: 1px dashed var(--bg3);
@@ -743,8 +798,10 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
   display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
 }
-.conference-topic-filter-panel {
+.conference-drilldown-filter {
   display: flex; flex-direction: column; gap: 0.65rem;
+  background: var(--bg); border: 1px solid var(--bg3);
+  border-radius: 8px; padding: 0.72rem; margin-bottom: 0.78rem;
 }
 .conference-active-filter {
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
@@ -786,6 +843,10 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
 .conference-drug-chip b {
   color: var(--fg3); font-size: 0.68rem;
 }
+.conference-topic-pill small {
+  color: var(--fg3); font-size: 0.62rem; font-weight: 700;
+  border-right: 1px solid var(--bg3); padding-right: 0.32rem;
+}
 .conference-section-note {
   color: var(--fg3); font-size: 0.76rem; white-space: nowrap;
 }
@@ -797,7 +858,7 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
   display: flex; flex-direction: column; gap: 0.58rem;
   border: 1px solid rgba(15,118,110,0.18);
   background: linear-gradient(180deg, rgba(15,118,110,0.045), var(--bg));
-  border-radius: 8px; padding: 0.95rem; min-height: 420px;
+  border-radius: 8px; padding: 0.95rem; min-height: auto;
 }
 .conference-breakthrough-top {
   display: flex; justify-content: space-between; align-items: center;
@@ -810,8 +871,32 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
   border-radius: 4px; padding: 0.08rem 0.38rem;
   font-size: 0.68rem; font-weight: 700;
 }
+.conference-priority-rule {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.45rem;
+  border: 1px dashed rgba(37,99,235,0.18); background: rgba(37,99,235,0.04);
+  border-radius: 8px; padding: 0.55rem 0.65rem; margin-bottom: 0.7rem;
+}
+.conference-priority-rule span {
+  color: var(--fg3); font-size: 0.68rem;
+}
+.conference-priority-rule strong {
+  color: var(--fg); font-size: 0.78rem; line-height: 1.35;
+}
 .conference-breakthrough-top em {
   color: var(--fg3); font-size: 0.7rem; font-style: normal;
+}
+.conference-kol-tier {
+  border: 1px solid var(--bg3); border-radius: 999px; padding: 0.1rem 0.42rem;
+  background: var(--bg2);
+}
+.conference-kol-tier.efgar {
+  color: #047857; background: rgba(5,150,105,0.08); border-color: rgba(5,150,105,0.22);
+}
+.conference-kol-tier.competitor_response {
+  color: #1d4ed8; background: rgba(37,99,235,0.08); border-color: rgba(37,99,235,0.22);
+}
+.conference-kol-tier.disease_progress {
+  color: #b45309; background: rgba(217,119,6,0.08); border-color: rgba(217,119,6,0.22);
 }
 .conference-breakthrough-card strong {
   display: block; color: var(--fg); font-size: 0.98rem; line-height: 1.35;
@@ -820,23 +905,41 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
   color: var(--fg2); font-size: 0.76rem; line-height: 1.55;
   margin: 0;
 }
+.conference-kol-parent,
+.conference-kol-why {
+  color: var(--fg3) !important; font-size: 0.72rem !important;
+}
+.conference-kol-score-row {
+  display: flex; flex-wrap: wrap; gap: 0.35rem;
+}
 .conference-breakthrough-analysis {
   display: grid; gap: 0.42rem;
 }
 .conference-breakthrough-work,
 .conference-breakthrough-analysis,
+.conference-breakthrough-evidence,
 .conference-breakthrough-refs {
   border-top: 1px dashed var(--bg3);
   padding-top: 0.5rem;
 }
 .conference-breakthrough-work span,
 .conference-breakthrough-analysis span,
+.conference-breakthrough-evidence > span,
 .conference-breakthrough-refs span {
   display: block; color: var(--fg3); font-size: 0.68rem;
   line-height: 1.4; margin-bottom: 0.18rem;
 }
 .conference-breakthrough-work p {
   color: var(--fg2); font-size: 0.75rem; line-height: 1.45;
+}
+.conference-key-message-list {
+  display: grid; gap: 0.36rem; margin: 0; padding-left: 1.1rem;
+}
+.conference-key-message-list li {
+  color: var(--fg2); font-size: 0.78rem; line-height: 1.55;
+}
+.conference-breakthrough-anchor-row {
+  display: flex; flex-wrap: wrap; gap: 0.32rem;
 }
 .conference-breakthrough-refs {
   display: grid; gap: 0.28rem;
@@ -862,6 +965,17 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
 .conference-breakthrough-refs em {
   color: var(--fg3); font-size: 0.74rem; font-style: normal;
 }
+.conference-breakthrough-evidence-list {
+  display: grid; gap: 0.34rem; list-style: none;
+  margin: 0; padding: 0;
+}
+.conference-breakthrough-evidence-list li {
+  display: grid; grid-template-columns: auto minmax(0, 1fr);
+  align-items: start; gap: 0.45rem;
+}
+.conference-breakthrough-evidence-list li > span {
+  color: var(--fg2); font-size: 0.74rem; line-height: 1.48;
+}
 .conference-source-note {
   display: block; color: var(--fg3); font-size: 0.68rem;
   font-style: normal; line-height: 1.4;
@@ -874,14 +988,16 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
   display: grid; grid-template-columns: minmax(180px, 1fr) 170px 170px auto;
   gap: 0.55rem; align-items: center; margin-bottom: 0.8rem;
 }
+.conference-filter-row-simple {
+  grid-template-columns: minmax(220px, 1fr);
+}
 .conference-result-table {
   display: flex; flex-direction: column; gap: 0.55rem;
 }
 .conference-result-row {
-  display: grid; grid-template-columns: minmax(0, 1fr) minmax(150px, 0.34fr);
-  gap: 0.75rem; align-items: start;
+  display: block;
   border: 1px solid var(--bg3); border-radius: 8px;
-  background: var(--bg); padding: 0.75rem;
+  background: var(--bg); padding: 0.72rem 0.78rem;
 }
 .conference-result-row p {
   color: var(--fg3); font-size: 0.72rem; line-height: 1.45;
@@ -929,7 +1045,7 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
   border-radius: 6px; padding: 0.36rem 0.48rem; font-style: normal;
 }
 .conference-evidence-detail {
-  margin-top: 0.6rem; border-top: 1px dashed var(--bg3); padding-top: 0.52rem;
+  margin-top: 0.48rem; border-top: 1px dashed var(--bg3); padding-top: 0.42rem;
 }
 .conference-evidence-detail summary {
   cursor: pointer; color: var(--accent); font-size: 0.74rem; font-weight: 600;
@@ -1015,7 +1131,7 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
   display: inline-flex; align-items: center; gap: 0.28rem; flex-shrink: 0;
 }
 .result-panel-head {
-  display: flex; align-items: baseline; justify-content: space-between;
+  display: flex; align-items: flex-start; justify-content: space-between;
   gap: 0.7rem; padding-bottom: 0.65rem; margin-bottom: 0.65rem;
   border-bottom: 1px solid var(--bg3);
 }
@@ -1024,6 +1140,9 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
 }
 .result-panel-head span {
   color: var(--fg3); font-size: 0.76rem; white-space: nowrap;
+}
+.result-panel-head p {
+  margin: 0.18rem 0 0;
 }
 .metric-line { color: var(--fg2) !important; }
 .chip-row { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.5rem; }

@@ -17,13 +17,14 @@
       edition: '2026',
       title: 'AAN Annual Meeting 2026',
       subtitle: 'Mirasmart abstract website + insight synthesis',
+      isNew: true,
       meetingKeys: ['AAN 2026'],
       monitorIds: ['aan'],
       url: 'https://index.mirasmart.com/AAN2026/',
-      status: '已结构化',
+      status: '',
       statusTone: 'ready',
       intro: 'AAN 2026 适合追踪神经病学大会里的 MG 治疗进展，尤其是 FcRn、补体、CAR-T、真实世界和 seronegative gMG。',
-      breakthroughNote: '结合 AAN 2026 已结构化摘要，优先提炼会改变治疗格局、证据叙事、中国协作或患者价值沟通的突破。',
+      breakthroughNote: '结合 AAN 2026 摘要，优先提炼会改变治疗格局、证据叙事、中国协作或患者价值沟通的突破。',
       emptyNote: ''
     },
     {
@@ -32,10 +33,11 @@
       edition: '2026',
       title: 'EAN Congress 2026',
       subtitle: 'European Journal of Neurology abstract book',
+      isNew: true,
       meetingKeys: ['EAN 2026'],
       monitorIds: ['ean'],
       url: 'https://www.ean.org/congress2026/abstracts/important-information/ean-2026-congress-abstract-book',
-      status: '已结构化',
+      status: '',
       statusTone: 'ready',
       intro: 'EAN 2026 以欧洲多中心数据、治疗结局和 ePoster Virtual 为主要内容。分析重点放在国家协作网络、治疗机制和公开摘要完整度。',
       breakthroughNote: '结合 EAN 摘要集的机制、长期管理、真实世界和患者价值研究，提炼可复用到医学事务工作的突破判断。',
@@ -44,32 +46,32 @@
     {
       id: 'mgfa',
       label: 'MGFA',
-      edition: '2025',
-      title: 'MGFA 2025 摘要集',
-      subtitle: 'International Conference + Scientific Session',
-      meetingKeys: ['MGFA IC 2025', 'MGFA SS 2025'],
-      monitorIds: ['mgfa-ic', 'mgfa-scientific'],
-      url: 'https://myasthenia.org/mgfa-international-conference/',
-      status: '已结构化',
-      statusTone: 'ready',
-      intro: 'MGFA 是本网站的核心会议源。本模块合并 2025 International Conference 与 2025 Scientific Session，优先看治疗机制、临床结局、患者旅程和中国机构线索。',
-      breakthroughNote: '基于高优先级药物、随机/对照试验、机制转化和中国相关线索，提炼可进入会后复盘的重大突破。',
-      emptyNote: ''
+      edition: '',
+      title: 'MGFA',
+      subtitle: '待提供数据源链接',
+      meetingKeys: [],
+      monitorIds: [],
+      url: '',
+      status: '',
+      statusTone: 'watch',
+      intro: 'MGFA 后台数据已清空，等待新的会议摘要链接后再接入。',
+      breakthroughNote: '待提供数据源链接后，再提炼治疗机制、临床结局、患者旅程和中国机构线索。',
+      emptyNote: 'MGFA 后台数据已清空；提供会议摘要链接后再重新接入。'
     },
     {
       id: 'aanem',
       label: 'AANEM',
-      edition: '2025',
-      title: 'AANEM Annual Meeting 2025',
-      subtitle: 'Abstracts Guide 已定位',
+      edition: '',
+      title: 'AANEM',
+      subtitle: '待提供数据源链接',
       meetingKeys: [],
-      monitorIds: ['aanem'],
-      url: 'https://online.flippingbook.com/view/442003187/',
-      status: '待结构化',
+      monitorIds: [],
+      url: '',
+      status: '',
       statusTone: 'watch',
-      intro: 'AANEM 2025 官方 Abstracts Guide 位于 FlippingBook 阅读器。当前已定位 myasthenia 检索页段，待稳定文本层或 Wiley supplement 后接入完整摘要字段。',
-      breakthroughNote: 'AANEM 暂先作为摘要源监控；待结构化后再提炼临床路径、诊断监测和肌病交叉管理的突破线索。',
-      emptyNote: '已定位官方 2025 Abstracts Guide；阅读器内 myasthenia 搜索可见多个页段，下一步补抓题名、poster 编号、作者、机构和摘要正文。'
+      intro: 'AANEM 后台数据已清空，等待新的会议摘要链接后再接入。',
+      breakthroughNote: '待提供数据源链接后，再提炼临床路径、诊断监测和肌病交叉管理线索。',
+      emptyNote: 'AANEM 后台数据已清空；提供会议摘要链接后再重新接入。'
     }
   ];
 
@@ -242,7 +244,7 @@
     var conference = item.conference || '';
     var token = getLocalToken(item);
     var page = item.page ? 'p.' + item.page : '';
-    return [conference, token, page].filter(Boolean).join(' · ') || truncateText(item.title || '摘要', 36);
+    return [token, page].filter(Boolean).join(' · ') || conference || truncateText(item.title || '摘要', 36);
   }
 
   function getSourceHref(item) {
@@ -260,6 +262,38 @@
     return (metrics || []).filter(Boolean).slice(0, limit || 2);
   }
 
+  function getChineseAbstract(item) {
+    if (!item) return '中文摘要待生成；请回到原始摘要核查全文。';
+    var insight = item && item.deepInsight ? item.deepInsight : {};
+    return item.abstractZh || insight.abstractZh || '中文摘要全文翻译待生成；当前不展示自动分析，避免误认为摘要全文。';
+  }
+
+  function getEvidenceStatement(item) {
+    if (!item) return '该摘要暂缺明确量化数据，需回到站内摘要或原始来源核查。';
+    var insight = item && item.deepInsight ? item.deepInsight : {};
+    if (insight.kolKeyMessageZh) return insight.kolKeyMessageZh;
+    var metrics = getKeyMetrics(item, 2);
+    if (metrics.length) return metrics.join('；');
+    return insight.clinicalReadoutZh || item.analysisZh || '该摘要暂缺明确量化数据，需回到站内摘要或原始来源核查。';
+  }
+
+  function renderKolKeyMessages(refs, fallback) {
+    var messages = (refs || []).slice(0, 3).map(function(item) {
+      return getEvidenceStatement(item);
+    }).filter(Boolean);
+    if (!messages.length && fallback) messages = [fallback];
+    if (!messages.length) return '<p>暂无可直接传递的量化 key message，需回到摘要核查。</p>';
+    return renderKeyMessageList(messages);
+  }
+
+  function renderKeyMessageList(messages) {
+    var list = (messages || []).filter(Boolean).slice(0, 3);
+    if (!list.length) return '';
+    return '<ul class="conference-key-message-list">' + list.map(function(message) {
+      return '<li>' + escapeHtml(message) + '</li>';
+    }).join('') + '</ul>';
+  }
+
   function renderLocatorChips(refs, limit) {
     var items = (refs || []).slice(0, limit || 4);
     if (!items.length) return '<span class="conference-ref-empty">暂无定位摘要</span>';
@@ -273,6 +307,75 @@
     }).join('');
   }
 
+  function getKolTier(signal) {
+    return signal && signal.priorityTier ? signal.priorityTier : 'disease_progress';
+  }
+
+  function getKolTierLabel(signal) {
+    if (signal && signal.priorityLabel) return signal.priorityLabel;
+    var tier = getKolTier(signal);
+    if (tier === 'efgar') return 'efgar重点传递';
+    if (tier === 'competitor_response') return '竞品应对解读';
+    return '疾病进展传递';
+  }
+
+  function getKolTierRank(signal) {
+    var tier = getKolTier(signal);
+    if (tier === 'efgar') return 0;
+    if (tier === 'competitor_response') return 1;
+    return 2;
+  }
+
+  function sortKolSignals(signals) {
+    return (signals || []).slice().sort(function(a, b) {
+      return getKolTierRank(a) - getKolTierRank(b) ||
+        (Number(b.kolScore || 0) - Number(a.kolScore || 0)) ||
+        String(a.title || '').localeCompare(String(b.title || ''), 'zh-CN');
+    });
+  }
+
+  function getChapterTalkingPoints(narrative, chapter) {
+    if (chapter && Array.isArray(chapter.talkingPoints) && chapter.talkingPoints.length) {
+      return sortKolSignals(chapter.talkingPoints);
+    }
+    var id = chapter && chapter.id;
+    var title = chapter && chapter.title;
+    return sortKolSignals((narrative.kolFocus || []).filter(function(point) {
+      return (id && point.parentSignalId === id) || (title && point.parentSignalTitle === title);
+    }));
+  }
+
+  function renderScorePill(label, value) {
+    if (value == null || value === '') return '';
+    return '<span class="conference-score-pill">' + escapeHtml(label + ' ' + value + '/5') + '</span>';
+  }
+
+  function renderTalkingPointCard(point, index, compact) {
+    var refs = point.refs || point.representatives || [];
+    var messages = point.keyMessages && point.keyMessages.length ? point.keyMessages : [];
+    var cls = compact ? 'conference-nested-kol-card' : 'conference-breakthrough-card';
+    var tier = getKolTier(point);
+    var parentHtml = !compact && point.parentSignalTitle ? '<p class="conference-kol-parent">来自线索：' + escapeHtml(point.parentSignalTitle) + '</p>' : '';
+    var reasonHtml = point.whyKol ? '<p class="conference-kol-why">' + escapeHtml(point.whyKol) + '</p>' : '';
+    return '<article class="' + cls + '">' +
+      '<div class="conference-breakthrough-top">' +
+        '<span class="conference-breakthrough-index">' + escapeHtml((compact ? '交流 ' : '优先 ') + String(index + 1).padStart(2, '0')) + '</span>' +
+        '<em class="conference-kol-tier ' + escapeHtml(tier) + '">' + escapeHtml(getKolTierLabel(point)) + '</em>' +
+      '</div>' +
+      '<strong>' + escapeHtml(point.title || '') + '</strong>' +
+      parentHtml +
+      reasonHtml +
+      '<div class="conference-breakthrough-analysis">' +
+        '<span>传递信息</span>' +
+        (messages.length ? renderKeyMessageList(messages) : renderKolKeyMessages(refs, point.conclusion)) +
+      '</div>' +
+      '<div class="conference-breakthrough-evidence">' +
+        '<span>明确数据证据</span><div class="conference-breakthrough-anchor-row">' + renderLocatorChips(refs, 4) + '</div>' +
+      '</div>' +
+      (point.kolScore ? '<div class="conference-kol-score-row">' + renderScorePill('交流优先级', point.kolScore) + '</div>' : '') +
+    '</article>';
+  }
+
   function scrollToResults() {
     var target = document.querySelector('.conference-drilldown');
     if (target && target.scrollIntoView) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -280,17 +383,26 @@
 
   function renderActiveFilterSummary() {
     if (!el.activeFilter) return;
-    if (!state.topic) {
-      el.activeFilter.innerHTML = '<span>未选择主题/药物筛选。点击标签后，下方摘要池会即时收窄。</span>';
+    var total = filteredItems.length;
+    var start = total ? (state.page * pageSize + 1) : 0;
+    var end = Math.min(total, (state.page + 1) * pageSize);
+    var pageText = total ? '当前显示 ' + start + '–' + end + ' 条' : '当前无匹配摘要';
+    var filters = [];
+    if (state.topic) filters.push('标签：' + state.topic);
+    if (state.keyword) filters.push('关键词：' + state.keyword);
+    if (!filters.length) {
+      el.activeFilter.innerHTML = '<span>未筛选 · 全部 <strong>' + escapeHtml(total) + '</strong> 条 · ' + escapeHtml(pageText) + '</span>';
       return;
     }
-    el.activeFilter.innerHTML = '<span>已筛选：<strong>' + escapeHtml(state.topic) + '</strong> · ' + escapeHtml(filteredItems.length) + ' 条</span>' +
-      '<button type="button" data-conference-clear-filter="1">清除</button>';
+    el.activeFilter.innerHTML = '<span>' + escapeHtml(filters.join(' · ')) + ' · 命中 <strong>' + escapeHtml(total) + '</strong> 条 · ' + escapeHtml(pageText) + '</span>' +
+      '<button type="button" data-conference-clear-filter="1">清除筛选</button>';
     var clear = el.activeFilter.querySelector('[data-conference-clear-filter]');
     if (clear) {
       clear.addEventListener('click', function() {
         state.topic = null;
+        state.keyword = '';
         state.page = 0;
+        if (el.keyword) el.keyword.value = '';
         renderTopics(summarizeModule(currentItems));
         applyFilters();
       });
@@ -298,7 +410,7 @@
   }
 
   function getMeetingSourceLimitation(module) {
-    if (module.id === 'aanem') return 'AANEM 2025 摘要源已定位，但稳定结构化字段尚待补抓。';
+    if (module.id === 'mgfa' || module.id === 'aanem') return module.label + ' 后台数据已清空，待提供稳定会议摘要链接后再接入。';
     if (module.id === 'aan') return '基于 AAN Mirasmart 摘要页；presentation 细节仍需会后核查。';
     if (module.id === 'ean') return '基于 EAN / European Journal of Neurology abstract book；部分 ePoster 信息可能缺少完整会话语境。';
     return '基于 MGFA 公开 program / poster abstract guide；未公开全文或口头报告材料时仅作摘要级复盘。';
@@ -317,7 +429,7 @@
         getMeetingSourceLimitation(module)
       ];
     } else {
-      takeaways.push('本模块已结构化 ' + summary.total + ' 条 MG 摘要，主导主题为 ' + summary.topTopic + '，研究类型以 ' + summary.topType + ' 为主。');
+      takeaways.push('本模块已接入 ' + summary.total + ' 条 MG 摘要，主导主题为 ' + summary.topTopic + '，研究类型以 ' + summary.topType + ' 为主。');
       takeaways.push('投稿/机构线索集中在 ' + joinNames(countryNames, '待识别国家/地区') + '；中国相关 ' + summary.chinaRelated + ' 条，可作为会后 KOL 与机构追踪入口。');
       takeaways.push('药物/机制信号以 ' + joinNames(mechanismNames, '待识别机制') + ' 为核心；高优先级摘要 ' + summary.highPriority + ' 条，适合优先进入 MSL briefing 候选池。');
       takeaways.push('本页把会议资讯转成“重大突破、工作用途、来源核查”三层结构，避免只停留在摘要新闻流。');
@@ -344,24 +456,18 @@
     var questions = narrative.briefingQuestions || [];
     var sourceId = items[0] && items[0].sourceId;
     var audit = sourceId && payload.coverageAudits ? payload.coverageAudits[sourceId] : null;
-    var comparison = narrative.competitiveComparison || null;
     var auditHtml = audit ? '<div class="conference-audit-strip">' +
-      '<span><b>' + escapeHtml(audit.rawSearchResults || 0) + '</b>raw search</span>' +
-      '<span><b>' + escapeHtml(audit.curatedMgIncluded || 0) + '</b>MG-core</span>' +
+      '<span><b>' + escapeHtml(audit.rawSearchResults || 0) + '</b>检索命中</span>' +
+      '<span><b>' + escapeHtml(audit.curatedMgIncluded || 0) + '</b>MG 摘要</span>' +
       '<span><b>' + escapeHtml(audit.excludedByRule || 0) + '</b>规则剔除</span>' +
       '<p>' + escapeHtml(audit.exclusionPrinciple || '') + '</p>' +
-    '</div>' : '';
-    var comparisonHtml = comparison ? '<div class="conference-comparison-card">' +
-      '<div><span>竞品对照</span><a href="' + escapeHref(comparison.url || '#') + '" target="_blank" rel="noopener">' + escapeHtml(comparison.label || '参考页面') + '</a></div>' +
-      '<p>' + escapeHtml(comparison.verdict || '') + '</p>' +
-      '<ul>' + (comparison.advantages || []).slice(0, 4).map(function(item) { return '<li>' + escapeHtml(item) + '</li>'; }).join('') + '</ul>' +
     '</div>' : '';
     el.strategicNarrative.innerHTML =
       '<section class="conference-narrative-panel">' +
         '<div class="conference-narrative-head">' +
           '<span>全景剖析 · MA 工作流版本</span>' +
           '<strong>' + escapeHtml(narrative.headline || '') + '</strong>' +
-          '<p>' + escapeHtml(narrative.strategicRead || '') + '</p>' +
+          (narrative.strategicRead ? '<p>' + escapeHtml(narrative.strategicRead) + '</p>' : '') +
         '</div>' +
         '<div class="conference-depth-strip">' +
           '<span><b>' + escapeHtml(depth.abstracts || 0) + '</b>站内摘要</span>' +
@@ -370,15 +476,24 @@
           '<span><b>站内卡 + 来源定位</b>证据入口</span>' +
         '</div>' +
         auditHtml +
-        comparisonHtml +
         '<div class="conference-chapter-grid">' + chapters.map(function(chapter, idx) {
           var refs = chapter.refs || [];
+          var talkingPoints = getChapterTalkingPoints(narrative, chapter);
+          var scoreHtml = renderScorePill('线索强度', chapter.signalScore);
+          var whyHtml = chapter.whySignal ? '<div class="conference-signal-reason"><span>为什么是线索</span><p>' + escapeHtml(chapter.whySignal) + '</p></div>' : '';
+          var boundaryHtml = chapter.evidenceBoundary ? '<div class="conference-signal-boundary"><span>证据边界</span><p>' + escapeHtml(chapter.evidenceBoundary) + '</p></div>' : '';
+          var talkingHtml = talkingPoints.length ? '<div class="conference-signal-kol"><span>可转化 KOL 交流</span><div class="conference-nested-kol-list">' +
+            talkingPoints.map(function(point, pointIndex) { return renderTalkingPointCard(point, pointIndex, true); }).join('') +
+            '</div></div>' : '';
           return '<article class="conference-chapter-card">' +
-            '<div class="conference-chapter-index">' + escapeHtml('线索 0' + (idx + 1)) + '</div>' +
+            '<div class="conference-chapter-top"><div class="conference-chapter-index">' + escapeHtml('线索 ' + String(idx + 1).padStart(2, '0')) + '</div>' + scoreHtml + '</div>' +
             '<h3>' + escapeHtml(chapter.title || '') + '</h3>' +
             '<p>' + escapeHtml(chapter.takeaway || '') + '</p>' +
-            '<p>' + escapeHtml(chapter.maUse || '') + '</p>' +
+            whyHtml +
+            boundaryHtml +
+            (chapter.maUse ? '<p class="conference-signal-use">' + escapeHtml(chapter.maUse) + '</p>' : '') +
             '<div class="conference-chapter-refs"><span>证据锚点</span><div>' + renderLocatorChips(refs, 4) + '</div></div>' +
+            talkingHtml +
           '</article>';
         }).join('') + '</div>' +
         '<div class="conference-briefing-questions">' +
@@ -394,9 +509,10 @@
       var items = getModuleItems(module);
       var summary = summarizeModule(items);
       var active = module.id === state.activeModule;
+      var editionHtml = module.edition ? '<em>' + escapeHtml(module.edition) + '</em>' : '';
+      var newHtml = module.isNew ? '<span class="conference-new-badge" aria-label="new">NEW</span>' : '';
       return '<button type="button" class="conference-meeting-card' + (active ? ' active' : '') + '" data-conference-module="' + escapeHtml(module.id) + '" aria-pressed="' + (active ? 'true' : 'false') + '">' +
-        '<span class="conference-meeting-status ' + escapeHtml(module.statusTone) + '">' + escapeHtml(module.status) + '</span>' +
-        '<strong>' + escapeHtml(module.label) + '<em>' + escapeHtml(module.edition) + '</em></strong>' +
+        '<strong class="conference-meeting-title">' + escapeHtml(module.label) + editionHtml + newHtml + '</strong>' +
         '<p>' + escapeHtml(module.subtitle) + '</p>' +
         '<div class="conference-meeting-metrics">' +
           '<span><b>' + escapeHtml(compactNumber(summary.total)) + '</b>摘要</span>' +
@@ -426,7 +542,7 @@
   function renderKpis(module, summary) {
     if (!el.moduleKpis) return;
     var cards = [
-      { label: '结构化摘要', value: summary.total, note: module.status },
+      { label: '摘要', value: summary.total, note: '会议源条目' },
       { label: '国家/地区', value: summary.countryCount || 0, note: '机构字段推断' },
       { label: '重点候选', value: summary.highPriority || 0, note: '规则评分，仅作入口' },
       { label: '中国相关', value: summary.chinaRelated || 0, note: '机构或地点命中' }
@@ -467,14 +583,20 @@
       applyFilters();
       scrollToResults();
     }
-    var topics = (summary.topics || []).slice(0, 12);
-    if (!topics.length) {
-      el.topicCloud.innerHTML = '<div class="conference-empty-line">暂无主题数据</div>';
+    var chips = [];
+    (summary.topics || []).slice(0, 8).forEach(function(topic) {
+      chips.push({ kind: '主题', name: topic.name, count: topic.count });
+    });
+    (summary.drugs || []).slice(0, 8).forEach(function(drug) {
+      chips.push({ kind: '药物', name: drug.name, count: drug.count });
+    });
+    if (!chips.length) {
+      el.topicCloud.innerHTML = '<div class="conference-empty-line">暂无主题/药物数据</div>';
     } else {
-      el.topicCloud.innerHTML = topics.map(function(topic) {
-        var active = state.topic === topic.name;
-        return '<button type="button" class="conference-topic-pill' + (active ? ' active' : '') + '" data-conference-topic="' + escapeHtml(topic.name) + '">' +
-          '<span>' + escapeHtml(topic.name) + '</span><b>' + escapeHtml(topic.count) + '</b>' +
+      el.topicCloud.innerHTML = chips.map(function(chip) {
+        var active = state.topic === chip.name;
+        return '<button type="button" class="conference-topic-pill' + (active ? ' active' : '') + '" data-conference-topic="' + escapeHtml(chip.name) + '">' +
+          '<small>' + escapeHtml(chip.kind) + '</small><span>' + escapeHtml(chip.name) + '</span><b>' + escapeHtml(chip.count) + '</b>' +
         '</button>';
       }).join('');
       var buttons = el.topicCloud.querySelectorAll('[data-conference-topic]');
@@ -485,18 +607,7 @@
       }
     }
 
-    if (!el.drugBoard) return;
-    var drugs = (summary.drugs || []).slice(0, 8);
-    el.drugBoard.innerHTML = drugs.length ? drugs.map(function(drug) {
-      var active = state.topic === drug.name;
-      return '<button type="button" class="conference-drug-chip' + (active ? ' active' : '') + '" data-conference-drug="' + escapeHtml(drug.name) + '">' + escapeHtml(drug.name) + '<b>' + escapeHtml(drug.count) + '</b></button>';
-    }).join('') : '<div class="conference-empty-line">暂无药物/靶点命中</div>';
-    var drugButtons = el.drugBoard.querySelectorAll('[data-conference-drug]');
-    for (var d = 0; d < drugButtons.length; d++) {
-      drugButtons[d].addEventListener('click', function() {
-        setFilter(this.getAttribute('data-conference-drug'));
-      });
-    }
+    if (el.drugBoard) el.drugBoard.innerHTML = '';
   }
 
   function hasAnyTopic(item, topicNames) {
@@ -634,47 +745,23 @@
       ));
     }
 
-    return signals.slice(0, 4);
+    return signals;
   }
 
   function renderBreakthroughs(module, summary, items) {
     if (!el.breakthroughs) return;
-    var signals = buildBreakthroughSignals(module, summary, items);
+    var conferenceName = module.meetingKeys[0];
+    var narrative = conferenceName && payload.meetingNarratives ? payload.meetingNarratives[conferenceName] : null;
+    var signals = narrative && Array.isArray(narrative.kolFocus) && narrative.kolFocus.length ? sortKolSignals(narrative.kolFocus) : buildBreakthroughSignals(module, summary, items);
     if (!signals.length) {
-      el.breakthroughs.innerHTML = '<div class="conference-empty-focus"><strong>KOL 交流重点待结构化</strong><p>' + escapeHtml(module.breakthroughNote || '当前先保留会议入口与摘要源状态，待摘要结构化后再提炼可向 KOL 传递的摘要与关键数据。') + '</p></div>';
+      el.breakthroughs.innerHTML = '<div class="conference-empty-focus"><strong>KOL 交流重点待提炼</strong><p>' + escapeHtml(module.breakthroughNote || '当前先保留会议入口与摘要源状态，待摘要接入后再提炼可向 KOL 传递的摘要与关键数据。') + '</p></div>';
       return;
     }
-    el.breakthroughs.innerHTML = '<div class="conference-breakthrough-grid">' + signals.map(function(signal, index) {
-      var refs = signal.representatives.slice(0, 3);
-      return '<article class="conference-breakthrough-card">' +
-        '<div class="conference-breakthrough-top">' +
-          '<span class="conference-breakthrough-index">' + escapeHtml('交流 0' + (index + 1)) + '</span>' +
-          '<em>' + escapeHtml(signal.dimension) + '</em>' +
-        '</div>' +
-        '<strong>' + escapeHtml(signal.title) + '</strong>' +
-        '<div class="conference-breakthrough-analysis">' +
-          '<span>传递信息</span>' +
-          '<p>' + escapeHtml(signal.conclusion) + '</p>' +
-          '<p>' + escapeHtml(signal.why) + '</p>' +
-        '</div>' +
-        '<div class="conference-breakthrough-work"><span>KOL 交流价值</span><p>' + escapeHtml(signal.maUse) + '</p></div>' +
-        '<div class="conference-breakthrough-work"><span>证据边界</span><p>' + escapeHtml(signal.nextStep) + '</p></div>' +
-        '<div class="conference-breakthrough-refs">' +
-          '<span>关联摘要与关键数据</span>' +
-          (refs.length ? refs.map(function(item) {
-            var metrics = getKeyMetrics(item, 1);
-            return '<button type="button" data-conference-focus="' + escapeHtml(item.id || '') + '">' +
-              '<strong>' + escapeHtml(getSourceLocator(item)) + '</strong>' +
-              '<em>' + escapeHtml(truncateText(item.title || '摘要题名待补充', 58)) + '</em>' +
-              '<span>' + escapeHtml(metrics[0] || '摘要未给具体数值；需回到站内摘要核对。') + '</span>' +
-            '</button>';
-          }).join('') : '<em>暂无代表摘要，待源数据补充。</em>') +
-        '</div>' +
-        '<div class="conference-card-head">' + signal.tags.slice(0, 5).map(function(tag) {
-          return '<span class="conference-badge highlight">' + escapeHtml(tag) + '</span>';
-        }).join('') + '</div>' +
-        '<em class="conference-source-note">' + escapeHtml(getMeetingSourceLimitation(module)) + '</em>' +
-      '</article>';
+    el.breakthroughs.innerHTML = '<div class="conference-priority-rule">' +
+      '<span>排序原则</span><strong>efgar数据优先 → 竞品应对解读 → 重要疾病进展</strong>' +
+    '</div>' +
+    '<div class="conference-breakthrough-grid">' + signals.map(function(signal, index) {
+      return renderTalkingPointCard(signal, index, false);
     }).join('') + '</div>';
   }
 
@@ -723,7 +810,7 @@
     if (!el.results) return;
     if (el.resultCount) el.resultCount.textContent = filteredItems.length + ' 条';
     if (!currentItems.length) {
-      el.results.innerHTML = '<div class="conference-empty-line">该会议暂未接入结构化摘要，先看上方接口状态。</div>';
+      el.results.innerHTML = '<div class="conference-empty-line">该会议暂未接入摘要，先看上方接口状态。</div>';
       return;
     }
     if (!filteredItems.length) {
@@ -733,43 +820,25 @@
     var totalPages = Math.ceil(filteredItems.length / pageSize);
     if (state.page >= totalPages) state.page = Math.max(0, totalPages - 1);
     var pageItems = filteredItems.slice(state.page * pageSize, state.page * pageSize + pageSize);
+    if (el.resultCount) {
+      var start = state.page * pageSize + 1;
+      var end = Math.min(filteredItems.length, (state.page + 1) * pageSize);
+      el.resultCount.textContent = filteredItems.length + ' 条 · 显示 ' + start + '–' + end;
+    }
     el.results.innerHTML = '<div class="conference-result-table">' + pageItems.map(renderResultRow).join('') + '</div>' + renderPagination(totalPages);
     bindResultActions();
   }
 
   function renderResultRow(item) {
-    var insight = item.deepInsight || {};
-    var tags = [item.researchType].concat(item.drugs || []).concat(item.topics || []).slice(0, 4);
-    var actionTags = insight.actionTags || [];
-    var metrics = insight.keyMetrics || [];
     var locator = getSourceLocator(item);
-    var sourceHref = getSourceHref(item);
-    return '<article class="conference-result-row conference-result-row-deep" id="conference-item-' + escapeHtml(safeDomId(item.id)) + '" data-conference-item-id="' + escapeHtml(item.id || '') + '">' +
-      '<div>' +
-        '<strong class="conference-card-title">' + escapeHtml(item.title) + '</strong>' +
-        '<p>' + escapeHtml([locator, item.presentationType, (item.countries || []).slice(0, 4).join('、')].filter(Boolean).join(' · ')) + '</p>' +
-        '<div class="conference-deep-readout">' +
-          '<span>临床读数</span>' +
-          '<p>' + escapeHtml(insight.clinicalReadoutZh || item.analysisZh || '中文分析待生成；请展开摘要核查来源。') + '</p>' +
-        '</div>' +
-        '<div class="conference-ma-implication">' +
-          '<span>MA 转化</span>' +
-          '<p>' + escapeHtml(insight.maImplicationZh || '待补充医学事务转化判断。') + '</p>' +
-        '</div>' +
-        (metrics.length ? '<div class="conference-metric-list">' + metrics.slice(0, 3).map(function(metric) { return '<em>' + escapeHtml(metric) + '</em>'; }).join('') + '</div>' : '') +
-        '<details class="conference-evidence-detail">' +
-          '<summary>证据边界 / 来源定位 / 摘要正文</summary>' +
-          '<p><strong>证据边界：</strong>' + escapeHtml(insight.evidenceBoundaryZh || '需回到原始摘要核查。') + '</p>' +
-          '<p><strong>来源定位：</strong>' + escapeHtml(locator) + '；外部来源仅作次级核查，PDF 跳页不保证篇内精确定位。</p>' +
-          '<p><a class="conference-source-link" href="' + escapeHref(sourceHref) + '" target="_blank" rel="noopener">打开外部来源</a></p>' +
-          '<div class="conference-abstract open" id="conference-abs-' + escapeHtml(item.id) + '">' + escapeHtml(item.abstract || '摘要正文待公开。') + '</div>' +
-        '</details>' +
-      '</div>' +
-      '<div class="conference-result-tags">' + tags.map(function(tag) {
-        return '<span class="conference-badge">' + escapeHtml(tag) + '</span>';
-      }).join('') + actionTags.map(function(tag) {
-        return '<span class="conference-badge highlight">' + escapeHtml(tag) + '</span>';
-      }).join('') + '</div>' +
+    var countries = (item.countries || []).filter(function(country) { return country && country !== '未识别'; }).slice(0, 4).join('、') || '国家/地区未识别';
+    return '<article class="conference-result-row conference-result-row-compact" id="conference-item-' + escapeHtml(safeDomId(item.id)) + '" data-conference-item-id="' + escapeHtml(item.id || '') + '">' +
+      '<strong class="conference-card-title">' + escapeHtml(item.title) + '</strong>' +
+      '<p>' + escapeHtml([locator, countries].filter(Boolean).join(' · ')) + '</p>' +
+      '<details class="conference-evidence-detail">' +
+        '<summary>点击展开中文摘要</summary>' +
+        '<div class="conference-abstract open" id="conference-abs-' + escapeHtml(item.id) + '">' + escapeHtml(getChineseAbstract(item)) + '</div>' +
+      '</details>' +
     '</article>';
   }
 
@@ -790,6 +859,7 @@
         if (action === 'prev' && state.page > 0) state.page--;
         if (action === 'next') state.page++;
         renderResults();
+        renderActiveFilterSummary();
       });
     }
   }
@@ -851,7 +921,10 @@
     var items = (payload.sourceMonitor || []).filter(function(item) {
       return module.monitorIds.indexOf(item.id) !== -1;
     });
-    if (!items.length) items = payload.sourceMonitor || [];
+    if (!items.length) {
+      el.sourceMonitor.innerHTML = '<div class="conference-empty-line">待提供会议摘要数据源链接。</div>';
+      return;
+    }
     el.sourceMonitor.innerHTML = '<div class="conference-source-list">' + items.map(function(item) {
       var warn = /监控|入口|待|定位/.test(item.status || '');
       return '<article class="conference-mini-card">' +
@@ -901,10 +974,18 @@
     var summary = summarizeModule(currentItems);
 
     if (el.badge) el.badge.textContent = '会议数据更新 ' + (payload.generated_at || '-');
-    if (el.moduleEyebrow) el.moduleEyebrow.textContent = module.label + ' · ' + module.edition + ' · ' + module.status;
+    if (el.moduleEyebrow) el.moduleEyebrow.textContent = [module.label, module.edition].filter(Boolean).join(' · ');
     if (el.moduleTitle) el.moduleTitle.textContent = module.title;
     if (el.moduleIntro) el.moduleIntro.textContent = module.intro;
-    if (el.moduleLink) el.moduleLink.href = module.url;
+    if (el.moduleLink) {
+      if (module.url) {
+        el.moduleLink.href = module.url;
+        el.moduleLink.style.display = '';
+      } else {
+        el.moduleLink.href = '#';
+        el.moduleLink.style.display = 'none';
+      }
+    }
 
     renderMeetingCards();
     renderKpis(module, summary);

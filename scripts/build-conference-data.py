@@ -116,36 +116,6 @@ SOURCES = [
         "url": "https://www.ean.org/fileadmin/user_upload/ean/Congress-2026/Abstracts/ENE_v33_iS1_Congress_Abstract_Book.pdf",
         "pageUrl": "https://www.ean.org/congress2026/abstracts/important-information/ean-2026-congress-abstract-book",
     },
-    {
-        "id": "mgfa-international-2025",
-        "meetingId": "mgfa-ic-2025",
-        "parser": "numbered-poster",
-        "startPage": 8,
-        "sourceLabel": "MGFA International Conference",
-        "title": "15th International Conference on Myasthenia Gravis and Related Disorders",
-        "shortTitle": "MGFA IC 2025",
-        "year": 2025,
-        "date": "2025-05-12 to 2025-05-15",
-        "location": "The Hague, The Netherlands",
-        "presentationType": "Poster",
-        "url": "https://myasthenia.org/wp-content/uploads/2024/08/MGFAInternationalConferenceAbstractList_05.07.2025.pdf",
-        "pageUrl": "https://myasthenia.org/mgfa-international-conference/",
-    },
-    {
-        "id": "mgfa-scientific-session-2025",
-        "meetingId": "mgfa-scientific-2025",
-        "parser": "simple-numbered",
-        "startPage": 0,
-        "sourceLabel": "MGFA Scientific Session",
-        "title": "2025 MGFA Scientific Session Poster List & Abstracts",
-        "shortTitle": "MGFA SS 2025",
-        "year": 2025,
-        "date": "2025-10",
-        "location": "AANEM Annual Meeting",
-        "presentationType": "Poster",
-        "url": "https://myasthenia.org/wp-content/uploads/2025/10/2025-MGFA-Scientific-Session-Posters-MGFA-Scientific-Session.pdf",
-        "pageUrl": "https://myasthenia.org/events/2026-scientific-session/",
-    },
 ]
 
 SOURCE_MONITOR = [
@@ -165,49 +135,9 @@ SOURCE_MONITOR = [
         "url": "https://www.ean.org/congress2026",
         "evidence": "EAN 2026 abstract book 在线公开，官网说明 accepted abstracts 作为 European Journal of Neurology online supplement 发布。",
     },
-    {
-        "id": "mgfa-ic",
-        "organization": "MGFA International Conference",
-        "status": "已抓取",
-        "nextAction": "监控第 16 届会议日期地点，官网称年底前公布。",
-        "url": "https://myasthenia.org/mgfa-international-conference/",
-        "evidence": "2025 年会议页面公开 Program 与 Poster Abstract Guide；官网列示 73 presentations / 241 posters。",
-    },
-    {
-        "id": "mgfa-scientific",
-        "organization": "MGFA Scientific Session",
-        "status": "已抓取历史摘要 / 监控 2026",
-        "nextAction": "2026 摘要已截止，待会后 poster list / abstracts PDF 公开后自动补抓。",
-        "url": "https://myasthenia.org/events/2026-scientific-session/",
-        "evidence": "2026 session 为 2026-09-29，含 oral presentations 与 poster session；2025 poster abstracts PDF 已公开。",
-    },
-    {
-        "id": "aanem",
-        "organization": "AANEM Annual Meeting",
-        "status": "2025 Abstract Guide 已定位",
-        "nextAction": "AANEM 2025 guide 为 FlippingBook 签名阅读器；已定位 myasthenia 检索页段，待抽取稳定文本层或 Wiley supplement 后结构化补抓。",
-        "url": "https://online.flippingbook.com/view/442003187/",
-        "evidence": "AANEM abstract information 页面链接 2025 Abstracts Guide；阅读器内 myasthenia 搜索可定位 MG 页段。2026 年会继续作为未来会议监控。",
-    },
 ]
 
 FUTURE_MEETINGS = [
-    {
-        "meeting": "MGFA Scientific Session 2026",
-        "organization": "MGFA / AANEM",
-        "date": "2026-09-29",
-        "location": "Signia by Hilton Orlando Bonnet Creek, Orlando, Florida",
-        "status": "摘要已截止，待会后公开",
-        "url": "https://myasthenia.org/events/2026-scientific-session/",
-    },
-    {
-        "meeting": "AANEM Annual Meeting 2026",
-        "organization": "AANEM",
-        "date": "2026-09-29 to 2026-10-02",
-        "location": "Orlando, Florida",
-        "status": "Registration open；摘要结果待会议/期刊公开",
-        "url": "https://www.aanem.org/meetings/annual-meeting",
-    },
     {
         "meeting": "AAN Annual Meeting 2027",
         "organization": "AAN",
@@ -223,14 +153,6 @@ FUTURE_MEETINGS = [
         "location": "TBD",
         "status": "待官网更新",
         "url": "https://www.ean.org/congress2026",
-    },
-    {
-        "meeting": "16th International Conference on MG and Related Disorders",
-        "organization": "MGFA",
-        "date": "TBD",
-        "location": "TBD",
-        "status": "官网称日期地点将于年底前公布",
-        "url": "https://myasthenia.org/mgfa-international-conference/",
     },
 ]
 
@@ -722,7 +644,7 @@ def parse_aan_mirasmart(source: dict, refresh: bool = False) -> list[dict]:
             "label": "huashanmuscle AAN 2026 panorama",
             "reportedDirectMg": 106,
             "url": "https://mg-intelligence-hub.huashanmuscle.com/pages/conferences/aan-2026-mg-panorama.html",
-            "note": "对照页按综述口径报告 106 篇；本站保留可追溯原始摘要链接，并透明展示 raw search 与 curated MG-core 的差异。",
+            "note": "不同来源的摘要口径存在差异；会后复盘应优先回到站内摘要卡和原始来源核查具体证据。",
         },
     }
     return parsed
@@ -1130,11 +1052,11 @@ def build_meeting_narratives(abstracts: list[dict]) -> dict:
         china_refs = _top_items(items, lambda item: item.get("isChinaRelated"), 4)
 
         if conference == "EAN 2026":
-            headline = "EAN 2026 的 MG 信息密度不低于公开综述，但医学事务价值在于把 103 条摘要拆成治疗格局、特殊人群、真实世界价值和中国转化四条行动线。"
-            strategic_read = "公开文章按药物机制串讲已经足够完整；HUB 的升级目标是更进一步：每条摘要都回答“对 KOL 问题、内部 briefing、本土证据和竞品追问有什么用”。"
+            headline = "EAN 2026 的 MG 线索集中在 FcRn/补体新药、血清阴性与青少年人群、真实世界长期管理和欧洲—中国协作网络。"
+            strategic_read = "会后复盘应按治疗机制、人群边界、实践价值和本土转化拆解，区分可直接交流的数据、仍需全文核查的探索信号和适合追问的证据空白。"
         elif conference == "AAN 2026":
-            headline = "AAN 2026 的价值不在复述 106 篇新闻式综述，而在把原始 MiraSmart 检索、MG-core 口径、每条摘要证据边界和 MSL 行动问题放在同一工作台。"
-            strategic_read = "对照页已经给出完整叙事；HUB 的升级目标是更进一步：动态回链原始摘要、区分 raw search 与 curated MG-core、突出细胞治疗/补体/FcRn/B 细胞重置的证据边界，并把每条摘要转成 KOL 追问。"
+            headline = "AAN 2026 的 MG 线索集中在靶向治疗 RCT、补体/FcRn/B 细胞与细胞治疗布局、特殊人群证据和真实世界负担。"
+            strategic_read = "会后复盘应围绕哪些数据能改变治疗讨论、哪些仍属于设计或探索性证据、哪些适合转成 KOL 追问展开。"
         elif conference.startswith("MGFA"):
             headline = "MGFA 摘要更接近 MG 专病生态，适合连接患者旅程、基础机制、临床实践和专家网络。"
             strategic_read = "医学事务使用时应优先识别能进入疾病教育、ad board 议题和本地研究假设的摘要。"
@@ -1153,17 +1075,7 @@ def build_meeting_narratives(abstracts: list[dict]) -> dict:
                 "topDrugs": top_drugs,
                 "topResearchTypes": top_types,
             },
-            "competitiveComparison": {
-                "label": "对照 huashanmuscle AAN 2026 panorama",
-                "url": "https://mg-intelligence-hub.huashanmuscle.com/pages/conferences/aan-2026-mg-panorama.html",
-                "verdict": "对照页优势是长文综述；本站优势是可追溯、可筛选、可复用的 MA/MSL 情报产品：每条摘要都有临床读数、MA 转化、证据边界、关键数字和 KOL 问题。",
-                "advantages": [
-                    "raw search 与 curated MG-core 口径透明",
-                    "每条摘要可回链 AAN MiraSmart 原文",
-                    "按机制/研究类型/国家/行动标签下钻",
-                    "将细胞治疗、补体、FcRn、B 细胞重置统一放入证据边界框架",
-                ],
-            } if conference == "AAN 2026" else None,
+            "competitiveComparison": None,
             "chapters": [
                 {
                     "title": "治疗格局：从阳性结果走向机制定位",
@@ -1191,10 +1103,10 @@ def build_meeting_narratives(abstracts: list[dict]) -> dict:
                 },
             ],
             "briefingQuestions": [
-                "AAN raw search、curated MG-core 与对照页 106 篇口径差异，是否会影响内部汇报的摘要总数表述？",
-                "细胞治疗、上游补体、FcRn 与 B 细胞重置分别解决的是哪类患者路径问题？",
-                "哪些摘要能进入 KOL follow-up，哪些只适合等待全文/poster 后再判断？",
-                "中国机构参与的是全球多中心贡献，还是能转化为本土证据或专家网络机会？",
+                "哪些靶向治疗结果已经有明确终点和效应量，哪些仍只是设计或探索性信号？",
+                "细胞治疗、补体、FcRn 与 B 细胞/免疫重置分别对应哪类患者路径和证据边界？",
+                "特殊人群数据能否支持患者分层讨论，还是仅适合形成 KOL 追问？",
+                "真实世界、PRO 和安全性摘要能否转化为长期管理或患者价值议题？",
             ] if conference == "AAN 2026" else [
                 "哪些摘要可以进入内部 briefing，哪些只能作为趋势观察？",
                 "核心结果对应的是疗效、激素减量、长期控制、患者价值还是安全性管理？",
@@ -1205,8 +1117,93 @@ def build_meeting_narratives(abstracts: list[dict]) -> dict:
     return narratives
 
 
+def load_existing_zh_enrichment() -> dict[str, dict]:
+    """Preserve optional LLM-generated Chinese fields across deterministic rebuilds."""
+    payload = None
+    if JSON_PATH.exists():
+        try:
+            payload = json.loads(JSON_PATH.read_text(encoding="utf-8"))
+        except Exception:
+            payload = None
+    elif JS_PATH.exists():
+        try:
+            text = JS_PATH.read_text(encoding="utf-8")
+            prefix = "window.MG_CONFERENCE_DATA = "
+            body = text[len(prefix):].strip() if text.startswith(prefix) else ""
+            if body.endswith(";"):
+                body = body[:-1]
+            payload = json.loads(body) if body else None
+        except Exception:
+            payload = None
+    if not payload:
+        return {}
+    enrichments: dict[str, dict] = {}
+    for item in payload.get("abstracts", []):
+        item_id = item.get("id")
+        if not item_id:
+            continue
+        insight = item.get("deepInsight") or {}
+        entry: dict = {}
+        if item.get("abstractZh"):
+            entry["abstractZh"] = item["abstractZh"]
+        if insight.get("kolKeyMessageZh"):
+            entry["kolKeyMessageZh"] = insight["kolKeyMessageZh"]
+        if entry:
+            enrichments[item_id] = entry
+    return enrichments
+
+
+def load_existing_meeting_narrative_enrichment() -> dict[str, dict]:
+    """Preserve optional LLM-curated meeting narratives across deterministic rebuilds."""
+    payload = None
+    if JSON_PATH.exists():
+        try:
+            payload = json.loads(JSON_PATH.read_text(encoding="utf-8"))
+        except Exception:
+            payload = None
+    elif JS_PATH.exists():
+        try:
+            text = JS_PATH.read_text(encoding="utf-8")
+            prefix = "window.MG_CONFERENCE_DATA = "
+            body = text[len(prefix):].strip() if text.startswith(prefix) else ""
+            if body.endswith(";"):
+                body = body[:-1]
+            payload = json.loads(body) if body else None
+        except Exception:
+            payload = None
+    if not payload:
+        return {}
+    enrichments: dict[str, dict] = {}
+    for conference, narrative in (payload.get("meetingNarratives") or {}).items():
+        if isinstance(narrative, dict) and narrative.get("llmCurated"):
+            enrichments[str(conference)] = narrative
+    return enrichments
+
+
+def apply_existing_zh_enrichment(abstracts: list[dict], enrichments: dict[str, dict]) -> None:
+    for item in abstracts:
+        entry = enrichments.get(str(item.get("id") or ""))
+        if not entry:
+            continue
+        if entry.get("abstractZh"):
+            item["abstractZh"] = entry["abstractZh"]
+        if entry.get("kolKeyMessageZh"):
+            item.setdefault("deepInsight", {})["kolKeyMessageZh"] = entry["kolKeyMessageZh"]
+
+
+def apply_existing_meeting_narrative_enrichment(narratives: dict[str, dict], enrichments: dict[str, dict]) -> None:
+    for conference, enriched in enrichments.items():
+        if not enriched:
+            continue
+        base = dict(narratives.get(conference, {}))
+        base.update(enriched)
+        narratives[conference] = base
+
+
 def build_payload(refresh: bool = False) -> dict:
     DATA_DIR.mkdir(parents=True, exist_ok=True)
+    zh_enrichments = load_existing_zh_enrichment()
+    narrative_enrichments = load_existing_meeting_narrative_enrichment()
     abstracts: list[dict] = []
     source_stats = []
     for source in SOURCES:
@@ -1242,6 +1239,9 @@ def build_payload(refresh: bool = False) -> dict:
 
     abstracts = dedupe_items(abstracts)
     abstracts.sort(key=lambda item: (-item["year"], -item["priorityScore"], item["conference"], item["title"]))
+    apply_existing_zh_enrichment(abstracts, zh_enrichments)
+    meeting_narratives = build_meeting_narratives(abstracts)
+    apply_existing_meeting_narrative_enrichment(meeting_narratives, narrative_enrichments)
     payload = {
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "summary": build_summary(abstracts),
@@ -1259,7 +1259,7 @@ def build_payload(refresh: bool = False) -> dict:
             for source in SOURCES
         ],
         "abstracts": abstracts,
-        "meetingNarratives": build_meeting_narratives(abstracts),
+        "meetingNarratives": meeting_narratives,
         "coverageAudits": SOURCE_COVERAGE_AUDITS,
         "sourceStats": source_stats,
         "sourceMonitor": SOURCE_MONITOR,

@@ -148,7 +148,7 @@ PubMed / ClinicalTrials.gov / EasyScholar / 中国监管状态 / 会议来源
 | `data/landscapeInsights.js` | 27 KB；6 条动态洞察 | 月度格局洞察、MSL action | 诊治格局 / MSL 同步加载 |
 | `data/curated-topics.js` | 117 KB；27 个专题 | 知识库专题层 | 知识库 / 诊治格局同步加载 |
 | `data/wikiTopicCoverage.js` | 64 KB；27 个专题覆盖 | wiki 专题与 PubMed 社区映射 | 多页面同步加载 |
-| `data/conference-data.js` / `.json` | 466 条摘要 | 会议资讯；含 meetingNarratives、coverageAudits 和逐条 deepInsight | 情报中心同步加载 |
+| `data/conference-data.js` / `.json` | 195 条摘要 | 会议资讯；含 meetingNarratives、coverageAudits 和逐条 deepInsight。MGFA / AANEM 已清空，待新数据源链接后再接入 | 情报中心同步加载 |
 | `data/pipeline-status.js` | 6 KB | 数据状态页 | 数据状态同步加载 |
 | `data/backendOptions.js` | 5 KB | Phase 6 后端选项评估 | 数据状态同步加载 |
 | `data/china-regulatory-status.json` | — | NMPA/CDE/准入状态 | 构建脚本与诊治格局使用 |
@@ -254,19 +254,18 @@ PubMed / ClinicalTrials.gov / EasyScholar / 中国监管状态 / 会议来源
 | 文献速览 | `literature-recent.js` | 近一年文献浏览、筛选、分页、证据等级展示 |
 | 信号板 | `signals-weekly.js` | 近 14 天候选信号、强信号、机制/安全/中国等维度 |
 | 中国情报 | `china-intelligence.js` | 中国相关文献、方向、机构/作者线索 |
-| 会议资讯 | `conference-data.js` + `conference.js` | MGFA / AAN / EAN / AANEM 会议模块 |
+| 会议资讯 | `conference-data.js` + `conference.js` | AAN / EAN 会议模块；MGFA / AANEM 仅保留待接入占位 |
 
 ### 6.2 会议数据
 
-当前结构化会议摘要共 466 条。会议资讯不是新闻列表，而是面向医学事务（medical affairs, MA）和 MSL briefing 的摘要级情报工作台。
+当前结构化会议摘要共 195 条。会议资讯不是新闻列表，而是面向医学事务（medical affairs, MA）和 MSL briefing 的摘要级情报工作台。MGFA / AANEM 后台数据已清空，等待新的稳定摘要链接后再接入。
 
 | 来源 | 数量 | 当前状态 |
 |---|---:|---|
-| MGFA IC 2025 | 192 | 已结构化 |
-| MGFA SS 2025 | 79 | 已结构化 |
-| AAN 2026 | 91 | 已结构化；MiraSmart raw search 109 条，curated MG-core 91 条，规则剔除 18 条 |
-| EAN 2026 | 104 | 已结构化；已纳入 acronym-only MG 标题条目 |
-| AANEM | — | 已建立监控口，尚未进入结构化摘要库 |
+| AAN 2026 | 91 | 已接入；MiraSmart 检索命中 109 条，MG 摘要 91 条，规则剔除 18 条；前端显示 NEW |
+| EAN 2026 | 104 | 已接入；已纳入 acronym-only MG 标题条目；前端显示 NEW |
+| MGFA | — | 后台清空；待提供会议摘要链接后重新接入 |
+| AANEM | — | 后台清空；待提供会议摘要链接后重新接入 |
 
 分析维度包括国家/地区、研究类型、主题、药物/机制、中国相关、高优先级、行动标签、证据边界和 KOL 问题。
 
@@ -276,14 +275,26 @@ PubMed / ClinicalTrials.gov / EasyScholar / 中国监管状态 / 会议来源
 
 | 字段 | 用途 |
 |---|---|
-| `meetingNarratives` | 会议级全景剖析，服务 congress debrief 和团队 briefing |
-| `coverageAudits` | 展示 raw search、curated MG-core、剔除数量和剔除原则 |
+| `meetingNarratives.chapters` | 会议级线索，回答“本次会议说明 MG 领域什么方向正在变化” |
+| `meetingNarratives.chapters[].talkingPoints` / `kolFocus` | KOL 交流点，回答“拿哪条证据去和 KOL 说什么/问什么”；前者嵌套在线索下，后者作为优先清单扁平排序 |
+| `coverageAudits` | 展示检索命中、MG 摘要、剔除数量和剔除原则 |
 | `deepInsight` | 每条摘要的临床读数、MA 转化、证据边界、关键数字、KOL 问题 |
-| `analysisZh` | 兼容旧前端的中文摘要字段 |
+| `abstractZh` | LLM 生成的真实中文摘要翻译；不要用 `analysisZh` 冒充摘要全文 |
+| `deepInsight.kolKeyMessageZh` | 摘要级 KOL key message，供会议级交流点调用 |
 
-AAN 2026 的公开对照页报告 106 篇 MG 直接相关摘要。本站保留更透明的工作流口径：MiraSmart `myasthenia` raw search 109 条，curated MG-core 91 条，剔除 18 条 CMS / LEMS / mimic / 非 MG 误命中。每条入库摘要保留原始链接，并增加 MA 转化与证据边界。
+AAN 2026 的会议资讯保留可核查工作流口径：MiraSmart `myasthenia` 检索命中 109 条，MG 摘要 91 条，剔除 18 条 CMS / LEMS / mimic / 非 MG 误命中。每条入库摘要保留原始链接，并增加 MA 转化与证据边界。
 
 EAN 2026 已完成外部文章引用核查。被引用的 31 条 EAN 摘要均已纳入本库并生成分析字段。当前 104 条包含 acronym-only MG 标题条目 `EPV-1203`。
+
+#### Signal-to-KOL 生成原则
+
+会议资讯不是把“线索”和“交流点”并排罗列，而是采用三层链条：`摘要证据 → 会议线索 → KOL 交流点`。
+
+- 会议线索（signal）是父层：回答“会议说明什么变化”，必须说明 `whySignal` 和 `evidenceBoundary`，由多摘要趋势、证据格局变化、未满足需求或 MA 机会支撑。
+- KOL 交流点（talking point）挂在线索下：回答“拿哪条证据去和 KOL 说什么/问什么”，必须有 `parentSignalId`、`whyKol`、`keyMessages` 和证据 locator chips。
+- 同一摘要可以同时支撑线索和交流点；线索解释结构变化，交流点承载可传递的具体数据或追问。
+- 交流点排序：`efgar` 数据优先传递；竞品/其他治疗数据从与 efgar 的机制、人群、终点、给药、安全性、证据成熟度区隔角度解读；与产品或治疗无直接关系但重要的疾病进展最后补充。
+- 复刻到 MGFA / AANEM 时，先把稳定摘要链接加入 `SOURCES` / `SOURCE_MONITOR`，保证摘要正文与 locator 可靠，再运行 `enrich-conference-zh.py` 和 `enrich-conference-narrative.py --conference "会议名" --force`。
 
 ---
 

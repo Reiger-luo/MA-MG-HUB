@@ -36,7 +36,8 @@
     <button class="intel-tab active" type="button" data-tab="literature">文献速览</button>
     <button class="intel-tab" type="button" data-tab="signals">信号板</button>
     <button class="intel-tab" type="button" data-tab="china">中国情报</button>
-    <button class="intel-tab" type="button" data-tab="conference">会议资讯</button>
+    <span class="intel-tab-separator" aria-hidden="true"></span>
+    <button class="intel-tab intel-tab-conference" type="button" data-tab="conference">会议资讯</button>
   </div>
 
   <section class="intel-tab-panel active" id="tab-literature">
@@ -278,7 +279,6 @@
   <section class="intel-tab-panel" id="tab-conference">
     <div class="conference-topline">
       <div>
-        <div class="section-kicker">会后复盘 · MG-only 摘要情报</div>
         <h2>会议资讯</h2>
       </div>
       <span class="update-badge" id="conferenceBadge">Loading…</span>
@@ -313,36 +313,20 @@
 
         <div class="conference-strategic-narrative" id="conferenceStrategicNarrative"></div>
 
-        <section class="conference-breakthrough-focus">
-          <div class="panel-head">
-            <h2>KOL 交流重点</h2>
-            <span class="conference-section-note">值得传递的摘要与关键数据</span>
-          </div>
-          <div id="conferenceBreakthroughs"></div>
-        </section>
-
-        <section class="conference-map-panel conference-topic-filter-panel">
-          <div class="panel-head">
-            <h2>主题与药物筛选</h2>
-            <span class="conference-section-note">点击后筛选下方摘要池</span>
-          </div>
-          <div class="conference-active-filter" id="conferenceActiveFilter"></div>
-          <div class="conference-topic-board" id="conferenceTopicCloud"></div>
-          <div class="conference-drug-board" id="conferenceDrugBoard"></div>
-        </section>
-
         <section class="conference-drilldown">
           <div class="result-panel-head">
-            <h2>摘要池下钻 / 来源核查</h2>
+            <div>
+              <h2>摘要池 / 主题与药物筛选</h2>
+              <p class="conference-section-note">输入关键词或点击标签，统一筛选下方摘要；分页只显示当前命中范围。</p>
+            </div>
             <span id="conferenceResultCount">0 条</span>
           </div>
-          <div class="conference-filter-row">
-            <input type="text" class="filter-input" id="conferenceKeyword" placeholder="题名/作者/药物/主题…">
-            <select class="filter-input" id="conferenceTypeFilter"></select>
-            <select class="filter-input" id="conferenceCountryFilter"></select>
-            <label class="filter-checkbox-item conference-toggle">
-              <input type="checkbox" id="conferenceChinaOnly"> 中国相关
-            </label>
+          <div class="conference-drilldown-filter">
+            <div class="conference-active-filter" id="conferenceActiveFilter"></div>
+            <div class="conference-topic-board" id="conferenceTopicCloud"></div>
+          </div>
+          <div class="conference-filter-row conference-filter-row-simple">
+            <input type="text" class="filter-input" id="conferenceKeyword" placeholder="题名 / 编号 / 国家 / 药物 / 主题…">
           </div>
           <div class="conference-result-list" id="conferenceResults"></div>
         </section>
