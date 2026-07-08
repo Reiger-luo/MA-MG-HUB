@@ -9,7 +9,8 @@ Modes:
 - II: recheck existing evidence_level == 'II'
 - III: recheck existing evidence_level == 'III'
 - IV: recheck existing evidence_level == 'IV'
-- VI: recheck existing evidence_level == 'VI'
+- V: recheck existing evidence_level == 'V'
+- VI: recheck legacy evidence_level == 'VI'
 - NONE: recheck records with empty/None evidence_level
 
 Other records are left untouched unless matched by the selected mode(s).
@@ -59,6 +60,8 @@ def should_recheck(article: dict, modes: set[str]) -> bool:
     if "III" in modes and level == "III":
         return True
     if "IV" in modes and level == "IV":
+        return True
+    if "V" in modes and level == "V":
         return True
     if "VI" in modes and level == "VI":
         return True
@@ -119,8 +122,8 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Reclassify selected evidence buckets")
     parser.add_argument(
         "--modes",
-        default="II,III,IV,VI,NONE",
-        help="Comma-separated buckets to recheck: ALL,II,III,IV,VI,NONE",
+        default="II,III,IV,V,VI,NONE",
+        help="Comma-separated buckets to recheck: ALL,II,III,IV,V,VI,NONE",
     )
     parser.add_argument(
         "--recent-days",

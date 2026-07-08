@@ -1,6 +1,4 @@
-# MG Intelligence Hub v5 — 架构设计与操作手册
-
-> 版本：v5.1（基于 2026-07-05 本地仓库与线上 GitHub Pages 公开产物）
+# MG Intelligence Hub v5.x — 架构设计与操作手册
 > 定位：MA-MG-HUB 医学事务 AI 变革引擎，围绕 MSL 工作流的主动赋能系统
 > 本手册是当前操作依据；`report/` 中旧规划文档仅作历史参考。
 
@@ -477,15 +475,24 @@ MG-Intelligence-Hub/
 - 动态 HTML 必须 escape；外链 URL 必须走 safe helper。
 - 页面导航修改必须同步 6 个主页面；redirect 页不算主导航。
 
-### 10.3 Python 约定
+### 10.3 证据等级
+
+- `scripts/studyClassifier.py`：Oxford CEBM 2011-informed I–V 自动筛选标签。
+- 规则来源：`report/Oxford-CEBM-2011-证据等级规则参考.md`
+- I：Systematic Review / Meta-Analysis；II：RCT / Prognostic Inception Cohort；
+  III：Non-randomized controlled cohort / Adjusted Retrospective Cohort / Post-marketing Controlled Follow-up；
+  IV：Case Control / Historical Control / Case Series / Case Report / Cross-Sectional / Single Arm / Pharmacovigilance / Genetic/Omics Association / Biomarker Association；
+  V：Mechanism-based Reasoning。
+- Narrative Review / Protocol / HEOR / Guideline / Consensus / Editorial / Letter / Comment / Animal / In Vitro 为未分类，无 evidence_level。
+
+### 10.4 Python 约定
 
 - 共用读写工具：`scripts/common/io.py`
-- 证据等级：`scripts/studyClassifier.py`，I–VI 级
 - EasyScholar：`scripts/easyscholar_api.py`，只从 `EASYSCHOLAR_KEY` 环境变量读取密钥
 - PubMed / NCBI：`NCBI_API_KEY` 作为可选加速参数
 - 写前端 JS 数据优先用 `atomic_write_js_global`
 
-### 10.4 Git 与安全纪律
+### 10.5 Git 与安全纪律
 
 - `data/literature-full.json`、`data/literature-weekly.json`、`data/archive/`、LLM cache/cost 不推 GitHub。
 - 公开数据产物在 `data/*.js`。
@@ -493,7 +500,7 @@ MG-Intelligence-Hub/
 - CI 已扫描旧硬编码 key 与 SSL bypass pattern。
 - 拜访记录、内部专家标签、团队反馈不进入公开仓库。
 
-### 10.5 验证命令
+### 10.6 验证命令
 
 ```bash
 python3 -m pytest -q

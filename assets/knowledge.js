@@ -329,7 +329,7 @@
     var stats = graphData.stats || {};
     var cards = [
       { label: '命中文献', value: compactNumber(stats.matched_articles), note: 'full PubMed abstract' },
-      { label: '有证据等级', value: compactNumber(stats.evidence_articles), note: 'I-VI 或已分级' },
+      { label: '有证据等级', value: compactNumber(stats.evidence_articles), note: 'I-V 或已分级' },
       { label: '图谱节点', value: stats.total_nodes || 0, note: '疾病/药物/机制/结局' },
       { label: '图谱关系', value: (stats.all_edges || stats.edges || 0) + '/' + (stats.graph_edges || stats.edges || 0), note: '全量合格/默认主图' },
       { label: '社区映射', value: (stats.community_mapped_nodes || 0) + '/' + (stats.total_nodes || 0), note: '图谱 dominant community' },

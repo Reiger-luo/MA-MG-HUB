@@ -36,21 +36,21 @@ MA-MG-HUB 不是单纯的文献列表，而是医学事务团队的 MG 情报工
 
 | 口径 | 当前规模 | 用途 |
 |---|---:|---|
-| 公开滚动层 | 近一年文献 1,154 篇；中国相关 323 篇；14 天候选信号 38 条 | 工作台、情报中心、信号板、中国情报 |
-| full / 语义底座 | full 轻索引与社区层 10,635 篇 | 知识图谱、社区归类、专家画像、跨库检索 |
+| 公开滚动层 | 近一年文献 1,151 篇；中国相关 316 篇；14 天候选信号 32 条 | 工作台、情报中心、信号板、中国情报 |
+| full / 语义底座 | full 轻索引与社区层 10,656 篇 | 知识图谱、社区归类、专家画像、跨库检索 |
 
-Dashboard 与 `pipeline-status.js` 现在统一显示两套口径：`public_rolling_count` 为 1,154 篇，`semantic_full_count` 为 10,635 篇。full 口径来自 raw full / full-index / community full 产物；recent 口径分别记录 `literature-recent.js` 与 `communityAssignmentsRecent.js`，当前生效的 active recent 以实际文件更新时间较新的那个为准。`MG_SEMANTIC_FULL_COUNT` 和 `MG_TOTAL_COUNT` 只作为 recent 文件头部的声明与兼容校验字段。
+Dashboard 与 `pipeline-status.js` 显示两套口径：`public_rolling_count` 为 1,151 篇，`semantic_full_count` 为 10,656 篇。full 口径来自 raw full / full-index / community full 产物；recent 口径分别记录 `literature-recent.js` 与 `communityAssignmentsRecent.js`，当前生效的 active recent 以实际文件更新时间较新的那个为准。`MG_SEMANTIC_FULL_COUNT` 和 `MG_TOTAL_COUNT` 只作为 recent 文件头部的声明与兼容校验字段。
 
 核心数据产物：
 
 | 产物 | 当前规模 | 用途 |
 |---|---:|---|
-| `data/literature-recent.js` | 1,154 篇 | 近一年公开文献列表 |
-| `data/signals-weekly.js` | 38 条 | 近 14 天候选信号 |
+| `data/literature-recent.js` | 1,151 篇 | 近一年公开文献列表 |
+| `data/signals-weekly.js` | 32 条 | 近 14 天候选信号 |
 | `data/china-intelligence.js` | 120 条摘要 | 中国情报 |
-| `data/literature-full-index.js` | 10,635 篇 | full 文献轻索引，不含 abstract |
+| `data/literature-full-index.js` | 10,656 篇 | full 文献轻索引，不含 abstract |
 | `data/communityTaxonomy.js` | 10 个社区 | 医学事务主题 taxonomy |
-| `data/communityAudit.js` | 10,635 篇 audit | 社区归类质量状态 |
+| `data/communityAudit.js` | 10,656 篇 audit | 社区归类质量状态 |
 | `data/knowledge-graph.js` | 55 节点、334 核心边、180 行证据矩阵 | 知识图谱与证据矩阵 |
 | `data/expert-profiles-china.js` | 8,926 位 | 中国作者-机构画像 |
 | `data/expert-profiles-international.js` | 43,485 位 | 国际作者-机构画像 |
@@ -229,3 +229,4 @@ node --check assets/*.js
 
 1. 将 MSL 拜访助手升级为可保存、可导出、可 follow-up 的工作流。
 2. 等待 MGFA / AANEM 稳定摘要链接，按会议资讯 signal-to-kol 流程重新接入。
+3. 证据等级采用 Oxford CEBM 2011-informed I–V 自动筛选标签，规则依据见 `report/Oxford-CEBM-2011-证据等级规则参考.md`。

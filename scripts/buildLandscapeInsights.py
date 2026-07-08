@@ -103,7 +103,7 @@ COMMUNITY_PROFILES: dict[str, dict[str, Any]] = {
 }
 
 
-LEVEL_SCORE = {"I": 6, "II": 5, "III": 4, "IV": 3, "V": 2, "VI": 1}
+LEVEL_SCORE = {"I": 6, "II": 5, "III": 4, "IV": 3, "V": 2}
 SIGNAL_SCORE = {"high": 12, "medium": 6, "low": 2, "active": 10, "watch": 6, "quiet": 1}
 
 

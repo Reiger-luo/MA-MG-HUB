@@ -760,7 +760,7 @@ def infer_topics(article):
 
 
 def evidence_score(level):
-    return {"I": 7, "II": 5, "III": 4, "IV": 3, "V": 2, "VI": 1}.get(level or "", 0)
+    return {"I": 7, "II": 5, "III": 4, "IV": 3, "V": 2}.get(level or "", 0)
 
 
 def is_case_report(article, text):
@@ -905,11 +905,11 @@ def build_signals(recent):
         if not high_value_signal and not drug_signal and not article.get("china_related"):
             continue
         # 强度分级
-        #   强（任一）：证据 I/II 级；IF ≥ 10 且不是 V/VI 级低证据
+        #   强（任一）：证据 I/II 级；IF ≥ 10 且不是 V 级机制推理证据
         #   中（任一）：IF ≥ 5；证据 III/IV 级；中国相关
         #   弱：其余入选条目
         strength = "弱"
-        if level in {"I", "II"} or (if_val >= 10 and level not in {"V", "VI"}):
+        if level in {"I", "II"} or (if_val >= 10 and level != "V"):
             strength = "强"
         elif if_val >= 5 or level in {"III", "IV"} or article.get("china_related"):
             strength = "中"
@@ -1064,7 +1064,7 @@ def build_china(recent):
             "top_journal": journals.most_common(1)[0][0] if journals else "",
         },
         "monthly": [{"month": k, "count": monthly[k]} for k in sorted(monthly)],
-        "evidence": [{"level": k, "count": evidence[k]} for k in ["I", "II", "III", "IV", "V", "VI"] if evidence[k]],
+        "evidence": [{"level": k, "count": evidence[k]} for k in ["I", "II", "III", "IV", "V"] if evidence[k]],
         "quartile": [{"level": k, "count": quartiles[k]} for k in ["1区", "2区", "3区", "4区"] if quartiles[k]],
         "top_journals": build_rank_items(journals, journal_articles, limit=10),
         "top_institutions": build_rank_items(institutions, institution_articles, limit=12),
@@ -1592,7 +1592,7 @@ def select_module_references(articles, spec, used_pmids):
 
 
 def best_evidence_level(refs):
-    rank = {"I": 1, "II": 2, "III": 3, "IV": 4, "V": 5, "VI": 6}
+    rank = {"I": 1, "II": 2, "III": 3, "IV": 4, "V": 5}
     levels = [ref.get("evidence_level") for ref in refs if ref.get("evidence_level") in rank]
     if not levels:
         return "未分类"

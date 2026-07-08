@@ -128,7 +128,6 @@
             <label class="filter-checkbox-item"><input type="checkbox" value="III"> III</label>
             <label class="filter-checkbox-item"><input type="checkbox" value="IV"> IV</label>
             <label class="filter-checkbox-item"><input type="checkbox" value="V"> V</label>
-            <label class="filter-checkbox-item"><input type="checkbox" value="VI"> VI</label>
           </div>
         </div>
 
@@ -153,32 +152,34 @@
         证据等级分类说明 <span id="evidenceArrow">▸</span>
       </button>
       <div class="evidence-ref-content" id="evidenceContent">
-        <p>文献证据等级参考 <strong>Oxford CEBM 2011</strong> 的问题域思路，先区分治疗/伤害、预后/预测模型、诊断/监测、机制/遗传，再按标题/摘要中的真实研究设计判定。</p>
+        <p>文献证据等级是 <strong>Oxford CEBM 2011-informed</strong> 的自动筛选标签：先区分治疗/伤害、预后、诊断/监测、患病率/筛查、机制问题域，再按标题/摘要可识别的研究设计保守映射。正式引用和医学决策仍需核查原文。</p>
         <table class="evidence-table">
           <tr><th>等级</th><th>分类</th><th>说明</th></tr>
           <tr><td><strong>I</strong></td><td>Systematic Review / Meta-Analysis</td><td>随机试验系统综述 / 荟萃分析 / 间接治疗比较；或预后 inception cohort 系统综述</td></tr>
           <tr><td rowspan="2"><strong>II</strong></td><td>Randomized Controlled Trial</td><td>本研究存在随机分组或随机分配的临床对照试验</td></tr>
           <tr><td>Prognostic Inception Cohort</td><td>预后问题中的 inception cohort</td></tr>
-          <tr><td rowspan="5"><strong>III</strong></td><td>Non-randomized Controlled Cohort</td><td>前瞻性对照队列 / 非随机对照临床研究</td></tr>
+          <tr><td rowspan="6"><strong>III</strong></td><td>Non-randomized Controlled Cohort</td><td>前瞻性对照队列 / 非随机对照临床研究</td></tr>
           <tr><td>Adjusted Retrospective Cohort</td><td>回顾性对照 + 统计校正（PSM/IPTW 等）</td></tr>
+          <tr><td>Post-marketing Controlled Follow-up</td><td>上市后安全性随访 / 监测研究；需有队列或随访设计且样本量足够</td></tr>
           <tr><td>Prognostic Cohort</td><td>预后 / 风险因素 / 进展结局队列研究</td></tr>
           <tr><td>Biomarker Prognostic / Prediction External Validation</td><td>生物标志物-结局关联研究 / 明确外部验证预测模型</td></tr>
           <tr><td>Diagnostic Accuracy Study</td><td>诊断/监测准确性研究（无法确认连续入组与盲法时按保守等级）</td></tr>
-          <tr><td rowspan="9"><strong>IV</strong></td><td>Historical Control / Case-Control</td><td>回顾性对照（未校正）/ 病例对照</td></tr>
+          <tr><td rowspan="12"><strong>IV</strong></td><td>Historical Control / Case-Control</td><td>回顾性对照（未校正）/ 病例对照</td></tr>
           <tr><td>Cross-Sectional / Survey / DCE</td><td>横断面、问卷、患者偏好或离散选择实验</td></tr>
           <tr><td>Single Arm</td><td>单臂研究（含无真实外部对照的真实世界 / 回顾性研究）</td></tr>
           <tr><td>Poor-quality Prognostic Cohort</td><td>回顾性、质量受限或无法确认入组质量的预后队列</td></tr>
           <tr><td>Prediction Model Development</td><td>预测模型开发 / 内部验证模型</td></tr>
           <tr><td>Diagnostic Case-Control / Scale Validation</td><td>诊断病例对照 / 量表或监测工具验证</td></tr>
-          <tr><td>Pharmacovigilance</td><td>药物警戒 / FAERS / 上市后监测</td></tr>
+          <tr><td>Pharmacovigilance</td><td>普通药物警戒 / FAERS / disproportionality，未满足 Level III 上市后随访条件</td></tr>
+          <tr><td>Case Report / Case Series</td><td>病例报告 / 病例系列；按 CEBM 2011 case-series 低等级临床证据桶处理</td></tr>
+          <tr><td>Genetic / Omics Association</td><td>GWAS、omics、遗传关联等探索性观察关联，不自动等同机制推理</td></tr>
+          <tr><td>Biomarker Association</td><td>未明确结局预测或外部验证的探索性 biomarker association</td></tr>
           <tr><td>Systematic Review of Case Reports</td><td>病例报告或病例系列的系统综述</td></tr>
           <tr><td>Systematic Review of Uncontrolled Studies</td><td>无对照单臂研究、病例系列或比例 meta-analysis 的系统综述</td></tr>
-          <tr><td rowspan="2"><strong>V</strong></td><td>Case Report</td><td>病例报告</td></tr>
-          <tr><td>Mechanistic / Genetic Association</td><td>机制推理、遗传关联、GWAS / omics 等探索性证据</td></tr>
-          <tr><td><strong>VI</strong></td><td>Narrative Review</td><td>叙述性综述</td></tr>
-          <tr><td><strong>—</strong></td><td>Protocol / HEOR / Guideline / Consensus / Editorial / Letter / Comment / Animal / In Vitro</td><td>非原始临床证据类</td></tr>
+          <tr><td><strong>V</strong></td><td>Mechanism-based Reasoning</td><td>机制推理；不能直接外推为疗效或安全性结论</td></tr>
+          <tr><td><strong>—</strong></td><td>Narrative Review / Protocol / HEOR / Guideline / Consensus / Editorial / Letter / Comment / Animal / In Vitro</td><td>未分级或非原始临床证据类</td></tr>
         </table>
-        <p style="margin-top:0.5rem;font-size:0.8rem;color:var(--fg3);">分类结果来自 AI 自动判定，仅供快速过滤参考。重要决策请核查原文。</p>
+        <p style="margin-top:0.5rem;font-size:0.8rem;color:var(--fg3);">分类结果来自规则程序自动判定，仅供快速过滤参考。重要决策请核查原文；来源规则见 report/Oxford-CEBM-2011-证据等级规则参考.md。</p>
       </div>
     </div>
   </section>
@@ -214,7 +215,7 @@
           <div class="signal-spec-block">
             <h4>② 入选门槛</h4>
             <ul>
-              <li>必须有证据等级（I–VI）；无分级直接剔除。</li>
+              <li>必须有证据等级（I–V）；无分级直接剔除。</li>
               <li>命中低价值词（撤稿 / 作者回复 / 对评论的回复等）直接剔除。</li>
               <li>病例报告仅当涉及药物、安全性、中国相关或明确主题时保留，否则剔除。</li>
               <li>无药物信号、无高价值主题且非中国相关时不入选。</li>
@@ -229,7 +230,7 @@
           <div class="signal-spec-block">
             <h4>④ 强度分级</h4>
             <ul>
-              <li><strong>强</strong>（任一）：证据 I 或 II 级；IF ≥ 10 且证据不是 V/VI 级。</li>
+              <li><strong>强</strong>（任一）：证据 I 或 II 级；IF ≥ 10 且证据不是 V 级机制推理。</li>
               <li><strong>中</strong>（任一）：IF ≥ 5；证据 III 或 IV 级；中国相关。</li>
               <li><strong>弱</strong>：其余入选条目。</li>
             </ul>

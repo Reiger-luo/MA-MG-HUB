@@ -34,8 +34,8 @@ candidatesPath = dataDir / "communityCandidates.json"
 assignmentsJsonlPath = dataDir / "communityAssignments.jsonl"
 reviewQueuePath = dataDir / "communityReviewQueue.json"
 
-levelScore = {"I": 7, "II": 6, "III": 4, "IV": 3, "V": 2, "VI": 1}
-levelRank = {"I": 1, "II": 2, "III": 3, "IV": 4, "V": 5, "VI": 6}
+levelScore = {"I": 7, "II": 6, "III": 4, "IV": 3, "V": 2}
+levelRank = {"I": 1, "II": 2, "III": 3, "IV": 4, "V": 5}
 semanticVersion = "2026.07-v4e-medical-affairs-signal"
 semanticMethod = "ruleBasedMedicalAffairsReview"
 
@@ -812,7 +812,7 @@ def evidenceMaturity(level: str) -> str:
         return "high"
     if level in {"III", "IV"}:
         return "medium"
-    if level in {"V", "VI"}:
+    if level == "V":
         return "early"
     return "unclassified"
 

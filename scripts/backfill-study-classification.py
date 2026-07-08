@@ -39,10 +39,10 @@ def backfill_file(filepath, label):
     classified = 0
     no_change = 0
     for a in articles:
-        # 默认跳过已分类条目；但证据等级 II/III/VI 需要按新标准重跑
+        # 默认跳过已分类条目；但旧版含 VI 的历史结果需按 I–V 新标准重跑
         st = a.get("study_types")
         ev = a.get("evidence_level")
-        if ev in {"II", "III", "VI"}:
+        if ev in {"II", "III", "IV", "V", "VI"}:
             result = classify_article(a)
             a["study_types"] = result["study_types"]
             a["evidence_level"] = result["evidence_level"]
@@ -85,10 +85,10 @@ def print_stats(articles, label):
     for t, c in types.most_common():
         print(f"    {t}: {c}")
     print(f"  证据等级分布:")
-    for lv in ["I", "II", "III", "IV", "V", "VI"]:
+    for lv in ["I", "II", "III", "IV", "V"]:
         c = levels.get(lv, 0)
         if c > 0:
-            print(f"    L{lv}: {c}")
+            print(f"    {lv}: {c}")
     if unclass:
         print(f"  非证据类: {unclass}")
 

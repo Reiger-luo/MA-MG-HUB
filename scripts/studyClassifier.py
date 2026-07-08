@@ -7,6 +7,7 @@ studyClassifier.py — MG 文献研究类型与证据等级统一分类器。
   2. RCT 需要本研究存在随机分组/随机分配，不能只因摘要提到既往 RCT 或 subgroup analysis 升级。
   3. 先区分问题域：治疗/伤害、预后/预测模型、诊断/监测、机制/遗传不能混用同一条治疗证据梯子。
   4. 横断面、问卷、DCE、单臂真实世界、无外部对照的回顾性研究统一按 IV 级处理。
+  5. Oxford CEBM 2011 只有 I–V；叙述性综述不再给 VI，Level V 仅用于 mechanism-based reasoning。
 """
 
 from __future__ import annotations
@@ -31,14 +32,18 @@ levelMap = {
     "Diagnostic Accuracy Study": "III",
     "Diagnostic Case-Control": "IV",
     "Scale Validation": "IV",
-    "Pharmacovigilance": "IV",
     "Historical Control": "IV",
     "Case-Control": "IV",
     "Cross-Sectional": "IV",
     "Single Arm": "IV",
-    "Case Report": "V",
-    "Mechanistic/Genetic Association": "V",
-    "Review": "VI",
+    "Case Series": "IV",
+    "Case Report": "IV",
+    "Post-marketing Controlled Follow-up": "III",
+    "Pharmacovigilance": "IV",
+    "Genetic/Omics Association": "IV",
+    "Biomarker Association": "IV",
+    "Mechanism-based Reasoning": "V",
+    "Review": None,
     "Protocol": None,
     "HEOR": None,
     "Guideline/Consensus": None,
@@ -84,7 +89,9 @@ animalTerms = [
     "rodent",
 ]
 
-caseTerms = ["case report", "case reports", "case series", "a case of"]
+caseReportTerms = ["case report", "case reports", "a case of"]
+caseSeriesTerms = ["case series", "case-series"]
+caseTerms = caseReportTerms + caseSeriesTerms
 guidelineTerms = ["consensus", "guideline", "delphi"]
 retractionTerms = [
     "retraction:",
@@ -234,9 +241,45 @@ pharmacovigilanceTerms = [
     "postmarketing surveillance",
 ]
 
-mechanisticGeneticTerms = [
+postMarketingTerms = [
+    "post-marketing surveillance",
+    "postmarketing surveillance",
+    "post-authorization safety study",
+    "post-authorisation safety study",
+    "post authorization safety study",
+    "post authorisation safety study",
+    "post-approval safety study",
+    "post approval safety study",
+]
+
+largeSampleTerms = [
+    "large-scale",
+    "large scale",
+    "nationwide",
+    "population-based",
+    "population based",
+    "multi-center",
+    "multicenter",
+    "multicentre",
+    "registry-based",
+    "registry based",
+]
+
+mechanismReasoningTerms = [
+    "pathogenesis",
+    "mechanistic",
+    "mechanism",
+    "mechanism-based",
+    "mechanism based",
+    "pathway",
+    "signaling pathway",
+    "signalling pathway",
+    "western blot",
+    "luciferase",
+]
+
+geneticOmicsAssociationTerms = [
     "functional profiling",
-    "antibody profiling",
     "genome-wide",
     "gwas",
     "genetic association",
@@ -256,23 +299,29 @@ mechanisticGeneticTerms = [
     "flora",
     "metabolite",
     "metabolites",
-    "cytokine",
-    "pathogenesis",
-    "mechanistic",
-    "mechanism",
-    "biomarker",
-    "biomarkers",
     "microarray",
     "rna microarray",
     "mirna",
     "microrna",
     "circrna",
     "cerna",
+    "transcriptomic",
+    "transcriptomics",
+    "single-cell",
+    "single cell",
+]
+
+biomarkerAssociationTerms = [
+    "antibody profiling",
+    "immune profiling",
+    "cytokine",
+    "biomarker",
+    "biomarkers",
     "qpcr",
     "rt-pcr",
-    "western blot",
-    "luciferase",
 ]
+
+mechanisticGeneticTerms = mechanismReasoningTerms + geneticOmicsAssociationTerms + biomarkerAssociationTerms
 
 biomarkerOutcomeTerms = [
     "therapeutic outcome",
@@ -613,8 +662,12 @@ def isSystematicReviewOfUncontrolledEvidence(text: str) -> bool:
     return any(hasPattern(text, pattern) for pattern in uncontrolled_patterns)
 
 
+def isCaseSeries(text: str) -> bool:
+    return hasAny(text, caseSeriesTerms)
+
+
 def isCaseReport(text: str, pubTypeText: str = "") -> bool:
-    if "CASE REPORTS" in pubTypeText or hasAny(text, caseTerms):
+    if "CASE REPORTS" in pubTypeText or hasAny(text, caseReportTerms):
         return True
     if hasPattern(text, r"\bin (a|an|one) patient with\b"):
         return True
@@ -631,6 +684,44 @@ def isScaleValidation(text: str) -> bool:
 
 def isPharmacovigilance(text: str) -> bool:
     return hasAny(text, pharmacovigilanceTerms)
+
+
+def hasSufficientHarmSample(text: str) -> bool:
+    if hasAny(text, largeSampleTerms):
+        return True
+    sample_patterns = [
+        r"\b[nN]\s*=\s*([0-9][0-9,]{1,})\b",
+        r"\b(?:included|enrolled|followed|analysed|analyzed)\s+([0-9][0-9,]{2,})\b",
+        r"\b([0-9][0-9,]{2,})\s+(?:patients|participants|subjects|individuals|persons)\b",
+    ]
+    for pattern in sample_patterns:
+        for match in re.finditer(pattern, text, re.I):
+            value = int(match.group(1).replace(",", ""))
+            if value >= 100:
+                return True
+    return False
+
+
+def isPostMarketingControlledFollowup(text: str) -> bool:
+    if not hasAny(text, postMarketingTerms):
+        return False
+    if not hasSufficientHarmSample(text):
+        return False
+    return hasTrueComparator(text) or hasAny(text, [
+        "cohort",
+        "follow-up",
+        "follow up",
+        "registry",
+        "surveillance study",
+        "post-marketing surveillance study",
+        "postmarketing surveillance study",
+    ])
+
+
+def classifyPharmacovigilance(text: str) -> str:
+    if isPostMarketingControlledFollowup(text):
+        return "Post-marketing Controlled Follow-up"
+    return "Pharmacovigilance"
 
 
 def isTreatmentEffectQuestion(text: str) -> bool:
@@ -680,6 +771,28 @@ def isDiagnosticQuestion(text: str) -> bool:
 
 def isMechanisticGeneticQuestion(text: str) -> bool:
     return hasAny(text, mechanisticGeneticTerms)
+
+
+def isGeneticOmicsAssociation(text: str) -> bool:
+    return hasAny(text, geneticOmicsAssociationTerms)
+
+
+def isBiomarkerAssociation(text: str) -> bool:
+    return hasAny(text, biomarkerAssociationTerms)
+
+
+def isMechanismBasedReasoning(text: str) -> bool:
+    return hasAny(text, mechanismReasoningTerms)
+
+
+def classifyMechanismOrAssociation(text: str) -> str:
+    if isGeneticOmicsAssociation(text):
+        return "Genetic/Omics Association"
+    if isBiomarkerAssociation(text):
+        return "Biomarker Association"
+    if isMechanismBasedReasoning(text):
+        return "Mechanism-based Reasoning"
+    return ""
 
 
 def isBiomarkerPrognosticQuestion(text: str) -> bool:
@@ -855,6 +968,8 @@ def classifyStudyType(pubTypes, abstract: str | None = "", title: str | None = "
         return "Systematic Review of Uncontrolled Studies"
     if isSystematicReviewOfCaseEvidence(text):
         return "Systematic Review of Case Reports"
+    if isCaseSeries(text):
+        return "Case Series"
     if isCaseReport(text, pubTypeText):
         return "Case Report"
     if word("narrative review", titleText) or hasPattern(titleText, r"\(review\)"):
@@ -872,15 +987,16 @@ def classifyStudyType(pubTypes, abstract: str | None = "", title: str | None = "
     if isDiagnosticQuestion(text) and isScaleValidation(text):
         return classifyDiagnosis(text)
     if isPharmacovigilance(text):
-        return "Pharmacovigilance"
+        return classifyPharmacovigilance(text)
     if isCrossSectional(text):
         return "Cross-Sectional"
     if isRetrospective(text, pubTypeText) and hasAdjustment(text):
         return "Adjusted Retrospective Cohort"
     if isSingleArmTreatmentStudy(text, pubTypeText):
         return "Single Arm"
-    if isMechanisticGeneticQuestion(text) and not word("systematic review", text):
-        return "Mechanistic/Genetic Association"
+    mechanismAssociationType = classifyMechanismOrAssociation(text)
+    if mechanismAssociationType and not word("systematic review", text):
+        return mechanismAssociationType
     if word("meta-analysis", text) or isItc(text):
         return "ITC"
     if word("systematic review", text):
@@ -891,8 +1007,9 @@ def classifyStudyType(pubTypes, abstract: str | None = "", title: str | None = "
         return classifyPrognosis(text, pubTypeText)
     if isDiagnosticQuestion(text):
         return classifyDiagnosis(text)
-    if isMechanisticGeneticQuestion(text):
-        return "Mechanistic/Genetic Association"
+    mechanismAssociationType = classifyMechanismOrAssociation(text)
+    if mechanismAssociationType:
+        return mechanismAssociationType
 
     if "CASE REPORTS" in pubTypeText:
         if isCohortUpgrade(text) or (isRetrospective(text, pubTypeText) and hasAdjustment(text)):
@@ -901,6 +1018,8 @@ def classifyStudyType(pubTypes, abstract: str | None = "", title: str | None = "
             return "Case-Control"
         if isRetrospective(text, pubTypeText):
             return "Historical Control" if hasTrueComparator(text) else "Single Arm"
+        if isCaseSeries(text):
+            return "Case Series"
         return "Case Report"
 
     if isRetrospective(text, pubTypeText) and hasAdjustment(text):
@@ -931,7 +1050,9 @@ def classifyStudyType(pubTypes, abstract: str | None = "", title: str | None = "
             return "Cross-Sectional"
         if isRetrospective(titleText, pubTypeText):
             return "Historical Control" if hasTrueComparator(titleText) else "Single Arm"
-        if hasAny(titleText, caseTerms):
+        if isCaseSeries(titleText):
+            return "Case Series"
+        if hasAny(titleText, caseReportTerms):
             return "Case Report"
 
     return pubTypeLastResort(pubTypeText)

@@ -35,8 +35,8 @@ communityTaxonomyJsPath = dataDir / "communityTaxonomy.js"
 communityCardsJsPath = dataDir / "communityCards.js"
 communityRecentAssignmentsJsPath = dataDir / "communityAssignmentsRecent.js"
 
-levelScore = {"I": 7, "II": 5, "III": 4, "IV": 3, "V": 2, "VI": 1}
-levelRank = {"I": 1, "II": 2, "III": 3, "IV": 4, "V": 5, "VI": 6}
+levelScore = {"I": 7, "II": 5, "III": 4, "IV": 3, "V": 2}
+levelRank = {"I": 1, "II": 2, "III": 3, "IV": 4, "V": 5}
 priorityNodeIds = {
     "efgartigimod",
     "rozanolixizumab",

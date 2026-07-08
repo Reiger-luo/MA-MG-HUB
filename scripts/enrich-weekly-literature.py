@@ -114,7 +114,7 @@ def classifyArticle(article):
 
     hasStudyTypes = bool(article.get("study_types"))
     hasEvidenceLevel = bool(article.get("evidence_level"))
-    needsReclassify = article.get("evidence_level") in {"II", "III", "VI"}
+    needsReclassify = article.get("evidence_level") in {"II", "III", "IV", "V", "VI"}
     if needsReclassify or (not hasStudyTypes and not hasEvidenceLevel):
         studyTypes, evidenceLevel = classifyStudy(article)
         article["study_types"] = studyTypes

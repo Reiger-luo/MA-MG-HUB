@@ -110,7 +110,7 @@
   }
 
   function evidenceRank(level) {
-    return { I: 6, II: 5, III: 4, IV: 3, V: 2, VI: 1 }[level || ''] || 0;
+    return { I: 6, II: 5, III: 4, IV: 3, V: 2 }[level || ''] || 0;
   }
 
   function articleTimeValue(article) {
@@ -816,10 +816,10 @@
     if (topics.length === 0 && drugs.length === 0 && !article.china_related) return null;
 
     var strength = '弱';
-    if (ev === 'I' || ev === 'II' || ifVal >= 10) strength = '强';
+    if (ev === 'I' || ev === 'II' || (ifVal >= 10 && ev !== 'V')) strength = '强';
     else if (ifVal >= 5 || ev === 'III' || ev === 'IV' || article.china_related) strength = '中';
 
-    var score = ifVal + (ev === 'I' ? 7 : ev === 'II' ? 5 : ev ? 2 : 0) + (article.china_related ? 1.5 : 0) + (SIGNAL_WINDOW_DAYS - age) / 3;
+    var score = ifVal + evidenceRank(ev) + (article.china_related ? 1.5 : 0) + (SIGNAL_WINDOW_DAYS - age) / 3;
     if (strength === '强') score += 10;
     if (strength === '中') score += 4;
 
@@ -1187,7 +1187,7 @@
         if (ev) evidenceCounts[ev] = (evidenceCounts[ev] || 0) + 1;
       }
     }
-    var evOrder = ['I', 'II', 'III', 'IV', 'V', 'VI'];
+    var evOrder = ['I', 'II', 'III', 'IV', 'V'];
     var evValues = [];
     for (var e = 0; e < evOrder.length; e++) evValues.push(evidenceCounts[evOrder[e]] || 0);
 
@@ -1303,7 +1303,7 @@
         var ev = allArticles[i].evidence_level;
         if (ev) { evCounts[ev] = (evCounts[ev] || 0) + 1; evTotal++; }
       }
-      var evOrder = ['I','II','III','IV','V','VI'];
+      var evOrder = ['I','II','III','IV','V'];
       var evParts = [];
       for (var k = 0; k < evOrder.length; k++) {
         var key = evOrder[k];
