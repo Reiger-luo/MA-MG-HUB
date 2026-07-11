@@ -129,3 +129,23 @@ def test_build_network_keeps_hong_kong_as_filter_layer_and_does_not_translate_la
     heatmap_scopes = {row["geo_scope"] for row in payload["heatmap"]}
     assert "mainland" in heatmap_scopes
     assert "hong_kong" in heatmap_scopes
+
+
+def test_hospital_canonicalization_and_last_location_token():
+    module = load_module()
+
+    huashan = module.hospital_from_affiliation(
+        "Department of Neurology, Huashan Hospital Shanghai Medical College, Fudan University, Shanghai, China."
+    )
+    assert huashan and huashan["label"] == "Huashan Hospital"
+
+    reversed_huashan = module.hospital_from_affiliation(
+        "Department of Neurology, Fudan University Huashan Hospital, Shanghai, China."
+    )
+    assert reversed_huashan and reversed_huashan["label"] == "Huashan Hospital"
+
+    location = module.infer_location(
+        "Fuzhou General Hospital of Nanjing Military Command, Second Military Medical University, Fuzhou, China."
+    )
+    assert location["province"] == "Fujian"
+    assert location["city"] == "Fuzhou"

@@ -809,7 +809,6 @@ def buildGraph(articles: list[dict], communityContext: dict | None = None) -> di
         "edges": coreEdges,
         "all_edges": allEdges,
         "node_references": nodeReferences,
-        "edge_references": edgeReferences,
         "evidence_matrix": matrixRows,
     }
 

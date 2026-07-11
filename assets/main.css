@@ -1821,6 +1821,100 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
 .china-network-heatmap {
   margin-top: 0.9rem;
 }
+.china-network-map-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.65rem;
+}
+.china-network-map-head h3 {
+  margin: 0 0 0.2rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+.china-network-map-head p,
+.china-network-map-source {
+  margin: 0;
+  color: var(--fg3);
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+.china-network-map-source {
+  white-space: nowrap;
+}
+.china-network-map-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 180px;
+  gap: 0.8rem;
+  align-items: start;
+}
+.china-network-map-canvas {
+  min-height: 360px;
+  padding: 0.35rem;
+  background: linear-gradient(180deg, #f8fbfe, #eef5fb);
+  border: 1px solid var(--bg3);
+  border-radius: 0.5rem;
+}
+.china-province-map {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 470px;
+}
+.china-province {
+  cursor: pointer;
+  stroke: #fff;
+  stroke-width: 0.8;
+  transition: filter 120ms ease, stroke-width 120ms ease;
+}
+.china-province:hover,
+.china-province:focus {
+  filter: brightness(0.88);
+  stroke: #163a5f;
+  stroke-width: 1.6;
+  outline: none;
+}
+.china-network-map-rank {
+  padding: 0.75rem;
+  background: var(--bg2);
+  border: 1px solid var(--bg3);
+  border-radius: 0.5rem;
+}
+.china-network-map-rank h4 {
+  margin: 0 0 0.45rem;
+  font-size: 0.82rem;
+}
+.china-network-map-rank ol {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+.china-network-map-rank li {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin: 0.35rem 0;
+  color: var(--fg2);
+  font-size: 0.76rem;
+}
+.china-network-map-rank strong {
+  color: var(--fg);
+  white-space: nowrap;
+}
+.china-network-map-legend {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.45rem;
+  color: var(--fg3);
+  font-size: 0.72rem;
+}
+.china-network-map-legend i {
+  display: inline-block;
+  width: 1.05rem;
+  height: 0.58rem;
+  border: 1px solid rgba(31, 101, 155, 0.18);
+}
 .china-network-heatmap h3 {
   margin: 0 0 0.55rem;
   font-size: 0.92rem;
@@ -1862,6 +1956,20 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
 }
 .china-network-stats .knowledge-stat-card:nth-child(5) strong {
   color: var(--green);
+}
+@media (max-width: 760px) {
+  .china-network-map-head,
+  .china-network-map-layout {
+    display: block;
+  }
+  .china-network-map-source {
+    display: block;
+    margin-top: 0.35rem;
+    white-space: normal;
+  }
+  .china-network-map-rank {
+    margin-top: 0.65rem;
+  }
 }
 
 .chip-button {

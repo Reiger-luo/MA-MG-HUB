@@ -53,29 +53,65 @@ LOCATION_RULES = [
     ("hong_kong", "Hong Kong", "Hong Kong", ["hong kong", "hongkong"]),
     ("macau", "Macau", "Macau", ["macau", "macao"]),
     ("taiwan", "Taiwan", "Taiwan", ["taiwan", "taipei", "kaohsiung", "taichung", "tainan"]),
-    ("mainland", "Beijing", "Beijing", ["beijing", "peking", "capital medical"]),
-    ("mainland", "Shanghai", "Shanghai", ["shanghai", "fudan", "huashan", "ruijin"]),
-    ("mainland", "Guangdong", "Guangzhou", ["guangzhou", "guangdong", "sun yat-sen", "sun yat sen", "nanfang", "shenzhen"]),
-    ("mainland", "Jiangsu", "Nanjing", ["nanjing", "jiangsu", "suzhou", "xuzhou"]),
+    ("mainland", "Beijing", "Beijing", ["beijing", "peking"]),
+    ("mainland", "Shanghai", "Shanghai", ["shanghai"]),
+    ("mainland", "Guangdong", "Guangzhou", ["guangzhou"]),
+    ("mainland", "Guangdong", "Shenzhen", ["shenzhen"]),
+    ("mainland", "Guangdong", "Shantou", ["shantou"]),
+    ("mainland", "Guangdong", "Dongguan", ["dongguan"]),
+    ("mainland", "Jiangsu", "Nanjing", ["nanjing"]),
+    ("mainland", "Jiangsu", "Suzhou", ["suzhou"]),
+    ("mainland", "Jiangsu", "Xuzhou", ["xuzhou"]),
+    ("mainland", "Jiangsu", "Wuxi", ["wuxi"]),
+    ("mainland", "Jiangsu", "Nantong", ["nantong"]),
+    ("mainland", "Jiangsu", "Yancheng", ["yancheng"]),
+    ("mainland", "Jiangsu", "Huai'an", ["huai'an", "huaian"]),
+    ("mainland", "Jiangsu", "Yangzhou", ["yangzhou"]),
     ("mainland", "Tianjin", "Tianjin", ["tianjin"]),
-    ("mainland", "Hubei", "Wuhan", ["wuhan", "hubei", "tongji hospital", "union hospital"]),
-    ("mainland", "Hunan", "Changsha", ["changsha", "hunan", "xiangya"]),
-    ("mainland", "Sichuan", "Chengdu", ["chengdu", "sichuan", "west china"]),
-    ("mainland", "Zhejiang", "Hangzhou", ["hangzhou", "zhejiang"]),
-    ("mainland", "Shaanxi", "Xi'an", ["xian", "xi'an", "shaanxi", "tangdu", "xijing"]),
-    ("mainland", "Shandong", "Jinan", ["jinan", "shandong", "qingdao"]),
-    ("mainland", "Henan", "Zhengzhou", ["zhengzhou", "henan"]),
+    ("mainland", "Hubei", "Wuhan", ["wuhan"]),
+    ("mainland", "Hubei", "Xiangyang", ["xiangyang"]),
+    ("mainland", "Hubei", "Suizhou", ["suizhou"]),
+    ("mainland", "Hunan", "Changsha", ["changsha"]),
+    ("mainland", "Sichuan", "Chengdu", ["chengdu"]),
+    ("mainland", "Sichuan", "Mianyang", ["mianyang"]),
+    ("mainland", "Sichuan", "Dazhou", ["dazhou"]),
+    ("mainland", "Zhejiang", "Hangzhou", ["hangzhou"]),
+    ("mainland", "Zhejiang", "Wenzhou", ["wenzhou"]),
+    ("mainland", "Zhejiang", "Shaoxing", ["shaoxing"]),
+    ("mainland", "Shaanxi", "Xi'an", ["xian", "xi'an"]),
+    ("mainland", "Shaanxi", "Xianyang", ["xianyang"]),
+    ("mainland", "Shaanxi", "Baoji", ["baoji"]),
+    ("mainland", "Shaanxi", "Shangluo", ["shangluo"]),
+    ("mainland", "Shandong", "Jinan", ["jinan"]),
+    ("mainland", "Shandong", "Qingdao", ["qingdao"]),
+    ("mainland", "Shandong", "Tai'an", ["tai'an", "taian"]),
+    ("mainland", "Shandong", "Zibo", ["zibo"]),
+    ("mainland", "Henan", "Zhengzhou", ["zhengzhou"]),
+    ("mainland", "Henan", "Luoyang", ["luoyang"]),
+    ("mainland", "Henan", "Nanyang", ["nanyang"]),
+    ("mainland", "Henan", "Kaifeng", ["kaifeng"]),
     ("mainland", "Chongqing", "Chongqing", ["chongqing"]),
-    ("mainland", "Anhui", "Hefei", ["hefei", "anhui"]),
-    ("mainland", "Fujian", "Fuzhou", ["fujian", "fuzhou", "xiamen"]),
-    ("mainland", "Yunnan", "Kunming", ["kunming", "yunnan"]),
-    ("mainland", "Guangxi", "Nanning", ["nanning", "guangxi"]),
-    ("mainland", "Xinjiang", "Urumqi", ["urumqi", "xinjiang"]),
-    ("mainland", "Gansu", "Lanzhou", ["lanzhou", "gansu"]),
-    ("mainland", "Hebei", "Shijiazhuang", ["shijiazhuang", "hebei"]),
-    ("mainland", "Liaoning", "Shenyang", ["shenyang", "liaoning"]),
-    ("mainland", "Heilongjiang", "Harbin", ["harbin", "heilongjiang"]),
+    ("mainland", "Anhui", "Hefei", ["hefei"]),
+    ("mainland", "Anhui", "Bengbu", ["bengbu"]),
+    ("mainland", "Fujian", "Fuzhou", ["fuzhou"]),
+    ("mainland", "Fujian", "Xiamen", ["xiamen"]),
+    ("mainland", "Fujian", "Quanzhou", ["quanzhou"]),
+    ("mainland", "Yunnan", "Kunming", ["kunming"]),
+    ("mainland", "Yunnan", "Qujing", ["qujing"]),
+    ("mainland", "Yunnan", "Lincang", ["lincang"]),
+    ("mainland", "Guangxi", "Nanning", ["nanning"]),
+    ("mainland", "Guangxi", "Guilin", ["guilin"]),
+    ("mainland", "Xinjiang", "Urumqi", ["urumqi"]),
+    ("mainland", "Gansu", "Lanzhou", ["lanzhou"]),
+    ("mainland", "Hebei", "Shijiazhuang", ["shijiazhuang"]),
+    ("mainland", "Hebei", "Cangzhou", ["cangzhou"]),
+    ("mainland", "Liaoning", "Shenyang", ["shenyang"]),
+    ("mainland", "Liaoning", "Dalian", ["dalian"]),
+    ("mainland", "Liaoning", "Panjin", ["panjin"]),
+    ("mainland", "Liaoning", "Anshan", ["anshan"]),
+    ("mainland", "Heilongjiang", "Harbin", ["harbin"]),
 ]
+
 
 GENERIC_ORG_PREFIX_RE = re.compile(
     r"^(department|dept\.?|division|unit|laboratory|lab|center|centre|institute|school|college|faculty|"
@@ -124,6 +160,10 @@ def split_affiliation_parts(affiliation: str) -> list[str]:
 
 def normalize_org_label(value: str) -> str:
     value = compact_space(value)
+    value = value.replace("\u00a0", " ")
+    value = re.sub(r"\bCentre\b", "Center", value)
+    value = re.sub(r"\bcentre\b", "center", value)
+    value = re.sub(r"\s*&\s*", " and ", value)
     # Preserve official English names such as "The University of Hong Kong";
     # the module deliberately avoids manual translation/alias rewriting.
     value = re.sub(r"\s+#?\d{3,}.*$", "", value)
@@ -163,14 +203,20 @@ def infer_geo_scope(text: str) -> str:
 
 def infer_location(text: str) -> dict[str, str]:
     lower = (text or "").lower()
-    for scope, province, city, terms in LOCATION_RULES:
-        if any(term in lower for term in terms):
-            return {
-                "geo_scope": scope,
-                "region": GEO_SCOPE_LABELS.get(scope, scope),
-                "province": province,
-                "city": city,
-            }
+    matches: list[tuple[int, int, int, str, str, str]] = []
+    for rule_index, (scope, province, city, terms) in enumerate(LOCATION_RULES):
+        for term in terms:
+            position = lower.rfind(term)
+            if position >= 0:
+                matches.append((position, len(term), rule_index, scope, province, city))
+    if matches:
+        _, _, _, scope, province, city = max(matches)
+        return {
+            "geo_scope": scope,
+            "region": GEO_SCOPE_LABELS.get(scope, scope),
+            "province": province,
+            "city": city,
+        }
     scope = infer_geo_scope(text)
     return {
         "geo_scope": scope,
@@ -191,6 +237,7 @@ def looks_like_address(part: str) -> bool:
 def parent_org_after(parts: list[str], start_index: int) -> str:
     for part in parts[start_index + 1:start_index + 5]:
         candidate = normalize_org_label(part)
+        candidate = re.sub(r"^(?:of|at|to|with)\s+", "", candidate, flags=re.I)
         if not candidate:
             continue
         if HOSPITAL_RE.search(candidate):
@@ -221,6 +268,56 @@ def non_hospital_label(parts: list[str]) -> str:
     return ""
 
 
+GENERIC_HOSPITAL_MARKERS = (
+    "first ", "second ", "third ", "fourth ", "fifth ", "affiliated",
+    "provincial", "people", "general", "central", "union", "medical center",
+    "cancer", "children", "women", "maternal", "army", "military",
+    "traditional chinese", "rehabilitation", "hospital of",
+)
+
+
+def canonical_hospital_label(candidate: str, parts: list[str], index: int) -> str:
+    """Collapse department, punctuation, and academic-suffix variants."""
+    value = normalize_org_label(candidate)
+    match = HOSPITAL_RE.search(value)
+    if not match:
+        return value
+
+    label = value[:match.end()].strip(" .;,\t\n")
+    label = re.sub(
+        r"^(?:department|dept\.?|division|unit|laboratory|lab)\b.*?\b(?:and|&)\s+",
+        "",
+        label,
+        flags=re.I,
+    )
+    label = re.sub(r"^the\s+", "", label, flags=re.I)
+    label = normalize_org_label(label)
+    if not label:
+        return ""
+
+    location = infer_location("; ".join(parts))
+    if location["geo_scope"] == "mainland":
+        reversed_match = re.match(r"^.+\b(?:university|college)\s+(.+\bhospital)$", label, flags=re.I)
+        if reversed_match:
+            reversed_label = normalize_org_label(reversed_match.group(1))
+            if not any(marker in reversed_label.lower() for marker in GENERIC_HOSPITAL_MARKERS):
+                label = reversed_label
+    needs_parent = (
+        location["geo_scope"] in {"hong_kong", "macau", "taiwan"}
+        or any(marker in label.lower() for marker in GENERIC_HOSPITAL_MARKERS)
+    )
+    suffix = normalize_org_label(value[match.end():].strip(" .;,\t\n"))
+    suffix = re.sub(r"^(?:of|at|to|with)\s+", "", suffix, flags=re.I)
+    parent = ""
+    if suffix and re.search(r"\b(university|college|academy|medical school|school of medicine)\b", suffix, re.I):
+        parent = suffix
+    if not parent:
+        parent = parent_org_after(parts, index)
+    if needs_parent and parent and parent.lower() not in label.lower():
+        label = f"{label}, {parent}"
+    return normalize_org_label(label)
+
+
 def hospital_from_affiliation(affiliation: str) -> dict[str, Any] | None:
     parts = split_affiliation_parts(affiliation)
     if not parts:
@@ -233,11 +330,7 @@ def hospital_from_affiliation(affiliation: str) -> dict[str, Any] | None:
         candidate = normalize_org_label(part)
         if not HOSPITAL_RE.search(candidate):
             continue
-        parent = parent_org_after(parts, index)
-        label = candidate
-        if parent and parent.lower() not in label.lower():
-            label = f"{label}, {parent}"
-        label = normalize_org_label(label)
+        label = canonical_hospital_label(candidate, parts, index)
         if not label:
             continue
         location = infer_location("; ".join(parts))
@@ -436,12 +529,12 @@ def build_network(articles: list[dict[str, Any]], source_scope: str = "full") ->
                 "hospital_ids": set(),
                 "paper_ids": set(),
                 "all_author_occurrences": 0,
-                "hospitals": Counter(),
+                "hospital_paper_ids": defaultdict(set),
             })
             row["hospital_ids"].add(hospital["id"])
             row["paper_ids"].add(pmid)
             row["all_author_occurrences"] += 1
-            row["hospitals"][hospital["label"]] += 1
+            row["hospital_paper_ids"][hospital["id"]].add(pmid)
 
         authors_graph = []
         graph_hospital_ids: set[str] = set()
@@ -560,7 +653,13 @@ def build_network(articles: list[dict[str, Any]], source_scope: str = "full") ->
             "hospital_count": len(row["hospital_ids"]),
             "paper_count": len(row["paper_ids"]),
             "all_author_occurrences": row["all_author_occurrences"],
-            "top_hospitals": counter_top(row["hospitals"], 8),
+            "top_hospitals": [
+                {"label": nodes[hospital_id]["label"], "count": len(paper_ids)}
+                for hospital_id, paper_ids in sorted(
+                    row["hospital_paper_ids"].items(),
+                    key=lambda item: (-len(item[1]), nodes[item[0]]["label"]),
+                )[:8]
+            ],
         })
     heatmap.sort(key=lambda item: (-item["paper_count"], item["geo_scope"], item["province"], item["city"]))
 

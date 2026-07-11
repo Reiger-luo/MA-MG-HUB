@@ -65,6 +65,9 @@
   var filtersAttached = false;
   var activeNodeId = '';
   var activeEdgeId = '';
+  var chinaMapTemplate = null;
+  var chinaMapLoading = false;
+  var chinaMapCallbacks = [];
 
   function refreshData() {
     payload = window.MG_CHINA_AUTHOR_NETWORK || payload || null;
@@ -244,7 +247,8 @@
       setSvgAttrs(text, { x: point.x, y: point.y + point.r + 13 });
       text.textContent = shortLabel(node.label);
       var title = document.createElementNS(svgNs, 'title');
-      title.textContent = node.label + ' · ' + (node.paper_count || 0) + ' papers';
+      title.textContent = node.label + ' · 联络作者文献 ' + (node.paper_count || 0) +
+        ' · 全作者文献 ' + (node.all_author_paper_count || 0);
       group.appendChild(circle);
       group.appendChild(text);
       group.appendChild(title);
@@ -309,7 +313,8 @@
     el.detail.innerHTML = '<div class="kg-detail-head"><h3>' + escapeHtml(node.label) + '</h3><span>' +
       escapeHtml(node.region || node.geo_scope || '') + '</span></div>' +
       '<div class="kg-detail-section"><h4>节点概况</h4><p>' +
-      '文献 ' + escapeHtml(node.paper_count || 0) + ' 篇 · 第一作者 ' + escapeHtml(node.first_author_paper_count || 0) +
+      '联络作者文献 ' + escapeHtml(node.paper_count || 0) + ' 篇 · 全作者文献 ' + escapeHtml(node.all_author_paper_count || 0) +
+      ' 篇 · 第一作者 ' + escapeHtml(node.first_author_paper_count || 0) +
       ' · 通讯作者 ' + escapeHtml(node.corresponding_author_paper_count || 0) + ' · 合作医院 ' + escapeHtml(node.collaborator_count || 0) + '</p></div>' +
       '<div class="kg-detail-section"><h4>合作医院</h4><ul class="kg-study-list">' +
       (collaborators || '<li class="kg-ref-meta">暂无合作边；可能是单中心或未达到当前图谱筛选阈值。</li>') + '</ul></div>' +
@@ -376,16 +381,166 @@
     });
   }
 
-  function renderHeatmap() {
-    if (!el.heatmap) return;
+  var MAP_PROVINCE_BY_ID = {
+    anhui: 'Anhui', beijing: 'Beijing', chongqing: 'Chongqing', fujian: 'Fujian',
+    gansu: 'Gansu', guangdong: 'Guangdong', 'guangxi-zhuang': 'Guangxi', guizhou: 'Guizhou',
+    hainan: 'Hainan', hebei: 'Hebei', heilongjiang: 'Heilongjiang', henan: 'Henan',
+    'hong-kong': 'Hong Kong', hubei: 'Hubei', hunan: 'Hunan', jiangsu: 'Jiangsu',
+    jiangxi: 'Jiangxi', jilin: 'Jilin', liaoning: 'Liaoning', macau: 'Macau',
+    'nei-mongol': 'Inner Mongolia', 'ningxia-hui': 'Ningxia', quinghai: 'Qinghai',
+    shaanxi: 'Shaanxi', shandong: 'Shandong', shanghai: 'Shanghai', shanxi: 'Shanxi',
+    sichuan: 'Sichuan', tianjin: 'Tianjin', 'xinjiang-uygur': 'Xinjiang', xizang: 'Tibet',
+    yunnan: 'Yunnan', zhejiang: 'Zhejiang'
+  };
+  var MAP_COLORS = ['#eef5fb', '#d7e8f6', '#b7d5ec', '#86b9de', '#4e91c4', '#1f659b'];
+
+  function mapAssetUrl() {
+    return hub.assetUrl ? hub.assetUrl('assets/china-provinces.svg') : 'assets/china-provinces.svg';
+  }
+
+  function loadChinaMap(callback) {
+    if (chinaMapTemplate) { callback(true); return; }
+    chinaMapCallbacks.push(callback);
+    if (chinaMapLoading) return;
+    chinaMapLoading = true;
+    fetch(mapAssetUrl(), { cache: 'force-cache' }).then(function (response) {
+      if (!response.ok) throw new Error('map HTTP ' + response.status);
+      return response.text();
+    }).then(function (text) {
+      var doc = new DOMParser().parseFromString(text, 'image/svg+xml');
+      var svg = doc.documentElement;
+      if (!svg || svg.nodeName.toLowerCase() !== 'svg') throw new Error('invalid SVG map');
+      chinaMapTemplate = svg;
+      chinaMapLoading = false;
+      var callbacks = chinaMapCallbacks.slice();
+      chinaMapCallbacks = [];
+      callbacks.forEach(function (cb) { if (cb) cb(true); });
+    }).catch(function (error) {
+      chinaMapLoading = false;
+      chinaMapTemplate = null;
+      var callbacks = chinaMapCallbacks.slice();
+      chinaMapCallbacks = [];
+      console.warn('China province map load failed:', error);
+      callbacks.forEach(function (cb) { if (cb) cb(false); });
+    });
+  }
+
+  function provinceHeatmapStats() {
+    var stats = {};
+    heatmap.forEach(function (row) {
+      if (row.geo_scope !== 'mainland') return;
+      var province = row.province || '';
+      if (!province || province === 'Mainland China') return;
+      var item = stats[province] || {
+        province: province, paper_count: 0, hospital_count: 0,
+        all_author_occurrences: 0, top_hospitals: {}
+      };
+      item.paper_count += Number(row.paper_count || 0);
+      item.hospital_count += Number(row.hospital_count || 0);
+      item.all_author_occurrences += Number(row.all_author_occurrences || 0);
+      (row.top_hospitals || []).forEach(function (hospital) {
+        item.top_hospitals[hospital.label] = (item.top_hospitals[hospital.label] || 0) + Number(hospital.count || 0);
+      });
+      stats[province] = item;
+    });
+    Object.keys(stats).forEach(function (province) {
+      stats[province].top_hospitals = Object.keys(stats[province].top_hospitals).map(function (label) {
+        return { label: label, count: stats[province].top_hospitals[label] };
+      }).sort(function (a, b) { return b.count - a.count || a.label.localeCompare(b.label); }).slice(0, 5);
+    });
+    return stats;
+  }
+
+  function mapFill(value, maximum) {
+    if (!value || !maximum) return MAP_COLORS[0];
+    var index = Math.min(MAP_COLORS.length - 1, Math.max(1, Math.ceil(value / maximum * (MAP_COLORS.length - 1))));
+    return MAP_COLORS[index];
+  }
+
+  function showProvinceDetail(province, row) {
+    if (!el.detail) return;
+    row = row || { paper_count: 0, hospital_count: 0, all_author_occurrences: 0, top_hospitals: [] };
+    var top = (row.top_hospitals || []).map(function (item) {
+      return '<li>' + escapeHtml(item.label) + ' · ' + escapeHtml(item.count) + ' 篇</li>';
+    }).join('');
+    el.detail.innerHTML = '<div class="kg-detail-head"><h3>' + escapeHtml(province) + '</h3><span>全作者热力线索</span></div>' +
+      '<div class="kg-detail-section"><h4>省级聚合</h4><p>' + escapeHtml(row.paper_count || 0) + ' 篇去重 PMID · ' +
+      escapeHtml(row.hospital_count || 0) + ' 个医院节点 · ' + escapeHtml(row.all_author_occurrences || 0) + ' 次 affiliation 出现</p></div>' +
+      '<div class="kg-detail-section"><h4>高频医院</h4><ul class="kg-study-list">' + (top || '<li>暂无</li>') + '</ul></div>';
+  }
+
+  function renderProvinceMap() {
+    var stats = provinceHeatmapStats();
+    var values = Object.keys(stats).map(function (province) { return stats[province].paper_count; });
+    var maximum = Math.max.apply(Math, values.concat([0]));
+    var sorted = Object.keys(stats).sort(function (a, b) {
+      return stats[b].paper_count - stats[a].paper_count || a.localeCompare(b);
+    });
+    el.heatmap.innerHTML = '<div class="china-network-map-head"><div><h3>全作者医院热力线索 · 中国省级图</h3><p>颜色 = 省级去重 PMID 数；点击省份查看医院排行。医院名称与文献仍可通过下方联络图和搜索核查。</p></div>' +
+      '<span class="china-network-map-source">底图：@svg-maps/china · CC BY 4.0</span></div>' +
+      '<div class="china-network-map-layout"><div class="china-network-map-canvas" id="chinaNetworkMapCanvas"></div><aside class="china-network-map-rank"><h4>省级排行</h4><ol>' +
+      sorted.slice(0, 8).map(function (province) {
+        return '<li><span>' + escapeHtml(province) + '</span><strong>' + escapeHtml(stats[province].paper_count) + ' 篇</strong></li>';
+      }).join('') + '</ol></aside></div>' +
+      '<div class="china-network-map-legend"><span>低</span><i style="background:' + MAP_COLORS[0] + '"></i><i style="background:' + MAP_COLORS[2] + '"></i><i style="background:' + MAP_COLORS[4] + '"></i><i style="background:' + MAP_COLORS[5] + '"></i><span>高</span></div>';
+
+    var mapCanvas = document.getElementById('chinaNetworkMapCanvas');
+    var svg = chinaMapTemplate.cloneNode(true);
+    svg.classList.add('china-province-map');
+    svg.setAttribute('role', 'img');
+    svg.setAttribute('aria-label', '中国省级医院文献热力图');
+    Array.prototype.forEach.call(svg.querySelectorAll('path[id]'), function (path) {
+      var province = MAP_PROVINCE_BY_ID[path.getAttribute('id')];
+      if (!province) return;
+      var row = stats[province];
+      path.classList.add('china-province');
+      path.style.fill = mapFill(row ? row.paper_count : 0, maximum);
+      path.setAttribute('tabindex', '0');
+      path.setAttribute('role', 'button');
+      path.setAttribute('aria-label', province + ' · ' + (row ? row.paper_count : 0) + ' 篇');
+      var title = document.createElementNS(svgNs, 'title');
+      title.textContent = province + ' · ' + (row ? row.paper_count : 0) + ' 篇 · ' + (row ? row.hospital_count : 0) + ' 个医院节点';
+      path.appendChild(title);
+      path.addEventListener('click', function () { showProvinceDetail(province, row); });
+      path.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          showProvinceDetail(province, row);
+        }
+      });
+    });
+    mapCanvas.appendChild(svg);
+  }
+
+  function renderRegionalHeatmapCards() {
     var geoScope = currentGeoScope();
-    var rows = heatmap.filter(function (row) { return geoScope === 'all' || row.geo_scope === geoScope; }).slice(0, 8);
-    el.heatmap.innerHTML = '<h3>全作者医院热力线索</h3><div class="china-network-heatmap-grid">' + rows.map(function (row) {
-      var top = (row.top_hospitals || []).slice(0, 3).map(function (item) { return item.label + ' ' + item.count; }).join('；');
-      return '<article class="china-network-heatmap-card"><span>' + escapeHtml(row.province || row.region || row.geo_scope) + '</span><strong>' +
-        escapeHtml(row.paper_count || 0) + ' 篇</strong><em>' + escapeHtml(row.hospital_count || 0) + ' hospitals · ' +
-        escapeHtml(row.all_author_occurrences || 0) + ' affiliations</em><p>' + escapeHtml(top || '—') + '</p></article>';
-    }).join('') + '</div>';
+    var rows = heatmap.filter(function (row) { return geoScope === 'all' ? row.geo_scope !== 'mainland' : row.geo_scope === geoScope; })
+      .sort(function (a, b) { return b.paper_count - a.paper_count; }).slice(0, 8);
+    el.heatmap.innerHTML = '<div class="china-network-map-head"><div><h3>全作者医院热力线索</h3><p>该筛选层没有对应的省级底图，先按独立地区展示去重 PMID 与医院排行。</p></div></div>' +
+      '<div class="china-network-heatmap-grid">' + rows.map(function (row) {
+        var top = (row.top_hospitals || []).slice(0, 3).map(function (item) { return item.label + ' ' + item.count; }).join('；');
+        return '<article class="china-network-heatmap-card"><span>' + escapeHtml(row.province || row.region || row.geo_scope) + '</span><strong>' +
+          escapeHtml(row.paper_count || 0) + ' 篇</strong><em>' + escapeHtml(row.hospital_count || 0) + ' hospitals · ' +
+          escapeHtml(row.all_author_occurrences || 0) + ' affiliations</em><p>' + escapeHtml(top || '—') + '</p></article>';
+      }).join('') + '</div>';
+  }
+
+  function renderHeatmap() {
+    if (!el.heatmap || !payload) return;
+    var geoScope = currentGeoScope();
+    if (geoScope !== 'mainland' && geoScope !== 'all') {
+      renderRegionalHeatmapCards();
+      return;
+    }
+    if (!chinaMapTemplate) {
+      el.heatmap.innerHTML = '<div class="kg-empty-hint">正在加载中国省级底图…</div>';
+      loadChinaMap(function (ok) {
+        if (ok) renderHeatmap();
+        else el.heatmap.innerHTML = '<div class="kg-empty-hint">中国省级底图加载失败，已保留地区排行数据。</div>';
+      });
+      return;
+    }
+    renderProvinceMap();
   }
 
   function refresh() {

@@ -13,7 +13,6 @@
   var allEdges = graphData.all_edges || coreEdges;
   var edges = coreEdges;
   var nodeRefs = graphData.node_references || {};
-  var edgeRefs = graphData.edge_references || {};
   var matrixRows = graphData.evidence_matrix || [];
   var curatedData = window.MG_CURATED_TOPICS || { topics: [], bridge_by_node: {}, stats: {} };
   var curatedTopics = curatedData.topics || [];
@@ -127,6 +126,9 @@
   var activeNodeId = null;
   var activeCommunityId = null;
   var tabController = null;
+  var matrixInitialized = false;
+  var communityInitialized = false;
+  var searchInitialized = false;
   var communityAssignmentCache = {};
   var communityAssignmentLoading = {};
   var communityAssignmentErrors = {};
@@ -1486,6 +1488,7 @@
       tabController.activate(key, false);
       return;
     }
+    ensureTabInitialized(key);
     var tabs = document.querySelectorAll('[data-knowledge-tab]');
     var panels = document.querySelectorAll('.intel-tab-panel');
     Array.prototype.forEach.call(tabs, function (tab) {
@@ -1498,11 +1501,27 @@
     if (panel) panel.classList.add('active');
   }
 
+  function ensureTabInitialized(key) {
+    if (key === 'matrix' && !matrixInitialized) {
+      matrixInitialized = true;
+      attachMatrixFilters();
+    }
+    if (key === 'communities' && !communityInitialized) {
+      communityInitialized = true;
+      attachCommunityFilters();
+    }
+    if (key === 'search' && !searchInitialized) {
+      searchInitialized = true;
+      attachSearch();
+    }
+  }
+
   function attachTabs() {
     if (hub.initTabs) {
       tabController = hub.initTabs({
         tabAttr: 'data-knowledge-tab',
-        panelFor: function(key) { return document.getElementById('knowledge-' + key + '-panel'); }
+        panelFor: function(key) { return document.getElementById('knowledge-' + key + '-panel'); },
+        onChange: ensureTabInitialized
       });
       return;
     }
@@ -1642,16 +1661,12 @@
   function init() {
     renderBadge();
     renderStats();
-    attachTabs();
     initializeCommunityControls();
     buildGraph();
     attachPanZoom();
     attachGraphInteraction();
     attachNodeFilters();
-    attachMatrixFilters();
-    attachTopicFilters();
-    attachCommunityFilters();
-    attachSearch();
+    attachTabs();
     selectNode(nodesById.fcrnInhibition ? 'fcrnInhibition' : (nodes[0] && nodes[0].id));
     var initialCommunityId = getInitialKnowledgeCommunityId();
     var initialTopicId = getInitialKnowledgeTopicId();

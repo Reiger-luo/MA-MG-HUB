@@ -25,6 +25,10 @@
   var chinaDataLoading = false;
   var echartsCallbacks = [];
   var chinaDataCallbacks = [];
+  var chinaInsightsStarted = false;
+  var conferenceLoading = false;
+  var conferenceStarted = false;
+  var conferenceCallbacks = [];
 
   function loadScript(src, callback) {
     if (hub.loadScript) {
@@ -63,6 +67,35 @@
       chinaDataCallbacks = [];
       callbacks.forEach(function(callback) { if (callback) callback(ok && !!window.MG_CHINA_DATA); });
     });
+  }
+
+  function loadConferenceModule(cb) {
+    if (conferenceStarted) { if (cb) cb(true); return; }
+    conferenceCallbacks.push(cb);
+    if (conferenceLoading) return;
+    conferenceLoading = true;
+
+    function finish(ok) {
+      conferenceLoading = false;
+      conferenceStarted = ok;
+      var callbacks = conferenceCallbacks.slice();
+      conferenceCallbacks = [];
+      callbacks.forEach(function(callback) { if (callback) callback(ok); });
+    }
+
+    loadScript('data/conference-data.js', function(dataOk) {
+      if (!dataOk) { finish(false); return; }
+      loadScript('assets/conference.js', finish);
+    });
+  }
+
+  function ensureChinaInsights() {
+    if (chinaInsightsStarted) {
+      resizeChinaCharts();
+      return;
+    }
+    chinaInsightsStarted = true;
+    renderChinaInsights();
   }
 
   const $ = id => document.getElementById(id);
@@ -685,7 +718,18 @@
 
   function bindTabs() {
     function handleTabChange(key) {
-      if (key === 'china') resizeChinaCharts();
+      if (key === 'china') {
+        ensureChinaInsights();
+        resizeChinaCharts();
+      }
+      if (key === 'conference') {
+        loadConferenceModule(function(ok) {
+          if (!ok) {
+            var badge = document.getElementById('conferenceBadge');
+            if (badge) badge.textContent = '会议数据加载失败';
+          }
+        });
+      }
       if (el.btnExport) el.btnExport.style.display = key === 'conference' ? 'none' : '';
     }
     if (hub.initTabs) {
@@ -1350,7 +1394,6 @@
       applyFilters();
       buildSignals();
       renderSignals();
-      renderChinaInsights();
       window.addEventListener('resize', resizeChinaCharts);
       document.getElementById('updateBadge').textContent = '数据: ' + allArticles.length + ' 篇';
 
