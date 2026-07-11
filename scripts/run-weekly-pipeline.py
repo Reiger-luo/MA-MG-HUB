@@ -57,6 +57,7 @@ def main():
     run_step("全库文献轻索引生成", [sys.executable, "scripts/buildFullLiteratureIndex.py"])
     run_step("医学事务社区语义层生成", [sys.executable, "scripts/buildCommunityData.py"])
     run_step("知识库图谱与证据矩阵生成", [sys.executable, "scripts/build-knowledge-data.py"])
+    run_step("中国作者医院联络图生成", [sys.executable, "scripts/buildChinaAuthorNetwork.py"])
     run_step("本地 wiki 专题层生成", [sys.executable, "scripts/build-curated-topic-data.py"])
     run_step("wiki 专题社区覆盖生成", [sys.executable, "scripts/buildWikiTopicCoverage.py"])
     run_step("动态诊治格局洞察生成", [sys.executable, "scripts/buildLandscapeInsights.py"])

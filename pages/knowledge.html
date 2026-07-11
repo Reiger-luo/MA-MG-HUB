@@ -41,6 +41,7 @@
     <button class="intel-tab active" type="button" data-knowledge-tab="graph">知识图谱</button>
     <button class="intel-tab" type="button" data-knowledge-tab="communities">社区视图</button>
     <button class="intel-tab" type="button" data-knowledge-tab="matrix">证据矩阵</button>
+    <button class="intel-tab" type="button" data-knowledge-tab="china-network">中国作者联络图</button>
     <button class="intel-tab" type="button" data-knowledge-tab="search">跨库检索</button>
   </div>
 
@@ -166,6 +167,51 @@
     </div>
   </section>
 
+  <section class="intel-tab-panel" id="knowledge-china-network-panel">
+    <div class="workspace-panel china-network-panel">
+      <div class="panel-head">
+        <div>
+          <h2>中国作者医院联络图</h2>
+          <p class="panel-caption">热力图用全作者；医院联络图只用第一作者 + 通讯作者（PubMed 无明确通讯作者时末位作者按通讯作者处理）。默认展示大陆医院且 edge_weight ≥5，搜索节点时展开全部合作边。</p>
+        </div>
+        <span class="update-badge" id="chinaNetworkBadge">Loading…</span>
+      </div>
+
+      <section class="knowledge-stat-grid china-network-stats" id="chinaNetworkStats"></section>
+
+      <div class="kg-filter-bar china-network-filter-bar">
+        <div class="knowledge-search compact">
+          <input id="chinaNetworkSearch" placeholder="搜索医院，例如 Huashan / Peking University / Xiangya">
+        </div>
+        <select class="filter-input compact-select" id="chinaNetworkGeoScope">
+          <option value="mainland">中国大陆</option>
+          <option value="hong_kong">Hong Kong</option>
+          <option value="macau">Macau</option>
+          <option value="taiwan">Taiwan</option>
+          <option value="all">大中华全部</option>
+        </select>
+        <select class="filter-input compact-select" id="chinaNetworkEdgeWeight">
+          <option value="5">核心边 ≥5</option>
+          <option value="3">中强边 ≥3</option>
+          <option value="1">全部边 ≥1</option>
+        </select>
+      </div>
+
+      <div class="kg-layout china-network-layout">
+        <div>
+          <div class="kg-canvas-wrap china-network-canvas-wrap">
+            <svg id="chinaAuthorNetworkGraph" class="kg-canvas china-network-canvas" xmlns="http://www.w3.org/2000/svg"></svg>
+          </div>
+          <div class="kg-legend" id="chinaNetworkLegend"></div>
+          <div class="china-network-heatmap" id="chinaNetworkHeatmap"></div>
+        </div>
+        <aside class="kg-detail" id="chinaNetworkDetail">
+          <div class="kg-empty-hint">点击医院节点或医院之间的边查看合作医院与 PMID 文献清单。</div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
   <section class="intel-tab-panel" id="knowledge-search-panel">
     <div class="workspace-panel">
       <div class="panel-head">
@@ -192,5 +238,6 @@
 <script src="../data/communityWeekly.js"></script>
 <script src="../data/communityAudit.js"></script>
 <script src="../assets/knowledge.js"></script>
+<script src="../assets/chinaAuthorNetwork.js"></script>
 </body>
 </html>

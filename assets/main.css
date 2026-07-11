@@ -1738,6 +1738,78 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
   color: var(--accent); text-decoration: none;
 }
 .kg-pmid-link:hover { text-decoration: underline; }
+
+/* 中国作者医院联络图 */
+.china-network-panel .panel-caption {
+  max-width: 860px;
+}
+.china-network-canvas-wrap {
+  min-height: 560px;
+}
+.kg-canvas .china-network-edge {
+  stroke: rgba(37, 99, 235, 0.24);
+}
+.kg-canvas .china-network-edge.hl {
+  stroke: var(--accent);
+  stroke-opacity: 0.92;
+}
+.china-network-node circle {
+  fill: rgba(37, 99, 235, 0.76);
+}
+.china-network-node:hover circle,
+.china-network-node.active circle {
+  fill: var(--accent);
+}
+.china-network-node text {
+  fill: #1e3a8a;
+  font-weight: 500;
+}
+.china-network-heatmap {
+  margin-top: 0.9rem;
+}
+.china-network-heatmap h3 {
+  margin: 0 0 0.55rem;
+  font-size: 0.92rem;
+  color: var(--fg);
+  font-weight: 600;
+}
+.china-network-heatmap-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 0.65rem;
+}
+.china-network-heatmap-card {
+  background: var(--bg2);
+  border: 1px solid var(--bg3);
+  border-radius: 8px;
+  padding: 0.7rem 0.8rem;
+}
+.china-network-heatmap-card span,
+.china-network-heatmap-card em,
+.china-network-heatmap-card p {
+  display: block;
+  color: var(--fg3);
+  font-size: 0.72rem;
+  font-style: normal;
+  line-height: 1.45;
+}
+.china-network-heatmap-card strong {
+  display: block;
+  color: var(--fg);
+  margin: 0.1rem 0;
+  font-size: 1rem;
+}
+.china-network-heatmap-card p {
+  margin: 0.35rem 0 0;
+  color: var(--fg2);
+}
+.china-network-stats .knowledge-stat-card:nth-child(4) strong {
+  color: var(--yellow);
+}
+.china-network-stats .knowledge-stat-card:nth-child(5) strong {
+  color: var(--green);
+}
+
 .chip-button {
   cursor: pointer;
   border-color: rgba(37,99,235,0.18);

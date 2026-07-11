@@ -32,6 +32,7 @@ PUBLIC_ARTIFACTS = [
     ("landscapeInsights.js", "动态诊治格局洞察", "MG_LANDSCAPE_INSIGHTS"),
     ("knowledge-graph.js", "知识库图谱", "MG_KNOWLEDGE_GRAPH"),
     ("graphHealth.js", "图谱健康", "MG_GRAPH_HEALTH"),
+    ("china-author-network.js", "中国作者医院联络图", "MG_CHINA_AUTHOR_NETWORK"),
     ("curated-topics.js", "专题层", "MG_CURATED_TOPICS"),
     ("wikiTopicCoverage.js", "专题社区覆盖", "MG_WIKI_TOPIC_COVERAGE"),
     ("communityTaxonomy.js", "社区 Taxonomy", "MG_COMMUNITY_TAXONOMY"),
