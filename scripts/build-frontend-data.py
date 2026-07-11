@@ -244,6 +244,32 @@ LOW_VALUE_SIGNAL_TERMS = [
     "comment on",
 ]
 
+CONFERENCE_SOURCE_FIELDS = [
+    "source", "type", "category", "collection", "data_source", "source_type",
+    "conference", "meeting", "event", "track",
+]
+CONFERENCE_SOURCE_TERMS = [
+    "conference", "meeting", "congress", "symposium", "workshop",
+    "aan ", "aanem", "ean ", "eular", "cmsc", "poster", "oral presentation",
+]
+CONFERENCE_PUB_TYPE_TERMS = [
+    "meeting abstract", "conference abstract", "congress abstract", "published abstract",
+]
+CONFERENCE_TITLE_PATTERNS = [
+    r"\bconference abstracts?\b",
+    r"\bmeeting abstracts?\b",
+    r"\bannual meeting\b",
+    r"\bcongress abstracts?\b",
+    r"\bposter presentation\b",
+    r"\boral presentation\b",
+]
+
+KOL_ROLE_LABELS = {
+    "first_author": "第一作者",
+    "last_author": "末位作者",
+    "corresponding_author": "通讯作者",
+}
+
 PIPELINE = [
     {"name": "Efgartigimod", "target": "FcRn", "route": "IV/SC", "status": "已上市", "owner": "argenx"},
     {"name": "Rozanolixizumab", "target": "FcRn", "route": "SC", "status": "已上市", "owner": "UCB"},
@@ -786,6 +812,207 @@ def is_low_value_signal(article, text):
     return has_any(f"{title} {pub_types} {text}", LOW_VALUE_SIGNAL_TERMS)
 
 
+def is_conference_or_meeting_record(article):
+    """文献级 signal-to-kol 只允许 PubMed literature，不纳入会议/会议信息源。"""
+    source_blob = " ".join(str(article.get(field) or "") for field in CONFERENCE_SOURCE_FIELDS).lower()
+    pub_type_blob = " ".join(article.get("pub_types") or []).lower()
+    title = (article.get("title") or "").lower()
+    if source_blob and any(term in f"{source_blob} " for term in CONFERENCE_SOURCE_TERMS):
+        return True
+    if any(term in pub_type_blob for term in CONFERENCE_PUB_TYPE_TERMS):
+        return True
+    return any(re.search(pattern, title) for pattern in CONFERENCE_TITLE_PATTERNS)
+
+
+def author_roles(detail, total_authors):
+    roles = []
+    position = detail.get("position")
+    try:
+        position = int(position)
+    except (TypeError, ValueError):
+        position = None
+    if detail.get("is_first") or position == 1:
+        roles.append("first_author")
+    if detail.get("is_last") or (total_authors and position == total_authors):
+        roles.append("last_author")
+    if detail.get("is_corresponding"):
+        roles.append("corresponding_author")
+    return roles
+
+
+def location_hint(institution, raw_affiliations, article):
+    raw_counter = Counter(raw_affiliations or [])
+    if article.get("china_related") or is_china_author_institution_profile(institution, raw_counter):
+        location = infer_china_location(institution, raw_counter)
+        return {
+            "region": "china",
+            "country": "中国",
+            "province": location.get("province", ""),
+            "city": location.get("city", ""),
+        }
+    return {
+        "region": "international",
+        "country": infer_international_country(institution, raw_counter),
+        "province": "",
+        "city": "",
+    }
+
+
+def institution_from_affiliations(raw_affiliations):
+    for affiliation in raw_affiliations or []:
+        institution = normalize_institution(affiliation)
+        if institution:
+            return canonicalize_institution(institution, raw_affiliations)
+    return canonicalize_institution("", raw_affiliations or [])
+
+
+def build_kol_leads(article):
+    """从本篇文献作者位次提取潜在 KOL 线索；不读取任何会议数据。"""
+    details = article.get("author_affiliations") or []
+    total_authors = len(details) or len(article.get("authors") or [])
+    candidates = []
+    if details:
+        for detail in details:
+            roles = author_roles(detail, total_authors)
+            if not roles:
+                continue
+            candidates.append({
+                "name": detail.get("name") or "",
+                "position": detail.get("position"),
+                "roles": roles,
+                "raw_affiliations": detail.get("affiliations") or [],
+                "emails": detail.get("emails") or [],
+            })
+    else:
+        authors = article.get("authors") or []
+        for idx, name in enumerate(authors, 1):
+            roles = []
+            if idx == 1:
+                roles.append("first_author")
+            if idx == len(authors):
+                roles.append("last_author")
+            if not roles:
+                continue
+            candidates.append({
+                "name": name,
+                "position": idx,
+                "roles": roles,
+                "raw_affiliations": article.get("affiliations") or [],
+                "emails": [],
+            })
+
+    leads = []
+    seen = set()
+    for candidate in candidates:
+        name = (candidate.get("name") or "").strip()
+        if not name:
+            continue
+        raw_affiliations = candidate.get("raw_affiliations") or []
+        canonical = institution_from_affiliations(raw_affiliations)
+        institution = (canonical.get("name") or normalize_institution(raw_affiliations[0])) if raw_affiliations else (canonical.get("name") or "")
+        key = (normalize_author_key(name), normalize_institution_key(institution))
+        if key in seen:
+            continue
+        seen.add(key)
+        loc = location_hint(institution, raw_affiliations, article)
+        role_labels = [str(KOL_ROLE_LABELS.get(role) or role) for role in candidate.get("roles") or []]
+        role_text = "/".join(role_labels) or "作者"
+        leads.append({
+            "name": name,
+            "roles": role_labels,
+            "position": candidate.get("position"),
+            "institution": institution,
+            "institution_key": canonical.get("key") or normalize_institution_key(institution),
+            "country": loc["country"],
+            "region": loc["region"],
+            "province": loc["province"],
+            "city": loc["city"],
+            "emails": candidate.get("emails") or [],
+            "rationale": f"本篇文献{role_text}，可作为该主题的 KOL 线索。",
+        })
+    return leads
+
+
+def build_institution_leads(article, kol_leads):
+    institutions = {}
+    for row in article_author_rows(article):
+        institution = row.get("canonical_institution") or row.get("institution") or ""
+        key = row.get("canonical_institution_key") or normalize_institution_key(institution)
+        if not institution or key == "institution_unresolved":
+            continue
+        bucket = institutions.setdefault(key, {
+            "name": institution,
+            "institution_key": key,
+            "article_author_count": 0,
+            "kol_names": set(),
+            "raw_affiliations": [],
+        })
+        bucket["article_author_count"] += 1
+        if row.get("name"):
+            bucket["kol_names"].add(row["name"])
+        bucket["raw_affiliations"].extend(row.get("raw_affiliations") or [])
+
+    lead_name_by_inst = defaultdict(set)
+    for lead in kol_leads:
+        if lead.get("institution_key"):
+            lead_name_by_inst[lead["institution_key"]].add(lead.get("name", ""))
+
+    result = []
+    for key, bucket in institutions.items():
+        loc = location_hint(bucket["name"], bucket["raw_affiliations"], article)
+        highlighted_names = sorted(name for name in lead_name_by_inst.get(key, set()) if name)
+        result.append({
+            "name": bucket["name"],
+            "institution_key": key,
+            "country": loc["country"],
+            "region": loc["region"],
+            "province": loc["province"],
+            "city": loc["city"],
+            "article_author_count": bucket["article_author_count"],
+            "highlighted_kol_names": highlighted_names,
+        })
+    result.sort(key=lambda item: (-len(item["highlighted_kol_names"]), -item["article_author_count"], item["name"]))
+    return result
+
+
+def build_medical_affairs_bridge(article, topics, drugs, signal_type, strength):
+    level = article.get("evidence_level") or "未分类"
+    journal = article.get("journal") or "期刊待识别"
+    if_text = f"IF {article.get('journal_if')}" if article.get("journal_if") else "IF 待补充"
+    topic_set = set(topics or [])
+    if "安全性" in topic_set:
+        implication = "安全性证据更新，可用于与 KOL 讨论风险分层、监测和患者选择。"
+        question = "该安全性发现是否会改变目标人群、监测频率或长期治疗排序？"
+        action = "MSL 需准备 AE 定义、采集方式、发生率分母和与既有靶向治疗证据的差异。"
+    elif drugs or {"FcRn", "补体", "B细胞"}.intersection(topic_set):
+        drug_text = "、".join(drugs) if drugs else "靶向治疗"
+        implication = f"{drug_text} 相关证据更新，可支持治疗定位、竞品区隔和患者分层讨论。"
+        question = "该证据最适合影响哪一类患者、哪一个治疗节点或哪项竞品比较？"
+        action = "MSL 需关联证据等级、终点、亚组和同机制/跨机制竞品信息。"
+    elif "真实世界" in topic_set or article.get("china_related"):
+        implication = "真实世界/本土证据更新，可补足临床路径、可及性和外推性的医学讨论。"
+        question = "该真实世界结果与 RCT 或既有指南相比，新增了哪些落地信息？"
+        action = "MSL 需整理研究设计、样本来源、治疗路径和可外推边界。"
+    elif "机制" in topic_set or signal_type == "新机制":
+        implication = "机制或生物标志物线索更新，可用于机制教育和专家深访问题设计。"
+        question = "该机制线索是否能解释疗效异质性、抗体分型或未来联合研究方向？"
+        action = "MSL 需准备机制图、关键实验/临床关联和可验证的专家问题。"
+    elif "诊疗策略" in topic_set or signal_type == "新观点":
+        implication = "综述/共识/诊疗观点更新，可用于校准医学叙事和专家共识差距。"
+        question = "该观点与本地实践之间的最大差距和未满足需求是什么？"
+        action = "MSL 需提炼推荐强度、证据来源和可用于圆桌讨论的争议点。"
+    else:
+        implication = "新增高价值文献信号，可作为专家沟通和后续证据追踪线索。"
+        question = "该文献对当前 MG 诊疗路径或专家关注问题的增量价值是什么？"
+        action = "MSL 需先确认研究类型、证据等级和与现有材料的关联。"
+    return {
+        "implication": implication,
+        "suggested_kol_question": question,
+        "msl_action": action,
+        "evidence_context": f"证据 {level}；{journal}；{if_text}；{strength}信号。",
+    }
+
+
 def compact_article(article):
     return {
         "pmid": article.get("pmid", ""),
@@ -872,9 +1099,13 @@ def build_signals(recent):
     cutoff = latest - timedelta(days=14)
     signals = []
     topic_counter = Counter()
+    excluded_conference_records = 0
     for article in recent:
         dt = parse_date(article.get("entry_date"))
         if not dt or dt < cutoff:
+            continue
+        if is_conference_or_meeting_record(article):
+            excluded_conference_records += 1
             continue
         text = text_of(article)
         topics = infer_topics(article)
@@ -926,6 +1157,10 @@ def build_signals(recent):
             score += 10
         elif strength == "中":
             score += 4
+
+        medical_affairs = build_medical_affairs_bridge(article, topics, drugs, signal_type, strength)
+        kol_leads = build_kol_leads(article)
+        institution_leads = build_institution_leads(article, kol_leads)
         signals.append({
             "date": dt.strftime("%Y-%m-%d"),
             "type": signal_type,
@@ -936,14 +1171,34 @@ def build_signals(recent):
             "drugs": drugs,
             "score": round(score, 2),
             "article": compact_article(article),
+            "medical_affairs": medical_affairs,
+            "medical_affairs_implication": medical_affairs["implication"],
+            "kol_leads": kol_leads,
+            "institution_leads": institution_leads,
+            "signal_to_kol": {
+                "source_artifact": "data/literature-recent.js",
+                "scope": "literature_only",
+                "pmid": article.get("pmid", ""),
+                "auto_publish": True,
+                "review_required": False,
+            },
         })
     strength_rank = {"强": 3, "中": 2, "弱": 1}
     signals.sort(key=lambda item: (-strength_rank.get(item["strength"], 0), -item["score"], item["date"]))
     return {
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "window_days": 14,
-        "topic_hotspots": [{"topic": k, "count": v} for k, v in topic_counter.most_common(12)],
-        "signals": signals[:80],
+        "source_artifact": "data/literature-recent.js",
+        "source_policy": {
+            "scope": "literature_only",
+            "auto_publish": True,
+            "review_required": False,
+            "signal_count_unlimited": True,
+            "excluded_conference_records": excluded_conference_records,
+            "conference_meeting_policy": "excluded_by_source_type_pub_type_title_guard",
+        },
+        "topic_hotspots": [{"topic": k, "count": v} for k, v in topic_counter.most_common()],
+        "signals": signals,
     }
 
 
