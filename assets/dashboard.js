@@ -99,14 +99,30 @@
       var drugHtml = (signal.drugs || []).map(function(d) {
         return '<span class="signal-drug">' + escapeHtml(d) + '</span>';
       }).join('');
+      var kolHtml = renderDashboardSignalToKol(signal);
       return '<article class="signal-card signal-' + escapeHtml(signal.strength) + '">' +
         '<div class="signal-card-head"><span class="signal-strength">' + escapeHtml(signal.strength) + '信号</span><span class="signal-type">' + escapeHtml(signal.type) + '</span></div>' +
         '<a class="signal-title" href="' + escapeHref(article.url) + '" target="_blank" rel="noopener">' + escapeHtml(signal.summary) + '</a>' +
         '<div class="signal-meta">' + escapeHtml(article.journal || '') + ' · PMID ' + escapeHtml(article.pmid || '-') + '</div>' +
+        kolHtml +
         (drugHtml ? '<div class="signal-topic-row">' + drugHtml + '</div>' : '') +
       '</article>';
     }).join('');
     document.getElementById('dashboardSignals').innerHTML = html || '<div class="empty-state small"><h3>暂无信号</h3></div>';
+  }
+
+  function renderDashboardSignalToKol(signal) {
+    var leads = signal.kol_leads || [];
+    var ma = signal.medical_affairs || {};
+    var implication = signal.medical_affairs_implication || ma.implication || '';
+    if (!signal.signal_to_kol && !leads.length && !implication) return '';
+    var lead = leads[0] || {};
+    var leadText = lead.name ? [lead.name, lead.institution].filter(Boolean).join(' · ') : '';
+    return '<div class="signal-kol-bridge compact">' +
+      '<div class="signal-kol-kicker">Signal → KOL</div>' +
+      (implication ? '<p>' + escapeHtml(implication) + '</p>' : '') +
+      (leadText ? '<p><strong>KOL lead</strong>：' + escapeHtml(leadText) + '</p>' : '') +
+    '</div>';
   }
 
   function renderCommunityDynamics() {

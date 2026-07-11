@@ -857,7 +857,12 @@
           topics: signal.keywords || [],
           drugs: signal.drugs || [],
           score: signal.score || 0,
-          age: 0
+          age: 0,
+          signal_to_kol: signal.signal_to_kol || null,
+          kol_leads: signal.kol_leads || [],
+          institution_leads: signal.institution_leads || [],
+          medical_affairs: signal.medical_affairs || {},
+          medical_affairs_implication: signal.medical_affairs_implication || (signal.medical_affairs && signal.medical_affairs.implication) || ''
         };
       });
       signalItems.sort(compareSignals);
@@ -947,6 +952,7 @@
       drugHtml += '<span class="signal-drug">' + escapeHtml(item.drugs[d]) + '</span>';
     }
     var tagHtml = topicHtml + drugHtml + (a.china_related ? '<span class="signal-topic china">中国相关</span>' : '');
+    var kolHtml = renderSignalToKol(item);
     return '' +
       '<article class="signal-card signal-' + escapeHtml(item.strength) + '">' +
         '<div class="signal-card-head">' +
@@ -955,8 +961,35 @@
         '</div>' +
         '<a class="signal-title" href="' + escapeHref(a.url) + '" target="_blank" rel="noopener">' + escapeHtml(a.title || '(无标题)') + '</a>' +
         '<div class="signal-meta">' + buildArticleMeta(a, dateStr) + '</div>' +
+        kolHtml +
         '<div class="signal-topic-row">' + tagHtml + '</div>' +
       '</article>';
+  }
+
+  function renderSignalToKol(item) {
+    var leads = item.kol_leads || [];
+    var institutions = item.institution_leads || [];
+    var ma = item.medical_affairs || {};
+    var implication = item.medical_affairs_implication || ma.implication || '';
+    if (!item.signal_to_kol && !leads.length && !institutions.length && !implication) return '';
+    var leadHtml = leads.slice(0, 2).map(function(lead) {
+      var roles = (lead.roles || []).join('/');
+      var meta = [roles, lead.institution, lead.country || lead.region].filter(Boolean).join(' · ');
+      return '<span class="signal-kol-chip"><strong>' + escapeHtml(lead.name || 'Unknown KOL') + '</strong><em>' + escapeHtml(meta) + '</em></span>';
+    }).join('');
+    var institutionHtml = institutions.slice(0, 2).map(function(inst) {
+      var meta = [inst.country || inst.region, (inst.article_author_count ? inst.article_author_count + ' authors' : '')].filter(Boolean).join(' · ');
+      return '<span class="signal-kol-chip institution"><strong>' + escapeHtml(inst.name || 'Unknown institution') + '</strong><em>' + escapeHtml(meta) + '</em></span>';
+    }).join('');
+    var actionHtml = ma.msl_action ? '<p><strong>MSL action</strong>：' + escapeHtml(ma.msl_action) + '</p>' : '';
+    var questionHtml = ma.suggested_kol_question ? '<p><strong>KOL question</strong>：' + escapeHtml(ma.suggested_kol_question) + '</p>' : '';
+    return '<div class="signal-kol-bridge">' +
+      '<div class="signal-kol-kicker">Signal → KOL</div>' +
+      (implication ? '<p>' + escapeHtml(implication) + '</p>' : '') +
+      (leadHtml ? '<div class="signal-kol-row">' + leadHtml + '</div>' : '') +
+      (institutionHtml ? '<div class="signal-kol-row institutions">' + institutionHtml + '</div>' : '') +
+      actionHtml + questionHtml +
+    '</div>';
   }
 
   function groupByMonth(articles) {
