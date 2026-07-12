@@ -440,6 +440,14 @@ GENERIC_HOSPITAL_MARKERS = (
 # are replaced with the canonical form. Every entry must document the
 # evidence for the merge (source-label pattern / manual review).
 # ---------------------------------------------------------------------------
+
+# Labels that are always disambiguated by appending the city name because
+# the same label string refers to distinct hospitals in different cities
+# (e.g. "Second People's Hospital" in Tongxiang vs Shenzhen vs Yichang).
+_GENERIC_LABEL_CITY_SUFFIX: set[str] = {
+    "Second People's Hospital",
+}
+
 _HOSPITAL_LABEL_NORMALIZATION: dict[str, dict[str, str]] = {
     # Shandong Provincial Qianfoshan Hospital (same physical hospital
     # listed under multiple affiliation-string variants across PubMed):
@@ -460,6 +468,16 @@ _HOSPITAL_LABEL_NORMALIZATION: dict[str, dict[str, str]] = {
     },
     "shandong_university_affiliated_qianfoshan_hospital": {
         "label": "Shandong Provincial Qianfoshan Hospital, Shandong First Medical University",
+    },
+    # Xiangya: "Seond" is a typo for "Second"; "…Changsha" is a redundant suffix.
+    "seond_xiangya_hospital": {
+        "label": "Second Xiangya Hospital, Central South University",
+    },
+    "second_xiangya_hospital_central_south_university_changsha": {
+        "label": "Second Xiangya Hospital, Central South University",
+    },
+    "second_affiliated_xiangya_hospital_central_south_university": {
+        "label": "Second Xiangya Hospital, Central South University",
     },
 }
 
@@ -548,6 +566,10 @@ def hospital_from_affiliation(affiliation: str) -> dict[str, Any] | None:
         location = infer_location(location_segments)
         if location["geo_scope"] == "mainland" and location["province"] == "Mainland China":
             location = infer_location("; ".join(parts))
+        # Disambiguate generic labels with city when the same label
+        # represents distinct hospitals in different cities.
+        if label in _GENERIC_LABEL_CITY_SUFFIX and location["city"]:
+            label = f"{label}, {location['city']}"
         # Province-name fallback: when the source affiliation has no city
         # token, infer province from the hospital label (e.g. 'Shanxi Bethune
         # Hospital' → capital Taiyuan).
