@@ -149,3 +149,51 @@ def test_hospital_canonicalization_and_last_location_token():
     )
     assert location["province"] == "Fujian"
     assert location["city"] == "Fuzhou"
+
+
+def test_hospital_edges_use_first_and_corresponding_author_hospital_cooccurrence():
+    module = load_module()
+    article = sample_articles()[0]
+    article["author_affiliations"].insert(1, {
+        "position": 2,
+        "name": "Chen Hongxi",
+        "is_first": False,
+        "is_corresponding": False,
+        "affiliations": [
+            "Department of Neurology, West China Hospital, Sichuan University, Chengdu, China."
+        ],
+    })
+    article["author_affiliations"][2]["position"] = 3
+    article["author_affiliations"][3]["position"] = 4
+
+    payload = module.build_network([article], source_scope="test")
+    edge = next(
+        edge for edge in payload["edges"]
+        if {edge["source"], edge["target"]} == {"huashan_hospital", "peking_university_first_hospital"}
+    )
+    assert edge["edge_weight"] == 1
+    assert not any(
+        {edge["source"], edge["target"]} == {"huashan_hospital", "west_china_hospital"}
+        for edge in payload["edges"]
+    )
+    assert payload["inclusion_policy"]["graph_edges"] == "first_and_corresponding_hospital_cooccurrence"
+
+
+def test_hospital_edges_include_raw_affiliation_email_corresponding_candidates():
+    module = load_module()
+    article = sample_articles()[0]
+    article["author_affiliations"][1]["affiliations"] = [
+        "Department of Neurology, West China Hospital, Sichuan University, Chengdu, China. "
+        "Electronic address: west@example.org."
+    ]
+
+    payload = module.build_network([article], source_scope="test")
+    edge = next(
+        edge for edge in payload["edges"]
+        if {edge["source"], edge["target"]} == {"huashan_hospital", "west_china_hospital"}
+    )
+    assert edge["edge_weight"] == 1
+    assert not any(
+        {edge["source"], edge["target"]} == {"huashan_hospital", "peking_university_first_hospital"}
+        for edge in payload["edges"]
+    )

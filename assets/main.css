@@ -1807,6 +1807,14 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
   stroke: var(--accent);
   stroke-opacity: 0.92;
 }
+.kg-canvas .china-network-edge-hit {
+  cursor: pointer;
+  pointer-events: stroke;
+  outline: none;
+}
+.kg-canvas .china-network-edge-hit:focus {
+  stroke: rgba(37, 99, 235, 0.16);
+}
 .china-network-node circle {
   fill: rgba(37, 99, 235, 0.76);
 }
@@ -1856,23 +1864,39 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
   border: 1px solid var(--bg3);
   border-radius: 0.5rem;
 }
-.china-province-map {
+.china-standard-map-shell {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1000 / 707;
+  overflow: hidden;
+  background: #fff;
+}
+.china-standard-map-image {
   display: block;
   width: 100%;
   height: auto;
-  max-height: 470px;
+  max-width: 100%;
+}
+.china-standard-map-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
 .china-province {
   cursor: pointer;
-  stroke: #fff;
-  stroke-width: 0.8;
+  pointer-events: auto;
+  fill-opacity: 0.28;
+  stroke: transparent;
+  stroke-width: 0;
   transition: filter 120ms ease, stroke-width 120ms ease;
 }
 .china-province:hover,
 .china-province:focus {
   filter: brightness(0.88);
   stroke: #163a5f;
-  stroke-width: 1.6;
+  stroke-width: 1.8;
   outline: none;
 }
 .china-network-map-rank {

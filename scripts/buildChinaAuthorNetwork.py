@@ -121,7 +121,7 @@ GENERIC_ORG_PREFIX_RE = re.compile(
 HOSPITAL_RE = re.compile(r"\b(hospital|medical\s+center|medical\s+centre)\b", re.I)
 ACADEMIC_RE = re.compile(r"\b(university|medical\s+university|school\s+of\s+medicine|college|academy|faculty)\b", re.I)
 ADDRESS_RE = re.compile(r"\b(road|street|avenue|district|province|postal|zipcode|zip\s*code|p\.r\.\s*china|people's\s+republic)\b", re.I)
-EMAIL_RE = re.compile(r"\S+@\S+")
+EMAIL_RE = re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+")
 
 TOPIC_RULES = [
     ("FcRn", ["fcrn", "efgartigimod", "rozanolixizumab", "nipocalimab", "batoclimab"]),
@@ -389,6 +389,20 @@ def author_position(detail: dict[str, Any]) -> int:
         return 0
 
 
+def author_affiliation_emails(detail: dict[str, Any]) -> list[str]:
+    emails = detail.get("emails") or []
+    if isinstance(emails, str):
+        emails = [emails]
+    found = [str(email).strip() for email in emails if str(email).strip()]
+    if found:
+        return sorted(set(found))
+    return sorted({
+        email
+        for affiliation in detail.get("affiliations") or []
+        for email in EMAIL_RE.findall(str(affiliation))
+    })
+
+
 def graph_author_details(article: dict[str, Any]) -> list[dict[str, Any]]:
     details = [d for d in article.get("author_affiliations") or [] if isinstance(d, dict)]
     if not details:
@@ -398,7 +412,11 @@ def graph_author_details(article: dict[str, Any]) -> list[dict[str, Any]]:
     corr_names = author_name_set(article.get("corresponding_authors"))
     explicit_corr = [
         d for d in details
-        if d.get("is_corresponding") or str(d.get("name") or "").strip().lower() in corr_names
+        if (
+            d.get("is_corresponding")
+            or author_affiliation_emails(d)
+            or str(d.get("name") or "").strip().lower() in corr_names
+        )
     ]
     max_pos = max((author_position(d) for d in details), default=0)
 
@@ -414,7 +432,11 @@ def graph_author_details(article: dict[str, Any]) -> list[dict[str, Any]]:
         is_explicit_corr = detail in explicit_corr
         is_last_fallback = not explicit_corr and (detail.get("is_last") or author_position(detail) == max_pos)
         if is_explicit_corr:
-            roles.append(("corresponding", "corresponding_author_metadata"))
+            if detail.get("is_corresponding") or name_key in corr_names:
+                role_source = "corresponding_author_metadata"
+            else:
+                role_source = "email_in_affiliation"
+            roles.append(("corresponding", role_source))
         elif is_last_fallback:
             roles.append(("corresponding", "last_author_fallback"))
         for role, role_source in roles:
@@ -469,6 +491,17 @@ def counter_top(counter: Counter, limit: int = 8) -> list[dict[str, Any]]:
     return [{"label": key, "count": count} for key, count in counter.most_common(limit)]
 
 
+def sort_pmids_latest(pmids: set[str] | list[str], papers: dict[str, dict[str, Any]]) -> list[str]:
+    return sorted(
+        {str(pmid) for pmid in pmids},
+        key=lambda pmid: (
+            str(papers.get(pmid, {}).get("entry_date") or papers.get(pmid, {}).get("pub_date") or ""),
+            pmid,
+        ),
+        reverse=True,
+    )
+
+
 def ensure_node(nodes: dict[str, dict[str, Any]], hospital: dict[str, Any]) -> dict[str, Any]:
     node = nodes.get(hospital["id"])
     if not node:
@@ -504,6 +537,7 @@ def build_network(articles: list[dict[str, Any]], source_scope: str = "full") ->
     china_papers = 0
     graph_author_rows = 0
     graph_author_with_hospital = 0
+    role_source_counts = Counter()
 
     for article in articles:
         if not article_is_china_related(article):
@@ -537,9 +571,10 @@ def build_network(articles: list[dict[str, Any]], source_scope: str = "full") ->
             row["hospital_paper_ids"][hospital["id"]].add(pmid)
 
         authors_graph = []
-        graph_hospital_ids: set[str] = set()
+        edge_hospital_ids: set[str] = set()
         for author in graph_author_details(article):
             graph_author_rows += 1
+            role_source_counts[author["role_source"]] += 1
             author_hospitals, author_excluded = unique_hospitals_from_affiliations(author["affiliations"])
             for item in author_excluded:
                 audit_excluded[item["id"]] = item
@@ -561,7 +596,7 @@ def build_network(articles: list[dict[str, Any]], source_scope: str = "full") ->
                     node["first_author_paper_ids"].add(pmid)
                 if author["role"] == "corresponding":
                     node["corresponding_author_paper_ids"].add(pmid)
-                graph_hospital_ids.add(hospital["id"])
+                edge_hospital_ids.add(hospital["id"])
                 hospital_refs.append(hospital["id"])
             authors_graph.append({
                 "name": author["name"],
@@ -578,7 +613,7 @@ def build_network(articles: list[dict[str, Any]], source_scope: str = "full") ->
                 "all_author_hospital_count": len(all_hospitals),
             }
 
-        for a, b in combinations(sorted(graph_hospital_ids), 2):
+        for a, b in combinations(sorted(edge_hospital_ids), 2):
             edge = edges.setdefault((a, b), {
                 "id": f"{a}__{b}",
                 "source": a,
@@ -622,8 +657,8 @@ def build_network(articles: list[dict[str, Any]], source_scope: str = "full") ->
 
     node_list = []
     for node in nodes.values():
-        paper_ids = sorted(node["paper_ids"])
-        all_author_ids = sorted(node["all_author_paper_ids"])
+        paper_ids = sort_pmids_latest(node["paper_ids"], papers)
+        all_author_ids = sort_pmids_latest(node["all_author_paper_ids"], papers)
         node_list.append({
             "id": node["id"],
             "label": node["label"],
@@ -640,6 +675,7 @@ def build_network(articles: list[dict[str, Any]], source_scope: str = "full") ->
             "top_authors": counter_top(node["authors"], 10),
             "top_topics": counter_top(node["topics"], 8),
             "paper_ids": paper_ids[:200],
+            "all_author_paper_ids": all_author_ids[:200],
         })
     node_list.sort(key=lambda item: (-item["paper_count"], -item["degree"], item["label"]))
 
@@ -654,7 +690,7 @@ def build_network(articles: list[dict[str, Any]], source_scope: str = "full") ->
             "paper_count": len(row["paper_ids"]),
             "all_author_occurrences": row["all_author_occurrences"],
             "top_hospitals": [
-                {"label": nodes[hospital_id]["label"], "count": len(paper_ids)}
+                {"id": hospital_id, "label": nodes[hospital_id]["label"], "count": len(paper_ids)}
                 for hospital_id, paper_ids in sorted(
                     row["hospital_paper_ids"].items(),
                     key=lambda item: (-len(item[1]), nodes[item[0]]["label"]),
@@ -673,7 +709,13 @@ def build_network(articles: list[dict[str, Any]], source_scope: str = "full") ->
             "geography": "china_only_mainland_default_hmt_filter_layers",
             "heatmap_authors": "all_authors",
             "graph_authors": "first_and_corresponding_authors",
+            "graph_edges": "first_and_corresponding_hospital_cooccurrence",
             "corresponding_fallback": "last_author_as_corresponding",
+            "corresponding_source_order": [
+                "corresponding_authors_or_is_corresponding",
+                "email_in_affiliation",
+                "last_author_fallback",
+            ],
             "data_edge_threshold": DATA_EDGE_THRESHOLD,
             "institution_level": "hospital_canonical",
             "node_label_policy": "english_or_pinyin_canonical_no_zh_dictionary",
@@ -683,6 +725,7 @@ def build_network(articles: list[dict[str, Any]], source_scope: str = "full") ->
             "default_edge_weight_min": DEFAULT_DISPLAY_EDGE_WEIGHT,
             "available_edge_weight_min": [5, 3, 1],
             "node_search_expands_all_edges": True,
+            "edge_weight_basis": "deduplicated PMID count across first/corresponding author hospitals",
         },
         "summary": {
             "input_articles": len(articles),
@@ -711,8 +754,11 @@ def build_network(articles: list[dict[str, Any]], source_scope: str = "full") ->
                 audit_excluded.values(), key=lambda item: (item.get("geo_scope", ""), item.get("label", ""))
             )[:80],
             "corresponding_last_author_count": corresponding_last_author_count,
+            "graph_author_role_sources": dict(role_source_counts),
             "notes": [
                 "Default graph shows mainland edges with edge_weight >= 5.",
+                "Heatmap uses all-author hospitals; collaboration edges use first/corresponding-author hospitals.",
+                "PubMed XML has no normalized corresponding-author tag; email-in-affiliation candidates are used before last-author fallback.",
                 "Hong Kong, Macau, and Taiwan are retained as filter layers.",
                 "Hospital labels are English/pinyin canonical values parsed from PubMed affiliations; no Chinese dictionary is maintained.",
             ],

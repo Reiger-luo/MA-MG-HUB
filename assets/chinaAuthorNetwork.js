@@ -137,17 +137,28 @@
       });
     }
 
+    var degreeById = {};
+    visibleEdges.forEach(function (edge) {
+      degreeById[edge.source] = (degreeById[edge.source] || 0) + Number(edge.edge_weight || edge.weight || 0);
+      degreeById[edge.target] = (degreeById[edge.target] || 0) + Number(edge.edge_weight || edge.weight || 0);
+    });
     var visibleNodes = nodes.filter(function (node) { return visibleNodeIds[node.id]; });
     if (!visibleNodes.length) {
       visibleNodes = nodes.filter(function (node) { return nodeInGeo(node, geoScope); }).slice(0, 42);
     }
-    if (visibleNodes.length > 72) {
+    visibleNodes.sort(function (a, b) {
+      return (degreeById[b.id] || 0) - (degreeById[a.id] || 0) ||
+        Number(b.all_author_paper_count || 0) - Number(a.all_author_paper_count || 0) ||
+        Number(b.paper_count || 0) - Number(a.paper_count || 0) || a.label.localeCompare(b.label);
+    });
+    var maxNodes = query ? 72 : 64;
+    if (visibleNodes.length > maxNodes) {
       var keep = {};
-      visibleNodes.slice(0, 72).forEach(function (node) { keep[node.id] = true; });
-      visibleNodes = visibleNodes.slice(0, 72);
+      visibleNodes.slice(0, maxNodes).forEach(function (node) { keep[node.id] = true; });
+      visibleNodes = visibleNodes.slice(0, maxNodes);
       visibleEdges = visibleEdges.filter(function (edge) { return keep[edge.source] && keep[edge.target]; });
     }
-    return { nodes: visibleNodes, edges: visibleEdges };
+    return { nodes: visibleNodes, edges: visibleEdges, degreeById: degreeById };
   }
 
   function renderBadge() {
@@ -175,22 +186,73 @@
     }).join('');
   }
 
-  function layoutNodes(graphNodes) {
+  function layoutNodes(graphNodes, graphEdges) {
+    var width = 1240;
+    var height = 720;
+    var cx = width / 2;
+    var cy = height / 2;
     var count = graphNodes.length || 1;
-    var cx = 550;
-    var cy = 320;
-    var rx = count < 8 ? 210 : 360;
-    var ry = count < 8 ? 150 : 230;
     var positioned = {};
     graphNodes.forEach(function (node, index) {
-      var angle = (Math.PI * 2 * index / count) - Math.PI / 2;
-      var ring = index < 12 ? 0.82 : 1;
+      var ring = index < 8 ? 150 : (index < 24 ? 270 : 390);
+      var ringIndex = index < 8 ? index : index < 24 ? index - 8 : index - 24;
+      var ringCount = index < 8 ? 8 : index < 24 ? 16 : Math.max(1, count - 24);
+      var angle = (Math.PI * 2 * ringIndex / ringCount) - Math.PI / 2;
       positioned[node.id] = Object.assign({}, node, {
-        x: cx + Math.cos(angle) * rx * ring,
-        y: cy + Math.sin(angle) * ry * ring,
-        r: Math.max(7, Math.min(24, 7 + Math.sqrt(Number(node.paper_count || 0)) * 1.8))
+        x: cx + Math.cos(angle) * ring,
+        y: cy + Math.sin(angle) * ring * 0.7,
+        vx: 0,
+        vy: 0,
+        r: Math.max(8, Math.min(24, 8 + Math.sqrt(Number(node.all_author_paper_count || node.paper_count || 0)) * 1.35))
       });
     });
+    var links = (graphEdges || []).filter(function (edge) {
+      return positioned[edge.source] && positioned[edge.target];
+    });
+    for (var iteration = 0; iteration < 90; iteration += 1) {
+      graphNodes.forEach(function (node) {
+        var point = positioned[node.id];
+        point.vx += (cx - point.x) * 0.0008;
+        point.vy += (cy - point.y) * 0.0008;
+      });
+      for (var i = 0; i < graphNodes.length; i += 1) {
+        var a = positioned[graphNodes[i].id];
+        for (var j = i + 1; j < graphNodes.length; j += 1) {
+          var b = positioned[graphNodes[j].id];
+          var dx = b.x - a.x;
+          var dy = b.y - a.y;
+          var distance = Math.max(24, Math.sqrt(dx * dx + dy * dy));
+          var force = 1900 / (distance * distance);
+          var fx = dx / distance * force;
+          var fy = dy / distance * force;
+          a.vx -= fx;
+          a.vy -= fy;
+          b.vx += fx;
+          b.vy += fy;
+        }
+      }
+      links.forEach(function (edge) {
+        var source = positioned[edge.source];
+        var target = positioned[edge.target];
+        var dx = target.x - source.x;
+        var dy = target.y - source.y;
+        var distance = Math.max(24, Math.sqrt(dx * dx + dy * dy));
+        var force = (distance - 170) * 0.0025 * Math.min(3, Number(edge.edge_weight || 1));
+        var fx = dx / distance * force;
+        var fy = dy / distance * force;
+        source.vx += fx;
+        source.vy += fy;
+        target.vx -= fx;
+        target.vy -= fy;
+      });
+      graphNodes.forEach(function (node) {
+        var point = positioned[node.id];
+        point.vx *= 0.86;
+        point.vy *= 0.86;
+        point.x = Math.max(45, Math.min(width - 45, point.x + point.vx));
+        point.y = Math.max(42, Math.min(height - 42, point.y + point.vy));
+      });
+    }
     return positioned;
   }
 
@@ -207,8 +269,8 @@
       return;
     }
     var graph = filteredGraph();
-    var positioned = layoutNodes(graph.nodes);
-    el.canvas.setAttribute('viewBox', '0 0 1100 660');
+    var positioned = layoutNodes(graph.nodes, graph.edges);
+    el.canvas.setAttribute('viewBox', '0 0 1240 720');
     el.canvas.innerHTML = '';
 
     var edgeGroup = document.createElementNS(svgNs, 'g');
@@ -235,17 +297,38 @@
       title.textContent = edgeTitle(edge);
       line.appendChild(title);
       edgeGroup.appendChild(line);
+      var hit = document.createElementNS(svgNs, 'line');
+      setSvgAttrs(hit, {
+        x1: source.x,
+        y1: source.y,
+        x2: target.x,
+        y2: target.y,
+        class: 'china-network-edge-hit',
+        'data-edge-id': edge.id,
+        stroke: 'transparent',
+        'stroke-width': 16,
+        'pointer-events': 'stroke',
+        tabindex: 0,
+        'aria-label': edgeTitle(edge)
+      });
+      edgeGroup.appendChild(hit);
     });
 
     graph.nodes.forEach(function (node) {
       var point = positioned[node.id];
       var group = document.createElementNS(svgNs, 'g');
-      setSvgAttrs(group, { class: 'kg-node china-network-node' + (node.id === activeNodeId ? ' active' : ''), 'data-node-id': node.id });
+      setSvgAttrs(group, {
+        class: 'kg-node china-network-node' + (node.id === activeNodeId ? ' active' : ''),
+        'data-node-id': node.id,
+        tabindex: 0,
+        role: 'button',
+        'aria-label': node.label + ' · ' + (node.city || node.province || '')
+      });
       var circle = document.createElementNS(svgNs, 'circle');
       setSvgAttrs(circle, { cx: point.x, cy: point.y, r: point.r });
       var text = document.createElementNS(svgNs, 'text');
       setSvgAttrs(text, { x: point.x, y: point.y + point.r + 13 });
-      text.textContent = shortLabel(node.label);
+      text.textContent = displayNodeLabel(node);
       var title = document.createElementNS(svgNs, 'title');
       title.textContent = node.label + ' · 联络作者文献 ' + (node.paper_count || 0) +
         ' · 全作者文献 ' + (node.all_author_paper_count || 0);
@@ -264,15 +347,36 @@
     return label.length > 28 ? label.slice(0, 26) + '…' : label;
   }
 
+  function displayNodeLabel(node) {
+    var label = node.label || '';
+    var generic = /first|second|third|fourth|fifth|affiliated|people|provincial|general|central/i.test(label);
+    if (generic && node.city && label.toLowerCase().indexOf(String(node.city).toLowerCase()) === -1) {
+      label += ' · ' + node.city;
+    }
+    return shortLabel(label);
+  }
+
   function bindGraphEvents() {
     Array.prototype.forEach.call(el.canvas.querySelectorAll('[data-node-id]'), function (nodeEl) {
       nodeEl.addEventListener('click', function () {
         selectNode(nodeEl.getAttribute('data-node-id'));
       });
+      nodeEl.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          selectNode(nodeEl.getAttribute('data-node-id'));
+        }
+      });
     });
     Array.prototype.forEach.call(el.canvas.querySelectorAll('[data-edge-id]'), function (edgeEl) {
       edgeEl.addEventListener('click', function () {
         selectEdge(edgeEl.getAttribute('data-edge-id'));
+      });
+      edgeEl.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          selectEdge(edgeEl.getAttribute('data-edge-id'));
+        }
       });
     });
   }
@@ -283,6 +387,7 @@
     var minWeight = currentEdgeMin();
     var geoScope = currentGeoScope();
     var note = query ? '搜索模式：展开匹配医院的全部合作边' : '默认阈值：edge_weight ≥' + minWeight;
+    note += '；线 = 第一/通讯作者医院共现 PMID，节点大小 = 全作者文献量';
     if (!graph.edges.length) {
       note += '；当前筛选无合作边，已显示该地区发文量最高的医院节点';
     }
@@ -347,14 +452,26 @@
     }).join('') + '</div>';
   }
 
+  function paperDateKey(pmid) {
+    var paper = papers[pmid] || {};
+    return String(paper.entry_date || paper.pub_date || '').replace(/\//g, '-');
+  }
+
+  function latestFirst(pmids) {
+    return (pmids || []).slice().sort(function (a, b) {
+      return paperDateKey(b).localeCompare(paperDateKey(a)) || String(b).localeCompare(String(a));
+    });
+  }
+
   function renderPaperList(pmids, limit) {
-    pmids = (pmids || []).slice(0, limit || 10);
+    pmids = latestFirst(pmids).slice(0, limit || 10);
     if (!pmids.length) return '<p class="kg-ref-meta">暂无 PMID</p>';
     return '<ul class="kg-study-list">' + pmids.map(function (pmid) {
       var paper = papers[pmid] || { pmid: pmid };
       var authorLine = renderPaperAuthors(paper);
       return '<li><a class="text-link" href="' + escapeHref(pubmedUrl(pmid)) + '" target="_blank" rel="noopener">' +
         escapeHtml(paper.title || ('PMID ' + pmid)) + '</a><br><span class="kg-ref-meta">PMID ' + escapeHtml(pmid) +
+        ((paper.entry_date || paper.pub_date) ? ' · ' + escapeHtml(paper.entry_date || paper.pub_date) : '') +
         (paper.journal ? ' · ' + escapeHtml(paper.journal) : '') + (paper.evidence_level ? ' · Level ' + escapeHtml(paper.evidence_level) : '') +
         '</span>' + authorLine + '</li>';
     }).join('') + '</ul>';
@@ -398,6 +515,10 @@
     return hub.assetUrl ? hub.assetUrl('assets/china-provinces.svg') : 'assets/china-provinces.svg';
   }
 
+  function standardMapAssetUrl() {
+    return hub.assetUrl ? hub.assetUrl('assets/china-standard-map-gs-2016-2923.jpg') : 'assets/china-standard-map-gs-2016-2923.jpg';
+  }
+
   function loadChinaMap(callback) {
     if (chinaMapTemplate) { callback(true); return; }
     chinaMapCallbacks.push(callback);
@@ -439,14 +560,17 @@
       item.hospital_count += Number(row.hospital_count || 0);
       item.all_author_occurrences += Number(row.all_author_occurrences || 0);
       (row.top_hospitals || []).forEach(function (hospital) {
-        item.top_hospitals[hospital.label] = (item.top_hospitals[hospital.label] || 0) + Number(hospital.count || 0);
+        var id = hospital.id || hospital.label;
+        var previous = item.top_hospitals[id] || { id: id, label: hospital.label, count: 0 };
+        previous.count += Number(hospital.count || 0);
+        item.top_hospitals[id] = previous;
       });
       stats[province] = item;
     });
     Object.keys(stats).forEach(function (province) {
-      stats[province].top_hospitals = Object.keys(stats[province].top_hospitals).map(function (label) {
-        return { label: label, count: stats[province].top_hospitals[label] };
-      }).sort(function (a, b) { return b.count - a.count || a.label.localeCompare(b.label); }).slice(0, 5);
+      stats[province].top_hospitals = Object.keys(stats[province].top_hospitals).map(function (id) {
+        return stats[province].top_hospitals[id];
+      }).sort(function (a, b) { return b.count - a.count || a.label.localeCompare(b.label); }).slice(0, 10);
     });
     return stats;
   }
@@ -457,16 +581,43 @@
     return MAP_COLORS[index];
   }
 
+  function bindDetailHospitalButtons() {
+    if (!el.detail) return;
+    Array.prototype.forEach.call(el.detail.querySelectorAll('[data-china-hospital]'), function (button) {
+      button.addEventListener('click', function () {
+        showHospitalDetail(button.getAttribute('data-china-hospital'), button.getAttribute('data-china-province') || '');
+      });
+    });
+  }
+
+  function showHospitalDetail(hospitalId, province) {
+    if (!el.detail) return;
+    var node = nodesById[hospitalId];
+    if (!node) {
+      el.detail.innerHTML = '<div class="kg-empty-hint">医院节点未找到。</div>';
+      return;
+    }
+    var pmids = latestFirst(node.all_author_paper_ids || node.paper_ids || []);
+    el.detail.innerHTML = '<div class="kg-detail-head"><h3>' + escapeHtml(node.label) + '</h3><span>' +
+      escapeHtml(province || node.province || node.region || '') + '</span></div>' +
+      '<div class="kg-detail-section"><h4>医院文献概况</h4><p>全作者文献 ' + escapeHtml(node.all_author_paper_count || 0) +
+      ' 篇 · 联络作者文献 ' + escapeHtml(node.paper_count || 0) + ' 篇 · 以下按最新入库/发表信息倒序。</p></div>' +
+      '<div class="kg-detail-section"><h4>文献清单</h4>' + renderPaperList(pmids, 30) + '</div>';
+  }
+
   function showProvinceDetail(province, row) {
     if (!el.detail) return;
     row = row || { paper_count: 0, hospital_count: 0, all_author_occurrences: 0, top_hospitals: [] };
     var top = (row.top_hospitals || []).map(function (item) {
-      return '<li>' + escapeHtml(item.label) + ' · ' + escapeHtml(item.count) + ' 篇</li>';
+      return '<li><button type="button" class="matrix-node-link" data-china-hospital="' + escapeHtml(item.id || '') +
+        '" data-china-province="' + escapeHtml(province) + '">' + escapeHtml(item.label) + '</button><br><span class="kg-ref-meta">' +
+        escapeHtml(item.count) + ' 篇全作者 PMID</span></li>';
     }).join('');
     el.detail.innerHTML = '<div class="kg-detail-head"><h3>' + escapeHtml(province) + '</h3><span>全作者热力线索</span></div>' +
       '<div class="kg-detail-section"><h4>省级聚合</h4><p>' + escapeHtml(row.paper_count || 0) + ' 篇去重 PMID · ' +
       escapeHtml(row.hospital_count || 0) + ' 个医院节点 · ' + escapeHtml(row.all_author_occurrences || 0) + ' 次 affiliation 出现</p></div>' +
-      '<div class="kg-detail-section"><h4>高频医院</h4><ul class="kg-study-list">' + (top || '<li>暂无</li>') + '</ul></div>';
+      '<div class="kg-detail-section"><h4>医院排名</h4><p class="kg-ref-meta">点击医院查看最新文献清单。</p><ul class="kg-study-list">' + (top || '<li>暂无</li>') + '</ul></div>';
+    bindDetailHospitalButtons();
   }
 
   function renderProvinceMap() {
@@ -476,8 +627,8 @@
     var sorted = Object.keys(stats).sort(function (a, b) {
       return stats[b].paper_count - stats[a].paper_count || a.localeCompare(b);
     });
-    el.heatmap.innerHTML = '<div class="china-network-map-head"><div><h3>全作者医院热力线索 · 中国省级图</h3><p>颜色 = 省级去重 PMID 数；点击省份查看医院排行。医院名称与文献仍可通过下方联络图和搜索核查。</p></div>' +
-      '<span class="china-network-map-source">底图：@svg-maps/china · CC BY 4.0</span></div>' +
+    el.heatmap.innerHTML = '<div class="china-network-map-head"><div><h3>全作者医院热力线索 · 中国省级图</h3><p>颜色 = 省级去重 PMID 数；点击省份查看医院排名，点击医院查看最新文献清单。颜色叠加是情报数据层，底图边界与标注来自规范标准地图。</p></div>' +
+      '<span class="china-network-map-source">标准地图：自然资源部 · 审图号 GS（2016）2923号</span></div>' +
       '<div class="china-network-map-layout"><div class="china-network-map-canvas" id="chinaNetworkMapCanvas"></div><aside class="china-network-map-rank"><h4>省级排行</h4><ol>' +
       sorted.slice(0, 8).map(function (province) {
         return '<li><span>' + escapeHtml(province) + '</span><strong>' + escapeHtml(stats[province].paper_count) + ' 篇</strong></li>';
@@ -485,10 +636,12 @@
       '<div class="china-network-map-legend"><span>低</span><i style="background:' + MAP_COLORS[0] + '"></i><i style="background:' + MAP_COLORS[2] + '"></i><i style="background:' + MAP_COLORS[4] + '"></i><i style="background:' + MAP_COLORS[5] + '"></i><span>高</span></div>';
 
     var mapCanvas = document.getElementById('chinaNetworkMapCanvas');
+    mapCanvas.innerHTML = '<div class="china-standard-map-shell"><img class="china-standard-map-image" src="' + escapeHref(standardMapAssetUrl()) + '" alt="中国地图，审图号 GS（2016）2923号"><svg class="china-standard-map-overlay" viewBox="0 0 1000 707" preserveAspectRatio="none" role="group" aria-label="中国省级情报数据交互层"></svg></div>';
+    var overlay = mapCanvas.querySelector('.china-standard-map-overlay');
+    var overlayGroup = document.createElementNS(svgNs, 'g');
+    overlayGroup.setAttribute('transform', 'translate(80 48) scale(0.995 1)');
+    overlay.appendChild(overlayGroup);
     var svg = chinaMapTemplate.cloneNode(true);
-    svg.classList.add('china-province-map');
-    svg.setAttribute('role', 'img');
-    svg.setAttribute('aria-label', '中国省级医院文献热力图');
     Array.prototype.forEach.call(svg.querySelectorAll('path[id]'), function (path) {
       var province = MAP_PROVINCE_BY_ID[path.getAttribute('id')];
       if (!province) return;
@@ -508,8 +661,8 @@
           showProvinceDetail(province, row);
         }
       });
+      overlayGroup.appendChild(path);
     });
-    mapCanvas.appendChild(svg);
   }
 
   function renderRegionalHeatmapCards() {

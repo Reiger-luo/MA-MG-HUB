@@ -8,7 +8,7 @@ fetch-pubmed-full.py — MG-HUB PubMed 全量初始化
 策略：先按年分批（MeSH），再用 TiAb 补漏。
 """
 
-import json, os, sys, time, xml.etree.ElementTree as ET
+import json, os, re, sys, time, xml.etree.ElementTree as ET
 from datetime import datetime
 from urllib.request import urlopen, Request
 from urllib.parse import quote
@@ -19,6 +19,7 @@ DATA_DIR = PROJECT_ROOT / "data"
 ARCHIVE_DIR = DATA_DIR / "archive"
 
 API_KEY = os.environ.get("NCBI_API_KEY", "")
+EMAIL_RE = re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+")
 
 
 def eutils_get(path, params):
@@ -80,6 +81,59 @@ def fetch_edates(pmids):
     return edat_map
 
 
+def parse_authors(author_list):
+    authors = []
+    author_affiliations = []
+    affiliations = []
+    email_corresponding = []
+    first_authors = []
+    author_count = len(author_list)
+    for position, author in enumerate(author_list, 1):
+        name = extract_author_name(author)
+        if not name:
+            continue
+        authors.append(name)
+        is_equal = author.get("EqualContrib") == "Y"
+        if position == 1 or is_equal:
+            first_authors.append(name)
+        author_affs = unique_list(
+            "".join(aff.itertext()).strip()
+            for aff in author.findall("./AffiliationInfo/Affiliation")
+            if "".join(aff.itertext()).strip()
+        )
+        emails = unique_list(
+            email
+            for aff_text in author_affs
+            for email in EMAIL_RE.findall(aff_text)
+        )
+        if emails:
+            email_corresponding.append(name)
+        affiliations.extend(author_affs)
+        author_affiliations.append({
+            "position": position,
+            "name": name,
+            "affiliations": author_affs,
+            "emails": emails,
+            "is_first": position == 1,
+            "is_last": position == author_count,
+            "equal_contrib": is_equal,
+            "is_corresponding": bool(emails),
+        })
+    corresponding_authors = unique_list(email_corresponding)
+    corresponding_source = "email" if corresponding_authors else ""
+    if not corresponding_authors and len(authors) > 1:
+        corresponding_authors = [authors[-1]]
+        corresponding_source = "last_author_fallback"
+    return {
+        "authors": authors,
+        "first_authors": unique_list(first_authors),
+        "corresponding_authors": corresponding_authors,
+        "corresponding_authors_source": corresponding_source,
+        "author_affiliations": author_affiliations,
+        "affiliations": unique_list(affiliations),
+    }
+
+
 def parse_article_xml(article_elem, edat_map):
     medline = article_elem.find(".//MedlineCitation")
     if medline is None:
@@ -101,25 +155,7 @@ def parse_article_xml(article_elem, edat_map):
         abstract_parts.append(f"{label}: {text}" if label else text)
     abstract = "\n".join(abstract_parts)
 
-    authors = []
-    author_affiliations = []
-    affiliations = []
-    for position, author in enumerate(medline.findall(".//Author"), 1):
-        name = extract_author_name(author)
-        if not name:
-            continue
-        authors.append(name)
-        author_affs = []
-        for aff in author.findall("./AffiliationInfo/Affiliation"):
-            if aff.text and aff.text.strip():
-                author_affs.append(aff.text.strip())
-        author_affs = unique_list(author_affs)
-        affiliations.extend(author_affs)
-        author_affiliations.append({
-            "position": position,
-            "name": name,
-            "affiliations": author_affs,
-        })
+    author_data = parse_authors(medline.findall(".//Article/AuthorList/Author"))
     # 期刊：优先全称（Title），次选 ISO 缩写
     journal_title = medline.findtext(".//Journal/Title", "")
     journal_iso = medline.findtext(".//Journal/ISOAbbreviation", "")
@@ -151,8 +187,6 @@ def parse_article_xml(article_elem, edat_map):
             doi = eid.text or ""
             break
 
-    affiliations = unique_list(affiliations)
-
     # Publication Types
     pub_types = []
     for pt in medline.findall(".//PublicationTypeList/PublicationType"):
@@ -165,15 +199,18 @@ def parse_article_xml(article_elem, edat_map):
         "pmid": pmid,
         "title": title.strip(),
         "abstract": abstract.strip(),
-        "authors": authors,
-        "author_affiliations": author_affiliations,
+        "authors": author_data["authors"],
+        "first_authors": author_data["first_authors"],
+        "corresponding_authors": author_data["corresponding_authors"],
+        "corresponding_authors_source": author_data["corresponding_authors_source"],
+        "author_affiliations": author_data["author_affiliations"],
         "journal": journal,
         "entry_date": entry_date,
         "pub_date": pub_date,
         "doi": doi,
         "url": f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/",
         "pub_types": pub_types,
-        "affiliations": affiliations,
+        "affiliations": author_data["affiliations"],
         "china_related": None,
         "study_types": [],
         "evidence_level": None,

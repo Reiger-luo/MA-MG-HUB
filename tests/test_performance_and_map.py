@@ -28,10 +28,20 @@ def test_knowledge_graph_omits_unused_edge_references():
 
 def test_china_network_map_asset_and_render_hook_exist():
     map_asset = ROOT / "assets" / "china-provinces.svg"
+    standard_map = ROOT / "assets" / "china-standard-map-gs-2016-2923.jpg"
+    attribution = (ROOT / "assets" / "china-provinces-map-ATTRIBUTION.md").read_text(encoding="utf-8")
     frontend = (ROOT / "assets" / "chinaAuthorNetwork.js").read_text(encoding="utf-8")
 
     assert map_asset.exists()
+    assert standard_map.exists()
+    assert standard_map.stat().st_size > 1_000_000
     assert 'id="shanghai"' in map_asset.read_text(encoding="utf-8")
-    assert "assets/china-provinces.svg" in frontend
-    assert "china-province-map" in frontend
+    assert "assets/china-standard-map-gs-2016-2923.jpg" in frontend
+    assert "china-standard-map-overlay" in frontend
+    assert "data-china-hospital" in frontend
+    assert "china-network-edge-hit" in frontend
+    assert "all_author_paper_ids" in frontend
+    assert "paper.entry_date || paper.pub_date" in frontend
+    assert "latestFirst" in frontend
     assert "provinceHeatmapStats" in frontend
+    assert "GS（2016）2923号" in attribution
