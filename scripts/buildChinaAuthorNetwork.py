@@ -104,13 +104,110 @@ LOCATION_RULES = [
     ("mainland", "Guangxi", "Guilin", ["guilin"]),
     ("mainland", "Xinjiang", "Urumqi", ["urumqi"]),
     ("mainland", "Gansu", "Lanzhou", ["lanzhou"]),
-    ("mainland", "Hebei", "Shijiazhuang", ["shijiazhuang"]),
+    ("mainland", "Hebei", "Shijiazhuang", ["shijiazhuang", "shi jiazhuang"]),
     ("mainland", "Hebei", "Cangzhou", ["cangzhou"]),
     ("mainland", "Liaoning", "Shenyang", ["shenyang"]),
     ("mainland", "Liaoning", "Dalian", ["dalian"]),
     ("mainland", "Liaoning", "Panjin", ["panjin"]),
     ("mainland", "Liaoning", "Anshan", ["anshan"]),
     ("mainland", "Heilongjiang", "Harbin", ["harbin"]),
+    # --- provinces/cities added 2026-07-12 from source-affiliation audit ---
+    ("mainland", "Jilin", "Changchun", ["changchun"]),
+    ("mainland", "Jiangxi", "Nanchang", ["nanchang"]),
+    ("mainland", "Jiangxi", "Ganzhou", ["ganzhou"]),
+    ("mainland", "Shanxi", "Taiyuan", ["taiyuan"]),
+    ("mainland", "Shanxi", "Datong", ["datong"]),
+    ("mainland", "Guizhou", "Guiyang", ["guiyang"]),
+    ("mainland", "Guizhou", "Zunyi", ["zunyi"]),
+    ("mainland", "Shandong", "Jining", ["jining"]),
+    ("mainland", "Shandong", "Binzhou", ["binzhou"]),
+    ("mainland", "Shandong", "Tai'an", ["tai'an", "taian"]),
+    ("mainland", "Inner Mongolia", "Hohhot", ["hohhot"]),
+    ("mainland", "Ningxia", "Yinchuan", ["yinchuan"]),
+    ("mainland", "Hunan", "Zhuzhou", ["zhuzhou"]),
+    ("mainland", "Hainan", "Haikou", ["haikou"]),
+    ("mainland", "Zhejiang", "Ningbo", ["ningbo"]),
+    ("mainland", "Hubei", "Shiyan", ["shiyan"]),
+    ("mainland", "Hubei", "Yichang", ["yichang"]),
+    ("mainland", "Hebei", "Zhangjiakou", ["zhangjiakou"]),
+    ("mainland", "Sichuan", "Luzhou", ["luzhou"]),
+    # --- batch 2: cities from 2026-07-12 audit of remaining bad-province hospitals ---
+    ("mainland", "Anhui", "Wuhu", ["wuhu"]),
+    ("mainland", "Fujian", "Putian", ["putian"]),
+    ("mainland", "Guangdong", "Foshan", ["foshan"]),
+    ("mainland", "Guangdong", "Shaoguan", ["shaoguan"]),
+    ("mainland", "Guangdong", "Zhanjiang", ["zhanjiang"]),
+    ("mainland", "Guangdong", "Meizhou", ["meizhou"]),
+    ("mainland", "Guangdong", "Zhongshan", ["zhongshan"]),
+    ("mainland", "Guangdong", "Zhuhai", ["zhuhai"]),
+    ("mainland", "Guangxi", "Liuzhou", ["liuzhou"]),
+    ("mainland", "Guangxi", "Baise", ["baise"]),
+    ("mainland", "Guangxi", "Yulin", ["yulin"]),
+    ("mainland", "Guizhou", "Liupanshui", ["liupanshui"]),
+    ("mainland", "Hainan", "Sanya", ["sanya"]),
+    ("mainland", "Hebei", "Handan", ["handan"]),
+    ("mainland", "Hebei", "Qinhuangdao", ["qinhuangdao"]),
+    ("mainland", "Hebei", "Langfang", ["langfang"]),
+    ("mainland", "Heilongjiang", "Qiqihar", ["qiqihar"]),
+    ("mainland", "Henan", "Pingdingshan", ["pingdingshan"]),
+    ("mainland", "Hubei", "Jingzhou", ["jingzhou"]),
+    ("mainland", "Hubei", "Xiaogan", ["xiaogan"]),
+    ("mainland", "Hunan", "Hengyang", ["hengyang"]),
+    ("mainland", "Hunan", "Loudi", ["loudi"]),
+    ("mainland", "Inner Mongolia", "Baotou", ["baotou"]),
+    ("mainland", "Inner Mongolia", "Chifeng", ["chifeng"]),
+    ("mainland", "Inner Mongolia", "Tongliao", ["tongliao"]),
+    ("mainland", "Jiangsu", "Lianyungang", ["lianyungang"]),
+    ("mainland", "Jiangxi", "Jiujiang", ["jiujiang"]),
+    ("mainland", "Jiangxi", "Shangrao", ["shangrao"]),
+    ("mainland", "Jiangxi", "Ji'an", ["ji'an", "jian"]),
+    ("mainland", "Jilin", "Jilin", ["jilin city", "jilin"]),
+    ("mainland", "Liaoning", "Jinzhou", ["jinzhou"]),
+    ("mainland", "Liaoning", "Tieling", ["tieling"]),
+    ("mainland", "Qinghai", "Xining", ["xining"]),
+    ("mainland", "Shaanxi", "Yulin", ["yulin"]),
+    ("mainland", "Shandong", "Weifang", ["weifang"]),
+    ("mainland", "Shandong", "Linyi", ["linyi"]),
+    ("mainland", "Shandong", "Liaocheng", ["liaocheng"]),
+    ("mainland", "Shandong", "Zaozhuang", ["zaozhuang"]),
+    ("mainland", "Shanxi", "Changzhi", ["changzhi"]),
+    ("mainland", "Shanxi", "Yuncheng", ["yuncheng"]),
+    ("mainland", "Shanxi", "Lvliang", ["lvliang"]),
+    ("mainland", "Sichuan", "Nanchong", ["nanchong"]),
+    ("mainland", "Sichuan", "Zigong", ["zigong"]),
+    ("mainland", "Sichuan", "Guang'an", ["guang'an", "guangan"]),
+    ("mainland", "Yunnan", "Dali", ["dali"]),
+    ("mainland", "Yunnan", "Honghe", ["honghe"]),
+    ("mainland", "Yunnan", "Wenshan", ["wenshan"]),
+    ("mainland", "Zhejiang", "Jiaxing", ["jiaxing"]),
+    ("mainland", "Zhejiang", "Quzhou", ["quzhou"]),
+    ("mainland", "Xinjiang", "Ili", ["ili"]),
+    ("mainland", "Gansu", "Wuwei", ["wuwei"]),
+    # --- batch 3: cities from 2026-07-12 user-confirmed remaining 33 ---
+    ("mainland", "Anhui", "Hefei", ["hefei"]),
+    ("mainland", "Anhui", "Lu'an", ["lu'an", "luan"]),
+    ("mainland", "Anhui", "Maanshan", ["maanshan"]),
+    ("mainland", "Fujian", "Shishi", ["shishi"]),
+    ("mainland", "Fujian", "Zhangzhou", ["zhangzhou"]),
+    ("mainland", "Guangdong", "Xinyi", ["xinyi"]),
+    ("mainland", "Guangxi", "Guigang", ["guigang"]),
+    ("mainland", "Guangxi", "Nanning", ["nanning"]),
+    ("mainland", "Hainan", "Qionghai", ["qionghai"]),
+    ("mainland", "Henan", "Jiaozuo", ["jiaozuo"]),
+    ("mainland", "Henan", "Xinxiang", ["xinxiang"]),
+    ("mainland", "Henan", "Zhengzhou", ["zhengzhou", "zhenzhou"]),
+    ("mainland", "Hunan", "Changde", ["changde"]),
+    ("mainland", "Jiangsu", "Changzhou", ["changzhou"]),
+    ("mainland", "Shandong", "Shouguang", ["shouguang"]),
+    ("mainland", "Sichuan", "Shifang", ["shifang"]),
+    ("mainland", "Xinjiang", "Kashi", ["kashi"]),
+    ("mainland", "Zhejiang", "Taizhou", ["taizhou", "tongxiang"]),
+    ("mainland", "Zhejiang", "Yiwu", ["yiwu"]),
+    # Province-level fallbacks (no specific city in source → capital)
+    ("mainland", "Shandong", "Jinan", ["shandong"]),
+    ("mainland", "Henan", "Zhengzhou", ["henan"]),
+    # Known hospital → location when source has no city token
+    ("mainland", "Hubei", "Yichang", ["renhe"]),
 ]
 
 
@@ -207,9 +304,14 @@ def infer_location(text: str) -> dict[str, str]:
     matches: list[tuple[int, int, int, str, str, str]] = []
     for rule_index, (scope, province, city, terms) in enumerate(LOCATION_RULES):
         for term in terms:
-            position = lower.rfind(term)
-            if position >= 0:
-                matches.append((position, len(term), rule_index, scope, province, city))
+            # Use word-boundary regex to avoid substring false positives
+            # (e.g. "ili" matching inside "jilin", "xian" inside "xianyang")
+            # Collect all matches and keep the last (preserves rfind semantics)
+            pattern = r"\b" + re.escape(term) + r"\b"
+            found = list(re.finditer(pattern, lower))
+            if found:
+                m = found[-1]
+                matches.append((m.start(), len(term), rule_index, scope, province, city))
     if matches:
         _, _, _, scope, province, city = max(matches)
         return {
@@ -225,6 +327,62 @@ def infer_location(text: str) -> dict[str, str]:
         "province": GEO_SCOPE_LABELS.get(scope, scope),
         "city": "",
     }
+
+
+# Provincial capitals for province-name fallback (province in label →
+# default to capital city).
+_PROVINCE_CAPITALS: dict[str, tuple[str, str]] = {
+    "anhui": ("Anhui", "Hefei"),
+    "beijing": ("Beijing", "Beijing"),
+    "chongqing": ("Chongqing", "Chongqing"),
+    "fujian": ("Fujian", "Fuzhou"),
+    "gansu": ("Gansu", "Lanzhou"),
+    "guangdong": ("Guangdong", "Guangzhou"),
+    "guangxi": ("Guangxi", "Nanning"),
+    "guizhou": ("Guizhou", "Guiyang"),
+    "hainan": ("Hainan", "Haikou"),
+    "hebei": ("Hebei", "Shijiazhuang"),
+    "heilongjiang": ("Heilongjiang", "Harbin"),
+    "henan": ("Henan", "Zhengzhou"),
+    "hubei": ("Hubei", "Wuhan"),
+    "hunan": ("Hunan", "Changsha"),
+    "inner mongolia": ("Inner Mongolia", "Hohhot"),
+    "jiangsu": ("Jiangsu", "Nanjing"),
+    "jiangxi": ("Jiangxi", "Nanchang"),
+    "jilin": ("Jilin", "Changchun"),
+    "liaoning": ("Liaoning", "Shenyang"),
+    "ningxia": ("Ningxia", "Yinchuan"),
+    "qinghai": ("Qinghai", "Xining"),
+    "shaanxi": ("Shaanxi", "Xi'an"),
+    "shandong": ("Shandong", "Jinan"),
+    "shanghai": ("Shanghai", "Shanghai"),
+    "shanxi": ("Shanxi", "Taiyuan"),
+    "sichuan": ("Sichuan", "Chengdu"),
+    "tianjin": ("Tianjin", "Tianjin"),
+    "xinjiang": ("Xinjiang", "Urumqi"),
+    "yunnan": ("Yunnan", "Kunming"),
+    "zhejiang": ("Zhejiang", "Hangzhou"),
+}
+
+
+def province_from_label_fallback(label: str, location: dict[str, str]) -> dict[str, str]:
+    """When label contains a Chinese province name, default to that province's
+    capital. This catches cases like 'Shanxi Bethune Hospital' where the
+    source affiliation has no usable city token."""
+    if location.get("province") != "Mainland China":
+        return location
+    lower_label = (label or "").lower()
+    for province_key, (prov, city) in _PROVINCE_CAPITALS.items():
+        if re.search(r"\b" + re.escape(province_key) + r"\b", lower_label):
+            # Guard against university names that coincidentally contain
+            # province substrings (e.g. "Fudan" ⊅ "Fujian" is safe via \b).
+            return {
+                "geo_scope": location["geo_scope"],
+                "region": prov,
+                "province": prov,
+                "city": city,
+            }
+    return location
 
 
 def looks_like_address(part: str) -> bool:
@@ -276,6 +434,35 @@ GENERIC_HOSPITAL_MARKERS = (
     "traditional chinese", "rehabilitation", "hospital of",
 )
 
+# ---------------------------------------------------------------------------
+# Canonical label overrides — applied after canonical_hospital_label.
+# Keys are slugified label ids. When a hospital id matches, both label and id
+# are replaced with the canonical form. Every entry must document the
+# evidence for the merge (source-label pattern / manual review).
+# ---------------------------------------------------------------------------
+_HOSPITAL_LABEL_NORMALIZATION: dict[str, dict[str, str]] = {
+    # Shandong Provincial Qianfoshan Hospital (same physical hospital
+    # listed under multiple affiliation-string variants across PubMed):
+    "first_affiliated_hospital_shandong_first_medical_university_and_shandong_provincial_qianfoshan_hospital": {
+        "label": "Shandong Provincial Qianfoshan Hospital, Shandong First Medical University",
+    },
+    "first_affiliated_hospital_shandong_first_medical_university": {
+        "label": "Shandong Provincial Qianfoshan Hospital, Shandong First Medical University",
+    },
+    "shandong_provincial_qianfoshan_hospital_shandong_university": {
+        "label": "Shandong Provincial Qianfoshan Hospital, Shandong First Medical University",
+    },
+    "shandong_provincial_qianfoshan_hospital_cheeloo_college_of_medicine": {
+        "label": "Shandong Provincial Qianfoshan Hospital, Shandong First Medical University",
+    },
+    "shandong_provincial_qianfoshan_hospital": {
+        "label": "Shandong Provincial Qianfoshan Hospital, Shandong First Medical University",
+    },
+    "shandong_university_affiliated_qianfoshan_hospital": {
+        "label": "Shandong Provincial Qianfoshan Hospital, Shandong First Medical University",
+    },
+}
+
 
 def canonical_hospital_label(candidate: str, parts: list[str], index: int) -> str:
     """Collapse department, punctuation, and academic-suffix variants."""
@@ -291,6 +478,18 @@ def canonical_hospital_label(candidate: str, parts: list[str], index: int) -> st
         label,
         flags=re.I,
     )
+    # Strip leading department prefix even without and/& junction
+    # (e.g. "Department of Neurology The First Affiliated Hospital...")
+    if re.match(r"^(?:department|dept\.?)\s+of\s+\w+", label, flags=re.I):
+        stripped = re.sub(
+            r"^(?:department|dept\.?)\s+of\s+\w+\s+",
+            "",
+            label,
+            count=1,
+            flags=re.I,
+        )
+        if HOSPITAL_RE.search(stripped):
+            label = stripped
     label = re.sub(r"^the\s+", "", label, flags=re.I)
     label = normalize_org_label(label)
     if not label:
@@ -334,7 +533,25 @@ def hospital_from_affiliation(affiliation: str) -> dict[str, Any] | None:
         label = canonical_hospital_label(candidate, parts, index)
         if not label:
             continue
-        location = infer_location("; ".join(parts))
+        # Apply label-normalization overrides (e.g. same hospital under
+        # multiple affiliation-string variants).
+        normalized = _HOSPITAL_LABEL_NORMALIZATION.get(slugify(label))
+        if normalized:
+            label = normalized["label"]
+        # Catch-all: any label containing "qianfoshan" normalizes to canonical
+        elif "qianfoshan" in label.lower():
+            label = "Shandong Provincial Qianfoshan Hospital, Shandong First Medical University"
+        # Infer location from the hospital-bearing segment only, not the
+        # full multi-institution affiliation (avoids cross-contamination
+        # from e.g. "Fudan at Xiamen" in a semicolon-separated compound).
+        location_segments = "; ".join(parts[:index + 1])
+        location = infer_location(location_segments)
+        if location["geo_scope"] == "mainland" and location["province"] == "Mainland China":
+            location = infer_location("; ".join(parts))
+        # Province-name fallback: when the source affiliation has no city
+        # token, infer province from the hospital label (e.g. 'Shanxi Bethune
+        # Hospital' → capital Taiyuan).
+        location = province_from_label_fallback(label, location)
         return {
             "id": slugify(label),
             "label": label,
@@ -527,6 +744,15 @@ def ensure_node(nodes: dict[str, dict[str, Any]], hospital: dict[str, Any]) -> d
         }
         nodes[hospital["id"]] = node
     node["source_labels"].add(hospital.get("source_label") or hospital["label"])
+    # Upgrade the node's location when a later, more-informative source
+    # appears.  Some sources carry no city token; others carry the wrong
+    # city (e.g. from a semicolon-separated multi-institution compound).
+    if hospital["province"] and hospital["province"] != "Mainland China":
+        if node["province"] in ("Mainland China", "", None) or node["province"] != hospital["province"]:
+            node["province"] = hospital["province"]
+            node["city"] = hospital["city"]
+            node["region"] = hospital["region"]
+            node["geo_scope"] = hospital["geo_scope"]
     return node
 
 

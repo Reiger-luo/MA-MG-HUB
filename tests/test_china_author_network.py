@@ -131,6 +131,65 @@ def test_build_network_keeps_hong_kong_as_filter_layer_and_does_not_translate_la
     assert "hong_kong" in heatmap_scopes
 
 
+def test_qianfoshan_normalization_merges_multiple_variants():
+    """First Affiliated Hospital of Shandong First Medical University is the
+    same physical hospital as Shandong Provincial Qianfoshan Hospital — all
+    affiliation-string variants should canonicalize to one node."""
+    module = load_module()
+    variants = [
+        "Department of Neurology, Shandong Provincial Qianfoshan Hospital, Shandong University, Jinan, 250014, PR China.",
+        "Department of Neurology, The First Affiliated Hospital of Shandong First Medical University and Shandong Provincial Qianfoshan Hospital, Jinan, China.",
+        "Department of Neurology, The First Affiliated Hospital of Shandong First Medical University, Jinan, China.",
+        "Department of Neurology, Shandong Provincial Qianfoshan Hospital, Cheeloo College of Medicine, Shandong University, Jinan, China.",
+        "Department of Neurology, Shandong Provincial Qianfoshan Hospital, Jinan, China.",
+    ]
+    articles = [
+        {
+            "pmid": str(5000 + i),
+            "title": f"Qianfoshan variant {i+1}",
+            "journal": "Test",
+            "entry_date": "2026/07/01",
+            "pub_date": "2026",
+            "evidence_level": "IV",
+            "study_types": ["Case Series"],
+            "china_related": True,
+            "author_affiliations": [
+                {
+                    "position": 1,
+                    "name": f"Author{i}",
+                    "is_first": True,
+                    "is_corresponding": True,
+                    "affiliations": [variant],
+                }
+            ],
+        }
+        for i, variant in enumerate(variants)
+    ]
+    payload = module.build_network(articles, source_scope="test")
+    labels = {n["label"] for n in payload["nodes"]}
+    assert len(labels) == 1, f"Expected 1 node, got {len(labels)}: {labels}"
+    canonical = payload["nodes"][0]["label"]
+    assert "Qianfoshan" in canonical
+
+
+def test_location_rules_resolve_jilin_and_nanchang():
+    module = load_module()
+
+    hospital = module.hospital_from_affiliation(
+        "Department of Neurology, First Hospital of Jilin University, Changchun, Jilin, China."
+    )
+    assert hospital
+    assert hospital["province"] == "Jilin", f"Got {hospital['province']}"
+    assert hospital["city"] in {"Changchun", "Jilin"}, f"Got {hospital['city']}"
+
+    hospital2 = module.hospital_from_affiliation(
+        "Department of Neurology, The First Affiliated Hospital of Nanchang University, Nanchang, China."
+    )
+    assert hospital2
+    assert hospital2["province"] == "Jiangxi", f"Got {hospital2['province']}"
+    assert hospital2["city"] == "Nanchang", f"Got {hospital2['city']}"
+
+
 def test_hospital_canonicalization_and_last_location_token():
     module = load_module()
 
