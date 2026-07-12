@@ -18,7 +18,8 @@
     canvas: document.getElementById('chinaAuthorNetworkGraph'),
     legend: document.getElementById('chinaNetworkLegend'),
     heatmap: document.getElementById('chinaNetworkHeatmap'),
-    detail: document.getElementById('chinaNetworkDetail')
+    detail: document.getElementById('chinaNetworkDetail'),
+    mainColumn: document.querySelector('.china-network-main-column')
   };
 
   if (!el.canvas) return;
@@ -68,6 +69,7 @@
   var filtersAttached = false;
   var activeNodeId = '';
   var activeEdgeId = '';
+  var activeDetail = null;
   var chinaMapTemplate = null;
   var chinaMapLoading = false;
   var chinaMapCallbacks = [];
@@ -92,7 +94,7 @@
   }
 
   function currentEdgeMin() {
-    return el.edgeWeight ? Number(el.edgeWeight.value || 5) : 5;
+    return el.edgeWeight ? Number(el.edgeWeight.value || 1) : 1;
   }
 
   function currentQuery() {
@@ -231,7 +233,7 @@
       { label: '中国相关文献', value: compactNumber(summary.china_related_papers), note: payload ? payload.source_scope : 'missing' },
       { label: '医院节点', value: compactNumber(summary.hospitals), note: compactNumber(summary.mainland_hospitals) + ' mainland' },
       { label: '合作边', value: compactNumber(summary.edges), note: 'data edge ≥1' },
-      { label: '默认核心边', value: compactNumber(summary.mainland_default_edges), note: 'mainland edge ≥5' },
+      { label: '默认阈值', value: '≥1', note: '展示全部数据边' },
       { label: '作者机构解析率', value: Math.round(Number(summary.graph_author_hospital_parse_rate || 0) * 100) + '%', note: 'first/corresponding' }
     ];
     el.stats.innerHTML = items.map(function (item) {
@@ -442,7 +444,7 @@
     var query = currentQuery();
     var minWeight = currentEdgeMin();
     var geoScope = currentGeoScope();
-    var note = query ? '搜索模式：展开匹配医院的全部合作边' : '默认阈值：edge_weight ≥' + minWeight;
+    var note = query ? '搜索模式：展开匹配医院的全部合作边' : '当前阈值：edge_weight ≥' + minWeight;
     note += '；线 = 第一/通讯作者医院共现 PMID，节点大小 = 全作者文献量';
     if (currentDrugId()) note += '；当前按药物标签：' + ((drugById[currentDrugId()] || {}).label || currentDrugId());
     if (!graph.edges.length) {
@@ -463,6 +465,7 @@
   function selectNode(nodeId) {
     activeNodeId = nodeId;
     activeEdgeId = '';
+    activeDetail = { type: 'node', id: nodeId };
     renderGraph();
     var node = nodesById[nodeId];
     if (!node || !el.detail) return;
@@ -496,6 +499,7 @@
   function selectEdge(edgeId) {
     activeEdgeId = edgeId;
     activeNodeId = '';
+    activeDetail = { type: 'edge', id: edgeId };
     renderGraph();
     var edge = edges.filter(function (item) { return item.id === edgeId; })[0];
     if (!edge || !el.detail) return;
@@ -599,10 +603,6 @@
     return hub.assetUrl ? hub.assetUrl('assets/china-provinces.svg') : 'assets/china-provinces.svg';
   }
 
-  function standardMapAssetUrl() {
-    return hub.assetUrl ? hub.assetUrl('assets/china-standard-map-gs-2016-2923.jpg') : 'assets/china-standard-map-gs-2016-2923.jpg';
-  }
-
   function loadChinaMap(callback) {
     if (chinaMapTemplate) { callback(true); return; }
     chinaMapCallbacks.push(callback);
@@ -702,6 +702,7 @@
 
   function showHospitalDetail(hospitalId, province) {
     if (!el.detail) return;
+    activeDetail = { type: 'mapHospital', id: hospitalId, province: province || '' };
     var node = nodesById[hospitalId];
     if (!node) {
       el.detail.innerHTML = '<div class="kg-empty-hint">医院节点未找到。</div>';
@@ -724,6 +725,7 @@
 
   function showProvinceDetail(province, row) {
     if (!el.detail) return;
+    activeDetail = { type: 'province', province: province };
     row = row || { paper_count: 0, hospital_count: 0, all_author_occurrences: 0, top_hospitals: [] };
     var top = provinceHospitalRanking(province).map(function (item) {
       return '<li><button type="button" class="matrix-node-link" data-china-hospital="' + escapeHtml(item.id || '') +
@@ -747,8 +749,8 @@
       return stats[b].paper_count - stats[a].paper_count || a.localeCompare(b);
     });
     var drugLabel = currentDrugId() ? ((drugById[currentDrugId()] || {}).label || currentDrugId()) : '';
-    el.heatmap.innerHTML = '<div class="china-network-map-head"><div><h3>全作者医院热力线索 · 中国省级图</h3><p>颜色 = ' + (drugLabel ? escapeHtml(drugLabel) + '相关' : '省级') + '去重 PMID 数；点击省份查看医院排名，点击医院查看最新文献清单。颜色叠加是情报数据层，底图边界与标注来自规范标准地图。</p></div>' +
-      '<span class="china-network-map-source">标准地图：自然资源部 · 审图号 GS（2016）2923号</span></div>' +
+    el.heatmap.innerHTML = '<div class="china-network-map-head"><div><h3>全作者医院热力线索 · 中国省级图</h3><p>颜色 = ' + (drugLabel ? escapeHtml(drugLabel) + '相关' : '省级') + '去重 PMID 数；点击省份查看医院排名，点击医院查看最新文献清单。</p></div>' +
+      '<span class="china-network-map-source">单层可编辑省级 SVG · 审图号 GS（2016）2923号</span></div>' +
       '<div class="china-network-map-layout"><div class="china-network-map-canvas" id="chinaNetworkMapCanvas"></div><aside class="china-network-map-rank"><h4>省级排行</h4><ol>' +
       sorted.slice(0, 8).map(function (province) {
         return '<li><span>' + escapeHtml(province) + '</span><strong>' + escapeHtml(stats[province].paper_count) + ' 篇</strong></li>';
@@ -756,12 +758,13 @@
       '<div class="china-network-map-legend"><span>低</span><i style="background:' + MAP_COLORS[0] + '"></i><i style="background:' + MAP_COLORS[2] + '"></i><i style="background:' + MAP_COLORS[4] + '"></i><i style="background:' + MAP_COLORS[5] + '"></i><span>高</span></div>';
 
     var mapCanvas = document.getElementById('chinaNetworkMapCanvas');
-    mapCanvas.innerHTML = '<div class="china-standard-map-shell"><img class="china-standard-map-image" src="' + escapeHref(standardMapAssetUrl()) + '" alt="中国地图，审图号 GS（2016）2923号"><svg class="china-standard-map-overlay" viewBox="0 0 1000 707" preserveAspectRatio="none" role="group" aria-label="中国省级情报数据交互层"></svg></div>';
-    var overlay = mapCanvas.querySelector('.china-standard-map-overlay');
-    var overlayGroup = document.createElementNS(svgNs, 'g');
-    overlayGroup.setAttribute('transform', 'translate(80 48) scale(0.995 1)');
-    overlay.appendChild(overlayGroup);
+    mapCanvas.innerHTML = '<div class="china-editable-map-shell"></div>';
+    var mapShell = mapCanvas.querySelector('.china-editable-map-shell');
     var svg = chinaMapTemplate.cloneNode(true);
+    svg.classList.add('china-province-map');
+    svg.setAttribute('role', 'group');
+    svg.setAttribute('aria-label', '中国省级医院情报热力图，审图号 GS（2016）2923号');
+    svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
     Array.prototype.forEach.call(svg.querySelectorAll('path[id]'), function (path) {
       var province = MAP_PROVINCE_BY_ID[path.getAttribute('id')];
       if (!province) return;
@@ -781,8 +784,13 @@
           showProvinceDetail(province, row);
         }
       });
-      overlayGroup.appendChild(path);
     });
+    var auditText = document.createElementNS(svgNs, 'text');
+    setSvgAttrs(auditText, { x: 14, y: 558, class: 'china-map-audit-label' });
+    auditText.textContent = '审图号 GS（2016）2923号';
+    svg.appendChild(auditText);
+    mapShell.appendChild(svg);
+    syncDetailHeight();
   }
 
   function renderRegionalHeatmapCards() {
@@ -823,6 +831,39 @@
     renderStats();
     renderGraph();
     renderHeatmap();
+    syncDetailHeight();
+  }
+
+  function rerenderActiveDetail() {
+    if (!activeDetail) return;
+    if (activeDetail.type === 'node') selectNode(activeDetail.id);
+    else if (activeDetail.type === 'edge') selectEdge(activeDetail.id);
+    else if (activeDetail.type === 'mapHospital') showHospitalDetail(activeDetail.id, activeDetail.province);
+    else if (activeDetail.type === 'province') {
+      var currentStats = provinceHeatmapStats();
+      showProvinceDetail(activeDetail.province, currentStats[activeDetail.province]);
+    }
+    syncDetailHeight();
+  }
+
+  function clearActiveDetail() {
+    activeEdgeId = '';
+    activeNodeId = '';
+    activeDetail = null;
+    if (el.detail) {
+      el.detail.innerHTML = '<div class="kg-empty-hint">点击医院节点、合作边或地图省份查看筛选后的详情。</div>';
+    }
+  }
+
+  function syncDetailHeight() {
+    if (!el.mainColumn || !el.detail) return;
+    window.requestAnimationFrame(function () {
+      if (window.innerWidth <= 800) {
+        el.detail.style.height = '';
+        return;
+      }
+      el.detail.style.height = el.mainColumn.offsetHeight + 'px';
+    });
   }
 
   function attachFilters() {
@@ -831,13 +872,14 @@
     [el.search, el.geo, el.edgeWeight, el.drugFilter].forEach(function (input) {
       if (!input) return;
       input.addEventListener(input.tagName === 'INPUT' ? 'input' : 'change', function () {
-        activeEdgeId = '';
-        activeNodeId = '';
+        var preserveDetail = input === el.drugFilter;
+        if (!preserveDetail) clearActiveDetail();
         if (!payload) {
           loadAndRender();
           return;
         }
         refresh();
+        if (preserveDetail) rerenderActiveDetail();
       });
     });
   }
@@ -876,8 +918,7 @@
         return;
       }
       payload = window.MG_CHINA_AUTHOR_NETWORK;
-      activeEdgeId = '';
-      activeNodeId = '';
+      clearActiveDetail();
       refresh();
       if (nodes.length) selectNode(nodes[0].id);
     };
@@ -898,6 +939,10 @@
     renderLoadingShell('点击“中国作者联络图”后按需加载数据');
     var tab = document.querySelector('[data-knowledge-tab="china-network"]');
     if (tab) tab.addEventListener('click', loadAndRender);
+    window.addEventListener('resize', syncDetailHeight);
+    if (window.ResizeObserver && el.mainColumn) {
+      new ResizeObserver(syncDetailHeight).observe(el.mainColumn);
+    }
     if (isChinaTabActive()) loadAndRender();
   }
 

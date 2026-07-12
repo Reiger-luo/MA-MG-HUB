@@ -33,7 +33,7 @@ OUTPUT_PATH = DATA_DIR / "china-author-network.js"
 OUTPUT_GLOBAL = "MG_CHINA_AUTHOR_NETWORK"
 
 DATA_EDGE_THRESHOLD = 1
-DEFAULT_DISPLAY_EDGE_WEIGHT = 5
+DEFAULT_DISPLAY_EDGE_WEIGHT = 1
 
 CHINA_TERMS = (
     "china", "chinese", "hong kong", "hongkong", "macau", "macao", "taiwan",
@@ -781,7 +781,7 @@ def build_network(articles: list[dict[str, Any]], source_scope: str = "full") ->
         "display_policy": {
             "default_geo_scope": "mainland",
             "default_edge_weight_min": DEFAULT_DISPLAY_EDGE_WEIGHT,
-            "available_edge_weight_min": [5, 3, 1],
+            "available_edge_weight_min": [1, 3, 5],
             "node_search_expands_all_edges": True,
             "edge_weight_basis": "deduplicated PMID count across first/corresponding author hospitals",
         },

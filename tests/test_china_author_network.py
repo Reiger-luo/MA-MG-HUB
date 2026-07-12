@@ -95,7 +95,7 @@ def test_build_network_uses_last_author_as_corresponding_and_preserves_data_vs_d
     payload = module.build_network(sample_articles(), source_scope="test")
 
     assert payload["inclusion_policy"]["data_edge_threshold"] == 1
-    assert payload["display_policy"]["default_edge_weight_min"] == 5
+    assert payload["display_policy"]["default_edge_weight_min"] == 1
     assert payload["display_policy"]["default_geo_scope"] == "mainland"
     assert payload["inclusion_policy"]["corresponding_fallback"] == "last_author_as_corresponding"
 

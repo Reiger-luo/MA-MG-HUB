@@ -172,7 +172,7 @@
       <div class="panel-head">
         <div>
           <h2>中国作者医院联络图</h2>
-          <p class="panel-caption">全作者医院热力线索使用去重 PMID 的中国省级标准地图；医院联络作者统计与医院合作边均只用第一作者 + 通讯作者（PubMed 无标准化通讯作者标签时使用 email-derived 候选，缺失时末位作者 fallback）。药物标签按标题、摘要、关键词、MeSH/Chemicals 文本命中，仅表示文献相关线索，不等同于干预结论。</p>
+          <p class="panel-caption">全作者医院热力线索使用去重 PMID 的单层可编辑省级 SVG，图面标注审图号；医院联络作者统计与医院合作边均只用第一作者 + 通讯作者（PubMed 无标准化通讯作者标签时使用 email-derived 候选，缺失时末位作者 fallback）。药物标签按标题、摘要、关键词、MeSH/Chemicals 文本命中，仅表示文献相关线索，不等同于干预结论。</p>
         </div>
         <span class="update-badge" id="chinaNetworkBadge">Loading…</span>
       </div>
@@ -191,9 +191,9 @@
           <option value="all">大中华全部</option>
         </select>
         <select class="filter-input compact-select" id="chinaNetworkEdgeWeight">
-          <option value="5">核心边 ≥5</option>
+          <option value="1" selected>全部边 ≥1</option>
           <option value="3">中强边 ≥3</option>
-          <option value="1">全部边 ≥1</option>
+          <option value="5">核心边 ≥5</option>
         </select>
         <select class="filter-input compact-select" id="chinaNetworkDrugFilter">
           <option value="">全部药物标签</option>
@@ -201,14 +201,14 @@
       </div>
 
       <div class="kg-layout china-network-layout">
-        <div>
+        <div class="china-network-main-column">
           <div class="kg-canvas-wrap china-network-canvas-wrap">
             <svg id="chinaAuthorNetworkGraph" class="kg-canvas china-network-canvas" xmlns="http://www.w3.org/2000/svg"></svg>
           </div>
           <div class="kg-legend" id="chinaNetworkLegend"></div>
           <div class="china-network-heatmap" id="chinaNetworkHeatmap"></div>
         </div>
-        <aside class="kg-detail" id="chinaNetworkDetail">
+        <aside class="kg-detail china-network-detail" id="chinaNetworkDetail">
           <div class="kg-empty-hint">点击医院节点或医院之间的边查看合作医院与 PMID 文献清单。</div>
         </aside>
       </div>
