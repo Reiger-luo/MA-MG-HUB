@@ -36,7 +36,7 @@ MA-MG-HUB 不是单纯的文献列表，而是医学事务团队的 MG 情报工
 
 | 口径 | 当前规模 | 用途 |
 |---|---:|---|
-| 公开滚动层 | 近一年文献 1,151 篇；中国相关 316 篇；14 天候选信号 32 条 | 工作台、情报中心、信号板、中国情报 |
+| 公开滚动层 | 近一年文献 1,151 篇；中国相关 316 篇；14 天 MG-core 聚合信号 8 条 / 26 篇 PMID | 工作台、情报中心、信号板、中国情报 |
 | full / 语义底座 | full 轻索引与社区层 10,656 篇 | 知识图谱、社区归类、专家画像、跨库检索 |
 
 Dashboard 与 `pipeline-status.js` 显示两套口径：`public_rolling_count` 为 1,151 篇，`semantic_full_count` 为 10,656 篇。full 口径来自 raw full / full-index / community full 产物；recent 口径分别记录 `literature-recent.js` 与 `communityAssignmentsRecent.js`，当前生效的 active recent 以实际文件更新时间较新的那个为准。`MG_SEMANTIC_FULL_COUNT` 和 `MG_TOTAL_COUNT` 只作为 recent 文件头部的声明与兼容校验字段。
@@ -46,7 +46,7 @@ Dashboard 与 `pipeline-status.js` 显示两套口径：`public_rolling_count` �
 | 产物 | 当前规模 | 用途 |
 |---|---:|---|
 | `data/literature-recent.js` | 1,151 篇 | 近一年公开文献列表 |
-| `data/signals-weekly.js` | 32 条 | 近 14 天候选信号 |
+| `data/signals-weekly.js` | 8 条父级 Signal / 20 条 KOL talking point / 26 篇 PMID | 近 14 天 MG-core Signal → KOL |
 | `data/china-intelligence.js` | 120 条摘要 | 中国情报 |
 | `data/literature-full-index.js` | 10,656 篇 | full 文献轻索引，不含 abstract |
 | `data/communityTaxonomy.js` | 10 个社区 | 医学事务主题 taxonomy |
@@ -65,7 +65,7 @@ PubMed / ClinicalTrials.gov / EasyScholar / 中国监管状态 / 会议来源
   ↓
 本地 full 底座：literature-full.json、communityAssignments.jsonl、communityCorpusPack.jsonl
   ↓
-公开滚动层：literature-recent.js、signals-weekly.js、china-intelligence.js
+公开滚动层：literature-recent.js → MG-core 过滤 → 主题聚合 → signals-weekly.js（Signal → Talking Points → Evidence）
   ↓
 语义层：communityTaxonomy.js、communityCards.js、communityWeekly.js、communityAssignments-*.js
   ↓
@@ -205,6 +205,19 @@ node --check assets/*.js
 - 主页面资源路径与相对导航
 - `assets/common.js` 的 URL 协议安全约束
 - `scripts/studyClassifier.py` 的证据等级与研究类型分类
+- 文献 Signal → Talking Points → PMID evidence 的父子关系、引用覆盖率和 MG-core 排除规则
+- 中国作者-机构网络的药物标签归一化与边/节点统计
+
+当前完整质量门：
+
+```bash
+python3 -m pytest -q
+python3 -m py_compile scripts/*.py
+for f in assets/*.js; do node --check "$f" || exit 1; done
+git diff --check
+```
+
+LLM 语义层是可选增强，不应成为公开基础数据发布的单点故障。若 `DEEPSEEK_API_KEY` 不可用或返回不合格 JSON，`build-frontend-data.py` 生成的确定性 MG-core 主题聚合仍然保留；发布前应检查 `data/signals-weekly.js` 的 `source_policy.published_reference_coverage`。
 
 ## 开发约定
 

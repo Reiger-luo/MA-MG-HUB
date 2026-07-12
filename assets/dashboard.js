@@ -102,8 +102,8 @@
       var kolHtml = renderDashboardSignalToKol(signal);
       return '<article class="signal-card signal-' + escapeHtml(signal.strength) + '">' +
         '<div class="signal-card-head"><span class="signal-strength">' + escapeHtml(signal.strength) + '信号</span><span class="signal-type">' + escapeHtml(signal.type) + '</span></div>' +
-        '<a class="signal-title" href="' + escapeHref(article.url) + '" target="_blank" rel="noopener">' + escapeHtml(signal.summary) + '</a>' +
-        '<div class="signal-meta">' + escapeHtml(article.journal || '') + ' · PMID ' + escapeHtml(article.pmid || '-') + '</div>' +
+        '<a class="signal-title" href="' + escapeHref(article.url) + '" target="_blank" rel="noopener">' + escapeHtml(signal.title || signal.summary || article.title || '') + '</a>' +
+        '<div class="signal-meta">' + escapeHtml(signal.article_count ? signal.article_count + ' 篇文献聚合' : (article.journal || '')) + ' · PMID ' + escapeHtml(article.pmid || '-') + '</div>' +
         kolHtml +
         (drugHtml ? '<div class="signal-topic-row">' + drugHtml + '</div>' : '') +
       '</article>';
@@ -115,12 +115,15 @@
     var leads = signal.kol_leads || [];
     var ma = signal.medical_affairs || {};
     var implication = signal.medical_affairs_implication || ma.implication || '';
+    var point = (signal.talkingPoints || signal.kolFocus || [])[0] || {};
     if (!signal.signal_to_kol && !leads.length && !implication) return '';
     var lead = leads[0] || {};
     var leadText = lead.name ? [lead.name, lead.institution].filter(Boolean).join(' · ') : '';
     return '<div class="signal-kol-bridge compact">' +
-      '<div class="signal-kol-kicker">Signal → KOL</div>' +
-      (implication ? '<p>' + escapeHtml(implication) + '</p>' : '') +
+      '<div class="signal-kol-kicker">Signal → Talking Point</div>' +
+      (!point.title && implication ? '<p>' + escapeHtml(implication) + '</p>' : '') +
+      (point.title ? '<p><strong>交流点</strong>：' + escapeHtml(point.title) + '</p>' : '') +
+      (point.keyMessages && point.keyMessages[0] ? '<p>' + escapeHtml(point.keyMessages[0]) + '</p>' : '') +
       (leadText ? '<p><strong>KOL lead</strong>：' + escapeHtml(leadText) + '</p>' : '') +
     '</div>';
   }

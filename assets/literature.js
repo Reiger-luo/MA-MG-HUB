@@ -895,13 +895,24 @@
       signalItems = window.MG_SIGNALS_DATA.signals.map(function(signal) {
         return {
           article: signal.article || {},
-          date: parseDate(signal.date),
+          date: parseDate(signal.date || signal.article && signal.article.entry_date),
           type: signal.type || '新证据',
+          title: signal.title || signal.summary || (signal.article && signal.article.title) || '',
+          summary: signal.summary || signal.title || '',
           strength: signal.strength || '弱',
           topics: signal.keywords || [],
           drugs: signal.drugs || [],
           score: signal.score || 0,
           age: 0,
+          article_count: signal.article_count || (signal.related_pmids || []).length || 1,
+          china_related: Boolean(signal.china_related || signal.article && signal.article.china_related),
+          related_pmids: signal.related_pmids || [],
+          refs: signal.refs || [],
+          takeaway: signal.takeaway || '',
+          whySignal: signal.whySignal || '',
+          evidenceBoundary: signal.evidenceBoundary || '',
+          maUse: signal.maUse || '',
+          talkingPoints: signal.talkingPoints || signal.kolFocus || [],
           signal_to_kol: signal.signal_to_kol || null,
           kol_leads: signal.kol_leads || [],
           institution_leads: signal.institution_leads || [],
@@ -930,7 +941,7 @@
     for (var i = 0; i < signalItems.length; i++) {
       var s = signalItems[i];
       counts[s.strength]++;
-      if (s.article.china_related) counts.china++;
+      if (s.china_related || (s.article && s.article.china_related)) counts.china++;
       typeCounts[s.type] = (typeCounts[s.type] || 0) + 1;
       for (var k = 0; k < s.topics.length; k++) {
         topicCounts[s.topics[k]] = (topicCounts[s.topics[k]] || 0) + 1;
@@ -984,8 +995,44 @@
     }
   }
 
+  function renderSignalReferenceLinks(refs) {
+    return (refs || []).slice(0, 5).map(function(ref) {
+      var pmid = ref && ref.pmid ? 'PMID ' + ref.pmid : '证据';
+      var title = ref && ref.title ? ref.title : pmid;
+      if (!ref || !ref.url) return '<span class="literature-signal-ref">' + escapeHtml(pmid) + '</span>';
+      return '<a class="literature-signal-ref" href="' + escapeHref(ref.url) + '" target="_blank" rel="noopener" title="' + escapeHtml(title) + '">' + escapeHtml(pmid) + '</a>';
+    }).join('');
+  }
+
+  function renderLiteratureTalkingPoints(item) {
+    var points = item.talkingPoints || item.kolFocus || [];
+    if (!item.whySignal && !item.evidenceBoundary && !points.length) return '';
+    var pointHtml = points.slice(0, 4).map(function(point, index) {
+      var tier = point.priorityTier || 'disease_progress';
+      var tierLabel = point.priorityLabel || (tier === 'efgar' ? 'efgar重点传递' : tier === 'competitor_response' ? '竞品应对解读' : '疾病进展传递');
+      var messages = (point.keyMessages || []).map(function(message) {
+        return '<li>' + escapeHtml(message) + '</li>';
+      }).join('');
+      return '<article class="literature-signal-point">' +
+        '<div class="literature-signal-point-head"><span>交流 ' + escapeHtml(String(index + 1).padStart(2, '0')) + '</span><em class="literature-signal-tier ' + escapeHtml(tier) + '">' + escapeHtml(tierLabel) + '</em></div>' +
+        '<strong>' + escapeHtml(point.title || '') + '</strong>' +
+        (point.whyKol ? '<p class="literature-signal-why">' + escapeHtml(point.whyKol) + '</p>' : '') +
+        (messages ? '<ul>' + messages + '</ul>' : '') +
+        '<div class="literature-signal-point-refs">' + renderSignalReferenceLinks(point.refs || []) + '</div>' +
+      '</article>';
+    }).join('');
+    return '<div class="literature-signal-narrative">' +
+      '<div class="signal-kol-kicker">Signal → Talking Points</div>' +
+      (item.takeaway ? '<p class="literature-signal-takeaway">' + escapeHtml(item.takeaway) + '</p>' : '') +
+      (item.whySignal ? '<div class="literature-signal-field"><span>为什么是线索</span><p>' + escapeHtml(item.whySignal) + '</p></div>' : '') +
+      (item.evidenceBoundary ? '<div class="literature-signal-field boundary"><span>证据边界</span><p>' + escapeHtml(item.evidenceBoundary) + '</p></div>' : '') +
+      (pointHtml ? '<div class="literature-signal-points"><span>可转化 KOL 交流</span>' + pointHtml + '</div>' : '') +
+      (item.refs && item.refs.length ? '<div class="literature-signal-refs"><span>证据锚点</span><div>' + renderSignalReferenceLinks(item.refs) + '</div></div>' : '') +
+    '</div>';
+  }
+
   function renderSignalCard(item) {
-    var a = item.article;
+    var a = item.article || {};
     var dateStr = item.date ? item.date.toLocaleDateString('zh-CN') : (a.pub_date || '');
     var topicHtml = '';
     for (var i = 0; i < item.topics.length; i++) {
@@ -995,22 +1042,28 @@
     for (var d = 0; d < item.drugs.length; d++) {
       drugHtml += '<span class="signal-drug">' + escapeHtml(item.drugs[d]) + '</span>';
     }
-    var tagHtml = topicHtml + drugHtml + (a.china_related ? '<span class="signal-topic china">中国相关</span>' : '');
+    var tagHtml = topicHtml + drugHtml + (item.china_related ? '<span class="signal-topic china">中国相关</span>' : '');
     var kolHtml = renderSignalToKol(item);
+    var narrativeHtml = renderLiteratureTalkingPoints(item);
+    var title = item.title || item.summary || a.title || '(无标题)';
+    var titleHtml = a.url ? '<a class="signal-title" href="' + escapeHref(a.url) + '" target="_blank" rel="noopener">' + escapeHtml(title) + '</a>' : '<strong class="signal-title">' + escapeHtml(title) + '</strong>';
+    var meta = item.article_count > 1 ? escapeHtml(item.article_count + ' 篇文献聚合 · ' + (item.date_range ? item.date_range.from + '–' + item.date_range.to : dateStr)) : buildArticleMeta(a, dateStr);
     return '' +
       '<article class="signal-card signal-' + escapeHtml(item.strength) + '">' +
         '<div class="signal-card-head">' +
           '<span class="signal-strength">' + escapeHtml(item.strength) + '信号</span>' +
           '<span class="signal-type">' + escapeHtml(item.type) + '</span>' +
         '</div>' +
-        '<a class="signal-title" href="' + escapeHref(a.url) + '" target="_blank" rel="noopener">' + escapeHtml(a.title || '(无标题)') + '</a>' +
-        '<div class="signal-meta">' + buildArticleMeta(a, dateStr) + '</div>' +
+        titleHtml +
+        '<div class="signal-meta">' + meta + '</div>' +
+        narrativeHtml +
         kolHtml +
         '<div class="signal-topic-row">' + tagHtml + '</div>' +
       '</article>';
   }
 
   function renderSignalToKol(item) {
+    if ((item.talkingPoints || item.kolFocus || []).length) return '';
     var leads = item.kol_leads || [];
     var institutions = item.institution_leads || [];
     var ma = item.medical_affairs || {};

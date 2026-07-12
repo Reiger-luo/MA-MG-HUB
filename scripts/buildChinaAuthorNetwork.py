@@ -23,6 +23,7 @@ if str(PROJECT) not in sys.path:
     sys.path.insert(0, str(PROJECT))
 
 from scripts.common.io import atomic_write_js_global, load_js_global, load_json
+from scripts.common.drug_tags import extract_drug_tag_ids, public_drug_catalog
 
 
 DATA_DIR = PROJECT / "data"
@@ -484,6 +485,7 @@ def compact_article(article: dict[str, Any]) -> dict[str, Any]:
         "evidence_level": article.get("evidence_level", ""),
         "study_types": article.get("study_types") or [],
         "china_related": bool(article.get("china_related")),
+        "drug_tags": extract_drug_tag_ids(article),
     }
 
 
@@ -517,6 +519,8 @@ def ensure_node(nodes: dict[str, dict[str, Any]], hospital: dict[str, Any]) -> d
             "source_labels": set(),
             "authors": Counter(),
             "topics": Counter(),
+            "drug_paper_ids": defaultdict(set),
+            "all_author_drug_paper_ids": defaultdict(set),
             "first_author_paper_ids": set(),
             "corresponding_author_paper_ids": set(),
             "collaborators": set(),
@@ -547,6 +551,7 @@ def build_network(articles: list[dict[str, Any]], source_scope: str = "full") ->
             continue
         china_papers += 1
         topics = article_topics(article)
+        drug_tags = extract_drug_tag_ids(article)
 
         all_hospitals, all_excluded = unique_hospitals_from_affiliations(all_author_affiliations(article))
         for item in all_excluded:
@@ -564,11 +569,15 @@ def build_network(articles: list[dict[str, Any]], source_scope: str = "full") ->
                 "paper_ids": set(),
                 "all_author_occurrences": 0,
                 "hospital_paper_ids": defaultdict(set),
+                "drug_paper_ids": defaultdict(set),
             })
             row["hospital_ids"].add(hospital["id"])
             row["paper_ids"].add(pmid)
             row["all_author_occurrences"] += 1
             row["hospital_paper_ids"][hospital["id"]].add(pmid)
+            for drug_id in drug_tags:
+                node["all_author_drug_paper_ids"][drug_id].add(pmid)
+                row["drug_paper_ids"][drug_id].add(pmid)
 
         authors_graph = []
         edge_hospital_ids: set[str] = set()
@@ -592,6 +601,8 @@ def build_network(articles: list[dict[str, Any]], source_scope: str = "full") ->
                 node["authors"][author["name"]] += 1
                 for topic in topics:
                     node["topics"][topic] += 1
+                for drug_id in drug_tags:
+                    node["drug_paper_ids"][drug_id].add(pmid)
                 if author["role"] == "first":
                     node["first_author_paper_ids"].add(pmid)
                 if author["role"] == "corresponding":
@@ -621,9 +632,12 @@ def build_network(articles: list[dict[str, Any]], source_scope: str = "full") ->
                 "paper_ids": set(),
                 "authors": Counter(),
                 "topics": Counter(),
+                "drug_paper_ids": defaultdict(set),
                 "latest_date": "",
             })
             edge["paper_ids"].add(pmid)
+            for drug_id in drug_tags:
+                edge["drug_paper_ids"][drug_id].add(pmid)
             edge["latest_date"] = max(edge["latest_date"], str(article.get("entry_date") or article.get("pub_date") or ""))
             for author in authors_graph:
                 edge["authors"][author["name"]] += 1
@@ -652,6 +666,11 @@ def build_network(articles: list[dict[str, Any]], source_scope: str = "full") ->
             "geo_scopes": sorted({source["geo_scope"], target["geo_scope"]}),
             "top_authors": counter_top(edge["authors"], 8),
             "top_topics": counter_top(edge["topics"], 8),
+            "drug_counts": {
+                drug_id: len(paper_ids)
+                for drug_id, paper_ids in sorted(edge["drug_paper_ids"].items())
+                if paper_ids
+            },
         })
     edge_list.sort(key=lambda item: (-item["edge_weight"], item["source_label"], item["target_label"]))
 
@@ -674,6 +693,26 @@ def build_network(articles: list[dict[str, Any]], source_scope: str = "full") ->
             "degree": len(node["collaborators"]),
             "top_authors": counter_top(node["authors"], 10),
             "top_topics": counter_top(node["topics"], 8),
+            "drug_counts": {
+                drug_id: len(paper_ids)
+                for drug_id, paper_ids in sorted(node["drug_paper_ids"].items())
+                if paper_ids
+            },
+            "all_author_drug_counts": {
+                drug_id: len(paper_ids)
+                for drug_id, paper_ids in sorted(node["all_author_drug_paper_ids"].items())
+                if paper_ids
+            },
+            "drug_paper_ids": {
+                drug_id: sort_pmids_latest(paper_ids, papers)[:200]
+                for drug_id, paper_ids in sorted(node["drug_paper_ids"].items())
+                if paper_ids
+            },
+            "all_author_drug_paper_ids": {
+                drug_id: sort_pmids_latest(paper_ids, papers)[:200]
+                for drug_id, paper_ids in sorted(node["all_author_drug_paper_ids"].items())
+                if paper_ids
+            },
             "paper_ids": paper_ids[:200],
             "all_author_paper_ids": all_author_ids[:200],
         })
@@ -689,6 +728,17 @@ def build_network(articles: list[dict[str, Any]], source_scope: str = "full") ->
             "hospital_count": len(row["hospital_ids"]),
             "paper_count": len(row["paper_ids"]),
             "all_author_occurrences": row["all_author_occurrences"],
+            "drug_counts": {
+                drug_id: len(paper_ids)
+                for drug_id, paper_ids in sorted(row["drug_paper_ids"].items())
+                if paper_ids
+            },
+            "paper_ids": sorted(row["paper_ids"]),
+            "drug_paper_ids": {
+                drug_id: sorted(paper_ids)
+                for drug_id, paper_ids in sorted(row["drug_paper_ids"].items())
+                if paper_ids
+            },
             "top_hospitals": [
                 {"id": hospital_id, "label": nodes[hospital_id]["label"], "count": len(paper_ids)}
                 for hospital_id, paper_ids in sorted(
@@ -701,6 +751,13 @@ def build_network(articles: list[dict[str, Any]], source_scope: str = "full") ->
 
     mainland_default_edges = [e for e in edge_list if e["edge_weight"] >= DEFAULT_DISPLAY_EDGE_WEIGHT and e["geo_scopes"] == ["mainland"]]
     graph_author_parse_rate = (graph_author_with_hospital / graph_author_rows) if graph_author_rows else 0
+    drug_paper_counts = Counter()
+    for paper in papers.values():
+        for drug_id in paper.get("drug_tags") or []:
+            drug_paper_counts[drug_id] += 1
+    drug_catalog = public_drug_catalog()
+    for drug in drug_catalog:
+        drug["article_count"] = drug_paper_counts.get(drug["id"], 0)
 
     return {
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -719,6 +776,7 @@ def build_network(articles: list[dict[str, Any]], source_scope: str = "full") ->
             "data_edge_threshold": DATA_EDGE_THRESHOLD,
             "institution_level": "hospital_canonical",
             "node_label_policy": "english_or_pinyin_canonical_no_zh_dictionary",
+            "drug_tags": "title_abstract_keywords_mesh_chemicals_text_match",
         },
         "display_policy": {
             "default_geo_scope": "mainland",
@@ -739,7 +797,10 @@ def build_network(articles: list[dict[str, Any]], source_scope: str = "full") ->
             "graph_author_rows": graph_author_rows,
             "graph_author_with_hospital": graph_author_with_hospital,
             "graph_author_hospital_parse_rate": round(graph_author_parse_rate, 4),
+            "drug_tagged_papers": sum(1 for paper in papers.values() if paper.get("drug_tags")),
+            "drug_paper_counts": dict(sorted(drug_paper_counts.items())),
         },
+        "drug_catalog": drug_catalog,
         "nodes": node_list,
         "edges": edge_list,
         "default_edge_ids": [edge["id"] for edge in mainland_default_edges],

@@ -44,4 +44,8 @@ def test_china_network_map_asset_and_render_hook_exist():
     assert "paper.entry_date || paper.pub_date" in frontend
     assert "latestFirst" in frontend
     assert "provinceHeatmapStats" in frontend
+    assert "chinaNetworkDrugFilter" in frontend
+    assert "renderDrugCounts" in frontend
+    assert "all_author_drug_paper_ids" in frontend
+    assert "drug_paper_ids" in frontend
     assert "GS（2016）2923号" in attribution

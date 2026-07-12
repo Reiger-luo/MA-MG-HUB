@@ -205,7 +205,7 @@
         <div class="keyword-cloud" id="signalKeywords"></div>
         <h3>信号口径</h3>
         <div class="signal-spec">
-          <p class="signal-spec-intro">基于规则筛选与评分排序，由 <code>build-frontend-data.py</code> 每周生成；下方规则与代码完全对应，<strong>不</strong>使用 LLM。</p>
+          <p class="signal-spec-intro">先做 MG-core 相关性过滤，再按主题聚合文献并生成 <code>Signal → Talking Points → Evidence</code>；确定性规则负责候选与回退，LLM 只负责证据边界内的语义归纳。</p>
 
           <div class="signal-spec-block">
             <h4>① 时间窗口</h4>
@@ -223,8 +223,12 @@
           </div>
 
           <div class="signal-spec-block">
-            <h4>③ 信号分类</h4>
-            <p>类型（新观点 / 新机制 / 新证据）由题名、摘要、出版类型的关键词匹配判定。药物名称从文本中直接提取，一篇可能命中多个。</p>
+            <h4>③ MG-core 与跨文献聚合</h4>
+            <ul>
+              <li>题名明确以 MG 为主体，或摘要重复出现 MG 且不存在其他疾病主导标题。</li>
+              <li>仅把 MG 作为比较组 / 背景的 CIDP、stiff-person、MS 等记录排除。</li>
+              <li>候选按 efgartigimod、其他靶向机制、抗体分型、治疗安全性、患者负担和临床路径等主题聚合。</li>
+            </ul>
           </div>
 
           <div class="signal-spec-block">
@@ -237,8 +241,8 @@
           </div>
 
           <div class="signal-spec-block">
-            <h4>⑤ 排序与数量</h4>
-            <p>数据层不设固定上限；按 强度 &gt; 评分 &gt; 日期 降序，前端优先展示高价值信号卡片。</p>
+            <h4>⑤ Signal → KOL</h4>
+            <p>父层 Signal 说明“近期文献发生了什么变化”；子层 Talking Point 绑定具体 PMID，说明“拿哪条证据和 KOL 说什么/问什么”。efgar → 竞品应对 → 疾病进展排序，作者和机构仅作为证据线索，不等同于已确认 KOL。</p>
           </div>
         </div>
       </aside>
@@ -353,6 +357,6 @@
 <script src="../data/literature-recent.js?v=20260619"></script>
 <script src="../data/signals-weekly.js"></script>
 <script src="../data/communityTaxonomy.js"></script>
-<script src="../assets/literature.js"></script>
+<script src="../assets/literature.js?v=20260712"></script>
 </body>
 </html>

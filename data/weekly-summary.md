@@ -1,27 +1,27 @@
 # MA-MG-HUB 周更
 
-生成时间：2026-07-10 19:16:46
+生成时间：2026-07-12 02:59:27
 
 ## 数据状态
 
 - 近1年文献：1151
 - 中国相关：316
-- 候选信号：32
-- 文献级 Signal-to-KOL：32（自动审核发布）
+- 候选信号：8
+- 文献级 Signal-to-KOL：8（自动审核发布）
 - 专家画像：52498
 - 内容模块：6
 
-## 强信号 Top 3
+## 优先 Signal Top 3
 
-1. [强] Serum inflammatory proteomic signatures define chronic inflammatory demyelinating polyneuropathy and inform on disease activity.（PMID 42349252）
-2. [强] Clinical Characteristics and Treatment Management of Seronegative Myasthenia Gravis: A Systematic Review of the Literature.（PMID 42387811）
-3. [强] Phase 1 Study Evaluating Gefurulimab Pharmacokinetics and Safety Following Delivery Via Autoinjector or Prefilled Syringe With Needle Safety Device in Healthy Adults.（PMID 42379942）
+1. [弱] 围手术期抗体清除治疗策略优化：efgartigimod 与淋巴血浆置换在胸腺切除术前快速清除抗体中的真实世界比较（PMID 42322065）
+2. [中] MG特殊亚群：青少年、晚发型及重叠综合征的临床特征与管理挑战（PMID 42384108）
+3. [强] 新型FcRn拮抗剂和补体抑制剂在gMG中的疗效与安全性新证据（PMID 42388397）
 
 ## 文献级 Signal-to-KOL Top 3
 
-1. PMID 42349252｜真实世界/本土证据更新，可补足临床路径、可及性和外推性的医学讨论。｜Bhandage Amol Keshavasa（第一作者；Uppsala University）｜MSL 需整理研究设计、样本来源、治疗路径和可外推边界。
-2. PMID 42387811｜综述/共识/诊疗观点更新，可用于校准医学叙事和专家共识差距。｜Verza Massimiliano Ugo（第一作者；University of Florence）｜MSL 需提炼推荐强度、证据来源和可用于圆桌讨论的争议点。
-3. PMID 42379942｜安全性证据更新，可用于与 KOL 讨论风险分层、监测和患者选择。｜McEneny Alanna（第一作者/通讯作者；Alexion）｜MSL 需准备 AE 定义、采集方式、发生率分母和与既有靶向治疗证据的差异。
+1. PMID 42322065｜1 篇 MG-core 文献聚合为“围手术期抗体清除治疗策略优化：efgartigimod 与淋巴血浆置换在胸腺切除术前快速清除抗体中的真实世界比较”，可用于结构化 KOL 交流和后续证据追踪。｜Yang Huan（末位作者；Xiangya Hospital, Central South University）｜按 PMID 核对研究设计、样本量、终点和结果，再准备与 KOL 讨论的区隔问题。
+2. PMID 42384108｜12 篇 MG-core 文献聚合为“MG特殊亚群：青少年、晚发型及重叠综合征的临床特征与管理挑战”，可用于结构化 KOL 交流和后续证据追踪。｜Pongen Akumtoshi（第一作者/末位作者/通讯作者；Zion Hospital and Research Centre）｜按 PMID 核对研究设计、样本量、终点和结果，再准备与 KOL 讨论的区隔问题。
+3. PMID 42388397｜3 篇 MG-core 文献聚合为“新型FcRn拮抗剂和补体抑制剂在gMG中的疗效与安全性新证据”，可用于结构化 KOL 交流和后续证据追踪。｜McEneny Alanna（第一作者/通讯作者；Alexion）｜按 PMID 核对研究设计、样本量、终点和结果，再准备与 KOL 讨论的区隔问题。
 
 ## 中国情报 Top 3
 
@@ -31,15 +31,15 @@
 
 ## 热点主题
 
-- 疗效: 32
-- 真实世界: 21
-- 抗体分型: 18
-- 安全性: 16
-- 机制: 16
+- 疗效: 20
+- 安全性: 12
+- 抗体分型: 12
+- 真实世界: 12
+- 机制: 9
 
 ## 待处理
 
-- 近 14 天信号: 32
+- 近 14 天信号: 8
 - 已构建专家画像: 52498
 - MSL 内容模块: 6
 - 待确认证据矩阵: 6

@@ -218,6 +218,7 @@ DRUG_KEYWORDS = {
     "Ravulizumab": ["ravulizumab"],
     "Eculizumab": ["eculizumab"],
     "Zilucoplan": ["zilucoplan"],
+    "Gefurulimab": ["gefurulimab"],
     "Nipocalimab": ["nipocalimab"],
     "Batoclimab": ["batoclimab"],
     "Telitacicept": ["telitacicept", "rc18", "rc-18"],
@@ -268,6 +269,110 @@ KOL_ROLE_LABELS = {
     "first_author": "第一作者",
     "last_author": "末位作者",
     "corresponding_author": "通讯作者",
+}
+
+# 文献级 Signal-to-KOL 的 MG-core 门槛。PubMed 检索词允许 MG 出现在比较组、
+# 背景或排除标准中；这里必须再做一次“研究主体”判断，避免 CIDP / stiff-person
+# 等其他神经免疫疾病因为摘要提到 MG 而进入信号板。
+MG_CORE_TITLE_TERMS = (
+    "myasthenia gravis",
+    "generalized myasthenia",
+    "generalised myasthenia",
+    "ocular myasthenia",
+    "juvenile myasthenia",
+)
+MG_CORE_TEXT_TERMS = (
+    "myasthenia gravis",
+    "generalized myasthenia",
+    "generalised myasthenia",
+    "ocular myasthenia",
+    "juvenile myasthenia",
+)
+MG_SECONDARY_DISEASE_TERMS = (
+    "chronic inflammatory demyelinating polyneuropathy",
+    "cidp",
+    "stiff-person syndrome",
+    "stiff person syndrome",
+    "multiple sclerosis",
+    "guillain-barré",
+    "guillain barre",
+    "lambert-eaton",
+    "lambert eaton",
+)
+
+SIGNAL_CLUSTER_META = {
+    "efgar": {
+        "title": "Efgartigimod 证据继续向不同治疗节点和人群延伸",
+        "type": "治疗证据",
+        "tier": "efgar",
+        "keywords": ["FcRn", "疗效", "安全性"],
+    },
+    "fcrn_competitor": {
+        "title": "其他 FcRn 证据补充给药、长期获益与生活质量维度",
+        "type": "竞品证据",
+        "tier": "competitor_response",
+        "keywords": ["FcRn", "疗效", "安全性"],
+    },
+    "complement": {
+        "title": "补体通路证据继续扩展到长期治疗与给药便利性",
+        "type": "竞品证据",
+        "tier": "competitor_response",
+        "keywords": ["补体", "疗效", "安全性"],
+    },
+    "other_targeted": {
+        "title": "其他靶向机制在难治和特殊人群中形成治疗线索",
+        "type": "竞品证据",
+        "tier": "competitor_response",
+        "keywords": ["疗效", "真实世界", "抗体分型"],
+    },
+    "diagnostic_stratification": {
+        "title": "抗体分型与诊断确认成为治疗定位的前置问题",
+        "type": "诊疗进展",
+        "tier": "disease_progress",
+        "keywords": ["抗体分型", "诊疗策略", "疗效"],
+    },
+    "treatment_safety": {
+        "title": "免疫治疗相关风险推动 MG 安全性分层与监测讨论",
+        "type": "安全性",
+        "tier": "disease_progress",
+        "keywords": ["安全性", "疗效", "诊疗策略"],
+    },
+    "patient_burden": {
+        "title": "患者负担、生活质量与治疗偏好进入 MG 证据评价",
+        "type": "患者旅程",
+        "tier": "disease_progress",
+        "keywords": ["安全性", "疗效", "真实世界"],
+    },
+    "mechanism_biomarker": {
+        "title": "机制与生物标志物研究继续解释 MG 亚型和疗效异质性",
+        "type": "新机制",
+        "tier": "disease_progress",
+        "keywords": ["机制", "抗体分型", "疗效"],
+    },
+    "clinical_pathway": {
+        "title": "围手术期、危象与误诊问题持续暴露临床路径缺口",
+        "type": "临床路径",
+        "tier": "disease_progress",
+        "keywords": ["诊疗策略", "疗效", "真实世界"],
+    },
+    "real_world_outcomes": {
+        "title": "真实世界研究补充长期结局、治疗路径与本土实践信息",
+        "type": "真实世界",
+        "tier": "disease_progress",
+        "keywords": ["真实世界", "疗效", "安全性"],
+    },
+    "disease_management": {
+        "title": "MG 管理证据继续覆盖患者结局与临床决策问题",
+        "type": "诊疗进展",
+        "tier": "disease_progress",
+        "keywords": ["疗效", "真实世界", "诊疗策略"],
+    },
+}
+
+SIGNAL_TIER_LABELS = {
+    "efgar": "efgar重点传递",
+    "competitor_response": "竞品应对解读",
+    "disease_progress": "疾病进展传递",
 }
 
 PIPELINE = [
@@ -1094,12 +1199,226 @@ def write_expert_outputs(experts):
         })
 
 
+def mg_core_relevance(article, text=None):
+    """判断文章是否以 MG 为研究主体，而非仅在比较组/背景中提及 MG。"""
+    text = text or text_of(article)
+    title = str(article.get("title") or "").lower()
+    if any(term in title for term in MG_CORE_TITLE_TERMS):
+        return True, "title_explicit_mg"
+    if any(term in title for term in MG_SECONDARY_DISEASE_TERMS):
+        return False, "secondary_disease_in_title"
+    mentions = sum(text.count(term) for term in MG_CORE_TEXT_TERMS)
+    if mentions >= 2:
+        return True, "repeated_mg_mentions"
+    return False, "mg_only_background_or_comparator"
+
+
+def literature_cluster_key(article, topics, drugs):
+    """把单篇候选归入可解释的主题簇；药物优先于泛主题。"""
+    text = text_of(article)
+    if any(term in text for term in ("efgartigimod", "vyvgart", "argx-113", "argx113")):
+        return "efgar"
+    if any(drug in {"nipocalimab", "rozanolixizumab", "batoclimab"} for drug in drugs):
+        return "fcrn_competitor"
+    if any(drug in {"eculizumab", "ravulizumab", "zilucoplan", "gefurulimab"} for drug in drugs):
+        return "complement"
+    if drugs:
+        return "other_targeted"
+    title = str(article.get("title") or "").lower()
+    if has_any(text, ["seronegative", "double-seronegative", "musk", "lrp4", "autoantibody", "misdiagnos"]):
+        return "diagnostic_stratification"
+    if has_any(text, ["immune checkpoint", "myocarditis", "myositis", "fatal", "adverse event", "safety"]):
+        return "treatment_safety"
+    if has_any(text, ["quality of life", "patient preference", "treatment preference", "burden", "fatigue", "exercise", "caregiver"]):
+        return "patient_burden"
+    if has_any(text, ["biomarker", "cytokine", "proteomic", "pathogenesis", "signaling", "signalling"]):
+        return "mechanism_biomarker"
+    if has_any(title + " " + text, ["thymectomy", "thymoma", "preoperative", "myasthenic crisis", "rehabilitation"]):
+        return "clinical_pathway"
+    if has_any(text, RWE_TERMS):
+        return "real_world_outcomes"
+    return "disease_management"
+
+
+def evidence_excerpt(article, limit=320):
+    """从摘要结果/结论段提取原文，避免 Signal-to-KOL 生成无证据数字。"""
+    abstract = re.sub(r"\s+", " ", str(article.get("abstract") or "")).strip()
+    if not abstract:
+        return "摘要正文未提供，需阅读全文核查。"
+    match = re.search(
+        r"(?:findings|results|main results|outcomes|conclusions?|interpretation|implications?)\s*:\s*(.+?)(?=\s+(?:funding|limitations?|conclusions?|interpretation|implications?)\s*:|$)",
+        abstract,
+        flags=re.IGNORECASE,
+    )
+    excerpt = match.group(1).strip() if match else abstract
+    if len(excerpt) > limit:
+        excerpt = excerpt[: limit - 1].rsplit(" ", 1)[0].rstrip(" ,;:") + "…"
+    return excerpt
+
+
+def aggregate_kol_leads(articles):
+    buckets = {}
+    for article in articles:
+        for lead in build_kol_leads(article):
+            key = (normalize_author_key(lead.get("name")), lead.get("institution_key") or "")
+            bucket = buckets.setdefault(key, {**lead, "_pmids": set(), "_roles": set()})
+            bucket["_pmids"].add(str(article.get("pmid") or ""))
+            bucket["_roles"].update(lead.get("roles") or [])
+            bucket["emails"] = sorted(set(bucket.get("emails") or []) | set(lead.get("emails") or []))
+    result = []
+    for bucket in buckets.values():
+        pmids = {pmid for pmid in bucket.pop("_pmids") if pmid}
+        roles = sorted(bucket.pop("_roles"), key=lambda role: ["第一作者", "末位作者", "通讯作者"].index(role) if role in ["第一作者", "末位作者", "通讯作者"] else 9)
+        bucket["roles"] = roles
+        bucket["article_count"] = len(pmids)
+        bucket["rationale"] = f"在该信号的 {len(pmids)} 篇文献中担任" + "/".join(roles or ["关键作者"]) + "，作为作者线索待进一步核查。"
+        result.append(bucket)
+    result.sort(key=lambda item: (-item.get("article_count", 0), -len(item.get("roles") or []), item.get("name", "")))
+    return result[:8]
+
+
+def aggregate_institution_leads(articles, kol_leads):
+    buckets = {}
+    for article in articles:
+        for institution in build_institution_leads(article, build_kol_leads(article)):
+            key = institution.get("institution_key") or normalize_institution_key(institution.get("name"))
+            if not key or key == "institution_unresolved":
+                continue
+            bucket = buckets.setdefault(key, {**institution, "_pmids": set(), "_authors": set(), "_kol": set()})
+            bucket["_pmids"].add(str(article.get("pmid") or ""))
+            bucket["_authors"].update(institution.get("highlighted_kol_names") or [])
+    for lead in kol_leads:
+        key = lead.get("institution_key")
+        if key in buckets and lead.get("name"):
+            buckets[key]["_kol"].add(lead["name"])
+    result = []
+    for bucket in buckets.values():
+        pmids = {pmid for pmid in bucket.pop("_pmids") if pmid}
+        authors = bucket.pop("_authors")
+        kol_names = bucket.pop("_kol")
+        bucket["article_count"] = len(pmids)
+        bucket["highlighted_kol_names"] = sorted(authors | kol_names)
+        result.append(bucket)
+    result.sort(key=lambda item: (-item.get("article_count", 0), -len(item.get("highlighted_kol_names") or []), item.get("name", "")))
+    return result[:8]
+
+
+def cluster_strength(members):
+    levels = {str(item.get("level") or "") for item in members}
+    if levels.intersection({"I", "II"}):
+        return "强"
+    if any(item.get("score", 0) >= 12 for item in members) or len(members) >= 2:
+        return "中"
+    return "弱"
+
+
+def build_cluster_signal(cluster_id, members, latest, signal_index):
+    meta = SIGNAL_CLUSTER_META[cluster_id]
+    members = sorted(members, key=lambda item: (-item["score"], -evidence_score(item.get("level")), item["date"], item["pmid"]))
+    articles = [item["article"] for item in members]
+    pmids = [str(article.get("pmid") or "") for article in articles if article.get("pmid")]
+    refs = [compact_article(article) for article in articles[:5]]
+    strength = cluster_strength(members)
+    max_score = max(item["score"] for item in members)
+    cluster_score = max_score + min(4, max(0, len(members) - 1) * 0.8)
+    level_counts = Counter(item.get("level") or "未分类" for item in members)
+    design_counts = Counter(
+        str(item["article"].get("study_types", ["研究类型待补充"])[0])
+        for item in members
+    )
+    level_text = "、".join(f"{level}级 {count}篇" for level, count in sorted(level_counts.items()))
+    design_text = "、".join(f"{design} {count}篇" for design, count in design_counts.most_common(3))
+    why_signal = (
+        f"近14天有 {len(members)} 篇 MG-core 文献聚集到“{meta['title']}”这一主题，"
+        f"证据等级分布为 {level_text}，形成可继续追踪的文献级证据簇。"
+    )
+    boundary = (
+        f"本簇包含 {design_text}；不同研究设计、终点和人群不可直接横向比较，"
+        "下述结果均为摘要级定位，需回到全文核查。"
+    )
+    takeaway = (
+        f"{len(members)} 篇近14天文献集中覆盖 {meta['title']}；"
+        "先用代表性结果进入 KOL 交流，再按 PMID 核查研究设计和外推边界。"
+    )
+    top_members = members[: min(3, len(members))]
+    messages = [
+        f"PMID {item['pmid']}：{evidence_excerpt(item['article'])}"
+        for item in top_members
+    ]
+    tier = meta["tier"]
+    if tier == "efgar":
+        why_kol = "该簇包含 efgartigimod 相关文献，应优先与 KOL 讨论其具体人群、终点和证据成熟度。"
+    elif tier == "competitor_response":
+        why_kol = "该簇涉及其他治疗机制；交流时应围绕机制、人群、终点、给药、安全性和证据成熟度与 efgar 做区隔，不暗示 head-to-head。"
+    else:
+        why_kol = "该簇提示诊疗、患者负担或机制层面的未满足问题，可用于向 KOL 提问并建立后续证据追踪。"
+    talking_point = {
+        "parentSignalId": f"L{signal_index:02d}",
+        "parentSignalTitle": meta["title"],
+        "priorityTier": tier,
+        "priorityLabel": SIGNAL_TIER_LABELS[tier],
+        "priorityRank": {"efgar": 0, "competitor_response": 1, "disease_progress": 2}[tier],
+        "dimension": meta["type"],
+        "title": meta["title"],
+        "whyKol": why_kol,
+        "kolScore": 5 if tier == "efgar" else (4 if len(members) >= 2 else 3),
+        "keyMessages": messages[:3],
+        "refs": refs[:4],
+    }
+    medical_affairs = {
+        "implication": f"{len(members)} 篇 MG-core 文献形成“{meta['title']}”主题簇，可用于结构化 KOL 交流和后续证据追踪。",
+        "suggested_kol_question": "这些研究在人群、终点、治疗节点和证据成熟度上，哪一项最可能改变当前 MG 临床决策？",
+        "msl_action": "先按 PMID 核对摘要中的研究设计、样本量、终点和结果，再准备与 KOL 讨论的区隔问题。",
+        "evidence_context": f"{level_text}；{design_text}；摘要级聚合。",
+    }
+    return {
+        "id": f"L{signal_index:02d}",
+        "date": max(item["date"] for item in members),
+        "date_range": {"from": min(item["date"] for item in members), "to": max(item["date"] for item in members)},
+        "type": meta["type"],
+        "strength": strength,
+        "title": meta["title"],
+        "summary": meta["title"],
+        "takeaway": takeaway,
+        "whySignal": why_signal,
+        "evidenceBoundary": boundary,
+        "maUse": "用于 MSL briefing、KOL 问题设计和后续全文追踪；不替代逐篇医学核查。",
+        "signalScore": max(1, min(5, round(2 + cluster_score / 10))),
+        "related_pmids": pmids,
+        "keywords": sorted(set(meta["keywords"] + [topic for item in members for topic in item["topics"]]))[:8],
+        "drugs": sorted(set(drug for item in members for drug in item["drugs"])),
+        "score": round(cluster_score, 2),
+        "article_count": len(members),
+        "china_related": any(bool(item["article"].get("china_related")) for item in members),
+        "article": compact_article(members[0]["article"]),
+        "refs": refs,
+        "talkingPoints": [talking_point],
+        "kolFocus": [talking_point],
+        "medical_affairs": medical_affairs,
+        "medical_affairs_implication": medical_affairs["implication"],
+        "kol_leads": aggregate_kol_leads(articles),
+        "institution_leads": aggregate_institution_leads(articles, aggregate_kol_leads(articles)),
+        "signal_to_kol": {
+            "source_artifact": "data/literature-recent.js",
+            "scope": "literature_only",
+            "analysis_model": "literature-signal-to-kol-v1",
+            "aggregation": "mg_core_topic_cluster",
+            "parent_signal_id": f"L{signal_index:02d}",
+            "source_pmids": pmids,
+            "auto_publish": True,
+            "review_required": False,
+        },
+    }
+
+
 def build_signals(recent):
     latest = max((parse_date(a.get("entry_date")) for a in recent if parse_date(a.get("entry_date"))), default=datetime.now())
     cutoff = latest - timedelta(days=14)
-    signals = []
+    candidates = defaultdict(list)
     topic_counter = Counter()
     excluded_conference_records = 0
+    excluded_non_mg_core = Counter()
+
     for article in recent:
         dt = parse_date(article.get("entry_date"))
         if not dt or dt < cutoff:
@@ -1108,37 +1427,24 @@ def build_signals(recent):
             excluded_conference_records += 1
             continue
         text = text_of(article)
+        is_core, reason = mg_core_relevance(article, text)
+        if not is_core:
+            excluded_non_mg_core[reason] += 1
+            continue
         topics = infer_topics(article)
-        for topic in topics:
-            topic_counter[topic] += 1
         level = article.get("evidence_level")
         if not level or is_low_value_signal(article, text):
             continue
         if_val = float(article.get("journal_if") or 0)
-        signal_type = "新证据"
-        if has_any(text, ["guideline", "consensus", "recommendation", "review", "meta-analysis"]):
-            signal_type = "新观点"
-        if has_any(text, ["pathogenesis", "mechanism", "biomarker", "cytokine", "receptor", "autoantibody"]):
-            signal_type = "新机制"
-        # 匹配到的药物通用名（小写），可能为空列表
-        drugs = sorted(
-            drug.lower() for drug, words in DRUG_KEYWORDS.items()
-            if has_any(text, words)
-        )
+        drugs = sorted(drug.lower() for drug, words in DRUG_KEYWORDS.items() if has_any(text, words))
         case_report = is_case_report(article, text)
         drug_signal = has_drug_signal(text)
         safety_signal = has_safety_signal(text)
         high_value_signal = has_high_value_signal(text, topics)
-
-        # 病例报告保留在文献库，但只有涉及药物、安全性、中国相关或明确主题时才推入信号板。
         if case_report and not (drug_signal or safety_signal or article.get("china_related") or topics):
             continue
         if not high_value_signal and not drug_signal and not article.get("china_related"):
             continue
-        # 强度分级
-        #   强（任一）：证据 I/II 级；IF ≥ 10 且不是 V 级机制推理证据
-        #   中（任一）：IF ≥ 5；证据 III/IV 级；中国相关
-        #   弱：其余入选条目
         strength = "弱"
         if level in {"I", "II"} or (if_val >= 10 and level != "V"):
             strength = "强"
@@ -1157,34 +1463,29 @@ def build_signals(recent):
             score += 10
         elif strength == "中":
             score += 4
-
-        medical_affairs = build_medical_affairs_bridge(article, topics, drugs, signal_type, strength)
-        kol_leads = build_kol_leads(article)
-        institution_leads = build_institution_leads(article, kol_leads)
-        signals.append({
+        cluster_id = literature_cluster_key(article, topics, drugs)
+        for topic in topics:
+            topic_counter[topic] += 1
+        candidates[cluster_id].append({
+            "article": article,
             "date": dt.strftime("%Y-%m-%d"),
-            "type": signal_type,
-            "strength": strength,
-            "summary": article.get("title", ""),
-            "related_pmids": [article.get("pmid", "")],
-            "keywords": topics,
+            "pmid": str(article.get("pmid") or ""),
+            "level": level,
+            "topics": topics,
             "drugs": drugs,
-            "score": round(score, 2),
-            "article": compact_article(article),
-            "medical_affairs": medical_affairs,
-            "medical_affairs_implication": medical_affairs["implication"],
-            "kol_leads": kol_leads,
-            "institution_leads": institution_leads,
-            "signal_to_kol": {
-                "source_artifact": "data/literature-recent.js",
-                "scope": "literature_only",
-                "pmid": article.get("pmid", ""),
-                "auto_publish": True,
-                "review_required": False,
-            },
+            "score": score,
         })
-    strength_rank = {"强": 3, "中": 2, "弱": 1}
-    signals.sort(key=lambda item: (-strength_rank.get(item["strength"], 0), -item["score"], item["date"]))
+
+    tier_rank = {"efgar": 0, "competitor_response": 1, "disease_progress": 2}
+    ordered_clusters = sorted(
+        candidates.items(),
+        key=lambda pair: (
+            tier_rank[SIGNAL_CLUSTER_META[pair[0]]["tier"]],
+            -max(item["score"] for item in pair[1]),
+            pair[0],
+        ),
+    )
+    signals = [build_cluster_signal(cluster_id, members, latest, idx) for idx, (cluster_id, members) in enumerate(ordered_clusters, 1)]
     return {
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "window_days": 14,
@@ -1194,6 +1495,11 @@ def build_signals(recent):
             "auto_publish": True,
             "review_required": False,
             "signal_count_unlimited": True,
+            "analysis_model": "literature-signal-to-kol-v1",
+            "aggregation": "mg_core_topic_cluster",
+            "mg_core_policy": "title_explicit_or_repeated_mg_mentions_with_secondary_disease_guard",
+            "excluded_non_mg_core": sum(excluded_non_mg_core.values()),
+            "excluded_non_mg_core_by_reason": dict(excluded_non_mg_core),
             "excluded_conference_records": excluded_conference_records,
             "conference_meeting_policy": "excluded_by_source_type_pub_type_title_guard",
         },

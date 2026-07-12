@@ -54,6 +54,8 @@ def main():
         return
 
     run_step("前端数据产物生成", [sys.executable, "scripts/build-frontend-data.py"])
+    if not args.skip_llm:
+        run_step("文献 Signal-to-KOL 语义归纳", [sys.executable, "scripts/enrich-literature-narrative.py"], optional=True)
     run_step("全库文献轻索引生成", [sys.executable, "scripts/buildFullLiteratureIndex.py"])
     run_step("医学事务社区语义层生成", [sys.executable, "scripts/buildCommunityData.py"])
     run_step("知识库图谱与证据矩阵生成", [sys.executable, "scripts/build-knowledge-data.py"])

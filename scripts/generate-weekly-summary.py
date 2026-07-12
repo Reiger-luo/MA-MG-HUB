@@ -91,7 +91,7 @@ def build_summary() -> str:
         f"- 专家画像：{stats.get('experts', 0)}",
         f"- 内容模块：{stats.get('modules', 0)}",
         "",
-        "## 强信号 Top 3",
+        "## 优先 Signal Top 3",
         "",
     ]
     lines.extend(signal_line(signal, idx) for idx, signal in enumerate(top_signals, 1))

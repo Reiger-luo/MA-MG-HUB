@@ -14,6 +14,7 @@
     search: document.getElementById('chinaNetworkSearch'),
     geo: document.getElementById('chinaNetworkGeoScope'),
     edgeWeight: document.getElementById('chinaNetworkEdgeWeight'),
+    drugFilter: document.getElementById('chinaNetworkDrugFilter'),
     canvas: document.getElementById('chinaAuthorNetworkGraph'),
     legend: document.getElementById('chinaNetworkLegend'),
     heatmap: document.getElementById('chinaNetworkHeatmap'),
@@ -60,6 +61,8 @@
   var edges = [];
   var papers = {};
   var heatmap = [];
+  var drugCatalog = [];
+  var drugById = {};
   var nodesById = {};
   var payloadLoading = false;
   var filtersAttached = false;
@@ -75,7 +78,11 @@
     edges = payload && payload.edges ? payload.edges : [];
     papers = payload && payload.papers ? payload.papers : {};
     heatmap = payload && payload.heatmap ? payload.heatmap : [];
+    drugCatalog = payload && payload.drug_catalog ? payload.drug_catalog : [];
+    drugById = {};
+    drugCatalog.forEach(function (drug) { drugById[drug.id] = drug; });
     nodesById = nodeByIdMap(nodes);
+    renderDrugFilterOptions();
   }
 
   refreshData();
@@ -90,6 +97,49 @@
 
   function currentQuery() {
     return el.search ? (el.search.value || '').trim().toLowerCase() : '';
+  }
+
+  function currentDrugId() {
+    return el.drugFilter ? (el.drugFilter.value || '') : '';
+  }
+
+  function renderDrugFilterOptions() {
+    if (!el.drugFilter) return;
+    var selected = el.drugFilter.value || '';
+    var options = '<option value="">全部药物标签</option>' + drugCatalog
+      .filter(function (drug) { return Number(drug.article_count || 0) > 0; })
+      .sort(function (a, b) { return Number(b.article_count || 0) - Number(a.article_count || 0) || a.label.localeCompare(b.label); })
+      .map(function (drug) {
+        return '<option value="' + escapeHtml(drug.id) + '">' + escapeHtml(drug.label) + ' · ' + escapeHtml(drug.article_count || 0) + '篇</option>';
+      }).join('');
+    el.drugFilter.innerHTML = options;
+    el.drugFilter.value = drugCatalog.some(function (drug) { return drug.id === selected; }) ? selected : '';
+  }
+
+  function paperHasDrug(pmid, drugId) {
+    if (!drugId) return true;
+    return Boolean(papers[pmid] && (papers[pmid].drug_tags || []).indexOf(drugId) !== -1);
+  }
+
+  function edgeDisplayWeight(edge) {
+    var drugId = currentDrugId();
+    if (!drugId) return Number(edge.edge_weight || edge.weight || 0);
+    return Number((edge.drug_counts || {})[drugId] || 0);
+  }
+
+  function edgePaperIds(edge) {
+    return (edge.paper_ids || []).filter(function (pmid) { return paperHasDrug(pmid, currentDrugId()); });
+  }
+
+  function edgeForDisplay(edge) {
+    var displayWeight = edgeDisplayWeight(edge);
+    if (!displayWeight) return null;
+    return Object.assign({}, edge, { display_weight: displayWeight });
+  }
+
+  function nodeDrugCount(node) {
+    var drugId = currentDrugId();
+    return drugId ? Number((node.all_author_drug_counts || {})[drugId] || 0) : Number(node.all_author_paper_count || 0);
   }
 
   function nodeInGeo(node, geoScope) {
@@ -121,8 +171,9 @@
       });
       edges.forEach(function (edge) {
         if (!edgeInGeo(edge, geoScope)) return;
-        if (visibleNodeIds[edge.source] || visibleNodeIds[edge.target]) {
-          visibleEdges.push(edge);
+        var displayEdge = edgeForDisplay(edge);
+        if (displayEdge && (visibleNodeIds[edge.source] || visibleNodeIds[edge.target])) {
+          visibleEdges.push(displayEdge);
           visibleNodeIds[edge.source] = true;
           visibleNodeIds[edge.target] = true;
         }
@@ -130,8 +181,9 @@
     } else {
       edges.forEach(function (edge) {
         if (!edgeInGeo(edge, geoScope)) return;
-        if ((Number(edge.edge_weight || edge.weight || 0)) < minWeight) return;
-        visibleEdges.push(edge);
+        var displayEdge = edgeForDisplay(edge);
+        if (!displayEdge || displayEdge.display_weight < minWeight) return;
+        visibleEdges.push(displayEdge);
         visibleNodeIds[edge.source] = true;
         visibleNodeIds[edge.target] = true;
       });
@@ -139,16 +191,18 @@
 
     var degreeById = {};
     visibleEdges.forEach(function (edge) {
-      degreeById[edge.source] = (degreeById[edge.source] || 0) + Number(edge.edge_weight || edge.weight || 0);
-      degreeById[edge.target] = (degreeById[edge.target] || 0) + Number(edge.edge_weight || edge.weight || 0);
+      degreeById[edge.source] = (degreeById[edge.source] || 0) + edge.display_weight;
+      degreeById[edge.target] = (degreeById[edge.target] || 0) + edge.display_weight;
     });
     var visibleNodes = nodes.filter(function (node) { return visibleNodeIds[node.id]; });
     if (!visibleNodes.length) {
-      visibleNodes = nodes.filter(function (node) { return nodeInGeo(node, geoScope); }).slice(0, 42);
+      visibleNodes = nodes.filter(function (node) {
+        return nodeInGeo(node, geoScope) && nodeDrugCount(node) > 0;
+      }).slice(0, 42);
     }
     visibleNodes.sort(function (a, b) {
       return (degreeById[b.id] || 0) - (degreeById[a.id] || 0) ||
-        Number(b.all_author_paper_count || 0) - Number(a.all_author_paper_count || 0) ||
+        nodeDrugCount(b) - nodeDrugCount(a) ||
         Number(b.paper_count || 0) - Number(a.paper_count || 0) || a.label.localeCompare(b.label);
     });
     var maxNodes = query ? 72 : 64;
@@ -237,7 +291,7 @@
         var dx = target.x - source.x;
         var dy = target.y - source.y;
         var distance = Math.max(24, Math.sqrt(dx * dx + dy * dy));
-        var force = (distance - 170) * 0.0025 * Math.min(3, Number(edge.edge_weight || 1));
+        var force = (distance - 170) * 0.0025 * Math.min(3, Number(edge.display_weight || edge.edge_weight || 1));
         var fx = dx / distance * force;
         var fy = dy / distance * force;
         source.vx += fx;
@@ -259,7 +313,9 @@
   function edgeTitle(edge) {
     var source = nodesById[edge.source] || {};
     var target = nodesById[edge.target] || {};
-    return (source.label || edge.source) + ' ↔ ' + (target.label || edge.target) + ' · ' + (edge.edge_weight || edge.weight || 0) + ' papers';
+    var weight = edge.display_weight == null ? edgeDisplayWeight(edge) : edge.display_weight;
+    return (source.label || edge.source) + ' ↔ ' + (target.label || edge.target) + ' · ' + weight + ' papers' +
+      (currentDrugId() ? ' · ' + ((drugById[currentDrugId()] || {}).label || currentDrugId()) : '');
   }
 
   function renderGraph() {
@@ -283,7 +339,7 @@
       var target = positioned[edge.target];
       if (!source || !target) return;
       var line = document.createElementNS(svgNs, 'line');
-      var weight = Number(edge.edge_weight || edge.weight || 1);
+      var weight = Number(edge.display_weight || edge.edge_weight || edge.weight || 1);
       setSvgAttrs(line, {
         x1: source.x,
         y1: source.y,
@@ -388,6 +444,7 @@
     var geoScope = currentGeoScope();
     var note = query ? '搜索模式：展开匹配医院的全部合作边' : '默认阈值：edge_weight ≥' + minWeight;
     note += '；线 = 第一/通讯作者医院共现 PMID，节点大小 = 全作者文献量';
+    if (currentDrugId()) note += '；当前按药物标签：' + ((drugById[currentDrugId()] || {}).label || currentDrugId());
     if (!graph.edges.length) {
       note += '；当前筛选无合作边，已显示该地区发文量最高的医院节点';
     }
@@ -398,7 +455,9 @@
 
   function incidentEdges(nodeId) {
     return edges.filter(function (edge) { return edge.source === nodeId || edge.target === nodeId; })
-      .sort(function (a, b) { return Number(b.edge_weight || 0) - Number(a.edge_weight || 0); });
+      .map(edgeForDisplay)
+      .filter(Boolean)
+      .sort(function (a, b) { return b.display_weight - a.display_weight; });
   }
 
   function selectNode(nodeId) {
@@ -407,13 +466,17 @@
     renderGraph();
     var node = nodesById[nodeId];
     if (!node || !el.detail) return;
+    var nodeDrugId = currentDrugId();
+    var nodePaperIds = nodeDrugId
+      ? ((node.all_author_drug_paper_ids || {})[nodeDrugId] || [])
+      : (node.paper_ids || []);
     var nodeEdges = incidentEdges(nodeId);
     var collaborators = nodeEdges.slice(0, 20).map(function (edge) {
       var otherId = edge.source === nodeId ? edge.target : edge.source;
       var other = nodesById[otherId] || { label: otherId };
       return '<li><button type="button" class="matrix-node-link" data-china-edge="' + escapeHtml(edge.id) + '">' +
         escapeHtml(other.label) + '</button><br><span class="kg-ref-meta">edge_weight ' +
-        escapeHtml(edge.edge_weight || edge.weight || 0) + ' · PMID ' + escapeHtml((edge.paper_ids || []).slice(0, 4).join(', ')) + '</span></li>';
+        escapeHtml(edge.display_weight) + ' · PMID ' + escapeHtml(edgePaperIds(edge).slice(0, 4).join(', ')) + '</span></li>';
     }).join('');
     el.detail.innerHTML = '<div class="kg-detail-head"><h3>' + escapeHtml(node.label) + '</h3><span>' +
       escapeHtml(node.region || node.geo_scope || '') + '</span></div>' +
@@ -425,7 +488,8 @@
       (collaborators || '<li class="kg-ref-meta">暂无合作边；可能是单中心或未达到当前图谱筛选阈值。</li>') + '</ul></div>' +
       '<div class="kg-detail-section"><h4>代表作者</h4>' + renderMiniTags(node.top_authors, 'label') + '</div>' +
       '<div class="kg-detail-section"><h4>主题</h4>' + renderMiniTags(node.top_topics, 'label') + '</div>' +
-      '<div class="kg-detail-section"><h4>文献</h4>' + renderPaperList(node.paper_ids || [], 8) + '</div>';
+      '<div class="kg-detail-section"><h4>药物标签</h4>' + renderDrugCounts(node.all_author_drug_counts, '全作者文献') + '</div>' +
+      '<div class="kg-detail-section"><h4>文献' + (nodeDrugId ? ' · 当前药物标签' : ' · 联络作者口径') + '</h4>' + renderPaperList(nodePaperIds, 8) + '</div>';
     bindDetailEdgeButtons();
   }
 
@@ -437,11 +501,13 @@
     if (!edge || !el.detail) return;
     var source = nodesById[edge.source] || { label: edge.source };
     var target = nodesById[edge.target] || { label: edge.target };
+    var displayWeight = edgeDisplayWeight(edge);
     el.detail.innerHTML = '<div class="kg-detail-head"><h3>' + escapeHtml(source.label) + ' ↔ ' + escapeHtml(target.label) +
-      '</h3><span>edge_weight ' + escapeHtml(edge.edge_weight || edge.weight || 0) + '</span></div>' +
+      '</h3><span>edge_weight ' + escapeHtml(displayWeight) + '</span></div>' +
       '<div class="kg-detail-section"><h4>合作主题</h4>' + renderMiniTags(edge.top_topics, 'label') + '</div>' +
       '<div class="kg-detail-section"><h4>第一/通讯作者</h4>' + renderMiniTags(edge.top_authors, 'label') + '</div>' +
-      '<div class="kg-detail-section"><h4>合作 PMID</h4>' + renderPaperList(edge.paper_ids || [], 20) + '</div>';
+      '<div class="kg-detail-section"><h4>药物标签</h4>' + renderDrugCounts(edge.drug_counts, '合作文献') + '</div>' +
+      '<div class="kg-detail-section"><h4>合作 PMID</h4>' + renderPaperList(edgePaperIds(edge), 20) + '</div>';
   }
 
   function renderMiniTags(items, key) {
@@ -450,6 +516,24 @@
     return '<div class="signal-topic-row">' + items.slice(0, 10).map(function (item) {
       return '<span class="signal-topic">' + escapeHtml(item[key] || item.label || '') + ' ' + escapeHtml(item.count || '') + '</span>';
     }).join('') + '</div>';
+  }
+
+  function renderDrugCounts(counts, basis) {
+    var items = Object.keys(counts || {}).map(function (id) {
+      return { id: id, label: (drugById[id] || {}).label || id, count: Number(counts[id] || 0) };
+    }).filter(function (item) { return item.count > 0; })
+      .sort(function (a, b) { return b.count - a.count || a.label.localeCompare(b.label); });
+    if (!items.length) return '<p class="kg-ref-meta">暂无药物标签</p>';
+    return '<div class="signal-topic-row">' + items.map(function (item) {
+      return '<span class="signal-drug">' + escapeHtml(item.label) + ' · ' + escapeHtml(item.count) + '篇' +
+        (basis ? ' · ' + escapeHtml(basis) : '') + '</span>';
+    }).join('') + '</div>';
+  }
+
+  function renderPaperDrugTags(paper) {
+    var tags = (paper.drug_tags || []).map(function (id) { return (drugById[id] || {}).label || id; });
+    if (!tags.length) return '';
+    return '<br><span class="kg-ref-meta">药物标签：' + escapeHtml(tags.join('；')) + '</span>';
   }
 
   function paperDateKey(pmid) {
@@ -473,7 +557,7 @@
         escapeHtml(paper.title || ('PMID ' + pmid)) + '</a><br><span class="kg-ref-meta">PMID ' + escapeHtml(pmid) +
         ((paper.entry_date || paper.pub_date) ? ' · ' + escapeHtml(paper.entry_date || paper.pub_date) : '') +
         (paper.journal ? ' · ' + escapeHtml(paper.journal) : '') + (paper.evidence_level ? ' · Level ' + escapeHtml(paper.evidence_level) : '') +
-        '</span>' + authorLine + '</li>';
+        '</span>' + renderPaperDrugTags(paper) + authorLine + '</li>';
     }).join('') + '</ul>';
   }
 
@@ -554,11 +638,16 @@
       if (!province || province === 'Mainland China') return;
       var item = stats[province] || {
         province: province, paper_count: 0, hospital_count: 0,
-        all_author_occurrences: 0, top_hospitals: {}
+        all_author_occurrences: 0, top_hospitals: {}, paper_ids: {}, drug_counts: {}
       };
-      item.paper_count += Number(row.paper_count || 0);
+      var rowPaperIds = currentDrugId() ? ((row.drug_paper_ids || {})[currentDrugId()] || []) : (row.paper_ids || []);
+      rowPaperIds.forEach(function (pmid) { item.paper_ids[pmid] = true; });
+      item.paper_count = Object.keys(item.paper_ids).length;
       item.hospital_count += Number(row.hospital_count || 0);
       item.all_author_occurrences += Number(row.all_author_occurrences || 0);
+      Object.keys(row.drug_counts || {}).forEach(function (drugId) {
+        item.drug_counts[drugId] = (item.drug_counts[drugId] || 0) + Number(row.drug_counts[drugId] || 0);
+      });
       (row.top_hospitals || []).forEach(function (hospital) {
         var id = hospital.id || hospital.label;
         var previous = item.top_hospitals[id] || { id: id, label: hospital.label, count: 0 };
@@ -571,14 +660,35 @@
       stats[province].top_hospitals = Object.keys(stats[province].top_hospitals).map(function (id) {
         return stats[province].top_hospitals[id];
       }).sort(function (a, b) { return b.count - a.count || a.label.localeCompare(b.label); }).slice(0, 10);
+      delete stats[province].paper_ids;
     });
     return stats;
+  }
+
+  function provinceHospitalRanking(province) {
+    var drugId = currentDrugId();
+    return nodes.filter(function (node) {
+      return node.geo_scope === 'mainland' && node.province === province;
+    }).map(function (node) {
+      return {
+        id: node.id,
+        label: node.label,
+        count: drugId ? Number((node.all_author_drug_counts || {})[drugId] || 0) : Number(node.all_author_paper_count || 0)
+      };
+    }).filter(function (item) { return item.count > 0; })
+      .sort(function (a, b) { return b.count - a.count || a.label.localeCompare(b.label); })
+      .slice(0, 10);
   }
 
   function mapFill(value, maximum) {
     if (!value || !maximum) return MAP_COLORS[0];
     var index = Math.min(MAP_COLORS.length - 1, Math.max(1, Math.ceil(value / maximum * (MAP_COLORS.length - 1))));
     return MAP_COLORS[index];
+  }
+
+  function heatmapRowPaperCount(row) {
+    var drugId = currentDrugId();
+    return drugId ? Number((row.drug_counts || {})[drugId] || 0) : Number(row.paper_count || 0);
   }
 
   function bindDetailHospitalButtons() {
@@ -597,25 +707,34 @@
       el.detail.innerHTML = '<div class="kg-empty-hint">医院节点未找到。</div>';
       return;
     }
-    var pmids = latestFirst(node.all_author_paper_ids || node.paper_ids || []);
+    var drugId = currentDrugId();
+    var pmids = latestFirst(drugId
+      ? ((node.all_author_drug_paper_ids || {})[drugId] || [])
+      : (node.all_author_paper_ids || node.paper_ids || []));
+    var drugLabel = drugId ? ((drugById[drugId] || {}).label || drugId) : '';
     el.detail.innerHTML = '<div class="kg-detail-head"><h3>' + escapeHtml(node.label) + '</h3><span>' +
       escapeHtml(province || node.province || node.region || '') + '</span></div>' +
       '<div class="kg-detail-section"><h4>医院文献概况</h4><p>全作者文献 ' + escapeHtml(node.all_author_paper_count || 0) +
-      ' 篇 · 联络作者文献 ' + escapeHtml(node.paper_count || 0) + ' 篇 · 以下按最新入库/发表信息倒序。</p></div>' +
+      ' 篇 · 联络作者文献 ' + escapeHtml(node.paper_count || 0) +
+      (drugLabel ? ' · ' + escapeHtml(drugLabel) + '相关 ' + escapeHtml((node.all_author_drug_counts || {})[drugId] || 0) + ' 篇' : '') +
+      ' · 以下按最新入库/发表信息倒序。</p></div>' +
+      '<div class="kg-detail-section"><h4>药物标签</h4>' + renderDrugCounts(node.all_author_drug_counts, '全作者文献') + '</div>' +
       '<div class="kg-detail-section"><h4>文献清单</h4>' + renderPaperList(pmids, 30) + '</div>';
   }
 
   function showProvinceDetail(province, row) {
     if (!el.detail) return;
     row = row || { paper_count: 0, hospital_count: 0, all_author_occurrences: 0, top_hospitals: [] };
-    var top = (row.top_hospitals || []).map(function (item) {
+    var top = provinceHospitalRanking(province).map(function (item) {
       return '<li><button type="button" class="matrix-node-link" data-china-hospital="' + escapeHtml(item.id || '') +
         '" data-china-province="' + escapeHtml(province) + '">' + escapeHtml(item.label) + '</button><br><span class="kg-ref-meta">' +
         escapeHtml(item.count) + ' 篇全作者 PMID</span></li>';
     }).join('');
+    var drugLabel = currentDrugId() ? ((drugById[currentDrugId()] || {}).label || currentDrugId()) : '';
     el.detail.innerHTML = '<div class="kg-detail-head"><h3>' + escapeHtml(province) + '</h3><span>全作者热力线索</span></div>' +
       '<div class="kg-detail-section"><h4>省级聚合</h4><p>' + escapeHtml(row.paper_count || 0) + ' 篇去重 PMID · ' +
       escapeHtml(row.hospital_count || 0) + ' 个医院节点 · ' + escapeHtml(row.all_author_occurrences || 0) + ' 次 affiliation 出现</p></div>' +
+      (drugLabel ? '<div class="kg-detail-section"><h4>当前药物标签</h4><p>' + escapeHtml(drugLabel) + ' · ' + escapeHtml((row.drug_counts || {})[currentDrugId()] || 0) + ' 篇文本命中文献</p></div>' : '') +
       '<div class="kg-detail-section"><h4>医院排名</h4><p class="kg-ref-meta">点击医院查看最新文献清单。</p><ul class="kg-study-list">' + (top || '<li>暂无</li>') + '</ul></div>';
     bindDetailHospitalButtons();
   }
@@ -627,7 +746,8 @@
     var sorted = Object.keys(stats).sort(function (a, b) {
       return stats[b].paper_count - stats[a].paper_count || a.localeCompare(b);
     });
-    el.heatmap.innerHTML = '<div class="china-network-map-head"><div><h3>全作者医院热力线索 · 中国省级图</h3><p>颜色 = 省级去重 PMID 数；点击省份查看医院排名，点击医院查看最新文献清单。颜色叠加是情报数据层，底图边界与标注来自规范标准地图。</p></div>' +
+    var drugLabel = currentDrugId() ? ((drugById[currentDrugId()] || {}).label || currentDrugId()) : '';
+    el.heatmap.innerHTML = '<div class="china-network-map-head"><div><h3>全作者医院热力线索 · 中国省级图</h3><p>颜色 = ' + (drugLabel ? escapeHtml(drugLabel) + '相关' : '省级') + '去重 PMID 数；点击省份查看医院排名，点击医院查看最新文献清单。颜色叠加是情报数据层，底图边界与标注来自规范标准地图。</p></div>' +
       '<span class="china-network-map-source">标准地图：自然资源部 · 审图号 GS（2016）2923号</span></div>' +
       '<div class="china-network-map-layout"><div class="china-network-map-canvas" id="chinaNetworkMapCanvas"></div><aside class="china-network-map-rank"><h4>省级排行</h4><ol>' +
       sorted.slice(0, 8).map(function (province) {
@@ -668,12 +788,13 @@
   function renderRegionalHeatmapCards() {
     var geoScope = currentGeoScope();
     var rows = heatmap.filter(function (row) { return geoScope === 'all' ? row.geo_scope !== 'mainland' : row.geo_scope === geoScope; })
-      .sort(function (a, b) { return b.paper_count - a.paper_count; }).slice(0, 8);
+      .sort(function (a, b) { return heatmapRowPaperCount(b) - heatmapRowPaperCount(a); }).slice(0, 8);
+    var drugLabel = currentDrugId() ? ((drugById[currentDrugId()] || {}).label || currentDrugId()) : '';
     el.heatmap.innerHTML = '<div class="china-network-map-head"><div><h3>全作者医院热力线索</h3><p>该筛选层没有对应的省级底图，先按独立地区展示去重 PMID 与医院排行。</p></div></div>' +
       '<div class="china-network-heatmap-grid">' + rows.map(function (row) {
         var top = (row.top_hospitals || []).slice(0, 3).map(function (item) { return item.label + ' ' + item.count; }).join('；');
         return '<article class="china-network-heatmap-card"><span>' + escapeHtml(row.province || row.region || row.geo_scope) + '</span><strong>' +
-          escapeHtml(row.paper_count || 0) + ' 篇</strong><em>' + escapeHtml(row.hospital_count || 0) + ' hospitals · ' +
+          escapeHtml(heatmapRowPaperCount(row)) + ' 篇' + (drugLabel ? ' · ' + escapeHtml(drugLabel) : '') + '</strong><em>' + escapeHtml(row.hospital_count || 0) + ' hospitals · ' +
           escapeHtml(row.all_author_occurrences || 0) + ' affiliations</em><p>' + escapeHtml(top || '—') + '</p></article>';
       }).join('') + '</div>';
   }
@@ -707,7 +828,7 @@
   function attachFilters() {
     if (filtersAttached) return;
     filtersAttached = true;
-    [el.search, el.geo, el.edgeWeight].forEach(function (input) {
+    [el.search, el.geo, el.edgeWeight, el.drugFilter].forEach(function (input) {
       if (!input) return;
       input.addEventListener(input.tagName === 'INPUT' ? 'input' : 'change', function () {
         activeEdgeId = '';

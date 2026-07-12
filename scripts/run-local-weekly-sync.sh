@@ -71,6 +71,11 @@ python3 scripts/run-weekly-pipeline.py --skip-status --skip-downstream
 # 分类规则可能独立于周更变化；周更后重扫 full 中的近一年窗口，并重建 recent 与基础前端产物。
 python3 scripts/reclassify-existing-iii.py --modes ALL --recent-days 365
 
+# 文献 Signal-to-KOL 的语义层是可选增强；无 API key 时保留 build-frontend-data.py 的确定性回退产物。
+if ! python3 scripts/enrich-literature-narrative.py; then
+  echo "⚠️ 文献 Signal-to-KOL LLM 归纳失败，继续使用确定性 MG-core 聚合产物。"
+fi
+
 # reclassify 会重建 literature-recent.js 与基础前端数据；这里一次性刷新 full-derived 下游产物。
 python3 scripts/buildFullLiteratureIndex.py
 python3 scripts/buildCommunityData.py

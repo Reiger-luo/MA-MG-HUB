@@ -124,10 +124,10 @@ PubMed / ClinicalTrials.gov / EasyScholar / 中国监管状态 / 会议来源
 
 | 文件 | 当前大小 / 数量 | 用途 | 加载方式 |
 |---|---:|---|---|
-| `data/dashboard-data.js` | 7 KB；生成时间 2026-07-02 00:02:32 | 工作台统计、section、top signals、工作流 | 首页同步加载 |
-| `data/literature-recent.js` | 2.8 MB；1,154 篇 | 情报中心主文献数据 | 情报中心同步加载 |
-| `data/signals-weekly.js` | 27 KB；38 条信号 | 信号板、工作台、MSL 助手 | 同步加载 |
-| `data/china-intelligence.js` | 111 KB；120 条中国情报摘要 | 中国情报 tab | 按需加载 |
+| `data/dashboard-data.js` | 99 KB；生成时间 2026-07-12 01:16:57 | 工作台统计、section、top signals、工作流 | 首页同步加载 |
+| `data/literature-recent.js` | 4.8 MB；1,151 篇 | 情报中心主文献数据 | 情报中心同步加载 |
+| `data/signals-weekly.js` | 146 KB；8 条父级 Signal / 20 条 talking point / 26 个 PMID | Signal → Talking Points → Evidence | 同步加载 |
+| `data/china-intelligence.js` | 127 KB；120 条中国情报摘要 | 中国情报 tab | 按需加载 |
 | `data/literature-full-index.js` | 5.4 MB；10,635 篇轻索引 | 知识库跨库检索 | 懒加载 |
 | `data/knowledge-graph.js` | 6.8 MB；55 节点 / 334 核心边 / 180 矩阵行 | 知识库图谱与证据矩阵 | 知识库同步加载 |
 | `data/graphHealth.js` | 7 KB | 图谱健康度 | 知识库、数据状态同步加载 |
@@ -250,7 +250,7 @@ PubMed / ClinicalTrials.gov / EasyScholar / 中国监管状态 / 会议来源
 | Tab | 数据来源 | 用途 |
 |---|---|---|
 | 文献速览 | `literature-recent.js` | 近一年文献浏览、筛选、分页、证据等级展示 |
-| 信号板 | `signals-weekly.js` | 近 14 天候选信号、强信号、机制/安全/中国等维度 |
+| 信号板 | `signals-weekly.js` | 近 14 天 MG-core 聚合 Signal → Talking Points → Evidence |
 | 中国情报 | `china-intelligence.js` | 中国相关文献、方向、机构/作者线索 |
 | 会议资讯 | `conference-data.js` + `conference.js` | AAN / EAN 会议模块；MGFA / AANEM 仅保留待接入占位 |
 
@@ -293,6 +293,18 @@ EAN 2026 已完成外部文章引用核查。被引用的 31 条 EAN 摘要均�
 - 同一摘要可以同时支撑线索和交流点；线索解释结构变化，交流点承载可传递的具体数据或追问。
 - 交流点排序：`efgar` 数据优先传递；竞品/其他治疗数据从与 efgar 的机制、人群、终点、给药、安全性、证据成熟度区隔角度解读；与产品或治疗无直接关系但重要的疾病进展最后补充。
 - 复刻到 MGFA / AANEM 时，先把稳定摘要链接加入 `SOURCES` / `SOURCE_MONITOR`，保证摘要正文与 locator 可靠，再运行 `enrich-conference-zh.py` 和 `enrich-conference-narrative.py --conference "会议名" --force`。
+
+#### 文献 Signal-to-KOL 生成原则
+
+文献信号与会议信号来源不同，但复用同一语义链条：`PubMed evidence → literature Signal → KOL talking point → PMID evidence`。
+
+- `scripts/build-frontend-data.py` 先做 MG-core 相关性过滤，再按 efgartigimod / 其他靶向机制 / 抗体分型 / 安全性 / 患者负担 / 临床路径等主题聚合。
+- 仅把 MG 作为比较组或背景的 CIDP、stiff-person、MS 等文章不会进入文献 Signal；会议摘要仍严格排除在 `signals-weekly.js` 之外。
+- `scripts/enrich-literature-narrative.py` 只负责证据边界内的语义归纳；所有 `refPmids` 必须来自输入记录，程序写入前会去重并核查公开引用覆盖率。
+- 每个 talking point 必须包含 `parentSignalId`、`priorityTier`、`whyKol`、`keyMessages` 和 `refs`；优先级为 `efgar → competitor_response → disease_progress`。
+- 无 API key 或 LLM 返回不合格 JSON 时，保留确定性 MG-core 聚合回退，不阻断基础周更。
+- 当前公开产物为 8 条父级 Signal、20 条 talking point、26 个唯一 PMID，`published_reference_coverage = 1.0`；该数量随近 14 天 PubMed 窗口变化，不应硬编码到前端逻辑。
+- 手动重建顺序：`python3 scripts/build-frontend-data.py` → `python3 scripts/enrich-literature-narrative.py` → `python3 scripts/generate-weekly-summary.py` → `python3 scripts/generate-pipeline-status.py`。只重建基础数据时，前两步中的第二步可跳过，但发布前必须确认 `signals-weekly.js` 的 `source_policy` 与 PMID 覆盖率。
 
 ---
 
@@ -396,22 +408,24 @@ MG_WEEKLY_DRY_RUN=1 bash scripts/run-local-weekly-sync.sh
 13. 非 dry-run 时 git add → commit → push
 ```
 
-### 9.3 `run-weekly-pipeline.py` 内部 13 步
+### 9.3 `run-weekly-pipeline.py` 内部 15 步
 
 ```
 1. fetch-pubmed-weekly.py
 2. enrich-weekly-literature.py
 3. merge-weekly-literature.py
 4. build-frontend-data.py
-5. buildFullLiteratureIndex.py
-6. buildCommunityData.py
-7. build-knowledge-data.py
-8. build-curated-topic-data.py
-9. buildWikiTopicCoverage.py
-10. buildLandscapeInsights.py
-11. buildBackendOptions.py
-12. generate-weekly-summary.py
-13. generate-pipeline-status.py
+5. enrich-literature-narrative.py（可选；失败回退确定性聚合）
+6. buildFullLiteratureIndex.py
+7. buildCommunityData.py
+8. build-knowledge-data.py
+9. buildChinaAuthorNetwork.py
+10. build-curated-topic-data.py
+11. buildWikiTopicCoverage.py
+12. buildLandscapeInsights.py
+13. buildBackendOptions.py
+14. generate-weekly-summary.py
+15. generate-pipeline-status.py
 ```
 
 ### 9.4 GitHub Actions 兜底
