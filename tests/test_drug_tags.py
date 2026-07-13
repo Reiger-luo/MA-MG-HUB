@@ -51,6 +51,38 @@ def test_drug_tags_normalize_aliases_and_keep_article_level_scope():
     assert tags == ["efgartigimod", "telitacicept"]
 
 
+def test_title_drug_matches_are_authoritative_over_fallback_metadata():
+    module = load_network_module()
+    article = {
+        "pmid": "38436998",
+        "title": "Batoclimab vs Placebo for Generalized Myasthenia Gravis",
+        "abstract": "The discussion mentions efgartigimod and rozanolixizumab.",
+        "keywords": ["nipocalimab"],
+        "mesh_terms": [{"descriptor": "Eculizumab"}],
+        "chemicals": [{"name": "Ravulizumab"}],
+    }
+
+    assert module.extract_drug_tag_ids(article) == ["batoclimab"]
+
+
+def test_fallback_metadata_is_combined_only_when_title_has_no_catalog_match():
+    module = load_network_module()
+    article = {
+        "title": "Targeted therapies for generalized myasthenia gravis",
+        "abstract": "Efgartigimod was evaluated.",
+        "keywords": ["Rystiggo"],
+        "mesh_terms": [{"descriptor": "Eculizumab"}],
+        "chemicals": [{"name": "Tacrolimus"}],
+    }
+
+    assert module.extract_drug_tag_ids(article) == [
+        "efgartigimod",
+        "rozanolixizumab",
+        "eculizumab",
+        "tacrolimus",
+    ]
+
+
 def test_network_exposes_drug_counts_for_edge_and_hospital_views():
     module = load_network_module()
     payload = module.build_network([article_with_drugs()], source_scope="test")

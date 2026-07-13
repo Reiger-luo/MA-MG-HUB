@@ -18,8 +18,7 @@
     canvas: document.getElementById('chinaAuthorNetworkGraph'),
     legend: document.getElementById('chinaNetworkLegend'),
     heatmap: document.getElementById('chinaNetworkHeatmap'),
-    detail: document.getElementById('chinaNetworkDetail'),
-    mainColumn: document.querySelector('.china-network-main-column')
+    detail: document.getElementById('chinaNetworkDetail')
   };
 
   if (!el.canvas) return;
@@ -105,14 +104,45 @@
     return el.drugFilter ? (el.drugFilter.value || '') : '';
   }
 
+  function currentGlobalContext() {
+    var geoLabel = currentGeoScope();
+    if (el.geo && el.geo.options && el.geo.selectedIndex >= 0) {
+      geoLabel = el.geo.options[el.geo.selectedIndex].text;
+    }
+    var drugId = currentDrugId();
+    return {
+      geoScope: currentGeoScope(),
+      geoLabel: geoLabel,
+      drugId: drugId,
+      drugLabel: drugId ? ((drugById[drugId] || {}).label || drugId) : '全部药物标签'
+    };
+  }
+
+  function renderDetailContext(sourceLabel, basis) {
+    var context = currentGlobalContext();
+    return '<div class="china-network-detail-context"><span class="kg-detail-type">' + escapeHtml(sourceLabel) +
+      '</span><p>当前全局筛选：' + escapeHtml(context.geoLabel) + ' · ' + escapeHtml(context.drugLabel) +
+      '</p><p>统计口径：' + escapeHtml(basis) + '</p></div>';
+  }
+
+  function renderContextEmpty(sourceLabel, basis, title, message) {
+    if (!el.detail) return;
+    el.detail.innerHTML = renderDetailContext(sourceLabel, basis) +
+      '<div class="kg-detail-head"><h3>' + escapeHtml(title || '暂无匹配数据') + '</h3></div>' +
+      '<div class="kg-empty-hint">当前全局筛选下暂无匹配数据。' + escapeHtml(message || '') + '</div>';
+  }
+
+  function nodeMatchesGlobalGeo(node) {
+    return Boolean(node && nodeInGeo(node, currentGeoScope()));
+  }
+
   function renderDrugFilterOptions() {
     if (!el.drugFilter) return;
     var selected = el.drugFilter.value || '';
     var options = '<option value="">全部药物标签</option>' + drugCatalog
       .filter(function (drug) { return Number(drug.article_count || 0) > 0; })
-      .sort(function (a, b) { return Number(b.article_count || 0) - Number(a.article_count || 0) || a.label.localeCompare(b.label); })
       .map(function (drug) {
-        return '<option value="' + escapeHtml(drug.id) + '">' + escapeHtml(drug.label) + ' · ' + escapeHtml(drug.article_count || 0) + '篇</option>';
+        return '<option value="' + escapeHtml(drug.id) + '">' + escapeHtml(drug.label) + '</option>';
       }).join('');
     el.drugFilter.innerHTML = options;
     el.drugFilter.value = drugCatalog.some(function (drug) { return drug.id === selected; }) ? selected : '';
@@ -139,7 +169,12 @@
     return Object.assign({}, edge, { display_weight: displayWeight });
   }
 
-  function nodeDrugCount(node) {
+  function graphNodePaperCount(node) {
+    var drugId = currentDrugId();
+    return drugId ? Number((node.drug_counts || {})[drugId] || 0) : Number(node.paper_count || 0);
+  }
+
+  function allAuthorNodePaperCount(node) {
     var drugId = currentDrugId();
     return drugId ? Number((node.all_author_drug_counts || {})[drugId] || 0) : Number(node.all_author_paper_count || 0);
   }
@@ -199,12 +234,12 @@
     var visibleNodes = nodes.filter(function (node) { return visibleNodeIds[node.id]; });
     if (!visibleNodes.length) {
       visibleNodes = nodes.filter(function (node) {
-        return nodeInGeo(node, geoScope) && nodeDrugCount(node) > 0;
+        return nodeInGeo(node, geoScope) && graphNodePaperCount(node) > 0;
       }).slice(0, 42);
     }
     visibleNodes.sort(function (a, b) {
       return (degreeById[b.id] || 0) - (degreeById[a.id] || 0) ||
-        nodeDrugCount(b) - nodeDrugCount(a) ||
+        graphNodePaperCount(b) - graphNodePaperCount(a) ||
         Number(b.paper_count || 0) - Number(a.paper_count || 0) || a.label.localeCompare(b.label);
     });
     var maxNodes = query ? 72 : 64;
@@ -228,13 +263,30 @@
 
   function renderStats() {
     if (!el.stats) return;
-    var summary = payload && payload.summary ? payload.summary : {};
+    var geoScope = currentGeoScope();
+    var graphPaperIds = {};
+    var allAuthorPaperIds = {};
+    var graphNodes = nodes.filter(function (node) {
+      if (!nodeInGeo(node, geoScope) || !graphNodePaperCount(node)) return false;
+      var ids = currentDrugId() ? ((node.drug_paper_ids || {})[currentDrugId()] || []) : (node.paper_ids || []);
+      ids.forEach(function (pmid) { graphPaperIds[pmid] = true; });
+      return true;
+    });
+    var allAuthorNodes = nodes.filter(function (node) {
+      if (!nodeInGeo(node, geoScope) || !allAuthorNodePaperCount(node)) return false;
+      var ids = currentDrugId() ? ((node.all_author_drug_paper_ids || {})[currentDrugId()] || []) : (node.all_author_paper_ids || []);
+      ids.forEach(function (pmid) { allAuthorPaperIds[pmid] = true; });
+      return true;
+    });
+    var graphEdges = edges.filter(function (edge) {
+      return edgeInGeo(edge, geoScope) && edgeDisplayWeight(edge) > 0;
+    });
     var items = [
-      { label: '中国相关文献', value: compactNumber(summary.china_related_papers), note: payload ? payload.source_scope : 'missing' },
-      { label: '医院节点', value: compactNumber(summary.hospitals), note: compactNumber(summary.mainland_hospitals) + ' mainland' },
-      { label: '合作边', value: compactNumber(summary.edges), note: 'data edge ≥1' },
-      { label: '默认阈值', value: '≥1', note: '展示全部数据边' },
-      { label: '作者机构解析率', value: Math.round(Number(summary.graph_author_hospital_parse_rate || 0) * 100) + '%', note: 'first/corresponding' }
+      { label: '联络作者文献', value: compactNumber(Object.keys(graphPaperIds).length), note: 'first/corresponding' },
+      { label: '合作图医院', value: compactNumber(graphNodes.length), note: 'first/corresponding' },
+      { label: '合作边', value: compactNumber(graphEdges.length), note: 'first/corresponding co-occurrence' },
+      { label: '全作者文献', value: compactNumber(Object.keys(allAuthorPaperIds).length), note: 'all-author affiliations' },
+      { label: '全作者医院', value: compactNumber(allAuthorNodes.length), note: 'province evidence map' }
     ];
     el.stats.innerHTML = items.map(function (item) {
       return '<article class="knowledge-stat-card"><span>' + escapeHtml(item.label) + '</span><strong>' +
@@ -259,7 +311,7 @@
         y: cy + Math.sin(angle) * ring * 0.7,
         vx: 0,
         vy: 0,
-        r: Math.max(8, Math.min(24, 8 + Math.sqrt(Number(node.all_author_paper_count || node.paper_count || 0)) * 1.35))
+        r: Math.max(8, Math.min(24, 8 + Math.sqrt(graphNodePaperCount(node)) * 1.35))
       });
     });
     var links = (graphEdges || []).filter(function (edge) {
@@ -388,8 +440,7 @@
       setSvgAttrs(text, { x: point.x, y: point.y + point.r + 13 });
       text.textContent = displayNodeLabel(node);
       var title = document.createElementNS(svgNs, 'title');
-      title.textContent = node.label + ' · 联络作者文献 ' + (node.paper_count || 0) +
-        ' · 全作者文献 ' + (node.all_author_paper_count || 0);
+      title.textContent = node.label + ' · 当前上下文第一/通讯作者文献 ' + graphNodePaperCount(node);
       group.appendChild(circle);
       group.appendChild(text);
       group.appendChild(title);
@@ -445,7 +496,7 @@
     var minWeight = currentEdgeMin();
     var geoScope = currentGeoScope();
     var note = query ? '搜索模式：展开匹配医院的全部合作边' : '当前阈值：edge_weight ≥' + minWeight;
-    note += '；线 = 第一/通讯作者医院共现 PMID，节点大小 = 全作者文献量';
+    note += '；线 = 第一/通讯作者医院共现 PMID，节点大小 = 第一/通讯作者文献量';
     if (currentDrugId()) note += '；当前按药物标签：' + ((drugById[currentDrugId()] || {}).label || currentDrugId());
     if (!graph.edges.length) {
       note += '；当前筛选无合作边，已显示该地区发文量最高的医院节点';
@@ -456,7 +507,9 @@
   }
 
   function incidentEdges(nodeId) {
-    return edges.filter(function (edge) { return edge.source === nodeId || edge.target === nodeId; })
+    return edges.filter(function (edge) {
+      return (edge.source === nodeId || edge.target === nodeId) && edgeInGeo(edge, currentGeoScope());
+    })
       .map(edgeForDisplay)
       .filter(Boolean)
       .sort(function (a, b) { return b.display_weight - a.display_weight; });
@@ -468,11 +521,19 @@
     activeDetail = { type: 'node', id: nodeId };
     renderGraph();
     var node = nodesById[nodeId];
-    if (!node || !el.detail) return;
+    if (!el.detail) return;
+    if (!node || !nodeMatchesGlobalGeo(node)) {
+      renderContextEmpty('医院联络视图', '第一作者 + 通讯作者医院', node ? node.label : nodeId, '所选医院不在当前地域范围内。');
+      return;
+    }
     var nodeDrugId = currentDrugId();
     var nodePaperIds = nodeDrugId
-      ? ((node.all_author_drug_paper_ids || {})[nodeDrugId] || [])
+      ? ((node.drug_paper_ids || {})[nodeDrugId] || [])
       : (node.paper_ids || []);
+    if (!nodePaperIds.length) {
+      renderContextEmpty('医院联络视图', '第一作者 + 通讯作者医院', node.label, '所选医院没有符合当前药物标签的联络作者文献。');
+      return;
+    }
     var nodeEdges = incidentEdges(nodeId);
     var collaborators = nodeEdges.slice(0, 20).map(function (edge) {
       var otherId = edge.source === nodeId ? edge.target : edge.source;
@@ -481,18 +542,20 @@
         escapeHtml(other.label) + '</button><br><span class="kg-ref-meta">edge_weight ' +
         escapeHtml(edge.display_weight) + ' · PMID ' + escapeHtml(edgePaperIds(edge).slice(0, 4).join(', ')) + '</span></li>';
     }).join('');
-    el.detail.innerHTML = '<div class="kg-detail-head"><h3>' + escapeHtml(node.label) + '</h3><span>' +
+    var contextPaperCount = nodeDrugId ? Number((node.drug_counts || {})[nodeDrugId] || 0) : Number(node.paper_count || 0);
+    var nodeMetadata = nodeDrugId ? '' :
+      '<div class="kg-detail-section"><h4>代表作者</h4>' + renderMiniTags(node.top_authors, 'label') + '</div>' +
+      '<div class="kg-detail-section"><h4>主题</h4>' + renderMiniTags(node.top_topics, 'label') + '</div>';
+    el.detail.innerHTML = renderDetailContext('医院联络视图', '第一作者 + 通讯作者医院；文献与合作边同口径') +
+      '<div class="kg-detail-head"><h3>' + escapeHtml(node.label) + '</h3><span>' +
       escapeHtml(node.region || node.geo_scope || '') + '</span></div>' +
       '<div class="kg-detail-section"><h4>节点概况</h4><p>' +
-      '联络作者文献 ' + escapeHtml(node.paper_count || 0) + ' 篇 · 全作者文献 ' + escapeHtml(node.all_author_paper_count || 0) +
-      ' 篇 · 第一作者 ' + escapeHtml(node.first_author_paper_count || 0) +
-      ' · 通讯作者 ' + escapeHtml(node.corresponding_author_paper_count || 0) + ' · 合作医院 ' + escapeHtml(node.collaborator_count || 0) + '</p></div>' +
+      '当前上下文联络作者文献 ' + escapeHtml(contextPaperCount) + ' 篇 · 当前上下文合作医院 ' + escapeHtml(nodeEdges.length) + '</p></div>' +
       '<div class="kg-detail-section"><h4>合作医院</h4><ul class="kg-study-list">' +
       (collaborators || '<li class="kg-ref-meta">暂无合作边；可能是单中心或未达到当前图谱筛选阈值。</li>') + '</ul></div>' +
-      '<div class="kg-detail-section"><h4>代表作者</h4>' + renderMiniTags(node.top_authors, 'label') + '</div>' +
-      '<div class="kg-detail-section"><h4>主题</h4>' + renderMiniTags(node.top_topics, 'label') + '</div>' +
-      '<div class="kg-detail-section"><h4>药物标签</h4>' + renderDrugCounts(node.all_author_drug_counts, '全作者文献') + '</div>' +
-      '<div class="kg-detail-section"><h4>文献' + (nodeDrugId ? ' · 当前药物标签' : ' · 联络作者口径') + '</h4>' + renderPaperList(nodePaperIds, 8) + '</div>';
+      nodeMetadata +
+      '<div class="kg-detail-section"><h4>药物标签</h4>' + renderDrugCounts(node.drug_counts, '第一/通讯作者文献') + '</div>' +
+      '<div class="kg-detail-section"><h4>文献 · 联络作者口径</h4>' + renderPaperList(nodePaperIds) + '</div>';
     bindDetailEdgeButtons();
   }
 
@@ -502,16 +565,28 @@
     activeDetail = { type: 'edge', id: edgeId };
     renderGraph();
     var edge = edges.filter(function (item) { return item.id === edgeId; })[0];
-    if (!edge || !el.detail) return;
+    if (!el.detail) return;
+    if (!edge || !edgeInGeo(edge, currentGeoScope())) {
+      renderContextEmpty('医院合作', '第一作者 + 通讯作者医院共现', edgeId, '所选合作边不在当前地域范围内。');
+      return;
+    }
     var source = nodesById[edge.source] || { label: edge.source };
     var target = nodesById[edge.target] || { label: edge.target };
     var displayWeight = edgeDisplayWeight(edge);
-    el.detail.innerHTML = '<div class="kg-detail-head"><h3>' + escapeHtml(source.label) + ' ↔ ' + escapeHtml(target.label) +
-      '</h3><span>edge_weight ' + escapeHtml(displayWeight) + '</span></div>' +
+    var paperIds = edgePaperIds(edge);
+    if (!displayWeight || !paperIds.length) {
+      renderContextEmpty('医院合作', '第一作者 + 通讯作者医院共现', source.label + ' ↔ ' + target.label, '所选合作边没有符合当前药物标签的文献。');
+      return;
+    }
+    var edgeMetadata = currentDrugId() ? '' :
       '<div class="kg-detail-section"><h4>合作主题</h4>' + renderMiniTags(edge.top_topics, 'label') + '</div>' +
-      '<div class="kg-detail-section"><h4>第一/通讯作者</h4>' + renderMiniTags(edge.top_authors, 'label') + '</div>' +
+      '<div class="kg-detail-section"><h4>第一/通讯作者</h4>' + renderMiniTags(edge.top_authors, 'label') + '</div>';
+    el.detail.innerHTML = renderDetailContext('医院合作', '第一作者 + 通讯作者医院共现；edge_weight 为去重 PMID 数') +
+      '<div class="kg-detail-head"><h3>' + escapeHtml(source.label) + ' ↔ ' + escapeHtml(target.label) +
+      '</h3><span>edge_weight ' + escapeHtml(displayWeight) + '</span></div>' +
+      edgeMetadata +
       '<div class="kg-detail-section"><h4>药物标签</h4>' + renderDrugCounts(edge.drug_counts, '合作文献') + '</div>' +
-      '<div class="kg-detail-section"><h4>合作 PMID</h4>' + renderPaperList(edgePaperIds(edge), 20) + '</div>';
+      '<div class="kg-detail-section"><h4>合作 PMID</h4>' + renderPaperList(paperIds) + '</div>';
   }
 
   function renderMiniTags(items, key) {
@@ -525,7 +600,7 @@
   function renderDrugCounts(counts, basis) {
     var items = Object.keys(counts || {}).map(function (id) {
       return { id: id, label: (drugById[id] || {}).label || id, count: Number(counts[id] || 0) };
-    }).filter(function (item) { return item.count > 0; })
+    }).filter(function (item) { return item.count > 0 && (!currentDrugId() || item.id === currentDrugId()); })
       .sort(function (a, b) { return b.count - a.count || a.label.localeCompare(b.label); });
     if (!items.length) return '<p class="kg-ref-meta">暂无药物标签</p>';
     return '<div class="signal-topic-row">' + items.map(function (item) {
@@ -551,12 +626,13 @@
     });
   }
 
-  function renderPaperList(pmids, limit) {
-    pmids = latestFirst(pmids).slice(0, limit || 10);
+  function renderPaperList(pmids, limit, includeGraphAuthors) {
+    pmids = latestFirst(pmids);
+    if (limit != null) pmids = pmids.slice(0, limit);
     if (!pmids.length) return '<p class="kg-ref-meta">暂无 PMID</p>';
     return '<ul class="kg-study-list">' + pmids.map(function (pmid) {
       var paper = papers[pmid] || { pmid: pmid };
-      var authorLine = renderPaperAuthors(paper);
+      var authorLine = includeGraphAuthors === false ? '' : renderPaperAuthors(paper);
       return '<li><a class="text-link" href="' + escapeHref(pubmedUrl(pmid)) + '" target="_blank" rel="noopener">' +
         escapeHtml(paper.title || ('PMID ' + pmid)) + '</a><br><span class="kg-ref-meta">PMID ' + escapeHtml(pmid) +
         ((paper.entry_date || paper.pub_date) ? ' · ' + escapeHtml(paper.entry_date || paper.pub_date) : '') +
@@ -660,6 +736,11 @@
       stats[province].top_hospitals = Object.keys(stats[province].top_hospitals).map(function (id) {
         return stats[province].top_hospitals[id];
       }).sort(function (a, b) { return b.count - a.count || a.label.localeCompare(b.label); }).slice(0, 10);
+      if (currentDrugId()) {
+        stats[province].hospital_count = nodes.filter(function (node) {
+          return node.geo_scope === 'mainland' && node.province === province && allAuthorNodePaperCount(node) > 0;
+        }).length;
+      }
       delete stats[province].paper_ids;
     });
     return stats;
@@ -704,8 +785,8 @@
     if (!el.detail) return;
     activeDetail = { type: 'mapHospital', id: hospitalId, province: province || '' };
     var node = nodesById[hospitalId];
-    if (!node) {
-      el.detail.innerHTML = '<div class="kg-empty-hint">医院节点未找到。</div>';
+    if (!node || !nodeMatchesGlobalGeo(node)) {
+      renderContextEmpty('医院全作者文献', '全部作者 affiliation', node ? node.label : hospitalId, '所选医院不在当前地域范围内。');
       return;
     }
     var drugId = currentDrugId();
@@ -713,29 +794,44 @@
       ? ((node.all_author_drug_paper_ids || {})[drugId] || [])
       : (node.all_author_paper_ids || node.paper_ids || []));
     var drugLabel = drugId ? ((drugById[drugId] || {}).label || drugId) : '';
-    el.detail.innerHTML = '<div class="kg-detail-head"><h3>' + escapeHtml(node.label) + '</h3><span>' +
+    if (!pmids.length) {
+      renderContextEmpty('医院全作者文献', '全部作者 affiliation', node.label, '所选医院没有符合当前药物标签的全作者文献。');
+      return;
+    }
+    var contextPaperCount = drugId ? Number((node.all_author_drug_counts || {})[drugId] || 0) : Number(node.all_author_paper_count || 0);
+    el.detail.innerHTML = renderDetailContext('医院全作者文献', '全部作者 affiliation；医院文献按去重 PMID') +
+      '<div class="kg-detail-head"><h3>' + escapeHtml(node.label) + '</h3><span>' +
       escapeHtml(province || node.province || node.region || '') + '</span></div>' +
-      '<div class="kg-detail-section"><h4>医院文献概况</h4><p>全作者文献 ' + escapeHtml(node.all_author_paper_count || 0) +
-      ' 篇 · 联络作者文献 ' + escapeHtml(node.paper_count || 0) +
-      (drugLabel ? ' · ' + escapeHtml(drugLabel) + '相关 ' + escapeHtml((node.all_author_drug_counts || {})[drugId] || 0) + ' 篇' : '') +
+      '<div class="kg-detail-section"><h4>医院文献概况</h4><p>当前上下文全作者文献 ' + escapeHtml(contextPaperCount) +
+      (drugLabel ? ' 篇 · ' + escapeHtml(drugLabel) + '相关' : ' 篇') +
       ' · 以下按最新入库/发表信息倒序。</p></div>' +
       '<div class="kg-detail-section"><h4>药物标签</h4>' + renderDrugCounts(node.all_author_drug_counts, '全作者文献') + '</div>' +
-      '<div class="kg-detail-section"><h4>文献清单</h4>' + renderPaperList(pmids, 30) + '</div>';
+      '<div class="kg-detail-section"><h4>文献清单</h4>' + renderPaperList(pmids, null, false) + '</div>';
   }
 
   function showProvinceDetail(province, row) {
     if (!el.detail) return;
     activeDetail = { type: 'province', province: province };
+    if (currentGeoScope() !== 'mainland' && currentGeoScope() !== 'all') {
+      renderContextEmpty('省级全作者分布', '全部作者 affiliation；省级文献按去重 PMID', province, '当前地域不使用中国大陆省级分布。');
+      return;
+    }
     row = row || { paper_count: 0, hospital_count: 0, all_author_occurrences: 0, top_hospitals: [] };
+    if (!Number(row.paper_count || 0)) {
+      renderContextEmpty('省级全作者分布', '全部作者 affiliation；省级文献按去重 PMID', province, '所选省份没有符合当前药物标签的文献。');
+      return;
+    }
     var top = provinceHospitalRanking(province).map(function (item) {
       return '<li><button type="button" class="matrix-node-link" data-china-hospital="' + escapeHtml(item.id || '') +
         '" data-china-province="' + escapeHtml(province) + '">' + escapeHtml(item.label) + '</button><br><span class="kg-ref-meta">' +
         escapeHtml(item.count) + ' 篇全作者 PMID</span></li>';
     }).join('');
     var drugLabel = currentDrugId() ? ((drugById[currentDrugId()] || {}).label || currentDrugId()) : '';
-    el.detail.innerHTML = '<div class="kg-detail-head"><h3>' + escapeHtml(province) + '</h3><span>全作者热力线索</span></div>' +
+    var occurrenceText = currentDrugId() ? '' : ' · ' + escapeHtml(row.all_author_occurrences || 0) + ' 次 affiliation 出现';
+    el.detail.innerHTML = renderDetailContext('省级全作者分布', '全部作者 affiliation；省级文献按去重 PMID') +
+      '<div class="kg-detail-head"><h3>' + escapeHtml(province) + '</h3><span>全作者热力线索</span></div>' +
       '<div class="kg-detail-section"><h4>省级聚合</h4><p>' + escapeHtml(row.paper_count || 0) + ' 篇去重 PMID · ' +
-      escapeHtml(row.hospital_count || 0) + ' 个医院节点 · ' + escapeHtml(row.all_author_occurrences || 0) + ' 次 affiliation 出现</p></div>' +
+      escapeHtml(row.hospital_count || 0) + ' 个医院节点' + occurrenceText + '</p></div>' +
       (drugLabel ? '<div class="kg-detail-section"><h4>当前药物标签</h4><p>' + escapeHtml(drugLabel) + ' · ' + escapeHtml((row.drug_counts || {})[currentDrugId()] || 0) + ' 篇文本命中文献</p></div>' : '') +
       '<div class="kg-detail-section"><h4>医院排名</h4><p class="kg-ref-meta">点击医院查看最新文献清单。</p><ul class="kg-study-list">' + (top || '<li>暂无</li>') + '</ul></div>';
     bindDetailHospitalButtons();
@@ -790,7 +886,6 @@
     auditText.textContent = '审图号 GS（2016）2923号';
     svg.appendChild(auditText);
     mapShell.appendChild(svg);
-    syncDetailHeight();
   }
 
   function renderRegionalHeatmapCards() {
@@ -831,7 +926,6 @@
     renderStats();
     renderGraph();
     renderHeatmap();
-    syncDetailHeight();
   }
 
   function rerenderActiveDetail() {
@@ -843,7 +937,6 @@
       var currentStats = provinceHeatmapStats();
       showProvinceDetail(activeDetail.province, currentStats[activeDetail.province]);
     }
-    syncDetailHeight();
   }
 
   function clearActiveDetail() {
@@ -855,31 +948,30 @@
     }
   }
 
-  function syncDetailHeight() {
-    if (!el.mainColumn || !el.detail) return;
-    window.requestAnimationFrame(function () {
-      if (window.innerWidth <= 800) {
-        el.detail.style.height = '';
-        return;
-      }
-      el.detail.style.height = el.mainColumn.offsetHeight + 'px';
-    });
-  }
-
   function attachFilters() {
     if (filtersAttached) return;
     filtersAttached = true;
-    [el.search, el.geo, el.edgeWeight, el.drugFilter].forEach(function (input) {
+    var globalFilterInputs = [el.geo, el.drugFilter];
+    var graphFilterInputs = [el.search, el.edgeWeight];
+    globalFilterInputs.forEach(function (input) {
       if (!input) return;
-      input.addEventListener(input.tagName === 'INPUT' ? 'input' : 'change', function () {
-        var preserveDetail = input === el.drugFilter;
-        if (!preserveDetail) clearActiveDetail();
+      input.addEventListener('change', function () {
         if (!payload) {
           loadAndRender();
           return;
         }
         refresh();
-        if (preserveDetail) rerenderActiveDetail();
+        rerenderActiveDetail();
+      });
+    });
+    graphFilterInputs.forEach(function (input) {
+      if (!input) return;
+      input.addEventListener(input.tagName === 'INPUT' ? 'input' : 'change', function () {
+        if (!payload) {
+          loadAndRender();
+          return;
+        }
+        renderGraph();
       });
     });
   }
@@ -939,10 +1031,6 @@
     renderLoadingShell('点击“中国作者联络图”后按需加载数据');
     var tab = document.querySelector('[data-knowledge-tab="china-network"]');
     if (tab) tab.addEventListener('click', loadAndRender);
-    window.addEventListener('resize', syncDetailHeight);
-    if (window.ResizeObserver && el.mainColumn) {
-      new ResizeObserver(syncDetailHeight).observe(el.mainColumn);
-    }
     if (isChinaTabActive()) loadAndRender();
   }
 

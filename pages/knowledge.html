@@ -172,32 +172,42 @@
       <div class="panel-head">
         <div>
           <h2>中国作者医院联络图</h2>
-          <p class="panel-caption">全作者医院热力线索使用去重 PMID 的单层可编辑省级 SVG，图面标注审图号；医院联络作者统计与医院合作边均只用第一作者 + 通讯作者（PubMed 无标准化通讯作者标签时使用 email-derived 候选，缺失时末位作者 fallback）。药物标签按标题、摘要、关键词、MeSH/Chemicals 文本命中，仅表示文献相关线索，不等同于干预结论。</p>
+          <p class="panel-caption">医院合作图的节点、合作边、指标与文献均使用第一作者 + 通讯作者口径（PubMed 无标准化通讯作者标签时使用 email-derived 候选，缺失时末位作者 fallback）；省级证据图与医院排行使用全作者 affiliation 口径。地域与药物是两图共享的全局筛选，医院搜索与合作强度只影响合作图。标题药物命中优先于摘要、关键词、MeSH/Chemicals，仅表示文献相关线索，不等同于干预结论。</p>
         </div>
         <span class="update-badge" id="chinaNetworkBadge">Loading…</span>
       </div>
 
       <section class="knowledge-stat-grid china-network-stats" id="chinaNetworkStats"></section>
 
-      <div class="kg-filter-bar china-network-filter-bar">
-        <div class="knowledge-search compact">
-          <input id="chinaNetworkSearch" placeholder="搜索医院，例如 Huashan / Peking University / Xiangya">
+      <div class="china-network-filter-bar">
+        <div class="china-network-filter-group" role="group" aria-labelledby="chinaGlobalFilterLabel">
+          <span class="china-network-filter-label" id="chinaGlobalFilterLabel">全局筛选（地域/药物）</span>
+          <div class="china-network-filter-controls">
+            <select class="filter-input compact-select" id="chinaNetworkGeoScope" aria-label="全局地域筛选">
+              <option value="mainland">中国大陆</option>
+              <option value="hong_kong">Hong Kong</option>
+              <option value="macau">Macau</option>
+              <option value="taiwan">Taiwan</option>
+              <option value="all">大中华全部</option>
+            </select>
+            <select class="filter-input compact-select" id="chinaNetworkDrugFilter" aria-label="全局药物筛选">
+              <option value="">全部药物标签</option>
+            </select>
+          </div>
         </div>
-        <select class="filter-input compact-select" id="chinaNetworkGeoScope">
-          <option value="mainland">中国大陆</option>
-          <option value="hong_kong">Hong Kong</option>
-          <option value="macau">Macau</option>
-          <option value="taiwan">Taiwan</option>
-          <option value="all">大中华全部</option>
-        </select>
-        <select class="filter-input compact-select" id="chinaNetworkEdgeWeight">
-          <option value="1" selected>全部边 ≥1</option>
-          <option value="3">中强边 ≥3</option>
-          <option value="5">核心边 ≥5</option>
-        </select>
-        <select class="filter-input compact-select" id="chinaNetworkDrugFilter">
-          <option value="">全部药物标签</option>
-        </select>
+        <div class="china-network-filter-group" role="group" aria-labelledby="chinaGraphFilterLabel">
+          <span class="china-network-filter-label" id="chinaGraphFilterLabel">合作图筛选（医院搜索/合作强度）</span>
+          <div class="china-network-filter-controls">
+            <div class="knowledge-search compact">
+              <input id="chinaNetworkSearch" aria-label="合作图医院搜索" placeholder="搜索医院，例如 Huashan / Peking University / Xiangya">
+            </div>
+            <select class="filter-input compact-select" id="chinaNetworkEdgeWeight" aria-label="合作图合作强度筛选">
+              <option value="1" selected>全部边 ≥1</option>
+              <option value="3">中强边 ≥3</option>
+              <option value="5">核心边 ≥5</option>
+            </select>
+          </div>
+        </div>
       </div>
 
       <div class="kg-layout china-network-layout">
@@ -209,7 +219,7 @@
           <div class="china-network-heatmap" id="chinaNetworkHeatmap"></div>
         </div>
         <aside class="kg-detail china-network-detail" id="chinaNetworkDetail">
-          <div class="kg-empty-hint">点击医院节点或医院之间的边查看合作医院与 PMID 文献清单。</div>
+          <div class="kg-empty-hint">点击合作图医院节点/合作边，或省级图省份/医院排行，查看带明确统计口径与全局筛选上下文的详情。</div>
         </aside>
       </div>
     </div>

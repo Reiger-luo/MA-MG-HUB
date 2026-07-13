@@ -1918,7 +1918,7 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
   margin-top: 0.9rem;
 }
 .china-network-layout {
-  align-items: stretch;
+  align-items: start;
 }
 .china-network-main-column {
   min-width: 0;
@@ -1927,7 +1927,44 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
   box-sizing: border-box;
   max-height: none;
   min-height: 0;
-  overflow-y: auto;
+  overflow: visible;
+}
+.china-network-filter-bar {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 0.8rem;
+}
+.china-network-filter-group {
+  padding: 0.65rem 0.75rem;
+  background: var(--bg2);
+  border: 1px solid var(--bg3);
+  border-radius: 8px;
+}
+.china-network-filter-label {
+  display: block;
+  margin-bottom: 0.45rem;
+  color: var(--fg2);
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+.china-network-filter-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+.china-network-detail-context {
+  margin-bottom: 0.85rem;
+  padding: 0.6rem 0.7rem;
+  background: rgba(37, 99, 235, 0.06);
+  border: 1px solid rgba(37, 99, 235, 0.14);
+  border-radius: 7px;
+}
+.china-network-detail-context p {
+  margin: 0.18rem 0 0;
+  color: var(--fg3);
+  font-size: 0.74rem;
+  line-height: 1.45;
 }
 .china-network-map-head {
   display: flex;
@@ -2083,6 +2120,13 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
   color: var(--green);
 }
 @media (max-width: 760px) {
+  .china-network-filter-bar {
+    grid-template-columns: 1fr;
+  }
+  .china-network-filter-controls {
+    align-items: stretch;
+    flex-direction: column;
+  }
   .china-network-map-head,
   .china-network-map-layout {
     display: block;

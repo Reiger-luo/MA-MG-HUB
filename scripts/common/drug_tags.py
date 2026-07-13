@@ -1,8 +1,10 @@
 """Canonical MG drug tags for article-level public intelligence views.
 
-Tags mean that a canonical drug name or alias was found in the article's title,
-abstract, keywords, MeSH descriptors/qualifiers, or Chemical records. They are
-text-level literature signals, not a claim that the drug was the intervention.
+Title matches are authoritative: when the title contains one or more canonical
+drug names or aliases, only those title tags are returned. Abstract, keywords,
+MeSH descriptors/qualifiers, and Chemical records are searched together only
+when the title has no catalog match. Tags are text-level literature signals,
+not a claim that the drug was the intervention.
 """
 
 from __future__ import annotations
@@ -156,12 +158,11 @@ _COMPILED = tuple(
 )
 
 
-def _article_search_text(article: dict[str, Any]) -> str:
+def _fallback_search_text(article: dict[str, Any]) -> str:
     parts: list[str] = []
-    for key in ("title", "abstract"):
-        value = article.get(key)
-        if value:
-            parts.append(str(value))
+    abstract = article.get("abstract")
+    if abstract:
+        parts.append(str(abstract))
     for key in ("keywords", "mesh_terms", "chemicals"):
         values = article.get(key) or []
         if isinstance(values, str):
@@ -180,7 +181,16 @@ def _article_search_text(article: dict[str, Any]) -> str:
 
 
 def extract_drug_tag_ids(article: dict[str, Any]) -> list[str]:
-    text = _article_search_text(article)
+    title = str(article.get("title") or "")
+    title_tags = [
+        drug["id"]
+        for drug, patterns in _COMPILED
+        if any(pattern.search(title) for pattern in patterns)
+    ]
+    if title_tags:
+        return title_tags
+
+    text = _fallback_search_text(article)
     return [
         drug["id"]
         for drug, patterns in _COMPILED
