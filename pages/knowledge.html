@@ -177,51 +177,90 @@
         <span class="update-badge" id="chinaNetworkBadge">Loading…</span>
       </div>
 
-      <section class="knowledge-stat-grid china-network-stats" id="chinaNetworkStats"></section>
-
-      <div class="china-network-filter-bar">
-        <div class="china-network-filter-group" role="group" aria-labelledby="chinaGlobalFilterLabel">
-          <span class="china-network-filter-label" id="chinaGlobalFilterLabel">全局筛选（地域/药物）</span>
-          <div class="china-network-filter-controls">
-            <select class="filter-input compact-select" id="chinaNetworkGeoScope" aria-label="全局地域筛选">
+      <div class="china-network-global-filter china-network-filter-group" role="group" aria-labelledby="chinaGlobalFilterLabel">
+        <span class="china-network-filter-label" id="chinaGlobalFilterLabel">全局筛选（地域/药物）</span>
+        <div class="china-network-filter-controls">
+          <label class="china-network-control-label" for="chinaNetworkGeoScope">地域
+            <select class="filter-input compact-select" id="chinaNetworkGeoScope">
               <option value="mainland">中国大陆</option>
               <option value="hong_kong">Hong Kong</option>
               <option value="macau">Macau</option>
               <option value="taiwan">Taiwan</option>
               <option value="all">大中华全部</option>
             </select>
-            <select class="filter-input compact-select" id="chinaNetworkDrugFilter" aria-label="全局药物筛选">
+          </label>
+          <label class="china-network-control-label" for="chinaNetworkDrugFilter">药物
+            <select class="filter-input compact-select" id="chinaNetworkDrugFilter">
               <option value="">全部药物标签</option>
             </select>
-          </div>
-        </div>
-        <div class="china-network-filter-group" role="group" aria-labelledby="chinaGraphFilterLabel">
-          <span class="china-network-filter-label" id="chinaGraphFilterLabel">合作图筛选（医院搜索/合作强度）</span>
-          <div class="china-network-filter-controls">
-            <div class="knowledge-search compact">
-              <input id="chinaNetworkSearch" aria-label="合作图医院搜索" placeholder="搜索医院，例如 Huashan / Peking University / Xiangya">
-            </div>
-            <select class="filter-input compact-select" id="chinaNetworkEdgeWeight" aria-label="合作图合作强度筛选">
-              <option value="1" selected>全部边 ≥1</option>
-              <option value="3">中强边 ≥3</option>
-              <option value="5">核心边 ≥5</option>
-            </select>
-          </div>
+          </label>
         </div>
       </div>
 
-      <div class="kg-layout china-network-layout">
-        <div class="china-network-main-column">
+      <section class="knowledge-stat-grid china-network-stats" id="chinaNetworkStats"></section>
+
+      <div class="china-network-visual-grid">
+        <section class="china-network-visual-card" id="chinaNetworkGraphCard" aria-labelledby="chinaNetworkGraphTitle">
+          <div class="china-network-card-head">
+            <div>
+              <h3 id="chinaNetworkGraphTitle">医院合作图</h3>
+              <p>第一作者 + 通讯作者医院口径</p>
+            </div>
+          </div>
+          <div class="china-network-filter-group china-network-local-filter" role="group" aria-labelledby="chinaGraphFilterLabel">
+            <span class="china-network-filter-label" id="chinaGraphFilterLabel">合作图筛选（医院搜索/合作强度）</span>
+            <div class="china-network-filter-controls">
+              <label class="china-network-control-label" for="chinaNetworkSearch">医院搜索
+                <input class="filter-input" id="chinaNetworkSearch" placeholder="例如 Huashan / Peking University">
+              </label>
+              <label class="china-network-control-label" for="chinaNetworkEdgeWeight">合作强度
+                <select class="filter-input compact-select" id="chinaNetworkEdgeWeight">
+                  <option value="1" selected>全部边 ≥1</option>
+                  <option value="3">中强边 ≥3</option>
+                  <option value="5">核心边 ≥5</option>
+                </select>
+              </label>
+            </div>
+          </div>
           <div class="kg-canvas-wrap china-network-canvas-wrap">
-            <svg id="chinaAuthorNetworkGraph" class="kg-canvas china-network-canvas" xmlns="http://www.w3.org/2000/svg"></svg>
+            <svg id="chinaAuthorNetworkGraph" class="kg-canvas china-network-canvas" xmlns="http://www.w3.org/2000/svg" aria-label="医院合作关系图"></svg>
           </div>
           <div class="kg-legend" id="chinaNetworkLegend"></div>
+        </section>
+
+        <section class="china-network-visual-card" id="chinaNetworkMapCard" aria-labelledby="chinaNetworkMapTitle">
+          <div class="china-network-card-head">
+            <div>
+              <h3 id="chinaNetworkMapTitle">中国省级证据图</h3>
+              <p>全部作者 affiliation 口径</p>
+            </div>
+          </div>
+          <div class="china-network-filter-group china-network-local-filter" role="group" aria-labelledby="chinaMapFilterLabel">
+            <span class="china-network-filter-label" id="chinaMapFilterLabel">证据图筛选（省份/医院排行）</span>
+            <div class="china-network-filter-controls">
+              <label class="china-network-control-label" for="chinaNetworkProvinceFilter">省份
+                <select class="filter-input compact-select" id="chinaNetworkProvinceFilter">
+                  <option value="">全部省份</option>
+                </select>
+              </label>
+              <label class="china-network-control-label" for="chinaNetworkMapHospitalSearch">医院搜索
+                <input class="filter-input" id="chinaNetworkMapHospitalSearch" placeholder="筛选医院排行">
+              </label>
+            </div>
+          </div>
           <div class="china-network-heatmap" id="chinaNetworkHeatmap"></div>
-        </div>
-        <aside class="kg-detail china-network-detail" id="chinaNetworkDetail">
-          <div class="kg-empty-hint">点击合作图医院节点/合作边，或省级图省份/医院排行，查看带明确统计口径与全局筛选上下文的详情。</div>
-        </aside>
+        </section>
       </div>
+
+      <section class="china-network-results" aria-labelledby="chinaNetworkSharedTitle">
+        <div class="china-network-shared-head">
+          <h3 id="chinaNetworkSharedTitle">统一分析结果</h3>
+          <p class="china-network-shared-caption">最后一次点击决定分析对象；全局筛选会重新计算当前结果。</p>
+        </div>
+        <section class="kg-detail china-network-detail" id="chinaNetworkDetail" aria-live="polite" aria-label="共享分析结果详情">
+          <div class="kg-empty-hint">点击合作图医院节点/合作边，或省级图省份/医院排行，查看带明确统计口径与全局筛选上下文的详情。</div>
+        </section>
+      </section>
     </div>
   </section>
 

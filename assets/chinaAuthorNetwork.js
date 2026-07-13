@@ -12,6 +12,8 @@
     badge: document.getElementById('chinaNetworkBadge'),
     stats: document.getElementById('chinaNetworkStats'),
     search: document.getElementById('chinaNetworkSearch'),
+    provinceFilter: document.getElementById('chinaNetworkProvinceFilter'),
+    hospitalSearch: document.getElementById('chinaNetworkMapHospitalSearch'),
     geo: document.getElementById('chinaNetworkGeoScope'),
     edgeWeight: document.getElementById('chinaNetworkEdgeWeight'),
     drugFilter: document.getElementById('chinaNetworkDrugFilter'),
@@ -69,6 +71,8 @@
   var activeNodeId = '';
   var activeEdgeId = '';
   var activeDetail = null;
+  var selectedMapProvince = '';
+  var selectedMapHospitalId = '';
   var chinaMapTemplate = null;
   var chinaMapLoading = false;
   var chinaMapCallbacks = [];
@@ -84,6 +88,7 @@
     drugCatalog.forEach(function (drug) { drugById[drug.id] = drug; });
     nodesById = nodeByIdMap(nodes);
     renderDrugFilterOptions();
+    populateProvinceFilter();
   }
 
   refreshData();
@@ -98,6 +103,14 @@
 
   function currentQuery() {
     return el.search ? (el.search.value || '').trim().toLowerCase() : '';
+  }
+
+  function currentProvince() {
+    return el.provinceFilter ? el.provinceFilter.value || '' : '';
+  }
+
+  function currentHospitalQuery() {
+    return el.hospitalSearch ? (el.hospitalSearch.value || '').trim().toLowerCase() : '';
   }
 
   function currentDrugId() {
@@ -195,6 +208,19 @@
     return [node.label, node.province, node.city, node.region].join(' ').toLowerCase().indexOf(query) !== -1;
   }
 
+  function keepActiveGraphSelectionVisible(visibleNodeIds, visibleEdges) {
+    var activeNode = nodesById[activeNodeId];
+    if (activeNode && nodeInGeo(activeNode, currentGeoScope()) && graphNodePaperCount(activeNode) > 0) {
+      visibleNodeIds[activeNodeId] = true;
+    }
+    var activeEdge = edges.filter(function (edge) { return edge.id === activeEdgeId; })[0];
+    var displayEdge = activeEdge && edgeInGeo(activeEdge, currentGeoScope()) ? edgeForDisplay(activeEdge) : null;
+    if (!displayEdge) return;
+    if (!visibleEdges.some(function (edge) { return edge.id === displayEdge.id; })) visibleEdges.push(displayEdge);
+    visibleNodeIds[displayEdge.source] = true;
+    visibleNodeIds[displayEdge.target] = true;
+  }
+
   function filteredGraph() {
     var geoScope = currentGeoScope();
     var minWeight = currentEdgeMin();
@@ -226,11 +252,18 @@
       });
     }
 
+    keepActiveGraphSelectionVisible(visibleNodeIds, visibleEdges);
     var degreeById = {};
     visibleEdges.forEach(function (edge) {
       degreeById[edge.source] = (degreeById[edge.source] || 0) + edge.display_weight;
       degreeById[edge.target] = (degreeById[edge.target] || 0) + edge.display_weight;
     });
+    if (activeNodeId && visibleNodeIds[activeNodeId]) degreeById[activeNodeId] = Number.MAX_SAFE_INTEGER;
+    var selectedEdge = visibleEdges.filter(function (edge) { return edge.id === activeEdgeId; })[0];
+    if (selectedEdge) {
+      degreeById[selectedEdge.source] = Number.MAX_SAFE_INTEGER;
+      degreeById[selectedEdge.target] = Number.MAX_SAFE_INTEGER;
+    }
     var visibleNodes = nodes.filter(function (node) { return visibleNodeIds[node.id]; });
     if (!visibleNodes.length) {
       visibleNodes = nodes.filter(function (node) {
@@ -675,6 +708,28 @@
   };
   var MAP_COLORS = ['#eef5fb', '#d7e8f6', '#b7d5ec', '#86b9de', '#4e91c4', '#1f659b'];
 
+  function populateProvinceFilter() {
+    if (!el.provinceFilter) return;
+    var selected = el.provinceFilter.value || '';
+    var provinces = {};
+    heatmap.forEach(function (row) {
+      if (row.geo_scope === 'mainland' && row.province && row.province !== 'Mainland China') {
+        provinces[row.province] = true;
+      }
+    });
+    var available = Object.keys(provinces).sort(function (a, b) { return a.localeCompare(b); });
+    el.provinceFilter.innerHTML = '<option value="">全部省份</option>' + available.map(function (province) {
+      return '<option value="' + escapeHtml(province) + '">' + escapeHtml(province) + '</option>';
+    }).join('');
+    el.provinceFilter.value = available.indexOf(selected) !== -1 ? selected : '';
+    var supportsProvinceMap = currentGeoScope() === 'mainland' || currentGeoScope() === 'all';
+    el.provinceFilter.disabled = !supportsProvinceMap;
+    if (el.hospitalSearch) {
+      el.hospitalSearch.disabled = !supportsProvinceMap;
+      el.hospitalSearch.placeholder = supportsProvinceMap ? '筛选医院排行' : '当前地域无省级医院排行';
+    }
+  }
+
   function mapAssetUrl() {
     return hub.assetUrl ? hub.assetUrl('assets/china-provinces.svg') : 'assets/china-provinces.svg';
   }
@@ -748,8 +803,10 @@
 
   function provinceHospitalRanking(province) {
     var drugId = currentDrugId();
+    var query = currentHospitalQuery();
     return nodes.filter(function (node) {
-      return node.geo_scope === 'mainland' && node.province === province;
+      return node.geo_scope === 'mainland' && (!province || node.province === province) &&
+        (!query || labelMatches(node, query));
     }).map(function (node) {
       return {
         id: node.id,
@@ -758,7 +815,7 @@
       };
     }).filter(function (item) { return item.count > 0; })
       .sort(function (a, b) { return b.count - a.count || a.label.localeCompare(b.label); })
-      .slice(0, 10);
+      .slice(0, 12);
   }
 
   function mapFill(value, maximum) {
@@ -776,13 +833,44 @@
     if (!el.detail) return;
     Array.prototype.forEach.call(el.detail.querySelectorAll('[data-china-hospital]'), function (button) {
       button.addEventListener('click', function () {
-        showHospitalDetail(button.getAttribute('data-china-hospital'), button.getAttribute('data-china-province') || '');
+        selectMapHospital(button.getAttribute('data-china-hospital'), button.getAttribute('data-china-province') || '');
       });
     });
   }
 
+  function bindMapRankButtons() {
+    if (!el.heatmap) return;
+    Array.prototype.forEach.call(el.heatmap.querySelectorAll('[data-china-province-rank]'), function (button) {
+      button.addEventListener('click', function () {
+        selectMapProvince(button.getAttribute('data-china-province-rank'));
+      });
+    });
+    Array.prototype.forEach.call(el.heatmap.querySelectorAll('[data-china-hospital]'), function (button) {
+      button.addEventListener('click', function () {
+        selectMapHospital(button.getAttribute('data-china-hospital'), button.getAttribute('data-china-province') || '');
+      });
+    });
+  }
+
+  function selectMapProvince(province) {
+    selectedMapProvince = province;
+    selectedMapHospitalId = '';
+    if (el.provinceFilter) el.provinceFilter.value = province;
+    renderHeatmap();
+    showProvinceDetail(province, provinceHeatmapStats()[province]);
+  }
+
+  function selectMapHospital(hospitalId, province) {
+    selectedMapHospitalId = hospitalId;
+    selectedMapProvince = province || ((nodesById[hospitalId] || {}).province || '');
+    renderHeatmap();
+    showHospitalDetail(hospitalId, selectedMapProvince);
+  }
+
   function showHospitalDetail(hospitalId, province) {
     if (!el.detail) return;
+    selectedMapHospitalId = hospitalId;
+    selectedMapProvince = province || ((nodesById[hospitalId] || {}).province || '');
     activeDetail = { type: 'mapHospital', id: hospitalId, province: province || '' };
     var node = nodesById[hospitalId];
     if (!node || !nodeMatchesGlobalGeo(node)) {
@@ -811,6 +899,8 @@
 
   function showProvinceDetail(province, row) {
     if (!el.detail) return;
+    selectedMapProvince = province;
+    selectedMapHospitalId = '';
     activeDetail = { type: 'province', province: province };
     if (currentGeoScope() !== 'mainland' && currentGeoScope() !== 'all') {
       renderContextEmpty('省级全作者分布', '全部作者 affiliation；省级文献按去重 PMID', province, '当前地域不使用中国大陆省级分布。');
@@ -837,6 +927,28 @@
     bindDetailHospitalButtons();
   }
 
+  function renderMapRanking(stats, sorted) {
+    var province = currentProvince();
+    var query = currentHospitalQuery();
+    if (!province && !query) {
+      return '<aside class="china-network-map-rank"><h4>省级排行</h4><ol>' + sorted.slice(0, 10).map(function (name) {
+        var selected = selectedMapProvince === name && !selectedMapHospitalId ? ' active' : '';
+        return '<li><button type="button" class="china-network-rank-button' + selected +
+          '" data-china-province-rank="' + escapeHtml(name) + '"><span>' + escapeHtml(name) +
+          '</span><strong>' + escapeHtml(stats[name].paper_count) + ' 篇</strong></button></li>';
+      }).join('') + '</ol></aside>';
+    }
+    var hospitals = provinceHospitalRanking(province);
+    var title = province ? province + '医院排行' : '匹配医院排行';
+    return '<aside class="china-network-map-rank"><h4>' + escapeHtml(title) + '</h4><ol>' + hospitals.map(function (hospital) {
+      var node = nodesById[hospital.id] || {};
+      var active = selectedMapHospitalId === hospital.id ? ' active' : '';
+      return '<li><button type="button" class="china-network-rank-button' + active + '" data-china-hospital="' +
+        escapeHtml(hospital.id) + '" data-china-province="' + escapeHtml(node.province || province) + '"><span>' +
+        escapeHtml(hospital.label) + '</span><strong>' + escapeHtml(hospital.count) + ' 篇</strong></button></li>';
+    }).join('') + (hospitals.length ? '' : '<li class="kg-ref-meta">暂无匹配医院</li>') + '</ol></aside>';
+  }
+
   function renderProvinceMap() {
     var stats = provinceHeatmapStats();
     var values = Object.keys(stats).map(function (province) { return stats[province].paper_count; });
@@ -847,10 +959,8 @@
     var drugLabel = currentDrugId() ? ((drugById[currentDrugId()] || {}).label || currentDrugId()) : '';
     el.heatmap.innerHTML = '<div class="china-network-map-head"><div><h3>全作者医院热力线索 · 中国省级图</h3><p>颜色 = ' + (drugLabel ? escapeHtml(drugLabel) + '相关' : '省级') + '去重 PMID 数；点击省份查看医院排名，点击医院查看最新文献清单。</p></div>' +
       '<span class="china-network-map-source">单层可编辑省级 SVG · 审图号 GS（2016）2923号</span></div>' +
-      '<div class="china-network-map-layout"><div class="china-network-map-canvas" id="chinaNetworkMapCanvas"></div><aside class="china-network-map-rank"><h4>省级排行</h4><ol>' +
-      sorted.slice(0, 8).map(function (province) {
-        return '<li><span>' + escapeHtml(province) + '</span><strong>' + escapeHtml(stats[province].paper_count) + ' 篇</strong></li>';
-      }).join('') + '</ol></aside></div>' +
+      '<div class="china-network-map-layout"><div class="china-network-map-canvas" id="chinaNetworkMapCanvas"></div>' +
+      renderMapRanking(stats, sorted) + '</div>' +
       '<div class="china-network-map-legend"><span>低</span><i style="background:' + MAP_COLORS[0] + '"></i><i style="background:' + MAP_COLORS[2] + '"></i><i style="background:' + MAP_COLORS[4] + '"></i><i style="background:' + MAP_COLORS[5] + '"></i><span>高</span></div>';
 
     var mapCanvas = document.getElementById('chinaNetworkMapCanvas');
@@ -865,7 +975,7 @@
       var province = MAP_PROVINCE_BY_ID[path.getAttribute('id')];
       if (!province) return;
       var row = stats[province];
-      path.classList.add('china-province');
+      path.setAttribute('class', selectedMapProvince === province ? 'china-province selected' : 'china-province');
       path.style.fill = mapFill(row ? row.paper_count : 0, maximum);
       path.setAttribute('tabindex', '0');
       path.setAttribute('role', 'button');
@@ -873,11 +983,11 @@
       var title = document.createElementNS(svgNs, 'title');
       title.textContent = province + ' · ' + (row ? row.paper_count : 0) + ' 篇 · ' + (row ? row.hospital_count : 0) + ' 个医院节点';
       path.appendChild(title);
-      path.addEventListener('click', function () { showProvinceDetail(province, row); });
+      path.addEventListener('click', function () { selectMapProvince(province); });
       path.addEventListener('keydown', function (event) {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault();
-          showProvinceDetail(province, row);
+          selectMapProvince(province);
         }
       });
     });
@@ -886,6 +996,7 @@
     auditText.textContent = '审图号 GS（2016）2923号';
     svg.appendChild(auditText);
     mapShell.appendChild(svg);
+    bindMapRankButtons();
   }
 
   function renderRegionalHeatmapCards() {
@@ -953,6 +1064,7 @@
     filtersAttached = true;
     var globalFilterInputs = [el.geo, el.drugFilter];
     var graphFilterInputs = [el.search, el.edgeWeight];
+    var mapFilterInputs = [el.provinceFilter, el.hospitalSearch];
     globalFilterInputs.forEach(function (input) {
       if (!input) return;
       input.addEventListener('change', function () {
@@ -960,7 +1072,10 @@
           loadAndRender();
           return;
         }
-        refresh();
+        populateProvinceFilter();
+        renderStats();
+        renderGraph();
+        renderHeatmap();
         rerenderActiveDetail();
       });
     });
@@ -972,6 +1087,23 @@
           return;
         }
         renderGraph();
+      });
+    });
+    mapFilterInputs.forEach(function (input) {
+      if (!input) return;
+      input.addEventListener(input.tagName === 'INPUT' ? 'input' : 'change', function () {
+        if (!payload) {
+          loadAndRender();
+          return;
+        }
+        if (input === el.provinceFilter && currentProvince()) {
+          selectedMapProvince = currentProvince();
+          selectedMapHospitalId = '';
+        }
+        renderHeatmap();
+        if (input === el.provinceFilter && currentProvince()) {
+          showProvinceDetail(currentProvince(), provinceHeatmapStats()[currentProvince()]);
+        }
       });
     });
   }
