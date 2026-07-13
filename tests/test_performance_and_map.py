@@ -28,6 +28,7 @@ def test_knowledge_graph_omits_unused_edge_references():
 
 def test_china_network_map_asset_and_render_hook_exist():
     map_asset = ROOT / "assets" / "china-provinces.svg"
+    map_js_asset = ROOT / "assets" / "china-provinces-map.js"
     attribution = (ROOT / "assets" / "china-provinces-map-ATTRIBUTION.md").read_text(encoding="utf-8")
     frontend = (ROOT / "assets" / "chinaAuthorNetwork.js").read_text(encoding="utf-8")
     html = (ROOT / "pages" / "knowledge.html").read_text(encoding="utf-8")
@@ -35,6 +36,28 @@ def test_china_network_map_asset_and_render_hook_exist():
 
     assert map_asset.exists()
     assert 'id="shanghai"' in map_asset.read_text(encoding="utf-8")
+    assert map_js_asset.exists()
+    map_js = map_js_asset.read_text(encoding="utf-8")
+    assert "window.MG_CHINA_PROVINCES_SVG" in map_js
+    assert "<svg" in map_js
+    assert 'viewBox="0 0 774 569"' in map_js
+    assert 'id="beijing"' in map_js
+    assert 'id="shanghai"' in map_js
+    map_script = '<script src="../assets/china-provinces-map.js"></script>'
+    network_script = '<script src="../assets/chinaAuthorNetwork.js"></script>'
+    assert map_script in html
+    assert html.index(map_script) < html.index(network_script)
+    assert "window.MG_CHINA_PROVINCES_SVG" in frontend
+    assert "DOMParser" in frontend
+    assert "cloneNode(true)" in frontend
+    assert "function mapAssetUrl" not in frontend
+    assert "fetch(mapAssetUrl()" not in frontend
+    assert "loadChinaMap(" not in frontend
+    assert "chinaMapLoading" not in frontend
+    assert "chinaMapCallbacks" not in frontend
+    assert "正在加载中国省级底图" not in frontend
+    assert "中国省级底图加载失败" not in frontend
+    assert "已保留地区排行数据" in frontend
     assert "china-standard-map-gs-2016-2923.jpg" not in frontend
     assert "standardMapAssetUrl" not in frontend
     assert "china-standard-map-overlay" not in frontend

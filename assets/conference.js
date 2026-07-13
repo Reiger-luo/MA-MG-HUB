@@ -388,6 +388,8 @@
     var end = Math.min(total, (state.page + 1) * pageSize);
     var pageText = total ? '当前显示 ' + start + '–' + end + ' 条' : '当前无匹配摘要';
     var filters = [];
+    if (state.country !== 'all') filters.push('国家/地区：' + state.country);
+    if (state.researchType !== 'all') filters.push('研究类型：' + state.researchType);
     if (state.topic) filters.push('标签：' + state.topic);
     if (state.keyword) filters.push('关键词：' + state.keyword);
     if (!filters.length) {
@@ -399,11 +401,17 @@
     var clear = el.activeFilter.querySelector('[data-conference-clear-filter]');
     if (clear) {
       clear.addEventListener('click', function() {
+        state.country = 'all';
+        state.researchType = 'all';
         state.topic = null;
         state.keyword = '';
         state.page = 0;
         if (el.keyword) el.keyword.value = '';
-        renderTopics(summarizeModule(currentItems));
+        var summary = summarizeModule(currentItems);
+        updateFilters(currentItems);
+        renderRank(el.countryRank, summary.countries, 8, 'country');
+        renderRank(el.typeRank, summary.types, 8, 'researchType');
+        renderTopics(summary);
         applyFilters();
       });
     }
@@ -556,7 +564,7 @@
     }).join('');
   }
 
-  function renderRank(target, items, limit) {
+  function renderRank(target, items, limit, dimension) {
     if (!target) return;
     var rows = (items || []).slice(0, limit || 8);
     if (!rows.length) {
@@ -566,12 +574,30 @@
     var max = rows[0].count || 1;
     target.innerHTML = '<div class="conference-rank">' + rows.map(function(item) {
       var width = Math.max(7, Math.round((item.count || 0) / max * 100));
-      return '<div class="conference-rank-row">' +
+      var active = state[dimension] === item.name;
+      return '<button type="button" class="conference-rank-row' + (active ? ' active' : '') + '" data-conference-rank-dimension="' + escapeHtml(dimension) + '" data-conference-rank-value="' + escapeHtml(item.name) + '" aria-pressed="' + (active ? 'true' : 'false') + '">' +
         '<span title="' + escapeHtml(item.name) + '">' + escapeHtml(item.name) + '</span>' +
-        '<div class="conference-rank-track"><i style="--rank-width:' + width + '%"></i></div>' +
+        '<span class="conference-rank-track" aria-hidden="true"><i style="--rank-width:' + width + '%"></i></span>' +
         '<strong>' + escapeHtml(item.count || 0) + '</strong>' +
-      '</div>';
+      '</button>';
     }).join('') + '</div>';
+
+    var buttons = target.querySelectorAll('[data-conference-rank-value]');
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].addEventListener('click', function() {
+        var selectedDimension = this.getAttribute('data-conference-rank-dimension');
+        var value = this.getAttribute('data-conference-rank-value');
+        if (selectedDimension !== 'country' && selectedDimension !== 'researchType') return;
+        dimension = selectedDimension;
+        state[dimension] = state[dimension] === value ? 'all' : value;
+        state.page = 0;
+        if (dimension === 'country' && el.countryFilter) el.countryFilter.value = state.country;
+        if (dimension === 'researchType' && el.typeFilter) el.typeFilter.value = state.researchType;
+        renderRank(target, items, limit, dimension);
+        applyFilters();
+        scrollToResults();
+      });
+    }
   }
 
   function renderTopics(summary) {
@@ -990,8 +1016,8 @@
     renderMeetingCards();
     renderKpis(module, summary);
     renderStrategicNarrative(module, currentItems);
-    renderRank(el.countryRank, summary.countries, 8);
-    renderRank(el.typeRank, summary.types, 8);
+    renderRank(el.countryRank, summary.countries, 8, 'country');
+    renderRank(el.typeRank, summary.types, 8, 'researchType');
     renderTopics(summary);
     renderBreakthroughs(module, summary, currentItems);
     renderSourceMonitor(module);

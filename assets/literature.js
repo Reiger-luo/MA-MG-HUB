@@ -995,18 +995,29 @@
     }
   }
 
-  function renderSignalReferenceLinks(refs) {
-    return (refs || []).slice(0, 5).map(function(ref) {
-      var pmid = ref && ref.pmid ? 'PMID ' + ref.pmid : '证据';
+  function renderSignalReferenceLinks(refs, renderedPmids) {
+    renderedPmids = renderedPmids || {};
+    var links = [];
+    for (var i = 0; i < (refs || []).length && links.length < 5; i++) {
+      var ref = refs[i];
+      var pmidValue = ref && ref.pmid ? String(ref.pmid) : '';
+      if (pmidValue && renderedPmids[pmidValue]) continue;
+      if (pmidValue) renderedPmids[pmidValue] = true;
+      var pmid = pmidValue ? 'PMID ' + pmidValue : '证据';
       var title = ref && ref.title ? ref.title : pmid;
-      if (!ref || !ref.url) return '<span class="literature-signal-ref">' + escapeHtml(pmid) + '</span>';
-      return '<a class="literature-signal-ref" href="' + escapeHref(ref.url) + '" target="_blank" rel="noopener" title="' + escapeHtml(title) + '">' + escapeHtml(pmid) + '</a>';
-    }).join('');
+      if (!ref || !ref.url) {
+        links.push('<span class="literature-signal-ref">' + escapeHtml(pmid) + '</span>');
+      } else {
+        links.push('<a class="literature-signal-ref" href="' + escapeHref(ref.url) + '" target="_blank" rel="noopener" title="' + escapeHtml(title) + '">' + escapeHtml(pmid) + '</a>');
+      }
+    }
+    return links.join('');
   }
 
   function renderLiteratureTalkingPoints(item) {
     var points = item.talkingPoints || item.kolFocus || [];
     if (!item.whySignal && !item.evidenceBoundary && !points.length) return '';
+    var renderedPmids = {};
     var pointHtml = points.slice(0, 4).map(function(point, index) {
       var tier = point.priorityTier || 'disease_progress';
       var tierLabel = point.priorityLabel || (tier === 'efgar' ? 'efgar重点传递' : tier === 'competitor_response' ? '竞品应对解读' : '疾病进展传递');
@@ -1018,16 +1029,17 @@
         '<strong>' + escapeHtml(point.title || '') + '</strong>' +
         (point.whyKol ? '<p class="literature-signal-why">' + escapeHtml(point.whyKol) + '</p>' : '') +
         (messages ? '<ul>' + messages + '</ul>' : '') +
-        '<div class="literature-signal-point-refs">' + renderSignalReferenceLinks(point.refs || []) + '</div>' +
+        '<div class="literature-signal-point-refs">' + renderSignalReferenceLinks(point.refs || [], renderedPmids) + '</div>' +
       '</article>';
     }).join('');
+    var parentRefsHtml = renderSignalReferenceLinks(item.refs || [], renderedPmids);
     return '<div class="literature-signal-narrative">' +
       '<div class="signal-kol-kicker">Signal → Talking Points</div>' +
       (item.takeaway ? '<p class="literature-signal-takeaway">' + escapeHtml(item.takeaway) + '</p>' : '') +
       (item.whySignal ? '<div class="literature-signal-field"><span>为什么是线索</span><p>' + escapeHtml(item.whySignal) + '</p></div>' : '') +
       (item.evidenceBoundary ? '<div class="literature-signal-field boundary"><span>证据边界</span><p>' + escapeHtml(item.evidenceBoundary) + '</p></div>' : '') +
       (pointHtml ? '<div class="literature-signal-points"><span>可转化 KOL 交流</span>' + pointHtml + '</div>' : '') +
-      (item.refs && item.refs.length ? '<div class="literature-signal-refs"><span>证据锚点</span><div>' + renderSignalReferenceLinks(item.refs) + '</div></div>' : '') +
+      (parentRefsHtml ? '<div class="literature-signal-refs"><span>证据锚点</span><div>' + parentRefsHtml + '</div></div>' : '') +
     '</div>';
   }
 

@@ -3,7 +3,7 @@
   'use strict';
 
   var hub = window.MgHub || {};
-  var data = window.MG_DASHBOARD_DATA || { stats: {}, stat_cards: [], sections: [], top_signals: [], work_items: [] };
+  var data = window.MG_DASHBOARD_DATA || { stats: {}, stat_cards: [], sections: [], signal_summary: null, top_signals: [], work_items: [] };
   var communityCardsData = window.MG_COMMUNITY_CARDS || { cards: [] };
   var communityWeeklyData = window.MG_COMMUNITY_WEEKLY || { communities: [], hot_communities: [] };
   var topicCoverageData = window.MG_WIKI_TOPIC_COVERAGE || { community_coverage: [] };
@@ -93,39 +93,87 @@
     }).join('') || '<div class="empty-state small"><h3>暂无数据状态</h3></div>';
   }
 
-  function renderSignals() {
-    var html = (data.top_signals || []).map(function(signal) {
-      var article = signal.article || {};
-      var drugHtml = (signal.drugs || []).map(function(d) {
-        return '<span class="signal-drug">' + escapeHtml(d) + '</span>';
-      }).join('');
-      var kolHtml = renderDashboardSignalToKol(signal);
-      return '<article class="signal-card signal-' + escapeHtml(signal.strength) + '">' +
-        '<div class="signal-card-head"><span class="signal-strength">' + escapeHtml(signal.strength) + '信号</span><span class="signal-type">' + escapeHtml(signal.type) + '</span></div>' +
-        '<a class="signal-title" href="' + escapeHref(article.url) + '" target="_blank" rel="noopener">' + escapeHtml(signal.title || signal.summary || article.title || '') + '</a>' +
-        '<div class="signal-meta">' + escapeHtml(signal.article_count ? signal.article_count + ' 篇文献聚合' : (article.journal || '')) + ' · PMID ' + escapeHtml(article.pmid || '-') + '</div>' +
-        kolHtml +
-        (drugHtml ? '<div class="signal-topic-row">' + drugHtml + '</div>' : '') +
-      '</article>';
-    }).join('');
-    document.getElementById('dashboardSignals').innerHTML = html || '<div class="empty-state small"><h3>暂无信号</h3></div>';
+  function rankSignalFacts(signals, field, limit) {
+    var counts = {};
+    var order = {};
+    (signals || []).forEach(function(signal) {
+      var values = field === 'keywords' ? (signal.keywords || []) : [signal[field]];
+      var seen = {};
+      values.forEach(function(value) {
+        var label = String(value || '').trim();
+        if (!label || seen[label]) return;
+        seen[label] = true;
+        if (order[label] == null) order[label] = Object.keys(order).length;
+        counts[label] = (counts[label] || 0) + 1;
+      });
+    });
+    return Object.keys(counts).sort(function(a, b) {
+      return counts[b] - counts[a] || order[a] - order[b] || a.localeCompare(b);
+    }).slice(0, limit).map(function(label) {
+      return { label: label, count: counts[label] };
+    });
   }
 
-  function renderDashboardSignalToKol(signal) {
-    var leads = signal.kol_leads || [];
-    var ma = signal.medical_affairs || {};
-    var implication = signal.medical_affairs_implication || ma.implication || '';
-    var point = (signal.talkingPoints || signal.kolFocus || [])[0] || {};
-    if (!signal.signal_to_kol && !leads.length && !implication) return '';
-    var lead = leads[0] || {};
-    var leadText = lead.name ? [lead.name, lead.institution].filter(Boolean).join(' · ') : '';
-    return '<div class="signal-kol-bridge compact">' +
-      '<div class="signal-kol-kicker">Signal → Talking Point</div>' +
-      (!point.title && implication ? '<p>' + escapeHtml(implication) + '</p>' : '') +
-      (point.title ? '<p><strong>交流点</strong>：' + escapeHtml(point.title) + '</p>' : '') +
-      (point.keyMessages && point.keyMessages[0] ? '<p>' + escapeHtml(point.keyMessages[0]) + '</p>' : '') +
-      (leadText ? '<p><strong>KOL lead</strong>：' + escapeHtml(leadText) + '</p>' : '') +
-    '</div>';
+  function buildSignalSummaryFallback() {
+    var signals = Array.isArray(data.top_signals) ? data.top_signals : [];
+    var stats = data.stats || {};
+    var strengthCounts = { strong: 0, medium: 0, weak: 0 };
+    var strengthKeys = { '强': 'strong', '中': 'medium', '弱': 'weak' };
+    var strongThemes = [];
+    signals.forEach(function(signal) {
+      var strengthKey = strengthKeys[signal.strength] || 'weak';
+      strengthCounts[strengthKey] += 1;
+      if (strengthKey === 'strong' && signal.title && strongThemes.indexOf(signal.title) === -1) {
+        strongThemes.push(signal.title);
+      }
+    });
+    var leadingTypes = rankSignalFacts(signals, 'type', 3);
+    var topTopics = rankSignalFacts(signals, 'keywords', 3);
+    var totalCount = Number(stats.signals || signals.length || 0);
+    var overviewParts = ['近 14 天共形成 ' + totalCount + ' 条信号'];
+    if (leadingTypes.length) {
+      overviewParts.push('主要类型为' + leadingTypes.slice(0, 2).map(function(item) { return item.label; }).join('、'));
+    }
+    if (strongThemes.length) {
+      overviewParts.push('强信号聚焦“' + strongThemes.slice(0, 2).join('”、“') + '”');
+    }
+    if (topTopics.length) {
+      overviewParts.push('高频主题为' + topTopics.map(function(item) { return item.label; }).join('、'));
+    }
+    return {
+      total_count: totalCount,
+      strength_counts: strengthCounts,
+      overview: overviewParts.join('；') + '。',
+      leading_types: leadingTypes,
+      strong_themes: strongThemes.slice(0, 2),
+      top_topics: topTopics
+    };
+  }
+
+  function renderSignals() {
+    var target = document.getElementById('dashboardSignals');
+    if (!target) return;
+    var summary = data.signal_summary || buildSignalSummaryFallback();
+    var counts = summary.strength_counts || {};
+    var factHtml = [];
+    (summary.leading_types || []).slice(0, 3).forEach(function(item) {
+      factHtml.push('<span class="dashboard-signal-fact type"><em>类型</em><strong>' + escapeHtml(item.label) + '</strong><small>' + escapeHtml(item.count || 0) + ' 条</small></span>');
+    });
+    (summary.top_topics || []).slice(0, 3).forEach(function(item) {
+      factHtml.push('<span class="dashboard-signal-fact topic"><em>主题</em><strong>' + escapeHtml(item.label) + '</strong><small>' + escapeHtml(item.count || 0) + ' 条</small></span>');
+    });
+    target.innerHTML = '<article class="dashboard-signal-summary">' +
+      '<div class="dashboard-signal-summary-head">' +
+        '<div class="dashboard-signal-total"><span>信号总量</span><strong>' + escapeHtml(summary.total_count || 0) + '</strong><em>条</em></div>' +
+        '<div class="dashboard-signal-strengths">' +
+          '<span><em>强</em><strong>' + escapeHtml(counts.strong || 0) + '</strong></span>' +
+          '<span><em>中</em><strong>' + escapeHtml(counts.medium || 0) + '</strong></span>' +
+          '<span><em>弱</em><strong>' + escapeHtml(counts.weak || 0) + '</strong></span>' +
+        '</div>' +
+      '</div>' +
+      '<p class="dashboard-signal-overview">' + escapeHtml(summary.overview || '暂无可用的近期信号汇总。') + '</p>' +
+      (factHtml.length ? '<div class="dashboard-signal-facts">' + factHtml.join('') + '</div>' : '') +
+    '</article>';
   }
 
   function renderCommunityDynamics() {

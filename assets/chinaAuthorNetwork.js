@@ -73,9 +73,17 @@
   var activeDetail = null;
   var selectedMapProvince = '';
   var selectedMapHospitalId = '';
-  var chinaMapTemplate = null;
-  var chinaMapLoading = false;
-  var chinaMapCallbacks = [];
+
+  function parseChinaMapTemplate(markup) {
+    if (typeof markup !== 'string' || !markup.trim()) return null;
+    var doc = new DOMParser().parseFromString(markup, 'image/svg+xml');
+    var svg = doc.documentElement;
+    if (!svg || svg.nodeName.toLowerCase() !== 'svg' || doc.querySelector('parsererror')) return null;
+    if (!svg.getAttribute('viewBox') || !svg.querySelector('path#beijing') || !svg.querySelector('path#shanghai')) return null;
+    return svg;
+  }
+
+  var chinaMapTemplate = parseChinaMapTemplate(window.MG_CHINA_PROVINCES_SVG);
 
   function refreshData() {
     payload = window.MG_CHINA_AUTHOR_NETWORK || payload || null;
@@ -730,37 +738,6 @@
     }
   }
 
-  function mapAssetUrl() {
-    return hub.assetUrl ? hub.assetUrl('assets/china-provinces.svg') : 'assets/china-provinces.svg';
-  }
-
-  function loadChinaMap(callback) {
-    if (chinaMapTemplate) { callback(true); return; }
-    chinaMapCallbacks.push(callback);
-    if (chinaMapLoading) return;
-    chinaMapLoading = true;
-    fetch(mapAssetUrl(), { cache: 'force-cache' }).then(function (response) {
-      if (!response.ok) throw new Error('map HTTP ' + response.status);
-      return response.text();
-    }).then(function (text) {
-      var doc = new DOMParser().parseFromString(text, 'image/svg+xml');
-      var svg = doc.documentElement;
-      if (!svg || svg.nodeName.toLowerCase() !== 'svg') throw new Error('invalid SVG map');
-      chinaMapTemplate = svg;
-      chinaMapLoading = false;
-      var callbacks = chinaMapCallbacks.slice();
-      chinaMapCallbacks = [];
-      callbacks.forEach(function (cb) { if (cb) cb(true); });
-    }).catch(function (error) {
-      chinaMapLoading = false;
-      chinaMapTemplate = null;
-      var callbacks = chinaMapCallbacks.slice();
-      chinaMapCallbacks = [];
-      console.warn('China province map load failed:', error);
-      callbacks.forEach(function (cb) { if (cb) cb(false); });
-    });
-  }
-
   function provinceHeatmapStats() {
     var stats = {};
     heatmap.forEach(function (row) {
@@ -999,6 +976,18 @@
     bindMapRankButtons();
   }
 
+  function renderProvinceMapFallback() {
+    var stats = provinceHeatmapStats();
+    var sorted = Object.keys(stats).sort(function (a, b) {
+      return stats[b].paper_count - stats[a].paper_count || a.localeCompare(b);
+    });
+    el.heatmap.innerHTML = '<div class="china-network-map-head"><div><h3>全作者医院热力线索 · 中国省级排行</h3>' +
+      '<p>中国省级底图数据不可用，已保留地区排行数据。</p></div></div>' +
+      '<div class="china-network-map-layout"><div class="kg-empty-hint">无法显示省级地图；可继续使用右侧排行与筛选查看地区数据。</div>' +
+      renderMapRanking(stats, sorted) + '</div>';
+    bindMapRankButtons();
+  }
+
   function renderRegionalHeatmapCards() {
     var geoScope = currentGeoScope();
     var rows = heatmap.filter(function (row) { return geoScope === 'all' ? row.geo_scope !== 'mainland' : row.geo_scope === geoScope; })
@@ -1021,11 +1010,7 @@
       return;
     }
     if (!chinaMapTemplate) {
-      el.heatmap.innerHTML = '<div class="kg-empty-hint">正在加载中国省级底图…</div>';
-      loadChinaMap(function (ok) {
-        if (ok) renderHeatmap();
-        else el.heatmap.innerHTML = '<div class="kg-empty-hint">中国省级底图加载失败，已保留地区排行数据。</div>';
-      });
+      renderProvinceMapFallback();
       return;
     }
     renderProvinceMap();

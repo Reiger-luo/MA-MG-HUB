@@ -546,7 +546,16 @@ a.literature-signal-ref:hover { background: rgba(37,99,235,0.12); }
 .conference-rank-row {
   display: grid; grid-template-columns: minmax(80px, 0.78fr) minmax(90px, 1fr) 36px;
   gap: 0.45rem; align-items: center;
+  width: 100%; border: 0; background: transparent; padding: 0;
+  font: inherit; text-align: left; cursor: pointer;
   color: var(--fg2); font-size: 0.78rem;
+}
+.conference-rank-row:hover,
+.conference-rank-row.active {
+  color: var(--accent); background: rgba(37,99,235,0.05);
+}
+.conference-rank-row:focus-visible {
+  outline: 2px solid rgba(37,99,235,0.35); outline-offset: 3px;
 }
 .conference-rank-row span {
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
@@ -1241,6 +1250,9 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
   width: auto; min-width: 0;
   height: clamp(560px, calc(100vh - 230px), 760px);
   overflow-y: auto;
+}
+.msl-profile-grid .workspace-detail {
+  height: auto; overflow-y: visible; align-self: start;
 }
 .msl-profile-grid .workspace-list {
   display: flex; flex-direction: column;
@@ -2876,6 +2888,18 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
 .landscape-topic-detail .kg-study-list {
   max-height: 230px;
 }
+.landscape-answer-layout .landscape-topic-panel {
+  position: static;
+}
+.landscape-answer-layout .landscape-topic-list {
+  max-height: none; overflow-y: visible;
+}
+.landscape-answer-layout .landscape-topic-detail {
+  max-height: none; overflow-y: visible;
+}
+.landscape-answer-layout .landscape-topic-detail .kg-study-list {
+  max-height: none; overflow-y: visible;
+}
 .topic-answer-filter {
   width: 100%;
 }
@@ -3021,6 +3045,66 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
 }
 .dashboard-grid-single .dashboard-signals {
   grid-row: auto;
+}
+.dashboard-signals .dashboard-signal-summary {
+  display: grid; gap: 0.9rem;
+  border: 1px solid var(--bg3); border-radius: 9px;
+  background: var(--bg2); padding: 0.95rem;
+}
+.dashboard-signals .dashboard-signal-summary-head {
+  display: grid; grid-template-columns: minmax(130px, 0.55fr) minmax(260px, 1fr);
+  gap: 0.8rem; align-items: stretch;
+}
+.dashboard-signals .dashboard-signal-total {
+  display: flex; align-items: baseline; gap: 0.3rem;
+  border: 1px solid rgba(37,99,235,0.14); border-radius: 8px;
+  background: rgba(37,99,235,0.045); padding: 0.7rem 0.8rem;
+}
+.dashboard-signals .dashboard-signal-total span {
+  align-self: center; color: var(--fg3); font-size: 0.72rem; margin-right: auto;
+}
+.dashboard-signals .dashboard-signal-total strong {
+  color: var(--accent); font-size: 1.65rem; line-height: 1;
+}
+.dashboard-signals .dashboard-signal-total em {
+  color: var(--fg3); font-size: 0.72rem; font-style: normal;
+}
+.dashboard-signals .dashboard-signal-strengths {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.45rem;
+}
+.dashboard-signals .dashboard-signal-strengths span {
+  display: flex; align-items: center; justify-content: space-between; gap: 0.45rem;
+  border: 1px solid var(--bg3); border-radius: 8px;
+  background: var(--bg); padding: 0.65rem 0.7rem;
+}
+.dashboard-signals .dashboard-signal-strengths em {
+  color: var(--fg3); font-size: 0.72rem; font-style: normal;
+}
+.dashboard-signals .dashboard-signal-strengths strong {
+  color: var(--fg); font-size: 1rem;
+}
+.dashboard-signals .dashboard-signal-overview {
+  color: var(--fg2); font-size: 0.82rem; line-height: 1.7; margin: 0;
+}
+.dashboard-signals .dashboard-signal-facts {
+  display: flex; flex-wrap: wrap; gap: 0.4rem;
+}
+.dashboard-signals .dashboard-signal-fact {
+  display: inline-flex; align-items: center; gap: 0.32rem;
+  border: 1px solid var(--bg3); border-radius: 999px;
+  background: var(--bg); padding: 0.24rem 0.48rem;
+}
+.dashboard-signals .dashboard-signal-fact em {
+  color: var(--fg3); font-size: 0.66rem; font-style: normal;
+}
+.dashboard-signals .dashboard-signal-fact strong {
+  color: var(--fg2); font-size: 0.72rem; font-weight: 500;
+}
+.dashboard-signals .dashboard-signal-fact small {
+  color: var(--fg3); font-size: 0.66rem;
+}
+.dashboard-signals .dashboard-signal-fact.topic {
+  border-color: rgba(13,148,136,0.18); background: rgba(13,148,136,0.035);
 }
 .dashboard-side-stack {
   display: grid; gap: 1rem;
@@ -3479,6 +3563,7 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
   .kg-canvas-wrap { height: 440px; }
   .kg-detail { max-height: none; }
   .dashboard-stats, .dashboard-section-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dashboard-signals .dashboard-signal-summary-head { grid-template-columns: 1fr; }
   .compliance-box, .compliance-box.compact { grid-template-columns: 1fr; }
   .module-list.compact { max-height: none; grid-template-columns: 1fr; }
   .msl-brief-panel { min-height: 0; }
@@ -3507,4 +3592,5 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
 @media (max-width: 520px) {
   .dashboard-stats, .dashboard-section-grid, .dashboard-community-list, .conference-stat-grid { grid-template-columns: 1fr; }
   .dashboard-section-card { min-height: 0; }
+  .dashboard-signals .dashboard-signal-strengths { grid-template-columns: 1fr; }
 }

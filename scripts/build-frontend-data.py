@@ -1508,6 +1508,71 @@ def build_signals(recent):
     }
 
 
+def build_signal_summary(signals):
+    """将规范化信号压缩为首页可直接消费的稳定汇总。"""
+    normalized = [item for item in (signals or []) if isinstance(item, dict)]
+    strength_counts = {"strong": 0, "medium": 0, "weak": 0}
+    strength_keys = {"强": "strong", "中": "medium", "弱": "weak"}
+    type_counts = Counter()
+    topic_counts = Counter()
+    type_order = {}
+    topic_order = {}
+    strong_themes = []
+
+    for signal in normalized:
+        strength_key = strength_keys.get(str(signal.get("strength") or ""), "weak")
+        strength_counts[strength_key] += 1
+
+        signal_type = str(signal.get("type") or "").strip()
+        if signal_type:
+            type_order.setdefault(signal_type, len(type_order))
+            type_counts[signal_type] += 1
+
+        seen_topics = set()
+        for value in signal.get("keywords") or []:
+            topic = str(value or "").strip()
+            if not topic or topic in seen_topics:
+                continue
+            seen_topics.add(topic)
+            topic_order.setdefault(topic, len(topic_order))
+            topic_counts[topic] += 1
+
+        title = str(signal.get("title") or signal.get("summary") or "").strip()
+        if strength_key == "strong" and title and title not in strong_themes:
+            strong_themes.append(title if len(title) <= 32 else title[:31].rstrip() + "…")
+
+    def rank_counts(counts, order, limit):
+        ranked = sorted(counts, key=lambda label: (-counts[label], order[label], label))
+        return [{"label": label, "count": counts[label]} for label in ranked[:limit]]
+
+    leading_types = rank_counts(type_counts, type_order, 3)
+    top_topics = rank_counts(topic_counts, topic_order, 3)
+    strong_themes = strong_themes[:2]
+    total_count = len(normalized)
+    overview_parts = [f"近 14 天共形成 {total_count} 条信号"]
+    if leading_types:
+        overview_parts.append(
+            "信号类型以" + "、".join(
+                f"{item['label']}（{item['count']} 条）" for item in leading_types[:2]
+            ) + "为主"
+        )
+    if strong_themes:
+        overview_parts.append("强信号聚焦" + "、".join(f"“{title}”" for title in strong_themes))
+    else:
+        overview_parts.append("本期暂无强信号")
+    if top_topics:
+        overview_parts.append("高频主题为" + "、".join(item["label"] for item in top_topics))
+
+    return {
+        "total_count": total_count,
+        "strength_counts": strength_counts,
+        "overview": "；".join(overview_parts) + "。",
+        "leading_types": leading_types,
+        "strong_themes": strong_themes,
+        "top_topics": top_topics,
+    }
+
+
 def normalize_institution(affiliation):
     if not affiliation:
         return ""
@@ -3000,6 +3065,7 @@ def build_dashboard(recent, signals, experts, china, landscape, modules, total_c
             {"label": "证据矩阵", "value": f"{knowledge_stats.get('matrix_rows', 0)} 行", "state": "ok" if knowledge_stats.get("matrix_rows") else "warn"},
             {"label": "周更策略", "value": "增量更新", "state": "ok"},
         ],
+        "signal_summary": build_signal_summary(signals["signals"]),
         "top_signals": signals["signals"][:5],
         "work_items": [
             {"type": "文献", "label": "近 14 天信号", "count": len(signals["signals"]), "href": "pages/literature.html"},
