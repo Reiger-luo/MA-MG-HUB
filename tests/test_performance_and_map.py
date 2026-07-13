@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 
 
@@ -248,3 +249,29 @@ def test_china_network_result_height_and_responsive_stack():
     rank_list_css = css[css.index(".china-network-map-rank ol {"):css.index(".china-network-map-rank li")]
     assert "display: grid" in rank_list_css
     assert "repeat(auto-fit, minmax(" in rank_list_css
+
+
+def test_china_network_node_detail_lists_expand_only_in_semantic_scope():
+    frontend = (ROOT / "assets" / "chinaAuthorNetwork.js").read_text(encoding="utf-8")
+    css = (ROOT / "assets" / "main.css").read_text(encoding="utf-8")
+
+    assert frontend.count("china-network-node-detail-section") == 2
+    assert "renderPaperList(nodePaperIds, null, true, 'china-network-node-detail-list')" in frontend
+    assert 'class="kg-study-list china-network-node-detail-list"' in frontend
+
+    scoped_rule = re.search(
+        r"\.china-network-detail\s+\.china-network-node-detail-section\s+"
+        r"\.china-network-node-detail-list\s*\{([^}]*)\}",
+        css,
+        re.S,
+    )
+    assert scoped_rule is not None
+    assert "max-height: none" in scoped_rule.group(1)
+    assert "overflow: visible" in scoped_rule.group(1)
+
+    # 通用知识库文献列表继续保留内部滚动，避免影响诊治格局等模块。
+    assert re.search(
+        r"\.kg-study-list\s*\{[^}]*max-height:\s*200px;[^}]*overflow-y:\s*auto",
+        css,
+        re.S,
+    )

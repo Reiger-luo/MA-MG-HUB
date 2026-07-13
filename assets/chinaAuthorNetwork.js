@@ -592,11 +592,12 @@
       escapeHtml(node.region || node.geo_scope || '') + '</span></div>' +
       '<div class="kg-detail-section"><h4>节点概况</h4><p>' +
       '当前上下文联络作者文献 ' + escapeHtml(contextPaperCount) + ' 篇 · 当前上下文合作医院 ' + escapeHtml(nodeEdges.length) + '</p></div>' +
-      '<div class="kg-detail-section"><h4>合作医院</h4><ul class="kg-study-list">' +
+      '<div class="kg-detail-section china-network-node-detail-section"><h4>合作医院</h4><ul class="kg-study-list china-network-node-detail-list">' +
       (collaborators || '<li class="kg-ref-meta">暂无合作边；可能是单中心或未达到当前图谱筛选阈值。</li>') + '</ul></div>' +
       nodeMetadata +
       '<div class="kg-detail-section"><h4>药物标签</h4>' + renderDrugCounts(node.drug_counts, '第一/通讯作者文献') + '</div>' +
-      '<div class="kg-detail-section"><h4>文献 · 联络作者口径</h4>' + renderPaperList(nodePaperIds) + '</div>';
+      '<div class="kg-detail-section china-network-node-detail-section"><h4>文献 · 联络作者口径</h4>' +
+      renderPaperList(nodePaperIds, null, true, 'china-network-node-detail-list') + '</div>';
     bindDetailEdgeButtons();
   }
 
@@ -667,11 +668,14 @@
     });
   }
 
-  function renderPaperList(pmids, limit, includeGraphAuthors) {
+  function renderPaperList(pmids, limit, includeGraphAuthors, listClass) {
     pmids = latestFirst(pmids);
     if (limit != null) pmids = pmids.slice(0, limit);
     if (!pmids.length) return '<p class="kg-ref-meta">暂无 PMID</p>';
-    return '<ul class="kg-study-list">' + pmids.map(function (pmid) {
+    var listStart = listClass === 'china-network-node-detail-list'
+      ? '<ul class="kg-study-list china-network-node-detail-list">'
+      : '<ul class="kg-study-list">';
+    return listStart + pmids.map(function (pmid) {
       var paper = papers[pmid] || { pmid: pmid };
       var authorLine = includeGraphAuthors === false ? '' : renderPaperAuthors(paper);
       return '<li><a class="text-link" href="' + escapeHref(pubmedUrl(pmid)) + '" target="_blank" rel="noopener">' +

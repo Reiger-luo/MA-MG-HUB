@@ -69,30 +69,6 @@
     }).join('');
   }
 
-  function renderWorkflows() {
-    var target = document.getElementById('dashboardWorkflows');
-    if (!target) return;
-    var workflows = data.workflows || [];
-    target.innerHTML = workflows.map(function(item) {
-      return '<a class="dashboard-workflow-item" href="' + escapeHref(item.href || '#') + '">' +
-        '<span>' + escapeHtml(item.label) + '</span>' +
-        '<strong>' + escapeHtml(item.value || '') + '</strong>' +
-        '<em>' + escapeHtml(item.note || '') + '</em>' +
-      '</a>';
-    }).join('') || '<div class="empty-state small"><h3>暂无工作流数据</h3></div>';
-  }
-
-  function renderHealth() {
-    var target = document.getElementById('dashboardHealth');
-    if (!target) return;
-    target.innerHTML = (data.data_health || []).map(function(item) {
-      return '<div class="dashboard-health-row ' + escapeHtml(item.state || 'ok') + '">' +
-        '<span>' + escapeHtml(item.label) + '</span>' +
-        '<strong>' + escapeHtml(item.value || '') + '</strong>' +
-      '</div>';
-    }).join('') || '<div class="empty-state small"><h3>暂无数据状态</h3></div>';
-  }
-
   function rankSignalFacts(signals, field, limit) {
     var counts = {};
     var order = {};
@@ -212,8 +188,6 @@
     renderCommunityDynamics();
     renderSections();
     renderSignals();
-    renderWorkflows();
-    renderHealth();
     var badge = document.getElementById('dashboardBadge');
     if (badge) badge.textContent = '数据更新 ' + (data.generated_at || '-');
   }

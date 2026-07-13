@@ -34,3 +34,22 @@ def test_common_js_blocks_dangerous_url_protocols():
     assert "javascript:" not in common
     assert "resolved.protocol === 'http:'" in common
     assert "resolved.protocol === 'https:'" in common
+
+
+def test_dashboard_keeps_only_full_width_recent_signals_module():
+    html = (PROJECT / "index.html").read_text(encoding="utf-8")
+    dashboard_js = (PROJECT / "assets" / "dashboard.js").read_text(encoding="utf-8")
+    dashboard_data = (PROJECT / "data" / "dashboard-data.js").read_text(encoding="utf-8")
+
+    assert 'class="dashboard-grid dashboard-grid-single"' in html
+    assert 'id="dashboardWorkflows"' not in html
+    assert 'id="dashboardHealth"' not in html
+    assert "当前工作流" not in html
+    assert "数据健康" not in html
+
+    assert "renderWorkflows" not in dashboard_js
+    assert "renderHealth" not in dashboard_js
+
+    # 仅取消首页展示，不改动生成数据契约。
+    assert '"workflows"' in dashboard_data
+    assert '"data_health"' in dashboard_data

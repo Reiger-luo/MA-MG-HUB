@@ -1958,6 +1958,10 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
   min-height: 0;
   overflow: visible;
 }
+.china-network-detail .china-network-node-detail-section .china-network-node-detail-list {
+  max-height: none;
+  overflow: visible;
+}
 .china-network-global-filter {
   margin-bottom: 0.8rem;
 }
