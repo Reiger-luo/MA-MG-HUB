@@ -138,7 +138,7 @@ def test_china_network_approved_information_architecture():
     shared_heading = html.index('id="chinaNetworkSharedTitle"')
     detail = html.index('id="chinaNetworkDetail"')
 
-    assert global_group < stats < visual_grid < shared_module < detail
+    assert stats < global_group < visual_grid < shared_module < detail
     assert visual_grid < graph_card < map_card < shared_module < shared_heading < detail
     assert '<aside class="kg-detail china-network-detail"' not in html
     assert 'id="chinaNetworkProvinceFilter"' in html
@@ -175,6 +175,51 @@ def test_china_network_shared_detail_state_and_map_controls():
     assert "currentGlobalContext" in frontend
     assert "keepActiveGraphSelectionVisible" in frontend
 
+    clear_selection = frontend[
+        frontend.index("function clearMapSelection"):
+        frontend.index("function selectMapProvince")
+    ]
+    assert "selectedMapProvince = '';" in clear_selection
+    assert "selectedMapHospitalId = '';" in clear_selection
+    assert "el.provinceFilter.value = '';" in clear_selection
+    assert "renderHeatmap();" in clear_selection
+    assert "activeDetail.type === 'province'" in clear_selection
+    assert "activeDetail.type === 'mapHospital'" in clear_selection
+    assert "clearActiveDetail();" in clear_selection
+
+    province_map = frontend[
+        frontend.index("function renderProvinceMap()"):
+        frontend.index("function renderProvinceMapFallback()")
+    ]
+    assert "mapCanvas.addEventListener('click', clearMapSelection);" in province_map
+    assert "event.stopPropagation();" in province_map
+    assert "event.key === 'Enter' || event.key === ' '" in province_map
+
+
+def test_china_network_province_map_content_order_and_fallback_stack():
+    frontend = (ROOT / "assets" / "chinaAuthorNetwork.js").read_text(encoding="utf-8")
+
+    province_map = frontend[
+        frontend.index("function renderProvinceMap()"):
+        frontend.index("function renderProvinceMapFallback()")
+    ]
+    map_heading = province_map.index("全作者医院热力线索 · 中国省级图")
+    map_canvas = province_map.index('class="china-network-map-canvas"')
+    map_legend = province_map.index('class="china-network-map-legend"')
+    map_divider = province_map.index('class="china-network-map-divider"')
+    map_ranking = province_map.index("renderMapRanking(stats, sorted)")
+    assert map_heading < map_canvas < map_legend < map_divider < map_ranking
+
+    fallback = frontend[
+        frontend.index("function renderProvinceMapFallback()"):
+        frontend.index("function renderRegionalHeatmapCards()")
+    ]
+    fallback_hint = fallback.index("无法显示省级地图")
+    fallback_divider = fallback.index('class="china-network-map-divider"')
+    fallback_ranking = fallback.index("renderMapRanking(stats, sorted)")
+    assert fallback_hint < fallback_divider < fallback_ranking
+    assert "右侧排行" not in fallback
+
 
 def test_china_network_result_height_and_responsive_stack():
     css = (ROOT / "assets" / "main.css").read_text(encoding="utf-8")
@@ -197,3 +242,9 @@ def test_china_network_result_height_and_responsive_stack():
     assert ".china-network-visual-grid" in responsive
     assert "grid-template-columns: 1fr" in responsive
     assert "min-width: 0" in css[css.index(".china-network-visual-card"):]
+    map_layout_css = css[css.index(".china-network-map-layout {"):css.index(".china-network-map-canvas")]
+    assert "grid-template-columns:" not in map_layout_css
+    assert ".china-network-map-divider" in css
+    rank_list_css = css[css.index(".china-network-map-rank ol {"):css.index(".china-network-map-rank li")]
+    assert "display: grid" in rank_list_css
+    assert "repeat(auto-fit, minmax(" in rank_list_css

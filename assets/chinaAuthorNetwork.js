@@ -829,6 +829,17 @@
     });
   }
 
+  function clearMapSelection(event) {
+    if (event && event.target && event.target.closest && event.target.closest('.china-province')) return;
+    var clearsMapDetail = activeDetail &&
+      (activeDetail.type === 'province' || activeDetail.type === 'mapHospital');
+    selectedMapProvince = '';
+    selectedMapHospitalId = '';
+    if (el.provinceFilter) el.provinceFilter.value = '';
+    renderHeatmap();
+    if (clearsMapDetail) clearActiveDetail();
+  }
+
   function selectMapProvince(province) {
     selectedMapProvince = province;
     selectedMapHospitalId = '';
@@ -936,11 +947,13 @@
     var drugLabel = currentDrugId() ? ((drugById[currentDrugId()] || {}).label || currentDrugId()) : '';
     el.heatmap.innerHTML = '<div class="china-network-map-head"><div><h3>全作者医院热力线索 · 中国省级图</h3><p>颜色 = ' + (drugLabel ? escapeHtml(drugLabel) + '相关' : '省级') + '去重 PMID 数；点击省份查看医院排名，点击医院查看最新文献清单。</p></div>' +
       '<span class="china-network-map-source">单层可编辑省级 SVG · 审图号 GS（2016）2923号</span></div>' +
-      '<div class="china-network-map-layout"><div class="china-network-map-canvas" id="chinaNetworkMapCanvas"></div>' +
-      renderMapRanking(stats, sorted) + '</div>' +
-      '<div class="china-network-map-legend"><span>低</span><i style="background:' + MAP_COLORS[0] + '"></i><i style="background:' + MAP_COLORS[2] + '"></i><i style="background:' + MAP_COLORS[4] + '"></i><i style="background:' + MAP_COLORS[5] + '"></i><span>高</span></div>';
+      '<div class="china-network-map-layout"><div class="china-network-map-canvas" id="chinaNetworkMapCanvas"></div></div>' +
+      '<div class="china-network-map-legend"><span>低</span><i style="background:' + MAP_COLORS[0] + '"></i><i style="background:' + MAP_COLORS[2] + '"></i><i style="background:' + MAP_COLORS[4] + '"></i><i style="background:' + MAP_COLORS[5] + '"></i><span>高</span></div>' +
+      '<div class="china-network-map-divider" role="presentation"></div>' +
+      renderMapRanking(stats, sorted);
 
     var mapCanvas = document.getElementById('chinaNetworkMapCanvas');
+    mapCanvas.addEventListener('click', clearMapSelection);
     mapCanvas.innerHTML = '<div class="china-editable-map-shell"></div>';
     var mapShell = mapCanvas.querySelector('.china-editable-map-shell');
     var svg = chinaMapTemplate.cloneNode(true);
@@ -960,7 +973,10 @@
       var title = document.createElementNS(svgNs, 'title');
       title.textContent = province + ' · ' + (row ? row.paper_count : 0) + ' 篇 · ' + (row ? row.hospital_count : 0) + ' 个医院节点';
       path.appendChild(title);
-      path.addEventListener('click', function () { selectMapProvince(province); });
+      path.addEventListener('click', function (event) {
+        event.stopPropagation();
+        selectMapProvince(province);
+      });
       path.addEventListener('keydown', function (event) {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault();
@@ -983,8 +999,9 @@
     });
     el.heatmap.innerHTML = '<div class="china-network-map-head"><div><h3>全作者医院热力线索 · 中国省级排行</h3>' +
       '<p>中国省级底图数据不可用，已保留地区排行数据。</p></div></div>' +
-      '<div class="china-network-map-layout"><div class="kg-empty-hint">无法显示省级地图；可继续使用右侧排行与筛选查看地区数据。</div>' +
-      renderMapRanking(stats, sorted) + '</div>';
+      '<div class="china-network-map-layout"><div class="kg-empty-hint">无法显示省级地图；可继续使用下方排行与筛选查看地区数据。</div></div>' +
+      '<div class="china-network-map-divider" role="presentation"></div>' +
+      renderMapRanking(stats, sorted);
     bindMapRankButtons();
   }
 
