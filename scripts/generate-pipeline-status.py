@@ -26,6 +26,8 @@ PUBLIC_ARTIFACTS = [
     ("literature-recent.js", "近一年文献公开库", "MG_LITERATURE_DATA"),
     ("literature-full-index.js", "全库文献轻索引", "MG_LITERATURE_FULL_INDEX"),
     ("signals-weekly.js", "候选信号", "MG_SIGNALS_DATA"),
+    ("source-signals.js", "独立来源信号频道", "MG_SOURCE_SIGNALS"),
+    ("release-manifest.js", "一致性发布清单", "MG_RELEASE_MANIFEST"),
     ("china-intelligence.js", "中国情报", "MG_CHINA_DATA"),
     ("expert-profiles.js", "专家画像", "MG_EXPERT_PROFILES"),
     ("landscape-data.js", "诊治格局", "MG_LANDSCAPE_DATA"),
@@ -480,10 +482,12 @@ def buildStatus():
     weeklyPath = DATA_DIR / "literature-weekly.json"
     regulatoryPath = DATA_DIR / "china-regulatory-status.json"
     clinicalTrialsPath = DATA_DIR / "clinicaltrials-pipeline-cache.json"
+    chictrPath = DATA_DIR / "chictr-trials-cache.json"
     localFullCount = None
     weeklyCount = None
     regulatoryPayload = {}
     clinicalTrialsPayload = {}
+    chictrPayload = {}
     if fullPath.exists():
         localFullCount = len(loadJson(fullPath))
     if weeklyPath.exists():
@@ -492,6 +496,8 @@ def buildStatus():
         regulatoryPayload = loadJson(regulatoryPath)
     if clinicalTrialsPath.exists():
         clinicalTrialsPayload = loadJson(clinicalTrialsPath)
+    if chictrPath.exists():
+        chictrPayload = loadJson(chictrPath)
 
     recentCount = len(literature)
     declaredRollingCount = readWindowNumber(DATA_DIR / "literature-recent.js", "MG_PUBLIC_ROLLING_COUNT")
@@ -554,6 +560,17 @@ def buildStatus():
             ),
             "status": "ok" if clinicalTrialsPayload else "manual",
             "status_label": "已接入" if clinicalTrialsPayload else "待接入",
+        },
+        {
+            "id": "chictr",
+            "name": "ChiCTR 官方注册缓存",
+            "meta": (
+                f"MG 注册记录 {len(chictrPayload.get('records') or [])} 项 · mode={chictrPayload.get('mode', 'cache')} · 核对 {chictrPayload.get('last_verified') or '待更新'}"
+                if chictrPayload
+                else "等待 ChiCTR 官方 JSON/CSV 缓存"
+            ),
+            "status": "ok" if chictrPayload else "manual",
+            "status_label": "缓存可用" if chictrPayload else "待接入",
         },
         {
             "id": "regulatory",

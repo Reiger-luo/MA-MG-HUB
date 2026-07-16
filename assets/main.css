@@ -3602,3 +3602,30 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
   .dashboard-section-card { min-height: 0; }
   .dashboard-signals .dashboard-signal-strengths { grid-template-columns: 1fr; }
 }
+.source-signal-board {
+  margin: 1rem 0 1.25rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--card-bg);
+}
+.source-signal-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+.source-signal-head h3 { margin: 0 0 .25rem; }
+.source-signal-head p { margin: 0; color: var(--fg3); font-size: .82rem; }
+.source-signal-channels { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .4rem; }
+.source-signal-btn { border: 1px solid var(--border); background: var(--bg); color: var(--fg2); border-radius: 999px; padding: .38rem .65rem; cursor: pointer; }
+.source-signal-btn strong { margin-left: .35rem; }
+.source-signal-btn.active { border-color: var(--accent); color: var(--accent); background: #eff6ff; }
+.source-signal-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .7rem; margin-top: .85rem; }
+.source-signal-card { min-width: 0; padding: .75rem; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); }
+.source-signal-card > a, .source-signal-card > strong { display: block; color: var(--fg); font-weight: 650; line-height: 1.45; }
+.source-signal-meta { display: flex; justify-content: space-between; gap: .5rem; margin-bottom: .45rem; color: var(--fg3); font-size: .72rem; }
+.source-signal-status { margin-top: .5rem; color: var(--fg3); font-size: .75rem; }
+@media (max-width: 760px) { .source-signal-head { display: block; } .source-signal-channels { justify-content: flex-start; margin-top: .75rem; } }
+.china-trial-registry-signals { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+.china-trial-registry-signals h3 { margin: 0 0 .2rem; }
+#chinaTrialRegistrySignals { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: .65rem; margin-top: .75rem; }
+.china-trial-registry-card { padding: .75rem; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); }
+.china-trial-registry-card > div { display: flex; justify-content: space-between; gap: .5rem; color: var(--fg3); font-size: .72rem; }
+.china-trial-registry-card > a, .china-trial-registry-card > strong { display: block; margin-top: .4rem; color: var(--fg); font-weight: 650; line-height: 1.4; }
+.china-trial-registry-card p { margin: .45rem 0 0; color: var(--fg3); font-size: .75rem; }

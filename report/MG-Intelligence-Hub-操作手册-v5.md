@@ -1,6 +1,7 @@
 # MG Intelligence Hub v5.x — 架构设计与操作手册
 > 定位：MA-MG-HUB 医学事务 AI 变革引擎，围绕 MSL 工作流的主动赋能系统
 > 本手册是当前操作依据；`report/` 中旧规划文档仅作历史参考。
+> 设计与审查请先读：[网站设计与审查速览.md](网站设计与审查速览.md)。
 
 ---
 
@@ -16,6 +17,7 @@ MG Intelligence Hub 是面向重症肌无力（MG）医学事务团队的静态�
 - **本地 full 底座承担重分析**：`data/literature-full.json` 与大体量中间产物留在本地，不推 GitHub。
 - **前端以数据产物驱动**：所有页面通过 `window.MG_*` 全局数据对象渲染，不依赖 build step。
 - **医学事务语义层优先**：社区、Living Answers、MSL action 比单纯统计数字更重要。
+- **中国大陆 MSL 公开情报边界**：只提供专家证据、公开情报和拜访前材料；不记录拜访，不建设随访、CRM、互动历史、私有后端或浏览器持久化。
 
 ### 1.2 当前回答的问题
 
@@ -87,10 +89,10 @@ MG Intelligence Hub 是面向重症肌无力（MG）医学事务团队的静态�
 
 | 口径 | 当前数量 | 用途 |
 |---|---:|---|
-| **公开滚动文献层** | 近一年 `literature-recent.js` 1,154 篇；其中中国相关 323 篇；候选信号 38 条 | 情报中心、Dashboard、信号板、中国情报 |
-| **本地 full / 语义底座** | `literature-full.json` / `literature-full-index.js` / community assignment 为 10,635 篇 | 知识图谱、社区归类、专家画像、跨库检索 |
+| **公开滚动文献层** | 2026-07-15 严格派生快照：`literature-recent.js` 652 篇，其中中国相关 211 篇；全部 MG-core 且 evidence I–V | 情报中心文献速览、公开文献门控 |
+| **本地 full / 语义底座** | 2026-07-15 快照：`literature-full.json` / `literature-full-index.js` / community assignment 均为 10,672 篇 | 知识图谱、社区归类、专家画像、跨库检索 |
 
-注意：当前 `dashboard-data.js.stats.total_articles` 与 `window.MG_TOTAL_COUNT` 显示 1,165，属于公开前端统计口径，并不等同于社区语义层使用的 10,635 篇 full 底座。这个口径差异已列入已知问题。
+`pipeline-status.js` 当前声明 `public_rolling_count=652`、`semantic_full_count=10672`，并核对 raw full、full index、community index/audit 一致。`MG_TOTAL_COUNT` 与 `MG_SEMANTIC_FULL_COUNT` 表示语义 full，不等于 recent 数量。`dashboard-data.js` 与 `china-intelligence.js` 已从严格 recent 重建，当前分别显示 652 篇 recent 与 211 篇中国相关文献。
 
 ### 3.2 数据流
 
@@ -112,8 +114,8 @@ PubMed / ClinicalTrials.gov / EasyScholar / 中国监管状态 / 会议来源
 
 | 文件 | 当前状态 | 说明 |
 |---|---:|---|
-| `data/literature-full.json` | 10,635 篇，约 40 MB | 本地 full 文献底座，不推 GitHub |
-| `data/literature-weekly.json` | 38 篇，约 274 KB | 当前周增量临时文件 |
+| `data/literature-full.json` | 10,672 篇，约 40 MB | 本地 full 文献底座，不推 GitHub |
+| `data/literature-weekly.json` | 32 篇 | 当前周增量临时文件；不作为公开流权威数量 |
 | `data/communityCorpusPack.jsonl` | 约 21 MB | 社区语义层输入包 |
 | `data/communityAssignments.jsonl` | 约 4.1 MB | 全量 PMID 社区归类明细 |
 | `data/.llm_cache/` | 本地缓存 | LLM 响应缓存 |
@@ -124,11 +126,11 @@ PubMed / ClinicalTrials.gov / EasyScholar / 中国监管状态 / 会议来源
 
 | 文件 | 当前大小 / 数量 | 用途 | 加载方式 |
 |---|---:|---|---|
-| `data/dashboard-data.js` | 99 KB；生成时间 2026-07-12 01:16:57 | 工作台统计、section、top signals、工作流 | 首页同步加载 |
-| `data/literature-recent.js` | 4.8 MB；1,151 篇 | 情报中心主文献数据 | 情报中心同步加载 |
-| `data/signals-weekly.js` | 146 KB；8 条父级 Signal / 20 条 talking point / 26 个 PMID | Signal → Talking Points → Evidence | 同步加载 |
-| `data/china-intelligence.js` | 127 KB；120 条中国情报摘要 | 中国情报 tab | 按需加载 |
-| `data/literature-full-index.js` | 5.4 MB；10,635 篇轻索引 | 知识库跨库检索 | 懒加载 |
+| `data/dashboard-data.js` | 约 55 KB；2026-07-15 重建 | 工作台统计、section、top signals、工作流；recent 652 / China 211 | 首页同步加载 |
+| `data/literature-recent.js` | 652 篇 | 严格 MG-core + evidence I–V 主文献数据 | 情报中心同步加载 |
+| `data/signals-weekly.js` | 10 条父级 Signal / 10 条 talking point / 26 个 PMID | Signal → Talking Points → Evidence；严格 recent 重建 | 同步加载 |
+| `data/china-intelligence.js` | 中国相关 211 篇；展示最新 120 条摘要 | 严格 MG-core + evidence I–V 的 recent 中国情报 | 按需加载 |
+| `data/literature-full-index.js` | 10,672 篇轻索引 | 知识库跨库检索 | 懒加载 |
 | `data/knowledge-graph.js` | 6.8 MB；55 节点 / 334 核心边 / 180 矩阵行 | 知识库图谱与证据矩阵 | 知识库同步加载 |
 | `data/graphHealth.js` | 7 KB | 图谱健康度 | 知识库、数据状态同步加载 |
 | `data/communityTaxonomy.js` | 9 KB；10 个业务社区 | 社区定义 | 多页面同步加载 |
@@ -136,11 +138,15 @@ PubMed / ClinicalTrials.gov / EasyScholar / 中国监管状态 / 会议来源
 | `data/communityWeekly.js` | 23 KB；10 个社区周更 | 社区动态 | 首页、知识库同步加载 |
 | `data/communityAssignmentIndex.js` | 7 KB；10 个业务社区 + unassigned 分片索引 | 社区归类入口 | 同步加载 |
 | `data/communityAssignments-*.js` | 分片 | 某一社区 PMID 明细 | 懒加载 |
-| `data/communityAssignmentsRecent.js` | 505 KB；1,155 条近一年归类 | 近一年社区过滤 | 按需加载 |
+| `data/communityAssignmentsRecent.js` | 1,158 条近一年归类 | 上次 full 社区构建快照；与严格公开 recent 分属不同口径 | 按需加载 |
 | `data/communityAudit.js` | 28 KB | 社区 assignment 质量摘要 | 知识库、数据状态同步加载 |
 | `data/expert-profiles.js` | 2.4 KB manifest | 专家画像入口、分片路径 | MSL 同步加载 |
-| `data/expert-profiles-china.js` | 5.2 MB；8,926 位 | 中国作者-机构索引 | MSL 同步加载 |
-| `data/expert-profiles-international.js` | 24 MB；43,485 位 | 国外作者-机构索引 | MSL 按需加载 |
+| `data/expert-profiles-china.js` | 8,958 位 | 中国作者-机构索引 | MSL 同步加载 |
+| `data/expert-profiles-international.js` | 43,626 位 | 国外作者-机构索引，仅供离线分析 | 前端不加载 |
+| `data/source-signals.js` | 5 个来源频道 / 383 条频道项 | 文献、指南/共识、监管、注册、会议的独立信号摘要 | 情报中心同步加载 |
+| `data/guideline-consensus-cache.json` | 9 篇 | MG-core 且具有指南/共识主来源标志的独立缓存；不进入 I–V 文献流 | 构建脚本使用 |
+| `data/chictr-trials-cache.json` | tracked cache | ChiCTR 官方公开研究字段；人工官方导出刷新 | 构建脚本使用 |
+| `data/release-manifest.js` | 当前不存在 | 仅真实 required-step 管线完整成功后生成 coherent run id 与产物哈希 | 数据状态/发布审计 |
 | `data/content-modules.js` | 28 KB；6 个模块 | MSL 拜访助手信息模块 | MSL 同步加载 |
 | `data/landscape-data.js` | 254 KB | 竞争矩阵、临床管线、Living Answers | 诊治格局同步加载 |
 | `data/landscapeInsights.js` | 27 KB；6 条动态洞察 | 月度格局洞察、MSL action | 诊治格局 / MSL 同步加载 |
@@ -157,7 +163,7 @@ PubMed / ClinicalTrials.gov / EasyScholar / 中国监管状态 / 会议来源
 
 ## 4. 医学事务社区层
 
-社区层是当前网站的核心语义层。它把 10,635 篇 full corpus 文献映射到医学事务可行动主题，用于工作台、知识库、情报中心筛选和后续 MSL action。
+社区层是当前网站的核心语义层。2026-07-15 快照将 10,672 篇 full corpus 文献映射到医学事务可行动主题，用于工作台、知识库、情报中心筛选和后续 MSL action。
 
 ### 4.1 社区结构
 
@@ -165,17 +171,17 @@ PubMed / ClinicalTrials.gov / EasyScholar / 中国监管状态 / 会议来源
 
 | ID | 名称 | 文献数 | 高等级证据 | 中国相关 |
 |---|---|---:|---:|---:|
-| `clinicalSubtypesStratification` | 临床亚型与人群分层 | 2,055 | 58 | 323 |
-| `safetyMedicationManagement` | 安全性与用药管理 | 1,647 | 121 | 267 |
-| `diagnosisMonitoringPrediction` | 诊断、监测与预测 | 1,150 | 26 | 169 |
-| `mechanismTranslationalMedicine` | 机制与转化医学 | 1,064 | 13 | 424 |
-| `rweClinicalPathway` | 真实世界证据与临床路径 | 723 | 25 | 158 |
-| `efficacyBurdenOutcomes` | 疗效终点与疾病负担 | 553 | 69 | 127 |
-| `complementAndNovelTargets` | 补体与其他新靶点 | 290 | 19 | 31 |
-| `fcrnTargetedTherapy` | FcRn 靶向治疗 | 248 | 37 | 76 |
+| `clinicalSubtypesStratification` | 临床亚型与人群分层 | 2,058 | 57 | 322 |
+| `safetyMedicationManagement` | 安全性与用药管理 | 1,656 | 121 | 269 |
+| `diagnosisMonitoringPrediction` | 诊断、监测与预测 | 1,184 | 27 | 183 |
+| `mechanismTranslationalMedicine` | 机制与转化医学 | 1,042 | 13 | 420 |
+| `rweClinicalPathway` | 真实世界证据与临床路径 | 721 | 25 | 156 |
+| `efficacyBurdenOutcomes` | 疗效终点与疾病负担 | 557 | 69 | 128 |
+| `complementAndNovelTargets` | 补体与其他新靶点 | 293 | 19 | 32 |
+| `fcrnTargetedTherapy` | FcRn 靶向治疗 | 251 | 38 | 76 |
 | `guidelineHeorAccess` | 指南、共识与卫生经济 | 109 | 4 | 17 |
 | `competitiveLandscapeIndirectComparison` | 竞争格局与间接比较 | 51 | 18 | 14 |
-| `unassigned` | 未归类桶（非展示社区） | 2,745 | — | — |
+| `unassigned` | 未归类桶（非展示社区） | 2,750 | — | — |
 
 ### 4.2 质量状态
 
@@ -183,12 +189,12 @@ PubMed / ClinicalTrials.gov / EasyScholar / 中国监管状态 / 会议来源
 
 | 指标 | 数量 |
 |---|---:|
-| total_articles | 10,635 |
-| assigned_articles | 7,890 |
-| unassigned_articles | 2,745 |
-| low_confidence_articles | 1,120 |
-| conflict_articles | 1,481 |
-| recent_unassigned_articles | 3 |
+| total_articles | 10,672 |
+| assigned_articles | 7,922 |
+| unassigned_articles | 2,750 |
+| low_confidence_articles | 1,100 |
+| conflict_articles | 1,519 |
+| recent_unassigned_articles | 4 |
 
 当前状态为 `needsReview`。这不是运行失败，而是提示 taxonomy 和 assignment 仍需医学事务 review。
 
@@ -211,10 +217,10 @@ PubMed / ClinicalTrials.gov / EasyScholar / 中国监管状态 / 会议来源
 | 指标 | 数量 |
 |---|---:|
 | 图谱节点 | 55 |
-| 核心展示边 | 334 |
+| 核心展示边 | 337 |
 | 全量合格边 | 1,261 |
 | 证据矩阵行 | 180 |
-| abstract-level 命中文献 | 9,162 |
+| abstract-level 命中文献 | 9,191 |
 
 图谱关系来自 title / abstract / metadata 层面的证据线索，不代表全文级因果关系。页面中已保留 PMID 回链。
 
@@ -223,9 +229,9 @@ PubMed / ClinicalTrials.gov / EasyScholar / 中国监管状态 / 会议来源
 `graphHealth.js` 当前状态为 `needsReview`：
 
 - 55 个节点均已映射到社区
-- 334 条展示边均有社区映射
+- 337 条展示边均有社区映射
 - oversized_nodes = 6
-- weak_edges = 92
+- weak_edges = 88
 - isolated_nodes = 0
 - semantic_bridge_gaps = 0
 
@@ -303,7 +309,7 @@ EAN 2026 已完成外部文章引用核查。被引用的 31 条 EAN 摘要均�
 - `scripts/enrich-literature-narrative.py` 只负责证据边界内的语义归纳；所有 `refPmids` 必须来自输入记录，程序写入前会去重并核查公开引用覆盖率。
 - 每个 talking point 必须包含 `parentSignalId`、`priorityTier`、`whyKol`、`keyMessages` 和 `refs`；优先级为 `efgar → competitor_response → disease_progress`。
 - 无 API key 或 LLM 返回不合格 JSON 时，保留确定性 MG-core 聚合回退，不阻断基础周更。
-- 当前公开产物为 8 条父级 Signal、20 条 talking point、26 个唯一 PMID，`published_reference_coverage = 1.0`；该数量随近 14 天 PubMed 窗口变化，不应硬编码到前端逻辑。
+- 2026-07-15 的严格 recent 重建产物为 10 条父级 Signal、10 条 talking point、26 个唯一 PMID；该数量随近 14 天 PubMed 窗口变化，不应硬编码到前端逻辑。
 - 手动重建顺序：`python3 scripts/build-frontend-data.py` → `python3 scripts/enrich-literature-narrative.py` → `python3 scripts/generate-weekly-summary.py` → `python3 scripts/generate-pipeline-status.py`。只重建基础数据时，前两步中的第二步可跳过，但发布前必须确认 `signals-weekly.js` 的 `source_policy` 与 PMID 覆盖率。
 
 ---
@@ -338,10 +344,10 @@ EAN 2026 已完成外部文章引用核查。被引用的 31 条 EAN 摘要均�
 | 文件 | 数量 | 加载方式 |
 |---|---:|---|
 | `expert-profiles.js` | manifest，0 位实际专家 | 同步加载，用于声明分片路径 |
-| `expert-profiles-china.js` | 8,926 位 | MSL 页面同步加载，默认中国视图 |
-| `expert-profiles-international.js` | 43,485 位 | 用户切换到国外/全部或搜索时按需加载 |
+| `expert-profiles-china.js` | 8,958 位 | MSL 页面同步加载，默认中国视图 |
+| `expert-profiles-international.js` | 43,626 位 | 每次完整重建仍生成，仅供离线分析；网站不加载 |
 
-总计 52,411 位作者-机构画像。检索字段包括姓名、拼音/英文名、机构、国家/地区、研究方向、发文量和近期活跃度。
+完整重建生成总计 52,584 位作者-机构画像和轻量 manifest，但 `pages/msl.html` / `assets/msl.js` 是 China-only：默认、搜索和拜访准备只使用中国作者索引，没有国际分片加载路径。前端徽标只报告中国作者索引和快速候选。无 full 的云端构建会保留这两个 last-good 分片，不会以 recent 数据清空或缩小它们。
 
 ### 8.2 拜访助手
 
@@ -352,14 +358,7 @@ EAN 2026 已完成外部文章引用核查。被引用的 31 条 EAN 摘要均�
 - 读取近期信号与本月诊治格局 action
 - 在页面内生成“拜访话题建议”和对应 PMID 文献清单
 
-当前未实现：
-
-- 拜访记录持久化
-- follow-up 闭环
-- 一键导出/下载简报
-- 团队协作或权限控制
-
-这些能力需要后续引入本地存储方案或轻量后端后再建设。
+范围边界：本站只生成拜访前话题和公开 PMID 材料，不记录拜访、不保存随访、不维护 CRM 或互动历史，也不把这些能力列入未来范围。
 
 ### 8.3 内容模块
 
@@ -395,44 +394,51 @@ MG_WEEKLY_DRY_RUN=1 bash scripts/run-local-weekly-sync.sh
 ```
 1. 校验 full 文件存在、Git tracked 改动干净、当前分支为 main
 2. git fetch / pull --ff-only origin main
-3. python3 scripts/run-weekly-pipeline.py --skip-status --skip-downstream
-4. python3 scripts/reclassify-existing-iii.py --modes ALL --recent-days 365
-5. python3 scripts/buildFullLiteratureIndex.py
-6. python3 scripts/buildCommunityData.py
-7. python3 scripts/build-knowledge-data.py
-8. python3 scripts/build-curated-topic-data.py
-9. python3 scripts/buildWikiTopicCoverage.py
-10. python3 scripts/generate-weekly-summary.py
-11. python3 scripts/generate-pipeline-status.py
-12. 执行 full/recent 同步校验
-13. 非 dry-run 时 git add → commit → push
+3. `run-weekly-pipeline.py --local-full --run-id local-<timestamp>`：抓取/富集/合并后执行 MG-core `--apply`、归档排除记录、近一年重分类及完整下游重建
+4. 生成 source signals、pipeline status 与 release manifest
+5. 执行 full/recent 同步校验
+6. 非 dry-run 时 git add → commit → push
 ```
 
-### 9.3 `run-weekly-pipeline.py` 内部 15 步
+### 9.3 `run-weekly-pipeline.py` 检查点执行
 
-```
-1. fetch-pubmed-weekly.py
-2. enrich-weekly-literature.py
-3. merge-weekly-literature.py
-4. build-frontend-data.py
-5. enrich-literature-narrative.py（可选；失败回退确定性聚合）
-6. buildFullLiteratureIndex.py
-7. buildCommunityData.py
-8. build-knowledge-data.py
-9. buildChinaAuthorNetwork.py
-10. build-curated-topic-data.py
-11. buildWikiTopicCoverage.py
-12. buildLandscapeInsights.py
-13. buildBackendOptions.py
-14. generate-weekly-summary.py
-15. generate-pipeline-status.py
+每步记录到 `.hermes-audit/pipeline-runs/<run-id>.json`：step id、命令、起止时间、耗时、状态、optional、错误码、声明输出和哈希。标准流依次执行 fetch、MG-core/证据富集、merge、前端构建、可选 narrative、full index、community、knowledge、中国作者网络、专题、格局、ChiCTR cache、source signals、周报和状态。`--local-full` 会在 merge 后加入 `filter-mg-core-literature.py --apply` 与近一年重分类。
+
+恢复命令：
+
+```bash
+python3 scripts/run-weekly-pipeline.py --run-id weekly-20260715
+python3 scripts/run-weekly-pipeline.py --run-id weekly-20260715 --resume
+python3 scripts/run-weekly-pipeline.py --run-id weekly-20260715 --resume --from-step build-source-signals
 ```
 
-### 9.4 GitHub Actions 兜底
+步骤默认有可配置超时；required 超时为硬失败，optional 超时只记 warning。resume 仅跳过“此前成功且声明输出哈希仍匹配”的步骤。仅所有 required 步骤成功后更新 `data/release-manifest.js`，部分运行不会宣称成功发布。
+
+默认 `build-frontend-data.py` 会重建 recent-derived 的 signals、China、dashboard、landscape 与 content modules，同时加载并逐字节保留现有专家 manifest 和 China/international 分片，即使本地 full 存在也不改写专家文件。`run-weekly-pipeline.py` 仅在检测到 full 时为该步骤传入 `--rebuild-experts-from-full`，此显式模式固定生成两个区域分片。
+
+当 `data/literature-full.json` 不存在时，管线进入 cloud-safe mode：继续 recent、前端 recent/signals/China/dashboard、source signals、周报和状态流程，但不运行 `build-full-index`、`build-community`、`build-knowledge`、`build-china-author-network`，从而保留 tracked last-good full-derived 产物。cloud-safe mode 不传专家重建 flag，因此专家 manifest 和两个区域分片同样保持 last-good 字节不变。
+
+### 9.4 MG-core、证据门控与来源频道
+
+周增量先执行 MG-core，再调用证据分类器。明确 MG 题名、可靠 MG MeSH/关键词或重复 MG-core 提及可保留；非 MG 疾病主导题名和单次背景提及排除。之后仅证据等级 I–V 进入 PubMed 文献库。合并脚本对合并后的完整历史候选流再次执行两道门控，而不是只检查 weekly incoming。
+
+历史和 weekly 的 MG-core 指南/共识使用同一检测：研究类型标签之外，还要求 `Practice Guideline` / `Consensus Statement` 等 publication type，或题名中的明确指南/共识主来源标志，避免把正文中提到 guideline 的普通研究误路由。缓存按 PMID 原子、幂等更新，不进入证据文献流。未知、非指南且无 I–V 等级的记录不会进入任何公开证据频道。`source-signals.js` 分为文献证据、指南/共识、中国监管、试验注册和会议五个频道。会议频道只给摘要级信号，完整会议工作区仍留在会议 tab。
+
+只重建严格 recent、指南缓存、来源频道和状态，不合并 weekly、不写 full：
+
+```bash
+python3 scripts/merge-weekly-literature.py --derive-only
+python3 scripts/build-source-signals.py
+python3 scripts/generate-pipeline-status.py
+```
+
+ChiCTR 使用 `chictr-trials-cache.json` 的官方公开字段种子。自动访问被 Aliyun WAF 阻断时保持最后良好缓存并标记 `mode=cache`；运营人员可运行 `refresh-chictr-cache.py --input <official.json|csv>`。不得使用第三方抓取数据或重新分发 WHO ICTRP 数据。ChiCTR / ClinicalTrials.gov 注册记录没有 Oxford 证据等级。
+
+### 9.5 GitHub Actions 兜底
 
 Workflow：`.github/workflows/weekly-pipeline.yml`
 
-- 触发：手动 `workflow_dispatch` + 每周日 23:00 Asia/Shanghai
+- 触发：仅手动 `workflow_dispatch`；当前 YAML 没有 `schedule`
 - 环境：Ubuntu + Python 3.11
 - 质量门：`python -m py_compile scripts/*.py`、`node --check assets/*.js`、禁止旧 EasyScholar key / SSL bypass pattern
 - 测试：`python -m pytest -q`
@@ -485,7 +491,7 @@ MG-Intelligence-Hub/
 - 零构建：直接加载 HTML / CSS / JS。
 - 数据全局变量统一使用 `window.MG_*`。
 - 共用工具在 `window.MgHub`：base path、escape、safeUrl、loadScriptOnce、tabs 等。
-- 大文件使用分片或懒加载：full index、国际专家、community assignment shards。
+- 大文件使用分片或懒加载：full index、community assignment shards；国际专家分片只离线生成，MSL 前端不加载。
 - 动态 HTML 必须 escape；外链 URL 必须走 safe helper。
 - 页面导航修改必须同步 6 个主页面；redirect 页不算主导航。
 
@@ -518,7 +524,7 @@ MG-Intelligence-Hub/
 
 ```bash
 python3 -m pytest -q
-python3 -m py_compile scripts/*.py
+python3 -m py_compile scripts/*.py scripts/common/*.py
 node --check assets/*.js
 ```
 
@@ -528,10 +534,10 @@ node --check assets/*.js
 
 | 优先级 | 问题 | 当前影响 | 建议处理 |
 |---|---|---|---|
-| P0 | 公开统计口径与 full 语义底座口径并存：Dashboard / `MG_TOTAL_COUNT` 为 1,165，而 full/index/community 为 10,635 | 用户可能误以为“全库”只有 1,165 篇；本地 sync 校验也可能因 full/recent 口径变化失败 | 明确定义 public rolling count 与 semantic full count；同步修改展示文案与校验逻辑 |
-| P1 | `pipeline-status.js` 生成时间早于部分 2026-07-02 数据产物，且 expert split 后状态页仍把 manifest + shards 当成单文件 | 数据状态页个别 expert/size 信息不完全可信 | 让 `generate-pipeline-status.py` 识别 expert shards，并在所有前端产物重建后最后运行 |
+| P2 | `communityAssignmentsRecent.js` 仍是 full 社区构建口径，与严格公开 recent 分属不同快照 | 社区 recent 数量不能替代公开 rolling 数量 | 继续在状态页分开显示两套口径；需要时运行完整 community 构建 |
+| P1 | `data/release-manifest.js` 当前不存在 | 当前局部派生不构成 coherent 完整发布证明 | 仅在真实 required-step 管线完整成功后生成，不手工补造 |
 | P1 | 证据矩阵仍是 abstract-level 自动关系，可能混入跨疾病或弱相关 PMID | MSL 使用时需回到 PMID 原文核对 | 增加跨疾病排除规则和人工抽样 review |
-| P2 | MSL 拜访助手尚无持久化、导出和 follow-up 闭环 | 目前只能页面内生成建议，不能形成团队工作流 | 后续再设计本地存储或轻量后端 |
+| P2 | ChiCTR 自动访问可能被 Aliyun WAF 阻断 | 无法保证每周 live 刷新 | 使用官方字段 tracked cache 与运营人员官方 JSON/CSV 导出刷新 |
 | P3 | `data/china-manual.json` 不存在 | 中国情报缺少手动补充入口，但不影响 PubMed 自动部分 | 需要人工维护中国政策/指南时再创建 |
 | P3 | AANEM 仅有监控口，尚未进入结构化会议摘要库 | AAN / EAN / MGFA 已结构化，AANEM 仍缺摘要级情报 | 后续补结构化抓取/录入 |
 
@@ -560,6 +566,13 @@ bash scripts/run-local-weekly-sync.sh
 
 ```bash
 python3 scripts/run-weekly-pipeline.py
+```
+
+恢复指定运行：
+
+```bash
+python3 scripts/run-weekly-pipeline.py --run-id weekly-20260715 --resume
+python3 scripts/run-weekly-pipeline.py --run-id weekly-20260715 --resume --from-step build-source-signals
 ```
 
 ### 12.5 仅重建社区语义层
@@ -611,12 +624,13 @@ GitHub 仓库 → Actions → `MA-MG-HUB Weekly Pipeline` → `Run workflow`
 | `report/知识库社区分类精细化建议-2026-06-29.md` | 思路已融入社区层实现 |
 | `report/codexSecondOpinionReview2026-07-01.md` | 审查意见中仍有效的部分已纳入“当前已知问题” |
 
+当前设计审查入口为 `report/网站设计与审查速览.md`；建议新审查者先读该文件，再按需进入本手册。
+
 ---
 
 ## 14. 后续建设方向
 
 1. 统一 public rolling count 与 semantic full count 的展示和校验逻辑。
 2. 修复 pipeline-status 对 expert shards、community shards、生成时间的识别。
-3. 把 MSL 拜访助手从页面生成器升级为可保存、可导出、可 follow-up 的工作流。
-4. 补齐 AANEM 结构化会议数据。
-5. 在真正需要多人协作、权限和持久记录时，再评估轻量后端。
+3. 补齐 AANEM 结构化会议数据。
+4. 持续扩展公开来源频道的覆盖率、缓存审计与来源核查。

@@ -15,10 +15,13 @@ merge-weekly-literature.py — 把每周 PubMed 增量合入本地 full，并派
 from __future__ import annotations
 
 import argparse
-import json
 import re
 from datetime import datetime, timedelta
 from pathlib import Path
+
+from common.guideline_consensus import isGuidelineConsensus, updateGuidelineCache
+from common.io import atomic_write_json, atomic_write_text, load_json
+from common.mg_relevance import assess_mg_core
 
 
 PROJECT = Path(__file__).resolve().parent.parent
@@ -27,7 +30,9 @@ DEFAULT_WEEKLY_PATH = DATA_DIR / "literature-weekly.json"
 FULL_PATH = DATA_DIR / "literature-full.json"
 RECENT_JSON_CACHE_PATH = DATA_DIR / "literature-recent.json"
 RECENT_JS_PATH = DATA_DIR / "literature-recent.js"
+GUIDELINE_CACHE_PATH = DATA_DIR / "guideline-consensus-cache.json"
 DAYS_RECENT = 365
+EVIDENCE_LEVELS = {"I", "II", "III", "IV", "V"}
 
 PREFER_EXISTING_FIELDS = {
     "study_types",
@@ -39,7 +44,7 @@ PREFER_EXISTING_FIELDS = {
 
 
 def loadJson(path: Path):
-    return json.loads(path.read_text(encoding="utf-8"))
+    return load_json(path)
 
 
 def loadRecentFromJs(path: Path):
@@ -47,22 +52,36 @@ def loadRecentFromJs(path: Path):
     match = re.search(r"window\.MG_LITERATURE_DATA\s*=\s*(.*);\s*$", text, re.S)
     if not match:
         raise ValueError(f"无法解析 {path}")
+    import json
     return json.loads(match.group(1))
+
+
+def loadDeclaredSemanticFullCount(path: Path):
+    text = path.read_text(encoding="utf-8")
+    for name in ("MG_SEMANTIC_FULL_COUNT", "MG_TOTAL_COUNT"):
+        match = re.search(rf"window\.{name}\s*=\s*(\d+)\s*;", text)
+        if match:
+            return int(match.group(1))
+    return None
 
 
 def loadRecent():
     if RECENT_JS_PATH.exists():
-        return loadRecentFromJs(RECENT_JS_PATH), "literature-recent.js"
+        articles = loadRecentFromJs(RECENT_JS_PATH)
+        semanticCount = loadDeclaredSemanticFullCount(RECENT_JS_PATH) or len(articles)
+        return articles, "literature-recent.js", semanticCount
     if RECENT_JSON_CACHE_PATH.exists():
-        return loadJson(RECENT_JSON_CACHE_PATH), "literature-recent.json"
-    return [], "empty"
+        articles = loadJson(RECENT_JSON_CACHE_PATH)
+        return articles, "literature-recent.json", len(articles)
+    return [], "empty", 0
 
 
 def loadBaseArticles():
     if FULL_PATH.exists():
-        return loadJson(FULL_PATH), "literature-full.json", True
-    recent, source = loadRecent()
-    return recent, source, False
+        articles = loadJson(FULL_PATH)
+        return articles, "literature-full.json", True, len(articles)
+    recent, source, semanticCount = loadRecent()
+    return recent, source, False, semanticCount
 
 
 def parseDate(value: str | None):
@@ -121,28 +140,87 @@ def sortKey(article):
 
 
 def writeRecentJson(articles):
-    RECENT_JSON_CACHE_PATH.write_text(
-        json.dumps(articles, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
+    atomic_write_json(RECENT_JSON_CACHE_PATH, articles)
 
 
 def writeFullJson(articles):
-    FULL_PATH.write_text(
-        json.dumps(articles, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
+    atomic_write_json(FULL_PATH, articles)
 
 
 def writeRecentJs(articles, totalCount=None):
+    import json
     semanticFullCount = totalCount if totalCount is not None else len(articles)
-    with RECENT_JS_PATH.open("w", encoding="utf-8") as f:
-        f.write(f"window.MG_PUBLIC_ROLLING_COUNT = {len(articles)};\n")
-        f.write(f"window.MG_SEMANTIC_FULL_COUNT = {semanticFullCount};\n")
-        f.write(f"window.MG_TOTAL_COUNT = {semanticFullCount};\n")
-        f.write("window.MG_LITERATURE_DATA = ")
-        json.dump(articles, f, ensure_ascii=False)
-        f.write(";\n")
+    content = (
+        f"window.MG_PUBLIC_ROLLING_COUNT = {len(articles)};\n"
+        f"window.MG_SEMANTIC_FULL_COUNT = {semanticFullCount};\n"
+        f"window.MG_TOTAL_COUNT = {semanticFullCount};\n"
+        "window.MG_LITERATURE_DATA = "
+        + json.dumps(articles, ensure_ascii=False, separators=(",", ":"))
+        + ";\n"
+    )
+    atomic_write_text(RECENT_JS_PATH, content)
+
+
+def filterEligibleIncoming(articles):
+    """合并前防御性复核 MG-core 与 Oxford I–V 门控。"""
+    eligible = []
+    counters = {"not_mg_core": 0, "missing_evidence_level": 0}
+    for source in articles:
+        article = dict(source)
+        assessment = assess_mg_core(article)
+        if not assessment.is_core:
+            counters["not_mg_core"] += 1
+            continue
+        if article.get("evidence_level") not in EVIDENCE_LEVELS:
+            counters["missing_evidence_level"] += 1
+            continue
+        article["mg_core"] = True
+        article["mg_core_reason"] = assessment.reason_code
+        eligible.append(article)
+    return eligible, counters
+
+
+def derivePublicArticles(
+    articles,
+    guidelineCachePath=None,
+    replaceGuidelineCache=False,
+):
+    """对完整候选流执行 MG-core、指南分流和 I–V 公开门控。"""
+    eligible = []
+    guidelines = []
+    counters = {
+        "kept": 0,
+        "not_mg_core": 0,
+        "guideline_consensus": 0,
+        "missing_evidence_level": 0,
+        "mg_core_reason_codes": {},
+    }
+    for source in articles:
+        article = dict(source)
+        assessment = assess_mg_core(article)
+        reasons = counters["mg_core_reason_codes"]
+        reasons[assessment.reason_code] = reasons.get(assessment.reason_code, 0) + 1
+        if not assessment.is_core:
+            counters["not_mg_core"] += 1
+            continue
+        article["mg_core"] = True
+        article["mg_core_reason"] = assessment.reason_code
+        if isGuidelineConsensus(article):
+            guidelines.append(article)
+            counters["guideline_consensus"] += 1
+            continue
+        if article.get("evidence_level") not in EVIDENCE_LEVELS:
+            counters["missing_evidence_level"] += 1
+            continue
+        eligible.append(article)
+        counters["kept"] += 1
+    if guidelineCachePath is not None:
+        updateGuidelineCache(
+            guidelineCachePath,
+            guidelines,
+            replace=replaceGuidelineCache,
+        )
+    return eligible, counters
 
 
 def upsertArticles(base, incoming):
@@ -183,30 +261,50 @@ def buildRecentArticles(articles):
 def main():
     parser = argparse.ArgumentParser(description="Merge weekly PubMed data into public rolling recent.js")
     parser.add_argument("--weekly", default=str(DEFAULT_WEEKLY_PATH), help="weekly JSON input path")
+    parser.add_argument(
+        "--derive-only",
+        action="store_true",
+        help="只从现有 full（或 recent fallback）重建严格公开 recent，不合并 weekly、不写 full",
+    )
     parser.add_argument("--write-json-cache", action="store_true", help="同时写本地 literature-recent.json 调试缓存")
     args = parser.parse_args()
 
-    weeklyPath = Path(args.weekly)
-    if not weeklyPath.exists():
-        raise SystemExit(f"缺少 {weeklyPath}")
+    base, source, hasFull, declaredSemanticCount = loadBaseArticles()
+    weekly = []
+    gateCounters = {"not_mg_core": 0, "missing_evidence_level": 0}
+    added = 0
+    updated = 0
+    mergedBase = base
+    if not args.derive_only:
+        weeklyPath = Path(args.weekly)
+        if not weeklyPath.exists():
+            raise SystemExit(f"缺少 {weeklyPath}")
+        weekly, gateCounters = filterEligibleIncoming(loadJson(weeklyPath))
+        mergedBase, added, updated = upsertArticles(base, weekly)
+        if hasFull and (added or updated):
+            writeFullJson(mergedBase)
 
-    base, source, hasFull = loadBaseArticles()
-    weekly = loadJson(weeklyPath)
-
-    mergedBase, added, updated = upsertArticles(base, weekly)
-    if hasFull and (added or updated):
-        writeFullJson(mergedBase)
-
-    recent, dropped = buildRecentArticles(mergedBase)
-    writeRecentJs(recent, totalCount=len(mergedBase))
+    publicBase, publicGateCounters = derivePublicArticles(
+        mergedBase,
+        guidelineCachePath=GUIDELINE_CACHE_PATH,
+        replaceGuidelineCache=hasFull,
+    )
+    recent, dropped = buildRecentArticles(publicBase)
+    semanticCount = len(mergedBase) if hasFull else declaredSemanticCount
+    writeRecentJs(recent, totalCount=semanticCount)
     if args.write_json_cache:
         writeRecentJson(recent)
     elif RECENT_JSON_CACHE_PATH.exists():
         RECENT_JSON_CACHE_PATH.unlink()
 
-    print(f"✅ weekly 已同步到文献存储并派生 recent.js")
+    if args.derive_only:
+        print("✅ derive-only 已从现有基线重建严格公开 recent.js（未合并 weekly、未写 full）")
+    else:
+        print("✅ weekly 已同步到文献存储并派生 recent.js")
     print(f"   输入基线: {len(base)} 篇（来源 {source}）")
     print(f"   输入 weekly: {len(weekly)} 篇")
+    print(f"   合并前防御门控: {gateCounters}")
+    print(f"   完整公开流门控: {publicGateCounters}")
     print(f"   新增: {added}")
     print(f"   更新: {updated}")
     if hasFull:

@@ -25,7 +25,7 @@ jobs:
 
       - name: Static quality gates
         run: |
-          python -m py_compile scripts/*.py
+          python -m py_compile scripts/*.py scripts/common/*.py
           node --check assets/*.js
           if grep -R "ssl\\._create_unverified_context\\|_create_unverified_https_context\\|28fc90c1db04461a9f51f72cfe9b8418" scripts assets pages; then
             echo "Unsafe secret or SSL bypass pattern found."
@@ -54,7 +54,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/*.js data/weekly-summary.md data/china-regulatory-status.json data/clinicaltrials-pipeline-cache.json assets/*.js assets/*.css pages/*.html index.html
+          git add data/*.js data/weekly-summary.md data/china-regulatory-status.json data/clinicaltrials-pipeline-cache.json data/chictr-trials-cache.json data/guideline-consensus-cache.json assets/*.js assets/*.css pages/*.html index.html
           if git diff --cached --quiet; then
             echo "No public frontend updates."
           else

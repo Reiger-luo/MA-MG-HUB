@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import tempfile
 from pathlib import Path
 from typing import Any
 
@@ -28,12 +29,31 @@ def load_js_global(path: Path, global_name: str) -> Any:
     return payload
 
 
-def atomic_write_text(path: Path, content: str) -> None:
-    """先写临时文件，再原子替换目标文件。"""
+def atomic_write_text(path: Path, content: str, *, fsync: bool = False) -> None:
+    """使用同目录唯一临时文件写入，失败时保留旧目标并清理临时文件。"""
     path.parent.mkdir(parents=True, exist_ok=True)
-    tmp = path.with_name(path.name + ".tmp")
-    tmp.write_text(content, encoding="utf-8")
-    os.replace(tmp, path)
+    fd, tmp_name = tempfile.mkstemp(
+        dir=path.parent,
+        prefix=f".{path.name}.",
+        suffix=".tmp",
+    )
+    tmp = Path(tmp_name)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as handle:
+            handle.write(content)
+            handle.flush()
+            if fsync:
+                os.fsync(handle.fileno())
+        os.replace(tmp, path)
+        if fsync:
+            directory_fd = os.open(path.parent, os.O_RDONLY)
+            try:
+                os.fsync(directory_fd)
+            finally:
+                os.close(directory_fd)
+    finally:
+        if tmp.exists():
+            tmp.unlink()
 
 
 def atomic_write_json(path: Path, payload: Any, *, indent: int | None = 2) -> None:

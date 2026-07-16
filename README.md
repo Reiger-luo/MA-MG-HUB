@@ -2,7 +2,10 @@
 
 MG Intelligence Hub 是面向重症肌无力（myasthenia gravis, MG）医学事务工作的静态学术情报工作站。项目将 PubMed 文献、可追溯会议摘要、ClinicalTrials 管线、中国监管状态、知识图谱、医学事务社区层和 MSL 拜访准备整合到一个 GitHub Pages 网站中。
 
+本站服务于中国大陆 MSL 的公开学术情报、专家证据检索和拜访前材料准备；不记录拜访，不提供随访、CRM、互动历史、私有后端或浏览器持久化功能。
+
 - 线上站点：[https://reiger-luo.github.io/MA-MG-HUB/](https://reiger-luo.github.io/MA-MG-HUB/)
+- 5 分钟设计与审查入口：[report/网站设计与审查速览.md](report/网站设计与审查速览.md)
 - 当前操作手册：[report/MG-Intelligence-Hub-操作手册-v5.md](report/MG-Intelligence-Hub-操作手册-v5.md)
 - 周报素材：[data/weekly-summary.md](data/weekly-summary.md)
 
@@ -36,24 +39,28 @@ MA-MG-HUB 不是单纯的文献列表，而是医学事务团队的 MG 情报工
 
 | 口径 | 当前规模 | 用途 |
 |---|---:|---|
-| 公开滚动层 | 近一年文献 1,151 篇；中国相关 316 篇；14 天 MG-core 聚合信号 8 条 / 26 篇 PMID | 工作台、情报中心、信号板、中国情报 |
-| full / 语义底座 | full 轻索引与社区层 10,656 篇 | 知识图谱、社区归类、专家画像、跨库检索 |
+| 公开滚动层 | 截至 2026-07-15：近一年严格公开文献 652 篇；中国相关 211 篇；14 天 MG-core 聚合信号 10 条 / 26 篇 PMID | 工作台、情报中心、信号板、中国情报 |
+| full / 语义底座 | 截至 2026-07-15：full、轻索引与社区层均为 10,672 篇 | 知识图谱、社区归类、专家画像、跨库检索 |
 
-Dashboard 与 `pipeline-status.js` 显示两套口径：`public_rolling_count` 为 1,151 篇，`semantic_full_count` 为 10,656 篇。full 口径来自 raw full / full-index / community full 产物；recent 口径分别记录 `literature-recent.js` 与 `communityAssignmentsRecent.js`，当前生效的 active recent 以实际文件更新时间较新的那个为准。`MG_SEMANTIC_FULL_COUNT` 和 `MG_TOTAL_COUNT` 只作为 recent 文件头部的声明与兼容校验字段。
+`pipeline-status.js` 分开显示两套口径：`public_rolling_count=652`，`semantic_full_count=10672`。full 口径来自 raw full / full-index / community full 产物；recent 口径分别记录 `literature-recent.js` 与 `communityAssignmentsRecent.js`，生效的 active recent 以实际文件更新时间较新的那个为准。`MG_SEMANTIC_FULL_COUNT` 和 `MG_TOTAL_COUNT` 是 recent 文件头部的语义全量声明与兼容字段；云端 recent fallback 必须保留该声明，不能改成 recent 数量。`dashboard-data.js` 与 `china-intelligence.js` 已由严格 recent 重建，分别显示 652 篇 recent 与 211 篇中国相关文献。
 
 核心数据产物：
 
 | 产物 | 当前规模 | 用途 |
 |---|---:|---|
-| `data/literature-recent.js` | 1,151 篇 | 近一年公开文献列表 |
-| `data/signals-weekly.js` | 8 条父级 Signal / 20 条 KOL talking point / 26 篇 PMID | 近 14 天 MG-core Signal → KOL |
-| `data/china-intelligence.js` | 120 条摘要 | 中国情报 |
-| `data/literature-full-index.js` | 10,656 篇 | full 文献轻索引，不含 abstract |
+| `data/literature-recent.js` | 652 篇 | 近一年严格公开文献列表；全部 MG-core 且 evidence I–V |
+| `data/signals-weekly.js` | 10 条父级 Signal / 10 条 KOL talking point / 26 篇 PMID | 近 14 天 MG-core Signal → KOL |
+| `data/source-signals.js` | 5 个独立频道 / 383 条频道项 | 文献证据、指南/共识、中国监管、试验注册、会议线索 |
+| `data/guideline-consensus-cache.json` | 9 篇 | MG-core 且具有指南/共识主来源标志的独立缓存，不进入 I–V 文献流 |
+| `data/china-intelligence.js` | 中国相关 211 篇；展示最新 120 条摘要 | 严格 recent 的中国情报 |
+| `data/literature-full-index.js` | 10,672 篇 | full 文献轻索引，不含 abstract |
 | `data/communityTaxonomy.js` | 10 个社区 | 医学事务主题 taxonomy |
-| `data/communityAudit.js` | 10,656 篇 audit | 社区归类质量状态 |
-| `data/knowledge-graph.js` | 55 节点、334 核心边、180 行证据矩阵 | 知识图谱与证据矩阵 |
-| `data/expert-profiles-china.js` | 8,926 位 | 中国作者-机构画像 |
-| `data/expert-profiles-international.js` | 43,485 位 | 国际作者-机构画像 |
+| `data/communityAudit.js` | 10,672 篇 audit | 社区归类质量状态 |
+| `data/knowledge-graph.js` | 55 节点、337 核心边、180 行证据矩阵 | 知识图谱与证据矩阵 |
+| `data/expert-profiles-china.js` | 8,958 位 | 中国作者-机构画像 |
+| `data/expert-profiles-international.js` | 43,626 位 | 国际作者-机构画像 |
+| `data/chictr-trials-cache.json` | 4 条官方核实种子 | ChiCTR 官方字段缓存；支持人工官方 JSON/CSV 刷新 |
+| `data/release-manifest.js` | 当前不存在 | 仅在真实 required-step 管线完整成功后生成 coherent run id、公开产物哈希与时间戳 |
 | `data/conference-data.js` | 195 条摘要 | AAN、EAN 会议资讯；含会议级 signal-to-kol narrative、覆盖审计和逐条 deepInsight / abstractZh。MGFA / AANEM 后台数据已清空，待新数据源链接后再接入 |
 
 会议资讯当前结构化 195 条摘要：EAN 2026 104 条、AAN 2026 91 条。AAN 2026 保留 MiraSmart 检索命中 109 条、MG 摘要 91 条、规则剔除 18 条的口径审计；EAN 2026 已纳入 acronym-only MG 标题条目，并对外部文章引用摘要完成覆盖核查。MGFA / AANEM 暂不保留历史后台数据，待后续提供稳定摘要链接后按同一流程复刻接入。
@@ -61,11 +68,12 @@ Dashboard 与 `pipeline-status.js` 显示两套口径：`public_rolling_count` �
 ## 数据流
 
 ```text
-PubMed / ClinicalTrials.gov / EasyScholar / 中国监管状态 / 会议来源
+PubMed / ClinicalTrials.gov / ChiCTR / EasyScholar / 中国监管状态 / 会议来源
   ↓
 本地 full 底座：literature-full.json、communityAssignments.jsonl、communityCorpusPack.jsonl
   ↓
-公开滚动层：literature-recent.js → MG-core 过滤 → 主题聚合 → signals-weekly.js（Signal → Talking Points → Evidence）
+公开滚动层：MG-core gate → 证据等级 I–V gate → literature-recent.js / signals-weekly.js
+  ↘ 指南/共识独立缓存；监管、注册、会议进入 source-signals.js 独立频道
   ↓
 语义层：communityTaxonomy.js、communityCards.js、communityWeekly.js、communityAssignments-*.js
   ↓
@@ -74,7 +82,19 @@ PubMed / ClinicalTrials.gov / EasyScholar / 中国监管状态 / 会议来源
 应用层：dashboard-data.js、expert-profiles*.js、content-modules.js、conference-data.js
 ```
 
-公开网站只部署 HTML / CSS / JS / JSON。`data/literature-full.json`、weekly 临时数据、LLM 缓存、成本日志、拜访记录和内部专家标签留在本地，不进入公开仓库。
+公开网站只部署 HTML / CSS / JS / JSON。`data/literature-full.json`、weekly 临时数据、LLM 缓存和成本日志留在本地。系统不采集拜访记录；内部专家标签也不进入公开仓库。
+
+MSL 前端为 China-only：`pages/msl.html` 只加载 `expert-profiles-china.js`，搜索和拜访准备仅使用中国作者索引。完整专家重建仍固定生成 `expert-profiles-china.js` 与 `expert-profiles-international.js` 两个分片；国际分片仅供离线分析，不存在前端加载路径。
+
+PubMed 主文献流同时执行 MG-core 与证据门控。题名明确 MG、可靠 MG MeSH/关键词或重复 MG-core 提及可进入相关性候选；单次背景提及和非 MG 疾病主导题名被排除。之后仅证据等级 I–V 进入文献库。指南/共识、监管、试验注册和会议不冒充 Oxford 证据，分别保留在独立频道。
+
+只重建严格公开 recent（不合并 weekly、不写 full）时使用：
+
+```bash
+python3 scripts/merge-weekly-literature.py --derive-only
+python3 scripts/build-source-signals.py
+python3 scripts/generate-pipeline-status.py
+```
 
 ## 技术栈
 
@@ -172,6 +192,24 @@ MG_WEEKLY_DRY_RUN=1 bash scripts/run-local-weekly-sync.sh
 python3 scripts/run-weekly-pipeline.py
 ```
 
+可恢复运行示例：
+
+```bash
+python3 scripts/run-weekly-pipeline.py --run-id weekly-20260715
+python3 scripts/run-weekly-pipeline.py --run-id weekly-20260715 --resume
+python3 scripts/run-weekly-pipeline.py --run-id weekly-20260715 --resume --from-step build-source-signals
+```
+
+审计检查点位于 `.hermes-audit/pipeline-runs/<run-id>.json`。仅当所有 required 步骤成功时才更新 `data/release-manifest.js`；可选语义增强或 ChiCTR 刷新失败使用缓存并记录 warning。
+
+ChiCTR 默认使用 tracked cache。运营人员取得 ChiCTR 官方导出后可确定性刷新：
+
+```bash
+python3 scripts/refresh-chictr-cache.py --input /path/to/official-chictr-export.csv
+```
+
+自动访问受 Aliyun WAF 阻断时保持 `mode=cache`，不使用第三方抓取数据，也不再分发 WHO ICTRP 数据。
+
 常用单项重建：
 
 ```bash
@@ -186,6 +224,8 @@ python3 scripts/enrich-conference-narrative.py --force
 python3 scripts/generate-pipeline-status.py
 ```
 
+`build-frontend-data.py` 默认重建 recent-derived 的 signals、China、dashboard、landscape 与 content modules，并逐字节保留现有专家 manifest 和两个区域分片。仅在明确需要用本地 full 重建专家时运行 `python3 scripts/build-frontend-data.py --rebuild-experts-from-full`；该模式固定重写 China 与 international 两个分片。
+
 会议资讯的可复刻构建思路：`build-conference-data.py` 负责确定性抓取、清洗和基础字段；`enrich-conference-zh.py` 用 LLM 生成真正中文摘要与逐条 KOL key message；`enrich-conference-narrative.py` 用 signal-to-kol 模型生成会议线索和 KOL 交流点。线索回答“会议说明什么变化”，交流点回答“拿哪条证据去和 KOL 说什么/问什么”。交流点必须归属到某条线索下，并按 `efgar 数据优先 → 竞品应对解读 → 重要疾病进展` 排序。`build-conference-data.py` 会保留已有 `abstractZh`、`kolKeyMessageZh` 和 `llmCurated` narrative，避免确定性重建覆盖 LLM 结果。
 
 GitHub Actions 工作流为 `.github/workflows/weekly-pipeline.yml`，支持手动触发，仅作为轻量兜底。完整语义层与 efgar-wiki 融合以本地工作站/Hermes 周更为准；当前 Hermes 主周更排在每周一 03:15（Asia/Shanghai），位于 efgar-wiki 周更和社区摘要之后。
@@ -196,7 +236,7 @@ GitHub Actions 工作流为 `.github/workflows/weekly-pipeline.yml`，支持手�
 
 ```bash
 python3 -m pytest -q
-python3 -m py_compile scripts/*.py
+python3 -m py_compile scripts/*.py scripts/common/*.py
 node --check assets/*.js
 ```
 
@@ -212,7 +252,7 @@ node --check assets/*.js
 
 ```bash
 python3 -m pytest -q
-python3 -m py_compile scripts/*.py
+python3 -m py_compile scripts/*.py scripts/common/*.py
 for f in assets/*.js; do node --check "$f" || exit 1; done
 git diff --check
 ```
@@ -227,7 +267,7 @@ LLM 语义层是可选增强，不应成为公开基础数据发布的单点故�
 - 动态 HTML 必须 escape，外链必须通过 safe URL helper。
 - 会议摘要采用数据管线生成，禁止手改 `data/conference-data.js`。应修改 `scripts/build-conference-data.py` 或 LLM enrich 脚本后重建。
 - AAN / EAN 会议页采用 signal-to-kol 结构：会议线索是父层，KOL 交流点挂在线索下；efgar 数据优先传递，竞品数据从应对和区隔角度解读，非产品/非治疗疾病进展最后补充。
-- 大型数据文件优先使用分片或懒加载，例如 full index、国际专家画像和 community assignment shards。
+- 大型数据文件优先使用分片或懒加载；国际专家分片只生成供离线分析，MSL 前端不加载它。
 - Python 数据写入优先使用 `scripts/common/io.py` 中的原子写入工具。
 - API key 只从环境变量读取，例如 `EASYSCHOLAR_KEY` 和 `NCBI_API_KEY`。
 
@@ -236,10 +276,11 @@ LLM 语义层是可选增强，不应成为公开基础数据发布的单点故�
 - 图谱和 Living Answers 基于 PubMed title / abstract / metadata 层级信息，定位为 MSL 快速进入问题的基础提纲，不替代阅读全文后的医学整合。
 - 证据矩阵中的关系是摘要级证据线索，不代表全文级因果结论。
 - 社区 audit 当前状态为 `needsReview`，表示 taxonomy 和 assignment 仍需医学事务复核，不表示管线失败。
-- 拜访记录、团队反馈、内部专家标签、私有材料和任何敏感业务数据不得提交到公开仓库。
+- `dashboard-data.js` 与 `china-intelligence.js` 已同步到严格 recent（652 / 211）；community recent 分片仍属于独立的 full 社区构建口径。
+- 本站仅做拜访前公开材料准备，不采集拜访记录、随访、互动历史或 CRM 数据；团队反馈、内部专家标签和私有材料也不得提交到公开仓库。
 
 ## 后续重点
 
-1. 将 MSL 拜访助手升级为可保存、可导出、可 follow-up 的工作流。
-2. 等待 MGFA / AANEM 稳定摘要链接，按会议资讯 signal-to-kol 流程重新接入。
-3. 证据等级采用 Oxford CEBM 2011-informed I–V 自动筛选标签，规则依据见 `report/Oxford-CEBM-2011-证据等级规则参考.md`。
+1. 等待 MGFA / AANEM 稳定摘要链接，按会议资讯 signal-to-kol 流程重新接入。
+2. 继续抽样审计 MG-core 与 Oxford CEBM 2011-informed I–V 自动筛选规则。
+3. 改进公开情报频道的来源覆盖与缓存健康展示，不扩展到拜访记录工作流。

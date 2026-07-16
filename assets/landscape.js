@@ -697,6 +697,26 @@
       renderClinicalPipelineRows(rows) + '</table>';
   }
 
+  function renderChinaTrialRegistrySignals() {
+    var host = $('chinaTrialRegistrySignals');
+    if (!host) return;
+    var sourcePayload = window.MG_SOURCE_SIGNALS || { channels: [] };
+    var registryChannel = (sourcePayload.channels || []).filter(function(channel) {
+      return channel.id === 'trialRegistry';
+    })[0] || { items: [] };
+    var records = (registryChannel.items || []).filter(function(item) {
+      return item.registry === 'ChiCTR';
+    });
+    host.innerHTML = records.map(function(item) {
+      var title = escapeHtml(item.title || item.registry_id || 'ChiCTR record');
+      return '<article class="china-trial-registry-card">' +
+        '<div><span>' + escapeHtml(item.registry || 'ChiCTR') + '</span><time>' + escapeHtml(item.date || '日期未标注') + '</time></div>' +
+        (item.url ? '<a href="' + escapeHref(item.url) + '" target="_blank" rel="noopener">' + title + '</a>' : '<strong>' + title + '</strong>') +
+        '<p>' + escapeHtml(item.registry_id || '') + ' · ' + escapeHtml(item.status || 'Unknown') + ' · 阶段 ' + escapeHtml(item.phase || 'Unknown') + '</p>' +
+      '</article>';
+    }).join('') || '<div class="kg-empty-hint">ChiCTR 缓存当前为空；保留最后良好缓存后再刷新。</div>';
+  }
+
   function renderGuidelineSlot(china) {
     var slot = china.guideline_consensus_slot || {};
     var box = $('guidelineConsensusSlot');
@@ -869,6 +889,7 @@
     renderMonthlyChanges();
     renderCompetitiveMatrix();
     renderClinicalPipelineMatrix();
+    renderChinaTrialRegistrySignals();
     renderChinaLandscape();
     populateAnswerFilters();
     populateTopicFilters();

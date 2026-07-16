@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0",
+  "source": "ChiCTR official registry",
+  "source_url": "https://www.chictr.org.cn/",
+  "mode": "cache",
+  "last_verified": "2026-07-15",
+  "records": [
+    {
+      "registry": "ChiCTR",
+      "registry_id": "ChiCTR2500104662",
+      "secondary_ids": [],
+      "title": "Efficacy and Safety of Plasma Exchange Combined with FcRn Antagonist in the Treatment of Generalized Myasthenia Gravis: A Multicenter, Three-arm, Open-Label Clinical Study",
+      "registered_date": "2025-06-20",
+      "registration_type": "Prospective",
+      "status": "Not yet recruiting",
+      "official_url": "https://www.chictr.org.cn/showprojEN.html?proj=270461",
+      "sponsor": "Punan Hospital in Pudong New District, Shanghai",
+      "institution": "Punan Hospital in Pudong New District, Shanghai",
+      "study_type": "Interventional",
+      "phase": "N/A",
+      "start_date": "2025-07-01",
+      "end_date": "2028-06-30"
+    },
+    {
+      "registry": "ChiCTR",
+      "registry_id": "ChiCTR2500110600",
+      "secondary_ids": [],
+      "title": "Long-term Prognosis of Thymectomy Versus Conservative Treatment in AChR-Ab–Positive Myasthenia Gravis: A Multicenter Retrospective Study in China",
+      "registered_date": "2025-10-16",
+      "registration_type": "Unknown",
+      "status": "Recruiting",
+      "official_url": "https://www.chictr.org.cn/historyversionpub.html?regno=ChiCTR2500110600",
+      "sponsor": "",
+      "institution": "",
+      "study_type": "Unknown",
+      "phase": "Unknown",
+      "start_date": "",
+      "end_date": ""
+    },
+    {
+      "registry": "ChiCTR",
+      "registry_id": "ChiCTR2600117375",
+      "secondary_ids": [],
+      "title": "Clinical study of glucocorticoid treatment burden in patients with myasthenia gravis",
+      "registered_date": "2026-01-23",
+      "registration_type": "Unknown",
+      "status": "Recruiting",
+      "official_url": "https://www.chictr.org.cn/historyversionpub.html?regno=ChiCTR2600117375",
+      "sponsor": "",
+      "institution": "",
+      "study_type": "Unknown",
+      "phase": "Unknown",
+      "start_date": "",
+      "end_date": ""
+    },
+    {
+      "registry": "ChiCTR",
+      "registry_id": "ChiCTR2600120351",
+      "secondary_ids": [],
+      "title": "Efficacy and Safety Analysis of Ajamod versus Immunoglobulin G in Rescuing Patients from Myasthenia Gravis Crisis",
+      "registered_date": "2026-03-12",
+      "registration_type": "Unknown",
+      "status": "Recruiting",
+      "official_url": "https://www.chictr.org.cn/hvshowproject.html?id=296990&v=1.0",
+      "sponsor": "",
+      "institution": "General Hospital of Ningxia Medical University",
+      "study_type": "Unknown",
+      "phase": "Unknown",
+      "start_date": "",
+      "end_date": ""
+    }
+  ]
+}

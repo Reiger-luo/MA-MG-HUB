@@ -12,12 +12,14 @@ import argparse
 import json
 import math
 import re
-import os
 from collections import Counter, defaultdict
 from datetime import datetime, timedelta
 from pathlib import Path
 
 from common.io import atomic_write_json, atomic_write_js_global, load_js_global, load_json as read_json
+from common.expert_outputs import build_expert_manifest, write_expert_outputs as write_expert_shards
+from common.mg_relevance import assess_mg_core
+from common import clinical_registry
 
 try:
     import requests
@@ -37,6 +39,7 @@ AUTHOR_INSTITUTION_INDEX_PATH = DATA_DIR / "pubmed-author-institution-index.json
 ENTITY_NORMALIZATION_INDEX_PATH = DATA_DIR / "pubmed-entity-normalization-index.json"
 CHINA_REGULATORY_PATH = DATA_DIR / "china-regulatory-status.json"
 CLINICALTRIALS_CACHE_PATH = DATA_DIR / "clinicaltrials-pipeline-cache.json"
+CHICTR_CACHE_PATH = DATA_DIR / "chictr-trials-cache.json"
 FRONTEND_QUICK_EXPERT_LIMIT = 20
 
 CHINA_PROFILE_TERMS = [
@@ -271,35 +274,6 @@ KOL_ROLE_LABELS = {
     "corresponding_author": "通讯作者",
 }
 
-# 文献级 Signal-to-KOL 的 MG-core 门槛。PubMed 检索词允许 MG 出现在比较组、
-# 背景或排除标准中；这里必须再做一次“研究主体”判断，避免 CIDP / stiff-person
-# 等其他神经免疫疾病因为摘要提到 MG 而进入信号板。
-MG_CORE_TITLE_TERMS = (
-    "myasthenia gravis",
-    "generalized myasthenia",
-    "generalised myasthenia",
-    "ocular myasthenia",
-    "juvenile myasthenia",
-)
-MG_CORE_TEXT_TERMS = (
-    "myasthenia gravis",
-    "generalized myasthenia",
-    "generalised myasthenia",
-    "ocular myasthenia",
-    "juvenile myasthenia",
-)
-MG_SECONDARY_DISEASE_TERMS = (
-    "chronic inflammatory demyelinating polyneuropathy",
-    "cidp",
-    "stiff-person syndrome",
-    "stiff person syndrome",
-    "multiple sclerosis",
-    "guillain-barré",
-    "guillain barre",
-    "lambert-eaton",
-    "lambert eaton",
-)
-
 SIGNAL_CLUSTER_META = {
     "efgar": {
         "title": "Efgartigimod 证据继续向不同治疗节点和人群延伸",
@@ -484,62 +458,6 @@ CHINA_EVIDENCE_DIRECTION_SPECS = [
         "keywords": ["biomarker", "autoantibody", "mechanism", "pathogenesis", "cytokine", "proteomic"],
         "analysis_angle": "看机制研究是否能转化为专家深访问题，而不是直接推导治疗路径差异。",
     },
-]
-
-CLINICALTRIALS_ACTIVE_STATUSES = {
-    "RECRUITING",
-    "ACTIVE_NOT_RECRUITING",
-    "NOT_YET_RECRUITING",
-    "ENROLLING_BY_INVITATION",
-}
-
-CLINICALTRIALS_STATUS_LABELS = {
-    "RECRUITING": "招募中",
-    "ACTIVE_NOT_RECRUITING": "进行中/停止招募",
-    "NOT_YET_RECRUITING": "尚未招募",
-    "ENROLLING_BY_INVITATION": "邀请入组",
-}
-
-CLINICALTRIALS_PHASE_RANK = {
-    "PHASE4": 4,
-    "PHASE3": 3,
-    "PHASE2_PHASE3": 2.5,
-    "PHASE2": 2,
-    "PHASE1_PHASE2": 1.5,
-}
-
-CLINICAL_PIPELINE_CANONICAL = [
-    ("Batoclimab", ["batoclimab", "hbm9161", "hl161", "rvt-1401"], "FcRn", "FcRn", "Immunovant / Harbour"),
-    ("IMVT-1402", ["imvt-1402"], "FcRn", "FcRn", "Immunovant"),
-    ("B007", ["b007"], "待补充", "待补充", "Shanghai Jiaolian"),
-    ("Iptacopan", ["iptacopan"], "补体", "Factor B", "Novartis"),
-    ("Claseprubart", ["claseprubart", "dnth103"], "补体", "补体通路", "Dianthus"),
-    ("Pozelimab/Cemdisiran", ["pozelimab", "cemdisiran"], "补体", "C5 / C5 siRNA", "Regeneron"),
-    ("Empasiprubart", ["empasiprubart"], "补体", "C2", "argenx"),
-    ("Inebilizumab", ["inebilizumab"], "B细胞", "CD19", "Amgen"),
-    ("Remibrutinib", ["remibrutinib"], "B细胞", "BTK", "Novartis"),
-    ("Blinatumomab", ["blinatumomab"], "B细胞", "CD19/CD3 BiTE", "Academic"),
-    ("Povetacicept", ["povetacicept"], "BAFF/APRIL", "BAFF/APRIL", "Vertex"),
-    ("Aritinercept", ["aritinercept"], "BAFF/APRIL", "APRIL/BAFF", "Aurinia"),
-    ("Descartes-08", ["descartes-08", "decartes-08"], "细胞治疗", "BCMA CAR-T", "Cartesian"),
-    ("CABA-201", ["caba-201"], "细胞治疗", "CD19 CAR-T", "Cabaletta"),
-    ("KYV-101", ["kyv-101"], "细胞治疗", "CD19 CAR-T", "Kyverna"),
-    ("BAFF-R CAR-T", ["baff-r cart", "baff-r car-t"], "细胞治疗", "BAFF-R CAR-T", "Academic"),
-    ("NMD670", ["nmd670"], "神经肌接头", "ClC-1", "NMD Pharma"),
-    ("Cladribine", ["cladribine"], "免疫调节", "淋巴细胞耗竭", "Merck KGaA"),
-    ("Tocilizumab", ["tocilizumab"], "免疫调节", "IL-6R", "Academic"),
-    ("CNP-106", ["cnp-106"], "免疫耐受", "抗原特异免疫耐受", "COUR"),
-    ("IM-101", ["im-101"], "待补充", "待补充", "ImmunAbs"),
-    ("SHR-2173", ["shr-2173"], "待补充", "待补充", "Hengrui"),
-]
-
-CLINICAL_PIPELINE_EXCLUDE_TERMS = [
-    "placebo", "matching placebo", "prednisone", "prednisolone", "corticosteroid",
-    "pyridostigmine", "azathioprine", "mycophenolate", "tacrolimus",
-    "ivig", "immune globulin", "immunoglobulin", "hizentra", "igiv",
-    "salbutamol", "amifampridine", "methotrexate", "leflunomide",
-    "mycophenolate mofetil", "eculizumab", "ravulizumab", "zilucoplan",
-    "efgartigimod", "rozanolixizumab", "nipocalimab", "telitacicept",
 ]
 
 DRUG_POSITIONING = {
@@ -819,14 +737,14 @@ def load_articles_for_frontend(use_full_experts=False):
         raise FileNotFoundError("需要 data/literature-recent.js")
 
     full = None
-    if FULL_PATH.exists():
+    if use_full_experts and FULL_PATH.exists():
         full = load_json(FULL_PATH)
     elif use_full_experts:
         print("⚠️  请求从 full 重建专家画像，但 literature-full.json 不存在，将复用已提交专家画像。")
     else:
-        print("ℹ️  literature-full.json 不存在，将复用已提交的专家画像数据。")
+        print("ℹ️  默认 preservation mode：复用已提交的专家 manifest 与区域分片。")
 
-    # full 产物使用 full 口径；recent 产物使用从 full 派生出的 recent。
+    # 默认构建只消费严格 recent；语义总量可从已发布 full-index/community 产物读取。
     total_count = semanticFullCountFromOutputs(full) or len(recent)
 
     return recent, full, total_count
@@ -836,7 +754,17 @@ def load_or_build_experts(full, recent):
     if full is not None:
         return build_experts(full, write_backend_index=True)
     if EXPERT_JS_PATH.exists():
-        return load_public_js(EXPERT_JS_PATH, "MG_EXPERT_PROFILES")
+        experts = dict(load_public_js(EXPERT_JS_PATH, "MG_EXPERT_PROFILES"))
+        if EXPERT_CHINA_JS_PATH.exists():
+            chinaShard = load_public_js(EXPERT_CHINA_JS_PATH, "MG_EXPERT_PROFILE_CHINA")
+            experts["china_expert_index"] = chinaShard.get("items") or []
+        if EXPERT_INTERNATIONAL_JS_PATH.exists():
+            internationalShard = load_public_js(
+                EXPERT_INTERNATIONAL_JS_PATH,
+                "MG_EXPERT_PROFILE_INTERNATIONAL",
+            )
+            experts["international_expert_index"] = internationalShard.get("items") or []
+        return experts
     print("⚠️  expert-profiles.js 不存在，临时使用近一年公开数据生成专家画像。")
     return build_experts(recent)
 
@@ -1119,6 +1047,7 @@ def build_medical_affairs_bridge(article, topics, drugs, signal_type, strength):
 
 
 def compact_article(article):
+    assessment = assess_mg_core(article)
     return {
         "pmid": article.get("pmid", ""),
         "title": article.get("title", ""),
@@ -1131,6 +1060,8 @@ def compact_article(article):
         "journal_quartile": article.get("journal_quartile"),
         "china_related": bool(article.get("china_related")),
         "study_types": article.get("study_types") or [],
+        "mg_core": assessment.is_core,
+        "mg_core_reason": assessment.reason_code,
     }
 
 
@@ -1140,77 +1071,17 @@ def write_js(name, global_name, payload):
     print(f"✅ {path.relative_to(PROJECT)}")
 
 
-def build_expert_manifest(experts):
-    """生成首屏可加载的专家画像 manifest。"""
-    summary = dict(experts.get("summary") or {})
-    china_index = experts.get("china_expert_index") or []
-    international_index = experts.get("international_expert_index") or []
-    existing_shards = experts.get("shards") or []
-    shards = existing_shards or [
-        {
-            "id": "china",
-            "label": "中国作者-机构索引",
-            "path": "data/expert-profiles-china.js",
-            "global": "MG_EXPERT_PROFILE_CHINA",
-            "count": len(china_index),
-            "loaded_by_default": True,
-        },
-        {
-            "id": "international",
-            "label": "国际作者-机构索引",
-            "path": "data/expert-profiles-international.js",
-            "global": "MG_EXPERT_PROFILE_INTERNATIONAL",
-            "count": len(international_index),
-            "loaded_by_default": False,
-        },
-    ]
-    summary["frontend_load_mode"] = "sharded_by_region"
-    summary["initial_shard"] = "china"
-    return {
-        "generated_at": experts.get("generated_at") or datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "summary": summary,
-        "experts": [],
-        "quick_expert_ids": experts.get("quick_expert_ids") or {},
-        "shards": shards,
-        "china_expert_index": [],
-        "international_expert_index": [],
-    }
-
-
-def write_expert_outputs(experts):
-    """写出专家画像 manifest 与按区域拆分的前端索引。"""
-    manifest = build_expert_manifest(experts)
-    write_js("expert-profiles.js", "MG_EXPERT_PROFILES", manifest)
-    china_index = experts.get("china_expert_index") or []
-    international_index = experts.get("international_expert_index") or []
-    if china_index:
-        write_js("expert-profiles-china.js", "MG_EXPERT_PROFILE_CHINA", {
-            "generated_at": manifest["generated_at"],
-            "region": "china",
-            "count": len(china_index),
-            "items": china_index,
-        })
-    if international_index:
-        write_js("expert-profiles-international.js", "MG_EXPERT_PROFILE_INTERNATIONAL", {
-            "generated_at": manifest["generated_at"],
-            "region": "international",
-            "count": len(international_index),
-            "items": international_index,
-        })
-
-
 def mg_core_relevance(article, text=None):
-    """判断文章是否以 MG 为研究主体，而非仅在比较组/背景中提及 MG。"""
-    text = text or text_of(article)
-    title = str(article.get("title") or "").lower()
-    if any(term in title for term in MG_CORE_TITLE_TERMS):
-        return True, "title_explicit_mg"
-    if any(term in title for term in MG_SECONDARY_DISEASE_TERMS):
-        return False, "secondary_disease_in_title"
-    mentions = sum(text.count(term) for term in MG_CORE_TEXT_TERMS)
-    if mentions >= 2:
-        return True, "repeated_mg_mentions"
-    return False, "mg_only_background_or_comparator"
+    """兼容既有调用；实现由 common.mg_relevance 统一维护。"""
+    assessment = assess_mg_core(article)
+    legacy_reason = {
+        "explicit_mg_title": "title_explicit_mg",
+        "secondary_non_mg_disease_title": "secondary_disease_in_title",
+        "repeated_mg_core_mentions": "repeated_mg_mentions",
+        "single_background_mention": "mg_only_background_or_comparator",
+        "no_mg_core_evidence": "mg_only_background_or_comparator",
+    }.get(assessment.reason_code, assessment.reason_code)
+    return assessment.is_core, legacy_reason
 
 
 def literature_cluster_key(article, topics, drugs):
@@ -1427,9 +1298,9 @@ def build_signals(recent):
             excluded_conference_records += 1
             continue
         text = text_of(article)
-        is_core, reason = mg_core_relevance(article, text)
-        if not is_core:
-            excluded_non_mg_core[reason] += 1
+        assessment = assess_mg_core(article)
+        if not assessment.is_core:
+            excluded_non_mg_core[assessment.reason_code] += 1
             continue
         topics = infer_topics(article)
         level = article.get("evidence_level")
@@ -1655,7 +1526,14 @@ def build_rank_items(counts, article_map, limit=10, article_limit=10):
 
 
 def build_china(recent):
-    articles = [a for a in recent if a.get("china_related")]
+    allowedEvidenceLevels = {"I", "II", "III", "IV", "V"}
+    articles = [
+        article
+        for article in recent
+        if article.get("china_related")
+        and article.get("evidence_level") in allowedEvidenceLevels
+        and assess_mg_core(article).is_core
+    ]
     monthly = Counter()
     evidence = Counter()
     quartiles = Counter()
@@ -2325,309 +2203,6 @@ def build_china_evidence_direction_comparison(recent):
     }
 
 
-def phase_rank(phases):
-    return max((CLINICALTRIALS_PHASE_RANK.get(phase, 0) for phase in phases or []), default=0)
-
-
-def phase_label(phases):
-    rank = phase_rank(phases)
-    if rank >= 3:
-        return "III期"
-    if rank == 2.5:
-        return "II/III期"
-    if rank >= 2:
-        return "II期"
-    if rank >= 1.5:
-        return "I/II期"
-    return "未标注"
-
-
-def clinical_status_label(status):
-    return CLINICALTRIALS_STATUS_LABELS.get(status or "", status or "未标注")
-
-
-def canonical_clinical_intervention(name):
-    low = re.sub(r"\s+", " ", (name or "").strip().lower())
-    if not low:
-        return None
-    for canonical, aliases, target_type, target_detail, sponsor_hint in CLINICAL_PIPELINE_CANONICAL:
-        if any(alias in low for alias in aliases):
-            return {
-                "name": canonical,
-                "target_type": target_type,
-                "target": target_detail,
-                "sponsor_hint": sponsor_hint,
-            }
-    if any(term in low for term in CLINICAL_PIPELINE_EXCLUDE_TERMS):
-        return None
-    return None
-
-
-def fetch_clinicaltrials_mg_studies():
-    if os.environ.get("MG_SKIP_CLINICALTRIALS"):
-        raise RuntimeError("MG_SKIP_CLINICALTRIALS is set")
-    if requests is None:
-        raise RuntimeError("requests is not installed")
-    url = "https://clinicaltrials.gov/api/v2/studies"
-    params = {
-        "query.cond": "Myasthenia Gravis",
-        "pageSize": "100",
-        "format": "json",
-    }
-    studies = []
-    while True:
-        response = requests.get(url, params=params, timeout=30)
-        response.raise_for_status()
-        payload = response.json()
-        studies.extend(payload.get("studies") or [])
-        token = payload.get("nextPageToken")
-        if not token:
-            break
-        params["pageToken"] = token
-    return studies
-
-
-def compact_raw_clinical_study(study):
-    protocol = study.get("protocolSection") or {}
-    return {
-        "protocolSection": {
-            "identificationModule": protocol.get("identificationModule") or {},
-            "statusModule": protocol.get("statusModule") or {},
-            "sponsorCollaboratorsModule": protocol.get("sponsorCollaboratorsModule") or {},
-            "conditionsModule": protocol.get("conditionsModule") or {},
-            "designModule": protocol.get("designModule") or {},
-            "armsInterventionsModule": protocol.get("armsInterventionsModule") or {},
-            "eligibilityModule": protocol.get("eligibilityModule") or {},
-        }
-    }
-
-
-def load_clinicaltrials_studies():
-    source_url = "https://clinicaltrials.gov/search?cond=Myasthenia%20Gravis"
-    try:
-        studies = [compact_raw_clinical_study(study) for study in fetch_clinicaltrials_mg_studies()]
-        payload = {
-            "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            "source": "ClinicalTrials.gov API v2",
-            "source_url": source_url,
-            "studies": studies,
-        }
-        atomic_write_json(CLINICALTRIALS_CACHE_PATH, payload)
-        return studies, {
-            "source": payload["source"],
-            "source_url": source_url,
-            "generated_at": payload["generated_at"],
-            "mode": "live",
-        }
-    except Exception as exc:
-        if CLINICALTRIALS_CACHE_PATH.exists():
-            payload = load_json(CLINICALTRIALS_CACHE_PATH)
-            print(f"⚠️  ClinicalTrials.gov 读取失败，使用缓存: {exc}")
-            return payload.get("studies") or [], {
-                "source": payload.get("source", "ClinicalTrials.gov API v2 cache"),
-                "source_url": payload.get("source_url", source_url),
-                "generated_at": payload.get("generated_at", ""),
-                "mode": "cache",
-                "warning": str(exc),
-            }
-        print(f"⚠️  ClinicalTrials.gov 读取失败，且无缓存: {exc}")
-        return [], {
-            "source": "ClinicalTrials.gov API v2",
-            "source_url": source_url,
-            "generated_at": "",
-            "mode": "unavailable",
-            "warning": str(exc),
-        }
-
-
-def normalize_age(value):
-    if not value:
-        return ""
-    return str(value).replace("Years", "岁").replace("Year", "岁").replace("Months", "个月").replace("Month", "个月")
-
-
-def simplify_clinical_indication(conditions, title):
-    joined = " ".join(conditions or [])
-    low = f"{joined} {title or ''}".lower()
-    if "seronegative" in low:
-        return "血清阴性 gMG"
-    if ("achr" in low or "acetylcholine receptor" in low) and ("generalized" in low or "generalised" in low or "gmg" in low):
-        return "AChR+ gMG"
-    if "ocular" in low:
-        return "Ocular Myasthenia Gravis"
-    if "generalized" in low or "generalised" in low or "gmg" in low:
-        return "Generalized Myasthenia Gravis"
-    if "refractory" in low:
-        return "Refractory Myasthenia Gravis"
-    if conditions:
-        return conditions[0]
-    return "Myasthenia Gravis"
-
-
-def infer_trial_population(protocol):
-    ident = protocol.get("identificationModule") or {}
-    conditions = (protocol.get("conditionsModule") or {}).get("conditions") or []
-    eligibility = protocol.get("eligibilityModule") or {}
-    title = ident.get("briefTitle", "")
-    condition_text = simplify_clinical_indication(conditions, title)
-    title_low = title.lower()
-    details = []
-    min_age = normalize_age(eligibility.get("minimumAge", ""))
-    max_age = normalize_age(eligibility.get("maximumAge", ""))
-    if min_age and max_age:
-        details.append(f"{min_age}-{max_age}")
-    elif min_age:
-        details.append(f"≥{min_age}")
-    elif max_age:
-        details.append(f"≤{max_age}")
-    if eligibility.get("sex") and eligibility.get("sex") != "ALL":
-        details.append(eligibility.get("sex"))
-    if "pediatric" in title_low or "children" in title_low or "adolescent" in title_low:
-        details.append("儿童/青少年")
-    if "ocular" in title_low:
-        details.append("OMG")
-    elif "generalized" in title_low or "generalised" in title_low or "gmg" in title_low:
-        details.append("gMG")
-    if "refractory" in title_low:
-        details.append("难治")
-    if "seronegative" in title_low:
-        details.append("血清阴性")
-    return {
-        "indication": condition_text,
-        "population": " · ".join(dict.fromkeys([item for item in details if item])) or "未标注",
-    }
-
-
-def compact_clinical_trial(study, canonical_name):
-    protocol = study.get("protocolSection") or {}
-    ident = protocol.get("identificationModule") or {}
-    status = protocol.get("statusModule") or {}
-    design = protocol.get("designModule") or {}
-    sponsor = protocol.get("sponsorCollaboratorsModule") or {}
-    lead_sponsor = (sponsor.get("leadSponsor") or {}).get("name", "")
-    nct_id = ident.get("nctId", "")
-    population = infer_trial_population(protocol)
-    return {
-        "nct_id": nct_id,
-        "title": ident.get("briefTitle", ""),
-        "url": f"https://clinicaltrials.gov/study/{nct_id}" if nct_id else "",
-        "status": status.get("overallStatus", ""),
-        "status_label": clinical_status_label(status.get("overallStatus", "")),
-        "phases": design.get("phases") or [],
-        "phase_label": phase_label(design.get("phases") or []),
-        "phase_rank": phase_rank(design.get("phases") or []),
-        "sponsor": lead_sponsor,
-        "enrollment": (design.get("enrollmentInfo") or {}).get("count"),
-        "start": (status.get("startDateStruct") or {}).get("date", ""),
-        "primary_completion": (status.get("primaryCompletionDateStruct") or {}).get("date", ""),
-        "completion": (status.get("completionDateStruct") or {}).get("date", ""),
-        "last_update": status.get("lastUpdateSubmitDate", ""),
-        "indication": population["indication"],
-        "population": population["population"],
-        "canonical_drug": canonical_name,
-    }
-
-
-def build_clinical_pipeline_matrix(regulatory_map):
-    studies, meta = load_clinicaltrials_studies()
-    approved_names = {
-        name for name, item in regulatory_map.items()
-        if item.get("status_class") == "approved"
-    }
-    groups = {}
-    for study in studies:
-        protocol = study.get("protocolSection") or {}
-        design = protocol.get("designModule") or {}
-        status = protocol.get("statusModule") or {}
-        if design.get("studyType") != "INTERVENTIONAL":
-            continue
-        overall_status = status.get("overallStatus", "")
-        if overall_status not in CLINICALTRIALS_ACTIVE_STATUSES:
-            continue
-        phases = design.get("phases") or []
-        if not any(phase in {"PHASE1_PHASE2", "PHASE2", "PHASE2_PHASE3", "PHASE3"} for phase in phases):
-            continue
-        interventions = (protocol.get("armsInterventionsModule") or {}).get("interventions") or []
-        for intervention in interventions:
-            if intervention.get("type") not in {"DRUG", "BIOLOGICAL", "COMBINATION_PRODUCT"}:
-                continue
-            canonical = canonical_clinical_intervention(intervention.get("name", ""))
-            if not canonical or canonical["name"] in approved_names:
-                continue
-            trial = compact_clinical_trial(study, canonical["name"])
-            group = groups.setdefault(canonical["name"], {
-                "name": canonical["name"],
-                "target_type": canonical["target_type"],
-                "target": canonical["target"],
-                "sponsor_hint": canonical["sponsor_hint"],
-                "trials": [],
-            })
-            if all(existing.get("nct_id") != trial.get("nct_id") for existing in group["trials"]):
-                group["trials"].append(trial)
-
-    items = []
-    status_rank = {
-        "RECRUITING": 4,
-        "ACTIVE_NOT_RECRUITING": 3,
-        "NOT_YET_RECRUITING": 2,
-        "ENROLLING_BY_INVITATION": 1,
-    }
-    for item in groups.values():
-        trials = sorted(
-            item["trials"],
-            key=lambda trial: (
-                -trial.get("phase_rank", 0),
-                -status_rank.get(trial.get("status", ""), 0),
-                -(parse_date(trial.get("last_update")) or datetime.min).timestamp(),
-            ),
-        )
-        item["trials"] = trials[:5]
-        highest_phase_rank = max((trial.get("phase_rank", 0) for trial in trials), default=0)
-        highest_phase_label = phase_label([phase for trial in trials for phase in trial.get("phases", [])])
-        sponsors = Counter(trial.get("sponsor") or item["sponsor_hint"] for trial in trials)
-        status_counts = Counter(trial.get("status_label", "未标注") for trial in trials)
-        item["highest_phase_rank"] = highest_phase_rank
-        item["highest_phase_label"] = highest_phase_label
-        item["study_count"] = len(trials)
-        item["sponsors"] = [name for name, _ in sponsors.most_common(3) if name]
-        item["status_summary"] = " / ".join(f"{label} {count}" for label, count in status_counts.most_common())
-        item["latest_update"] = max((trial.get("last_update") for trial in trials if trial.get("last_update")), default="")
-        item["stage_number"] = 4 if highest_phase_rank >= 4 else 3 if highest_phase_rank >= 3 else 2 if highest_phase_rank >= 2 else 1
-        item["indication"] = trials[0].get("indication", "Myasthenia Gravis") if trials else "Myasthenia Gravis"
-        item["population"] = trials[0].get("population", "未标注") if trials else "未标注"
-        item["key_trial"] = trials[0] if trials else {}
-        items.append(item)
-
-    target_order = {
-        "FcRn": 1,
-        "补体": 2,
-        "B细胞": 3,
-        "BAFF/APRIL": 4,
-        "细胞治疗": 5,
-        "神经肌接头": 6,
-        "免疫调节": 7,
-        "免疫耐受": 8,
-        "待补充": 99,
-    }
-    target_counts = Counter(item.get("target_type", "待补充") for item in items)
-    for item in items:
-        item["target_group_count"] = target_counts.get(item.get("target_type", "待补充"), 1)
-    items.sort(key=lambda item: (
-        target_order.get(item.get("target_type", "待补充"), 90),
-        -item.get("highest_phase_rank", 0),
-        item["name"],
-    ))
-    meta.update({
-        "active_statuses": [CLINICALTRIALS_STATUS_LABELS[item] for item in sorted(CLINICALTRIALS_ACTIVE_STATUSES)],
-        "phase_rule": "纳入 ClinicalTrials.gov 中 MG 相关、Interventional、Drug/Biological、Phase I/II 及以上且仍在招募/进行/尚未招募的未获批中国治疗对象。",
-        "item_count": len(items),
-    })
-    return {
-        "meta": meta,
-        "items": items,
-    }
-
-
 def build_landscape(recent):
     questions = [
         ("Efgartigimod 在 gMG 的长期疗效", ["efgartigimod", "long-term", "efficacy", "adapt"]),
@@ -2725,7 +2300,16 @@ def build_landscape(recent):
         if row["china_regulatory"].get("status_class") == "approved":
             approved_competitive_matrix.append(row)
 
-    clinical_pipeline = build_clinical_pipeline_matrix(regulatory_map)
+    clinical_pipeline = clinical_registry.build_clinical_pipeline_matrix(
+        regulatory_map,
+        cache_path=CLINICALTRIALS_CACHE_PATH,
+        requests_module=requests,
+    )
+    chictr_payload = clinical_registry.load_chictr_cache(CHICTR_CACHE_PATH)
+    registry_signals = clinical_registry.normalize_registry_trials(
+        read_json(CLINICALTRIALS_CACHE_PATH) if CLINICALTRIALS_CACHE_PATH.exists() else {},
+        chictr_payload,
+    )
 
     living_answers = []
     generated_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -2765,6 +2349,14 @@ def build_landscape(recent):
         "all_competitive_matrix": all_competitive_matrix,
         "clinical_pipeline_matrix": clinical_pipeline.get("items") or [],
         "clinical_pipeline_meta": clinical_pipeline.get("meta") or {},
+        "trial_registry_signals": registry_signals,
+        "chictr_meta": {
+            "source": chictr_payload.get("source"),
+            "mode": chictr_payload.get("mode", "cache"),
+            "last_verified": chictr_payload.get("last_verified", ""),
+            "count": len(chictr_payload.get("records") or []),
+            "evidence_policy": "registry records do not receive Oxford evidence levels",
+        },
         "china_regulatory_status": regulatory_meta,
         "living_answers": living_answers,
         "china_landscape": {
@@ -3091,7 +2683,11 @@ def main():
 
     write_js("signals-weekly.js", "MG_SIGNALS_DATA", signals)
     write_js("china-intelligence.js", "MG_CHINA_DATA", china)
-    write_expert_outputs(experts)
+    if args.rebuild_experts_from_full and full is not None:
+        write_expert_shards(experts, DATA_DIR)
+        print(f"✅ {EXPERT_JS_PATH.relative_to(PROJECT)} + 2 regional shards")
+    else:
+        print("ℹ️  preservation mode：未改写 expert manifest 与两个区域分片。")
     write_js("landscape-data.js", "MG_LANDSCAPE_DATA", landscape)
     write_js("content-modules.js", "MG_CONTENT_MODULES", modules)
     write_js("dashboard-data.js", "MG_DASHBOARD_DATA", dashboard)

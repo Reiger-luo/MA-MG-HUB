@@ -15,6 +15,9 @@ import json
 import re
 from pathlib import Path
 
+from common.io import atomic_write_json
+from common.guideline_consensus import isGuidelineConsensus, updateGuidelineCache
+from common.mg_relevance import assess_mg_core
 from studyClassifier import classifyEvidence
 
 
@@ -23,6 +26,7 @@ DATA_DIR = PROJECT / "data"
 ASSETS_DIR = PROJECT / "assets"
 WEEKLY_PATH = DATA_DIR / "literature-weekly.json"
 JOURNAL_METRICS_PATH = ASSETS_DIR / "journal_metrics.json"
+GUIDELINE_CACHE_PATH = DATA_DIR / "guideline-consensus-cache.json"
 
 MIN_ABSTRACT_CHARS = 80
 
@@ -59,10 +63,7 @@ def loadJson(path: Path, default):
 
 
 def saveJson(path: Path, payload):
-    path.write_text(
-        json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
+    atomic_write_json(path, payload)
 
 
 def normalizeJournal(value: str | None):
@@ -137,36 +138,61 @@ def enrichMetrics(article, cache, normalized):
     return metricsFilled
 
 
+def processArticles(articles, cache, normalized, guidelineCachePath=GUIDELINE_CACHE_PATH):
+    """先执行 MG-core，再分类并应用 I–V 门控，同时路由指南/共识。"""
+    kept = []
+    guidelines = []
+    counters = {
+        "assessable": 0,
+        "classified": 0,
+        "metrics_filled": 0,
+        "dropped_not_mg_core": 0,
+        "dropped_no_evidence": 0,
+        "routed_guideline_consensus": 0,
+    }
+    reason_codes = {}
+    for source in articles:
+        article = dict(source)
+        assessment = assess_mg_core(article)
+        article["mg_core"] = assessment.is_core
+        article["mg_core_reason"] = assessment.reason_code
+        reason_codes[assessment.reason_code] = reason_codes.get(assessment.reason_code, 0) + 1
+        if not assessment.is_core:
+            counters["dropped_not_mg_core"] += 1
+            continue
+        if hasAssessableAbstract(article):
+            counters["assessable"] += 1
+        counters["classified"] += int(classifyArticle(article))
+        if isGuidelineConsensus(article):
+            guidelines.append(article)
+            counters["routed_guideline_consensus"] += 1
+            continue
+        if article.get("evidence_level") not in {"I", "II", "III", "IV", "V"}:
+            counters["dropped_no_evidence"] += 1
+            continue
+        counters["metrics_filled"] += int(enrichMetrics(article, cache, normalized))
+        kept.append(article)
+    updateGuidelineCache(guidelineCachePath, guidelines)
+    counters["mg_core_reason_codes"] = reason_codes
+    return {"kept": kept, "guidelines": guidelines, "counters": counters}
+
+
 def main():
     if not WEEKLY_PATH.exists():
         raise SystemExit(f"缺少 {WEEKLY_PATH}")
 
     articles = loadJson(WEEKLY_PATH, [])
     cache, normalized = loadJournalMetrics()
-    classified = 0
-    metricsFilled = 0
-    assessable = 0
-    kept = []
-    droppedNoEvidence = 0
-
-    for article in articles:
-        if hasAssessableAbstract(article):
-            assessable += 1
-        didClassify = classifyArticle(article)
-        classified += int(didClassify)
-        if not article.get("evidence_level"):
-            droppedNoEvidence += 1
-            continue
-        didMetrics = enrichMetrics(article, cache, normalized)
-        metricsFilled += int(didMetrics)
-        kept.append(article)
-
-    saveJson(WEEKLY_PATH, kept)
-    print(f"✅ weekly 文献富集完成: {len(kept)} / {len(articles)} 篇进入后续周更")
-    print(f"   有可判断摘要: {assessable}")
-    print(f"   补充研究类型/证据等级: {classified}")
-    print(f"   无证据等级剔除: {droppedNoEvidence}")
-    print(f"   补充 IF/CAS: {metricsFilled}")
+    result = processArticles(articles, cache, normalized)
+    counters = result["counters"]
+    saveJson(WEEKLY_PATH, result["kept"])
+    print(f"✅ weekly 文献富集完成: {len(result['kept'])} / {len(articles)} 篇进入后续周更")
+    print(f"   MG-core 排除: {counters['dropped_not_mg_core']} {counters['mg_core_reason_codes']}")
+    print(f"   有可判断摘要: {counters['assessable']}")
+    print(f"   补充研究类型/证据等级: {counters['classified']}")
+    print(f"   指南/共识独立路由: {counters['routed_guideline_consensus']}")
+    print(f"   无 I–V 证据等级剔除: {counters['dropped_no_evidence']}")
+    print(f"   补充 IF/CAS: {counters['metrics_filled']}")
 
 
 if __name__ == "__main__":

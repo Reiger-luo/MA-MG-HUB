@@ -66,24 +66,8 @@ fi
 git fetch origin main
 git pull --ff-only origin main
 
-python3 scripts/run-weekly-pipeline.py --skip-status --skip-downstream
-
-# 分类规则可能独立于周更变化；周更后重扫 full 中的近一年窗口，并重建 recent 与基础前端产物。
-python3 scripts/reclassify-existing-iii.py --modes ALL --recent-days 365
-
-# 文献 Signal-to-KOL 的语义层是可选增强；无 API key 时保留 build-frontend-data.py 的确定性回退产物。
-if ! python3 scripts/enrich-literature-narrative.py; then
-  echo "⚠️ 文献 Signal-to-KOL LLM 归纳失败，继续使用确定性 MG-core 聚合产物。"
-fi
-
-# reclassify 会重建 literature-recent.js 与基础前端数据；这里一次性刷新 full-derived 下游产物。
-python3 scripts/buildFullLiteratureIndex.py
-python3 scripts/buildCommunityData.py
-python3 scripts/build-knowledge-data.py
-python3 scripts/build-curated-topic-data.py
-python3 scripts/buildWikiTopicCoverage.py
-python3 scripts/generate-weekly-summary.py
-python3 scripts/generate-pipeline-status.py
+# full 模式在合并后执行 MG-core 原子过滤/归档，再重分类并完成全部公开产物；所有步骤共用同一审计 run id。
+python3 scripts/run-weekly-pipeline.py --local-full --run-id "local-${STAMP}"
 
 python3 - <<'PY'
 import json
@@ -157,6 +141,8 @@ else
     data/weekly-summary.md \
     data/china-regulatory-status.json \
     data/clinicaltrials-pipeline-cache.json \
+    data/chictr-trials-cache.json \
+    data/guideline-consensus-cache.json \
     assets/*.js \
     assets/*.css \
     pages/*.html \

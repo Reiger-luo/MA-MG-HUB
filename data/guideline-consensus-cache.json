@@ -1,0 +1,721 @@
+{
+  "schema_version": "1.0",
+  "source": "MG-core PubMed guideline/consensus records outside evidence literature",
+  "records": [
+    {
+      "pmid": "39806659",
+      "title": "Epidemiology, management and patient needs in myasthenia gravis: an Italian multistakeholder consensus based on Delphi methodology.",
+      "abstract": "OBJECTIVES: To provide comprehensive information on the burden of myasthenia gravis (MG) in Italy, including the unmet needs of patients and several other aspects related to the disease, based on skilled viewpoints of MG experts.\nDESIGN: Iterative analysis conducted in accordance with the best practices of the Delphi method, including anonymity, controlled feedback, and statistical stability of consensus.\nSETTING AND PARTICIPANTS: 24 clinicians, 18 public health experts and 4 patient associations experts completed all the Delphi iterations between 18 April and 3 July 2023, for a total of 46 participants from several Italian Regions.\nOUTCOME MEASURES: Five areas of investigation related to MG were examined: epidemiology in Italy and characteristics of disease; diagnostic issues and Italian patient journey; unmet needs during the acute and chronic phases of MG; quality of life; public health management of MG. Consensus in the Delphi iterations was defined by both the percentage level of agreement between panellists or the median value of the responses.\nRESULTS: We reported a high level of agreement (ie, >66.7% of panellists) on the prevalence and incidence of disease in Italy and on several management issues. A strong impact of MG on the quality of life of patients also emerged. Cross-agreement was achieved among different subgroups of panellists (ie, clinicians, public health experts and patient associations representatives) for most items proposed.\nCONCLUSIONS: This study provided guidance for educational and practical aspects of MG in Italy, highlighted disease severity and its role on patients' quality of life. A few gaps related to the handling of MG in Italy also emerged.",
+      "authors": [
+        "Habetswallner Francesco",
+        "Iorio Raffaele",
+        "Annicchiarico Giuseppina",
+        "Limongelli Giuseppe",
+        "Uccheddu Maria Bonaria",
+        "Galeone Carlotta",
+        "Mariani Paolo",
+        "Mantegazza Renato"
+      ],
+      "journal": "BMJ open",
+      "entry_date": "2025/01/14 01:04",
+      "pub_date": "2024-12-22",
+      "doi": "",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39806659/",
+      "pub_types": [
+        "Journal Article"
+      ],
+      "affiliations": [
+        "Clinical Neurophysiology Unit, Cardarelli Hospital, Naples, Italy.",
+        "Dipartimento di Neuroscienze, Università Cattolica del Sacro Cuore, Rome, Italy.",
+        "Dipartimento di Neuroscienze, Organi di Senso e Torace, Fondazione Policlinico Universitario Agostino Gemelli IRCCS, Rome, Italy.",
+        "Regional Coordination of Rare Diseases (CoReMaR), Apulia Regional Agency for Health and Social Care (AReSS), Bari, Italy.",
+        "Inherited and Rare Cardiovascular Diseases, Department of Translational Medical Sciences, University of Campania \"Luigi Vanvitelli\", Monaldi Hospital, Naples, Italy.",
+        "European Myasthenia Gravis Association (EuMGA), La Louviere, Belgium.",
+        "AIM Associazione Italiana Miastenia ODV, Milan, Italy.",
+        "Bicocca Applied Statistics Center (B-ASC), Department of Economics, Management and Statistics, University of Milan-Bicocca, Milan, Italy.",
+        "Neuroimmunology and Neuromuscular Diseases Unit, Fondazione IRCCS Istituto Neurologico Carlo Besta, Milano, Italy renato.mantegazza@istituto-besta.it."
+      ],
+      "china_related": false,
+      "study_types": [
+        "Guideline/Consensus"
+      ],
+      "evidence_level": null,
+      "journal_if": 2.3,
+      "journal_quartile": "3区",
+      "author_affiliations": [
+        {
+          "position": 1,
+          "name": "Habetswallner Francesco",
+          "affiliations": [
+            "Clinical Neurophysiology Unit, Cardarelli Hospital, Naples, Italy."
+          ]
+        },
+        {
+          "position": 2,
+          "name": "Iorio Raffaele",
+          "affiliations": [
+            "Dipartimento di Neuroscienze, Università Cattolica del Sacro Cuore, Rome, Italy.",
+            "Dipartimento di Neuroscienze, Organi di Senso e Torace, Fondazione Policlinico Universitario Agostino Gemelli IRCCS, Rome, Italy."
+          ]
+        },
+        {
+          "position": 3,
+          "name": "Annicchiarico Giuseppina",
+          "affiliations": [
+            "Regional Coordination of Rare Diseases (CoReMaR), Apulia Regional Agency for Health and Social Care (AReSS), Bari, Italy."
+          ]
+        },
+        {
+          "position": 4,
+          "name": "Limongelli Giuseppe",
+          "affiliations": [
+            "Inherited and Rare Cardiovascular Diseases, Department of Translational Medical Sciences, University of Campania \"Luigi Vanvitelli\", Monaldi Hospital, Naples, Italy."
+          ]
+        },
+        {
+          "position": 5,
+          "name": "Uccheddu Maria Bonaria",
+          "affiliations": [
+            "European Myasthenia Gravis Association (EuMGA), La Louviere, Belgium.",
+            "AIM Associazione Italiana Miastenia ODV, Milan, Italy."
+          ]
+        },
+        {
+          "position": 6,
+          "name": "Galeone Carlotta",
+          "affiliations": [
+            "Bicocca Applied Statistics Center (B-ASC), Department of Economics, Management and Statistics, University of Milan-Bicocca, Milan, Italy."
+          ]
+        },
+        {
+          "position": 7,
+          "name": "Mariani Paolo",
+          "affiliations": [
+            "Bicocca Applied Statistics Center (B-ASC), Department of Economics, Management and Statistics, University of Milan-Bicocca, Milan, Italy."
+          ]
+        },
+        {
+          "position": 8,
+          "name": "Mantegazza Renato",
+          "affiliations": [
+            "Neuroimmunology and Neuromuscular Diseases Unit, Fondazione IRCCS Istituto Neurologico Carlo Besta, Milano, Italy renato.mantegazza@istituto-besta.it."
+          ]
+        }
+      ],
+      "mg_core": true,
+      "mg_core_reason": "explicit_mg_title"
+    },
+    {
+      "pmid": "37197966",
+      "title": "[Transition of Japanese clinical guidelines for myasthenia gravis].",
+      "abstract": "The Japanese clinical guidelines for myasthenia gravis (MG) were revised in 2022. The major revision points in these guidelines are as follows. 1) A description of Lambert-Eaton myasthenic syndrome (LEMS) was included for the first time. 2) Revised diagnostic criteria of both MG and LEMS are proposed. 3) A high-dose oral steroid regimen with escalation and de-escalation schedule is not recommended. 4) Refractory MG is defined. 5) The use of molecular-targeted drugs is included. 6) MG is divided into six clinical subtypes. 7) Treatment algorithms for both MG and LEMS are presented.",
+      "authors": [
+        "Murai Hiroyuki"
+      ],
+      "journal": "Rinsho shinkeigaku = Clinical neurology",
+      "entry_date": "2023/05/17 21:23",
+      "pub_date": "2023-06-28",
+      "doi": "",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37197966/",
+      "pub_types": [
+        "English Abstract",
+        "Journal Article",
+        "Practice Guideline"
+      ],
+      "affiliations": [
+        "Department of Neurology, International University of Health and Welfare."
+      ],
+      "china_related": false,
+      "study_types": [
+        "Practice Guideline"
+      ],
+      "evidence_level": null,
+      "author_affiliations": [
+        {
+          "position": 1,
+          "name": "Murai Hiroyuki",
+          "affiliations": [
+            "Department of Neurology, International University of Health and Welfare."
+          ]
+        }
+      ],
+      "mg_core": true,
+      "mg_core_reason": "explicit_mg_title"
+    },
+    {
+      "pmid": "32247193",
+      "title": "Guidance for the management of myasthenia gravis (MG) and Lambert-Eaton myasthenic syndrome (LEMS) during the COVID-19 pandemic.",
+      "abstract": "",
+      "authors": [
+        "Jacob Saiju",
+        "Muppidi Srikanth",
+        "Guidon Amanda",
+        "Guptill Jeffrey",
+        "Hehir Michael",
+        "Howard James F",
+        "Illa Isabel",
+        "Mantegazza Renato",
+        "Murai Hiroyuki",
+        "Utsugisawa Kimiaki",
+        "Vissing John",
+        "Wiendl Heinz",
+        "Nowak Richard J"
+      ],
+      "journal": "Journal of the neurological sciences",
+      "entry_date": "2020/04/05 06:00",
+      "pub_date": "2020-05-15",
+      "doi": "",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32247193/",
+      "pub_types": [
+        "Journal Article",
+        "Practice Guideline"
+      ],
+      "affiliations": [
+        "Department of Neurology, Institute of Immunology and Immunotherapy, University Hospitals, Birmingham B15 2TH, United Kingdom. Electronic address: saiju.jacob@uhb.nhs.uk.",
+        "Department of Neurology, Stanford Neuroscience Health Center, Palo Alto, CA 94304, USA. Electronic address: muppidis@stanford.edu.",
+        "Department of Neurology, Massachusetts General Hospital, Boston, MA 02114, USA.",
+        "Department of Neurology, Duke University Medical Center, Durham, NC 27710, USA.",
+        "Department of Neurology, University of Vermont Medical Center, Burlington, VT 05401, USA.",
+        "Department of Neurology, The University of North Carolina at Chapel Hill, Chapel Hill, NC 27599-7025, USA.",
+        "Catedràtica Neurologia U.A.B., Unitat Patologia Neuromuscular, Servei Neurologia, Hospital Santa Creu i Sant Pau, C/ Pare Claret 167, Barcelona 08025, Spain.",
+        "Department of Neuroimmunology and Neuromuscular Diseases, Fondazione I.R.C.C.S. Istituto Neurologico Carlo Besta, Via Celoria 11, 20133 Milano, Italy.",
+        "Department of Neurology, School of Medicine, International University of Health and Welfare, Narita, Japan.",
+        "Department of Neurology, Hanamaki General Hospital, Japan.",
+        "Department of Neurology, 2082 Rigshospitalet, University of Copenhagen, DK-2100 Copenhagen, Denmark.",
+        "Department of Neurology, Institute of Translational Neurology, University of Münster, Münster, Germany.",
+        "Department of Neurology, Yale University School of Medicine, New Haven, CT 06520, USA. Electronic address: richard.nowak@yale.edu."
+      ],
+      "china_related": false,
+      "study_types": [
+        "Practice Guideline"
+      ],
+      "evidence_level": null,
+      "journal_if": 3.2,
+      "journal_quartile": "3区",
+      "author_affiliations": [
+        {
+          "position": 1,
+          "name": "International MG/COVID-19 Working Group",
+          "affiliations": []
+        },
+        {
+          "position": 2,
+          "name": "Jacob Saiju",
+          "affiliations": [
+            "Department of Neurology, Institute of Immunology and Immunotherapy, University Hospitals, Birmingham B15 2TH, United Kingdom. Electronic address: saiju.jacob@uhb.nhs.uk."
+          ]
+        },
+        {
+          "position": 3,
+          "name": "Muppidi Srikanth",
+          "affiliations": [
+            "Department of Neurology, Stanford Neuroscience Health Center, Palo Alto, CA 94304, USA. Electronic address: muppidis@stanford.edu."
+          ]
+        },
+        {
+          "position": 4,
+          "name": "Guidon Amanda",
+          "affiliations": [
+            "Department of Neurology, Massachusetts General Hospital, Boston, MA 02114, USA."
+          ]
+        },
+        {
+          "position": 5,
+          "name": "Guptill Jeffrey",
+          "affiliations": [
+            "Department of Neurology, Duke University Medical Center, Durham, NC 27710, USA."
+          ]
+        },
+        {
+          "position": 6,
+          "name": "Hehir Michael",
+          "affiliations": [
+            "Department of Neurology, University of Vermont Medical Center, Burlington, VT 05401, USA."
+          ]
+        },
+        {
+          "position": 7,
+          "name": "Howard James F",
+          "affiliations": [
+            "Department of Neurology, The University of North Carolina at Chapel Hill, Chapel Hill, NC 27599-7025, USA."
+          ]
+        },
+        {
+          "position": 8,
+          "name": "Illa Isabel",
+          "affiliations": [
+            "Catedràtica Neurologia U.A.B., Unitat Patologia Neuromuscular, Servei Neurologia, Hospital Santa Creu i Sant Pau, C/ Pare Claret 167, Barcelona 08025, Spain."
+          ]
+        },
+        {
+          "position": 9,
+          "name": "Mantegazza Renato",
+          "affiliations": [
+            "Department of Neuroimmunology and Neuromuscular Diseases, Fondazione I.R.C.C.S. Istituto Neurologico Carlo Besta, Via Celoria 11, 20133 Milano, Italy."
+          ]
+        },
+        {
+          "position": 10,
+          "name": "Murai Hiroyuki",
+          "affiliations": [
+            "Department of Neurology, School of Medicine, International University of Health and Welfare, Narita, Japan."
+          ]
+        },
+        {
+          "position": 11,
+          "name": "Utsugisawa Kimiaki",
+          "affiliations": [
+            "Department of Neurology, Hanamaki General Hospital, Japan."
+          ]
+        },
+        {
+          "position": 12,
+          "name": "Vissing John",
+          "affiliations": [
+            "Department of Neurology, 2082 Rigshospitalet, University of Copenhagen, DK-2100 Copenhagen, Denmark."
+          ]
+        },
+        {
+          "position": 13,
+          "name": "Wiendl Heinz",
+          "affiliations": [
+            "Department of Neurology, Institute of Translational Neurology, University of Münster, Münster, Germany."
+          ]
+        },
+        {
+          "position": 14,
+          "name": "Nowak Richard J",
+          "affiliations": [
+            "Department of Neurology, Yale University School of Medicine, New Haven, CT 06520, USA. Electronic address: richard.nowak@yale.edu."
+          ]
+        }
+      ],
+      "mg_core": true,
+      "mg_core_reason": "explicit_mg_title"
+    },
+    {
+      "pmid": "29121404",
+      "title": "The Association of British Neurologists' myasthenia gravis guidelines.",
+      "abstract": "Myasthenia gravis (MG) is an autoimmune disease of the neuromuscular junction for which many therapies were developed before the era of evidence-based medicine. Despite the basic principles of treatment being well known, patients continue to receive suboptimal treatment. A myasthenia gravis guidelines group was therefore established under the aegis of the Association of British Neurologists. These guidelines attempt to steer a path between evidence-based practice where available and established best practice where evidence is unavailable. It is not possible to consider all the potential decisions in managing MG without resorting to opinion rather than evidence. Where there is insufficient evidence or a choice of options, the guidelines invite the clinician to seek the opinion of a myasthenia expert. The guidelines support clinicians in using the right treatments in the right order and in optimizing the use of well-known therapeutic agents. Clinical practice can be audited against these guidelines.",
+      "authors": [
+        "Sussman Jon",
+        "Farrugia Maria E",
+        "Maddison Paul",
+        "Hill Marguerite",
+        "Leite M Isabel",
+        "Hilton-Jones David"
+      ],
+      "journal": "Annals of the New York Academy of Sciences",
+      "entry_date": "2017/11/10 06:00",
+      "pub_date": "2018-01",
+      "doi": "",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29121404/",
+      "pub_types": [
+        "Journal Article",
+        "Practice Guideline"
+      ],
+      "affiliations": [
+        "Department of Neurology, Greater Manchester Neuroscience Centre, Salford, Greater Manchester, UK.",
+        "Institute of Neurological Sciences, Queen Elizabeth University Hospital, Glasgow, UK.",
+        "Department of Neurology, Nottingham University Hospitals NHS Trust, Queens Medical Centre, Nottingham, Nottinghamshire, UK.",
+        "Department of Neurology, Morriston Hospital, Swansea, Wales, UK.",
+        "Department of Neurology, John Radcliffe Hospital, Oxford, UK."
+      ],
+      "china_related": false,
+      "study_types": [
+        "Practice Guideline"
+      ],
+      "evidence_level": null,
+      "journal_if": 4.8,
+      "journal_quartile": "2区",
+      "author_affiliations": [
+        {
+          "position": 1,
+          "name": "Sussman Jon",
+          "affiliations": [
+            "Department of Neurology, Greater Manchester Neuroscience Centre, Salford, Greater Manchester, UK."
+          ]
+        },
+        {
+          "position": 2,
+          "name": "Farrugia Maria E",
+          "affiliations": [
+            "Institute of Neurological Sciences, Queen Elizabeth University Hospital, Glasgow, UK."
+          ]
+        },
+        {
+          "position": 3,
+          "name": "Maddison Paul",
+          "affiliations": [
+            "Department of Neurology, Nottingham University Hospitals NHS Trust, Queens Medical Centre, Nottingham, Nottinghamshire, UK."
+          ]
+        },
+        {
+          "position": 4,
+          "name": "Hill Marguerite",
+          "affiliations": [
+            "Department of Neurology, Morriston Hospital, Swansea, Wales, UK."
+          ]
+        },
+        {
+          "position": 5,
+          "name": "Leite M Isabel",
+          "affiliations": [
+            "Department of Neurology, John Radcliffe Hospital, Oxford, UK."
+          ]
+        },
+        {
+          "position": 6,
+          "name": "Hilton-Jones David",
+          "affiliations": [
+            "Department of Neurology, John Radcliffe Hospital, Oxford, UK."
+          ]
+        }
+      ],
+      "mg_core": true,
+      "mg_core_reason": "explicit_mg_title"
+    },
+    {
+      "pmid": "29050154",
+      "title": "[The innovation of international consensus guidance for management of myasthenia gravis(2016) and its practice in China].",
+      "abstract": "",
+      "authors": [
+        "Liu W B"
+      ],
+      "journal": "Zhonghua yi xue za zhi",
+      "entry_date": "2017/10/20 06:00",
+      "pub_date": "2017-10-10",
+      "doi": "",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29050154/",
+      "pub_types": [
+        "Journal Article"
+      ],
+      "affiliations": [],
+      "china_related": false,
+      "study_types": [
+        "Guideline/Consensus"
+      ],
+      "evidence_level": null,
+      "journal_if": 0.0,
+      "journal_quartile": null,
+      "author_affiliations": [
+        {
+          "position": 1,
+          "name": "Liu W B",
+          "affiliations": []
+        }
+      ],
+      "mg_core": true,
+      "mg_core_reason": "explicit_mg_title"
+    },
+    {
+      "pmid": "24025471",
+      "title": "Clinical practice guideline series update.",
+      "abstract": "Approximately 20 per 100,000 people in the United States are currently living with myasthenia gravis (MG). MG is a chronic condition that occurs in all genders, ethnicities, and ages. The result of a defect at the neuromuscular junction, MG is characterized by fluctuating muscle weakness and fatigue. The purpose of the first edition of this American Association of Neuroscience Nurses' Clinical Practice Guideline is to summarize what is currently known about MG and to provide the reader with nursing-specific recommendations based on supporting evidence from nursing and other disciplines. Nursing Management of the Patient with Myasthenia Gravis includes information on epidemiology; types and classification of MG; pathophysiology; clinical features; clinical course; diagnostic tests; assessment; pharmacological, immunological, and surgical management; and the nurses' pivotal role in the care of the patient with MG.",
+      "authors": [
+        "Blissitt Patricia A"
+      ],
+      "journal": "The Journal of neuroscience nursing : journal of the American Association of Neuroscience Nurses",
+      "entry_date": "2013/09/13 06:00",
+      "pub_date": "2013-10",
+      "doi": "",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24025471/",
+      "pub_types": [
+        "Journal Article"
+      ],
+      "affiliations": [
+        "Questions or comments about this article may be directed to Patricia A. Blissit, RN PhD CCRN CNRN CCNS CCM ACNS-BC at pbliss@u.washington.edu. She is the Editor of the American Association of Neuroscience Nurses Clinical Practice Guideline Series."
+      ],
+      "china_related": false,
+      "study_types": [
+        "Guideline/Consensus"
+      ],
+      "evidence_level": null,
+      "author_affiliations": [
+        {
+          "position": 1,
+          "name": "Blissitt Patricia A",
+          "affiliations": [
+            "Questions or comments about this article may be directed to Patricia A. Blissit, RN PhD CCRN CNRN CCNS CCM ACNS-BC at pbliss@u.washington.edu. She is the Editor of the American Association of Neuroscience Nurses Clinical Practice Guideline Series."
+          ]
+        }
+      ],
+      "mg_core": true,
+      "mg_core_reason": "repeated_mg_core_mentions"
+    },
+    {
+      "pmid": "23540178",
+      "title": "Guidelines for the use of intravenous immunoglobulin in the treatment of neurologic diseases.",
+      "abstract": "The use of intravenous immunoglobulin (IVIg) in the management of patients with neuroimmune disorders has shown a progressive trend over the last few years. Despite the wide use of IVIg, consensus on its optimal use is deficient. The European Federation of Neurological Societies (EFNS) guidance regulations offer consensus recommendations for optimal use of IVIg. The effectiveness of IVIg has been proven in Guillain-Barré syndrome (level A), chronic inflammatory demyelinating polyradiculoneuropathy (level A), multifocal mononeuropathy (level A), acute exacerbations of myasthenia gravis and short-term treatment of severe myasthenia gravis (level A). As a second-line treatment, the use of IVIg is recommended in dermatomyositis in combination with prednisone (level B) and is considered as a treatment option in polymyositis (level C). As a second- or even third-line therapy, the use of IVIg should be considered in patients with relapsing-remitting multiple sclerosis if conventional immunomodulatory therapies are not tolerated (level B) and in relapses during pregnancy or post-partum period (good clinical practice point). Finally, it appears that the use of IVIg has a beneficial effect also in stiff-person syndrome (level A), some paraneoplastic neuropathies (level B), and some acute-demyelinating diseases and childhood refractory epilepsy (good practice point).",
+      "authors": [
+        "Bascić-Kes Vanja",
+        "Kes Petar",
+        "Zavoreo Iris",
+        "Lisak Marijana",
+        "Zadro Lucija",
+        "Corić Lejla",
+        "Demarin Vida"
+      ],
+      "journal": "Acta clinica Croatica",
+      "entry_date": "2013/04/02 06:00",
+      "pub_date": "2012-12",
+      "doi": "",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23540178/",
+      "pub_types": [
+        "Journal Article",
+        "Practice Guideline"
+      ],
+      "affiliations": [
+        "University Department of Neurology, Sestre milosrdnice University Hospital Center, Zagreb, Croatia. vanjakes@net.hr"
+      ],
+      "china_related": false,
+      "study_types": [
+        "Guideline/Consensus"
+      ],
+      "evidence_level": null,
+      "journal_if": 0.8,
+      "journal_quartile": "4区",
+      "author_affiliations": [
+        {
+          "position": 1,
+          "name": "Bascić-Kes Vanja",
+          "affiliations": [
+            "University Department of Neurology, Sestre milosrdnice University Hospital Center, Zagreb, Croatia. vanjakes@net.hr"
+          ]
+        },
+        {
+          "position": 2,
+          "name": "Kes Petar",
+          "affiliations": []
+        },
+        {
+          "position": 3,
+          "name": "Zavoreo Iris",
+          "affiliations": []
+        },
+        {
+          "position": 4,
+          "name": "Lisak Marijana",
+          "affiliations": []
+        },
+        {
+          "position": 5,
+          "name": "Zadro Lucija",
+          "affiliations": []
+        },
+        {
+          "position": 6,
+          "name": "Corić Lejla",
+          "affiliations": []
+        },
+        {
+          "position": 7,
+          "name": "Demarin Vida",
+          "affiliations": []
+        },
+        {
+          "position": 8,
+          "name": "Ad Hoc Comittee of the Croatian Society for Neurovascular Disorders, Croatian Medical Association",
+          "affiliations": []
+        }
+      ],
+      "mg_core": true,
+      "mg_core_reason": "repeated_mg_core_mentions"
+    },
+    {
+      "pmid": "20402760",
+      "title": "Guidelines for treatment of autoimmune neuromuscular transmission disorders.",
+      "abstract": "BACKGROUND: Important progress has been made in our understanding of the autoimmune neuromuscular transmission (NMT) disorders; myasthenia gravis (MG), Lambert-Eaton myasthenic syndrome (LEMS) and neuromyotonia (Isaacs' syndrome).\nMETHODS: To prepare consensus guidelines for the treatment of the autoimmune NMT disorders, references retrieved from MEDLINE, EMBASE and the Cochrane Library were considered and statements prepared and agreed on by disease experts.\nCONCLUSIONS: Anticholinesterase drugs should be given first in the management of MG, but with some caution in patients with MuSK antibodies (good practice point). Plasma exchange is recommended in severe cases to induce remission and in preparation for surgery (recommendation level B). IvIg and plasma exchange are effective for the treatment of MG exacerbations (recommendation level A). For patients with non-thymomatous MG, thymectomy is recommended as an option to increase the probability of remission or improvement (recommendation level B). Once thymoma is diagnosed, thymectomy is indicated irrespective of MG severity (recommendation level A). Oral corticosteroids are first choice drugs when immunosuppressive drugs are necessary (good practice point). When long-term immunosuppression is necessary, azathioprine is recommended to allow tapering the steroids to the lowest possible dose whilst maintaining azathioprine (recommendation level A). 3,4-Diaminopyridine is recommended as symptomatic treatment and IvIG has a positive short-term effect in LEMS (good practice point). Neuromyotonia patients should be treated with an antiepileptic drug that reduces peripheral nerve hyperexcitability (good practice point). For paraneoplastic LEMS and neuromyotonia optimal treatment of the underlying tumour is essential (good practice point). Immunosuppressive treatment of LEMS and neuromyotonia should be similar to MG (good practice point).",
+      "authors": [
+        "Skeie G O",
+        "Apostolski S",
+        "Evoli A",
+        "Gilhus N E",
+        "Illa I",
+        "Harms L",
+        "Hilton-Jones D",
+        "Melms A",
+        "Verschuuren J",
+        "Horge H W"
+      ],
+      "journal": "European journal of neurology",
+      "entry_date": "2010/04/21 06:00",
+      "pub_date": "2010-07",
+      "doi": "",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20402760/",
+      "pub_types": [
+        "Journal Article",
+        "Practice Guideline"
+      ],
+      "affiliations": [
+        "Department of Neurology, University of Bergen, Norway. geir.olve.skeie@helse-bergen.no"
+      ],
+      "china_related": false,
+      "study_types": [
+        "Guideline/Consensus"
+      ],
+      "evidence_level": null,
+      "journal_if": 3.9,
+      "journal_quartile": "2区",
+      "author_affiliations": [
+        {
+          "position": 1,
+          "name": "Skeie G O",
+          "affiliations": [
+            "Department of Neurology, University of Bergen, Norway. geir.olve.skeie@helse-bergen.no"
+          ]
+        },
+        {
+          "position": 2,
+          "name": "Apostolski S",
+          "affiliations": []
+        },
+        {
+          "position": 3,
+          "name": "Evoli A",
+          "affiliations": []
+        },
+        {
+          "position": 4,
+          "name": "Gilhus N E",
+          "affiliations": []
+        },
+        {
+          "position": 5,
+          "name": "Illa I",
+          "affiliations": []
+        },
+        {
+          "position": 6,
+          "name": "Harms L",
+          "affiliations": []
+        },
+        {
+          "position": 7,
+          "name": "Hilton-Jones D",
+          "affiliations": []
+        },
+        {
+          "position": 8,
+          "name": "Melms A",
+          "affiliations": []
+        },
+        {
+          "position": 9,
+          "name": "Verschuuren J",
+          "affiliations": []
+        },
+        {
+          "position": 10,
+          "name": "Horge H W",
+          "affiliations": []
+        },
+        {
+          "position": 11,
+          "name": "European Federation of Neurological Societies",
+          "affiliations": []
+        }
+      ],
+      "mg_core": true,
+      "mg_core_reason": "repeated_mg_core_mentions"
+    },
+    {
+      "pmid": "18796075",
+      "title": "EFNS guidelines for the use of intravenous immunoglobulin in treatment of neurological diseases: EFNS task force on the use of intravenous immunoglobulin in treatment of neurological diseases.",
+      "abstract": "Despite high-dose intravenous immunoglobulin (IVIG) is widely used in treatment of a number of immune-mediated neurological diseases, the consensus on its optimal use is insufficient. To define the evidence-based optimal use of IVIG in neurology, the recent papers of high relevance were reviewed and consensus recommendations are given according to EFNS guidance regulations. The efficacy of IVIG has been proven in Guillain-Barré syndrome (level A), chronic inflammatory demyelinating polyradiculoneuropathy (level A), multifocal mononeuropathy (level A), acute exacerbations of myasthenia gravis (MG) and short-term treatment of severe MG (level A recommendation), and some paraneoplastic neuropathies (level B). IVIG is recommended as a second-line treatment in combination with prednisone in dermatomyositis (level B) and treatment option in polymyositis (level C). IVIG should be considered as a second or third-line therapy in relapsing-remitting multiple sclerosis, if conventional immunomodulatory therapies are not tolerated (level B), and in relapses during pregnancy or post-partum period (good clinical practice point). IVIG seems to have a favourable effect also in paraneoplastic neurological diseases (good practice point) [corrected],stiff-person syndrome (level A), some acute-demyelinating diseases and childhood refractory epilepsy (good practice point).",
+      "authors": [
+        "Elovaara I",
+        "Apostolski S",
+        "van Doorn P",
+        "Gilhus N E",
+        "Hietaharju A",
+        "Honkaniemi J",
+        "van Schaik I N",
+        "Scolding N",
+        "Soelberg Sørensen P",
+        "Udd B"
+      ],
+      "journal": "European journal of neurology",
+      "entry_date": "2008/09/18 09:00",
+      "pub_date": "2008-09",
+      "doi": "",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18796075/",
+      "pub_types": [
+        "Consensus Statement",
+        "Journal Article",
+        "Practice Guideline"
+      ],
+      "affiliations": [
+        "Department of Neurology and Rehabilitation, Tampere University Hospital and Medical School, University of Tampere, Tampere, Finland. irina.elovaara@uta.fi"
+      ],
+      "china_related": false,
+      "study_types": [
+        "Guideline/Consensus"
+      ],
+      "evidence_level": null,
+      "journal_if": 3.9,
+      "journal_quartile": "2区",
+      "author_affiliations": [
+        {
+          "position": 1,
+          "name": "Elovaara I",
+          "affiliations": [
+            "Department of Neurology and Rehabilitation, Tampere University Hospital and Medical School, University of Tampere, Tampere, Finland. irina.elovaara@uta.fi"
+          ]
+        },
+        {
+          "position": 2,
+          "name": "Apostolski S",
+          "affiliations": []
+        },
+        {
+          "position": 3,
+          "name": "van Doorn P",
+          "affiliations": []
+        },
+        {
+          "position": 4,
+          "name": "Gilhus N E",
+          "affiliations": []
+        },
+        {
+          "position": 5,
+          "name": "Hietaharju A",
+          "affiliations": []
+        },
+        {
+          "position": 6,
+          "name": "Honkaniemi J",
+          "affiliations": []
+        },
+        {
+          "position": 7,
+          "name": "van Schaik I N",
+          "affiliations": []
+        },
+        {
+          "position": 8,
+          "name": "Scolding N",
+          "affiliations": []
+        },
+        {
+          "position": 9,
+          "name": "Soelberg Sørensen P",
+          "affiliations": []
+        },
+        {
+          "position": 10,
+          "name": "Udd B",
+          "affiliations": []
+        },
+        {
+          "position": 11,
+          "name": "EFNS",
+          "affiliations": []
+        }
+      ],
+      "mg_core": true,
+      "mg_core_reason": "repeated_mg_core_mentions"
+    }
+  ]
+}
