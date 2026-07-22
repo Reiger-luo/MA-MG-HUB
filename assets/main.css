@@ -108,6 +108,13 @@ body {
   gap: 1rem; margin-bottom: 1rem;
 }
 .signal-topline h2 { font-size: 1.25rem; font-weight: 600; }
+.signal-page-intro {
+  max-width: 760px;
+  margin: 0.3rem 0 0;
+  color: var(--fg3);
+  font-size: 0.8rem;
+  line-height: 1.55;
+}
 .signal-filter {
   display: flex; flex-wrap: wrap; gap: 0.3rem;
 }
@@ -167,7 +174,8 @@ body {
 .signal-type { color: var(--fg3); font-size: 0.78rem; }
 .signal-title {
   display: block; color: var(--accent); text-decoration: none;
-  font-size: 0.96rem; font-weight: 500; line-height: 1.45;
+  margin: 0;
+  font-size: 1.02rem; font-weight: 650; line-height: 1.45;
 }
 .signal-title:hover { text-decoration: underline; }
 .signal-meta {
@@ -332,6 +340,198 @@ body {
   text-decoration: none;
 }
 a.literature-signal-ref:hover { background: rgba(37,99,235,0.12); }
+.literature-signal-narrative {
+  display: grid;
+  gap: 0.78rem;
+  margin-top: 0.8rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--fg2);
+  font-size: 0.79rem;
+  line-height: 1.6;
+}
+.literature-signal-narrative section {
+  margin: 0;
+}
+.literature-signal-section-title {
+  margin-bottom: 0.42rem;
+  color: #315f65;
+  font-size: 0.7rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.literature-signal-change {
+  padding: 0.78rem 0.86rem;
+  border: 1px solid rgba(47, 111, 119, 0.2);
+  border-radius: 9px;
+  background: #f1f7f6;
+}
+.literature-signal-takeaway {
+  margin: 0;
+  color: var(--fg);
+  font-size: 0.88rem;
+  font-weight: 560;
+  line-height: 1.65;
+}
+.literature-signal-gap-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+.literature-signal-gap-grid > .literature-signal-section-title {
+  grid-column: 1 / -1;
+  margin-bottom: -0.05rem;
+}
+.literature-signal-gap-grid > div:not(.literature-signal-section-title) {
+  padding: 0.62rem 0.68rem;
+  border: 1px solid var(--bg3);
+  border-radius: 8px;
+  background: var(--bg);
+}
+.literature-signal-gap-grid > div.filled {
+  border-color: rgba(47, 111, 119, 0.2);
+  background: rgba(47, 111, 119, 0.045);
+}
+.literature-signal-gap-grid span,
+.literature-evidence-result span,
+.literature-evidence-gap span,
+.literature-kol-question span {
+  display: block;
+  margin-bottom: 0.16rem;
+  color: var(--fg3);
+  font-size: 0.67rem;
+  font-weight: 650;
+}
+.literature-signal-gap-grid p,
+.literature-evidence-result p,
+.literature-evidence-gap p,
+.literature-kol-question p {
+  margin: 0;
+}
+.literature-evidence-ledger {
+  display: grid;
+  gap: 0.48rem;
+}
+.literature-evidence-item {
+  padding: 0.72rem 0.78rem;
+  border: 1px solid var(--bg3);
+  border-radius: 9px;
+  background: #fff;
+}
+.literature-evidence-head,
+.literature-evidence-head > div {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.32rem;
+}
+.literature-evidence-head span:not(.literature-signal-ref) {
+  padding: 0.12rem 0.38rem;
+  border-radius: 999px;
+  color: var(--fg3);
+  background: var(--bg2);
+  font-size: 0.66rem;
+}
+.literature-evidence-item h4 {
+  margin: 0.44rem 0 0.48rem;
+  color: var(--fg);
+  font-size: 0.8rem;
+  font-weight: 640;
+  line-height: 1.5;
+}
+.literature-evidence-result,
+.literature-evidence-gap {
+  padding: 0.48rem 0;
+  border-top: 1px dashed var(--bg3);
+}
+.literature-evidence-gap {
+  color: #315f65;
+}
+.literature-evidence-boundary {
+  margin: 0.22rem 0 0;
+  padding: 0.38rem 0.48rem;
+  border-radius: 6px;
+  color: #796538;
+  background: rgba(181, 148, 75, 0.08);
+  font-size: 0.71rem;
+}
+.literature-signal-points {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.48rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.literature-signal-points > .literature-signal-section-title,
+.literature-kol-question,
+.literature-msl-action {
+  grid-column: 1 / -1;
+}
+.literature-signal-point {
+  padding: 0.68rem 0.72rem;
+  border-color: rgba(50, 92, 123, 0.15);
+  background: #f6f8fa;
+}
+.literature-signal-point > strong {
+  font-size: 0.8rem;
+}
+.literature-signal-point ul {
+  margin-top: 0.2rem;
+  padding-left: 1.1rem;
+}
+.literature-signal-point li {
+  margin: 0.22rem 0;
+}
+.literature-kol-question {
+  padding: 0.62rem 0.68rem;
+  border-left: 3px solid rgba(47, 111, 119, 0.42);
+  border-radius: 0 7px 7px 0;
+  background: rgba(47, 111, 119, 0.05);
+}
+.literature-msl-action {
+  margin: 0;
+  color: var(--fg3);
+  font-size: 0.71rem;
+}
+.signal-reading-guide {
+  display: grid;
+  gap: 0.4rem;
+}
+.signal-reading-guide p {
+  margin: 0;
+  padding-left: 0.58rem;
+  border-left: 2px solid rgba(47, 111, 119, 0.25);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+.signal-reading-guide strong {
+  color: var(--fg);
+}
+.signal-method-details {
+  margin-top: 1rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--bg3);
+  color: var(--fg2);
+  font-size: 0.75rem;
+}
+.signal-method-details summary {
+  color: var(--fg3);
+  cursor: pointer;
+  font-weight: 600;
+}
+.signal-method-details .signal-spec {
+  margin-top: 0.55rem;
+}
+.signal-method-details p,
+.signal-method-details ul {
+  margin: 0;
+}
+.signal-method-details ul {
+  padding-left: 1.05rem;
+}
 .signal-side, .china-panel, .chart-panel {
   background: var(--bg2); border: 1px solid var(--bg3);
   border-radius: 8px; padding: 1rem;
@@ -3545,6 +3745,8 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
   .signal-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .signal-layout, .china-grid, .china-content-grid, .china-chart-pair { grid-template-columns: 1fr; }
   .signal-list, .signal-side, .china-chart-pair, .china-source-panel { grid-column: auto; }
+  .literature-signal-gap-grid,
+  .literature-signal-points { grid-template-columns: 1fr; }
   .chart-canvas { height: 240px; }
   .chart-panel-wide .chart-canvas, .china-chart-pair .chart-canvas { height: 240px; }
   .workbench-grid, .workspace-two-col, .msl-setup-grid { grid-template-columns: 1fr; }

@@ -165,11 +165,35 @@ def test_literature_signal_card_renders_each_pmid_only_once():
     literature_js = (PROJECT / "assets" / "literature.js").read_text(encoding="utf-8")
 
     assert "function renderSignalReferenceLinks(refs, renderedPmids)" in literature_js
-    assert "renderSignalReferenceLinks(point.refs || [], renderedPmids)" in literature_js
-    assert "renderSignalReferenceLinks(item.refs || [], renderedPmids)" in literature_js
-    assert "if (pmidValue && renderedPmids[pmidValue]) continue" in literature_js
-    assert "var parentRefsHtml = renderSignalReferenceLinks(item.refs || [], renderedPmids)" in literature_js
-    assert "(parentRefsHtml ? '<div class=\"literature-signal-refs\"" in literature_js
+    assert "function renderSignalEvidence(item, renderedPmids)" in literature_js
+    assert "if (!pmid || renderedPmids[pmid]) return ''" in literature_js
+    assert "renderedPmids[pmid] = true" in literature_js
+    assert "literature-evidence-item" in literature_js
+    assert "这篇补了什么 gap" in literature_js
+    assert "renderSignalReferenceLinks(point.refs || [], renderedPmids)" not in literature_js
+    assert "var parentRefsHtml" not in literature_js
+
+
+def test_generated_signal_narratives_do_not_repeat_pmid_labels():
+    payload = load_js_global(PROJECT / "data" / "signals-weekly.js", "MG_SIGNALS_DATA")
+
+    for signal in payload.get("signals") or []:
+        narrative = {
+            "title": signal.get("title"),
+            "takeaway": signal.get("takeaway"),
+            "gapBefore": signal.get("gapBefore"),
+            "gapFilled": signal.get("gapFilled"),
+            "remainingGap": signal.get("remainingGap"),
+            "evidenceItems": [
+                {key: item.get(key) for key in ("finding", "gapContribution", "boundary")}
+                for item in signal.get("evidenceItems") or []
+            ],
+            "talkingPoints": [
+                {key: point.get(key) for key in ("title", "whyKol", "keyMessages")}
+                for point in signal.get("talkingPoints") or []
+            ],
+        }
+        assert "PMID" not in json.dumps(narrative, ensure_ascii=False).upper()
 
 
 def test_enrichment_prompt_requires_chinese_and_separates_narrative_roles():
@@ -178,8 +202,11 @@ def test_enrichment_prompt_requires_chinese_and_separates_narrative_roles():
 
     assert "所有面向用户的叙事字段必须使用中文" in prompt
     assert "takeaway=研究实际发现及其解释" in prompt
-    assert "whySignal=该发现为何改变现有判断或开启可持续追踪的问题" in prompt
-    assert "evidenceBoundary=研究设计与可推广性限制" in prompt
+    assert "gapBefore=此前不知道什么" in prompt
+    assert "gapFilled=本期证据补了什么" in prompt
+    assert "remainingGap=仍不知道什么" in prompt
+    assert "evidenceItems 必须逐篇覆盖 refPmids" in prompt
+    assert "PMID 只放结构化的 refPmids/evidenceItems.pmid" in prompt
     assert "keyMessages" in prompt and "必须使用中文" in prompt
 
 
@@ -394,8 +421,16 @@ def test_literature_signals_use_parent_child_evidence_chain_without_duplicate_pm
         assert signal.get("title")
         assert signal.get("whySignal")
         assert signal.get("evidenceBoundary")
+        assert signal.get("gapBefore")
+        assert signal.get("gapFilled")
+        assert signal.get("remainingGap")
         assert signal.get("refs")
+        assert signal.get("evidenceItems")
         assert signal.get("talkingPoints")
+        evidence_pmids = [str(item["pmid"]) for item in signal["evidenceItems"]]
+        assert len(evidence_pmids) == len(set(evidence_pmids))
+        assert set(evidence_pmids) == set(signal["related_pmids"])
+        assert all(item.get("finding") and item.get("gapContribution") and item.get("boundary") for item in signal["evidenceItems"])
         for point in signal["talkingPoints"]:
             assert point["parentSignalId"] == signal["id"]
             assert point["parentSignalTitle"] == signal["title"]

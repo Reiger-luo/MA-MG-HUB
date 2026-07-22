@@ -89,10 +89,10 @@ MG Intelligence Hub 是面向重症肌无力（MG）医学事务团队的静态�
 
 | 口径 | 当前数量 | 用途 |
 |---|---:|---|
-| **公开滚动文献层** | 2026-07-15 严格派生快照：`literature-recent.js` 652 篇，其中中国相关 211 篇；全部 MG-core 且 evidence I–V | 情报中心文献速览、公开文献门控 |
+| **公开滚动文献层** | 2026-07-22 严格派生快照：`literature-recent.js` 903 篇，其中中国相关 216 篇；全部 MG-core 且 evidence I–V | 情报中心文献速览、公开文献门控 |
 | **本地 full / 语义底座** | 2026-07-15 快照：`literature-full.json` / `literature-full-index.js` / community assignment 均为 10,672 篇 | 知识图谱、社区归类、专家画像、跨库检索 |
 
-`pipeline-status.js` 当前声明 `public_rolling_count=652`、`semantic_full_count=10672`，并核对 raw full、full index、community index/audit 一致。`MG_TOTAL_COUNT` 与 `MG_SEMANTIC_FULL_COUNT` 表示语义 full，不等于 recent 数量。`dashboard-data.js` 与 `china-intelligence.js` 已从严格 recent 重建，当前分别显示 652 篇 recent 与 211 篇中国相关文献。
+`pipeline-status.js` 当前声明 `public_rolling_count=903`、`semantic_full_count=10672`，并核对 raw full、full index、community index/audit 一致。`MG_TOTAL_COUNT` 与 `MG_SEMANTIC_FULL_COUNT` 表示语义 full，不等于 recent 数量。`dashboard-data.js` 与 `china-intelligence.js` 已从严格 recent 重建，当前分别显示 903 篇 recent 与 216 篇中国相关文献。
 
 ### 3.2 数据流
 
@@ -126,10 +126,10 @@ PubMed / ClinicalTrials.gov / EasyScholar / 中国监管状态 / 会议来源
 
 | 文件 | 当前大小 / 数量 | 用途 | 加载方式 |
 |---|---:|---|---|
-| `data/dashboard-data.js` | 约 55 KB；2026-07-15 重建 | 工作台统计、section、top signals、工作流；recent 652 / China 211 | 首页同步加载 |
-| `data/literature-recent.js` | 652 篇 | 严格 MG-core + evidence I–V 主文献数据 | 情报中心同步加载 |
-| `data/signals-weekly.js` | 10 条父级 Signal / 10 条 talking point / 26 个 PMID | Signal → Talking Points → Evidence；严格 recent 重建 | 同步加载 |
-| `data/china-intelligence.js` | 中国相关 211 篇；展示最新 120 条摘要 | 严格 MG-core + evidence I–V 的 recent 中国情报 | 按需加载 |
+| `data/dashboard-data.js` | 约 55 KB；2026-07-22 重建 | 工作台统计、section、top signals、工作流；recent 903 / China 216 | 首页同步加载 |
+| `data/literature-recent.js` | 903 篇 | 严格 MG-core + evidence I–V 主文献数据 | 情报中心同步加载 |
+| `data/signals-weekly.js` | 13 条父级 Signal / 19 条 talking point / 28 个 PMID | Signal → gap → Evidence → KOL key points；严格 recent 重建 | 同步加载 |
+| `data/china-intelligence.js` | 中国相关 216 篇；展示最新 120 条摘要 | 严格 MG-core + evidence I–V 的 recent 中国情报 | 按需加载 |
 | `data/literature-full-index.js` | 10,672 篇轻索引 | 知识库跨库检索 | 懒加载 |
 | `data/knowledge-graph.js` | 6.8 MB；55 节点 / 334 核心边 / 180 矩阵行 | 知识库图谱与证据矩阵 | 知识库同步加载 |
 | `data/graphHealth.js` | 7 KB | 图谱健康度 | 知识库、数据状态同步加载 |
@@ -143,7 +143,7 @@ PubMed / ClinicalTrials.gov / EasyScholar / 中国监管状态 / 会议来源
 | `data/expert-profiles.js` | 2.4 KB manifest | 专家画像入口、分片路径 | MSL 同步加载 |
 | `data/expert-profiles-china.js` | 8,958 位 | 中国作者-机构索引 | MSL 同步加载 |
 | `data/expert-profiles-international.js` | 43,626 位 | 国外作者-机构索引，仅供离线分析 | 前端不加载 |
-| `data/source-signals.js` | 5 个来源频道 / 383 条频道项 | 文献、指南/共识、监管、注册、会议的独立信号摘要 | 情报中心同步加载 |
+| `data/source-signals.js` | 5 个来源频道 / 386 条频道项 | 文献、指南/共识、监管、注册、会议的独立信号摘要 | 情报中心同步加载 |
 | `data/guideline-consensus-cache.json` | 9 篇 | MG-core 且具有指南/共识主来源标志的独立缓存；不进入 I–V 文献流 | 构建脚本使用 |
 | `data/chictr-trials-cache.json` | tracked cache | ChiCTR 官方公开研究字段；人工官方导出刷新 | 构建脚本使用 |
 | `data/release-manifest.js` | 当前不存在 | 仅真实 required-step 管线完整成功后生成 coherent run id 与产物哈希 | 数据状态/发布审计 |
@@ -309,7 +309,7 @@ EAN 2026 已完成外部文章引用核查。被引用的 31 条 EAN 摘要均�
 - `scripts/enrich-literature-narrative.py` 只负责证据边界内的语义归纳；所有 `refPmids` 必须来自输入记录，程序写入前会去重并核查公开引用覆盖率。
 - 每个 talking point 必须包含 `parentSignalId`、`priorityTier`、`whyKol`、`keyMessages` 和 `refs`；优先级为 `efgar → competitor_response → disease_progress`。
 - 无 API key 或 LLM 返回不合格 JSON 时，保留确定性 MG-core 聚合回退，不阻断基础周更。
-- 2026-07-15 的严格 recent 重建产物为 10 条父级 Signal、10 条 talking point、26 个唯一 PMID；该数量随近 14 天 PubMed 窗口变化，不应硬编码到前端逻辑。
+- 2026-07-22 的严格 recent 重建产物为 13 条父级 Signal、19 条 talking point、28 个唯一 PMID；每条 Signal 逐篇保存 finding、gapContribution 与 boundary，PMID 只在证据项中展示一次。该数量随近 14 天 PubMed 窗口变化，不应硬编码到前端逻辑。
 - 手动重建顺序：`python3 scripts/build-frontend-data.py` → `python3 scripts/enrich-literature-narrative.py` → `python3 scripts/generate-weekly-summary.py` → `python3 scripts/generate-pipeline-status.py`。只重建基础数据时，前两步中的第二步可跳过，但发布前必须确认 `signals-weekly.js` 的 `source_policy` 与 PMID 覆盖率。
 
 ---

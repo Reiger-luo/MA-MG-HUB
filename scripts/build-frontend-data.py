@@ -299,6 +299,12 @@ SIGNAL_CLUSTER_META = {
         "tier": "competitor_response",
         "keywords": ["疗效", "真实世界", "抗体分型"],
     },
+    "comparative_treatment": {
+        "title": "跨机制间接比较开始量化 MG 新疗法的相对效应",
+        "type": "治疗比较",
+        "tier": "competitor_response",
+        "keywords": ["疗效", "安全性", "诊疗策略"],
+    },
     "diagnostic_stratification": {
         "title": "抗体分型与诊断确认成为治疗定位的前置问题",
         "type": "诊疗进展",
@@ -306,10 +312,16 @@ SIGNAL_CLUSTER_META = {
         "keywords": ["抗体分型", "诊疗策略", "疗效"],
     },
     "treatment_safety": {
-        "title": "免疫治疗相关风险推动 MG 安全性分层与监测讨论",
+        "title": "非 MG 用药暴露与长期激素负担强化安全监测需求",
         "type": "安全性",
         "tier": "disease_progress",
         "keywords": ["安全性", "疗效", "诊疗策略"],
+    },
+    "care_delivery": {
+        "title": "院外沟通与跨专业认知暴露 MG 照护交付缺口",
+        "type": "照护路径",
+        "tier": "disease_progress",
+        "keywords": ["诊疗策略", "真实世界", "安全性"],
     },
     "patient_burden": {
         "title": "患者负担、生活质量与治疗偏好进入 MG 证据评价",
@@ -335,6 +347,18 @@ SIGNAL_CLUSTER_META = {
         "tier": "disease_progress",
         "keywords": ["真实世界", "疗效", "安全性"],
     },
+    "ocular_generalization": {
+        "title": "抗体状态开始指引眼肌型 MG 的全身化风险与免疫治疗",
+        "type": "真实世界",
+        "tier": "disease_progress",
+        "keywords": ["抗体分型", "真实世界", "诊疗策略"],
+    },
+    "critical_care": {
+        "title": "HRR 提供 MG 合并脓毒症围术期死亡风险线索",
+        "type": "风险分层",
+        "tier": "disease_progress",
+        "keywords": ["真实世界", "安全性", "诊疗策略"],
+    },
     "disease_management": {
         "title": "MG 管理证据继续覆盖患者结局与临床决策问题",
         "type": "诊疗进展",
@@ -347,6 +371,84 @@ SIGNAL_TIER_LABELS = {
     "efgar": "efgar重点传递",
     "competitor_response": "竞品应对解读",
     "disease_progress": "疾病进展传递",
+}
+
+SIGNAL_CLUSTER_GAPS = {
+    "efgar": {
+        "before": "Efgartigimod 在围手术期、危重救援和特殊人群中的治疗节点仍主要依赖零散经验。",
+        "filled": "新增研究开始提供这些非标准治疗节点中的患者过程与短期结局。",
+        "remaining": "仍缺少对照研究、统一终点和足够随访，不能据此扩大常规适用场景。",
+    },
+    "fcrn_competitor": {
+        "before": "其他 FcRn 抑制剂在亚洲人群中的疗效一致性和估计精度仍不清楚。",
+        "filled": "新增亚组或延伸研究补充了区域人群、终点和安全性结果。",
+        "remaining": "亚组样本量与置信区间仍限制结论，且不存在与 Efgartigimod 的头对头比较。",
+    },
+    "complement": {
+        "before": "补体治疗的机制差异、给药便利性与长期获益尚缺少同一证据框架下的解释。",
+        "filled": "新增研究补充了机制、治疗结局或给药路径的一项可核查结果。",
+        "remaining": "跨研究设计与不同产品不可直接比较，长期安全性和人群选择仍需验证。",
+    },
+    "other_targeted": {
+        "before": "非 FcRn 靶向治疗在真实世界相对现有免疫抑制路径能否增加获益，结论仍不稳定。",
+        "filled": "新增对照与小样本研究同时给出了效应不足和个别快速改善的不同结果。",
+        "remaining": "观察性偏倚、样本量和抗体亚型差异仍妨碍确定最佳治疗节点。",
+    },
+    "comparative_treatment": {
+        "before": "多类 MG 新疗法缺少头对头试验，跨机制相对效应难以量化。",
+        "filled": "新增网络荟萃分析在同一间接比较框架下量化了不同机制的疗效估计。",
+        "remaining": "试验人群与设计异质性仍限制排序解释，不能替代头对头比较或长期安全性数据。",
+    },
+    "diagnostic_stratification": {
+        "before": "抗体亚型和年龄分层能否改变诊断与治疗定位，缺少可量化的近期证据。",
+        "filled": "新增研究补充了抗体分布、表型或分层结局数据。",
+        "remaining": "检测完整性、选择偏倚和亚组样本量仍限制外推。",
+    },
+    "treatment_safety": {
+        "before": "非 MG 用药诱发或加重 MG 的早期风险窗口，以及长期激素暴露的累积负担，仍缺少可执行的监测依据。",
+        "filled": "新增病例、队列与自身对照研究把触发药物、时间窗和主要并发症进一步量化。",
+        "remaining": "罕见事件多为病例级证据，长期风险受混杂影响，停药与监测策略仍需前瞻性验证。",
+    },
+    "care_delivery": {
+        "before": "MG 患者在院外最常遇到什么问题、其他专科是否具备足够识别与用药知识，缺少量化证据。",
+        "filled": "新增调查量化了院外咨询主题、响应紧迫性和跨专业知识缺口。",
+        "remaining": "单中心调查不能证明教育或数字工具能改善患者结局，干预效果仍需验证。",
+    },
+    "patient_burden": {
+        "before": "患者负担和依从性问题尚未充分转化为可执行的管理指标。",
+        "filled": "新增研究补充了负担比例、相关因素或预测性能。",
+        "remaining": "模型外部验证、干预可行性与不同医疗系统的可推广性仍未知。",
+    },
+    "mechanism_biomarker": {
+        "before": "MG 机制候选与可用于临床分层的生物标志物之间仍有转化断层。",
+        "filled": "新增组学和对照研究同时提供候选机制与阴性标志物结果。",
+        "remaining": "探索性关联尚不能支持临床应用，候选指标仍需外部验证和纵向结局关联。",
+    },
+    "clinical_pathway": {
+        "before": "胸腺手术方式、围手术期管理和长期缓解之间缺少一致的路径证据。",
+        "filled": "新增队列补充了手术结局、危象和长期缓解数据。",
+        "remaining": "非随机选择、术式差异和长期随访异质性仍限制路径推荐。",
+    },
+    "real_world_outcomes": {
+        "before": "真实世界人群中的治疗选择、疾病进展与长期结局仍缺少对照和分层信息。",
+        "filled": "新增队列提供了部分风险分层与治疗关联结果。",
+        "remaining": "回顾性设计、残余混杂和单中心样本仍不能建立因果关系。",
+    },
+    "ocular_generalization": {
+        "before": "眼肌型 MG 的抗体状态能否预测全身化，以及免疫治疗是否改变该风险，缺少分层数据。",
+        "filled": "新增队列量化了抗体阳性与全身化风险，并提供免疫治疗相关的风险降低估计。",
+        "remaining": "单中心回顾性样本不能确定最佳启动时机或具体免疫治疗方案，仍需前瞻性验证。",
+    },
+    "critical_care": {
+        "before": "MG 合并脓毒症患者缺少简单可及的围术期死亡风险分层指标。",
+        "filled": "新增重症数据库研究给出了 HRR 与围术期死亡风险的独立关联估计。",
+        "remaining": "回顾性数据库与有限样本尚不足以确定临床阈值，模型仍需外部验证。",
+    },
+    "disease_management": {
+        "before": "门诊外症状、用药风险和新机制进展尚未形成连续管理视角。",
+        "filled": "新增研究把患者咨询、短期风险窗口或机制进展量化为可追踪问题。",
+        "remaining": "不同证据类型不能直接合并为统一路径，仍需前瞻性验证。",
+    },
 }
 
 PIPELINE = [
@@ -1060,6 +1162,7 @@ def compact_article(article):
         "journal_quartile": article.get("journal_quartile"),
         "china_related": bool(article.get("china_related")),
         "study_types": article.get("study_types") or [],
+        "key_evidence": evidence_excerpt(article),
         "mg_core": assessment.is_core,
         "mg_core_reason": assessment.reason_code,
     }
@@ -1087,25 +1190,40 @@ def mg_core_relevance(article, text=None):
 def literature_cluster_key(article, topics, drugs):
     """把单篇候选归入可解释的主题簇；药物优先于泛主题。"""
     text = text_of(article)
+    title = str(article.get("title") or "").lower()
     if any(term in text for term in ("efgartigimod", "vyvgart", "argx-113", "argx113")):
         return "efgar"
     if any(drug in {"nipocalimab", "rozanolixizumab", "batoclimab"} for drug in drugs):
         return "fcrn_competitor"
-    if any(drug in {"eculizumab", "ravulizumab", "zilucoplan", "gefurulimab"} for drug in drugs):
+    if has_any(title, ["network meta-analysis", "network meta analysis", "indirect treatment comparison"]):
+        return "comparative_treatment"
+    if has_any(text, ["dental practice", "dentist", "outside of visits", "remote monitoring", "care-related inquiries"]):
+        return "care_delivery"
+    if any(drug in {"eculizumab", "ravulizumab", "zilucoplan", "gefurulimab"} for drug in drugs) or has_any(
+        text, ["cemdisiran", "c5 synthesis", "complement inhibitor", "nimble trial"]
+    ):
         return "complement"
+    if has_any(title, ["seronegative", "double-seronegative", "musk", "lrp4", "autoantibody"]):
+        return "diagnostic_stratification"
     if drugs:
         return "other_targeted"
-    title = str(article.get("title") or "").lower()
+    if has_any(text, [
+        "immune checkpoint", "myocarditis", "myositis", "fatal", "adverse event",
+        "sglt-2", "sglt2", "statin initiation", "oral corticosteroid", "steroid exposure",
+    ]):
+        return "treatment_safety"
     if has_any(text, ["seronegative", "double-seronegative", "musk", "lrp4", "autoantibody", "misdiagnos"]):
         return "diagnostic_stratification"
-    if has_any(text, ["immune checkpoint", "myocarditis", "myositis", "fatal", "adverse event", "safety"]):
-        return "treatment_safety"
     if has_any(text, ["quality of life", "patient preference", "treatment preference", "burden", "fatigue", "exercise", "caregiver"]):
         return "patient_burden"
     if has_any(text, ["biomarker", "cytokine", "proteomic", "pathogenesis", "signaling", "signalling"]):
         return "mechanism_biomarker"
     if has_any(title + " " + text, ["thymectomy", "thymoma", "preoperative", "myasthenic crisis", "rehabilitation"]):
         return "clinical_pathway"
+    if "ocular myasthenia" in text and "generalization" in text:
+        return "ocular_generalization"
+    if "sepsis" in text and has_any(text, ["mortality", "death risk", "hemoglobin-to-red blood cell"]):
+        return "critical_care"
     if has_any(text, RWE_TERMS):
         return "real_world_outcomes"
     return "disease_management"
@@ -1188,7 +1306,7 @@ def build_cluster_signal(cluster_id, members, latest, signal_index):
     members = sorted(members, key=lambda item: (-item["score"], -evidence_score(item.get("level")), item["date"], item["pmid"]))
     articles = [item["article"] for item in members]
     pmids = [str(article.get("pmid") or "") for article in articles if article.get("pmid")]
-    refs = [compact_article(article) for article in articles[:5]]
+    refs = [compact_article(article) for article in articles]
     strength = cluster_strength(members)
     max_score = max(item["score"] for item in members)
     cluster_score = max_score + min(4, max(0, len(members) - 1) * 0.8)
@@ -1199,23 +1317,28 @@ def build_cluster_signal(cluster_id, members, latest, signal_index):
     )
     level_text = "、".join(f"{level}级 {count}篇" for level, count in sorted(level_counts.items()))
     design_text = "、".join(f"{design} {count}篇" for design, count in design_counts.most_common(3))
-    why_signal = (
-        f"近14天有 {len(members)} 篇 MG-core 文献聚集到“{meta['title']}”这一主题，"
-        f"证据等级分布为 {level_text}，形成可继续追踪的文献级证据簇。"
-    )
+    gap = SIGNAL_CLUSTER_GAPS[cluster_id]
+    why_signal = f"{gap['filled']} 这使“{meta['title']}”从主题趋势变成可按结果逐项核查的近期变化。"
     boundary = (
         f"本簇包含 {design_text}；不同研究设计、终点和人群不可直接横向比较，"
         "下述结果均为摘要级定位，需回到全文核查。"
     )
-    takeaway = (
-        f"{len(members)} 篇近14天文献集中覆盖 {meta['title']}；"
-        "先用代表性结果进入 KOL 交流，再按 PMID 核查研究设计和外推边界。"
-    )
+    takeaway = f"{gap['filled']} 本期共有 {len(members)} 项研究结果，证据构成为 {level_text}。"
     top_members = members[: min(3, len(members))]
     messages = [
-        f"PMID {item['pmid']}：{evidence_excerpt(item['article'])}"
+        f"摘要结果：{evidence_excerpt(item['article'])}"
         for item in top_members
     ]
+    evidence_items = []
+    for item in members:
+        article = item["article"]
+        design = " / ".join(str(value) for value in (article.get("study_types") or [])[:2]) or "研究设计待补充"
+        evidence_items.append({
+            "pmid": str(article.get("pmid") or ""),
+            "finding": f"摘要结果原文：{evidence_excerpt(article)}",
+            "gapContribution": f"为“{meta['title']}”补充了一项 {design} 结果，使该判断可定位到具体研究人群与结局。",
+            "boundary": f"{design}，证据 {article.get('evidence_level') or '未分类'} 级；摘要级定位，因果解释与人群外推需核查全文。",
+        })
     tier = meta["tier"]
     if tier == "efgar":
         why_kol = "该簇包含 efgartigimod 相关文献，应优先与 KOL 讨论其具体人群、终点和证据成熟度。"
@@ -1238,8 +1361,8 @@ def build_cluster_signal(cluster_id, members, latest, signal_index):
     }
     medical_affairs = {
         "implication": f"{len(members)} 篇 MG-core 文献形成“{meta['title']}”主题簇，可用于结构化 KOL 交流和后续证据追踪。",
-        "suggested_kol_question": "这些研究在人群、终点、治疗节点和证据成熟度上，哪一项最可能改变当前 MG 临床决策？",
-        "msl_action": "先按 PMID 核对摘要中的研究设计、样本量、终点和结果，再准备与 KOL 讨论的区隔问题。",
+        "suggested_kol_question": f"围绕“{meta['title']}”，哪项患者选择、治疗节点或监测问题最可能影响您当前的临床判断？",
+        "msl_action": "会前逐篇核对研究人群、主要终点、效应值与全文限制，并准备同类证据对照。",
         "evidence_context": f"{level_text}；{design_text}；摘要级聚合。",
     }
     return {
@@ -1253,6 +1376,10 @@ def build_cluster_signal(cluster_id, members, latest, signal_index):
         "takeaway": takeaway,
         "whySignal": why_signal,
         "evidenceBoundary": boundary,
+        "gapBefore": gap["before"],
+        "gapFilled": gap["filled"],
+        "remainingGap": gap["remaining"],
+        "evidenceItems": evidence_items,
         "maUse": "用于 MSL briefing、KOL 问题设计和后续全文追踪；不替代逐篇医学核查。",
         "signalScore": max(1, min(5, round(2 + cluster_score / 10))),
         "related_pmids": pmids,

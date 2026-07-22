@@ -906,12 +906,17 @@
           score: signal.score || 0,
           age: 0,
           article_count: signal.article_count || (signal.related_pmids || []).length || 1,
+          date_range: signal.date_range || null,
           china_related: Boolean(signal.china_related || signal.article && signal.article.china_related),
           related_pmids: signal.related_pmids || [],
           refs: signal.refs || [],
+          evidenceItems: signal.evidenceItems || [],
           takeaway: signal.takeaway || '',
           whySignal: signal.whySignal || '',
           evidenceBoundary: signal.evidenceBoundary || '',
+          gapBefore: signal.gapBefore || '',
+          gapFilled: signal.gapFilled || '',
+          remainingGap: signal.remainingGap || '',
           maUse: signal.maUse || '',
           talkingPoints: signal.talkingPoints || signal.kolFocus || [],
           signal_to_kol: signal.signal_to_kol || null,
@@ -1058,32 +1063,115 @@
     return links.join('');
   }
 
+  function stripPmidMentions(value) {
+    return String(value || '')
+      .replace(/PMIDs?\s*\d{6,9}(?:\s*[、,，/]\s*(?:PMIDs?\s*)?\d{6,9})*/gi, '')
+      .replace(/（\s*）|\(\s*\)/g, '')
+      .replace(/\s+([，。；：])/g, '$1')
+      .replace(/^[：:、，,；;\s]+|[：:、，,；;\s]+$/g, '')
+      .replace(/\s{2,}/g, ' ')
+      .trim();
+  }
+
+  function renderSignalEvidence(item, renderedPmids) {
+    var refs = item.refs || [];
+    var refsByPmid = {};
+    refs.forEach(function(ref) {
+      if (ref && ref.pmid) refsByPmid[String(ref.pmid)] = ref;
+    });
+    var evidenceItems = [];
+    var evidenceByPmid = {};
+    (item.evidenceItems || []).forEach(function(evidence) {
+      var pmid = evidence && evidence.pmid ? String(evidence.pmid) : '';
+      if (!pmid || evidenceByPmid[pmid]) return;
+      evidenceByPmid[pmid] = evidence;
+      evidenceItems.push(evidence);
+    });
+    refs.forEach(function(ref) {
+      var pmid = ref && ref.pmid ? String(ref.pmid) : '';
+      if (!pmid || evidenceByPmid[pmid]) return;
+      var fallback = {
+        pmid: pmid,
+        finding: ref.key_evidence || '',
+        gapContribution: '',
+        boundary: ''
+      };
+      evidenceByPmid[pmid] = fallback;
+      evidenceItems.push(fallback);
+    });
+    if (!evidenceItems.length) return '';
+
+    var rows = evidenceItems.map(function(evidence) {
+      var pmid = String(evidence.pmid || '');
+      if (!pmid || renderedPmids[pmid]) return '';
+      renderedPmids[pmid] = true;
+      var ref = refsByPmid[pmid] || {};
+      var href = ref.url || evidence.url || '';
+      var pmidHtml = href
+        ? '<a class="literature-signal-ref" href="' + escapeHref(href) + '" target="_blank" rel="noopener">PMID ' + escapeHtml(pmid) + '</a>'
+        : '<span class="literature-signal-ref">PMID ' + escapeHtml(pmid) + '</span>';
+      var design = (ref.study_types || evidence.studyTypes || []).slice(0, 2).join(' / ');
+      var meta = [ref.evidence_level ? '证据 ' + ref.evidence_level : '', design].filter(Boolean).map(function(value) {
+        return '<span>' + escapeHtml(value) + '</span>';
+      }).join('');
+      var finding = stripPmidMentions(evidence.finding || evidence.keyFinding || ref.key_evidence || '摘要结果待补充，需阅读全文核查。');
+      var contribution = stripPmidMentions(evidence.gapContribution || evidence.contribution || '为该信号补充了一项可追溯的摘要级研究结果。');
+      var boundary = stripPmidMentions(evidence.boundary || evidence.limit || '研究设计与外推范围需结合全文核查。');
+      var evidenceTitle = stripPmidMentions(evidence.title || ref.title || '研究证据');
+      return '<article class="literature-evidence-item">' +
+        '<div class="literature-evidence-head"><div>' + pmidHtml + meta + '</div></div>' +
+        (evidenceTitle ? '<h4>' + escapeHtml(evidenceTitle) + '</h4>' : '') +
+        '<div class="literature-evidence-result"><span>研究结果</span><p>' + escapeHtml(finding) + '</p></div>' +
+        '<div class="literature-evidence-gap"><span>这篇补了什么 gap</span><p>' + escapeHtml(contribution) + '</p></div>' +
+        '<p class="literature-evidence-boundary"><strong>边界</strong> · ' + escapeHtml(boundary) + '</p>' +
+      '</article>';
+    }).join('');
+    return rows ? '<section class="literature-evidence-ledger"><div class="literature-signal-section-title">证据怎么支持</div>' + rows + '</section>' : '';
+  }
+
   function renderLiteratureTalkingPoints(item) {
     var points = item.talkingPoints || item.kolFocus || [];
-    if (!item.whySignal && !item.evidenceBoundary && !points.length) return '';
+    if (!item.takeaway && !item.whySignal && !item.evidenceBoundary && !points.length && !(item.refs || []).length) return '';
     var renderedPmids = {};
     var pointHtml = points.slice(0, 4).map(function(point, index) {
       var tier = point.priorityTier || 'disease_progress';
       var tierLabel = point.priorityLabel || (tier === 'efgar' ? 'efgar重点传递' : tier === 'competitor_response' ? '竞品应对解读' : '疾病进展传递');
+      var seenMessages = {};
       var messages = (point.keyMessages || []).map(function(message) {
-        return '<li>' + escapeHtml(message) + '</li>';
+        var cleanMessage = stripPmidMentions(message);
+        if (!cleanMessage || seenMessages[cleanMessage]) return '';
+        seenMessages[cleanMessage] = true;
+        return '<li>' + escapeHtml(cleanMessage) + '</li>';
       }).join('');
       return '<article class="literature-signal-point">' +
-        '<div class="literature-signal-point-head"><span>交流 ' + escapeHtml(String(index + 1).padStart(2, '0')) + '</span><em class="literature-signal-tier ' + escapeHtml(tier) + '">' + escapeHtml(tierLabel) + '</em></div>' +
-        '<strong>' + escapeHtml(point.title || '') + '</strong>' +
-        (point.whyKol ? '<p class="literature-signal-why">' + escapeHtml(point.whyKol) + '</p>' : '') +
+        '<div class="literature-signal-point-head"><span>' + escapeHtml(point.dimension || ('交流 ' + String(index + 1).padStart(2, '0'))) + '</span><em class="literature-signal-tier ' + escapeHtml(tier) + '">' + escapeHtml(tierLabel) + '</em></div>' +
+        '<strong>' + escapeHtml(stripPmidMentions(point.title || '')) + '</strong>' +
+        (point.whyKol ? '<p class="literature-signal-why">' + escapeHtml(stripPmidMentions(point.whyKol)) + '</p>' : '') +
         (messages ? '<ul>' + messages + '</ul>' : '') +
-        '<div class="literature-signal-point-refs">' + renderSignalReferenceLinks(point.refs || [], renderedPmids) + '</div>' +
       '</article>';
     }).join('');
-    var parentRefsHtml = renderSignalReferenceLinks(item.refs || [], renderedPmids);
+    var gapBefore = stripPmidMentions(item.gapBefore || '');
+    var gapFilled = stripPmidMentions(item.gapFilled || item.whySignal || '');
+    var remainingGap = stripPmidMentions(item.remainingGap || item.evidenceBoundary || '');
+    var gapHtml = [
+      gapBefore ? '<div><span>原有 gap</span><p>' + escapeHtml(gapBefore) + '</p></div>' : '',
+      gapFilled ? '<div class="filled"><span>本期补充</span><p>' + escapeHtml(gapFilled) + '</p></div>' : '',
+      remainingGap ? '<div><span>仍待回答</span><p>' + escapeHtml(remainingGap) + '</p></div>' : ''
+    ].join('');
+    var ma = item.medical_affairs || {};
+    var kolQuestion = stripPmidMentions(ma.suggested_kol_question || '');
+    var mslAction = stripPmidMentions(ma.msl_action || '');
+    var evidenceHtml = renderSignalEvidence(item, renderedPmids);
     return '<div class="literature-signal-narrative">' +
-      '<div class="signal-kol-kicker">Signal → Talking Points</div>' +
-      (item.takeaway ? '<p class="literature-signal-takeaway">' + escapeHtml(item.takeaway) + '</p>' : '') +
-      (item.whySignal ? '<div class="literature-signal-field"><span>为什么是线索</span><p>' + escapeHtml(item.whySignal) + '</p></div>' : '') +
-      (item.evidenceBoundary ? '<div class="literature-signal-field boundary"><span>证据边界</span><p>' + escapeHtml(item.evidenceBoundary) + '</p></div>' : '') +
-      (pointHtml ? '<div class="literature-signal-points"><span>可转化 KOL 交流</span>' + pointHtml + '</div>' : '') +
-      (parentRefsHtml ? '<div class="literature-signal-refs"><span>证据锚点</span><div>' + parentRefsHtml + '</div></div>' : '') +
+      '<section class="literature-signal-change"><div class="literature-signal-section-title">信号是什么</div>' +
+        (item.takeaway ? '<p class="literature-signal-takeaway">' + escapeHtml(stripPmidMentions(item.takeaway)) + '</p>' : '') +
+      '</section>' +
+      (gapHtml ? '<section class="literature-signal-gap-grid"><div class="literature-signal-section-title">为什么构成信号</div>' + gapHtml + '</section>' : '') +
+      evidenceHtml +
+      (pointHtml ? '<section class="literature-signal-points"><div class="literature-signal-section-title">KOL 交流要点</div>' + pointHtml +
+        (kolQuestion ? '<div class="literature-kol-question"><span>建议追问</span><p>' + escapeHtml(kolQuestion) + '</p></div>' : '') +
+        (mslAction ? '<p class="literature-msl-action"><strong>会前动作</strong> · ' + escapeHtml(mslAction) + '</p>' : '') +
+      '</section>' : '') +
     '</div>';
   }
 
@@ -1101,9 +1189,9 @@
     var tagHtml = topicHtml + drugHtml + (item.china_related ? '<span class="signal-topic china">中国相关</span>' : '');
     var kolHtml = renderSignalToKol(item);
     var narrativeHtml = renderLiteratureTalkingPoints(item);
-    var title = item.title || item.summary || a.title || '(无标题)';
-    var titleHtml = a.url ? '<a class="signal-title" href="' + escapeHref(a.url) + '" target="_blank" rel="noopener">' + escapeHtml(title) + '</a>' : '<strong class="signal-title">' + escapeHtml(title) + '</strong>';
-    var meta = item.article_count > 1 ? escapeHtml(item.article_count + ' 篇文献聚合 · ' + (item.date_range ? item.date_range.from + '–' + item.date_range.to : dateStr)) : buildArticleMeta(a, dateStr);
+    var title = stripPmidMentions(item.title || item.summary || a.title || '(无标题)');
+    var titleHtml = '<h3 class="signal-title">' + escapeHtml(title) + '</h3>';
+    var meta = escapeHtml(item.article_count + ' 篇文献 · ' + (item.date_range ? item.date_range.from + '–' + item.date_range.to : dateStr));
     return '' +
       '<article class="signal-card signal-' + escapeHtml(item.strength) + '">' +
         '<div class="signal-card-head">' +

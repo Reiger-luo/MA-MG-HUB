@@ -189,6 +189,7 @@
       <div>
         <div class="section-kicker">滚动 14 天窗口 · 每周更新</div>
         <h2>信号板</h2>
+        <p class="signal-page-intro">先看本期判断，再逐篇核对研究结果与 PMID；每条证据只出现一次，KOL 要点不重复堆叠引用。</p>
       </div>
       <div class="signal-filter" id="signalFilter">
         <button class="signal-filter-btn active" type="button" data-signal-filter="all">全部</button>
@@ -197,66 +198,41 @@
         <button class="signal-filter-btn" type="button" data-signal-filter="弱">弱</button>
       </div>
     </div>
-    <section class="source-signal-board" aria-label="独立来源信号频道">
-      <div class="source-signal-head">
-        <div>
-          <h3>来源频道</h3>
-          <p>文献证据、指南/共识、监管、试验注册与会议线索分别呈现，不互相替代分级。</p>
-        </div>
-        <div class="source-signal-channels" id="sourceSignalChannels"></div>
-      </div>
-      <div class="source-signal-cards" id="sourceSignalCards"></div>
-    </section>
     <div class="signal-summary-grid" id="signalSummary"></div>
     <div class="signal-layout">
       <section class="signal-list" id="signalList"></section>
       <aside class="signal-side">
         <h3>高频主题</h3>
         <div class="keyword-cloud" id="signalKeywords"></div>
-        <h3>信号口径</h3>
-        <div class="signal-spec">
-          <p class="signal-spec-intro">先做 MG-core 相关性过滤，再按主题聚合文献并生成 <code>Signal → Talking Points → Evidence</code>；确定性规则负责候选与回退，LLM 只负责证据边界内的语义归纳。</p>
-
-          <div class="signal-spec-block">
-            <h4>① 时间窗口</h4>
-            <p>以库内最新入库日期为锚点，向前取 <strong>14 天</strong>（滚动窗口，非自然周）。</p>
-          </div>
-
-          <div class="signal-spec-block">
-            <h4>② 入选门槛</h4>
-            <ul>
-              <li>必须有证据等级（I–V）；无分级直接剔除。</li>
-              <li>命中低价值词（撤稿 / 作者回复 / 对评论的回复等）直接剔除。</li>
-              <li>病例报告仅当涉及药物、安全性、中国相关或明确主题时保留，否则剔除。</li>
-              <li>无药物信号、无高价值主题且非中国相关时不入选。</li>
-            </ul>
-          </div>
-
-          <div class="signal-spec-block">
-            <h4>③ MG-core 与跨文献聚合</h4>
-            <ul>
-              <li>题名明确以 MG 为主体，或摘要重复出现 MG 且不存在其他疾病主导标题。</li>
-              <li>仅把 MG 作为比较组 / 背景的 CIDP、stiff-person、MS 等记录排除。</li>
-              <li>候选按 efgartigimod、其他靶向机制、抗体分型、治疗安全性、患者负担和临床路径等主题聚合。</li>
-            </ul>
-          </div>
-
-          <div class="signal-spec-block">
-            <h4>④ 强度分级</h4>
-            <ul>
-              <li><strong>强</strong>（任一）：证据 I 或 II 级；IF ≥ 10 且证据不是 V 级机制推理。</li>
-              <li><strong>中</strong>（任一）：IF ≥ 5；证据 III 或 IV 级；中国相关。</li>
-              <li><strong>弱</strong>：其余入选条目。</li>
-            </ul>
-          </div>
-
-          <div class="signal-spec-block">
-            <h4>⑤ Signal → KOL</h4>
-            <p>父层 Signal 说明“近期文献发生了什么变化”；子层 Talking Point 绑定具体 PMID，说明“拿哪条证据和 KOL 说什么/问什么”。efgar → 竞品应对 → 疾病进展排序，作者和机构仅作为证据线索，不等同于已确认 KOL。</p>
-          </div>
+        <h3>怎么读</h3>
+        <div class="signal-reading-guide">
+          <p><strong>信号是什么</strong>：本期证据共同改变了哪项判断。</p>
+          <p><strong>证据补了什么</strong>：逐篇列结果、原有 gap 与仍需验证的边界。</p>
+          <p><strong>KOL 怎么聊</strong>：只保留可传递结论和需要追问的问题。</p>
         </div>
+        <details class="signal-method-details">
+          <summary>查看筛选与强度口径</summary>
+          <div class="signal-spec">
+            <p>滚动 14 天；先做 MG-core 相关性与证据等级 I–V 门控，再按治疗、机制、人群和路径聚合。</p>
+            <ul>
+              <li><strong>强</strong>：I/II 级，或 IF ≥ 10 且不是 V 级机制推理。</li>
+              <li><strong>中</strong>：IF ≥ 5、III/IV 级或中国相关。</li>
+              <li><strong>弱</strong>：其余达到入选门槛的线索。</li>
+            </ul>
+          </div>
+        </details>
       </aside>
     </div>
+    <section class="source-signal-board" aria-label="独立来源信号频道">
+      <div class="source-signal-head">
+        <div>
+          <h3>其他来源动向</h3>
+          <p>指南/共识、监管、试验注册与会议线索单独呈现，不与上方 PubMed 证据混合分级。</p>
+        </div>
+        <div class="source-signal-channels" id="sourceSignalChannels"></div>
+      </div>
+      <div class="source-signal-cards" id="sourceSignalCards"></div>
+    </section>
   </section>
 
   <section class="intel-tab-panel" id="tab-china">

@@ -1,27 +1,27 @@
 # MA-MG-HUB 周更
 
-生成时间：2026-07-20 03:21:09
+生成时间：2026-07-22 04:06:50
 
 ## 数据状态
 
 - 近1年文献：903
 - 中国相关：216
-- 候选信号：10
-- 文献级 Signal-to-KOL：10（自动审核发布）
+- 候选信号：13
+- 文献级 Signal-to-KOL：13（自动审核发布）
 - 专家画像：39850
 - 内容模块：6
 
 ## 优先 Signal Top 3
 
-1. [强] 近期MG 临床研究证据补充（PMID 42421405）（PMID 42421405）
-2. [中] 近期MG 临床研究证据补充（PMID 42407020、42465546、42419026）（PMID 42465546）
-3. [中] 近期MG 临床研究证据补充（PMID 42462363、42404894）（PMID 42462363）
+1. [中] Efgartigimod 证据继续向不同治疗节点和人群延伸（PMID 42462363）
+2. [强] 跨机制间接比较开始量化 MG 新疗法的相对效应（PMID 42467874）
+3. [强] 抗体分型与诊断确认成为治疗定位的前置问题（PMID 42461294）
 
 ## 文献级 Signal-to-KOL Top 3
 
-1. PMID 42421405｜1 篇 MG-core 文献聚合为“近期MG 临床研究证据补充（PMID 42421405）”，可用于结构化 KOL 交流和后续证据追踪。｜Nagane Yuriko（第一作者/通讯作者；Hanamaki General Hospital）｜按 PMID 核对研究设计、样本量、终点和结果，再准备与 KOL 讨论的区隔问题。
-2. PMID 42465546｜3 篇 MG-core 文献聚合为“近期MG 临床研究证据补充（PMID 42407020、42465546、42419026）”，可用于结构化 KOL 交流和后续证据追踪。｜Alsukhni Rana Alnasser（第一作者/通讯作者；Morriston Hospital）｜按 PMID 核对研究设计、样本量、终点和结果，再准备与 KOL 讨论的区隔问题。
-3. PMID 42462363｜2 篇 MG-core 文献聚合为“近期MG 临床研究证据补充（PMID 42462363、42404894）”，可用于结构化 KOL 交流和后续证据追踪。｜Han Xuemei（末位作者/通讯作者；China-Japan Union Hospital of Jilin University）｜按 PMID 核对研究设计、样本量、终点和结果，再准备与 KOL 讨论的区隔问题。
+1. PMID 42462363｜2 篇 MG-core 文献聚合为“Efgartigimod 证据继续向不同治疗节点和人群延伸”，可用于结构化 KOL 交流和后续证据追踪。｜Han Xuemei（末位作者/通讯作者；China-Japan Union Hospital of Jilin University）｜会前需核查efgartigimod在胸腺瘤围手术期使用的现有指南或共识，并准备与IVIg/血浆置换的对比数据。
+2. PMID 42467874｜1 篇 MG-core 文献聚合为“跨机制间接比较开始量化 MG 新疗法的相对效应”，可用于结构化 KOL 交流和后续证据追踪。｜McLaren Nilay P（第一作者；Yale School of Medicine）｜会前需熟悉网络荟萃分析的方法学细节（如纳入研究、异质性处理），并准备与efgartigimod直接相关的亚组分析。
+3. PMID 42461294｜3 篇 MG-core 文献聚合为“抗体分型与诊断确认成为治疗定位的前置问题”，可用于结构化 KOL 交流和后续证据追踪。｜Liampas Ioannis（第一作者/通讯作者；University of Thessaly）｜会前需核查本中心极晚发型MG患者的抗体检测率和胸腺手术率数据。
 
 ## 中国情报 Top 3
 
@@ -39,7 +39,7 @@
 
 ## 待处理
 
-- 近 14 天信号: 10
+- 近 14 天信号: 13
 - 已构建专家画像: 39850
 - MSL 内容模块: 6
 - 待确认证据矩阵: 6

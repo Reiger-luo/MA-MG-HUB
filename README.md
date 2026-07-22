@@ -39,20 +39,20 @@ MA-MG-HUB 不是单纯的文献列表，而是医学事务团队的 MG 情报工
 
 | 口径 | 当前规模 | 用途 |
 |---|---:|---|
-| 公开滚动层 | 截至 2026-07-15：近一年严格公开文献 652 篇；中国相关 211 篇；14 天 MG-core 聚合信号 10 条 / 26 篇 PMID | 工作台、情报中心、信号板、中国情报 |
+| 公开滚动层 | 截至 2026-07-22：近一年严格公开文献 903 篇；中国相关 216 篇；14 天 MG-core 聚合信号 13 条 / 28 篇 PMID | 工作台、情报中心、信号板、中国情报 |
 | full / 语义底座 | 截至 2026-07-15：full、轻索引与社区层均为 10,672 篇 | 知识图谱、社区归类、专家画像、跨库检索 |
 
-`pipeline-status.js` 分开显示两套口径：`public_rolling_count=652`，`semantic_full_count=10672`。full 口径来自 raw full / full-index / community full 产物；recent 口径分别记录 `literature-recent.js` 与 `communityAssignmentsRecent.js`，生效的 active recent 以实际文件更新时间较新的那个为准。`MG_SEMANTIC_FULL_COUNT` 和 `MG_TOTAL_COUNT` 是 recent 文件头部的语义全量声明与兼容字段；云端 recent fallback 必须保留该声明，不能改成 recent 数量。`dashboard-data.js` 与 `china-intelligence.js` 已由严格 recent 重建，分别显示 652 篇 recent 与 211 篇中国相关文献。
+`pipeline-status.js` 分开显示两套口径：`public_rolling_count=903`，`semantic_full_count=10672`。full 口径来自 raw full / full-index / community full 产物；recent 口径分别记录 `literature-recent.js` 与 `communityAssignmentsRecent.js`，生效的 active recent 以实际文件更新时间较新的那个为准。`MG_SEMANTIC_FULL_COUNT` 和 `MG_TOTAL_COUNT` 是 recent 文件头部的语义全量声明与兼容字段；云端 recent fallback 必须保留该声明，不能改成 recent 数量。`dashboard-data.js` 与 `china-intelligence.js` 已由严格 recent 重建，分别显示 903 篇 recent 与 216 篇中国相关文献。
 
 核心数据产物：
 
 | 产物 | 当前规模 | 用途 |
 |---|---:|---|
-| `data/literature-recent.js` | 652 篇 | 近一年严格公开文献列表；全部 MG-core 且 evidence I–V |
-| `data/signals-weekly.js` | 10 条父级 Signal / 10 条 KOL talking point / 26 篇 PMID | 近 14 天 MG-core Signal → KOL |
-| `data/source-signals.js` | 5 个独立频道 / 383 条频道项 | 文献证据、指南/共识、中国监管、试验注册、会议线索 |
+| `data/literature-recent.js` | 903 篇 | 近一年严格公开文献列表；全部 MG-core 且 evidence I–V |
+| `data/signals-weekly.js` | 13 条父级 Signal / 19 条 KOL talking point / 28 篇 PMID | 近 14 天 MG-core Signal → evidenceItems → KOL key points |
+| `data/source-signals.js` | 5 个独立频道 / 386 条频道项 | 文献证据、指南/共识、中国监管、试验注册、会议线索 |
 | `data/guideline-consensus-cache.json` | 9 篇 | MG-core 且具有指南/共识主来源标志的独立缓存，不进入 I–V 文献流 |
-| `data/china-intelligence.js` | 中国相关 211 篇；展示最新 120 条摘要 | 严格 recent 的中国情报 |
+| `data/china-intelligence.js` | 中国相关 216 篇；展示最新 120 条摘要 | 严格 recent 的中国情报 |
 | `data/literature-full-index.js` | 10,672 篇 | full 文献轻索引，不含 abstract |
 | `data/communityTaxonomy.js` | 10 个社区 | 医学事务主题 taxonomy |
 | `data/communityAudit.js` | 10,672 篇 audit | 社区归类质量状态 |
@@ -276,7 +276,7 @@ LLM 语义层是可选增强，不应成为公开基础数据发布的单点故�
 - 图谱和 Living Answers 基于 PubMed title / abstract / metadata 层级信息，定位为 MSL 快速进入问题的基础提纲，不替代阅读全文后的医学整合。
 - 证据矩阵中的关系是摘要级证据线索，不代表全文级因果结论。
 - 社区 audit 当前状态为 `needsReview`，表示 taxonomy 和 assignment 仍需医学事务复核，不表示管线失败。
-- `dashboard-data.js` 与 `china-intelligence.js` 已同步到严格 recent（652 / 211）；community recent 分片仍属于独立的 full 社区构建口径。
+- `dashboard-data.js` 与 `china-intelligence.js` 已同步到严格 recent（903 / 216）；community recent 分片仍属于独立的 full 社区构建口径。
 - 本站仅做拜访前公开材料准备，不采集拜访记录、随访、互动历史或 CRM 数据；团队反馈、内部专家标签和私有材料也不得提交到公开仓库。
 
 ## 后续重点
