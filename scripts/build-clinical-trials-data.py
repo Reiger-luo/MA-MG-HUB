@@ -250,6 +250,7 @@ def enrich_record(
         "status_label": status_label,
         "status_class": status_class,
         "drug_class": extract_drug_class(item.get("title"), item.get("drug_name")),
+        "drug_name": str(item.get("drug_name") or ""),
         "indication": INDICATION,
         "phase_label": phase_label(details.get("phase", item.get("phase"))),
         "sponsor": str(item.get("sponsor") or details.get("sponsor") or ""),
@@ -322,6 +323,199 @@ def build_decision_signals(records: list[dict[str, Any]], generated_at: str) -> 
     ]
 
 
+PHASE_RANK = {
+    "Early Phase 1": 0.5, "Phase 1": 1, "Phase 1/2": 1.5,
+    "Phase 2": 2, "Phase 2/3": 2.5, "Phase 3": 3, "Phase 4": 4,
+}
+
+DRUG_CLASS_ORDER = [
+    "FcRn 拮抗剂", "补体抑制剂", "B细胞/抗CD19/CD20",
+    "IL-6 抑制剂", "免疫抑制剂", "胆碱酯酶抑制剂", "免疫调节", "其他",
+]
+
+# Canonical drug name mapping: lowercase alias → display name
+DRUG_SYNONYMS: dict[str, str] = {
+    # FcRn
+    "efgartigimod": "Efgartigimod (艾加莫德)",
+    "efgartigimod ph20 sc": "Efgartigimod (艾加莫德)",
+    "efgartigimod alfa": "Efgartigimod (艾加莫德)",
+    "efgartigimod iv": "Efgartigimod (艾加莫德)",
+    "argx-113": "Efgartigimod (艾加莫德)",
+    "argx-113-2308": "Efgartigimod (艾加莫德)",
+    "艾加莫德": "Efgartigimod (艾加莫德)",
+    "艾加莫德α注射液": "Efgartigimod (艾加莫德)",
+    "艾加莫德α注射液（皮下注射）": "Efgartigimod (艾加莫德)",
+    "艾加莫德 α 注射液": "Efgartigimod (艾加莫德)",
+    "efgartigimod浓缩注射液": "Efgartigimod (艾加莫德)",
+    "efgartigimod注射液": "Efgartigimod (艾加莫德)",
+    "rozanolixizumab": "Rozanolixizumab (罗泽利昔珠单抗)",
+    "罗泽利昔珠单抗注射液": "Rozanolixizumab (罗泽利昔珠单抗)",
+    "nipocalimab": "Nipocalimab",
+    "nipocalimab注射液": "Nipocalimab",
+    "hbm9161": "Batoclimab (HBM9161)",
+    "hbm9161注射液": "Batoclimab (HBM9161)",
+    "hbm9161 injection (680mg)": "Batoclimab (HBM9161)",
+    "hbm9161(hl161bkn)注射液": "Batoclimab (HBM9161)",
+    "hl161": "Batoclimab (HBM9161)",
+    "imvt-1401": "Batoclimab (HBM9161)",
+    "imvt-1402": "IMVT-1402",
+    "batoclimab": "Batoclimab (HBM9161)",
+    "m281": "Batoclimab (HBM9161)",
+    "mom-m281": "Batoclimab (HBM9161)",
+    # Complement
+    "eculizumab": "Eculizumab (依库珠单抗)",
+    "依库珠单抗注射液": "Eculizumab (依库珠单抗)",
+    "ravulizumab": "Ravulizumab (瑞利珠单抗)",
+    "瑞利珠单抗注射液": "Ravulizumab (瑞利珠单抗)",
+    "alxn1720": "Ravulizumab (ALXN1720)",
+    "alxn1720注射液": "Ravulizumab (ALXN1720)",
+    "zilucoplan": "Zilucoplan",
+    "zilucoplan (ra101495)": "Zilucoplan",
+    "ra101495": "Zilucoplan",
+    "crovalimab": "Crovalimab",
+    "cemdisiran": "Cemdisiran",
+    "pozelimab": "Pozelimab",
+    # B-cell
+    "telitacicept": "Telitacicept (泰它西普)",
+    "泰它西普注射液": "Telitacicept (泰它西普)",
+    "注射用泰它西普": "Telitacicept (泰它西普)",
+    "rituximab": "Rituximab (利妥昔单抗)",
+    "inebilizumab": "Inebilizumab",
+    "inebilizumab 注射液": "Inebilizumab",
+    "sys6020注射液": "SYS6020 (BCMA CAR-T)",
+    "senl103自体t细胞注射液": "SENL103 (CAR-T)",
+    "cizutamig": "Cizutamig",
+    "cizutamig注射液": "Cizutamig",
+    # IL-6
+    "satralizumab": "Satralizumab (萨特利珠单抗)",
+    "萨特利珠单抗注射液": "Satralizumab (萨特利珠单抗)",
+    "sar442168": "SAR442168 (已终止)",
+    # Immunosuppressants
+    "remibrutinib": "Remibrutinib (LOU064)",
+    "remibrutinib (lou064)": "Remibrutinib (LOU064)",
+    "cladribine": "Cladribine (克拉屈滨)",
+    "克拉屈滨胶囊": "Cladribine (克拉屈滨)",
+    "azathioprine": "Azathioprine (硫唑嘌呤)",
+    "硫唑嘌呤片": "Azathioprine (硫唑嘌呤)",
+    "tacrolimus": "Tacrolimus (他克莫司)",
+    "他克莫司胶囊": "Tacrolimus (他克莫司)",
+    "shr-2173注射液": "SHR-2173",
+    "b007注射液": "B007",
+    # Cholinesterase
+    "pyridostigmine": "Pyridostigmine (溴吡斯的明)",
+    "溴吡斯的明片": "Pyridostigmine (溴吡斯的明)",
+    "溴吡斯的明缓释片": "Pyridostigmine (溴吡斯的明)",
+    "huperzine": "Huperzine A (石杉碱甲)",
+    "石杉碱甲口服溶液": "Huperzine A (石杉碱甲)",
+    "edrophonium": "Edrophonium (依酚氯铵)",
+    "依酚氯铵注射液": "Edrophonium (依酚氯铵)",
+    # Other
+    "belimumab": "Belimumab",
+    "注射用重组人b淋巴细胞刺激因子受体－抗体融合蛋白": "Belimumab",
+}
+
+
+def normalize_drug_name(raw: str) -> str:
+    """Map raw drug name to canonical display name."""
+    if not raw:
+        return ""
+    key = raw.strip().lower()
+    return DRUG_SYNONYMS.get(key, raw.strip())
+
+
+def _extract_drug_name(record: dict[str, Any]) -> str:
+    """从记录中提取药物名称并归一化。"""
+    drug = str(record.get("drug_name") or "").strip()
+    if drug and drug != "NA":
+        return normalize_drug_name(drug)
+    # Fallback: try to extract from title
+    title = str(record.get("title") or "")
+    if not title:
+        return record.get("registry_id", "Unknown")
+    # Check if any known drug appears in title
+    title_lower = title.lower()
+    for alias, canonical in DRUG_SYNONYMS.items():
+        if alias in title_lower:
+            return canonical
+    return title[:60]
+
+
+def build_pipeline_matrix(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """按药物机制分类 → 药物名称聚合为管线矩阵行。"""
+    # Group by (drug_class, drug_name)
+    groups: dict[tuple[str, str], list[dict[str, Any]]] = {}
+    for rec in records:
+        drug_class = rec.get("drug_class") or "其他"
+        drug_name = _extract_drug_name(rec)
+        key = (drug_class, drug_name)
+        groups.setdefault(key, []).append(rec)
+
+    matrix = []
+    for (drug_class, drug_name), trials in groups.items():
+        # Determine highest phase
+        phases = [t.get("phase_label", "未标注") for t in trials]
+        phase_ranks = [PHASE_RANK.get(p, -1) for p in phases]
+        best_idx = max(range(len(phase_ranks)), key=lambda i: phase_ranks[i])
+        highest_phase = phases[best_idx] if phase_ranks[best_idx] >= 0 else "未标注"
+
+        # Status summary
+        status_counts = Counter(t.get("status_label", "未知") for t in trials)
+        recruiting = status_counts.get("招募中", 0) + status_counts.get("尚未招募", 0)
+        active = status_counts.get("进行中", 0)
+        completed = status_counts.get("已完成", 0)
+        terminated = status_counts.get("已终止", 0) + status_counts.get("已撤回", 0)
+
+        # Source breakdown
+        source_counts = Counter(t.get("registry", "") for t in trials)
+
+        # Key trial (most recent or highest phase)
+        key_trial = trials[best_idx]
+
+        # Sponsors
+        sponsors = sorted({t.get("sponsor", "") for t in trials if t.get("sponsor")})
+
+        # Date range
+        dates = sorted(
+            d for d in (date_part(t.get("registered_date") or t.get("start_date")) for t in trials) if d
+        )
+
+        matrix.append({
+            "drug_class": drug_class,
+            "name": drug_name,
+            "highest_phase_label": highest_phase,
+            "stage_number": PHASE_RANK.get(highest_phase, 0),
+            "study_count": len(trials),
+            "status_summary": f"招募 {recruiting} · 进行 {active} · 完成 {completed}" + (f" · 终止 {terminated}" if terminated else ""),
+            "sponsors": sponsors[:3],
+            "sources": dict(source_counts),
+            "key_trial": {
+                "registry": key_trial.get("registry", ""),
+                "registry_id": key_trial.get("registry_id", ""),
+                "title": key_trial.get("title", ""),
+                "url": key_trial.get("url", ""),
+            },
+            "trials": [
+                {"registry": t.get("registry"), "registry_id": t.get("registry_id"), "url": t.get("url")}
+                for t in trials[:10]
+            ],
+            "first_registered": dates[0] if dates else "",
+            "latest_registered": dates[-1] if dates else "",
+            "linked_registries": [
+                lr for t in trials for lr in (t.get("linked_registries") or [])
+            ],
+        })
+
+    # Sort: drug class order → stage desc → study count desc
+    class_rank = {c: i for i, c in enumerate(DRUG_CLASS_ORDER)}
+    matrix.sort(key=lambda m: (
+        class_rank.get(m["drug_class"], 99),
+        -m["stage_number"],
+        -m["study_count"],
+        m["name"],
+    ))
+    return matrix
+
+
 def build_payload() -> dict[str, Any]:
     """装配前端要求的三来源数据结构。"""
     ct_payload = load_json(CT_CACHE_PATH)
@@ -377,6 +571,8 @@ def build_payload() -> dict[str, Any]:
         },
     ]
 
+    pipeline_matrix = build_pipeline_matrix(records)
+
     return {
         "meta": {
             "generated_at": generated_at,
@@ -384,6 +580,7 @@ def build_payload() -> dict[str, Any]:
             "sources_order": SOURCE_ORDER,
         },
         "decision_signals": build_decision_signals(records, generated_at),
+        "pipeline_matrix": pipeline_matrix,
         "sources": sources,
     }
 

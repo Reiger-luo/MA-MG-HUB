@@ -85,12 +85,20 @@ def _ct_items(payload: dict[str, Any]) -> list[dict[str, Any]]:
         if not relevance.is_core:
             continue
         nct_id = ident.get("nctId") or ""
+        # Extract drug name from interventions
+        interventions = (protocol.get("armsInterventionsModule") or {}).get("interventions") or []
+        drug_names = [
+            iv.get("name", "").strip()
+            for iv in interventions
+            if iv.get("type") in {"DRUG", "BIOLOGICAL"} and iv.get("name")
+        ]
         items.append({
             "id": nct_id,
             "registry": "ClinicalTrials.gov",
             "registry_id": nct_id,
             "secondary_ids": ident.get("orgStudyIdInfo", {}).get("id", "") and [ident["orgStudyIdInfo"]["id"]] or [],
             "title": ident.get("briefTitle") or ident.get("officialTitle") or "",
+            "drug_name": drug_names[0] if drug_names else "",
             "date": status.get("lastUpdateSubmitDate") or "",
             "status": status.get("overallStatus") or "",
             "source": "ClinicalTrials.gov",
@@ -106,6 +114,7 @@ def _chictr_items(payload: dict[str, Any]) -> list[dict[str, Any]]:
         "registry_id": item.get("registry_id") or "",
         "secondary_ids": item.get("secondary_ids") or [],
         "title": item.get("title") or item.get("public_title") or "",
+        "drug_name": _extract_chictr_drug(item),
         "date": item.get("date_registration") or item.get("registered_date") or "",
         "status": item.get("status") or item.get("recruitment_status") or "Unknown",
         "source": "ChiCTR",
@@ -113,6 +122,27 @@ def _chictr_items(payload: dict[str, Any]) -> list[dict[str, Any]]:
         "phase": item.get("phase") or "Unknown",
         "sponsor": item.get("sponsor") or item.get("primary_sponsor") or item.get("institution") or "",
     } for item in payload.get("records") or []]
+
+
+def _extract_chictr_drug(item: dict[str, Any]) -> str:
+    """Extract primary drug name from ChiCTR i_freetext intervention field."""
+    import re as _re
+    freetext = str(item.get("i_freetext") or "")
+    if not freetext:
+        return ""
+    # Pattern: "Group name:Drug name;" — take first non-empty drug after colon
+    for segment in freetext.split(";"):
+        segment = segment.strip()
+        if ":" in segment:
+            drug = segment.split(":", 1)[1].strip()
+            # Skip placeholders
+            if drug and drug.lower() not in {"none", "na", "no", "n/a", "-"}:
+                # Take first meaningful token(s) before dosage info
+                drug = _re.split(r"\s+\d+\s*(mg|ml|μg|mcg)", drug)[0].strip()
+                drug = _re.split(r"\s+(injection|infusion|capsule|tablet|solution)", drug, flags=_re.I)[0].strip()
+                if len(drug) > 2:
+                    return drug
+    return ""
 
 
 def _cdt_items(payload: dict[str, Any]) -> list[dict[str, Any]]:
