@@ -734,10 +734,13 @@
       if (key === 'trials') { renderTrialsTab(); }
       if (el.btnExport) el.btnExport.style.display = key === 'conference' ? 'none' : '';
     }
+    var params = new URLSearchParams(window.location.search || '');
+    var requestedTab = params.get('tab') || '';
     if (hub.initTabs) {
       hub.initTabs({
         tabAttr: 'data-tab',
         panelFor: function(key) { return document.getElementById('tab-' + key); },
+        initialKey: requestedTab || undefined,
         onChange: handleTabChange
       });
       return;
@@ -754,6 +757,14 @@
         if (panel) panel.classList.add('active');
         handleTabChange(key);
       });
+    }
+    if (requestedTab) {
+      for (var r = 0; r < tabs.length; r++) {
+        if (tabs[r].getAttribute('data-tab') === requestedTab) {
+          tabs[r].click();
+          return;
+        }
+      }
     }
     var activeTab = document.querySelector('.intel-tab.active');
     handleTabChange(activeTab ? activeTab.getAttribute('data-tab') : 'literature');
