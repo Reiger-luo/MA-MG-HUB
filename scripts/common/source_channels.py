@@ -105,13 +105,13 @@ def _chictr_items(payload: dict[str, Any]) -> list[dict[str, Any]]:
         "registry": "ChiCTR",
         "registry_id": item.get("registry_id") or "",
         "secondary_ids": item.get("secondary_ids") or [],
-        "title": item.get("title") or "",
-        "date": item.get("registered_date") or "",
-        "status": item.get("status") or "Unknown",
+        "title": item.get("title") or item.get("public_title") or "",
+        "date": item.get("date_registration") or item.get("registered_date") or "",
+        "status": item.get("status") or item.get("recruitment_status") or "Unknown",
         "source": "ChiCTR",
-        "url": _safe_http_url(item.get("official_url")),
+        "url": _safe_http_url(item.get("official_url") or item.get("url")),
         "phase": item.get("phase") or "Unknown",
-        "sponsor": item.get("sponsor") or item.get("institution") or "",
+        "sponsor": item.get("sponsor") or item.get("primary_sponsor") or item.get("institution") or "",
     } for item in payload.get("records") or []]
 
 
@@ -122,6 +122,7 @@ def _cdt_items(payload: dict[str, Any]) -> list[dict[str, Any]]:
         "registry_id": item.get("registry_id") or "",
         "secondary_ids": [],
         "title": item.get("title") or "",
+        "drug_name": item.get("drug_name") or "",
         "date": item.get("registered_date") or "",
         "status": item.get("status") or "Unknown",
         "source": "ChinaDrugTrials",

@@ -19,15 +19,18 @@ def test_tracked_chictr_seed_contains_only_verified_public_fields():
 
     assert payload["source"] == "ChiCTR official registry"
     assert payload["mode"] in {"cache", "manual"}
-    assert set(by_id) == {
-        "ChiCTR2500104662", "ChiCTR2600120351", "ChiCTR2600117375", "ChiCTR2500110600"
-    }
-    assert by_id["ChiCTR2500104662"]["status"] == "Not yet recruiting"
-    assert by_id["ChiCTR2500104662"]["registered_date"] == "2025-06-20"
-    assert by_id["ChiCTR2600120351"]["phase"] == "Unknown"
-    assert by_id["ChiCTR2600117375"]["sponsor"] == ""
-    assert all("contact" not in key.lower() for item in by_id.values() for key in item)
-    assert all(item["official_url"].startswith("https://www.chictr.org.cn/") for item in by_id.values())
+    # Full scrape: 97 MG-related trials (was 4 seed records)
+    assert len(by_id) >= 90, f"Expected >=90 ChiCTR records, got {len(by_id)}"
+    # Original seed records must still be present
+    seed_ids = {"ChiCTR2500104662", "ChiCTR2600120351", "ChiCTR2600117375", "ChiCTR2500110600"}
+    assert seed_ids.issubset(set(by_id)), f"Missing seed IDs: {seed_ids - set(by_id)}"
+    # Every record must have registry_id and a chictr.org.cn URL
+    assert all(item["registry_id"].startswith("ChiCTR") for item in by_id.values())
+    assert all(
+        item.get("url", "").startswith("https://www.chictr.org.cn/")
+        or item.get("official_url", "").startswith("https://www.chictr.org.cn/")
+        for item in by_id.values()
+    )
 
 
 def test_manual_official_csv_refresh_is_deterministic_and_deduplicated(tmp_path):

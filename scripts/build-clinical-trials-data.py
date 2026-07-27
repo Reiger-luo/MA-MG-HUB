@@ -14,7 +14,7 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from scripts.common.clinical_registry import load_china_drug_trials_cache
-from scripts.common.source_channels import _chictr_items, _ct_items, deduplicate_trials
+from scripts.common.source_channels import _cdt_items, _chictr_items, _ct_items, deduplicate_trials
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -52,6 +52,11 @@ DRUG_CLASS_TERMS = (
             "imvt-1402",
             "fcrn antagonist",
             "fcrn inhibitor",
+            "hbm9161",
+            "hl161",
+            "艾加莫德",
+            "argx-113",
+            "罗泽利昔珠单抗",
         ),
     ),
     (
@@ -63,6 +68,11 @@ DRUG_CLASS_TERMS = (
             "crovalimab",
             "complement inhibitor",
             "complement inhibition",
+            "cemdisiran",
+            "pozelimab",
+            "依库珠单抗",
+            "瑞利珠单抗",
+            "alxn1720",
         ),
     ),
     (
@@ -74,6 +84,12 @@ DRUG_CLASS_TERMS = (
             "telitacicept",
             "anti-cd19",
             "anti-cd20",
+            "泰它西普",
+            "sys6020",
+            "bcma",
+            "senl103",
+            "car-t",
+            "cizutamig",
         ),
     ),
     (
@@ -84,9 +100,16 @@ DRUG_CLASS_TERMS = (
             "tacrolimus",
             "cyclosporine",
             "methotrexate",
+            "cladribine",
+            "remibrutinib",
+            "lou064",
+            "btk inhibitor",
+            "硫唑嘌呤",
+            "他克莫司",
+            "克拉屈滨",
         ),
     ),
-    ("胆碱酯酶抑制剂", ("pyridostigmine",)),
+    ("胆碱酯酶抑制剂", ("pyridostigmine", "溴吡斯的明", "huperzine", "石杉碱甲", "edrophonium", "依酚氯铵")),
     (
         "免疫调节",
         (
@@ -96,6 +119,10 @@ DRUG_CLASS_TERMS = (
             "immunoglobulin",
             "immune globulin",
         ),
+    ),
+    (
+        "IL-6 抑制剂",
+        ("satralizumab", "萨特利珠单抗", "tocilizumab", "sar442168"),
     ),
 )
 
@@ -125,11 +152,11 @@ def contains_term(text: str, term: str) -> bool:
     return term in text
 
 
-def extract_drug_class(title: Any) -> str:
-    """仅从归一化题名提取药物机制分类。"""
-    normalized_title = str(title or "").lower()
+def extract_drug_class(title: Any, drug_name: Any = "") -> str:
+    """仅从归一化题名和药物名称提取药物机制分类。"""
+    normalized = (str(title or "") + " " + str(drug_name or "")).lower()
     for drug_class, terms in DRUG_CLASS_TERMS:
-        if any(contains_term(normalized_title, term) for term in terms):
+        if any(contains_term(normalized, term) for term in terms):
             return drug_class
     return "其他"
 
@@ -222,7 +249,7 @@ def enrich_record(
         "status": status,
         "status_label": status_label,
         "status_class": status_class,
-        "drug_class": extract_drug_class(item.get("title")),
+        "drug_class": extract_drug_class(item.get("title"), item.get("drug_name")),
         "indication": INDICATION,
         "phase_label": phase_label(details.get("phase", item.get("phase"))),
         "sponsor": str(item.get("sponsor") or details.get("sponsor") or ""),
@@ -301,7 +328,9 @@ def build_payload() -> dict[str, Any]:
     chictr_payload = load_json(CHICTR_CACHE_PATH)
     china_payload = load_china_drug_trials_cache(CHINA_DRUG_TRIALS_CACHE_PATH)
 
-    normalized_items = deduplicate_trials(_ct_items(ct_payload) + _chictr_items(chictr_payload))
+    normalized_items = deduplicate_trials(
+        _ct_items(ct_payload) + _chictr_items(chictr_payload) + _cdt_items(china_payload)
+    )
     ct_details = ct_metadata(ct_payload)
     chictr_details = chictr_metadata(chictr_payload)
     records = [
