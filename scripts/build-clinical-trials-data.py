@@ -251,6 +251,7 @@ def enrich_record(
         "status_class": status_class,
         "drug_class": extract_drug_class(item.get("title"), item.get("drug_name")),
         "drug_name": str(item.get("drug_name") or ""),
+        "drug_names": split_combo_drugs(item.get("drug_names") or []),
         "indication": INDICATION,
         "phase_label": phase_label(details.get("phase", item.get("phase"))),
         "sponsor": str(item.get("sponsor") or details.get("sponsor") or ""),
@@ -350,37 +351,45 @@ DRUG_SYNONYMS: dict[str, str] = {
     "艾加莫德 α 注射液": "Efgartigimod (艾加莫德)",
     "efgartigimod浓缩注射液": "Efgartigimod (艾加莫德)",
     "efgartigimod注射液": "Efgartigimod (艾加莫德)",
+    "vyvgart": "Efgartigimod (艾加莫德)",
+    "igamuratid": "Efgartigimod (艾加莫德)",
+    "igamuratid α": "Efgartigimod (艾加莫德)",
     "rozanolixizumab": "Rozanolixizumab (罗泽利昔珠单抗)",
     "罗泽利昔珠单抗注射液": "Rozanolixizumab (罗泽利昔珠单抗)",
-    "nipocalimab": "Nipocalimab",
-    "nipocalimab注射液": "Nipocalimab",
-    "hbm9161": "Batoclimab (HBM9161)",
-    "hbm9161注射液": "Batoclimab (HBM9161)",
-    "hbm9161 injection (680mg)": "Batoclimab (HBM9161)",
-    "hbm9161(hl161bkn)注射液": "Batoclimab (HBM9161)",
-    "hl161": "Batoclimab (HBM9161)",
-    "imvt-1401": "Batoclimab (HBM9161)",
+    "nipocalimab": "Nipocalimab (尼卡利单抗)",
+    "nipocalimab注射液": "Nipocalimab (尼卡利单抗)",
+    "hbm9161": "Batoclimab (巴托利单抗)",
+    "hbm9161注射液": "Batoclimab (巴托利单抗)",
+    "hbm9161 injection (680mg)": "Batoclimab (巴托利单抗)",
+    "hbm9161(hl161bkn)注射液": "Batoclimab (巴托利单抗)",
+    "hl161": "Batoclimab (巴托利单抗)",
+    "imvt-1401": "Batoclimab (巴托利单抗)",
     "imvt-1402": "IMVT-1402",
-    "batoclimab": "Batoclimab (HBM9161)",
-    "m281": "Batoclimab (HBM9161)",
-    "mom-m281": "Batoclimab (HBM9161)",
+    "batoclimab": "Batoclimab (巴托利单抗)",
+    "m281": "Batoclimab (巴托利单抗)",
+    "mom-m281": "Batoclimab (巴托利单抗)",
     # Complement
     "eculizumab": "Eculizumab (依库珠单抗)",
+    "依库珠单抗": "Eculizumab (依库珠单抗)",
     "依库珠单抗注射液": "Eculizumab (依库珠单抗)",
     "ravulizumab": "Ravulizumab (瑞利珠单抗)",
     "瑞利珠单抗注射液": "Ravulizumab (瑞利珠单抗)",
-    "alxn1720": "Ravulizumab (ALXN1720)",
-    "alxn1720注射液": "Ravulizumab (ALXN1720)",
-    "zilucoplan": "Zilucoplan",
-    "zilucoplan (ra101495)": "Zilucoplan",
-    "ra101495": "Zilucoplan",
+    "alxn1720": "Ravulizumab (瑞利珠单抗)",
+    "alxn1720注射液": "Ravulizumab (瑞利珠单抗)",
+    "zilucoplan": "Zilucoplan (泽卢克布仑钠)",
+    "zilucoplan (ra101495)": "Zilucoplan (泽卢克布仑钠)",
+    "ra101495": "Zilucoplan (泽卢克布仑钠)",
+    "zilbrysq": "Zilucoplan (泽卢克布仑钠)",
+    "zylbrysq": "Zilucoplan (泽卢克布仑钠)",
     "crovalimab": "Crovalimab",
     "cemdisiran": "Cemdisiran",
     "pozelimab": "Pozelimab",
     # B-cell
     "telitacicept": "Telitacicept (泰它西普)",
+    "泰它西普": "Telitacicept (泰它西普)",
     "泰它西普注射液": "Telitacicept (泰它西普)",
     "注射用泰它西普": "Telitacicept (泰它西普)",
+    "tetanercept": "Telitacicept (泰它西普)",
     "rituximab": "Rituximab (利妥昔单抗)",
     "inebilizumab": "Inebilizumab",
     "inebilizumab 注射液": "Inebilizumab",
@@ -411,22 +420,125 @@ DRUG_SYNONYMS: dict[str, str] = {
     "石杉碱甲口服溶液": "Huperzine A (石杉碱甲)",
     "edrophonium": "Edrophonium (依酚氯铵)",
     "依酚氯铵注射液": "Edrophonium (依酚氯铵)",
-    # Other
+    # Immunomodulation
+    "ivig": "IVIg (静注人免疫球蛋白)",
+    "gamma globulin": "IVIg (静注人免疫球蛋白)",
+    "immunoglobulin": "IVIg (静注人免疫球蛋白)",
+    "plasma exchange": "Plasma Exchange (血浆置换)",
+    "plex": "Plasma Exchange (血浆置换)",
+    # Corticosteroids / Other
+    "methylprednisolone": "Methylprednisolone (甲泼尼龙)",
+    "甲泼尼龙": "Methylprednisolone (甲泼尼龙)",
+    "prednisone": "Prednisone (泼尼松)",
+    "泼尼松": "Prednisone (泼尼松)",
+    "mycophenolate": "Mycophenolate (吗替麦考酚酯)",
+    "吗替麦考酚酯": "Mycophenolate (吗替麦考酚酯)",
     "belimumab": "Belimumab",
     "注射用重组人b淋巴细胞刺激因子受体－抗体融合蛋白": "Belimumab",
+    "agamod": "Efgartigimod (艾加莫德)",
+    "egamod": "Efgartigimod (艾加莫德)",
+    "empasiprubart": "Empasiprubart",
+    "ublituximab": "Ublituximab",
+    "amifampridine": "Amifampridine (氨吡啶)",
+    "3,4-diaminopyridine": "Amifampridine (氨吡啶)",
+    "3,4-dap": "Amifampridine (氨吡啶)",
+    "granulocyte-macrophage colony-stimulating factor": "GM-CSF",
+    "gm-csf": "GM-CSF",
+    "sargramostim": "GM-CSF",
 }
 
 
+# 安慰剂/对照干预名称子串，归一化时直接丢弃
+_PLACEBO_TOKENS = ("placebo", "安慰剂", "生理盐水", "normal saline", "vehicle", "sham",
+                   "sodium chloride", "氯化钠")
+
+# 非药物干预关键词（手术/针灸/运动/教育/注册研究/生物标志物等）
+_NON_DRUG_KEYWORDS = (
+    "acupuncture", "针灸", "thymectomy", "胸腺切除", "surgery", "手术",
+    "exercise", "运动", "education", "教育", "registry", "登记", "注册研究",
+    "biomarker", "生物标志物", "transplant", "移植", "catgut", "埋线",
+    "blood sample", "采血", "burden of disease", "疾病负担",
+    "immune profile", "免疫谱", "auto-antibod", "自身抗体",
+    "psyche", "心理", "standard of care", "常规治疗",
+    "tonify", "补中", "益气", "健脾", "补肾", "升阳",
+    "robotic", "机器人", "thoracoscopic", "胸腔镜",
+    "vitaccess", "ide study", "inpatient",
+    "treatment with", "medication", "hormone", "激素",
+)
+
+# 英语虚词（用于检测句子碎片）
+_EN_FUNCTION_WORDS = {"the", "of", "in", "and", "with", "for", "by", "was",
+                      "were", "is", "are", "a", "an", "on", "to", "from", "or"}
+
+# 剂型/给药途径 token（模糊归一化时剥离）
+_ROUTE_RE = re.compile(
+    r"\b(?:iv|sc|im|oral|subcutaneous|intravenous|injection|infusion|solution"
+    r"|注射液|注射用|浓缩|片|胶囊|口服溶液)\b",
+    re.I,
+)
+# 剂量括号，如 (680mg) (10mg/kg, qweek *4 cycles)
+_DOSE_PAREN_RE = re.compile(r"[(（][^)）]*(?:mg|ml|μg|mcg|kg|dose|剂量)[^)）]*[)）]", re.I)
+# 裸剂量，如 340 mg
+_DOSE_BARE_RE = re.compile(r"\b\d+(?:\.\d+)?\s*(?:mg|ml|μg|mcg|g)\b", re.I)
+# 联用分隔符
+_COMBO_SPLIT_RE = re.compile(r"\s*[+＋]\s*|联合|联用")
+
+
 def normalize_drug_name(raw: str) -> str:
-    """Map raw drug name to canonical display name."""
+    """Map raw drug name to canonical display name.
+
+    三级匹配：精确 → 剥离剂型/剂量后精确 → 已知别名子串（最长优先）。
+    安慰剂类名称返回空串。
+    """
     if not raw:
         return ""
     key = raw.strip().lower()
-    return DRUG_SYNONYMS.get(key, raw.strip())
+    # 1. Exact
+    if key in DRUG_SYNONYMS:
+        return DRUG_SYNONYMS[key]
+    # 2. Strip dose/route tokens then exact
+    cleaned = _DOSE_PAREN_RE.sub("", key)
+    cleaned = _DOSE_BARE_RE.sub("", cleaned)
+    cleaned = _ROUTE_RE.sub("", cleaned)
+    cleaned = re.sub(r"\s+", " ", cleaned).strip(" -,·、")
+    if cleaned in DRUG_SYNONYMS:
+        return DRUG_SYNONYMS[cleaned]
+    # 3. Longest known alias as substring (wins over placebo discard)
+    for alias in sorted(DRUG_SYNONYMS, key=len, reverse=True):
+        if len(alias) >= 4 and alias in cleaned:
+            return DRUG_SYNONYMS[alias]
+    # 4. Placebo / non-drug interventions → discard
+    if any(tok in key for tok in _PLACEBO_TOKENS):
+        return ""
+    if any(kw in key for kw in _NON_DRUG_KEYWORDS):
+        return ""
+    # 5. Sentence fragments / noise → discard
+    result = raw.strip()
+    words = result.split()
+    # English sentence with function words → not a drug name
+    if len(words) > 3:
+        func_count = sum(1 for w in words if w.lower().strip(".,;:()") in _EN_FUNCTION_WORDS)
+        if func_count >= 2:
+            return ""
+    # Long Chinese phrases without known drug tokens → not a drug name
+    if len(result) > 12 and not re.search(r"[a-zA-Z]", result):
+        return ""
+    return result
+
+
+def split_combo_drugs(raw_names: list[str]) -> list[str]:
+    """拆分联用药物名称（+ / 联合）并逐个归一化，保留顺序去重。"""
+    out: list[str] = []
+    for raw in raw_names:
+        for part in _COMBO_SPLIT_RE.split(str(raw)):
+            norm = normalize_drug_name(part.strip())
+            if norm and norm not in out:
+                out.append(norm)
+    return out
 
 
 def _extract_drug_name(record: dict[str, Any]) -> str:
-    """从记录中提取药物名称并归一化。"""
+    """从记录中提取药物名称并归一化（fallback 路径）。"""
     drug = str(record.get("drug_name") or "").strip()
     if drug and drug != "NA":
         return normalize_drug_name(drug)
@@ -434,23 +546,31 @@ def _extract_drug_name(record: dict[str, Any]) -> str:
     title = str(record.get("title") or "")
     if not title:
         return record.get("registry_id", "Unknown")
-    # Check if any known drug appears in title
-    title_lower = title.lower()
-    for alias, canonical in DRUG_SYNONYMS.items():
-        if alias in title_lower:
-            return canonical
-    return title[:60]
+    norm = normalize_drug_name(title)
+    return norm if norm != title.strip() else title[:60]
 
 
 def build_pipeline_matrix(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    """按药物机制分类 → 药物名称聚合为管线矩阵行。"""
-    # Group by (drug_class, drug_name)
+    """按药物机制分类 → 药物名称聚合为管线矩阵行。
+
+    联用试验（drug_names 多个）会出现在每个药物行下（多标签可筛选）。
+    """
+    # Group by (drug_class, drug_name) — combo trials appear under each drug
     groups: dict[tuple[str, str], list[dict[str, Any]]] = {}
     for rec in records:
-        drug_class = rec.get("drug_class") or "其他"
-        drug_name = _extract_drug_name(rec)
-        key = (drug_class, drug_name)
-        groups.setdefault(key, []).append(rec)
+        names = rec.get("drug_names") or []
+        if not names:
+            names = [_extract_drug_name(rec)]
+        names = [n for n in names if n]  # drop empty (placebo/noise filtered)
+        if not names:
+            continue  # no identifiable drug → skip from pipeline matrix
+        for drug_name in dict.fromkeys(names):  # dedupe, preserve order
+            # Derive drug_class from the drug name itself (not record-level title)
+            drug_class = extract_drug_class("", drug_name)
+            if drug_class == "其他":
+                drug_class = rec.get("drug_class") or "其他"
+            key = (drug_class, drug_name)
+            groups.setdefault(key, []).append(rec)
 
     matrix = []
     for (drug_class, drug_name), trials in groups.items():
@@ -500,8 +620,20 @@ def build_pipeline_matrix(records: list[dict[str, Any]]) -> list[dict[str, Any]]
                 "url": key_trial.get("url", ""),
             },
             "trials": [
-                {"registry": t.get("registry"), "registry_id": t.get("registry_id"), "url": t.get("url")}
-                for t in trials[:10]
+                {
+                    "registry": t.get("registry"),
+                    "registry_id": t.get("registry_id"),
+                    "title": t.get("title"),
+                    "status_label": t.get("status_label"),
+                    "status_class": t.get("status_class"),
+                    "phase_label": t.get("phase_label"),
+                    "start_date": date_part(t.get("start_date")),
+                    "readout_date": date_part(t.get("readout_date")),
+                    "completion_date": date_part(t.get("completion_date")),
+                    "sponsor": t.get("sponsor"),
+                    "url": t.get("url"),
+                }
+                for t in trials
             ],
             "timeline": {
                 "start": start_dates[0] if start_dates else (registered_dates[0] if registered_dates else ""),

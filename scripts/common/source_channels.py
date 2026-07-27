@@ -29,6 +29,10 @@ def _safe_http_url(value: Any) -> str:
     return value if value.startswith(("https://", "http://")) else ""
 
 
+# 安慰剂/对照干预名称（小写），提取药物标签时跳过
+_PLACEBO_NAMES = {"placebo", "安慰剂", "生理盐水", "normal saline", "vehicle", "sham"}
+
+
 def _literature_items(payload: dict[str, Any]) -> list[dict[str, Any]]:
     items = []
     for signal in (payload or {}).get("signals") or []:
@@ -91,6 +95,7 @@ def _ct_items(payload: dict[str, Any]) -> list[dict[str, Any]]:
             iv.get("name", "").strip()
             for iv in interventions
             if iv.get("type") in {"DRUG", "BIOLOGICAL"} and iv.get("name")
+            and iv.get("name", "").strip().lower() not in _PLACEBO_NAMES
         ]
         items.append({
             "id": nct_id,
@@ -99,6 +104,7 @@ def _ct_items(payload: dict[str, Any]) -> list[dict[str, Any]]:
             "secondary_ids": ident.get("orgStudyIdInfo", {}).get("id", "") and [ident["orgStudyIdInfo"]["id"]] or [],
             "title": ident.get("briefTitle") or ident.get("officialTitle") or "",
             "drug_name": drug_names[0] if drug_names else "",
+            "drug_names": drug_names,
             "date": status.get("lastUpdateSubmitDate") or "",
             "status": status.get("overallStatus") or "",
             "source": "ClinicalTrials.gov",
@@ -111,23 +117,28 @@ def _ct_items(payload: dict[str, Any]) -> list[dict[str, Any]]:
 
 
 def _chictr_items(payload: dict[str, Any]) -> list[dict[str, Any]]:
-    return [{
-        "id": item.get("registry_id") or "",
-        "registry": "ChiCTR",
-        "registry_id": item.get("registry_id") or "",
-        "secondary_ids": item.get("secondary_ids") or [],
-        "title": item.get("title") or item.get("public_title") or "",
-        "drug_name": _extract_chictr_drug(item),
-        "date": item.get("date_registration") or item.get("registered_date") or "",
-        "status": item.get("status") or item.get("recruitment_status") or "Unknown",
-        "source": "ChiCTR",
-        "url": _safe_http_url(item.get("official_url") or item.get("url")),
-        "phase": item.get("phase") or "Unknown",
-        "sponsor": item.get("sponsor") or item.get("primary_sponsor") or item.get("institution") or "",
-        "start_date": _chictr_valid_date(item.get("date_enrolment")),
-        "readout_date": _chictr_valid_date(item.get("results_date_completed")),
-        "completion_date": "",
-    } for item in payload.get("records") or []]
+    items = []
+    for item in payload.get("records") or []:
+        drugs = _extract_chictr_drugs(item)
+        items.append({
+            "id": item.get("registry_id") or "",
+            "registry": "ChiCTR",
+            "registry_id": item.get("registry_id") or "",
+            "secondary_ids": item.get("secondary_ids") or [],
+            "title": item.get("title") or item.get("public_title") or "",
+            "drug_name": drugs[0] if drugs else "",
+            "drug_names": drugs,
+            "date": item.get("date_registration") or item.get("registered_date") or "",
+            "status": item.get("status") or item.get("recruitment_status") or "Unknown",
+            "source": "ChiCTR",
+            "url": _safe_http_url(item.get("official_url") or item.get("url")),
+            "phase": item.get("phase") or "Unknown",
+            "sponsor": item.get("sponsor") or item.get("primary_sponsor") or item.get("institution") or "",
+            "start_date": _chictr_valid_date(item.get("date_enrolment")),
+            "readout_date": _chictr_valid_date(item.get("results_date_completed")),
+            "completion_date": "",
+        })
+    return items
 
 
 def _chictr_valid_date(value: Any) -> str:
@@ -136,25 +147,25 @@ def _chictr_valid_date(value: Any) -> str:
     return value if value and not value.startswith("1900") else ""
 
 
-def _extract_chictr_drug(item: dict[str, Any]) -> str:
-    """Extract primary drug name from ChiCTR i_freetext intervention field."""
+def _extract_chictr_drugs(item: dict[str, Any]) -> list[str]:
+    """Extract all drug names from ChiCTR i_freetext intervention field (联用多标签)."""
     import re as _re
     freetext = str(item.get("i_freetext") or "")
     if not freetext:
-        return ""
-    # Pattern: "Group name:Drug name;" — take first non-empty drug after colon
+        return []
+    drugs: list[str] = []
     for segment in freetext.split(";"):
         segment = segment.strip()
         if ":" in segment:
             drug = segment.split(":", 1)[1].strip()
             # Skip placeholders
-            if drug and drug.lower() not in {"none", "na", "no", "n/a", "-"}:
+            if drug and drug.lower() not in {"none", "na", "no", "n/a", "-", "placebo", "安慰剂", "生理盐水"}:
                 # Take first meaningful token(s) before dosage info
                 drug = _re.split(r"\s+\d+\s*(mg|ml|μg|mcg)", drug)[0].strip()
                 drug = _re.split(r"\s+(injection|infusion|capsule|tablet|solution)", drug, flags=_re.I)[0].strip()
-                if len(drug) > 2:
-                    return drug
-    return ""
+                if len(drug) > 2 and drug not in drugs:
+                    drugs.append(drug)
+    return drugs
 
 
 def _cdt_items(payload: dict[str, Any]) -> list[dict[str, Any]]:
@@ -165,6 +176,7 @@ def _cdt_items(payload: dict[str, Any]) -> list[dict[str, Any]]:
         "secondary_ids": [],
         "title": item.get("title") or "",
         "drug_name": item.get("drug_name") or "",
+        "drug_names": [item.get("drug_name")] if item.get("drug_name") else [],
         "date": item.get("registered_date") or "",
         "status": item.get("status") or "Unknown",
         "source": "ChinaDrugTrials",

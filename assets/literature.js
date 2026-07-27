@@ -1801,17 +1801,65 @@
     html += '</tbody></table>';
     container.innerHTML = html;
 
-    // Event delegation for expand/collapse
+    // Event delegation: drug name / study count → trials modal
     container.addEventListener('click', function(e) {
-      var link = e.target.closest('.drug-name-link');
-      if (!link) return;
-      var row = link.closest('tr');
-      if (!row) return;
-      var detail = row.nextElementSibling;
-      if (detail && detail.classList.contains('pipeline-detail-row')) {
-        detail.style.display = detail.style.display === 'table-row' ? 'none' : 'table-row';
-      }
+      var trigger = e.target.closest('[data-pm-target]');
+      if (!trigger) return;
+      var key = trigger.getAttribute('data-pm-target');
+      var row = (trialsData.pipeline_matrix || []).filter(function(r) {
+        return (r.name || '') + '|' + (r.drug_class || '') === key;
+      })[0];
+      if (row) openPipelineModal(row);
     });
+  }
+
+  function openPipelineModal(row) {
+    var trials = row.trials || [];
+    var listHtml = trials.map(function(t) {
+      var statusCls = t.status_class ? ' status-' + t.status_class : '';
+      var idHtml = t.url
+        ? '<a class="pm-trial-id" href="' + escapeHref(t.url) + '" target="_blank" rel="noopener">' + escapeHtml(t.registry_id || t.registry || '—') + '</a>'
+        : '<span class="pm-trial-id">' + escapeHtml(t.registry_id || '—') + '</span>';
+      var dates = [
+        t.start_date ? '开始 ' + t.start_date : '',
+        t.readout_date ? 'Readout ' + t.readout_date : '',
+        t.completion_date ? '结束 ' + t.completion_date : ''
+      ].filter(Boolean).join(' · ');
+      return '<div class="pm-trial">' +
+        '<div class="pm-trial-head">' + idHtml +
+          '<span class="trials-card-status' + statusCls + '">' + escapeHtml(t.status_label || '—') + '</span>' +
+          (t.phase_label && t.phase_label !== 'N/A' ? '<span class="pm-trial-phase">' + escapeHtml(t.phase_label) + '</span>' : '') +
+        '</div>' +
+        '<div class="pm-trial-title">' + escapeHtml(t.title || '—') + '</div>' +
+        '<div class="pm-trial-meta">' + escapeHtml([t.registry, t.sponsor, dates].filter(Boolean).join(' · ')) + '</div>' +
+      '</div>';
+    }).join('');
+    var sponsors = (row.sponsors || []).join(' · ');
+    var overlay = document.createElement('div');
+    overlay.className = 'modal-overlay open';
+    overlay.innerHTML =
+      '<div class="modal pm-modal" role="dialog" aria-modal="true">' +
+        '<button class="modal-close" type="button" data-modal-close="1">\u2715</button>' +
+        '<div class="pm-modal-head">' +
+          '<h2>' + escapeHtml(row.name || '') + '</h2>' +
+          '<span>' + escapeHtml(row.drug_class || '') + ' · ' + trials.length + ' 项研究' +
+            (sponsors ? ' · ' + escapeHtml(sponsors) : '') + '</span>' +
+        '</div>' +
+        '<div class="pm-modal-list">' + (listHtml || '<div class="kg-empty-hint">无试验记录。</div>') + '</div>' +
+      '</div>';
+    document.body.appendChild(overlay);
+
+    function closeModal() {
+      document.removeEventListener('keydown', handleKeydown);
+      overlay.remove();
+    }
+    function handleKeydown(event) {
+      if (event.key === 'Escape') closeModal();
+    }
+    overlay.addEventListener('click', function(event) {
+      if (event.target === overlay || event.target.getAttribute('data-modal-close') === '1') closeModal();
+    });
+    document.addEventListener('keydown', handleKeydown);
   }
 
   function renderPipelineRow(row) {
@@ -1850,10 +1898,11 @@
       tlLine('招募', tl.start) + tlLine('Readout', tl.readout) + tlLine('结束', tl.completion) +
     '</div>';
 
+    var pmKey = escapeHtml((row.name || '') + '|' + (row.drug_class || ''));
     var mainRow = '<tr>' +
       '<td>' + escapeHtml(row.drug_class || '—') + '</td>' +
-      '<td><span class="drug-name-link">' + escapeHtml(row.name || '—') + '</span></td>' +
-      '<td class="td-center">' + (row.study_count || 0) + '</td>' +
+      '<td data-pm-target="' + pmKey + '"><span class="drug-name-link">' + escapeHtml(row.name || '—') + '</span></td>' +
+      '<td class="td-center" data-pm-target="' + pmKey + '"><button class="pm-count-link" type="button">' + (row.study_count || 0) + '</button></td>' +
       '<td>' + stepsHtml + '<span class="phase-label-text">' + escapeHtml(row.highest_phase_label || '未标注') + '</span></td>' +
       '<td class="td-ellipsis">' + escapeHtml(row.status_summary || '—') + '</td>' +
       '<td>' + badgesHtml + '</td>' +
@@ -1861,22 +1910,7 @@
       '<td class="td-timeline">' + timeHtml + '</td>' +
     '</tr>';
 
-    // Detail row (hidden by default)
-    var trials = row.trials || [];
-    var trialsHtml = trials.map(function(t) {
-      return '<a class="trial-link" href="' + escapeHref(t.url || '#') + '" target="_blank" rel="noopener">' +
-        escapeHtml(t.registry + ':' + t.registry_id) + '</a>';
-    }).join('');
-    var sponsorsHtml = (row.sponsors || []).join(' · ');
-    var linkedHtml = (row.linked_registries || []).join(' · ');
-
-    var detailRow = '<tr class="pipeline-detail-row" style="display:none"><td colspan="8">' +
-      '<div class="detail-section"><strong>试验列表</strong><div>' + (trialsHtml || '—') + '</div></div>' +
-      '<div class="detail-section"><strong>申办方</strong><div>' + escapeHtml(sponsorsHtml || '—') + '</div></div>' +
-      (linkedHtml ? '<div class="detail-section"><strong>跨注册编号</strong><div>' + escapeHtml(linkedHtml) + '</div></div>' : '') +
-    '</td></tr>';
-
-    return mainRow + detailRow;
+    return mainRow;
   }
 
   init();
