@@ -354,7 +354,22 @@
 
     <!-- Pipeline matrix filters -->
     <div class="pipeline-filters" role="group" aria-label="管线筛选">
-      <select class="filter-input" id="pipelineFilterClass"><option value="all">全部药物分类</option></select>
+      <input type="search" class="filter-input pm-search" id="pipelineFilterSearch"
+             placeholder="搜索药物名称… 如 Efgartigimod / 艾加莫德" autocomplete="off">
+      <select class="filter-input" id="pipelineFilterStatus">
+        <option value="all">全部状态</option>
+        <option value="recruiting">招募中</option>
+        <option value="active">进行中</option>
+        <option value="completed">已完成</option>
+        <option value="terminated">已终止</option>
+        <option value="other">其他</option>
+      </select>
+      <select class="filter-input" id="pipelineFilterSource">
+        <option value="all">全部来源</option>
+        <option value="ClinicalTrials.gov">ClinicalTrials.gov</option>
+        <option value="ChiCTR">ChiCTR</option>
+        <option value="ChinaDrugTrials">ChinaDrugTrials</option>
+      </select>
       <select class="filter-input" id="pipelineFilterPhase"><option value="all">全部阶段</option></select>
     </div>
 

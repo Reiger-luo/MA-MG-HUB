@@ -1708,28 +1708,15 @@
 
   function populatePipelineFilters() {
     var matrix = trialsData.pipeline_matrix || [];
-    var classSeen = {};
     var phaseSeen = {};
     matrix.forEach(function(row) {
-      if (row.drug_class) classSeen[row.drug_class] = true;
       if (row.highest_phase_label) phaseSeen[row.highest_phase_label] = true;
     });
-
-    var classSelect = document.getElementById('pipelineFilterClass');
-    if (classSelect) {
-      classSelect.innerHTML = '<option value="all">全部药物分类</option>';
-      Object.keys(classSeen).sort().forEach(function(v) {
-        var opt = document.createElement('option');
-        opt.value = v; opt.textContent = v;
-        classSelect.appendChild(opt);
-      });
-      classSelect.addEventListener('change', renderPipelineMatrix);
-    }
 
     var phaseSelect = document.getElementById('pipelineFilterPhase');
     if (phaseSelect) {
       phaseSelect.innerHTML = '<option value="all">全部阶段</option>';
-      var phaseOrder = ['Phase 4', 'Phase 3', 'Phase 2', 'Phase 1', '未标注'];
+      var phaseOrder = ['Phase 4', 'Phase 3', 'Phase 2', 'Phase 1', 'Early Phase 1', '未标注'];
       phaseOrder.forEach(function(v) {
         if (phaseSeen[v]) {
           var opt = document.createElement('option');
@@ -1739,6 +1726,21 @@
       });
       phaseSelect.addEventListener('change', renderPipelineMatrix);
     }
+
+    var statusSelect = document.getElementById('pipelineFilterStatus');
+    if (statusSelect) statusSelect.addEventListener('change', renderPipelineMatrix);
+
+    var sourceSelect = document.getElementById('pipelineFilterSource');
+    if (sourceSelect) sourceSelect.addEventListener('change', renderPipelineMatrix);
+
+    var searchInput = document.getElementById('pipelineFilterSearch');
+    if (searchInput) {
+      var debounceTimer = null;
+      searchInput.addEventListener('input', function() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(renderPipelineMatrix, 200);
+      });
+    }
   }
 
   function renderPipelineMatrix() {
@@ -1746,11 +1748,25 @@
     if (!container) return;
     var matrix = trialsData.pipeline_matrix || [];
 
-    var classFilter = (document.getElementById('pipelineFilterClass') || {}).value || 'all';
+    var searchVal = ((document.getElementById('pipelineFilterSearch') || {}).value || '').trim().toLowerCase();
+    var statusFilter = (document.getElementById('pipelineFilterStatus') || {}).value || 'all';
+    var sourceFilter = (document.getElementById('pipelineFilterSource') || {}).value || 'all';
     var phaseFilter = (document.getElementById('pipelineFilterPhase') || {}).value || 'all';
 
     var filtered = matrix.filter(function(row) {
-      if (classFilter !== 'all' && row.drug_class !== classFilter) return false;
+      // Drug name fuzzy search (case-insensitive, supports Chinese)
+      if (searchVal && (row.name || '').toLowerCase().indexOf(searchVal) === -1) return false;
+      // Status: at least one trial matches
+      if (statusFilter !== 'all') {
+        var hasStatus = (row.trials || []).some(function(t) { return t.status_class === statusFilter; });
+        if (!hasStatus) return false;
+      }
+      // Source: row.sources has key with count > 0
+      if (sourceFilter !== 'all') {
+        var src = row.sources || {};
+        if (!src[sourceFilter] || src[sourceFilter] <= 0) return false;
+      }
+      // Phase
       if (phaseFilter !== 'all' && row.highest_phase_label !== phaseFilter) return false;
       return true;
     });
@@ -1766,10 +1782,11 @@
     filtered.forEach(function(row) {
       var key = row.drug_class || '其他';
       if (!groupMap[key]) {
-        groupMap[key] = { key: key, items: [] };
+        groupMap[key] = { key: key, items: [], totalStudies: 0 };
         groups.push(groupMap[key]);
       }
       groupMap[key].items.push(row);
+      groupMap[key].totalStudies += (row.study_count || 0);
     });
 
     // Sort within groups: stage_number DESC, study_count DESC
@@ -1779,38 +1796,66 @@
         return (b.study_count || 0) - (a.study_count || 0);
       });
     });
+    // Sort groups: highest stage DESC, total studies DESC
+    groups.sort(function(a, b) {
+      var aMax = Math.max.apply(null, a.items.map(function(r) { return r.stage_number || 0; }));
+      var bMax = Math.max.apply(null, b.items.map(function(r) { return r.stage_number || 0; }));
+      if (bMax !== aMax) return bMax - aMax;
+      return b.totalStudies - a.totalStudies;
+    });
 
-    var html = '<table class="pipeline-matrix-table">' +
-      '<colgroup>' +
+    var autoExpand = searchVal.length > 0;
+    var colgroup = '<colgroup>' +
       '<col style="width:12%"><col style="width:21%"><col style="width:4%"><col style="width:8%">' +
       '<col style="width:17%"><col style="width:15%"><col style="width:11%"><col style="width:12%">' +
-      '</colgroup>' +
-      '<thead><tr>' +
+      '</colgroup>';
+    var thead = '<thead><tr>' +
       '<th>靶点/机制</th><th>药物</th><th class="th-narrow">研究数</th><th>最高阶段</th>' +
       '<th>状态摘要</th><th>来源</th><th>关键试验</th><th>时间线</th>' +
-      '</tr></thead><tbody>';
+      '</tr></thead>';
 
+    var html = '';
     groups.forEach(function(g) {
-      html += '<tr class="pipeline-group-header"><td colspan="8">' +
-        escapeHtml(g.key) + '（' + g.items.length + ' 个药物）</td></tr>';
+      var openCls = autoExpand ? ' open' : '';
+      html += '<section class="pm-group' + openCls + '" data-class="' + escapeHtml(g.key) + '">' +
+        '<button class="pm-group-header" type="button" aria-expanded="' + (autoExpand ? 'true' : 'false') + '">' +
+          '<span class="pm-group-chevron">▸</span>' +
+          '<span class="pm-group-name">' + escapeHtml(g.key) + '</span>' +
+          '<span class="pm-group-stats">' + g.items.length + ' 个药物 · ' + g.totalStudies + ' 项研究</span>' +
+        '</button>' +
+        '<div class="pm-group-body"><div class="pm-group-inner">' +
+          '<table class="pipeline-matrix-table">' + colgroup + thead + '<tbody>';
       g.items.forEach(function(row) {
         html += renderPipelineRow(row);
       });
+      html += '</tbody></table></div></div></section>';
     });
 
-    html += '</tbody></table>';
     container.innerHTML = html;
 
-    // Event delegation: drug name / study count → trials modal
-    container.addEventListener('click', function(e) {
-      var trigger = e.target.closest('[data-pm-target]');
-      if (!trigger) return;
-      var key = trigger.getAttribute('data-pm-target');
-      var row = (trialsData.pipeline_matrix || []).filter(function(r) {
-        return (r.name || '') + '|' + (r.drug_class || '') === key;
-      })[0];
-      if (row) openPipelineModal(row);
-    });
+    // Group toggle (event delegation, bound once)
+    if (!container.dataset.pmGroupBound) {
+      container.dataset.pmGroupBound = '1';
+      container.addEventListener('click', function(e) {
+        var header = e.target.closest('.pm-group-header');
+        if (header) {
+          var group = header.closest('.pm-group');
+          if (group) {
+            group.classList.toggle('open');
+            header.setAttribute('aria-expanded', group.classList.contains('open') ? 'true' : 'false');
+          }
+          return;
+        }
+        // Drug name / study count → trials modal
+        var trigger = e.target.closest('[data-pm-target]');
+        if (!trigger) return;
+        var key = trigger.getAttribute('data-pm-target');
+        var row = (trialsData.pipeline_matrix || []).filter(function(r) {
+          return (r.name || '') + '|' + (r.drug_class || '') === key;
+        })[0];
+        if (row) openPipelineModal(row);
+      });
+    }
   }
 
   function openPipelineModal(row) {

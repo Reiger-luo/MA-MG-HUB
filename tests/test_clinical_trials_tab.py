@@ -67,7 +67,9 @@ def test_trials_tab_has_pipeline_matrix():
     panel = panel_match.group(0)
     # Pipeline matrix container and filters
     assert 'id="pipelineMatrixContainer"' in panel, "Pipeline matrix container missing"
-    assert 'id="pipelineFilterClass"' in panel, "Drug class filter missing"
+    assert 'id="pipelineFilterSearch"' in panel, "Drug name search filter missing"
+    assert 'id="pipelineFilterStatus"' in panel, "Status filter missing"
+    assert 'id="pipelineFilterSource"' in panel, "Source filter missing"
     assert 'id="pipelineFilterPhase"' in panel, "Phase filter missing"
 
 
@@ -81,8 +83,10 @@ def test_trials_tab_has_pipeline_filters():
     )
     assert panel_match
     panel = panel_match.group(0)
-    # Pipeline matrix filters: drug_class + phase
-    assert 'id="pipelineFilterClass"' in panel, "Missing 药物分类 filter"
+    # Pipeline matrix filters: search + status + source + phase
+    assert 'id="pipelineFilterSearch"' in panel, "Missing 药物名搜索 filter"
+    assert 'id="pipelineFilterStatus"' in panel, "Missing 状态 filter"
+    assert 'id="pipelineFilterSource"' in panel, "Missing 来源 filter"
     assert 'id="pipelineFilterPhase"' in panel, "Missing 阶段 filter"
 
 
