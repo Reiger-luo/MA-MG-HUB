@@ -103,6 +103,9 @@ def _ct_items(payload: dict[str, Any]) -> list[dict[str, Any]]:
             "status": status.get("overallStatus") or "",
             "source": "ClinicalTrials.gov",
             "url": f"https://clinicaltrials.gov/study/{nct_id}" if nct_id else "",
+            "start_date": (status.get("startDateStruct") or {}).get("date") or "",
+            "readout_date": (status.get("primaryCompletionDateStruct") or {}).get("date") or "",
+            "completion_date": (status.get("completionDateStruct") or {}).get("date") or "",
         })
     return items
 
@@ -121,7 +124,16 @@ def _chictr_items(payload: dict[str, Any]) -> list[dict[str, Any]]:
         "url": _safe_http_url(item.get("official_url") or item.get("url")),
         "phase": item.get("phase") or "Unknown",
         "sponsor": item.get("sponsor") or item.get("primary_sponsor") or item.get("institution") or "",
+        "start_date": _chictr_valid_date(item.get("date_enrolment")),
+        "readout_date": _chictr_valid_date(item.get("results_date_completed")),
+        "completion_date": "",
     } for item in payload.get("records") or []]
+
+
+def _chictr_valid_date(value: Any) -> str:
+    """ChiCTR 占位日期 1900-01-01 视为无效。"""
+    value = str(value or "").strip()
+    return value if value and not value.startswith("1900") else ""
 
 
 def _extract_chictr_drug(item: dict[str, Any]) -> str:
@@ -159,6 +171,9 @@ def _cdt_items(payload: dict[str, Any]) -> list[dict[str, Any]]:
         "url": _safe_http_url(item.get("official_url")),
         "phase": item.get("phase") or "Unknown",
         "sponsor": item.get("sponsor") or "",
+        "start_date": "",
+        "readout_date": "",
+        "completion_date": "",
     } for item in payload.get("records") or []]
 
 

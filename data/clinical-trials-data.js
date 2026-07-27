@@ -101,6 +101,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT02965573"
         }
       ],
+      "timeline": {
+        "start": "2016-12-30",
+        "readout": "2028-03-07",
+        "completion": "2028-03-07"
+      },
       "first_registered": "2016-11-17",
       "latest_registered": "2026-05-19",
       "linked_registries": []
@@ -178,6 +183,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07463521"
         }
       ],
+      "timeline": {
+        "start": "2019-06-03",
+        "readout": "2031-01-23",
+        "completion": "2031-01-23"
+      },
       "first_registered": "2019-06-03",
       "latest_registered": "2026-05-06",
       "linked_registries": []
@@ -208,6 +218,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06688253"
         }
       ],
+      "timeline": {
+        "start": "2024-11-15",
+        "readout": "2025-01-15",
+        "completion": "2025-03-30"
+      },
       "first_registered": "2024-11-14",
       "latest_registered": "2024-11-14",
       "linked_registries": []
@@ -277,6 +292,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05332210"
         }
       ],
+      "timeline": {
+        "start": "2019-04-10",
+        "readout": "2024-04-26",
+        "completion": "2024-04-26"
+      },
       "first_registered": "2018-12-11",
       "latest_registered": "2022-04-29",
       "linked_registries": [
@@ -334,6 +354,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07217587"
         }
       ],
+      "timeline": {
+        "start": "2021-07-15",
+        "readout": "2027-09-28",
+        "completion": "2029-07-02"
+      },
       "first_registered": "2021-07-07",
       "latest_registered": "2025-10-16",
       "linked_registries": []
@@ -364,6 +389,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05403541"
         }
       ],
+      "timeline": {
+        "start": "2022-06-27",
+        "readout": "2025-01-10",
+        "completion": ""
+      },
       "first_registered": "2022-06-03",
       "latest_registered": "2022-06-03",
       "linked_registries": []
@@ -394,6 +424,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07039916"
         }
       ],
+      "timeline": {
+        "start": "2025-05-27",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2025-06-26",
       "latest_registered": "2025-06-26",
       "linked_registries": []
@@ -424,6 +459,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06765161"
         }
       ],
+      "timeline": {
+        "start": "2025-02-06",
+        "readout": "2027-01-06",
+        "completion": "2027-01-06"
+      },
       "first_registered": "2025-01-09",
       "latest_registered": "2025-01-09",
       "linked_registries": []
@@ -454,6 +494,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT04346888"
         }
       ],
+      "timeline": {
+        "start": "2020-07-23",
+        "readout": "2021-08-24",
+        "completion": "2021-08-24"
+      },
       "first_registered": "2020-04-15",
       "latest_registered": "2020-04-15",
       "linked_registries": []
@@ -484,6 +529,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07673744"
         }
       ],
+      "timeline": {
+        "start": "2026-07-30",
+        "readout": "2028-07-01",
+        "completion": "2030-01-01"
+      },
       "first_registered": "2026-06-29",
       "latest_registered": "2026-06-29",
       "linked_registries": []
@@ -514,6 +564,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06827587"
         }
       ],
+      "timeline": {
+        "start": "2025-02-14",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2025-02-14",
       "latest_registered": "2025-02-14",
       "linked_registries": []
@@ -544,6 +599,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05374590"
         }
       ],
+      "timeline": {
+        "start": "2022-08-18",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2022-05-16",
       "latest_registered": "2022-05-16",
       "linked_registries": []
@@ -574,6 +634,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=54367"
         }
       ],
+      "timeline": {
+        "start": "2020-07-01",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2020-06-05",
       "latest_registered": "2020-06-05",
       "linked_registries": []
@@ -604,6 +669,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=215289"
         }
       ],
+      "timeline": {
+        "start": "2023-11-21",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2024-02-18",
       "latest_registered": "2024-02-18",
       "linked_registries": []
@@ -634,6 +704,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=269768"
         }
       ],
+      "timeline": {
+        "start": "2025-04-17",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2025-04-17",
       "latest_registered": "2025-04-17",
       "linked_registries": []
@@ -664,6 +739,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=256603"
         }
       ],
+      "timeline": {
+        "start": "2025-02-01",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2025-01-07",
       "latest_registered": "2025-01-07",
       "linked_registries": []
@@ -694,6 +774,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=183410"
         }
       ],
+      "timeline": {
+        "start": "2023-01-01",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2022-12-20",
       "latest_registered": "2022-12-20",
       "linked_registries": []
@@ -724,6 +809,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=230180"
         }
       ],
+      "timeline": {
+        "start": "2024-06-02",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2024-05-28",
       "latest_registered": "2024-05-28",
       "linked_registries": []
@@ -754,6 +844,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=293253"
         }
       ],
+      "timeline": {
+        "start": "2025-11-04",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2025-11-04",
       "latest_registered": "2025-11-04",
       "linked_registries": []
@@ -784,6 +879,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=270461"
         }
       ],
+      "timeline": {
+        "start": "2025-07-01",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2025-06-20",
       "latest_registered": "2025-06-20",
       "linked_registries": []
@@ -814,6 +914,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=230185"
         }
       ],
+      "timeline": {
+        "start": "2024-05-31",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2024-05-24",
       "latest_registered": "2024-05-24",
       "linked_registries": []
@@ -844,6 +949,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=221367"
         }
       ],
+      "timeline": {
+        "start": "2023-11-24",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2024-07-31",
       "latest_registered": "2024-07-31",
       "linked_registries": []
@@ -917,6 +1027,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07596784"
         }
       ],
+      "timeline": {
+        "start": "2019-03-12",
+        "readout": "2029-12-31",
+        "completion": "2029-12-31"
+      },
       "first_registered": "2019-04-18",
       "latest_registered": "2026-05-19",
       "linked_registries": []
@@ -979,6 +1094,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06471361"
         }
       ],
+      "timeline": {
+        "start": "2017-10-11",
+        "readout": "2027-10-26",
+        "completion": "2027-11-19"
+      },
       "first_registered": "2017-10-19",
       "latest_registered": "2024-06-24",
       "linked_registries": []
@@ -1035,6 +1155,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06764160"
         }
       ],
+      "timeline": {
+        "start": "2014-11-12",
+        "readout": "2025-12-29",
+        "completion": "2025-12-29"
+      },
       "first_registered": "2008-08-01",
       "latest_registered": "2025-01-08",
       "linked_registries": []
@@ -1071,6 +1196,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05556096"
         }
       ],
+      "timeline": {
+        "start": "2022-11-21",
+        "readout": "2025-05-27",
+        "completion": "2027-08-31"
+      },
       "first_registered": "2022-09-27",
       "latest_registered": "2022-09-27",
       "linked_registries": []
@@ -1101,6 +1231,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05070858"
         }
       ],
+      "timeline": {
+        "start": "2021-12-14",
+        "readout": "2025-07-08",
+        "completion": "2028-11-11"
+      },
       "first_registered": "2021-10-07",
       "latest_registered": "2021-10-07",
       "linked_registries": []
@@ -1131,6 +1266,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07215949"
         }
       ],
+      "timeline": {
+        "start": "2026-01-20",
+        "readout": "2027-12-01",
+        "completion": "2028-04-01"
+      },
       "first_registered": "2025-10-14",
       "latest_registered": "2025-10-14",
       "linked_registries": []
@@ -1159,6 +1299,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20241295"
         }
       ],
+      "timeline": {
+        "start": "",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "",
       "latest_registered": "",
       "linked_registries": [
@@ -1195,6 +1340,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06815133"
         }
       ],
+      "timeline": {
+        "start": "2025-03-01",
+        "readout": "2026-02-01",
+        "completion": "2026-03-03"
+      },
       "first_registered": "2025-02-07",
       "latest_registered": "2025-02-07",
       "linked_registries": []
@@ -1225,6 +1375,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=239613"
         }
       ],
+      "timeline": {
+        "start": "2024-08-01",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2025-03-10",
       "latest_registered": "2025-03-10",
       "linked_registries": []
@@ -1255,6 +1410,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=334069"
         }
       ],
+      "timeline": {
+        "start": "2026-07-31",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2026-07-27",
       "latest_registered": "2026-07-27",
       "linked_registries": []
@@ -1334,6 +1494,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07249632"
         }
       ],
+      "timeline": {
+        "start": "2023-03-28",
+        "readout": "2026-12-31",
+        "completion": "2027-02-28"
+      },
       "first_registered": "2023-02-21",
       "latest_registered": "2026-07-04",
       "linked_registries": [
@@ -1398,6 +1563,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05868837"
         }
       ],
+      "timeline": {
+        "start": "2016-10-16",
+        "readout": "2025-07-31",
+        "completion": "2025-07-31"
+      },
       "first_registered": "2008-10-17",
       "latest_registered": "2023-05-22",
       "linked_registries": []
@@ -1439,6 +1609,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06987539"
         }
       ],
+      "timeline": {
+        "start": "2020-10-15",
+        "readout": "2030-03-13",
+        "completion": "2030-03-13"
+      },
       "first_registered": "2020-08-24",
       "latest_registered": "2025-05-23",
       "linked_registries": []
@@ -1469,6 +1644,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06342544"
         }
       ],
+      "timeline": {
+        "start": "2025-04-29",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2024-04-02",
       "latest_registered": "2024-04-02",
       "linked_registries": []
@@ -1499,6 +1679,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT04146051"
         }
       ],
+      "timeline": {
+        "start": "2019-12-04",
+        "readout": "2025-07-31",
+        "completion": "2026-03-31"
+      },
       "first_registered": "2019-10-31",
       "latest_registered": "2019-10-31",
       "linked_registries": [
@@ -1541,6 +1726,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07215650"
         }
       ],
+      "timeline": {
+        "start": "2025-09-16",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2025-10-10",
       "latest_registered": "2025-10-10",
       "linked_registries": []
@@ -1571,6 +1761,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05828225"
         }
       ],
+      "timeline": {
+        "start": "2023-04-30",
+        "readout": "2026-04-20",
+        "completion": "2026-04-20"
+      },
       "first_registered": "2023-04-25",
       "latest_registered": "2023-04-25",
       "linked_registries": []
@@ -1601,6 +1796,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06371040"
         }
       ],
+      "timeline": {
+        "start": "2024-07-12",
+        "readout": "2025-11-01",
+        "completion": "2026-12-01"
+      },
       "first_registered": "2024-04-17",
       "latest_registered": "2024-04-17",
       "linked_registries": []
@@ -1631,6 +1831,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06249438"
         }
       ],
+      "timeline": {
+        "start": "2024-03-20",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2024-02-08",
       "latest_registered": "2024-02-08",
       "linked_registries": []
@@ -1661,6 +1866,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06869278"
         }
       ],
+      "timeline": {
+        "start": "2025-06-17",
+        "readout": "2025-06-17",
+        "completion": "2025-06-17"
+      },
       "first_registered": "2025-03-11",
       "latest_registered": "2025-03-11",
       "linked_registries": []
@@ -1691,6 +1901,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06688435"
         }
       ],
+      "timeline": {
+        "start": "2025-01-08",
+        "readout": "2028-12-01",
+        "completion": "2033-05-01"
+      },
       "first_registered": "2024-11-14",
       "latest_registered": "2024-11-14",
       "linked_registries": []
@@ -1721,6 +1936,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06978738"
         }
       ],
+      "timeline": {
+        "start": "2025-05-18",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2025-05-18",
       "latest_registered": "2025-05-18",
       "linked_registries": []
@@ -1751,6 +1971,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07392528"
         }
       ],
+      "timeline": {
+        "start": "2026-02-06",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2026-02-06",
       "latest_registered": "2026-02-06",
       "linked_registries": []
@@ -1781,6 +2006,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06939166"
         }
       ],
+      "timeline": {
+        "start": "2025-06-17",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2025-04-22",
       "latest_registered": "2025-04-22",
       "linked_registries": []
@@ -1811,6 +2041,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06933563"
         }
       ],
+      "timeline": {
+        "start": "2025-04-18",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2025-04-18",
       "latest_registered": "2025-04-18",
       "linked_registries": []
@@ -1841,6 +2076,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=292341"
         }
       ],
+      "timeline": {
+        "start": "2026-04-01",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2026-03-17",
       "latest_registered": "2026-03-17",
       "linked_registries": []
@@ -1871,6 +2111,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=281385"
         }
       ],
+      "timeline": {
+        "start": "2025-08-01",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2025-07-29",
       "latest_registered": "2025-07-29",
       "linked_registries": []
@@ -1901,6 +2146,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=229359"
         }
       ],
+      "timeline": {
+        "start": "2024-06-12",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2024-05-16",
       "latest_registered": "2024-05-16",
       "linked_registries": []
@@ -1931,6 +2181,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=229365"
         }
       ],
+      "timeline": {
+        "start": "2024-06-02",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2024-05-04",
       "latest_registered": "2024-05-04",
       "linked_registries": []
@@ -1961,6 +2216,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT00619671"
         }
       ],
+      "timeline": {
+        "start": "2008-02-21",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2008-02-21",
       "latest_registered": "2008-02-21",
       "linked_registries": []
@@ -1991,6 +2251,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07071246"
         }
       ],
+      "timeline": {
+        "start": "2022-08-01",
+        "readout": "2027-06-30",
+        "completion": "2027-07-31"
+      },
       "first_registered": "2025-07-17",
       "latest_registered": "2025-07-17",
       "linked_registries": []
@@ -2019,6 +2284,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20253934"
         }
       ],
+      "timeline": {
+        "start": "",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "",
       "latest_registered": "",
       "linked_registries": []
@@ -2047,6 +2317,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20244175"
         }
       ],
+      "timeline": {
+        "start": "",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "",
       "latest_registered": "",
       "linked_registries": []
@@ -2077,6 +2352,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06193889"
         }
       ],
+      "timeline": {
+        "start": "2024-08-28",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2024-01-05",
       "latest_registered": "2024-01-05",
       "linked_registries": []
@@ -2107,6 +2387,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=229366"
         }
       ],
+      "timeline": {
+        "start": "2024-05-31",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2024-05-23",
       "latest_registered": "2024-05-23",
       "linked_registries": []
@@ -2137,6 +2422,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=318236"
         }
       ],
+      "timeline": {
+        "start": "2026-05-15",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2026-05-07",
       "latest_registered": "2026-05-07",
       "linked_registries": []
@@ -2167,6 +2457,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=285570"
         }
       ],
+      "timeline": {
+        "start": "2025-10-30",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2025-10-14",
       "latest_registered": "2025-10-14",
       "linked_registries": []
@@ -2197,6 +2492,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=293807"
         }
       ],
+      "timeline": {
+        "start": "2025-11-12",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2025-11-11",
       "latest_registered": "2025-11-11",
       "linked_registries": []
@@ -2233,6 +2533,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT04963270"
         }
       ],
+      "timeline": {
+        "start": "2021-10-19",
+        "readout": "2024-01-29",
+        "completion": "2024-09-02"
+      },
       "first_registered": "2021-07-15",
       "latest_registered": "2021-07-15",
       "linked_registries": []
@@ -2263,6 +2568,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05132569"
         }
       ],
+      "timeline": {
+        "start": "2021-12-03",
+        "readout": "2023-02-21",
+        "completion": "2023-02-21"
+      },
       "first_registered": "2021-11-24",
       "latest_registered": "2021-11-24",
       "linked_registries": []
@@ -2293,6 +2603,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05067348"
         }
       ],
+      "timeline": {
+        "start": "2022-07-21",
+        "readout": "2025-12-31",
+        "completion": "2026-03-30"
+      },
       "first_registered": "2021-10-05",
       "latest_registered": "2021-10-05",
       "linked_registries": []
@@ -2321,6 +2636,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20220329"
         }
       ],
+      "timeline": {
+        "start": "",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "",
       "latest_registered": "",
       "linked_registries": []
@@ -2351,6 +2671,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05716035"
         }
       ],
+      "timeline": {
+        "start": "2023-04-01",
+        "readout": "2024-07-31",
+        "completion": "2024-12-31"
+      },
       "first_registered": "2023-02-08",
       "latest_registered": "2023-02-08",
       "linked_registries": []
@@ -2381,6 +2706,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=121875"
         }
       ],
+      "timeline": {
+        "start": "2021-02-20",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2021-02-09",
       "latest_registered": "2021-02-09",
       "linked_registries": []
@@ -2411,6 +2741,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT00987116"
         }
       ],
+      "timeline": {
+        "start": "2009-09-30",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2009-09-30",
       "latest_registered": "2009-09-30",
       "linked_registries": []
@@ -2465,6 +2800,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT00309101"
         }
       ],
+      "timeline": {
+        "start": "2022-03-02",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2006-03-31",
       "latest_registered": "2022-06-27",
       "linked_registries": []
@@ -2506,6 +2846,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT01727193"
         }
       ],
+      "timeline": {
+        "start": "2012-11-15",
+        "readout": "2021-10-18",
+        "completion": "2021-11-18"
+      },
       "first_registered": "2012-11-15",
       "latest_registered": "2012-11-15",
       "linked_registries": []
@@ -2536,6 +2881,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06463587"
         }
       ],
+      "timeline": {
+        "start": "2024-06-25",
+        "readout": "2028-08-23",
+        "completion": "2030-11-12"
+      },
       "first_registered": "2024-06-18",
       "latest_registered": "2024-06-18",
       "linked_registries": []
@@ -2566,6 +2916,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06744920"
         }
       ],
+      "timeline": {
+        "start": "2025-02-07",
+        "readout": "2028-02-25",
+        "completion": "2033-02-26"
+      },
       "first_registered": "2024-12-20",
       "latest_registered": "2024-12-20",
       "linked_registries": []
@@ -2596,6 +2951,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT01325571"
         }
       ],
+      "timeline": {
+        "start": "2011-03-30",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2011-03-30",
       "latest_registered": "2011-03-30",
       "linked_registries": []
@@ -2626,6 +2986,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT00285350"
         }
       ],
+      "timeline": {
+        "start": "2006-02-02",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2006-02-02",
       "latest_registered": "2006-02-02",
       "linked_registries": []
@@ -2656,6 +3021,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT00683969"
         }
       ],
+      "timeline": {
+        "start": "2008-05-26",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2008-05-26",
       "latest_registered": "2008-05-26",
       "linked_registries": []
@@ -2686,6 +3056,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT00408213"
         }
       ],
+      "timeline": {
+        "start": "2006-12-06",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2006-12-06",
       "latest_registered": "2006-12-06",
       "linked_registries": []
@@ -2716,6 +3091,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT00814138"
         }
       ],
+      "timeline": {
+        "start": "2008-12-24",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2008-12-24",
       "latest_registered": "2008-12-24",
       "linked_registries": []
@@ -2744,6 +3124,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20243857"
         }
       ],
+      "timeline": {
+        "start": "",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "",
       "latest_registered": "",
       "linked_registries": []
@@ -2774,6 +3159,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT03490539"
         }
       ],
+      "timeline": {
+        "start": "2018-05-07",
+        "readout": "2021-01-31",
+        "completion": "2021-01-31"
+      },
       "first_registered": "2018-04-06",
       "latest_registered": "2018-04-06",
       "linked_registries": []
@@ -2804,6 +3194,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT00997412"
         }
       ],
+      "timeline": {
+        "start": "2009-10-19",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2009-10-19",
       "latest_registered": "2009-10-19",
       "linked_registries": []
@@ -2834,6 +3229,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT04768465"
         }
       ],
+      "timeline": {
+        "start": "2021-01-01",
+        "readout": "2023-12-31",
+        "completion": "2024-10-31"
+      },
       "first_registered": "2021-02-24",
       "latest_registered": "2021-02-24",
       "linked_registries": []
@@ -2862,6 +3262,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20252589"
         }
       ],
+      "timeline": {
+        "start": "",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "",
       "latest_registered": "",
       "linked_registries": []
@@ -2892,6 +3297,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT04182984"
         }
       ],
+      "timeline": {
+        "start": "2019-11-04",
+        "readout": "2026-04-30",
+        "completion": "2026-06-30"
+      },
       "first_registered": "2019-12-02",
       "latest_registered": "2019-12-02",
       "linked_registries": []
@@ -2922,6 +3332,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=41074"
         }
       ],
+      "timeline": {
+        "start": "2018-01-01",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2019-07-22",
       "latest_registered": "2019-07-22",
       "linked_registries": []
@@ -2999,6 +3414,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT03510546"
         }
       ],
+      "timeline": {
+        "start": "2018-04-09",
+        "readout": "2024-09-22",
+        "completion": "2024-09-22"
+      },
       "first_registered": "2018-04-27",
       "latest_registered": "2023-06-26",
       "linked_registries": []
@@ -3029,6 +3449,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT04226170"
         }
       ],
+      "timeline": {
+        "start": "2023-11-08",
+        "readout": "2025-04-30",
+        "completion": "2025-04-30"
+      },
       "first_registered": "2020-01-13",
       "latest_registered": "2020-01-13",
       "linked_registries": []
@@ -3059,6 +3484,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07154095"
         }
       ],
+      "timeline": {
+        "start": "2023-08-10",
+        "readout": "2023-11-22",
+        "completion": "2024-02-06"
+      },
       "first_registered": "2025-09-04",
       "latest_registered": "2025-09-04",
       "linked_registries": []
@@ -3087,6 +3517,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20182086"
         }
       ],
+      "timeline": {
+        "start": "",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "",
       "latest_registered": "",
       "linked_registries": []
@@ -3115,6 +3550,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20255231"
         }
       ],
+      "timeline": {
+        "start": "",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "",
       "latest_registered": "",
       "linked_registries": []
@@ -3145,6 +3585,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=256067"
         }
       ],
+      "timeline": {
+        "start": "2024-07-01",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2025-06-17",
       "latest_registered": "2025-06-17",
       "linked_registries": []
@@ -3175,6 +3620,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT01179893"
         }
       ],
+      "timeline": {
+        "start": "2010-08-11",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2010-08-11",
       "latest_registered": "2010-08-11",
       "linked_registries": []
@@ -3205,6 +3655,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT00515450"
         }
       ],
+      "timeline": {
+        "start": "2007-08-13",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2007-08-13",
       "latest_registered": "2007-08-13",
       "linked_registries": []
@@ -3235,6 +3690,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT02774239"
         }
       ],
+      "timeline": {
+        "start": "2016-05-17",
+        "readout": "2022-10-21",
+        "completion": "2022-10-21"
+      },
       "first_registered": "2016-05-17",
       "latest_registered": "2016-05-17",
       "linked_registries": []
@@ -3265,6 +3725,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT00306033"
         }
       ],
+      "timeline": {
+        "start": "2006-03-22",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2006-03-22",
       "latest_registered": "2006-03-22",
       "linked_registries": []
@@ -3295,6 +3760,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT02100969"
         }
       ],
+      "timeline": {
+        "start": "2014-04-01",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2014-04-01",
       "latest_registered": "2014-04-01",
       "linked_registries": []
@@ -3325,6 +3795,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT04728425"
         }
       ],
+      "timeline": {
+        "start": "2020-08-28",
+        "readout": "2023-06-30",
+        "completion": "2023-12-30"
+      },
       "first_registered": "2021-01-28",
       "latest_registered": "2021-01-28",
       "linked_registries": []
@@ -3355,6 +3830,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT01828294"
         }
       ],
+      "timeline": {
+        "start": "2013-04-10",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2013-04-10",
       "latest_registered": "2013-04-10",
       "linked_registries": []
@@ -3385,6 +3865,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07532707"
         }
       ],
+      "timeline": {
+        "start": "2022-09-01",
+        "readout": "2023-10-15",
+        "completion": "2023-10-30"
+      },
       "first_registered": "2026-04-16",
       "latest_registered": "2026-04-16",
       "linked_registries": []
@@ -3415,6 +3900,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=200622"
         }
       ],
+      "timeline": {
+        "start": "2023-06-30",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2023-06-30",
       "latest_registered": "2023-06-30",
       "linked_registries": []
@@ -3445,6 +3935,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT04101578"
         }
       ],
+      "timeline": {
+        "start": "2017-02-08",
+        "readout": "2023-06-01",
+        "completion": "2024-12-31"
+      },
       "first_registered": "2019-09-24",
       "latest_registered": "2019-09-24",
       "linked_registries": []
@@ -3475,6 +3970,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT01927692"
         }
       ],
+      "timeline": {
+        "start": "2013-08-23",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2013-08-23",
       "latest_registered": "2013-08-23",
       "linked_registries": []
@@ -3505,6 +4005,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT00004682"
         }
       ],
+      "timeline": {
+        "start": "2000-02-25",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2000-02-25",
       "latest_registered": "2000-02-25",
       "linked_registries": []
@@ -3545,6 +4050,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT02473965"
         }
       ],
+      "timeline": {
+        "start": "2015-04-10",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2015-04-10",
       "latest_registered": "2015-06-17",
       "linked_registries": []
@@ -3580,6 +4090,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT03579966"
         }
       ],
+      "timeline": {
+        "start": "2018-04-18",
+        "readout": "2022-08-05",
+        "completion": "2022-08-05"
+      },
       "first_registered": "2017-10-06",
       "latest_registered": "2018-07-09",
       "linked_registries": []
@@ -3615,6 +4130,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07647510"
         }
       ],
+      "timeline": {
+        "start": "2024-02-23",
+        "readout": "2025-07-28",
+        "completion": ""
+      },
       "first_registered": "2024-02-28",
       "latest_registered": "2026-06-15",
       "linked_registries": []
@@ -3645,6 +4165,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06799247"
         }
       ],
+      "timeline": {
+        "start": "2025-05-06",
+        "readout": "2026-11-30",
+        "completion": "2027-09-30"
+      },
       "first_registered": "2025-01-29",
       "latest_registered": "2025-01-29",
       "linked_registries": []
@@ -3675,6 +4200,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06517758"
         }
       ],
+      "timeline": {
+        "start": "2024-07-31",
+        "readout": "2027-04-30",
+        "completion": "2032-05-27"
+      },
       "first_registered": "2024-07-24",
       "latest_registered": "2024-07-24",
       "linked_registries": []
@@ -3705,6 +4235,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06607627"
         }
       ],
+      "timeline": {
+        "start": "2024-11-13",
+        "readout": "2026-12-15",
+        "completion": "2029-01-23"
+      },
       "first_registered": "2024-09-23",
       "latest_registered": "2024-09-23",
       "linked_registries": []
@@ -3735,6 +4270,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT00995722"
         }
       ],
+      "timeline": {
+        "start": "2009-10-15",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2009-10-15",
       "latest_registered": "2009-10-15",
       "linked_registries": []
@@ -3765,6 +4305,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT00294658"
         }
       ],
+      "timeline": {
+        "start": "2006-02-22",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2006-02-22",
       "latest_registered": "2006-02-22",
       "linked_registries": []
@@ -3801,6 +4346,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT01480596"
         }
       ],
+      "timeline": {
+        "start": "2011-11-29",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2011-11-29",
       "latest_registered": "2011-11-29",
       "linked_registries": []
@@ -3837,6 +4387,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT02565576"
         }
       ],
+      "timeline": {
+        "start": "2015-09-29",
+        "readout": "2017-07-31",
+        "completion": "2017-12-19"
+      },
       "first_registered": "2010-12-30",
       "latest_registered": "2015-10-01",
       "linked_registries": []
@@ -3867,6 +4422,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT04982289"
         }
       ],
+      "timeline": {
+        "start": "2022-01-01",
+        "readout": "2023-01-31",
+        "completion": "2024-01-31"
+      },
       "first_registered": "2021-07-29",
       "latest_registered": "2021-07-29",
       "linked_registries": []
@@ -3897,6 +4457,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05218096"
         }
       ],
+      "timeline": {
+        "start": "2022-04-27",
+        "readout": "2023-11-30",
+        "completion": "2024-04-03"
+      },
       "first_registered": "2022-02-01",
       "latest_registered": "2022-02-01",
       "linked_registries": []
@@ -3927,6 +4492,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT00716066"
         }
       ],
+      "timeline": {
+        "start": "2008-07-16",
+        "readout": "2025-12-30",
+        "completion": "2030-01-31"
+      },
       "first_registered": "2008-07-16",
       "latest_registered": "2008-07-16",
       "linked_registries": []
@@ -3957,6 +4527,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05045248"
         }
       ],
+      "timeline": {
+        "start": "2020-06-01",
+        "readout": "2021-04-15",
+        "completion": "2021-04-15"
+      },
       "first_registered": "2021-09-16",
       "latest_registered": "2021-09-16",
       "linked_registries": []
@@ -3987,6 +4562,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT02102594"
         }
       ],
+      "timeline": {
+        "start": "2014-04-03",
+        "readout": "2019-08-30",
+        "completion": "2019-08-30"
+      },
       "first_registered": "2014-04-03",
       "latest_registered": "2014-04-03",
       "linked_registries": []
@@ -4017,6 +4597,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07673627"
         }
       ],
+      "timeline": {
+        "start": "2026-07-10",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2026-06-29",
       "latest_registered": "2026-06-29",
       "linked_registries": []
@@ -4047,6 +4632,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06414954"
         }
       ],
+      "timeline": {
+        "start": "2024-05-16",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2024-05-16",
       "latest_registered": "2024-05-16",
       "linked_registries": []
@@ -4077,6 +4667,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07501702"
         }
       ],
+      "timeline": {
+        "start": "2026-05-13",
+        "readout": "2029-03-02",
+        "completion": "2029-03-02"
+      },
       "first_registered": "2026-03-30",
       "latest_registered": "2026-03-30",
       "linked_registries": []
@@ -4107,6 +4702,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT04302103"
         }
       ],
+      "timeline": {
+        "start": "2020-07-07",
+        "readout": "2022-01-14",
+        "completion": "2022-02-11"
+      },
       "first_registered": "2020-03-10",
       "latest_registered": "2020-03-10",
       "linked_registries": []
@@ -4137,6 +4737,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT03863080"
         }
       ],
+      "timeline": {
+        "start": "2019-05-21",
+        "readout": "2020-10-07",
+        "completion": "2020-12-21"
+      },
       "first_registered": "2019-03-05",
       "latest_registered": "2019-03-05",
       "linked_registries": []
@@ -4167,6 +4772,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07622342"
         }
       ],
+      "timeline": {
+        "start": "2026-06-03",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2026-06-03",
       "latest_registered": "2026-06-03",
       "linked_registries": []
@@ -4197,6 +4807,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT04159805"
         }
       ],
+      "timeline": {
+        "start": "2020-01-14",
+        "readout": "2022-07-12",
+        "completion": "2022-07-12"
+      },
       "first_registered": "2019-11-12",
       "latest_registered": "2019-11-12",
       "linked_registries": []
@@ -4227,6 +4842,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT02317224"
         }
       ],
+      "timeline": {
+        "start": "2014-12-15",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2014-12-15",
       "latest_registered": "2014-12-15",
       "linked_registries": []
@@ -4257,6 +4877,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT03052751"
         }
       ],
+      "timeline": {
+        "start": "2017-05-15",
+        "readout": "2018-05-31",
+        "completion": "2018-08-06"
+      },
       "first_registered": "2017-02-14",
       "latest_registered": "2017-02-14",
       "linked_registries": []
@@ -4299,6 +4924,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07058298"
         }
       ],
+      "timeline": {
+        "start": "2024-12-01",
+        "readout": "2027-06-01",
+        "completion": "2027-10-01"
+      },
       "first_registered": "2024-05-17",
       "latest_registered": "2025-07-10",
       "linked_registries": []
@@ -4334,6 +4964,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07556120"
         }
       ],
+      "timeline": {
+        "start": "2026-01-19",
+        "readout": "2027-05-31",
+        "completion": "2027-12-31"
+      },
       "first_registered": "2025-05-11",
       "latest_registered": "2026-04-29",
       "linked_registries": []
@@ -4364,6 +4999,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06220201"
         }
       ],
+      "timeline": {
+        "start": "2024-03-28",
+        "readout": "2027-07-15",
+        "completion": "2027-07-15"
+      },
       "first_registered": "2024-01-23",
       "latest_registered": "2024-01-23",
       "linked_registries": []
@@ -4394,6 +5034,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06958939"
         }
       ],
+      "timeline": {
+        "start": "2025-05-01",
+        "readout": "2026-04-30",
+        "completion": "2028-04-30"
+      },
       "first_registered": "2025-05-06",
       "latest_registered": "2025-05-06",
       "linked_registries": []
@@ -4424,6 +5069,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT01047761"
         }
       ],
+      "timeline": {
+        "start": "2010-01-13",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2010-01-13",
       "latest_registered": "2010-01-13",
       "linked_registries": []
@@ -4454,6 +5104,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT00424489"
         }
       ],
+      "timeline": {
+        "start": "2007-01-19",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2007-01-19",
       "latest_registered": "2007-01-19",
       "linked_registries": []
@@ -4484,6 +5139,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07304154"
         }
       ],
+      "timeline": {
+        "start": "2026-04-10",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2025-12-26",
       "latest_registered": "2025-12-26",
       "linked_registries": []
@@ -4514,6 +5174,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05451212"
         }
       ],
+      "timeline": {
+        "start": "2022-11-23",
+        "readout": "2025-07-24",
+        "completion": "2025-07-24"
+      },
       "first_registered": "2022-07-11",
       "latest_registered": "2022-07-11",
       "linked_registries": []
@@ -4544,6 +5209,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT04965987"
         }
       ],
+      "timeline": {
+        "start": "2021-07-16",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2021-07-16",
       "latest_registered": "2021-07-16",
       "linked_registries": []
@@ -4574,6 +5244,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07714798"
         }
       ],
+      "timeline": {
+        "start": "2026-07-06",
+        "readout": "2027-07-06",
+        "completion": "2028-07-06"
+      },
       "first_registered": "2026-07-20",
       "latest_registered": "2026-07-20",
       "linked_registries": []
@@ -4604,6 +5279,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06626919"
         }
       ],
+      "timeline": {
+        "start": "2025-04-30",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2024-10-04",
       "latest_registered": "2024-10-04",
       "linked_registries": []
@@ -4634,6 +5314,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT03059888"
         }
       ],
+      "timeline": {
+        "start": "2017-04-12",
+        "readout": "2019-07-15",
+        "completion": "2019-07-15"
+      },
       "first_registered": "2017-02-23",
       "latest_registered": "2017-02-23",
       "linked_registries": []
@@ -4664,6 +5349,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07243366"
         }
       ],
+      "timeline": {
+        "start": "2025-11-25",
+        "readout": "2027-06-30",
+        "completion": "2027-11-30"
+      },
       "first_registered": "2025-11-21",
       "latest_registered": "2025-11-21",
       "linked_registries": []
@@ -4694,6 +5384,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT04561557"
         }
       ],
+      "timeline": {
+        "start": "2020-09-22",
+        "readout": "2027-02-22",
+        "completion": "2027-05-31"
+      },
       "first_registered": "2020-09-23",
       "latest_registered": "2020-09-23",
       "linked_registries": []
@@ -4724,6 +5419,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT01555580"
         }
       ],
+      "timeline": {
+        "start": "2012-03-15",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2012-03-15",
       "latest_registered": "2012-03-15",
       "linked_registries": []
@@ -4754,6 +5454,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT04431895"
         }
       ],
+      "timeline": {
+        "start": "2020-06-11",
+        "readout": "2024-03-21",
+        "completion": "2024-03-31"
+      },
       "first_registered": "2020-06-16",
       "latest_registered": "2020-06-16",
       "linked_registries": []
@@ -4795,6 +5500,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=121805"
         }
       ],
+      "timeline": {
+        "start": "2020-10-01",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2020-08-30",
       "latest_registered": "2021-02-09",
       "linked_registries": []
@@ -4831,6 +5541,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06447597"
         }
       ],
+      "timeline": {
+        "start": "2024-07-01",
+        "readout": "2026-06-30",
+        "completion": "2026-06-30"
+      },
       "first_registered": "2024-06-07",
       "latest_registered": "2024-06-07",
       "linked_registries": []
@@ -4867,6 +5582,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06836973"
         }
       ],
+      "timeline": {
+        "start": "2024-11-30",
+        "readout": "2028-03-31",
+        "completion": "2028-06-30"
+      },
       "first_registered": "2024-11-12",
       "latest_registered": "2025-02-20",
       "linked_registries": []
@@ -4902,6 +5622,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT03165435"
         }
       ],
+      "timeline": {
+        "start": "2015-11-20",
+        "readout": "2019-10-01",
+        "completion": "2019-12-31"
+      },
       "first_registered": "2015-11-20",
       "latest_registered": "2017-05-24",
       "linked_registries": []
@@ -4937,6 +5662,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07478172"
         }
       ],
+      "timeline": {
+        "start": "2023-07-12",
+        "readout": "2030-12-31",
+        "completion": "2031-01-07"
+      },
       "first_registered": "2023-10-03",
       "latest_registered": "2026-03-17",
       "linked_registries": []
@@ -4974,6 +5704,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06436768"
         }
       ],
+      "timeline": {
+        "start": "2022-08-10",
+        "readout": "2025-03-05",
+        "completion": "2025-03-05"
+      },
       "first_registered": "2023-07-19",
       "latest_registered": "2024-05-31",
       "linked_registries": []
@@ -5011,6 +5746,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07499323"
         }
       ],
+      "timeline": {
+        "start": "2026-03-20",
+        "readout": "2027-03-20",
+        "completion": "2027-04-01"
+      },
       "first_registered": "2026-03-30",
       "latest_registered": "2026-04-03",
       "linked_registries": []
@@ -5047,6 +5787,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=27584"
         }
       ],
+      "timeline": {
+        "start": "2019-07-29",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2019-05-23",
       "latest_registered": "2019-08-14",
       "linked_registries": []
@@ -5077,6 +5822,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT02012933"
         }
       ],
+      "timeline": {
+        "start": "2013-12-17",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2013-12-17",
       "latest_registered": "2013-12-17",
       "linked_registries": []
@@ -5107,6 +5857,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT04224506"
         }
       ],
+      "timeline": {
+        "start": "2020-03-02",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2020-01-13",
       "latest_registered": "2020-01-13",
       "linked_registries": []
@@ -5137,6 +5892,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT04674605"
         }
       ],
+      "timeline": {
+        "start": "2020-12-31",
+        "readout": "2022-10-01",
+        "completion": "2022-10-30"
+      },
       "first_registered": "2020-12-19",
       "latest_registered": "2020-12-19",
       "linked_registries": []
@@ -5167,6 +5927,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05455840"
         }
       ],
+      "timeline": {
+        "start": "2022-08-03",
+        "readout": "2024-04-11",
+        "completion": "2024-04-11"
+      },
       "first_registered": "2022-07-13",
       "latest_registered": "2022-07-13",
       "linked_registries": []
@@ -5197,6 +5962,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06700616"
         }
       ],
+      "timeline": {
+        "start": "2024-09-26",
+        "readout": "2027-12-30",
+        "completion": "2027-12-30"
+      },
       "first_registered": "2024-11-22",
       "latest_registered": "2024-11-22",
       "linked_registries": []
@@ -5227,6 +5997,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=278634"
         }
       ],
+      "timeline": {
+        "start": "2025-07-01",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2025-10-16",
       "latest_registered": "2025-10-16",
       "linked_registries": []
@@ -5257,6 +6032,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05230082"
         }
       ],
+      "timeline": {
+        "start": "2022-05-25",
+        "readout": "2024-04-30",
+        "completion": "2024-04-30"
+      },
       "first_registered": "2022-02-08",
       "latest_registered": "2022-02-08",
       "linked_registries": []
@@ -5287,6 +6067,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=291981"
         }
       ],
+      "timeline": {
+        "start": "2025-11-20",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2025-11-13",
       "latest_registered": "2025-11-13",
       "linked_registries": []
@@ -5317,6 +6102,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06879210"
         }
       ],
+      "timeline": {
+        "start": "2023-04-19",
+        "readout": "2026-04-19",
+        "completion": "2026-07-19"
+      },
       "first_registered": "2025-03-17",
       "latest_registered": "2025-03-17",
       "linked_registries": []
@@ -5347,6 +6137,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07596901"
         }
       ],
+      "timeline": {
+        "start": "2026-04-22",
+        "readout": "2029-03-02",
+        "completion": "2029-03-02"
+      },
       "first_registered": "2026-05-19",
       "latest_registered": "2026-05-19",
       "linked_registries": []
@@ -5377,6 +6172,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06860360"
         }
       ],
+      "timeline": {
+        "start": "2020-12-01",
+        "readout": "2022-12-31",
+        "completion": "2022-12-31"
+      },
       "first_registered": "2025-03-06",
       "latest_registered": "2025-03-06",
       "linked_registries": []
@@ -5407,6 +6207,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05380128"
         }
       ],
+      "timeline": {
+        "start": "2017-06-01",
+        "readout": "2019-12-31",
+        "completion": "2022-05-09"
+      },
       "first_registered": "2022-05-18",
       "latest_registered": "2022-05-18",
       "linked_registries": []
@@ -5437,6 +6242,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07022197"
         }
       ],
+      "timeline": {
+        "start": "2025-04-10",
+        "readout": "2027-12-30",
+        "completion": "2027-12-30"
+      },
       "first_registered": "2025-06-15",
       "latest_registered": "2025-06-15",
       "linked_registries": []
@@ -5467,6 +6277,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=43617"
         }
       ],
+      "timeline": {
+        "start": "2019-09-23",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2019-09-22",
       "latest_registered": "2019-09-22",
       "linked_registries": []
@@ -5497,6 +6312,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT02066519"
         }
       ],
+      "timeline": {
+        "start": "2014-02-19",
+        "readout": "2018-01-10",
+        "completion": "2018-04-06"
+      },
       "first_registered": "2014-02-19",
       "latest_registered": "2014-02-19",
       "linked_registries": []
@@ -5527,6 +6347,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06860347"
         }
       ],
+      "timeline": {
+        "start": "2022-05-19",
+        "readout": "2022-09-01",
+        "completion": "2023-04-01"
+      },
       "first_registered": "2025-03-06",
       "latest_registered": "2025-03-06",
       "linked_registries": []
@@ -5557,6 +6382,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06502015"
         }
       ],
+      "timeline": {
+        "start": "2024-07-31",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2024-07-15",
       "latest_registered": "2024-07-15",
       "linked_registries": []
@@ -5587,6 +6417,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT02761707"
         }
       ],
+      "timeline": {
+        "start": "2016-05-04",
+        "readout": "",
+        "completion": "2019-07-16"
+      },
       "first_registered": "2016-05-04",
       "latest_registered": "2016-05-04",
       "linked_registries": []
@@ -5617,6 +6452,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06881173"
         }
       ],
+      "timeline": {
+        "start": "2022-06-14",
+        "readout": "2025-06-13",
+        "completion": "2025-06-13"
+      },
       "first_registered": "2025-03-18",
       "latest_registered": "2025-03-18",
       "linked_registries": []
@@ -5647,6 +6487,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT03979521"
         }
       ],
+      "timeline": {
+        "start": "2019-05-01",
+        "readout": "2019-07-31",
+        "completion": "2019-07-31"
+      },
       "first_registered": "2019-06-07",
       "latest_registered": "2019-06-07",
       "linked_registries": []
@@ -5677,6 +6522,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=127794"
         }
       ],
+      "timeline": {
+        "start": "2022-01-01",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2021-06-20",
       "latest_registered": "2021-06-20",
       "linked_registries": []
@@ -5707,6 +6557,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=199555"
         }
       ],
+      "timeline": {
+        "start": "2023-07-15",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2023-07-04",
       "latest_registered": "2023-07-04",
       "linked_registries": []
@@ -5737,6 +6592,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06359041"
         }
       ],
+      "timeline": {
+        "start": "2024-12-17",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2024-04-11",
       "latest_registered": "2024-04-11",
       "linked_registries": []
@@ -5767,6 +6627,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06106672"
         }
       ],
+      "timeline": {
+        "start": "2024-05-30",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2023-10-30",
       "latest_registered": "2023-10-30",
       "linked_registries": []
@@ -5797,6 +6662,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT03900585"
         }
       ],
+      "timeline": {
+        "start": "2019-04-03",
+        "readout": "2021-01-01",
+        "completion": "2021-01-01"
+      },
       "first_registered": "2019-04-03",
       "latest_registered": "2019-04-03",
       "linked_registries": []
@@ -5827,6 +6697,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06743490"
         }
       ],
+      "timeline": {
+        "start": "2025-03-18",
+        "readout": "2026-08-28",
+        "completion": "2026-09-30"
+      },
       "first_registered": "2024-12-20",
       "latest_registered": "2024-12-20",
       "linked_registries": []
@@ -5857,6 +6732,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06707727"
         }
       ],
+      "timeline": {
+        "start": "2024-07-01",
+        "readout": "2025-12-31",
+        "completion": "2026-06-30"
+      },
       "first_registered": "2024-11-27",
       "latest_registered": "2024-11-27",
       "linked_registries": []
@@ -5887,6 +6767,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=129456"
         }
       ],
+      "timeline": {
+        "start": "2021-07-03",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2021-07-04",
       "latest_registered": "2021-07-04",
       "linked_registries": []
@@ -5917,6 +6802,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT04678115"
         }
       ],
+      "timeline": {
+        "start": "2021-06-01",
+        "readout": "2024-12-31",
+        "completion": "2024-12-31"
+      },
       "first_registered": "2020-12-21",
       "latest_registered": "2020-12-21",
       "linked_registries": []
@@ -5947,6 +6837,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT03818204"
         }
       ],
+      "timeline": {
+        "start": "2019-02-07",
+        "readout": "2023-12-01",
+        "completion": "2023-12-01"
+      },
       "first_registered": "2019-01-28",
       "latest_registered": "2019-01-28",
       "linked_registries": []
@@ -5977,6 +6872,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06774937"
         }
       ],
+      "timeline": {
+        "start": "2025-02-01",
+        "readout": "2025-05-01",
+        "completion": "2025-08-01"
+      },
       "first_registered": "2025-01-14",
       "latest_registered": "2025-01-14",
       "linked_registries": []
@@ -6007,6 +6907,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06718855"
         }
       ],
+      "timeline": {
+        "start": "2023-06-07",
+        "readout": "2025-08-12",
+        "completion": "2025-09-30"
+      },
       "first_registered": "2024-12-05",
       "latest_registered": "2024-12-05",
       "linked_registries": []
@@ -6037,6 +6942,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07653984"
         }
       ],
+      "timeline": {
+        "start": "2024-04-21",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2026-06-17",
       "latest_registered": "2026-06-17",
       "linked_registries": []
@@ -6067,6 +6977,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=30263"
         }
       ],
+      "timeline": {
+        "start": "2018-09-01",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2018-08-20",
       "latest_registered": "2018-08-20",
       "linked_registries": []
@@ -6097,6 +7012,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=233117"
         }
       ],
+      "timeline": {
+        "start": "2024-07-22",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2024-07-18",
       "latest_registered": "2024-07-18",
       "linked_registries": []
@@ -6127,6 +7047,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07146425"
         }
       ],
+      "timeline": {
+        "start": "2023-08-31",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2025-08-28",
       "latest_registered": "2025-08-28",
       "linked_registries": []
@@ -6157,6 +7082,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07649187"
         }
       ],
+      "timeline": {
+        "start": "2024-01-01",
+        "readout": "2025-12-31",
+        "completion": "2025-12-31"
+      },
       "first_registered": "2026-06-16",
       "latest_registered": "2026-06-16",
       "linked_registries": []
@@ -6187,6 +7117,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05566964"
         }
       ],
+      "timeline": {
+        "start": "2023-02-27",
+        "readout": "2025-01-10",
+        "completion": "2025-01-10"
+      },
       "first_registered": "2022-10-05",
       "latest_registered": "2022-10-05",
       "linked_registries": []
@@ -6217,6 +7152,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07033559"
         }
       ],
+      "timeline": {
+        "start": "2025-06-24",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2025-06-24",
       "latest_registered": "2025-06-24",
       "linked_registries": []
@@ -6247,6 +7187,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06605612"
         }
       ],
+      "timeline": {
+        "start": "2024-09-09",
+        "readout": "2027-08-01",
+        "completion": "2028-01-01"
+      },
       "first_registered": "2024-09-20",
       "latest_registered": "2024-09-20",
       "linked_registries": []
@@ -6277,6 +7222,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05324176"
         }
       ],
+      "timeline": {
+        "start": "2022-04-13",
+        "readout": "2022-05-09",
+        "completion": "2022-05-13"
+      },
       "first_registered": "2022-04-12",
       "latest_registered": "2022-04-12",
       "linked_registries": []
@@ -6307,6 +7257,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05992025"
         }
       ],
+      "timeline": {
+        "start": "2023-07-10",
+        "readout": "2024-08-15",
+        "completion": "2025-03-15"
+      },
       "first_registered": "2023-08-15",
       "latest_registered": "2023-08-15",
       "linked_registries": []
@@ -6337,6 +7292,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06805643"
         }
       ],
+      "timeline": {
+        "start": "2025-02-03",
+        "readout": "2025-12-31",
+        "completion": "2026-02-28"
+      },
       "first_registered": "2025-02-03",
       "latest_registered": "2025-02-03",
       "linked_registries": []
@@ -6367,6 +7327,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT03468452"
         }
       ],
+      "timeline": {
+        "start": "2015-01-01",
+        "readout": "2017-11-21",
+        "completion": "2017-12-11"
+      },
       "first_registered": "2018-03-16",
       "latest_registered": "2018-03-16",
       "linked_registries": []
@@ -6397,6 +7362,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT04714658"
         }
       ],
+      "timeline": {
+        "start": "2021-01-22",
+        "readout": "2025-05-22",
+        "completion": "2025-05-22"
+      },
       "first_registered": "2021-01-19",
       "latest_registered": "2021-01-19",
       "linked_registries": []
@@ -6427,6 +7397,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07247279"
         }
       ],
+      "timeline": {
+        "start": "2025-12-23",
+        "readout": "2029-12-31",
+        "completion": "2029-12-31"
+      },
       "first_registered": "2025-11-25",
       "latest_registered": "2025-11-25",
       "linked_registries": []
@@ -6457,6 +7432,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06866652"
         }
       ],
+      "timeline": {
+        "start": "2026-04-08",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2025-03-10",
       "latest_registered": "2025-03-10",
       "linked_registries": []
@@ -6487,6 +7467,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05408702"
         }
       ],
+      "timeline": {
+        "start": "2021-11-12",
+        "readout": "2022-05-15",
+        "completion": "2022-05-15"
+      },
       "first_registered": "2022-06-07",
       "latest_registered": "2022-06-07",
       "linked_registries": []
@@ -6517,6 +7502,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05945784"
         }
       ],
+      "timeline": {
+        "start": "2023-07-21",
+        "readout": "2023-09-15",
+        "completion": "2023-09-29"
+      },
       "first_registered": "2023-07-14",
       "latest_registered": "2023-07-14",
       "linked_registries": []
@@ -6547,6 +7537,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06002945"
         }
       ],
+      "timeline": {
+        "start": "2021-01-12",
+        "readout": "2025-05-31",
+        "completion": "2025-05-31"
+      },
       "first_registered": "2023-08-21",
       "latest_registered": "2023-08-21",
       "linked_registries": []
@@ -6577,6 +7572,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06539169"
         }
       ],
+      "timeline": {
+        "start": "2024-06-10",
+        "readout": "2026-06-10",
+        "completion": "2026-06-10"
+      },
       "first_registered": "2024-08-06",
       "latest_registered": "2024-08-06",
       "linked_registries": []
@@ -6607,6 +7607,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=130127"
         }
       ],
+      "timeline": {
+        "start": "2021-08-01",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2021-07-16",
       "latest_registered": "2021-07-16",
       "linked_registries": []
@@ -6637,6 +7642,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT04695379"
         }
       ],
+      "timeline": {
+        "start": "2020-04-27",
+        "readout": "2020-06-18",
+        "completion": "2020-06-18"
+      },
       "first_registered": "2021-01-05",
       "latest_registered": "2021-01-05",
       "linked_registries": []
@@ -6667,6 +7677,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=155608"
         }
       ],
+      "timeline": {
+        "start": "1990-01-01",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2022-02-26",
       "latest_registered": "2022-02-26",
       "linked_registries": []
@@ -6697,6 +7712,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07136844"
         }
       ],
+      "timeline": {
+        "start": "2024-03-29",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2025-08-22",
       "latest_registered": "2025-08-22",
       "linked_registries": []
@@ -6727,6 +7747,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07413835"
         }
       ],
+      "timeline": {
+        "start": "2026-03-17",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2026-02-17",
       "latest_registered": "2026-02-17",
       "linked_registries": []
@@ -6757,6 +7782,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT04590716"
         }
       ],
+      "timeline": {
+        "start": "2020-10-02",
+        "readout": "2021-07-26",
+        "completion": "2021-07-26"
+      },
       "first_registered": "2020-10-19",
       "latest_registered": "2020-10-19",
       "linked_registries": []
@@ -6787,6 +7817,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=31014"
         }
       ],
+      "timeline": {
+        "start": "2018-10-15",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2018-09-30",
       "latest_registered": "2018-09-30",
       "linked_registries": []
@@ -6817,6 +7852,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07323316"
         }
       ],
+      "timeline": {
+        "start": "2026-01-07",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2026-01-07",
       "latest_registered": "2026-01-07",
       "linked_registries": []
@@ -6847,6 +7887,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07250750"
         }
       ],
+      "timeline": {
+        "start": "2026-02-05",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2025-11-26",
       "latest_registered": "2025-11-26",
       "linked_registries": []
@@ -6877,6 +7922,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05095103"
         }
       ],
+      "timeline": {
+        "start": "2021-10-27",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2021-10-27",
       "latest_registered": "2021-10-27",
       "linked_registries": []
@@ -6907,6 +7957,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT03884777"
         }
       ],
+      "timeline": {
+        "start": "2009-01-01",
+        "readout": "2017-12-31",
+        "completion": "2017-12-31"
+      },
       "first_registered": "2019-03-21",
       "latest_registered": "2019-03-21",
       "linked_registries": []
@@ -6937,6 +7992,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT04158661"
         }
       ],
+      "timeline": {
+        "start": "2020-04-20",
+        "readout": "2020-11-30",
+        "completion": "2022-06-30"
+      },
       "first_registered": "2019-11-12",
       "latest_registered": "2019-11-12",
       "linked_registries": []
@@ -6967,6 +8027,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05694234"
         }
       ],
+      "timeline": {
+        "start": "2021-09-01",
+        "readout": "2021-12-30",
+        "completion": "2021-12-30"
+      },
       "first_registered": "2023-01-23",
       "latest_registered": "2023-01-23",
       "linked_registries": []
@@ -6997,6 +8062,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT02118805"
         }
       ],
+      "timeline": {
+        "start": "2014-04-21",
+        "readout": "2021-12-31",
+        "completion": "2021-12-31"
+      },
       "first_registered": "2014-04-21",
       "latest_registered": "2014-04-21",
       "linked_registries": []
@@ -7027,6 +8097,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07125105"
         }
       ],
+      "timeline": {
+        "start": "2025-11-01",
+        "readout": "2028-04-30",
+        "completion": "2028-10-30"
+      },
       "first_registered": "2025-08-15",
       "latest_registered": "2025-08-15",
       "linked_registries": []
@@ -7057,6 +8132,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05301153"
         }
       ],
+      "timeline": {
+        "start": "2022-07-01",
+        "readout": "2023-12-01",
+        "completion": "2024-12-01"
+      },
       "first_registered": "2022-03-29",
       "latest_registered": "2022-03-29",
       "linked_registries": []
@@ -7087,6 +8167,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06624345"
         }
       ],
+      "timeline": {
+        "start": "2018-01-01",
+        "readout": "2018-12-31",
+        "completion": "2018-12-31"
+      },
       "first_registered": "2024-10-03",
       "latest_registered": "2024-10-03",
       "linked_registries": []
@@ -7117,6 +8202,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06659627"
         }
       ],
+      "timeline": {
+        "start": "2024-12-04",
+        "readout": "2026-06-30",
+        "completion": "2027-01-23"
+      },
       "first_registered": "2024-10-26",
       "latest_registered": "2024-10-26",
       "linked_registries": []
@@ -7147,6 +8237,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06158815"
         }
       ],
+      "timeline": {
+        "start": "2022-12-28",
+        "readout": "2024-07-09",
+        "completion": "2024-12-25"
+      },
       "first_registered": "2023-12-06",
       "latest_registered": "2023-12-06",
       "linked_registries": []
@@ -7177,6 +8272,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06491238"
         }
       ],
+      "timeline": {
+        "start": "2024-09-16",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2024-07-09",
       "latest_registered": "2024-07-09",
       "linked_registries": []
@@ -7207,6 +8307,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=40498"
         }
       ],
+      "timeline": {
+        "start": "2019-08-01",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2019-07-05",
       "latest_registered": "2019-07-05",
       "linked_registries": []
@@ -7237,6 +8342,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07472777"
         }
       ],
+      "timeline": {
+        "start": "2024-01-01",
+        "readout": "2024-07-31",
+        "completion": "2024-07-31"
+      },
       "first_registered": "2026-03-16",
       "latest_registered": "2026-03-16",
       "linked_registries": []
@@ -7267,6 +8377,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=24904"
         }
       ],
+      "timeline": {
+        "start": "2016-07-01",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2018-08-10",
       "latest_registered": "2018-08-10",
       "linked_registries": []
@@ -7297,6 +8412,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT04541875"
         }
       ],
+      "timeline": {
+        "start": "2020-09-09",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2020-09-09",
       "latest_registered": "2020-09-09",
       "linked_registries": []
@@ -7327,6 +8447,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06256172"
         }
       ],
+      "timeline": {
+        "start": "2023-06-16",
+        "readout": "2023-12-16",
+        "completion": "2023-12-16"
+      },
       "first_registered": "2024-02-13",
       "latest_registered": "2024-02-13",
       "linked_registries": []
@@ -7357,6 +8482,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=64688"
         }
       ],
+      "timeline": {
+        "start": "2020-12-05",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2020-11-29",
       "latest_registered": "2020-11-29",
       "linked_registries": []
@@ -7387,6 +8517,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06259071"
         }
       ],
+      "timeline": {
+        "start": "2023-08-23",
+        "readout": "2025-08-23",
+        "completion": "2025-12-31"
+      },
       "first_registered": "2024-02-14",
       "latest_registered": "2024-02-14",
       "linked_registries": []
@@ -7417,6 +8552,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07224386"
         }
       ],
+      "timeline": {
+        "start": "2026-01-01",
+        "readout": "2027-12-31",
+        "completion": "2028-04-30"
+      },
       "first_registered": "2025-11-04",
       "latest_registered": "2025-11-04",
       "linked_registries": []
@@ -7447,6 +8587,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06617741"
         }
       ],
+      "timeline": {
+        "start": "2013-10-12",
+        "readout": "2029-09-19",
+        "completion": "2029-09-19"
+      },
       "first_registered": "2024-09-27",
       "latest_registered": "2024-09-27",
       "linked_registries": []
@@ -7477,6 +8622,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06241521"
         }
       ],
+      "timeline": {
+        "start": "2024-02-01",
+        "readout": "2034-02-01",
+        "completion": "2035-01-30"
+      },
       "first_registered": "2024-02-05",
       "latest_registered": "2024-02-05",
       "linked_registries": []
@@ -7507,6 +8657,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT03205306"
         }
       ],
+      "timeline": {
+        "start": "2017-05-08",
+        "readout": "2017-12-14",
+        "completion": "2017-12-14"
+      },
       "first_registered": "2017-07-02",
       "latest_registered": "2017-07-02",
       "linked_registries": []
@@ -7537,6 +8692,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06443333"
         }
       ],
+      "timeline": {
+        "start": "2020-12-01",
+        "readout": "2024-12-30",
+        "completion": "2024-12-30"
+      },
       "first_registered": "2024-06-05",
       "latest_registered": "2024-06-05",
       "linked_registries": []
@@ -7567,6 +8727,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT03826056"
         }
       ],
+      "timeline": {
+        "start": "2019-02-01",
+        "readout": "2021-12-07",
+        "completion": "2021-12-07"
+      },
       "first_registered": "2019-02-01",
       "latest_registered": "2019-02-01",
       "linked_registries": []
@@ -7597,6 +8762,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=122689"
         }
       ],
+      "timeline": {
+        "start": "2021-03-05",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2021-03-04",
       "latest_registered": "2021-03-04",
       "linked_registries": []
@@ -7627,6 +8797,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=264882"
         }
       ],
+      "timeline": {
+        "start": "2025-03-25",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2025-03-18",
       "latest_registered": "2025-03-18",
       "linked_registries": []
@@ -7657,6 +8832,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT03049956"
         }
       ],
+      "timeline": {
+        "start": "2016-11-01",
+        "readout": "2020-12-31",
+        "completion": ""
+      },
       "first_registered": "2017-02-10",
       "latest_registered": "2017-02-10",
       "linked_registries": []
@@ -7687,6 +8867,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07717281"
         }
       ],
+      "timeline": {
+        "start": "2026-06-04",
+        "readout": "2028-03-31",
+        "completion": "2028-03-31"
+      },
       "first_registered": "2026-07-21",
       "latest_registered": "2026-07-21",
       "linked_registries": []
@@ -7717,6 +8902,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07217509"
         }
       ],
+      "timeline": {
+        "start": "2025-08-14",
+        "readout": "2099-12-31",
+        "completion": "2099-12-31"
+      },
       "first_registered": "2025-10-16",
       "latest_registered": "2025-10-16",
       "linked_registries": []
@@ -7747,6 +8937,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06441825"
         }
       ],
+      "timeline": {
+        "start": "2024-05-02",
+        "readout": "2025-10-31",
+        "completion": "2025-10-31"
+      },
       "first_registered": "2024-06-04",
       "latest_registered": "2024-06-04",
       "linked_registries": []
@@ -7777,6 +8972,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT01469858"
         }
       ],
+      "timeline": {
+        "start": "2011-11-10",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2011-11-10",
       "latest_registered": "2011-11-10",
       "linked_registries": []
@@ -7807,6 +9007,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06277830"
         }
       ],
+      "timeline": {
+        "start": "2024-02-14",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2024-02-26",
       "latest_registered": "2024-02-26",
       "linked_registries": []
@@ -7837,6 +9042,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT03905473"
         }
       ],
+      "timeline": {
+        "start": "2019-06-01",
+        "readout": "2020-04-10",
+        "completion": "2020-10-10"
+      },
       "first_registered": "2019-04-05",
       "latest_registered": "2019-04-05",
       "linked_registries": []
@@ -7867,6 +9077,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06501794"
         }
       ],
+      "timeline": {
+        "start": "2024-07-15",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2024-07-15",
       "latest_registered": "2024-07-15",
       "linked_registries": []
@@ -7897,6 +9112,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT04535843"
         }
       ],
+      "timeline": {
+        "start": "2024-02-01",
+        "readout": "2028-02-01",
+        "completion": "2028-05-01"
+      },
       "first_registered": "2020-09-02",
       "latest_registered": "2020-09-02",
       "linked_registries": []
@@ -7927,6 +9147,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05214612"
         }
       ],
+      "timeline": {
+        "start": "2022-01-01",
+        "readout": "2024-12-31",
+        "completion": "2025-03-31"
+      },
       "first_registered": "2022-01-28",
       "latest_registered": "2022-01-28",
       "linked_registries": []
@@ -7957,6 +9182,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07319689"
         }
       ],
+      "timeline": {
+        "start": "2022-01-01",
+        "readout": "2025-12-18",
+        "completion": "2025-12-18"
+      },
       "first_registered": "2026-01-06",
       "latest_registered": "2026-01-06",
       "linked_registries": []
@@ -7987,6 +9217,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06940323"
         }
       ],
+      "timeline": {
+        "start": "2017-03-21",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2025-04-23",
       "latest_registered": "2025-04-23",
       "linked_registries": []
@@ -8017,6 +9252,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06877403"
         }
       ],
+      "timeline": {
+        "start": "2025-01-31",
+        "readout": "2025-07-31",
+        "completion": ""
+      },
       "first_registered": "2025-03-14",
       "latest_registered": "2025-03-14",
       "linked_registries": []
@@ -8047,6 +9287,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07291713"
         }
       ],
+      "timeline": {
+        "start": "2024-01-10",
+        "readout": "2025-01-09",
+        "completion": "2025-01-09"
+      },
       "first_registered": "2025-12-18",
       "latest_registered": "2025-12-18",
       "linked_registries": []
@@ -8077,6 +9322,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=54618"
         }
       ],
+      "timeline": {
+        "start": "2020-06-01",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2020-06-03",
       "latest_registered": "2020-06-03",
       "linked_registries": []
@@ -8107,6 +9357,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07226830"
         }
       ],
+      "timeline": {
+        "start": "2026-01-15",
+        "readout": "2028-01-31",
+        "completion": "2028-03-31"
+      },
       "first_registered": "2025-11-12",
       "latest_registered": "2025-11-12",
       "linked_registries": []
@@ -8137,6 +9392,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT01793168"
         }
       ],
+      "timeline": {
+        "start": "2013-02-15",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2013-02-15",
       "latest_registered": "2013-02-15",
       "linked_registries": []
@@ -8167,6 +9427,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT04202341"
         }
       ],
+      "timeline": {
+        "start": "2019-12-02",
+        "readout": "2029-10-01",
+        "completion": "2029-10-01"
+      },
       "first_registered": "2019-12-17",
       "latest_registered": "2019-12-17",
       "linked_registries": []
@@ -8197,6 +9462,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT03905161"
         }
       ],
+      "timeline": {
+        "start": "2019-02-10",
+        "readout": "2020-01-10",
+        "completion": "2020-01-10"
+      },
       "first_registered": "2019-04-05",
       "latest_registered": "2019-04-05",
       "linked_registries": []
@@ -8227,6 +9497,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=307709"
         }
       ],
+      "timeline": {
+        "start": "2026-02-01",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2026-01-29",
       "latest_registered": "2026-01-29",
       "linked_registries": []
@@ -8257,6 +9532,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=64752"
         }
       ],
+      "timeline": {
+        "start": "2020-12-01",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2020-11-26",
       "latest_registered": "2020-11-26",
       "linked_registries": []
@@ -8285,6 +9565,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20262007"
         }
       ],
+      "timeline": {
+        "start": "",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "",
       "latest_registered": "",
       "linked_registries": []
@@ -8315,6 +9600,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05150210"
         }
       ],
+      "timeline": {
+        "start": "2022-07-20",
+        "readout": "2023-06-16",
+        "completion": ""
+      },
       "first_registered": "2021-12-09",
       "latest_registered": "2021-12-09",
       "linked_registries": []
@@ -8345,6 +9635,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT04941079"
         }
       ],
+      "timeline": {
+        "start": "2021-06-30",
+        "readout": "2021-12-31",
+        "completion": "2021-12-31"
+      },
       "first_registered": "2021-06-28",
       "latest_registered": "2021-06-28",
       "linked_registries": []
@@ -8375,6 +9670,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT03914638"
         }
       ],
+      "timeline": {
+        "start": "2019-04-01",
+        "readout": "2021-10-31",
+        "completion": "2021-10-31"
+      },
       "first_registered": "2019-04-16",
       "latest_registered": "2019-04-16",
       "linked_registries": []
@@ -8405,6 +9705,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05888558"
         }
       ],
+      "timeline": {
+        "start": "2023-07-04",
+        "readout": "2024-03-31",
+        "completion": "2024-05-31"
+      },
       "first_registered": "2023-06-05",
       "latest_registered": "2023-06-05",
       "linked_registries": []
@@ -8435,6 +9740,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05337891"
         }
       ],
+      "timeline": {
+        "start": "2022-06-03",
+        "readout": "2026-05-01",
+        "completion": "2026-09-01"
+      },
       "first_registered": "2022-04-20",
       "latest_registered": "2022-04-20",
       "linked_registries": []
@@ -8465,6 +9775,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT00704626"
         }
       ],
+      "timeline": {
+        "start": "2008-06-25",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2008-06-25",
       "latest_registered": "2008-06-25",
       "linked_registries": []
@@ -8495,6 +9810,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07677852"
         }
       ],
+      "timeline": {
+        "start": "2026-07-30",
+        "readout": "2030-07-30",
+        "completion": "2030-07-30"
+      },
       "first_registered": "2026-07-01",
       "latest_registered": "2026-07-01",
       "linked_registries": []
@@ -8525,6 +9845,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT03941184"
         }
       ],
+      "timeline": {
+        "start": "1995-01-01",
+        "readout": "2020-11-10",
+        "completion": "2020-11-10"
+      },
       "first_registered": "2019-05-07",
       "latest_registered": "2019-05-07",
       "linked_registries": []
@@ -8555,6 +9880,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06006832"
         }
       ],
+      "timeline": {
+        "start": "2023-08-20",
+        "readout": "2026-09-30",
+        "completion": "2026-09-30"
+      },
       "first_registered": "2023-08-23",
       "latest_registered": "2023-08-23",
       "linked_registries": []
@@ -8585,6 +9915,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT04837625"
         }
       ],
+      "timeline": {
+        "start": "2020-10-01",
+        "readout": "2026-09-30",
+        "completion": "2026-09-30"
+      },
       "first_registered": "2021-04-08",
       "latest_registered": "2021-04-08",
       "linked_registries": []
@@ -8615,6 +9950,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT01105923"
         }
       ],
+      "timeline": {
+        "start": "2010-04-19",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2010-04-19",
       "latest_registered": "2010-04-19",
       "linked_registries": []
@@ -8645,6 +9985,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05091177"
         }
       ],
+      "timeline": {
+        "start": "2021-01-01",
+        "readout": "2021-12-31",
+        "completion": "2021-12-31"
+      },
       "first_registered": "2021-10-25",
       "latest_registered": "2021-10-25",
       "linked_registries": []
@@ -8675,6 +10020,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06704269"
         }
       ],
+      "timeline": {
+        "start": "2025-04-22",
+        "readout": "2029-10-26",
+        "completion": "2029-10-26"
+      },
       "first_registered": "2024-11-26",
       "latest_registered": "2024-11-26",
       "linked_registries": []
@@ -8705,6 +10055,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06754020"
         }
       ],
+      "timeline": {
+        "start": "2023-01-17",
+        "readout": "2027-01-17",
+        "completion": "2027-12-31"
+      },
       "first_registered": "2024-12-31",
       "latest_registered": "2024-12-31",
       "linked_registries": []
@@ -8735,6 +10090,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05917184"
         }
       ],
+      "timeline": {
+        "start": "2021-08-30",
+        "readout": "2023-01-20",
+        "completion": "2023-01-20"
+      },
       "first_registered": "2023-06-23",
       "latest_registered": "2023-06-23",
       "linked_registries": []
@@ -8765,6 +10125,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT03613272"
         }
       ],
+      "timeline": {
+        "start": "2018-07-01",
+        "readout": "2023-07-01",
+        "completion": "2023-12-01"
+      },
       "first_registered": "2018-08-03",
       "latest_registered": "2018-08-03",
       "linked_registries": []
@@ -8795,6 +10160,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT03792659"
         }
       ],
+      "timeline": {
+        "start": "2016-03-30",
+        "readout": "2026-09-30",
+        "completion": "2026-10-30"
+      },
       "first_registered": "2019-01-03",
       "latest_registered": "2019-01-03",
       "linked_registries": []
@@ -8825,6 +10195,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT03743740"
         }
       ],
+      "timeline": {
+        "start": "2018-12-03",
+        "readout": "2019-03-22",
+        "completion": "2019-04-08"
+      },
       "first_registered": "2018-11-16",
       "latest_registered": "2018-11-16",
       "linked_registries": []
@@ -8855,6 +10230,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07512375"
         }
       ],
+      "timeline": {
+        "start": "2026-04-06",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2026-04-06",
       "latest_registered": "2026-04-06",
       "linked_registries": []
@@ -8885,6 +10265,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT04176211"
         }
       ],
+      "timeline": {
+        "start": "2019-12-12",
+        "readout": "2024-05-31",
+        "completion": "2024-05-31"
+      },
       "first_registered": "2019-11-25",
       "latest_registered": "2019-11-25",
       "linked_registries": []
@@ -8915,6 +10300,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05564936"
         }
       ],
+      "timeline": {
+        "start": "2024-01-24",
+        "readout": "2025-09-24",
+        "completion": "2026-09-24"
+      },
       "first_registered": "2022-10-04",
       "latest_registered": "2022-10-04",
       "linked_registries": []
@@ -8945,6 +10335,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05890833"
         }
       ],
+      "timeline": {
+        "start": "2023-09-01",
+        "readout": "2024-09-09",
+        "completion": "2024-09-09"
+      },
       "first_registered": "2023-06-06",
       "latest_registered": "2023-06-06",
       "linked_registries": []
@@ -8975,6 +10370,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT01102192"
         }
       ],
+      "timeline": {
+        "start": "2010-04-13",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2010-04-13",
       "latest_registered": "2010-04-13",
       "linked_registries": []
@@ -9005,6 +10405,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05219097"
         }
       ],
+      "timeline": {
+        "start": "2021-01-01",
+        "readout": "2022-09-30",
+        "completion": "2022-12-31"
+      },
       "first_registered": "2022-02-01",
       "latest_registered": "2022-02-01",
       "linked_registries": []
@@ -9035,6 +10440,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=250531"
         }
       ],
+      "timeline": {
+        "start": "2024-11-30",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2024-11-28",
       "latest_registered": "2024-11-28",
       "linked_registries": []
@@ -9065,6 +10475,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=314390"
         }
       ],
+      "timeline": {
+        "start": "2026-03-19",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2026-03-19",
       "latest_registered": "2026-03-19",
       "linked_registries": []
@@ -9095,6 +10510,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=132462"
         }
       ],
+      "timeline": {
+        "start": "2021-09-01",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2021-08-25",
       "latest_registered": "2021-08-25",
       "linked_registries": []
@@ -9125,6 +10545,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=29432"
         }
       ],
+      "timeline": {
+        "start": "2018-09-08",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2018-08-04",
       "latest_registered": "2018-08-04",
       "linked_registries": []
@@ -9155,6 +10580,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07571525"
         }
       ],
+      "timeline": {
+        "start": "2026-09-15",
+        "readout": "2029-09-14",
+        "completion": "2029-12-01"
+      },
       "first_registered": "2026-05-06",
       "latest_registered": "2026-05-06",
       "linked_registries": []
@@ -9185,6 +10615,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05635266"
         }
       ],
+      "timeline": {
+        "start": "2021-10-26",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2022-12-02",
       "latest_registered": "2022-12-02",
       "linked_registries": []
@@ -9215,6 +10650,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT02902536"
         }
       ],
+      "timeline": {
+        "start": "2016-09-15",
+        "readout": "2019-08-31",
+        "completion": "2019-08-31"
+      },
       "first_registered": "2016-09-15",
       "latest_registered": "2016-09-15",
       "linked_registries": []
@@ -9245,6 +10685,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07333196"
         }
       ],
+      "timeline": {
+        "start": "2026-03-01",
+        "readout": "2036-03-01",
+        "completion": "2037-03-01"
+      },
       "first_registered": "2026-01-12",
       "latest_registered": "2026-01-12",
       "linked_registries": []
@@ -9275,6 +10720,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=38842"
         }
       ],
+      "timeline": {
+        "start": "2019-08-01",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2019-07-07",
       "latest_registered": "2019-07-07",
       "linked_registries": []
@@ -9305,6 +10755,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=130187"
         }
       ],
+      "timeline": {
+        "start": "2021-07-31",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2021-07-13",
       "latest_registered": "2021-07-13",
       "linked_registries": []
@@ -9335,6 +10790,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT02470364"
         }
       ],
+      "timeline": {
+        "start": "2015-06-12",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2015-06-12",
       "latest_registered": "2015-06-12",
       "linked_registries": []
@@ -9365,6 +10825,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06101407"
         }
       ],
+      "timeline": {
+        "start": "2016-01-15",
+        "readout": "2019-12-20",
+        "completion": "2019-12-25"
+      },
       "first_registered": "2023-10-26",
       "latest_registered": "2023-10-26",
       "linked_registries": []
@@ -9395,6 +10860,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06866483"
         }
       ],
+      "timeline": {
+        "start": "2025-02-26",
+        "readout": "2025-12-31",
+        "completion": "2025-12-31"
+      },
       "first_registered": "2025-03-10",
       "latest_registered": "2025-03-10",
       "linked_registries": []
@@ -9425,6 +10895,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT03597373"
         }
       ],
+      "timeline": {
+        "start": "2017-01-01",
+        "readout": "2019-01-01",
+        "completion": "2019-01-01"
+      },
       "first_registered": "2018-07-24",
       "latest_registered": "2018-07-24",
       "linked_registries": []
@@ -9455,6 +10930,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07022028"
         }
       ],
+      "timeline": {
+        "start": "2024-02-27",
+        "readout": "2024-11-06",
+        "completion": "2024-11-06"
+      },
       "first_registered": "2025-06-15",
       "latest_registered": "2025-06-15",
       "linked_registries": []
@@ -9485,6 +10965,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT06064461"
         }
       ],
+      "timeline": {
+        "start": "2024-07-31",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2023-10-03",
       "latest_registered": "2023-10-03",
       "linked_registries": []
@@ -9515,6 +11000,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=150770"
         }
       ],
+      "timeline": {
+        "start": "2022-03-01",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2022-03-15",
       "latest_registered": "2022-03-15",
       "linked_registries": []
@@ -9545,6 +11035,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT05979688"
         }
       ],
+      "timeline": {
+        "start": "2023-11-01",
+        "readout": "2024-10-31",
+        "completion": "2024-11-01"
+      },
       "first_registered": "2023-08-07",
       "latest_registered": "2023-08-07",
       "linked_registries": []
@@ -9575,6 +11070,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=128702"
         }
       ],
+      "timeline": {
+        "start": "2021-07-01",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2021-07-06",
       "latest_registered": "2021-07-06",
       "linked_registries": []
@@ -9605,6 +11105,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=261626"
         }
       ],
+      "timeline": {
+        "start": "2025-05-08",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2026-01-23",
       "latest_registered": "2026-01-23",
       "linked_registries": []
@@ -9635,6 +11140,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=124097"
         }
       ],
+      "timeline": {
+        "start": "2021-03-30",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2021-03-26",
       "latest_registered": "2021-03-26",
       "linked_registries": []
@@ -9665,6 +11175,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://clinicaltrials.gov/study/NCT07372807"
         }
       ],
+      "timeline": {
+        "start": "2026-01-28",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2026-01-28",
       "latest_registered": "2026-01-28",
       "linked_registries": []
@@ -9695,6 +11210,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=54906"
         }
       ],
+      "timeline": {
+        "start": "2020-06-15",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2020-06-15",
       "latest_registered": "2020-06-15",
       "linked_registries": []
@@ -9725,6 +11245,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=32544"
         }
       ],
+      "timeline": {
+        "start": "2019-07-30",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2019-07-19",
       "latest_registered": "2019-07-19",
       "linked_registries": []
@@ -9755,6 +11280,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=243673"
         }
       ],
+      "timeline": {
+        "start": "2025-01-01",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2024-10-11",
       "latest_registered": "2024-10-11",
       "linked_registries": []
@@ -9785,6 +11315,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=60932"
         }
       ],
+      "timeline": {
+        "start": "2020-09-01",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2020-09-04",
       "latest_registered": "2020-09-04",
       "linked_registries": []
@@ -9815,6 +11350,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=52251"
         }
       ],
+      "timeline": {
+        "start": "2020-05-20",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2020-04-19",
       "latest_registered": "2020-04-19",
       "linked_registries": []
@@ -9843,6 +11383,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20243185"
         }
       ],
+      "timeline": {
+        "start": "",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "",
       "latest_registered": "",
       "linked_registries": []
@@ -9873,6 +11418,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=265388"
         }
       ],
+      "timeline": {
+        "start": "2025-03-19",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2025-03-13",
       "latest_registered": "2025-03-13",
       "linked_registries": []
@@ -9903,6 +11453,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=38846"
         }
       ],
+      "timeline": {
+        "start": "2019-08-01",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2019-07-13",
       "latest_registered": "2019-07-13",
       "linked_registries": []
@@ -9933,6 +11488,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=331797"
         }
       ],
+      "timeline": {
+        "start": "2026-07-15",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2026-07-14",
       "latest_registered": "2026-07-14",
       "linked_registries": []
@@ -9963,6 +11523,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=266698"
         }
       ],
+      "timeline": {
+        "start": "2025-03-15",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2025-06-05",
       "latest_registered": "2025-06-05",
       "linked_registries": []
@@ -9993,6 +11558,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=298750"
         }
       ],
+      "timeline": {
+        "start": "2023-04-03",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2026-02-02",
       "latest_registered": "2026-02-02",
       "linked_registries": []
@@ -10023,6 +11593,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=175943"
         }
       ],
+      "timeline": {
+        "start": "2023-03-10",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2023-03-18",
       "latest_registered": "2023-03-18",
       "linked_registries": []
@@ -10051,6 +11626,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=62056"
         }
       ],
+      "timeline": {
+        "start": "",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "",
       "latest_registered": "",
       "linked_registries": []
@@ -10081,6 +11661,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=239996"
         }
       ],
+      "timeline": {
+        "start": "2024-02-01",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2025-03-05",
       "latest_registered": "2025-03-05",
       "linked_registries": []
@@ -10111,6 +11696,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=209196"
         }
       ],
+      "timeline": {
+        "start": "2023-11-01",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2023-11-01",
       "latest_registered": "2023-11-01",
       "linked_registries": []
@@ -10141,6 +11731,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=243122"
         }
       ],
+      "timeline": {
+        "start": "2024-09-10",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2024-09-10",
       "latest_registered": "2024-09-10",
       "linked_registries": []
@@ -10171,6 +11766,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=135161"
         }
       ],
+      "timeline": {
+        "start": "2021-10-27",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2021-11-06",
       "latest_registered": "2021-11-06",
       "linked_registries": []
@@ -10201,6 +11801,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=129461"
         }
       ],
+      "timeline": {
+        "start": "2021-09-10",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2021-09-07",
       "latest_registered": "2021-09-07",
       "linked_registries": []
@@ -10231,6 +11836,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=234265"
         }
       ],
+      "timeline": {
+        "start": "2024-05-28",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2024-10-31",
       "latest_registered": "2024-10-31",
       "linked_registries": []
@@ -10261,6 +11871,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=56769"
         }
       ],
+      "timeline": {
+        "start": "2020-11-01",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2020-10-08",
       "latest_registered": "2020-10-08",
       "linked_registries": []
@@ -10291,6 +11906,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=192663"
         }
       ],
+      "timeline": {
+        "start": "2023-04-23",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2023-04-25",
       "latest_registered": "2023-04-25",
       "linked_registries": []
@@ -10321,6 +11941,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=207062"
         }
       ],
+      "timeline": {
+        "start": "2023-11-08",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2023-11-03",
       "latest_registered": "2023-11-03",
       "linked_registries": []
@@ -10351,6 +11976,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=125748"
         }
       ],
+      "timeline": {
+        "start": "2021-04-25",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2021-04-25",
       "latest_registered": "2021-04-25",
       "linked_registries": []
@@ -10381,6 +12011,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=193106"
         }
       ],
+      "timeline": {
+        "start": "2024-03-27",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2024-03-26",
       "latest_registered": "2024-03-26",
       "linked_registries": []
@@ -10411,6 +12046,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=222770"
         }
       ],
+      "timeline": {
+        "start": "2022-12-05",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2024-08-07",
       "latest_registered": "2024-08-07",
       "linked_registries": []
@@ -10441,6 +12081,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=295152"
         }
       ],
+      "timeline": {
+        "start": "2025-12-01",
+        "readout": "",
+        "completion": ""
+      },
       "first_registered": "2025-11-26",
       "latest_registered": "2025-11-26",
       "linked_registries": []
@@ -10468,6 +12113,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "University of Texas",
           "start_date": "1995-03",
+          "readout_date": "",
+          "completion_date": "1999-03",
           "registered_date": "2000-02-25",
           "linked_registries": []
         },
@@ -10485,6 +12132,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "FDA Office of Orphan Products Development",
           "start_date": "2002-09",
+          "readout_date": "",
+          "completion_date": "2007-03",
           "registered_date": "2006-02-02",
           "linked_registries": []
         },
@@ -10502,6 +12151,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "University of Alabama at Birmingham",
           "start_date": "2006-06",
+          "readout_date": "2015-11",
+          "completion_date": "2015-12",
           "registered_date": "2006-02-22",
           "linked_registries": []
         },
@@ -10519,6 +12170,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "University Health Network, Toronto",
           "start_date": "2004-03",
+          "readout_date": "",
+          "completion_date": "2005-05",
           "registered_date": "2006-03-22",
           "linked_registries": []
         },
@@ -10536,6 +12189,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Astellas Pharma Inc",
           "start_date": "2006-04",
+          "readout_date": "2008-06",
+          "completion_date": "2008-06",
           "registered_date": "2006-03-31",
           "linked_registries": []
         },
@@ -10553,6 +12208,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Astellas Pharma Inc",
           "start_date": "2006-02",
+          "readout_date": "2009-02",
+          "completion_date": "2009-02",
           "registered_date": "2006-03-31",
           "linked_registries": []
         },
@@ -10570,6 +12227,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Hoffmann-La Roche",
           "start_date": "2004-06",
+          "readout_date": "",
+          "completion_date": "2007-09",
           "registered_date": "2006-12-06",
           "linked_registries": []
         },
@@ -10587,6 +12246,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 1",
           "sponsor": "Northwestern University",
           "start_date": "2002-02",
+          "readout_date": "2016-06",
+          "completion_date": "2016-06",
           "registered_date": "2007-01-19",
           "linked_registries": []
         },
@@ -10604,6 +12265,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Benesis Corporation",
           "start_date": "2007-07",
+          "readout_date": "2010-05",
+          "completion_date": "2010-06",
           "registered_date": "2007-08-13",
           "linked_registries": []
         },
@@ -10621,6 +12284,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 1 / Phase 2",
           "sponsor": "University of Vermont",
           "start_date": "2004-04",
+          "readout_date": "2009-03",
+          "completion_date": "2009-03",
           "registered_date": "2008-02-21",
           "linked_registries": []
         },
@@ -10638,6 +12303,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Hoffmann-La Roche",
           "start_date": "2004-08",
+          "readout_date": "",
+          "completion_date": "2007-05",
           "registered_date": "2008-05-26",
           "linked_registries": []
         },
@@ -10655,6 +12322,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "University of California, Davis",
           "start_date": "2002-01",
+          "readout_date": "2031-03",
+          "completion_date": "2031-03",
           "registered_date": "2008-06-25",
           "linked_registries": []
         },
@@ -10672,6 +12341,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "Fred Hutchinson Cancer Center",
           "start_date": "2008-06",
+          "readout_date": "2025-12-30",
+          "completion_date": "2030-01-31",
           "registered_date": "2008-07-16",
           "linked_registries": []
         },
@@ -10689,6 +12360,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "Alexion Pharmaceuticals, Inc.",
           "start_date": "2008-10",
+          "readout_date": "2011-03",
+          "completion_date": "2011-07",
           "registered_date": "2008-08-01",
           "linked_registries": []
         },
@@ -10706,6 +12379,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "Assistance Publique - Hôpitaux de Paris",
           "start_date": "2008-01",
+          "readout_date": "2011-12",
+          "completion_date": "2011-12",
           "registered_date": "2008-10-17",
           "linked_registries": []
         },
@@ -10723,6 +12398,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "University of Kansas Medical Center",
           "start_date": "2009-04",
+          "readout_date": "2014-01",
+          "completion_date": "2014-01",
           "registered_date": "2008-12-24",
           "linked_registries": []
         },
@@ -10740,6 +12417,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 4",
           "sponsor": "Assistance Publique - Hôpitaux de Paris",
           "start_date": "2009-06",
+          "readout_date": "2017-07",
+          "completion_date": "2017-09",
           "registered_date": "2009-09-30",
           "linked_registries": []
         },
@@ -10757,6 +12436,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Michael Benatar",
           "start_date": "2011-12",
+          "readout_date": "2013-10",
+          "completion_date": "2013-10",
           "registered_date": "2009-10-15",
           "linked_registries": []
         },
@@ -10774,6 +12455,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "Qualitix Clinical Research Co., Ltd.",
           "start_date": "2009-05",
+          "readout_date": "2011-05",
+          "completion_date": "2011-05",
           "registered_date": "2009-10-19",
           "linked_registries": []
         },
@@ -10791,6 +12474,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 1",
           "sponsor": "Baltimore VA Medical Center",
           "start_date": "2010-01",
+          "readout_date": "2020-12",
+          "completion_date": "2020-12",
           "registered_date": "2010-01-13",
           "linked_registries": []
         },
@@ -10808,6 +12493,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Charite University, Berlin, Germany",
           "start_date": "2007-08",
+          "readout_date": "2012-12",
+          "completion_date": "2012-12",
           "registered_date": "2010-04-13",
           "linked_registries": []
         },
@@ -10825,6 +12512,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "Brigham and Women's Hospital",
           "start_date": "2010-05",
+          "readout_date": "2010-11",
+          "completion_date": "2017-11",
           "registered_date": "2010-04-19",
           "linked_registries": []
         },
@@ -10842,6 +12531,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 4",
           "sponsor": "University Health Network, Toronto",
           "start_date": "2007-03",
+          "readout_date": "2010-07",
+          "completion_date": "2010-07",
           "registered_date": "2010-08-11",
           "linked_registries": []
         },
@@ -10859,6 +12550,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "Cytokinetics",
           "start_date": "2010-12",
+          "readout_date": "2012-10",
+          "completion_date": "2012-10",
           "registered_date": "2010-12-30",
           "linked_registries": []
         },
@@ -10876,6 +12569,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Astellas Pharma Inc",
           "start_date": "2011-03",
+          "readout_date": "2014-05",
+          "completion_date": "2014-05",
           "registered_date": "2011-03-30",
           "linked_registries": []
         },
@@ -10893,6 +12588,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "Hadassah Medical Organization",
           "start_date": "2011-11",
+          "readout_date": "2013-11",
+          "completion_date": "2015-11",
           "registered_date": "2011-11-10",
           "linked_registries": []
         },
@@ -10910,6 +12607,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "GlaxoSmithKline",
           "start_date": "2013-04",
+          "readout_date": "2015-08",
+          "completion_date": "2015-10",
           "registered_date": "2011-11-29",
           "linked_registries": []
         },
@@ -10927,6 +12626,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Early Phase 1",
           "sponsor": "Muscular Dystrophy Association",
           "start_date": "2012-04",
+          "readout_date": "2013-12",
+          "completion_date": "2013-12",
           "registered_date": "2012-03-15",
           "linked_registries": []
         },
@@ -10944,6 +12645,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "First Affiliated Hospital, Sun Yat-Sen University",
           "start_date": "2012-09",
+          "readout_date": "2021-10-18",
+          "completion_date": "2021-11-18",
           "registered_date": "2012-11-15",
           "linked_registries": []
         },
@@ -10961,6 +12664,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Sanford Health",
           "start_date": "2010-07",
+          "readout_date": "2100-12",
+          "completion_date": "2100-12",
           "registered_date": "2013-02-15",
           "linked_registries": []
         },
@@ -10978,6 +12683,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 1",
           "sponsor": "St. Louis University",
           "start_date": "2011-10",
+          "readout_date": "2017-12",
+          "completion_date": "2017-12",
           "registered_date": "2013-04-10",
           "linked_registries": []
         },
@@ -10995,6 +12702,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Duke University",
           "start_date": "2013-07",
+          "readout_date": "2014-10",
+          "completion_date": "2014-10",
           "registered_date": "2013-08-23",
           "linked_registries": []
         },
@@ -11012,6 +12721,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Alexion Pharmaceuticals, Inc.",
           "start_date": "2013-12",
+          "readout_date": "2016-02",
+          "completion_date": "2016-06",
           "registered_date": "2013-11-28",
           "linked_registries": []
         },
@@ -11029,6 +12740,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Oregon Health and Science University",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2013-12-17",
           "linked_registries": []
         },
@@ -11046,6 +12759,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "Assistance Publique - Hôpitaux de Paris",
           "start_date": "2014-10",
+          "readout_date": "2018-01-10",
+          "completion_date": "2018-04-06",
           "registered_date": "2014-02-19",
           "linked_registries": []
         },
@@ -11063,6 +12778,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "Mazen Dimachkie, MD",
           "start_date": "2015-05",
+          "readout_date": "2017-11",
+          "completion_date": "2018-01",
           "registered_date": "2014-04-01",
           "linked_registries": []
         },
@@ -11080,6 +12797,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "Charite University, Berlin, Germany",
           "start_date": "2014-10",
+          "readout_date": "2019-08-30",
+          "completion_date": "2019-08-30",
           "registered_date": "2014-04-03",
           "linked_registries": []
         },
@@ -11097,6 +12816,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "Yale University",
           "start_date": "2014-05",
+          "readout_date": "2017-07",
+          "completion_date": "2018-05",
           "registered_date": "2014-04-10",
           "linked_registries": []
         },
@@ -11114,6 +12835,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Beth Israel Deaconess Medical Center",
           "start_date": "2013-10",
+          "readout_date": "2021-12-31",
+          "completion_date": "2021-12-31",
           "registered_date": "2014-04-21",
           "linked_registries": []
         },
@@ -11131,6 +12854,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Alexion Pharmaceuticals, Inc.",
           "start_date": "2014-11-12",
+          "readout_date": "2019-01-15",
+          "completion_date": "2019-01-15",
           "registered_date": "2014-11-26",
           "linked_registries": []
         },
@@ -11148,6 +12873,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "Tang-Du Hospital",
           "start_date": "2014-08",
+          "readout_date": "2024-12",
+          "completion_date": "2024-12",
           "registered_date": "2014-12-15",
           "linked_registries": []
         },
@@ -11165,6 +12892,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Grifols Therapeutics LLC",
           "start_date": "2015-03",
+          "readout_date": "2018-04",
+          "completion_date": "2018-04",
           "registered_date": "2015-04-10",
           "linked_registries": []
         },
@@ -11182,6 +12911,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Assistance Publique - Hôpitaux de Paris",
           "start_date": "2014-06",
+          "readout_date": "2014-12",
+          "completion_date": "",
           "registered_date": "2015-06-12",
           "linked_registries": []
         },
@@ -11199,6 +12930,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "Grifols Therapeutics LLC",
           "start_date": "2015-08",
+          "readout_date": "2018-01",
+          "completion_date": "2018-01",
           "registered_date": "2015-06-17",
           "linked_registries": []
         },
@@ -11216,6 +12949,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "Grifols Therapeutics LLC",
           "start_date": "2015-06",
+          "readout_date": "2019-02",
+          "completion_date": "2019-02",
           "registered_date": "2015-06-17",
           "linked_registries": []
         },
@@ -11233,6 +12968,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "Novartis Pharmaceuticals",
           "start_date": "2015-09-29",
+          "readout_date": "2017-07-31",
+          "completion_date": "2017-12-19",
           "registered_date": "2015-10-01",
           "linked_registries": []
         },
@@ -11250,6 +12987,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 1 / Phase 2",
           "sponsor": "CuraVac",
           "start_date": "2016-03",
+          "readout_date": "2018-09-30",
+          "completion_date": "2018-09-30",
           "registered_date": "2015-11-20",
           "linked_registries": []
         },
@@ -11267,6 +13006,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "University of Pennsylvania",
           "start_date": "2016-06",
+          "readout_date": "2018-06",
+          "completion_date": "2019-07-16",
           "registered_date": "2016-05-04",
           "linked_registries": []
         },
@@ -11284,6 +13025,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "University of Alberta",
           "start_date": "2014-10",
+          "readout_date": "2022-10-21",
+          "completion_date": "2022-10-21",
           "registered_date": "2016-05-17",
           "linked_registries": []
         },
@@ -11301,6 +13044,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Johns Hopkins University",
           "start_date": "2015-08",
+          "readout_date": "2019-08-31",
+          "completion_date": "2019-08-31",
           "registered_date": "2016-09-15",
           "linked_registries": []
         },
@@ -11318,6 +13063,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Fredrik Piehl",
           "start_date": "2016-10-16",
+          "readout_date": "2021-01-30",
+          "completion_date": "2022-01-31",
           "registered_date": "2016-10-31",
           "linked_registries": []
         },
@@ -11335,6 +13082,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "argenx",
           "start_date": "2016-12-30",
+          "readout_date": "2017-10-20",
+          "completion_date": "2017-10-20",
           "registered_date": "2016-11-17",
           "linked_registries": []
         },
@@ -11352,6 +13101,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "University of Zurich",
           "start_date": "2016-11-01",
+          "readout_date": "2020-12-31",
+          "completion_date": "",
           "registered_date": "2017-02-10",
           "linked_registries": []
         },
@@ -11369,6 +13120,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "UCB Biopharma S.P.R.L.",
           "start_date": "2017-05-15",
+          "readout_date": "2018-05-31",
+          "completion_date": "2018-08-06",
           "registered_date": "2017-02-14",
           "linked_registries": []
         },
@@ -11386,6 +13139,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Early Phase 1",
           "sponsor": "Johns Hopkins University",
           "start_date": "2017-04-12",
+          "readout_date": "2019-07-15",
+          "completion_date": "2019-07-15",
           "registered_date": "2017-02-23",
           "linked_registries": []
         },
@@ -11403,6 +13158,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2 / Phase 3",
           "sponsor": "CuraVac",
           "start_date": "2018-07",
+          "readout_date": "2019-10-01",
+          "completion_date": "2019-12-31",
           "registered_date": "2017-05-24",
           "linked_registries": []
         },
@@ -11420,6 +13177,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Charite University, Berlin, Germany",
           "start_date": "2017-05-08",
+          "readout_date": "2017-12-14",
+          "completion_date": "2017-12-14",
           "registered_date": "2017-07-02",
           "linked_registries": []
         },
@@ -11437,6 +13196,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Catalyst Pharmaceuticals, Inc.",
           "start_date": "2018-04-18",
+          "readout_date": "2020-01-31",
+          "completion_date": "2020-03-15",
           "registered_date": "2017-10-06",
           "linked_registries": []
         },
@@ -11454,6 +13215,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "Ra Pharmaceuticals",
           "start_date": "2017-10-11",
+          "readout_date": "2018-12-10",
+          "completion_date": "2020-11-19",
           "registered_date": "2017-10-19",
           "linked_registries": []
         },
@@ -11471,6 +13234,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "First Affiliated Hospital, Sun Yat-Sen University",
           "start_date": "2015-01-01",
+          "readout_date": "2017-11-21",
+          "completion_date": "2017-12-11",
           "registered_date": "2018-03-16",
           "linked_registries": []
         },
@@ -11488,6 +13253,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Duke University",
           "start_date": "2018-05-07",
+          "readout_date": "2021-01-31",
+          "completion_date": "2021-01-31",
           "registered_date": "2018-04-06",
           "linked_registries": []
         },
@@ -11505,6 +13272,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 4",
           "sponsor": "University of Aarhus",
           "start_date": "2018-04-09",
+          "readout_date": "2020-08-31",
+          "completion_date": "2021-08-31",
           "registered_date": "2018-04-27",
           "linked_registries": []
         },
@@ -11522,6 +13291,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Catalyst Pharmaceuticals, Inc.",
           "start_date": "2018-06-11",
+          "readout_date": "2022-08-05",
+          "completion_date": "2022-08-05",
           "registered_date": "2018-07-09",
           "linked_registries": []
         },
@@ -11539,6 +13310,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "First Affiliated Hospital, Sun Yat-Sen University",
           "start_date": "2017-01-01",
+          "readout_date": "2019-01-01",
+          "completion_date": "2019-01-01",
           "registered_date": "2018-07-24",
           "linked_registries": []
         },
@@ -11556,6 +13329,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "Jiang Fan",
           "start_date": "2018-07-01",
+          "readout_date": "2023-07-01",
+          "completion_date": "2023-12-01",
           "registered_date": "2018-08-03",
           "linked_registries": []
         },
@@ -11573,6 +13348,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "argenx",
           "start_date": "2018-08-22",
+          "readout_date": "2020-04-06",
+          "completion_date": "2020-04-06",
           "registered_date": "2018-09-13",
           "linked_registries": []
         },
@@ -11590,6 +13367,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "Hacettepe University",
           "start_date": "2018-12-03",
+          "readout_date": "2019-03-22",
+          "completion_date": "2019-04-08",
           "registered_date": "2018-11-16",
           "linked_registries": []
         },
@@ -11607,6 +13386,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Alexion Pharmaceuticals, Inc.",
           "start_date": "2018-12-28",
+          "readout_date": "2022-01-06",
+          "completion_date": "2023-11-06",
           "registered_date": "2018-11-30",
           "linked_registries": []
         },
@@ -11624,6 +13405,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "argenx",
           "start_date": "2019-03-01",
+          "readout_date": "2022-06-23",
+          "completion_date": "2022-06-30",
           "registered_date": "2018-12-10",
           "linked_registries": []
         },
@@ -11641,6 +13424,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "Momenta Pharmaceuticals, Inc.",
           "start_date": "2019-04-10",
+          "readout_date": "2020-06-25",
+          "completion_date": "2020-06-25",
           "registered_date": "2018-12-11",
           "linked_registries": []
         },
@@ -11658,6 +13443,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Yale University",
           "start_date": "2016-03-30",
+          "readout_date": "2026-09-30",
+          "completion_date": "2026-10-30",
           "registered_date": "2019-01-03",
           "linked_registries": []
         },
@@ -11675,6 +13462,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "Massachusetts Eye and Ear Infirmary",
           "start_date": "2019-02-07",
+          "readout_date": "2023-12-01",
+          "completion_date": "2023-12-01",
           "registered_date": "2019-01-28",
           "linked_registries": []
         },
@@ -11692,6 +13481,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "Dartmouth-Hitchcock Medical Center",
           "start_date": "2019-02-01",
+          "readout_date": "2021-12-07",
+          "completion_date": "2021-12-07",
           "registered_date": "2019-02-01",
           "linked_registries": []
         },
@@ -11709,6 +13500,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "Immunovant Sciences GmbH",
           "start_date": "2019-05-21",
+          "readout_date": "2020-10-07",
+          "completion_date": "2020-12-21",
           "registered_date": "2019-03-05",
           "linked_registries": []
         },
@@ -11726,6 +13519,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Centre d'Investigation Clinique et Technologique 805",
           "start_date": "2009-01-01",
+          "readout_date": "2017-12-31",
+          "completion_date": "2017-12-31",
           "registered_date": "2019-03-21",
           "linked_registries": []
         },
@@ -11743,6 +13538,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "Momenta Pharmaceuticals, Inc.",
           "start_date": "2019-08-06",
+          "readout_date": "2020-12-09",
+          "completion_date": "2020-12-09",
           "registered_date": "2019-03-29",
           "linked_registries": []
         },
@@ -11760,6 +13557,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "Rigshospitalet, Denmark",
           "start_date": "2019-08",
+          "readout_date": "2021-01-01",
+          "completion_date": "2021-01-01",
           "registered_date": "2019-04-03",
           "linked_registries": []
         },
@@ -11777,6 +13576,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Rigshospitalet, Denmark",
           "start_date": "2019-02-10",
+          "readout_date": "2020-01-10",
+          "completion_date": "2020-01-10",
           "registered_date": "2019-04-05",
           "linked_registries": []
         },
@@ -11794,6 +13595,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Rigshospitalet, Denmark",
           "start_date": "2019-06-01",
+          "readout_date": "2020-04-10",
+          "completion_date": "2020-10-10",
           "registered_date": "2019-04-05",
           "linked_registries": []
         },
@@ -11811,6 +13614,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2 / Phase 3",
           "sponsor": "University of Aarhus",
           "start_date": "2019-04-01",
+          "readout_date": "2021-10-31",
+          "completion_date": "2021-10-31",
           "registered_date": "2019-04-16",
           "linked_registries": []
         },
@@ -11828,6 +13633,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Alexion Pharmaceuticals, Inc.",
           "start_date": "2019-03-12",
+          "readout_date": "2021-05-11",
+          "completion_date": "2023-05-25",
           "registered_date": "2019-04-18",
           "linked_registries": []
         },
@@ -11845,6 +13652,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Mayo Clinic",
           "start_date": "1995-01-01",
+          "readout_date": "2020-11-10",
+          "completion_date": "2020-11-10",
           "registered_date": "2019-05-07",
           "linked_registries": []
         },
@@ -11862,6 +13671,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "UCB Biopharma SRL",
           "start_date": "2019-06-03",
+          "readout_date": "2021-08-31",
+          "completion_date": "2021-10-26",
           "registered_date": "2019-06-03",
           "linked_registries": []
         },
@@ -11879,6 +13690,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Charite University, Berlin, Germany",
           "start_date": "2019-05-01",
+          "readout_date": "2019-07-31",
+          "completion_date": "2019-07-31",
           "registered_date": "2019-06-07",
           "linked_registries": []
         },
@@ -11896,6 +13709,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Da, Yuwei, M.D.",
           "start_date": "2017-02-08",
+          "readout_date": "2023-06-01",
+          "completion_date": "2024-12-31",
           "registered_date": "2019-09-24",
           "linked_registries": []
         },
@@ -11913,6 +13728,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Ra Pharmaceuticals, Inc.",
           "start_date": "2019-09-17",
+          "readout_date": "2021-12-30",
+          "completion_date": "2021-12-30",
           "registered_date": "2019-10-04",
           "linked_registries": []
         },
@@ -11930,6 +13747,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "UCB Biopharma SRL",
           "start_date": "2019-10-29",
+          "readout_date": "2021-09-01",
+          "completion_date": "2021-09-01",
           "registered_date": "2019-10-14",
           "linked_registries": []
         },
@@ -11947,6 +13766,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "Cartesian Therapeutics",
           "start_date": "2019-12-04",
+          "readout_date": "2025-07-31",
+          "completion_date": "2026-03-31",
           "registered_date": "2019-10-31",
           "linked_registries": [
             {
@@ -11970,6 +13791,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Charite University, Berlin, Germany",
           "start_date": "2020-04-20",
+          "readout_date": "2020-11-30",
+          "completion_date": "2022-06-30",
           "registered_date": "2019-11-12",
           "linked_registries": []
         },
@@ -11987,6 +13810,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "Takeda",
           "start_date": "2020-01-14",
+          "readout_date": "2022-07-12",
+          "completion_date": "2022-07-12",
           "registered_date": "2019-11-12",
           "linked_registries": []
         },
@@ -12004,6 +13829,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Vitaccess Ltd",
           "start_date": "2019-12-12",
+          "readout_date": "2024-05-31",
+          "completion_date": "2024-05-31",
           "registered_date": "2019-11-25",
           "linked_registries": []
         },
@@ -12021,6 +13848,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Tang-Du Hospital",
           "start_date": "2019-11-04",
+          "readout_date": "2026-04-30",
+          "completion_date": "2026-06-30",
           "registered_date": "2019-12-02",
           "linked_registries": []
         },
@@ -12038,6 +13867,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Alexion Pharmaceuticals, Inc.",
           "start_date": "2019-12-02",
+          "readout_date": "2029-10-01",
+          "completion_date": "2029-10-01",
           "registered_date": "2019-12-17",
           "linked_registries": []
         },
@@ -12055,6 +13886,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "ProgenaBiome",
           "start_date": "2020-03-02",
+          "readout_date": "2030-03",
+          "completion_date": "2030-07",
           "registered_date": "2020-01-13",
           "linked_registries": []
         },
@@ -12072,6 +13905,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "UCB Biopharma SRL",
           "start_date": "2019-12-23",
+          "readout_date": "2026-07-27",
+          "completion_date": "2026-07-27",
           "registered_date": "2020-01-13",
           "linked_registries": []
         },
@@ -12089,6 +13924,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "DAS-MG, Inc",
           "start_date": "2023-11-08",
+          "readout_date": "2025-04-30",
+          "completion_date": "2025-04-30",
           "registered_date": "2020-01-13",
           "linked_registries": []
         },
@@ -12106,6 +13943,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "RemeGen Co., Ltd.",
           "start_date": "2020-07-07",
+          "readout_date": "2022-01-14",
+          "completion_date": "2022-02-11",
           "registered_date": "2020-03-10",
           "linked_registries": []
         },
@@ -12123,6 +13962,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "Harbour BioMed (Guangzhou) Co. Ltd.",
           "start_date": "2020-07-23",
+          "readout_date": "2021-08-24",
+          "completion_date": "2021-08-24",
           "registered_date": "2020-04-15",
           "linked_registries": []
         },
@@ -12140,6 +13981,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Early Phase 1",
           "sponsor": "Huashan Hospital",
           "start_date": "2020-06-11",
+          "readout_date": "2024-03-21",
+          "completion_date": "2024-03-31",
           "registered_date": "2020-06-16",
           "linked_registries": []
         },
@@ -12157,6 +14000,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Amgen",
           "start_date": "2020-10-15",
+          "readout_date": "2024-05-28",
+          "completion_date": "2029-06-07",
           "registered_date": "2020-08-24",
           "linked_registries": []
         },
@@ -12174,6 +14019,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Huashan Hospital",
           "start_date": "2024-02-01",
+          "readout_date": "2028-02-01",
+          "completion_date": "2028-05-01",
           "registered_date": "2020-09-02",
           "linked_registries": []
         },
@@ -12191,6 +14038,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Xperiome",
           "start_date": "2021-01",
+          "readout_date": "2022-09",
+          "completion_date": "2022-09",
           "registered_date": "2020-09-09",
           "linked_registries": []
         },
@@ -12208,6 +14057,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Early Phase 1",
           "sponsor": "Tongji Hospital",
           "start_date": "2020-09-22",
+          "readout_date": "2027-02-22",
+          "completion_date": "2027-05-31",
           "registered_date": "2020-09-23",
           "linked_registries": []
         },
@@ -12225,6 +14076,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "doc.ai inc",
           "start_date": "2020-10-02",
+          "readout_date": "2021-07-26",
+          "completion_date": "2021-07-26",
           "registered_date": "2020-10-19",
           "linked_registries": []
         },
@@ -12242,6 +14095,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "UCB Biopharma SRL",
           "start_date": "2021-02-03",
+          "readout_date": "2024-01-25",
+          "completion_date": "2024-01-25",
           "registered_date": "2020-12-03",
           "linked_registries": []
         },
@@ -12259,6 +14114,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "First Affiliated Hospital of Chongqing Medical University",
           "start_date": "2020-12-31",
+          "readout_date": "2022-10-01",
+          "completion_date": "2022-10-30",
           "registered_date": "2020-12-19",
           "linked_registries": []
         },
@@ -12276,6 +14133,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "Massachusetts Eye and Ear Infirmary",
           "start_date": "2021-06-01",
+          "readout_date": "2024-12-31",
+          "completion_date": "2024-12-31",
           "registered_date": "2020-12-21",
           "linked_registries": []
         },
@@ -12293,6 +14152,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "University Hospital, Bordeaux",
           "start_date": "2020-04-27",
+          "readout_date": "2020-06-18",
+          "completion_date": "2020-06-18",
           "registered_date": "2021-01-05",
           "linked_registries": []
         },
@@ -12310,6 +14171,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "University Hospital, Strasbourg, France",
           "start_date": "2021-01-22",
+          "readout_date": "2025-05-22",
+          "completion_date": "2025-05-22",
           "registered_date": "2021-01-19",
           "linked_registries": []
         },
@@ -12327,6 +14190,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "University Health Network, Toronto",
           "start_date": "2020-08-28",
+          "readout_date": "2023-06-30",
+          "completion_date": "2023-12-30",
           "registered_date": "2021-01-28",
           "linked_registries": []
         },
@@ -12344,6 +14209,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "argenx",
           "start_date": "2021-02-05",
+          "readout_date": "2021-11-02",
+          "completion_date": "2021-12-13",
           "registered_date": "2021-02-03",
           "linked_registries": []
         },
@@ -12361,6 +14228,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Da, Yuwei, M.D.",
           "start_date": "2021-01-01",
+          "readout_date": "2023-12-31",
+          "completion_date": "2024-10-31",
           "registered_date": "2021-02-24",
           "linked_registries": []
         },
@@ -12378,6 +14247,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "argenx",
           "start_date": "2021-04-26",
+          "readout_date": "2024-12-31",
+          "completion_date": "2024-12-31",
           "registered_date": "2021-03-26",
           "linked_registries": []
         },
@@ -12395,6 +14266,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2 / Phase 3",
           "sponsor": "argenx",
           "start_date": "2021-10-26",
+          "readout_date": "2027-03",
+          "completion_date": "2027-03",
           "registered_date": "2021-04-06",
           "linked_registries": []
         },
@@ -12412,6 +14285,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Huashan Hospital",
           "start_date": "2020-10-01",
+          "readout_date": "2026-09-30",
+          "completion_date": "2026-09-30",
           "registered_date": "2021-04-08",
           "linked_registries": []
         },
@@ -12429,6 +14304,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "First Affiliated Hospital of Chongqing Medical University",
           "start_date": "2021-06-30",
+          "readout_date": "2021-12-31",
+          "completion_date": "2021-12-31",
           "registered_date": "2021-06-28",
           "linked_registries": []
         },
@@ -12446,6 +14323,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Janssen Research & Development, LLC",
           "start_date": "2021-07-15",
+          "readout_date": "2023-11-17",
+          "completion_date": "2029-03-30",
           "registered_date": "2021-07-07",
           "linked_registries": []
         },
@@ -12463,6 +14342,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Hoffmann-La Roche",
           "start_date": "2021-10-19",
+          "readout_date": "2024-01-29",
+          "completion_date": "2024-09-02",
           "registered_date": "2021-07-15",
           "linked_registries": []
         },
@@ -12480,6 +14361,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 1",
           "sponsor": "University of Kansas Medical Center",
           "start_date": "2025-08",
+          "readout_date": "2026-08",
+          "completion_date": "2026-12",
           "registered_date": "2021-07-16",
           "linked_registries": []
         },
@@ -12497,6 +14380,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "argenx",
           "start_date": "2021-12-16",
+          "readout_date": "2023-08-24",
+          "completion_date": "2025-10-06",
           "registered_date": "2021-07-28",
           "linked_registries": []
         },
@@ -12514,6 +14399,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "Alexion Pharmaceuticals, Inc.",
           "start_date": "2022-01-01",
+          "readout_date": "2023-01-31",
+          "completion_date": "2024-01-31",
           "registered_date": "2021-07-29",
           "linked_registries": []
         },
@@ -12531,6 +14418,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Harbour BioMed (Guangzhou) Co. Ltd.",
           "start_date": "2021-09-25",
+          "readout_date": "2023-01-14",
+          "completion_date": "2023-01-14",
           "registered_date": "2021-09-09",
           "linked_registries": []
         },
@@ -12548,6 +14437,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "American University of Beirut Medical Center",
           "start_date": "2020-06-01",
+          "readout_date": "2021-04-15",
+          "completion_date": "2021-04-15",
           "registered_date": "2021-09-16",
           "linked_registries": []
         },
@@ -12565,6 +14456,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "Tang-Du Hospital",
           "start_date": "2022-07-21",
+          "readout_date": "2025-12-31",
+          "completion_date": "2026-03-30",
           "registered_date": "2021-10-05",
           "linked_registries": []
         },
@@ -12582,6 +14475,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Regeneron Pharmaceuticals",
           "start_date": "2021-12-14",
+          "readout_date": "2025-07-08",
+          "completion_date": "2028-11-11",
           "registered_date": "2021-10-07",
           "linked_registries": []
         },
@@ -12599,6 +14494,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "XiaoYong Liu",
           "start_date": "2021-01-01",
+          "readout_date": "2021-12-31",
+          "completion_date": "2021-12-31",
           "registered_date": "2021-10-25",
           "linked_registries": []
         },
@@ -12616,6 +14513,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "University of Manchester",
           "start_date": "2021-10",
+          "readout_date": "2024-04",
+          "completion_date": "2024-04",
           "registered_date": "2021-10-27",
           "linked_registries": []
         },
@@ -12633,6 +14532,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Sanofi",
           "start_date": "2021-12-03",
+          "readout_date": "2023-02-21",
+          "completion_date": "2023-02-21",
           "registered_date": "2021-11-24",
           "linked_registries": []
         },
@@ -12650,6 +14551,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "Intuitive Surgical",
           "start_date": "2022-07-20",
+          "readout_date": "2023-06-16",
+          "completion_date": "2028-07",
           "registered_date": "2021-12-09",
           "linked_registries": []
         },
@@ -12667,6 +14570,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Assiut University",
           "start_date": "2022-01-01",
+          "readout_date": "2024-12-31",
+          "completion_date": "2025-03-31",
           "registered_date": "2022-01-28",
           "linked_registries": []
         },
@@ -12684,6 +14589,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "Alexion Pharmaceuticals, Inc.",
           "start_date": "2022-04-27",
+          "readout_date": "2023-11-30",
+          "completion_date": "2024-04-03",
           "registered_date": "2022-02-01",
           "linked_registries": []
         },
@@ -12701,6 +14608,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Tianjin Medical University General Hospital",
           "start_date": "2021-01-01",
+          "readout_date": "2022-09-30",
+          "completion_date": "2022-12-31",
           "registered_date": "2022-02-01",
           "linked_registries": []
         },
@@ -12718,6 +14627,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "HealthPartners Institute",
           "start_date": "2022-05-25",
+          "readout_date": "2024-04-30",
+          "completion_date": "2024-04-30",
           "registered_date": "2022-02-08",
           "linked_registries": []
         },
@@ -12735,6 +14646,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2 / Phase 3",
           "sponsor": "Janssen Research & Development, LLC",
           "start_date": "2022-07-20",
+          "readout_date": "2026-06-26",
+          "completion_date": "2029-07-02",
           "registered_date": "2022-03-03",
           "linked_registries": []
         },
@@ -12752,6 +14665,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Assiut University",
           "start_date": "2022-07-01",
+          "readout_date": "2023-12-01",
+          "completion_date": "2024-12-01",
           "registered_date": "2022-03-29",
           "linked_registries": []
         },
@@ -12769,6 +14684,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "Mansoura University",
           "start_date": "2022-04-13",
+          "readout_date": "2022-05-09",
+          "completion_date": "2022-05-13",
           "registered_date": "2022-04-12",
           "linked_registries": []
         },
@@ -12786,6 +14703,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Harbour BioMed (Guangzhou) Co. Ltd.",
           "start_date": "2022-06-30",
+          "readout_date": "2024-04-26",
+          "completion_date": "2024-04-26",
           "registered_date": "2022-04-18",
           "linked_registries": []
         },
@@ -12803,6 +14722,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "First Affiliated Hospital, Sun Yat-Sen University",
           "start_date": "2020-08-01",
+          "readout_date": "2022-07-01",
+          "completion_date": "2022-07-01",
           "registered_date": "2022-04-18",
           "linked_registries": []
         },
@@ -12820,6 +14741,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Jagiellonian University",
           "start_date": "2022-06-03",
+          "readout_date": "2026-05-01",
+          "completion_date": "2026-09-01",
           "registered_date": "2022-04-20",
           "linked_registries": []
         },
@@ -12837,6 +14760,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2 / Phase 3",
           "sponsor": "argenx",
           "start_date": "2022-08-18",
+          "readout_date": "2029-09",
+          "completion_date": "2029-09",
           "registered_date": "2022-05-16",
           "linked_registries": []
         },
@@ -12854,6 +14779,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Beijing Tongren Hospital",
           "start_date": "2017-06-01",
+          "readout_date": "2019-12-31",
+          "completion_date": "2022-05-09",
           "registered_date": "2022-05-18",
           "linked_registries": []
         },
@@ -12871,6 +14798,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Immunovant Sciences GmbH",
           "start_date": "2022-06-27",
+          "readout_date": "2025-01-10",
+          "completion_date": "2027-02",
           "registered_date": "2022-06-03",
           "linked_registries": []
         },
@@ -12888,6 +14817,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Institut de Myologie, France",
           "start_date": "2021-11-12",
+          "readout_date": "2022-05-15",
+          "completion_date": "2022-05-15",
           "registered_date": "2022-06-07",
           "linked_registries": []
         },
@@ -12905,6 +14836,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 1",
           "sponsor": "Cabaletta Bio",
           "start_date": "2022-11-23",
+          "readout_date": "2025-07-24",
+          "completion_date": "2025-07-24",
           "registered_date": "2022-07-11",
           "linked_registries": []
         },
@@ -12922,6 +14855,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "Chang Gung Memorial Hospital",
           "start_date": "2022-08-03",
+          "readout_date": "2024-04-11",
+          "completion_date": "2024-04-11",
           "registered_date": "2022-07-13",
           "linked_registries": []
         },
@@ -12939,6 +14874,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "UCB Biopharma SRL",
           "start_date": "2022-10-31",
+          "readout_date": "2024-03-13",
+          "completion_date": "2024-10-23",
           "registered_date": "2022-08-25",
           "linked_registries": []
         },
@@ -12956,6 +14893,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Alexion Pharmaceuticals, Inc.",
           "start_date": "2022-11-21",
+          "readout_date": "2025-05-27",
+          "completion_date": "2027-08-31",
           "registered_date": "2022-09-27",
           "linked_registries": []
         },
@@ -12973,6 +14912,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "Ad scientiam",
           "start_date": "2024-01-24",
+          "readout_date": "2025-09-24",
+          "completion_date": "2026-09-24",
           "registered_date": "2022-10-04",
           "linked_registries": []
         },
@@ -12990,6 +14931,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Ad scientiam",
           "start_date": "2023-02-27",
+          "readout_date": "2025-01-10",
+          "completion_date": "2025-01-10",
           "registered_date": "2022-10-05",
           "linked_registries": []
         },
@@ -13007,6 +14950,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Sanguine Biosciences",
           "start_date": "2021-10-26",
+          "readout_date": "2025-10",
+          "completion_date": "2025-10",
           "registered_date": "2022-12-02",
           "linked_registries": []
         },
@@ -13024,6 +14969,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Alexion Pharmaceuticals, Inc.",
           "start_date": "2023-06-24",
+          "readout_date": "2026-07-15",
+          "completion_date": "2028-06-30",
           "registered_date": "2022-12-09",
           "linked_registries": []
         },
@@ -13041,6 +14988,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "UCB Biopharma SRL",
           "start_date": "2023-04-17",
+          "readout_date": "2024-04-23",
+          "completion_date": "2024-04-23",
           "registered_date": "2023-01-12",
           "linked_registries": []
         },
@@ -13058,6 +15007,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Yonsei University",
           "start_date": "2021-09-01",
+          "readout_date": "2021-12-30",
+          "completion_date": "2021-12-30",
           "registered_date": "2023-01-23",
           "linked_registries": []
         },
@@ -13075,6 +15026,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2 / Phase 3",
           "sponsor": "Tang-Du Hospital",
           "start_date": "2023-04-01",
+          "readout_date": "2024-07-31",
+          "completion_date": "2024-12-31",
           "registered_date": "2023-02-08",
           "linked_registries": []
         },
@@ -13092,6 +15045,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "RemeGen Co., Ltd.",
           "start_date": "2023-03-28",
+          "readout_date": "2024-11-26",
+          "completion_date": "2024-12-12",
           "registered_date": "2023-02-21",
           "linked_registries": []
         },
@@ -13109,6 +15064,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 1",
           "sponsor": "Zhejiang University",
           "start_date": "2023-04-30",
+          "readout_date": "2026-04-20",
+          "completion_date": "2026-04-20",
           "registered_date": "2023-04-25",
           "linked_registries": []
         },
@@ -13126,6 +15083,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Fondazione Policlinico Universitario Agostino Gemelli IRCCS",
           "start_date": "2022-02-28",
+          "readout_date": "2025-07-31",
+          "completion_date": "2025-07-31",
           "registered_date": "2023-05-22",
           "linked_registries": []
         },
@@ -13143,6 +15102,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "First Affiliated Hospital of Jinan University",
           "start_date": "2023-07-04",
+          "readout_date": "2024-03-31",
+          "completion_date": "2024-05-31",
           "registered_date": "2023-06-05",
           "linked_registries": []
         },
@@ -13160,6 +15121,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "LMU Klinikum",
           "start_date": "2023-09-01",
+          "readout_date": "2024-09-09",
+          "completion_date": "2024-09-09",
           "registered_date": "2023-06-06",
           "linked_registries": []
         },
@@ -13177,6 +15140,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Yale University",
           "start_date": "2021-08-30",
+          "readout_date": "2023-01-20",
+          "completion_date": "2023-01-20",
           "registered_date": "2023-06-23",
           "linked_registries": []
         },
@@ -13194,6 +15159,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Leiden University Medical Center",
           "start_date": "2023-03-22",
+          "readout_date": "2024-09-22",
+          "completion_date": "2024-09-22",
           "registered_date": "2023-06-26",
           "linked_registries": []
         },
@@ -13211,6 +15178,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Casa Colina Hospital and Centers for Healthcare",
           "start_date": "2023-07-21",
+          "readout_date": "2023-09-15",
+          "completion_date": "2023-09-29",
           "registered_date": "2023-07-14",
           "linked_registries": []
         },
@@ -13228,6 +15197,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "University of Alabama at Birmingham",
           "start_date": "2023-11-01",
+          "readout_date": "2024-10-31",
+          "completion_date": "2024-11-01",
           "registered_date": "2023-08-07",
           "linked_registries": []
         },
@@ -13245,6 +15216,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "Uppsala University",
           "start_date": "2023-07-10",
+          "readout_date": "2024-08-15",
+          "completion_date": "2025-03-15",
           "registered_date": "2023-08-15",
           "linked_registries": []
         },
@@ -13262,6 +15235,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Yale University",
           "start_date": "2021-01-12",
+          "readout_date": "2025-05-31",
+          "completion_date": "2025-05-31",
           "registered_date": "2023-08-21",
           "linked_registries": []
         },
@@ -13279,6 +15254,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Peking Union Medical College Hospital",
           "start_date": "2023-08-20",
+          "readout_date": "2026-09-30",
+          "completion_date": "2026-09-30",
           "registered_date": "2023-08-23",
           "linked_registries": []
         },
@@ -13296,6 +15273,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2 / Phase 3",
           "sponsor": "UCB Biopharma SRL",
           "start_date": "2024-10-16",
+          "readout_date": "2026-11-16",
+          "completion_date": "2026-12-25",
           "registered_date": "2023-09-28",
           "linked_registries": []
         },
@@ -13313,6 +15292,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Vitaccess Ltd",
           "start_date": "2024-07-31",
+          "readout_date": "2034-07",
+          "completion_date": "2034-07",
           "registered_date": "2023-10-03",
           "linked_registries": []
         },
@@ -13330,6 +15311,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "University of Missouri-Columbia",
           "start_date": "2023-07-12",
+          "readout_date": "2025-04",
+          "completion_date": "2025-08",
           "registered_date": "2023-10-03",
           "linked_registries": []
         },
@@ -13347,6 +15330,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Nguyen Dang Thu",
           "start_date": "2016-01-15",
+          "readout_date": "2019-12-20",
+          "completion_date": "2019-12-25",
           "registered_date": "2023-10-26",
           "linked_registries": []
         },
@@ -13364,6 +15349,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 1 / Phase 2",
           "sponsor": "COUR Pharmaceutical Development Company, Inc.",
           "start_date": "2024-05-30",
+          "readout_date": "2026-06",
+          "completion_date": "2026-08",
           "registered_date": "2023-10-30",
           "linked_registries": []
         },
@@ -13381,6 +15368,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2 / Phase 3",
           "sponsor": "UCB Biopharma SRL",
           "start_date": "2024-06-14",
+          "readout_date": "2026-08-10",
+          "completion_date": "2026-10-19",
           "registered_date": "2023-11-29",
           "linked_registries": []
         },
@@ -13398,6 +15387,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "Hacettepe University",
           "start_date": "2022-12-28",
+          "readout_date": "2024-07-09",
+          "completion_date": "2024-12-25",
           "registered_date": "2023-12-06",
           "linked_registries": []
         },
@@ -13415,6 +15406,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2 / Phase 3",
           "sponsor": "Kyverna Therapeutics",
           "start_date": "2024-08-28",
+          "readout_date": "2027-09",
+          "completion_date": "2028-09",
           "registered_date": "2024-01-05",
           "linked_registries": []
         },
@@ -13432,6 +15425,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 1",
           "sponsor": "Juno Therapeutics, Inc., a Bristol-Myers Squibb Company",
           "start_date": "2024-03-28",
+          "readout_date": "2027-07-15",
+          "completion_date": "2027-07-15",
           "registered_date": "2024-01-23",
           "linked_registries": []
         },
@@ -13449,6 +15444,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "Shanghai Zhongshan Hospital",
           "start_date": "2024-02-01",
+          "readout_date": "2026-12-30",
+          "completion_date": "2027-06-30",
           "registered_date": "2024-01-24",
           "linked_registries": []
         },
@@ -13466,6 +15463,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Huashan Hospital",
           "start_date": "2024-02-01",
+          "readout_date": "2034-02-01",
+          "completion_date": "2035-01-30",
           "registered_date": "2024-02-05",
           "linked_registries": []
         },
@@ -13483,6 +15482,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 1",
           "sponsor": "RenJi Hospital",
           "start_date": "2024-03-20",
+          "readout_date": "2027-03",
+          "completion_date": "2040-03",
           "registered_date": "2024-02-08",
           "linked_registries": []
         },
@@ -13500,6 +15501,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "Olawuyi Racett Nigeria Ltd",
           "start_date": "2023-06-16",
+          "readout_date": "2023-12-16",
+          "completion_date": "2023-12-16",
           "registered_date": "2024-02-13",
           "linked_registries": []
         },
@@ -13517,6 +15520,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Myasthenia Gravis Rare Disease Network",
           "start_date": "2023-08-23",
+          "readout_date": "2025-08-23",
+          "completion_date": "2025-12-31",
           "registered_date": "2024-02-14",
           "linked_registries": []
         },
@@ -13534,6 +15539,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Massachusetts General Hospital",
           "start_date": "2024-02-14",
+          "readout_date": "2024-06",
+          "completion_date": "2024-06",
           "registered_date": "2024-02-26",
           "linked_registries": []
         },
@@ -13551,6 +15558,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "Dianthus Therapeutics",
           "start_date": "2024-02-23",
+          "readout_date": "2025-07-28",
+          "completion_date": "2028-10",
           "registered_date": "2024-02-28",
           "linked_registries": []
         },
@@ -13568,6 +15577,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "argenx",
           "start_date": "2024-04-16",
+          "readout_date": "2025-06-30",
+          "completion_date": "2027-06",
           "registered_date": "2024-03-07",
           "linked_registries": []
         },
@@ -13585,6 +15596,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "argenx",
           "start_date": "2024-11-04",
+          "readout_date": "2034-06",
+          "completion_date": "2034-06",
           "registered_date": "2024-03-07",
           "linked_registries": []
         },
@@ -13602,6 +15615,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "argenx",
           "start_date": "2023-11-30",
+          "readout_date": "2033-01",
+          "completion_date": "2033-12",
           "registered_date": "2024-03-08",
           "linked_registries": []
         },
@@ -13619,6 +15634,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Fondation Ophtalmologique Adolphe de Rothschild",
           "start_date": "2025-04-29",
+          "readout_date": "2028-06",
+          "completion_date": "2029-06",
           "registered_date": "2024-04-02",
           "linked_registries": []
         },
@@ -13636,6 +15653,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 1 / Phase 2",
           "sponsor": "Cabaletta Bio",
           "start_date": "2024-12-17",
+          "readout_date": "2029-09",
+          "completion_date": "2029-09",
           "registered_date": "2024-04-11",
           "linked_registries": []
         },
@@ -13653,6 +15672,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 1",
           "sponsor": "Ting Chang, MD",
           "start_date": "2024-07-12",
+          "readout_date": "2025-11-01",
+          "completion_date": "2026-12-01",
           "registered_date": "2024-04-17",
           "linked_registries": []
         },
@@ -13670,6 +15691,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2 / Phase 3",
           "sponsor": "argenx",
           "start_date": "2024-06-28",
+          "readout_date": "2026-09-30",
+          "completion_date": "2026-09-30",
           "registered_date": "2024-04-30",
           "linked_registries": []
         },
@@ -13687,6 +15710,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "NMD Pharma A/S",
           "start_date": "2024-05-16",
+          "readout_date": "2026-12",
+          "completion_date": "2026-12",
           "registered_date": "2024-05-16",
           "linked_registries": []
         },
@@ -13704,6 +15729,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Early Phase 1",
           "sponsor": "Zhejiang University",
           "start_date": "2024-12-01",
+          "readout_date": "2027-06-01",
+          "completion_date": "2027-10-01",
           "registered_date": "2024-05-17",
           "linked_registries": []
         },
@@ -13721,6 +15748,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "UCB Biopharma SRL",
           "start_date": "2024-11-19",
+          "readout_date": "2027-10-26",
+          "completion_date": "2027-11-19",
           "registered_date": "2024-05-30",
           "linked_registries": []
         },
@@ -13738,6 +15767,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "Beijing Tongren Hospital",
           "start_date": "2024-06-01",
+          "readout_date": "2025-03-05",
+          "completion_date": "2025-03-05",
           "registered_date": "2024-05-31",
           "linked_registries": []
         },
@@ -13755,6 +15786,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Heinrich-Heine University, Duesseldorf",
           "start_date": "2024-05-02",
+          "readout_date": "2025-10-31",
+          "completion_date": "2025-10-31",
           "registered_date": "2024-06-04",
           "linked_registries": []
         },
@@ -13772,6 +15805,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Xuanwu Hospital, Beijing",
           "start_date": "2020-12-01",
+          "readout_date": "2024-12-30",
+          "completion_date": "2024-12-30",
           "registered_date": "2024-06-05",
           "linked_registries": []
         },
@@ -13789,6 +15824,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2 / Phase 3",
           "sponsor": "Shanghai Jiaolian Drug Research and Development Co., Ltd",
           "start_date": "2024-07-01",
+          "readout_date": "2026-06-30",
+          "completion_date": "2026-06-30",
           "registered_date": "2024-06-07",
           "linked_registries": []
         },
@@ -13806,6 +15843,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Vor Biopharma",
           "start_date": "2024-07-17",
+          "readout_date": "2027-05",
+          "completion_date": "2029-01",
           "registered_date": "2024-06-13",
           "linked_registries": []
         },
@@ -13823,6 +15862,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Merck Healthcare KGaA, Darmstadt, Germany, an affiliate of Merck KGaA, Darmstadt, Germany",
           "start_date": "2024-06-25",
+          "readout_date": "2028-08-23",
+          "completion_date": "2030-11-12",
           "registered_date": "2024-06-18",
           "linked_registries": []
         },
@@ -13840,6 +15881,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "UCB Biopharma SRL",
           "start_date": "2024-08-27",
+          "readout_date": "2025-01-28",
+          "completion_date": "2025-02-03",
           "registered_date": "2024-06-24",
           "linked_registries": []
         },
@@ -13857,6 +15900,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "HealthPartners Institute",
           "start_date": "2024-09-16",
+          "readout_date": "2026-12",
+          "completion_date": "2026-12",
           "registered_date": "2024-07-09",
           "linked_registries": []
         },
@@ -13874,6 +15919,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "University of Liverpool",
           "start_date": "2016-03",
+          "readout_date": "2018-03",
+          "completion_date": "2018-03",
           "registered_date": "2024-07-15",
           "linked_registries": []
         },
@@ -13891,6 +15938,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Tongji Hospital",
           "start_date": "2024-07-31",
+          "readout_date": "2027-07",
+          "completion_date": "2027-07",
           "registered_date": "2024-07-15",
           "linked_registries": []
         },
@@ -13908,6 +15957,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Novartis Pharmaceuticals",
           "start_date": "2024-07-31",
+          "readout_date": "2027-04-30",
+          "completion_date": "2032-05-27",
           "registered_date": "2024-07-24",
           "linked_registries": []
         },
@@ -13925,6 +15976,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "xCures",
           "start_date": "2024-06-10",
+          "readout_date": "2026-06-10",
+          "completion_date": "2026-06-10",
           "registered_date": "2024-08-06",
           "linked_registries": []
         },
@@ -13942,6 +15995,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "UCB Biopharma SRL",
           "start_date": "2024-10-08",
+          "readout_date": "2027-08-17",
+          "completion_date": "2027-08-17",
           "registered_date": "2024-08-06",
           "linked_registries": []
         },
@@ -13959,6 +16014,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "argenx",
           "start_date": "2024-09-18",
+          "readout_date": "2026-01-12",
+          "completion_date": "2027-12",
           "registered_date": "2024-08-16",
           "linked_registries": []
         },
@@ -13976,6 +16033,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "University Health Network, Toronto",
           "start_date": "2023-06-01",
+          "readout_date": "2025-05",
+          "completion_date": "2025-05",
           "registered_date": "2024-09-19",
           "linked_registries": []
         },
@@ -13993,6 +16052,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "LMU Klinikum",
           "start_date": "2024-09-09",
+          "readout_date": "2027-08-01",
+          "completion_date": "2028-01-01",
           "registered_date": "2024-09-20",
           "linked_registries": []
         },
@@ -14010,6 +16071,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Alexion Pharmaceuticals, Inc.",
           "start_date": "2024-11-13",
+          "readout_date": "2026-12-15",
+          "completion_date": "2029-01-23",
           "registered_date": "2024-09-23",
           "linked_registries": []
         },
@@ -14027,6 +16090,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Myasthenia Gravis Foundation of America",
           "start_date": "2013-10-12",
+          "readout_date": "2029-09-19",
+          "completion_date": "2029-09-19",
           "registered_date": "2024-09-27",
           "linked_registries": []
         },
@@ -14044,6 +16109,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "Chang Gung University",
           "start_date": "2018-01-01",
+          "readout_date": "2018-12-31",
+          "completion_date": "2018-12-31",
           "registered_date": "2024-10-03",
           "linked_registries": []
         },
@@ -14061,6 +16128,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 1",
           "sponsor": "Arcellx, Inc.",
           "start_date": "2025-04-30",
+          "readout_date": "2027-03",
+          "completion_date": "2028-04",
           "registered_date": "2024-10-04",
           "linked_registries": []
         },
@@ -14078,6 +16147,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "Leiden University Medical Center",
           "start_date": "2024-12-04",
+          "readout_date": "2026-06-30",
+          "completion_date": "2027-01-23",
           "registered_date": "2024-10-26",
           "linked_registries": []
         },
@@ -14095,6 +16166,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2 / Phase 3",
           "sponsor": "Zhongming Qiu",
           "start_date": "2024-11-30",
+          "readout_date": "2025-12-31",
+          "completion_date": "2026-06-30",
           "registered_date": "2024-11-12",
           "linked_registries": []
         },
@@ -14112,6 +16185,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 4",
           "sponsor": "Rambam Health Care Campus",
           "start_date": "2024-11-15",
+          "readout_date": "2025-01-15",
+          "completion_date": "2025-03-30",
           "registered_date": "2024-11-14",
           "linked_registries": []
         },
@@ -14129,6 +16204,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 1",
           "sponsor": "CSPC ZhongQi Pharmaceutical Technology Co., Ltd.",
           "start_date": "2025-01-08",
+          "readout_date": "2028-12-01",
+          "completion_date": "2033-05-01",
           "registered_date": "2024-11-14",
           "linked_registries": []
         },
@@ -14146,6 +16223,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "AstraZeneca",
           "start_date": "2024-09-26",
+          "readout_date": "2027-12-30",
+          "completion_date": "2027-12-30",
           "registered_date": "2024-11-22",
           "linked_registries": []
         },
@@ -14163,6 +16242,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 1 / Phase 2",
           "sponsor": "Novartis Pharmaceuticals",
           "start_date": "2025-04-22",
+          "readout_date": "2029-10-26",
+          "completion_date": "2029-10-26",
           "registered_date": "2024-11-26",
           "linked_registries": []
         },
@@ -14180,6 +16261,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "First Affiliated Hospital of Chongqing Medical University",
           "start_date": "2024-07-01",
+          "readout_date": "2025-12-31",
+          "completion_date": "2026-06-30",
           "registered_date": "2024-11-27",
           "linked_registries": []
         },
@@ -14197,6 +16280,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Fondazione I.R.C.C.S. Istituto Neurologico Carlo Besta",
           "start_date": "2023-06-07",
+          "readout_date": "2025-08-12",
+          "completion_date": "2025-09-30",
           "registered_date": "2024-12-05",
           "linked_registries": []
         },
@@ -14214,6 +16299,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 4",
           "sponsor": "First Affiliated Hospital of Wenzhou Medical University",
           "start_date": "2024-12",
+          "readout_date": "2025-12",
+          "completion_date": "2026-12",
           "registered_date": "2024-12-09",
           "linked_registries": []
         },
@@ -14231,6 +16318,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Leiden University Medical Center",
           "start_date": "2025-03-18",
+          "readout_date": "2026-08-28",
+          "completion_date": "2026-09-30",
           "registered_date": "2024-12-20",
           "linked_registries": []
         },
@@ -14248,6 +16337,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Novartis Pharmaceuticals",
           "start_date": "2025-02-07",
+          "readout_date": "2028-02-25",
+          "completion_date": "2033-02-26",
           "registered_date": "2024-12-20",
           "linked_registries": []
         },
@@ -14265,6 +16356,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "Yi Ting Yeh",
           "start_date": "2023-01-17",
+          "readout_date": "2027-01-17",
+          "completion_date": "2027-12-31",
           "registered_date": "2024-12-31",
           "linked_registries": []
         },
@@ -14282,6 +16375,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 1",
           "sponsor": "Chongbo Zhao",
           "start_date": "2025-02-15",
+          "readout_date": "2027-02-13",
+          "completion_date": "2027-09-10",
           "registered_date": "2025-01-06",
           "linked_registries": []
         },
@@ -14299,6 +16394,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Alexion Pharmaceuticals, Inc.",
           "start_date": "2025-01-06",
+          "readout_date": "2025-12-29",
+          "completion_date": "2025-12-29",
           "registered_date": "2025-01-08",
           "linked_registries": []
         },
@@ -14316,6 +16413,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Clinique Neuro-Outaouais",
           "start_date": "2025-02-06",
+          "readout_date": "2027-01-06",
+          "completion_date": "2027-01-06",
           "registered_date": "2025-01-09",
           "linked_registries": []
         },
@@ -14333,6 +16432,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Sohag University",
           "start_date": "2025-02-01",
+          "readout_date": "2025-05-01",
+          "completion_date": "2025-08-01",
           "registered_date": "2025-01-14",
           "linked_registries": []
         },
@@ -14350,6 +16451,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Cartesian Therapeutics",
           "start_date": "2025-05-06",
+          "readout_date": "2026-11-30",
+          "completion_date": "2027-09-30",
           "registered_date": "2025-01-29",
           "linked_registries": []
         },
@@ -14367,6 +16470,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "The First People's Hospital of Yunnan",
           "start_date": "2025-02",
+          "readout_date": "2025-12-31",
+          "completion_date": "2026-02-28",
           "registered_date": "2025-02-03",
           "linked_registries": []
         },
@@ -14384,6 +16489,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Centre Hospitalier Universitaire de Nice",
           "start_date": "2025-03-01",
+          "readout_date": "2026-02-01",
+          "completion_date": "2026-03-03",
           "registered_date": "2025-02-07",
           "linked_registries": []
         },
@@ -14401,6 +16508,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "First Affiliated Hospital of Wenzhou Medical University",
           "start_date": "2025-02",
+          "readout_date": "2026-02",
+          "completion_date": "2026-12",
           "registered_date": "2025-02-14",
           "linked_registries": []
         },
@@ -14418,6 +16527,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2 / Phase 3",
           "sponsor": "Da, Yuwei, M.D.",
           "start_date": "2025-04-01",
+          "readout_date": "2028-03-31",
+          "completion_date": "2028-06-30",
           "registered_date": "2025-02-20",
           "linked_registries": []
         },
@@ -14435,6 +16546,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Leiden University Medical Center",
           "start_date": "2022-05-19",
+          "readout_date": "2022-09-01",
+          "completion_date": "2023-04-01",
           "registered_date": "2025-03-06",
           "linked_registries": []
         },
@@ -14452,6 +16565,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Leiden University Medical Center",
           "start_date": "2020-12-01",
+          "readout_date": "2022-12-31",
+          "completion_date": "2022-12-31",
           "registered_date": "2025-03-06",
           "linked_registries": []
         },
@@ -14469,6 +16584,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 4",
           "sponsor": "University of Colorado, Denver",
           "start_date": "2025-03-06",
+          "readout_date": "2026-12-31",
+          "completion_date": "2026-12-31",
           "registered_date": "2025-03-06",
           "linked_registries": []
         },
@@ -14486,6 +16603,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "ZS Associates",
           "start_date": "2025-02-26",
+          "readout_date": "2025-12-31",
+          "completion_date": "2025-12-31",
           "registered_date": "2025-03-10",
           "linked_registries": []
         },
@@ -14503,6 +16622,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Institut de Myologie, France",
           "start_date": "2026-04-08",
+          "readout_date": "2028-06",
+          "completion_date": "2028-06",
           "registered_date": "2025-03-10",
           "linked_registries": []
         },
@@ -14520,6 +16641,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 1",
           "sponsor": "Union Hospital, Tongji Medical College, Huazhong University of Science and Technology",
           "start_date": "2025-06-17",
+          "readout_date": "2025-06-17",
+          "completion_date": "2025-06-17",
           "registered_date": "2025-03-11",
           "linked_registries": []
         },
@@ -14537,6 +16660,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "University Hospital, Clermont-Ferrand",
           "start_date": "2025-01-31",
+          "readout_date": "2025-07-31",
+          "completion_date": "2025-10",
           "registered_date": "2025-03-14",
           "linked_registries": []
         },
@@ -14554,6 +16679,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "Yi Ting Yeh",
           "start_date": "2023-04-19",
+          "readout_date": "2026-04-19",
+          "completion_date": "2026-07-19",
           "registered_date": "2025-03-17",
           "linked_registries": []
         },
@@ -14571,6 +16698,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "Cheng, yu-ting",
           "start_date": "2022-06-14",
+          "readout_date": "2025-06-13",
+          "completion_date": "2025-06-13",
           "registered_date": "2025-03-18",
           "linked_registries": []
         },
@@ -14588,6 +16717,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 4",
           "sponsor": "argenx",
           "start_date": "2025-04-17",
+          "readout_date": "2026-08",
+          "completion_date": "2027-05",
           "registered_date": "2025-04-03",
           "linked_registries": []
         },
@@ -14605,6 +16736,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "AstraZeneca",
           "start_date": "2025-05-15",
+          "readout_date": "2029-12-31",
+          "completion_date": "2029-12-31",
           "registered_date": "2025-04-03",
           "linked_registries": []
         },
@@ -14622,6 +16755,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Early Phase 1",
           "sponsor": "Zhejiang University",
           "start_date": "2025-04",
+          "readout_date": "2026-04",
+          "completion_date": "2027-11",
           "registered_date": "2025-04-18",
           "linked_registries": []
         },
@@ -14639,6 +16774,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Early Phase 1",
           "sponsor": "Tianjin Huanhu Hospital",
           "start_date": "2025-06-17",
+          "readout_date": "2026-04",
+          "completion_date": "2027-10",
           "registered_date": "2025-04-22",
           "linked_registries": []
         },
@@ -14656,6 +16793,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "University of California, San Francisco",
           "start_date": "2017-03-21",
+          "readout_date": "2030-06",
+          "completion_date": "2035-06",
           "registered_date": "2025-04-23",
           "linked_registries": []
         },
@@ -14673,6 +16812,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 1",
           "sponsor": "Ting Chang, MD",
           "start_date": "2025-05-01",
+          "readout_date": "2026-04-30",
+          "completion_date": "2028-04-30",
           "registered_date": "2025-05-06",
           "linked_registries": []
         },
@@ -14690,6 +16831,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "Shenzhen MagicRNA Biotechnology Co., Ltd",
           "start_date": "2026-01-19",
+          "readout_date": "2026-02-11",
+          "completion_date": "2026-02-11",
           "registered_date": "2025-05-11",
           "linked_registries": []
         },
@@ -14707,6 +16850,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Alexion Pharmaceuticals, Inc.",
           "start_date": "2025-07-31",
+          "readout_date": "2027-06-30",
+          "completion_date": "2027-06-30",
           "registered_date": "2025-05-13",
           "linked_registries": []
         },
@@ -14724,6 +16869,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 1",
           "sponsor": "Changzhou No.2 People's Hospital",
           "start_date": "2025-05",
+          "readout_date": "2027-05",
+          "completion_date": "2028-11",
           "registered_date": "2025-05-18",
           "linked_registries": []
         },
@@ -14741,6 +16888,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "Amgen",
           "start_date": "2026-08-31",
+          "readout_date": "2030-03-13",
+          "completion_date": "2030-03-13",
           "registered_date": "2025-05-23",
           "linked_registries": []
         },
@@ -14758,6 +16907,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Poitiers University Hospital",
           "start_date": "2024-02-27",
+          "readout_date": "2024-11-06",
+          "completion_date": "2024-11-06",
           "registered_date": "2025-06-15",
           "linked_registries": []
         },
@@ -14775,6 +16926,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 1 / Phase 2",
           "sponsor": "Tianjin Medical University General Hospital",
           "start_date": "2025-04-10",
+          "readout_date": "2027-12-30",
+          "completion_date": "2027-12-30",
           "registered_date": "2025-06-15",
           "linked_registries": []
         },
@@ -14792,6 +16945,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Thymia Limited",
           "start_date": "2026-02",
+          "readout_date": "2026-06",
+          "completion_date": "2026-12",
           "registered_date": "2025-06-24",
           "linked_registries": []
         },
@@ -14809,6 +16964,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Immunovant Sciences GmbH",
           "start_date": "2025-05-27",
+          "readout_date": "2027-12",
+          "completion_date": "2028-12",
           "registered_date": "2025-06-26",
           "linked_registries": []
         },
@@ -14826,6 +16983,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Early Phase 1",
           "sponsor": "Daishi Tian",
           "start_date": "2025-07-15",
+          "readout_date": "2027-02-13",
+          "completion_date": "2027-09-10",
           "registered_date": "2025-07-10",
           "linked_registries": []
         },
@@ -14843,6 +17002,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "Tang-Du Hospital",
           "start_date": "2022-08-01",
+          "readout_date": "2027-06-30",
+          "completion_date": "2027-07-31",
           "registered_date": "2025-07-17",
           "linked_registries": []
         },
@@ -14860,6 +17021,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 4",
           "sponsor": "Centre Hospitalier Universitaire de Nice",
           "start_date": "2025-09-19",
+          "readout_date": "2027-10-01",
+          "completion_date": "2027-10-01",
           "registered_date": "2025-07-18",
           "linked_registries": []
         },
@@ -14877,6 +17040,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Da, Yuwei, M.D.",
           "start_date": "2025-07-30",
+          "readout_date": "2026-06-30",
+          "completion_date": "2026-09-30",
           "registered_date": "2025-07-22",
           "linked_registries": []
         },
@@ -14894,6 +17059,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "Universite du Littoral Cote d'Opale",
           "start_date": "2025-11-01",
+          "readout_date": "2028-04-30",
+          "completion_date": "2028-10-30",
           "registered_date": "2025-08-15",
           "linked_registries": []
         },
@@ -14911,6 +17078,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "Centre Hospitalier Universitaire de Liege",
           "start_date": "2024-03-29",
+          "readout_date": "2029-12",
+          "completion_date": "2030-12",
           "registered_date": "2025-08-22",
           "linked_registries": []
         },
@@ -14928,6 +17097,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Huashan Hospital",
           "start_date": "2023-08-31",
+          "readout_date": "2025-12",
+          "completion_date": "2025-12",
           "registered_date": "2025-08-28",
           "linked_registries": []
         },
@@ -14945,6 +17116,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 1",
           "sponsor": "West China Second University Hospital",
           "start_date": "2023-08-10",
+          "readout_date": "2023-11-22",
+          "completion_date": "2024-02-06",
           "registered_date": "2025-09-04",
           "linked_registries": []
         },
@@ -14962,6 +17135,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 1",
           "sponsor": "Candid Therapeutics",
           "start_date": "2025-09-16",
+          "readout_date": "2027-12",
+          "completion_date": "2028-04",
           "registered_date": "2025-10-10",
           "linked_registries": []
         },
@@ -14979,6 +17154,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Miriam Freimer",
           "start_date": "2026-01-20",
+          "readout_date": "2027-12-01",
+          "completion_date": "2028-04-01",
           "registered_date": "2025-10-14",
           "linked_registries": []
         },
@@ -14996,6 +17173,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "CorEvitas",
           "start_date": "2025-08-14",
+          "readout_date": "2099-12-31",
+          "completion_date": "2099-12-31",
           "registered_date": "2025-10-16",
           "linked_registries": []
         },
@@ -15013,6 +17192,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Janssen Research & Development, LLC",
           "start_date": "2026-01-05",
+          "readout_date": "2027-09-28",
+          "completion_date": "2029-01-29",
           "registered_date": "2025-10-16",
           "linked_registries": []
         },
@@ -15030,6 +17211,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 4",
           "sponsor": "Alexion Pharmaceuticals, Inc.",
           "start_date": "2026-03-04",
+          "readout_date": "2027-08-27",
+          "completion_date": "2027-08-27",
           "registered_date": "2025-10-28",
           "linked_registries": []
         },
@@ -15047,6 +17230,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "BioSensics",
           "start_date": "2026-01-01",
+          "readout_date": "2027-12-31",
+          "completion_date": "2028-04-30",
           "registered_date": "2025-11-04",
           "linked_registries": []
         },
@@ -15064,6 +17249,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "BioSensics",
           "start_date": "2026-01-15",
+          "readout_date": "2028-01-31",
+          "completion_date": "2028-03-31",
           "registered_date": "2025-11-12",
           "linked_registries": []
         },
@@ -15081,6 +17268,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Early Phase 1",
           "sponsor": "Guangdong ProCapZoom Biosciences Co., Ltd.",
           "start_date": "2025-11-25",
+          "readout_date": "2027-06-30",
+          "completion_date": "2027-11-30",
           "registered_date": "2025-11-21",
           "linked_registries": []
         },
@@ -15098,6 +17287,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 4",
           "sponsor": "UCB Biopharma SRL",
           "start_date": "2025-12-01",
+          "readout_date": "2027-10-15",
+          "completion_date": "2027-10-15",
           "registered_date": "2025-11-24",
           "linked_registries": []
         },
@@ -15115,6 +17306,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "AstraZeneca",
           "start_date": "2025-12-23",
+          "readout_date": "2029-12-31",
+          "completion_date": "2029-12-31",
           "registered_date": "2025-11-25",
           "linked_registries": []
         },
@@ -15132,6 +17325,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "RemeGen Co., Ltd.",
           "start_date": "2026-01-13",
+          "readout_date": "2026-12-31",
+          "completion_date": "2027-02-28",
           "registered_date": "2025-11-25",
           "linked_registries": []
         },
@@ -15149,6 +17344,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 1 / Phase 2",
           "sponsor": "ImmunAbs Inc.",
           "start_date": "2026-02-05",
+          "readout_date": "2027-12",
+          "completion_date": "2028-06",
           "registered_date": "2025-11-26",
           "linked_registries": []
         },
@@ -15166,6 +17363,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "argenx",
           "start_date": "2025-12-19",
+          "readout_date": "2028-03-07",
+          "completion_date": "2028-03-07",
           "registered_date": "2025-12-16",
           "linked_registries": []
         },
@@ -15183,6 +17382,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "Jiann-Horng Yeh",
           "start_date": "2024-01-10",
+          "readout_date": "2025-01-09",
+          "completion_date": "2025-01-09",
           "registered_date": "2025-12-18",
           "linked_registries": []
         },
@@ -15200,6 +17401,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "argenx",
           "start_date": "2025-12-19",
+          "readout_date": "2028-03-07",
+          "completion_date": "2028-03-07",
           "registered_date": "2025-12-19",
           "linked_registries": []
         },
@@ -15217,6 +17420,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "The Children's Hospital of Zhejiang University School of Medicine",
           "start_date": "2026-03-10",
+          "readout_date": "2028-12",
+          "completion_date": "2028-12",
           "registered_date": "2025-12-23",
           "linked_registries": []
         },
@@ -15234,6 +17439,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 1",
           "sponsor": "Kite, A Gilead Company",
           "start_date": "2026-04-10",
+          "readout_date": "2029-06",
+          "completion_date": "2029-06",
           "registered_date": "2025-12-26",
           "linked_registries": []
         },
@@ -15251,6 +17458,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Tanta University",
           "start_date": "2022-01-01",
+          "readout_date": "2025-12-18",
+          "completion_date": "2025-12-18",
           "registered_date": "2026-01-06",
           "linked_registries": []
         },
@@ -15268,6 +17477,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "Ad scientiam",
           "start_date": "2026-04",
+          "readout_date": "2027-10",
+          "completion_date": "2027-10",
           "registered_date": "2026-01-07",
           "linked_registries": []
         },
@@ -15285,6 +17496,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Tongji Hospital",
           "start_date": "2026-03-01",
+          "readout_date": "2036-03-01",
+          "completion_date": "2037-03-01",
           "registered_date": "2026-01-12",
           "linked_registries": []
         },
@@ -15302,6 +17515,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Fondazione Policlinico Universitario Agostino Gemelli IRCCS",
           "start_date": "2026-01",
+          "readout_date": "2028-01",
+          "completion_date": "2028-01",
           "registered_date": "2026-01-13",
           "linked_registries": []
         },
@@ -15319,6 +17534,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 1 / Phase 2",
           "sponsor": "Zhongming Qiu",
           "start_date": "2026-02",
+          "readout_date": "2027-12",
+          "completion_date": "2027-12",
           "registered_date": "2026-01-28",
           "linked_registries": []
         },
@@ -15336,6 +17553,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Early Phase 1",
           "sponsor": "Tianjin Huanhu Hospital",
           "start_date": "2026-03",
+          "readout_date": "2027-06",
+          "completion_date": "2028-12",
           "registered_date": "2026-02-06",
           "linked_registries": []
         },
@@ -15353,6 +17572,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Centre Hospitalier Universitaire de Nice",
           "start_date": "2025-11-26",
+          "readout_date": "2026-12-01",
+          "completion_date": "2027-06-01",
           "registered_date": "2026-02-17",
           "linked_registries": []
         },
@@ -15370,6 +17591,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "The Affiliated Hospital of Xuzhou Medical University",
           "start_date": "2026-03-17",
+          "readout_date": "2027-06",
+          "completion_date": "2027-12",
           "registered_date": "2026-02-17",
           "linked_registries": []
         },
@@ -15387,6 +17610,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "UCB Biopharma SRL",
           "start_date": "2026-05-27",
+          "readout_date": "2028-12-01",
+          "completion_date": "2029-01-22",
           "registered_date": "2026-03-11",
           "linked_registries": []
         },
@@ -15404,6 +17629,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "UCB Biopharma SRL",
           "start_date": "2026-07-27",
+          "readout_date": "2031-01-23",
+          "completion_date": "2031-01-23",
           "registered_date": "2026-03-11",
           "linked_registries": []
         },
@@ -15421,6 +17648,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Beijing University of Chinese Medicine",
           "start_date": "2024-01-01",
+          "readout_date": "2024-07-31",
+          "completion_date": "2024-07-31",
           "registered_date": "2026-03-16",
           "linked_registries": []
         },
@@ -15438,6 +17667,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "University of Missouri-Columbia",
           "start_date": "2026-03-10",
+          "readout_date": "2030-12-31",
+          "completion_date": "2031-01-07",
           "registered_date": "2026-03-17",
           "linked_registries": []
         },
@@ -15455,6 +17686,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "First Affiliated Hospital of Chongqing Medical University",
           "start_date": "2026-03-20",
+          "readout_date": "2027-03-20",
+          "completion_date": "2027-04-01",
           "registered_date": "2026-03-30",
           "linked_registries": []
         },
@@ -15472,6 +17705,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "Vertex Pharmaceuticals Incorporated",
           "start_date": "2026-05-13",
+          "readout_date": "2029-03-02",
+          "completion_date": "2029-03-02",
           "registered_date": "2026-03-30",
           "linked_registries": []
         },
@@ -15489,6 +17724,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "University Hospital, Grenoble",
           "start_date": "2026-04",
+          "readout_date": "2026-11",
+          "completion_date": "2027-06",
           "registered_date": "2026-04-06",
           "linked_registries": []
         },
@@ -15506,6 +17743,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "Damascus University",
           "start_date": "2022-09-01",
+          "readout_date": "2023-10-15",
+          "completion_date": "2023-10-30",
           "registered_date": "2026-04-16",
           "linked_registries": []
         },
@@ -15523,6 +17762,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 1",
           "sponsor": "Shenzhen MagicRNA Biotechnology Co., Ltd",
           "start_date": "2026-05-05",
+          "readout_date": "2027-05-31",
+          "completion_date": "2027-12-31",
           "registered_date": "2026-04-29",
           "linked_registries": []
         },
@@ -15540,6 +17781,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Centre Hospitalier Universitaire de Nice",
           "start_date": "2026-06-15",
+          "readout_date": "2028-03",
+          "completion_date": "2028-03",
           "registered_date": "2026-05-06",
           "linked_registries": []
         },
@@ -15557,6 +17800,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "IRCCS San Raffaele",
           "start_date": "2026-09-15",
+          "readout_date": "2029-09-14",
+          "completion_date": "2029-12-01",
           "registered_date": "2026-05-06",
           "linked_registries": []
         },
@@ -15574,6 +17819,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "argenx",
           "start_date": "2026-02-25",
+          "readout_date": "2027-11",
+          "completion_date": "2028-07",
           "registered_date": "2026-05-19",
           "linked_registries": []
         },
@@ -15591,6 +17838,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Alexion Pharmaceuticals, Inc.",
           "start_date": "2026-07-30",
+          "readout_date": "2027-08-27",
+          "completion_date": "2027-08-27",
           "registered_date": "2026-05-19",
           "linked_registries": []
         },
@@ -15608,6 +17857,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 1 / Phase 2",
           "sponsor": "Aurinia Pharmaceuticals Inc.",
           "start_date": "2026-04-22",
+          "readout_date": "2029-03-02",
+          "completion_date": "2029-03-02",
           "registered_date": "2026-05-19",
           "linked_registries": []
         },
@@ -15625,6 +17876,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "Guangdong Hengrui Pharmaceutical Co., Ltd",
           "start_date": "2026-06",
+          "readout_date": "2027-09",
+          "completion_date": "2027-12",
           "registered_date": "2026-06-03",
           "linked_registries": []
         },
@@ -15642,6 +17895,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Dianthus Therapeutics",
           "start_date": "2026-07",
+          "readout_date": "2028-12",
+          "completion_date": "2031-09",
           "registered_date": "2026-06-15",
           "linked_registries": []
         },
@@ -15659,6 +17914,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "N/A",
           "sponsor": "Ming-Hsing Chang",
           "start_date": "2024-01-01",
+          "readout_date": "2025-12-31",
+          "completion_date": "2025-12-31",
           "registered_date": "2026-06-16",
           "linked_registries": []
         },
@@ -15676,6 +17933,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Third Affiliated Hospital, Sun Yat-Sen University",
           "start_date": "2024-04-21",
+          "readout_date": "2030-01",
+          "completion_date": "2030-04",
           "registered_date": "2026-06-17",
           "linked_registries": []
         },
@@ -15693,6 +17952,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "argenx",
           "start_date": "2026-07-10",
+          "readout_date": "2027-10",
+          "completion_date": "2028-04",
           "registered_date": "2026-06-29",
           "linked_registries": []
         },
@@ -15710,6 +17971,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2",
           "sponsor": "TG Therapeutics, Inc.",
           "start_date": "2026-07-30",
+          "readout_date": "2028-07-01",
+          "completion_date": "2030-01-01",
           "registered_date": "2026-06-29",
           "linked_registries": []
         },
@@ -15727,6 +17990,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Centre Hospitalier Universitaire de Nice",
           "start_date": "2026-07-30",
+          "readout_date": "2030-07-30",
+          "completion_date": "2030-07-30",
           "registered_date": "2026-07-01",
           "linked_registries": []
         },
@@ -15744,6 +18009,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 1",
           "sponsor": "Daishi Tian",
           "start_date": "2026-07-06",
+          "readout_date": "2027-07-06",
+          "completion_date": "2028-07-06",
           "registered_date": "2026-07-20",
           "linked_registries": []
         },
@@ -15761,6 +18028,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "Fondazione IRCCS Ca' Granda, Ospedale Maggiore Policlinico",
           "start_date": "2026-06-04",
+          "readout_date": "2028-03-31",
+          "completion_date": "2028-03-31",
           "registered_date": "2026-07-21",
           "linked_registries": []
         }
@@ -15786,7 +18055,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "The First Affiliated Hospital of Guangzhou University of Traditional Chinese Medicine",
-          "start_date": "",
+          "start_date": "2018-09-08",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2018-08-04",
           "linked_registries": []
         },
@@ -15803,7 +18074,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "New Treatment Measure Clinical Study",
           "sponsor": "The University of Hong Kong-Shenzhen Hospital",
-          "start_date": "",
+          "start_date": "2016-07-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2018-08-10",
           "linked_registries": []
         },
@@ -15820,7 +18093,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "Basic Science",
           "sponsor": "Institute of Spleen-Stomach, Guangzhou University of Chinese Medicine",
-          "start_date": "",
+          "start_date": "2018-09-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2018-08-20",
           "linked_registries": []
         },
@@ -15837,7 +18112,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "4",
           "sponsor": "The First Hospital of Shijiazhuang",
-          "start_date": "",
+          "start_date": "2018-10-15",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2018-09-30",
           "linked_registries": []
         },
@@ -15854,7 +18131,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "0",
           "sponsor": "The Second Affiliated Hospital of the Air Force Military Medical University",
-          "start_date": "",
+          "start_date": "2019-07-29",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2019-05-23",
           "linked_registries": []
         },
@@ -15871,7 +18150,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "0",
           "sponsor": "Wuhan Aier Eye Hospital (Hanyang)",
-          "start_date": "",
+          "start_date": "2019-08-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2019-07-05",
           "linked_registries": []
         },
@@ -15888,7 +18169,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "The First Affiliated Hospital of Guangzhou University of Chinese Medicine",
-          "start_date": "",
+          "start_date": "2019-08-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2019-07-07",
           "linked_registries": []
         },
@@ -15905,7 +18188,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "The First Affiliated Hospital of Guangzhou University of Chinese Medicine",
-          "start_date": "",
+          "start_date": "2019-08-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2019-07-13",
           "linked_registries": []
         },
@@ -15922,7 +18207,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "Department of Neurology, Tongji Hospital, Tongji Medical College, Huazhong University of Science and Technology",
-          "start_date": "",
+          "start_date": "2019-07-30",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2019-07-19",
           "linked_registries": []
         },
@@ -15939,7 +18226,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "Neurology Department of the 940th Hospital of Joint Logistics Support force of Chinese People's Liberation Army",
-          "start_date": "",
+          "start_date": "2018-01-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2019-07-22",
           "linked_registries": []
         },
@@ -15956,7 +18245,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "0",
           "sponsor": "West China Hospital, Sichuan University",
-          "start_date": "",
+          "start_date": "2019-08-12",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2019-08-14",
           "linked_registries": []
         },
@@ -15973,7 +18264,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "The First Affiliated Hospital of Guangzhou University of Chinese Medicine",
-          "start_date": "",
+          "start_date": "2019-09-23",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2019-09-22",
           "linked_registries": []
         },
@@ -15990,7 +18283,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "0",
           "sponsor": "The First Affiliated Hospital of Guangzhou University of TCM",
-          "start_date": "",
+          "start_date": "2020-05-20",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2020-04-19",
           "linked_registries": []
         },
@@ -16007,7 +18302,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "0",
           "sponsor": "The First Affiliated Hospital of Guangzhou University of TCM",
-          "start_date": "",
+          "start_date": "2020-06-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2020-06-03",
           "linked_registries": []
         },
@@ -16024,7 +18321,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "2",
           "sponsor": "Huashan Hospital Affiliated to Fudan University",
-          "start_date": "",
+          "start_date": "2020-07-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2020-06-05",
           "linked_registries": []
         },
@@ -16041,7 +18340,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "0",
           "sponsor": "West China Hospital, Sichuan University",
-          "start_date": "",
+          "start_date": "2020-06-15",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2020-06-15",
           "linked_registries": []
         },
@@ -16058,7 +18359,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "0",
           "sponsor": "Huashan Hospital, Fudan University",
-          "start_date": "",
+          "start_date": "2020-10-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2020-08-30",
           "linked_registries": []
         },
@@ -16075,7 +18378,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "4",
           "sponsor": "Qianfoshan Hospital",
-          "start_date": "",
+          "start_date": "2020-09-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2020-09-04",
           "linked_registries": []
         },
@@ -16093,6 +18398,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -16109,7 +18416,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "0",
           "sponsor": "Department of Neurology, The Second Affiliated Hospital of Air Force Medical University",
-          "start_date": "",
+          "start_date": "2020-11-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2020-10-08",
           "linked_registries": []
         },
@@ -16126,7 +18435,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "Department of Neurology, The Second Affiliated Hospital of Air Force Medical University",
-          "start_date": "",
+          "start_date": "2020-12-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2020-11-26",
           "linked_registries": []
         },
@@ -16143,7 +18454,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "The First Affiliated Hospital of Guangzhou University of Chinese Medicine",
-          "start_date": "",
+          "start_date": "2020-12-05",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2020-11-29",
           "linked_registries": []
         },
@@ -16160,7 +18473,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "Department of Neurology, The Second Affiliated Hospital of Air Force Medical University",
-          "start_date": "",
+          "start_date": "2021-02-20",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2021-02-09",
           "linked_registries": []
         },
@@ -16177,7 +18492,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "Department of Neurology, The Second Affiliated Hospital of Air Force Medical University",
-          "start_date": "",
+          "start_date": "2021-03-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2021-02-09",
           "linked_registries": []
         },
@@ -16194,7 +18511,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "Department of Neurology, The Second Affiliated Hospital of Air Force Medical University",
-          "start_date": "",
+          "start_date": "2021-02-15",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2021-02-09",
           "linked_registries": []
         },
@@ -16211,7 +18530,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "0",
           "sponsor": "The university of Hong Kong,Shenzhen Hospital",
-          "start_date": "",
+          "start_date": "2021-03-05",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2021-03-04",
           "linked_registries": []
         },
@@ -16228,7 +18549,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "Shanghai Chest Hospital",
-          "start_date": "",
+          "start_date": "2021-03-30",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2021-03-26",
           "linked_registries": []
         },
@@ -16245,7 +18568,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "the First Affiliated Hospital of Fujian Medical University",
-          "start_date": "",
+          "start_date": "2021-04-25",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2021-04-25",
           "linked_registries": []
         },
@@ -16262,7 +18587,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "0",
           "sponsor": "Affiliated Jiangmen Traditional Chinese Medicine Hospital of Ji’nan University",
-          "start_date": "",
+          "start_date": "2022-01-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2021-06-20",
           "linked_registries": []
         },
@@ -16279,7 +18606,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "The first affiliated hospital of Zhejiang Chinese medical university",
-          "start_date": "",
+          "start_date": "2021-07-03",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2021-07-04",
           "linked_registries": []
         },
@@ -16296,7 +18625,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "0",
           "sponsor": "The Affiliated Hospital of Changchun University of Traditional Chinese Medicine",
-          "start_date": "",
+          "start_date": "2021-07-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2021-07-06",
           "linked_registries": []
         },
@@ -16313,7 +18644,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "Zhejiang Provincial Hospital of Traditional Chinese Medicine",
-          "start_date": "",
+          "start_date": "2021-07-31",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2021-07-13",
           "linked_registries": []
         },
@@ -16330,7 +18663,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "Tianjin Medical University affiliated General Hospital",
-          "start_date": "",
+          "start_date": "2021-08-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2021-07-16",
           "linked_registries": []
         },
@@ -16347,7 +18682,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "The First Affiliated Hospital of Zhengzhou University",
-          "start_date": "",
+          "start_date": "2021-09-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2021-08-25",
           "linked_registries": []
         },
@@ -16364,7 +18701,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "0",
           "sponsor": "Tianjin Medical University General Hospital",
-          "start_date": "",
+          "start_date": "2021-09-10",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2021-09-07",
           "linked_registries": []
         },
@@ -16381,7 +18720,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "3",
           "sponsor": "Huashan Hospital Affiliated to Fudan University",
-          "start_date": "",
+          "start_date": "2021-09-10",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2021-09-07",
           "linked_registries": [
             {
@@ -16404,7 +18745,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "Retrospective study",
           "sponsor": "West China Hospital of Sichuan University",
-          "start_date": "",
+          "start_date": "2021-10-27",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2021-11-06",
           "linked_registries": []
         },
@@ -16421,7 +18764,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "Retrospective study",
           "sponsor": "Affiliated Hospital of Liaoning University of Traditional Chinese Medicine",
-          "start_date": "",
+          "start_date": "1990-01-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2022-02-26",
           "linked_registries": []
         },
@@ -16438,7 +18783,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "4",
           "sponsor": "Shijiazhuang People's Hospital",
-          "start_date": "",
+          "start_date": "2022-03-02",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2022-03-02",
           "linked_registries": []
         },
@@ -16455,7 +18802,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "Guang'anmen Hospital, China Academy of Chinese Medical Sciences",
-          "start_date": "",
+          "start_date": "2022-03-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2022-03-15",
           "linked_registries": []
         },
@@ -16472,7 +18821,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "Beijing Hospital",
-          "start_date": "",
+          "start_date": "2022-05-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2022-04-21",
           "linked_registries": []
         },
@@ -16489,7 +18840,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "3",
           "sponsor": "Huashan Hospital Affiliated to Fudan University",
-          "start_date": "",
+          "start_date": "2022-04-30",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2022-04-29",
           "linked_registries": []
         },
@@ -16506,7 +18859,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "4",
           "sponsor": "The Third Affiliated Hospital of Sun Yat-sen University",
-          "start_date": "",
+          "start_date": "2022-07-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2022-06-27",
           "linked_registries": []
         },
@@ -16523,7 +18878,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "4",
           "sponsor": "Hainan General Hospital",
-          "start_date": "",
+          "start_date": "2023-01-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2022-12-20",
           "linked_registries": []
         },
@@ -16540,7 +18897,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "0",
           "sponsor": "TheFirst Affiliated Hospital, Sun Yat-Sen University",
-          "start_date": "",
+          "start_date": "2023-03-10",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2023-03-18",
           "linked_registries": []
         },
@@ -16557,7 +18916,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "1",
           "sponsor": "The Second Affiliated Hospital of Dalian Medical University",
-          "start_date": "",
+          "start_date": "2023-04-23",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2023-04-25",
           "linked_registries": []
         },
@@ -16574,7 +18935,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "0",
           "sponsor": "Huashan Hospital Fudan University",
-          "start_date": "",
+          "start_date": "2023-06-30",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2023-06-30",
           "linked_registries": []
         },
@@ -16591,7 +18954,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "Tangdu Hospital, Fourth Military Medical University of Chinese People's Liberation Army",
-          "start_date": "",
+          "start_date": "2023-07-15",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2023-07-04",
           "linked_registries": []
         },
@@ -16608,7 +18973,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "Beijing Tongren Hospital, Capital Medical University",
-          "start_date": "",
+          "start_date": "2022-08-10",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2023-07-19",
           "linked_registries": []
         },
@@ -16625,7 +18992,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "0",
           "sponsor": "Xiangya Hospital of Central South University",
-          "start_date": "",
+          "start_date": "2023-09-10",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2023-09-04",
           "linked_registries": []
         },
@@ -16642,7 +19011,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "The First Affiliated Hospital of Chongqing Medical University",
-          "start_date": "",
+          "start_date": "2023-11-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2023-11-01",
           "linked_registries": []
         },
@@ -16659,7 +19030,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "Diagnostic New Technique Clincal Study",
           "sponsor": "Beijing Hospital",
-          "start_date": "",
+          "start_date": "2023-11-08",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2023-11-03",
           "linked_registries": []
         },
@@ -16676,7 +19049,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "4",
           "sponsor": "Shijiazhuang People’s Hospita",
-          "start_date": "",
+          "start_date": "2023-11-21",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2024-02-18",
           "linked_registries": []
         },
@@ -16693,7 +19068,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "0",
           "sponsor": "Neurology Department of Yunnan University Affiliated Hospital",
-          "start_date": "",
+          "start_date": "2024-03-27",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2024-03-26",
           "linked_registries": []
         },
@@ -16710,7 +19087,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "2",
           "sponsor": "Peking University People's Hospital",
-          "start_date": "",
+          "start_date": "2024-06-02",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2024-05-04",
           "linked_registries": []
         },
@@ -16727,7 +19106,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "2",
           "sponsor": "Peking University People's Hospital",
-          "start_date": "",
+          "start_date": "2024-06-12",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2024-05-16",
           "linked_registries": []
         },
@@ -16744,7 +19125,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "2",
           "sponsor": "Peking University People's Hospital",
-          "start_date": "",
+          "start_date": "2024-05-31",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2024-05-23",
           "linked_registries": []
         },
@@ -16761,7 +19144,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "2",
           "sponsor": "Peking University People's Hospital",
-          "start_date": "",
+          "start_date": "2024-05-31",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2024-05-24",
           "linked_registries": []
         },
@@ -16778,7 +19163,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "2",
           "sponsor": "Peking University People's Hospital",
-          "start_date": "",
+          "start_date": "2024-06-02",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2024-05-28",
           "linked_registries": []
         },
@@ -16795,7 +19182,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "Guang'anmen Hospital, China Academy of Chinese Medical Sciences",
-          "start_date": "",
+          "start_date": "2024-07-22",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2024-07-18",
           "linked_registries": []
         },
@@ -16812,7 +19201,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "4",
           "sponsor": "Shijiazhuang People’s Hospita",
-          "start_date": "",
+          "start_date": "2023-11-24",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2024-07-31",
           "linked_registries": []
         },
@@ -16829,7 +19220,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "The Second Affiliated Hospital of Guizhou University of Traditional Chinese Medicine",
-          "start_date": "",
+          "start_date": "2022-12-05",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2024-08-07",
           "linked_registries": []
         },
@@ -16846,7 +19239,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "Xuanwu Hospital  Capital Medical University",
-          "start_date": "",
+          "start_date": "2024-09-10",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2024-09-10",
           "linked_registries": []
         },
@@ -16863,7 +19258,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "South China Hospital of Shenzhen University",
-          "start_date": "",
+          "start_date": "2025-01-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2024-10-11",
           "linked_registries": []
         },
@@ -16880,7 +19277,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "0",
           "sponsor": "West China Hospital, Sichuan University",
-          "start_date": "",
+          "start_date": "2024-05-28",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2024-10-31",
           "linked_registries": []
         },
@@ -16897,7 +19296,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "2-3",
           "sponsor": "Second Affiliated Hospital of Army Medical University",
-          "start_date": "",
+          "start_date": "2024-11-30",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2024-11-28",
           "linked_registries": []
         },
@@ -16914,7 +19315,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "The First Affiliated Hospital of Wenzhou Medical University",
-          "start_date": "",
+          "start_date": "2025-02-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2025-01-07",
           "linked_registries": []
         },
@@ -16931,7 +19334,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "The First Affiliated Hospital of Chongqing Medical University",
-          "start_date": "",
+          "start_date": "2024-02-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2025-03-05",
           "linked_registries": []
         },
@@ -16948,7 +19353,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "Shijiazhuang People’s Hospital",
-          "start_date": "",
+          "start_date": "2024-08-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2025-03-10",
           "linked_registries": []
         },
@@ -16965,7 +19372,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "Huashan Hospital, Fudan University",
-          "start_date": "",
+          "start_date": "2025-03-19",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2025-03-13",
           "linked_registries": []
         },
@@ -16982,7 +19391,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "0",
           "sponsor": "Taihe Hospital, Shiyan, China",
-          "start_date": "",
+          "start_date": "2025-03-25",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2025-03-18",
           "linked_registries": []
         },
@@ -16999,7 +19410,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "Shijiazhuang People’s Hospita",
-          "start_date": "",
+          "start_date": "2025-06-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2025-04-03",
           "linked_registries": []
         },
@@ -17016,7 +19429,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "Department of Neurology, Affiliated Hospital of Zunyi Medical University",
-          "start_date": "",
+          "start_date": "2025-04-17",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2025-04-17",
           "linked_registries": []
         },
@@ -17033,7 +19448,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "Affiliated Hospital of Zunyi Medical University",
-          "start_date": "",
+          "start_date": "2024-12-16",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2025-05-06",
           "linked_registries": []
         },
@@ -17050,7 +19467,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "Affiliated Hospital of Zunyi Medical University",
-          "start_date": "",
+          "start_date": "2025-03-15",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2025-06-05",
           "linked_registries": []
         },
@@ -17067,7 +19486,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "The First Affiliated Hospital of Chongqing Medical University",
-          "start_date": "",
+          "start_date": "2024-07-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2025-06-17",
           "linked_registries": []
         },
@@ -17084,7 +19505,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "Punan Hospital in Pudong New District, Shanghai",
-          "start_date": "",
+          "start_date": "2025-07-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2025-06-20",
           "linked_registries": []
         },
@@ -17101,7 +19524,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "1",
           "sponsor": "Huashan Hospital, Fudan University",
-          "start_date": "",
+          "start_date": "2025-08-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2025-07-29",
           "linked_registries": []
         },
@@ -17118,7 +19543,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "4",
           "sponsor": "The First Affiliated Hospital of China Medical University, Shenyang, China",
-          "start_date": "",
+          "start_date": "2025-09-16",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2025-09-16",
           "linked_registries": []
         },
@@ -17135,7 +19562,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "1",
           "sponsor": "Dongguan Taixin Hospital",
-          "start_date": "",
+          "start_date": "2025-10-30",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2025-10-14",
           "linked_registries": []
         },
@@ -17152,7 +19581,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "Shijiazhuang People’s Hospital",
-          "start_date": "",
+          "start_date": "2025-07-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2025-10-16",
           "linked_registries": []
         },
@@ -17169,7 +19600,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "The First Affiliated Hospital of Wenzhou Medical University",
-          "start_date": "",
+          "start_date": "2025-11-04",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2025-11-04",
           "linked_registries": []
         },
@@ -17186,7 +19619,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "1",
           "sponsor": "Tangdu Hospital, the Fourth Military Medical University",
-          "start_date": "",
+          "start_date": "2025-11-12",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2025-11-11",
           "linked_registries": []
         },
@@ -17203,7 +19638,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "Heyou Hospital of Shunde District, Foshan City",
-          "start_date": "",
+          "start_date": "2025-11-20",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2025-11-13",
           "linked_registries": []
         },
@@ -17220,7 +19657,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "The First Affiliated Hospital of Dalian Medical University",
-          "start_date": "",
+          "start_date": "2025-12-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2025-11-26",
           "linked_registries": []
         },
@@ -17237,7 +19676,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "West China Hospital of Sichuan University",
-          "start_date": "",
+          "start_date": "2025-05-08",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2026-01-23",
           "linked_registries": []
         },
@@ -17254,7 +19695,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "Second Affiliated Hospital of Army Medical University",
-          "start_date": "",
+          "start_date": "2026-02-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2026-01-29",
           "linked_registries": []
         },
@@ -17271,7 +19714,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "Luoyang Central Hospital",
-          "start_date": "",
+          "start_date": "2023-04-03",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2026-02-02",
           "linked_registries": []
         },
@@ -17288,7 +19733,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "General Hospital of Ningxia Medical University",
-          "start_date": "",
+          "start_date": "2024-03-07",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2026-03-12",
           "linked_registries": []
         },
@@ -17305,7 +19752,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "Shanghai Children's Medical Center, Shanghai Jiao Tong University School of Medicine",
-          "start_date": "",
+          "start_date": "2026-04-01",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2026-03-17",
           "linked_registries": []
         },
@@ -17322,7 +19771,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "1",
           "sponsor": "The First Affiliated Hospital of Guangzhou Medical University",
-          "start_date": "",
+          "start_date": "2026-03-19",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2026-03-19",
           "linked_registries": []
         },
@@ -17339,7 +19790,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "The First Affiliated Hospital of Chongqing Medical University",
-          "start_date": "",
+          "start_date": "2026-04-10",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2026-04-03",
           "linked_registries": []
         },
@@ -17356,7 +19809,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "4",
           "sponsor": "The First Affiliated Hospital, Sun Yat-sen University",
-          "start_date": "",
+          "start_date": "2025-07-09",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2026-04-26",
           "linked_registries": []
         },
@@ -17373,7 +19828,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "Tangdu Hospital, The Fourth Military Medical University",
-          "start_date": "",
+          "start_date": "2026-05-15",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2026-05-07",
           "linked_registries": []
         },
@@ -17390,7 +19847,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "Huashan Hospital, Fudan University",
-          "start_date": "",
+          "start_date": "2026-07-04",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2026-07-04",
           "linked_registries": []
         },
@@ -17407,7 +19866,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "N/A",
           "sponsor": "Qilu Hospital  of Shandong University",
-          "start_date": "",
+          "start_date": "2026-07-15",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2026-07-14",
           "linked_registries": []
         },
@@ -17424,7 +19885,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "4",
           "sponsor": "The Affiliated Hospital of Xuzhou Medical University",
-          "start_date": "",
+          "start_date": "2026-07-31",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "2026-07-27",
           "linked_registries": []
         }
@@ -17452,6 +19915,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -17469,6 +19934,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -17486,6 +19953,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -17503,6 +19972,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -17520,6 +19991,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -17537,6 +20010,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -17554,6 +20029,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -17571,6 +20048,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -17588,6 +20067,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -17605,6 +20086,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -17622,6 +20105,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -17639,6 +20124,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -17656,6 +20143,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -17673,6 +20162,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -17690,6 +20181,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -17707,6 +20200,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -17724,6 +20219,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -17741,6 +20238,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -17758,6 +20257,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -17775,6 +20276,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -17792,6 +20295,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -17809,6 +20314,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -17826,6 +20333,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": [
             {
@@ -17849,6 +20358,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -17866,6 +20377,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -17883,6 +20396,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -17900,6 +20415,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -17917,6 +20434,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -17934,6 +20453,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -17951,6 +20472,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -17968,6 +20491,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -17985,6 +20510,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -18002,6 +20529,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -18019,6 +20548,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -18036,6 +20567,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -18053,6 +20586,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -18070,6 +20605,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -18087,6 +20624,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -18104,6 +20643,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -18121,6 +20662,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -18138,6 +20681,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -18155,6 +20700,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": [
             {
@@ -18178,6 +20725,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         },
@@ -18195,6 +20744,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "",
           "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
           "registered_date": "",
           "linked_registries": []
         }

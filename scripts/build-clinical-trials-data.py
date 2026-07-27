@@ -254,7 +254,9 @@ def enrich_record(
         "indication": INDICATION,
         "phase_label": phase_label(details.get("phase", item.get("phase"))),
         "sponsor": str(item.get("sponsor") or details.get("sponsor") or ""),
-        "start_date": str(details.get("start_date") or ""),
+        "start_date": str(item.get("start_date") or details.get("start_date") or ""),
+        "readout_date": str(item.get("readout_date") or ""),
+        "completion_date": str(item.get("completion_date") or ""),
         "registered_date": str(details.get("registered_date") or item.get("date") or ""),
         "linked_registries": linked_registries,
     }
@@ -474,8 +476,11 @@ def build_pipeline_matrix(records: list[dict[str, Any]]) -> list[dict[str, Any]]
         # Sponsors
         sponsors = sorted({t.get("sponsor", "") for t in trials if t.get("sponsor")})
 
-        # Date range
-        dates = sorted(
+        # Timeline: earliest start / latest readout / latest completion
+        start_dates = sorted(d for d in (date_part(t.get("start_date")) for t in trials) if d)
+        readout_dates = sorted(d for d in (date_part(t.get("readout_date")) for t in trials) if d)
+        completion_dates = sorted(d for d in (date_part(t.get("completion_date")) for t in trials) if d)
+        registered_dates = sorted(
             d for d in (date_part(t.get("registered_date") or t.get("start_date")) for t in trials) if d
         )
 
@@ -498,8 +503,13 @@ def build_pipeline_matrix(records: list[dict[str, Any]]) -> list[dict[str, Any]]
                 {"registry": t.get("registry"), "registry_id": t.get("registry_id"), "url": t.get("url")}
                 for t in trials[:10]
             ],
-            "first_registered": dates[0] if dates else "",
-            "latest_registered": dates[-1] if dates else "",
+            "timeline": {
+                "start": start_dates[0] if start_dates else (registered_dates[0] if registered_dates else ""),
+                "readout": readout_dates[-1] if readout_dates else "",
+                "completion": completion_dates[-1] if completion_dates else "",
+            },
+            "first_registered": registered_dates[0] if registered_dates else "",
+            "latest_registered": registered_dates[-1] if registered_dates else "",
             "linked_registries": [
                 lr for t in trials for lr in (t.get("linked_registries") or [])
             ],
