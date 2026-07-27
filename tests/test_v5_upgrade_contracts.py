@@ -510,15 +510,15 @@ def test_source_signal_frontend_contract_is_wired_with_safe_rendering():
 
 
 def test_landscape_exposes_chictr_registry_signals_without_oxford_grading():
-    """ChiCTR signals moved from landscape to 情报中心临床试验 tab (v6)."""
+    """ChiCTR signals moved from landscape to 情报中心临床试验 tab (v6→v7 pipeline matrix)."""
     lit_html = (ROOT / "pages" / "literature.html").read_text(encoding="utf-8")
     lit_js = (ROOT / "assets" / "literature.js").read_text(encoding="utf-8")
     land_html = (ROOT / "pages" / "landscape.html").read_text(encoding="utf-8")
     # Landscape no longer hosts ChiCTR signals
     assert 'id="chinaTrialRegistrySignals"' not in land_html
-    # Literature trials tab now hosts them
-    assert 'id="trialsChiCTR"' in lit_html
-    assert "renderTrialsSourceCards" in lit_js
+    # Literature trials tab now hosts pipeline matrix
+    assert 'id="pipelineMatrixContainer"' in lit_html
+    assert "renderPipelineMatrix" in lit_js
     # Trials rendering block must not apply Oxford grading
-    trials_block = lit_js[lit_js.index("renderTrialsSourceCards"):]
+    trials_block = lit_js[lit_js.index("renderPipelineMatrix"):]
     assert "evidence_level" not in trials_block

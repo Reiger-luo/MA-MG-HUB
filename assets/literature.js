@@ -1678,8 +1678,8 @@
   function renderTrialsTab() {
     renderTrialsBadge();
     renderTrialsDecisionSignals();
-    populateTrialsFacets();
-    renderTrialsSourceCards();
+    populatePipelineFilters();
+    renderPipelineMatrix();
   }
 
   function renderTrialsBadge() {
@@ -1706,122 +1706,165 @@
     }).join('');
   }
 
-  function populateTrialsFacets() {
-    var sources = trialsData.sources || [];
-    var allRecords = [];
-    sources.forEach(function(src) { allRecords = allRecords.concat(src.records || []); });
+  function populatePipelineFilters() {
+    var matrix = trialsData.pipeline_matrix || [];
+    var classSeen = {};
+    var phaseSeen = {};
+    matrix.forEach(function(row) {
+      if (row.drug_class) classSeen[row.drug_class] = true;
+      if (row.highest_phase_label) phaseSeen[row.highest_phase_label] = true;
+    });
 
-    var drugClasses = uniqueTrialValues(allRecords, 'drug_class');
-    var indications = uniqueTrialValues(allRecords, 'indication');
-    var statuses = uniqueTrialValues(allRecords, 'status_label');
-
-    fillTrialSelect('trialsFacetDrugClass', drugClasses, '全部药物分类');
-    fillTrialSelect('trialsFacetIndication', indications, '全部适应症');
-    fillTrialSelect('trialsFacetStatus', statuses, '全部状态');
-    var timeSelect = document.getElementById('trialsFacetTime');
-    if (timeSelect && timeSelect.options.length <= 1) {
-      [['2026', '2026年'], ['2025', '2025年'], ['2024', '2024年及更早']].forEach(function(pair) {
+    var classSelect = document.getElementById('pipelineFilterClass');
+    if (classSelect) {
+      classSelect.innerHTML = '<option value="all">全部药物分类</option>';
+      Object.keys(classSeen).sort().forEach(function(v) {
         var opt = document.createElement('option');
-        opt.value = pair[0]; opt.textContent = pair[1];
-        timeSelect.appendChild(opt);
+        opt.value = v; opt.textContent = v;
+        classSelect.appendChild(opt);
       });
+      classSelect.addEventListener('change', renderPipelineMatrix);
     }
 
-    ['trialsFacetDrugClass', 'trialsFacetIndication', 'trialsFacetStatus', 'trialsFacetTime'].forEach(function(id) {
-      var el = document.getElementById(id);
-      if (el) el.addEventListener('change', renderTrialsSourceCards);
-    });
-  }
-
-  function uniqueTrialValues(records, field) {
-    var seen = {};
-    records.forEach(function(r) {
-      var v = r[field];
-      if (v && v !== 'Unknown' && v !== '待补充') seen[v] = true;
-    });
-    return Object.keys(seen).sort();
-  }
-
-  function fillTrialSelect(id, values, allLabel) {
-    var el = document.getElementById(id);
-    if (!el) return;
-    el.innerHTML = '<option value="all">' + allLabel + '</option>';
-    values.forEach(function(v) {
-      var opt = document.createElement('option');
-      opt.value = v; opt.textContent = v;
-      el.appendChild(opt);
-    });
-  }
-
-  function getTrialsFilter() {
-    return {
-      drugClass: (document.getElementById('trialsFacetDrugClass') || {}).value || 'all',
-      indication: (document.getElementById('trialsFacetIndication') || {}).value || 'all',
-      status: (document.getElementById('trialsFacetStatus') || {}).value || 'all',
-      time: (document.getElementById('trialsFacetTime') || {}).value || 'all'
-    };
-  }
-
-  function matchesTrialsFilter(record, filter) {
-    if (filter.drugClass !== 'all' && record.drug_class !== filter.drugClass) return false;
-    if (filter.indication !== 'all' && record.indication !== filter.indication) return false;
-    if (filter.status !== 'all' && record.status_label !== filter.status) return false;
-    if (filter.time !== 'all') {
-      var year = (record.start_date || record.registered_date || '').slice(0, 4);
-      if (filter.time === '2024') { if (year > '2024') return false; }
-      else if (year !== filter.time) return false;
+    var phaseSelect = document.getElementById('pipelineFilterPhase');
+    if (phaseSelect) {
+      phaseSelect.innerHTML = '<option value="all">全部阶段</option>';
+      var phaseOrder = ['Phase 4', 'Phase 3', 'Phase 2', 'Phase 1', '未标注'];
+      phaseOrder.forEach(function(v) {
+        if (phaseSeen[v]) {
+          var opt = document.createElement('option');
+          opt.value = v; opt.textContent = v;
+          phaseSelect.appendChild(opt);
+        }
+      });
+      phaseSelect.addEventListener('change', renderPipelineMatrix);
     }
-    return true;
   }
 
-  function renderTrialsSourceCards() {
-    var filter = getTrialsFilter();
-    var sources = trialsData.sources || [];
-    var sourceMap = {
-      'ClinicalTrials.gov': { cardsId: 'trialsCtCards', metaId: 'trialsCtMeta' },
-      'ChiCTR': { cardsId: 'trialsChictrCards', metaId: 'trialsChictrMeta' },
-      'ChinaDrugTrials': { cardsId: 'trialsCdtCards', metaId: 'trialsCdtMeta' }
-    };
+  function renderPipelineMatrix() {
+    var container = document.getElementById('pipelineMatrixContainer');
+    if (!container) return;
+    var matrix = trialsData.pipeline_matrix || [];
 
-    sources.forEach(function(src) {
-      var config = sourceMap[src.source];
-      if (!config) return;
-      var cardsBox = document.getElementById(config.cardsId);
-      var metaBox = document.getElementById(config.metaId);
-      if (!cardsBox) return;
+    var classFilter = (document.getElementById('pipelineFilterClass') || {}).value || 'all';
+    var phaseFilter = (document.getElementById('pipelineFilterPhase') || {}).value || 'all';
 
-      var records = (src.records || []).filter(function(r) { return matchesTrialsFilter(r, filter); });
-      if (metaBox) metaBox.textContent = (src.meta && src.meta.generated_at || '—') + ' · ' + records.length + ' 条';
+    var filtered = matrix.filter(function(row) {
+      if (classFilter !== 'all' && row.drug_class !== classFilter) return false;
+      if (phaseFilter !== 'all' && row.highest_phase_label !== phaseFilter) return false;
+      return true;
+    });
 
-      if (!records.length) {
-        cardsBox.innerHTML = '<div class="kg-empty-hint">当前筛选无结果。</div>';
-        return;
+    if (!filtered.length) {
+      container.innerHTML = '<div class="kg-empty-hint">当前筛选无结果。</div>';
+      return;
+    }
+
+    // Group by drug_class
+    var groups = [];
+    var groupMap = {};
+    filtered.forEach(function(row) {
+      var key = row.drug_class || '其他';
+      if (!groupMap[key]) {
+        groupMap[key] = { key: key, items: [] };
+        groups.push(groupMap[key]);
       }
-      cardsBox.innerHTML = records.map(function(r) {
-        var linkedHtml = (r.linked_registries || []).map(function(link) {
-          return '<a href="' + escapeHref(link.url) + '" target="_blank" rel="noopener">' + escapeHtml(link.registry + ':' + link.registry_id) + '</a>';
-        }).join(' ');
-        return '<article class="trials-card">' +
-          '<div class="trials-card-head">' +
-            '<span class="trials-card-status status-' + escapeHtml((r.status_class || 'unknown')) + '">' + escapeHtml(r.status_label || r.status || '—') + '</span>' +
-            '<span class="trials-card-phase">' + escapeHtml(r.phase_label || r.phase || '') + '</span>' +
-          '</div>' +
-          '<h4 class="trials-card-title">' + (r.url ? '<a href="' + escapeHref(r.url) + '" target="_blank" rel="noopener">' + escapeHtml(r.title || r.registry_id) + '</a>' : escapeHtml(r.title || r.registry_id)) + '</h4>' +
-          '<div class="trials-card-meta">' +
-            '<span>' + escapeHtml(r.registry_id || '') + '</span>' +
-            '<span>' + escapeHtml(r.drug_class || '') + ' · ' + escapeHtml(r.indication || '') + '</span>' +
-          '</div>' +
-          (r.sponsor ? '<div class="trials-card-sponsor">' + escapeHtml(r.sponsor) + '</div>' : '') +
-          (linkedHtml ? '<div class="trials-card-linked">' + linkedHtml + '</div>' : '') +
-        '</article>';
-      }).join('');
+      groupMap[key].items.push(row);
     });
 
-    var cdtSource = sources.filter(function(s) { return s.source === 'ChinaDrugTrials'; })[0];
-    var warningEl = document.getElementById('trialsCdtWarning');
-    if (warningEl && cdtSource && cdtSource.meta && cdtSource.meta.mode === 'cache') {
-      warningEl.style.display = '';
+    // Sort within groups: stage_number DESC, study_count DESC
+    groups.forEach(function(g) {
+      g.items.sort(function(a, b) {
+        if ((b.stage_number || 0) !== (a.stage_number || 0)) return (b.stage_number || 0) - (a.stage_number || 0);
+        return (b.study_count || 0) - (a.study_count || 0);
+      });
+    });
+
+    var html = '<table class="pipeline-matrix-table"><thead><tr>' +
+      '<th>靶点/机制</th><th>药物</th><th>研究数</th><th>最高阶段</th>' +
+      '<th>状态摘要</th><th>来源</th><th>关键试验</th><th class="col-time">时间范围</th>' +
+      '</tr></thead><tbody>';
+
+    groups.forEach(function(g) {
+      html += '<tr class="pipeline-group-header"><td colspan="8">' +
+        escapeHtml(g.key) + '（' + g.items.length + ' 个药物）</td></tr>';
+      g.items.forEach(function(row) {
+        html += renderPipelineRow(row);
+      });
+    });
+
+    html += '</tbody></table>';
+    container.innerHTML = html;
+
+    // Event delegation for expand/collapse
+    container.addEventListener('click', function(e) {
+      var link = e.target.closest('.drug-name-link');
+      if (!link) return;
+      var row = link.closest('tr');
+      if (!row) return;
+      var detail = row.nextElementSibling;
+      if (detail && detail.classList.contains('pipeline-detail-row')) {
+        detail.style.display = detail.style.display === 'table-row' ? 'none' : 'table-row';
+      }
+    });
+  }
+
+  function renderPipelineRow(row) {
+    var phaseColors = { 1: '#6b7280', 2: '#3b82f6', 3: '#8b5cf6', 4: '#22c55e' };
+    var stageNum = row.stage_number || 0;
+
+    // Phase step bar
+    var stepsHtml = '<div class="phase-steps">';
+    for (var i = 1; i <= 4; i++) {
+      var active = i <= stageNum ? ' active' : '';
+      var color = i <= stageNum ? ' style="background:' + phaseColors[i] + '"' : '';
+      stepsHtml += '<span class="phase-step' + active + '"' + color + '></span>';
     }
+    stepsHtml += '</div>';
+
+    // Source badges
+    var sources = row.sources || {};
+    var badgesHtml = '';
+    if (sources['ClinicalTrials.gov']) badgesHtml += '<span class="source-badge ctgov">CT.gov ' + sources['ClinicalTrials.gov'] + '</span>';
+    if (sources['ChiCTR']) badgesHtml += '<span class="source-badge chictr">ChiCTR ' + sources['ChiCTR'] + '</span>';
+    if (sources['ChinaDrugTrials']) badgesHtml += '<span class="source-badge cdt">CDT ' + sources['ChinaDrugTrials'] + '</span>';
+
+    // Key trial link
+    var kt = row.key_trial || {};
+    var keyTrialHtml = kt.url
+      ? '<a href="' + escapeHref(kt.url) + '" target="_blank" rel="noopener">' + escapeHtml(kt.registry_id || '链接') + '</a>'
+      : '—';
+
+    // Time range
+    var timeRange = (row.first_registered || '—') + ' ~ ' + (row.latest_registered || '—');
+
+    var mainRow = '<tr>' +
+      '<td>' + escapeHtml(row.drug_class || '—') + '</td>' +
+      '<td><span class="drug-name-link">' + escapeHtml(row.name || '—') + '</span></td>' +
+      '<td>' + (row.study_count || 0) + '</td>' +
+      '<td>' + stepsHtml + '<span class="phase-label-text">' + escapeHtml(row.highest_phase_label || '未标注') + '</span></td>' +
+      '<td class="td-ellipsis">' + escapeHtml(row.status_summary || '—') + '</td>' +
+      '<td>' + badgesHtml + '</td>' +
+      '<td class="td-ellipsis">' + keyTrialHtml + '</td>' +
+      '<td class="col-time td-ellipsis">' + escapeHtml(timeRange) + '</td>' +
+    '</tr>';
+
+    // Detail row (hidden by default)
+    var trials = row.trials || [];
+    var trialsHtml = trials.map(function(t) {
+      return '<a class="trial-link" href="' + escapeHref(t.url || '#') + '" target="_blank" rel="noopener">' +
+        escapeHtml(t.registry + ':' + t.registry_id) + '</a>';
+    }).join('');
+    var sponsorsHtml = (row.sponsors || []).join(' · ');
+    var linkedHtml = (row.linked_registries || []).join(' · ');
+
+    var detailRow = '<tr class="pipeline-detail-row" style="display:none"><td colspan="8">' +
+      '<div class="detail-section"><strong>试验列表</strong><div>' + (trialsHtml || '—') + '</div></div>' +
+      '<div class="detail-section"><strong>申办方</strong><div>' + escapeHtml(sponsorsHtml || '—') + '</div></div>' +
+      (linkedHtml ? '<div class="detail-section"><strong>跨注册编号</strong><div>' + escapeHtml(linkedHtml) + '</div></div>' : '') +
+    '</td></tr>';
+
+    return mainRow + detailRow;
   }
 
   init();

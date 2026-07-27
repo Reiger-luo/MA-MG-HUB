@@ -56,7 +56,7 @@ def test_trials_tab_has_decision_signals_section():
     assert 'id="trialsDecisionSignals"' in html
 
 
-def test_trials_tab_has_three_source_modules_in_order():
+def test_trials_tab_has_pipeline_matrix():
     html = (PROJECT / "pages" / "literature.html").read_text(encoding="utf-8")
     # Extract the tab-trials section
     panel_match = re.search(
@@ -65,21 +65,15 @@ def test_trials_tab_has_three_source_modules_in_order():
     )
     assert panel_match, "tab-trials panel not found"
     panel = panel_match.group(0)
-    # Three source module containers in exact order
-    ct_pos = panel.find('id="trialsClinicalTrialsGov"')
-    chictr_pos = panel.find('id="trialsChiCTR"')
-    cdt_pos = panel.find('id="trialsChinaDrugTrials"')
-    assert ct_pos != -1, "ClinicalTrials.gov module missing"
-    assert chictr_pos != -1, "ChiCTR module missing"
-    assert cdt_pos != -1, "ChinaDrugTrials module missing"
-    assert ct_pos < chictr_pos < cdt_pos, (
-        f"Source order wrong: CT={ct_pos}, ChiCTR={chictr_pos}, CDT={cdt_pos}"
-    )
+    # Pipeline matrix container and filters
+    assert 'id="pipelineMatrixContainer"' in panel, "Pipeline matrix container missing"
+    assert 'id="pipelineFilterClass"' in panel, "Drug class filter missing"
+    assert 'id="pipelineFilterPhase"' in panel, "Phase filter missing"
 
 
 # ── 4. Shared facets ──────────────────────────────────────────────────
 
-def test_trials_tab_has_shared_facets():
+def test_trials_tab_has_pipeline_filters():
     html = (PROJECT / "pages" / "literature.html").read_text(encoding="utf-8")
     panel_match = re.search(
         r'id="tab-trials".*?(?=<section class="intel-tab-panel"|</main>)',
@@ -87,11 +81,9 @@ def test_trials_tab_has_shared_facets():
     )
     assert panel_match
     panel = panel_match.group(0)
-    # Shared facet controls: 药物分类→适应症→状态→时间
-    assert 'id="trialsFacetDrugClass"' in panel, "Missing 药物分类 facet"
-    assert 'id="trialsFacetIndication"' in panel, "Missing 适应症 facet"
-    assert 'id="trialsFacetStatus"' in panel, "Missing 状态 facet"
-    assert 'id="trialsFacetTime"' in panel, "Missing 时间 facet"
+    # Pipeline matrix filters: drug_class + phase
+    assert 'id="pipelineFilterClass"' in panel, "Missing 药物分类 filter"
+    assert 'id="pipelineFilterPhase"' in panel, "Missing 阶段 filter"
 
 
 # ── 5. ChinaDrugTrials adapter (Python backend) ──────────────────────

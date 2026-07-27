@@ -3868,3 +3868,32 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
   .trials-facets .filter-input { max-width: none; }
   .trials-decision-signals { grid-template-columns: 1fr; }
 }
+
+/* ── Pipeline Matrix ── */
+.pipeline-filters { display: flex; gap: 12px; margin: 16px 0; }
+.pipeline-filters .filter-input { min-width: 160px; }
+.pipeline-matrix-table { width: 100%; table-layout: fixed; border-collapse: collapse; }
+.pipeline-matrix-table th { position: sticky; top: 0; background: var(--card-bg, #1e1e2e); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--fg3, #888); padding: 10px; text-align: left; border-bottom: 2px solid var(--border, rgba(255,255,255,0.1)); z-index: 1; }
+.pipeline-matrix-table td { font-size: 14px; padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,0.06); vertical-align: top; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pipeline-matrix-table td.td-ellipsis { overflow: hidden; text-overflow: ellipsis; }
+.pipeline-group-header td { background: rgba(255,255,255,0.04); font-weight: 600; font-size: 13px; color: var(--fg2, #aaa); padding: 10px; white-space: normal; }
+.pipeline-matrix-table tbody tr:hover td { background: rgba(255,255,255,0.03); }
+.pipeline-matrix-table tbody tr.pipeline-group-header:hover td { background: rgba(255,255,255,0.05); }
+.phase-steps { display: inline-flex; gap: 2px; margin-bottom: 2px; }
+.phase-step { width: 18px; height: 6px; border-radius: 3px; background: rgba(255,255,255,0.1); }
+.phase-label-text { display: block; font-size: 12px; color: var(--fg3, #888); margin-top: 2px; }
+.source-badge { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 11px; font-weight: 600; margin-right: 3px; color: #fff; white-space: nowrap; }
+.source-badge.ctgov { background: rgba(59,130,246,0.8); }
+.source-badge.chictr { background: rgba(34,197,94,0.8); }
+.source-badge.cdt { background: rgba(245,158,11,0.8); }
+.drug-name-link { cursor: pointer; color: var(--fg, #eee); text-decoration: underline dotted; font-weight: 500; display: block; }
+.drug-name-link:hover { color: var(--accent, #60a5fa); }
+.pipeline-detail-row td { background: rgba(255,255,255,0.02); padding: 12px 16px; white-space: normal; }
+.detail-section { margin-bottom: 8px; font-size: 13px; }
+.detail-section strong { display: block; font-size: 12px; color: var(--fg3, #888); margin-bottom: 4px; }
+.pipeline-detail-row .trial-link { display: inline-block; margin: 2px 4px; font-size: 12px; color: var(--accent, #60a5fa); text-decoration: none; }
+.pipeline-detail-row .trial-link:hover { text-decoration: underline; }
+@media (max-width: 900px) {
+  .col-time { display: none; }
+  .pipeline-filters { flex-direction: column; }
+}

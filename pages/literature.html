@@ -352,30 +352,14 @@
     <!-- Decision signals -->
     <section class="trials-decision-signals" id="trialsDecisionSignals" aria-label="决策信号"></section>
 
-    <!-- Shared facets -->
-    <div class="trials-facets" role="group" aria-label="筛选">
-      <select class="filter-input" id="trialsFacetDrugClass"><option value="all">全部药物分类</option></select>
-      <select class="filter-input" id="trialsFacetIndication"><option value="all">全部适应症</option></select>
-      <select class="filter-input" id="trialsFacetStatus"><option value="all">全部状态</option></select>
-      <select class="filter-input" id="trialsFacetTime"><option value="all">全部时间</option></select>
+    <!-- Pipeline matrix filters -->
+    <div class="pipeline-filters" role="group" aria-label="管线筛选">
+      <select class="filter-input" id="pipelineFilterClass"><option value="all">全部药物分类</option></select>
+      <select class="filter-input" id="pipelineFilterPhase"><option value="all">全部阶段</option></select>
     </div>
 
-    <!-- Three source modules in exact order -->
-    <section class="trials-source-module" id="trialsClinicalTrialsGov" aria-label="ClinicalTrials.gov">
-      <div class="panel-head"><h3>ClinicalTrials.gov</h3><span class="update-badge" id="trialsCtMeta"></span></div>
-      <div class="trials-card-grid" id="trialsCtCards"></div>
-    </section>
-
-    <section class="trials-source-module" id="trialsChiCTR" aria-label="ChiCTR">
-      <div class="panel-head"><h3>ChiCTR</h3><span class="update-badge" id="trialsChictrMeta"></span></div>
-      <div class="trials-card-grid" id="trialsChictrCards"></div>
-    </section>
-
-    <section class="trials-source-module" id="trialsChinaDrugTrials" aria-label="ChinaDrugTrials">
-      <div class="panel-head"><h3>ChinaDrugTrials</h3><span class="update-badge" id="trialsCdtMeta"></span></div>
-      <div class="trials-card-grid" id="trialsCdtCards"></div>
-      <div class="trials-freshness-warning" id="trialsCdtWarning" style="display:none">⚠️ 官方源暂不可达，显示最后良好缓存。</div>
-    </section>
+    <!-- Pipeline matrix table -->
+    <div id="pipelineMatrixContainer"></div>
   </section>
 </main>
 
