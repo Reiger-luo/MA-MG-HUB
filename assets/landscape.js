@@ -128,14 +128,15 @@
     var stats = [
       ['动态洞察', insights.length, (insightPayload.insights || []).length ? '社区/图谱驱动' : '固定框架回退'],
       ['已获批对象', overview.competitive_count || (data.approved_competitive_matrix || data.competitive_matrix || []).length, '中国监管 + 证据厚度'],
-      ['临床管线', overview.clinical_pipeline_count || (data.clinical_pipeline_matrix || []).length, 'ClinicalTrials Phase II+'],
+      ['临床管线', overview.clinical_pipeline_count || (data.clinical_pipeline_matrix || []).length, '<a href="literature.html?tab=trials" class="stat-link">→ 情报中心</a>'],
       ['PMID 锚点', insightSummary.reference_count || 0, '动态洞察引用']
     ];
     var box = $('landscapeStats');
     if (!box) return;
     box.innerHTML = stats.map(function(item) {
+      var label = /^</.test(item[2]) ? item[2] : escapeHtml(item[2]);
       return '<article class="landscape-stat-card"><span>' + escapeHtml(item[0]) + '</span><strong>' +
-        escapeHtml(compactNumber(item[1])) + '</strong><em>' + escapeHtml(item[2]) + '</em></article>';
+        escapeHtml(compactNumber(item[1])) + '</strong><em>' + label + '</em></article>';
     }).join('');
   }
 
@@ -618,105 +619,6 @@
     box.innerHTML = '<table><tr><th>药物</th><th>靶点/剂型</th><th>中国监管</th><th>中国适应症</th><th>CDE/NMPA</th><th>证据厚度</th></tr>' + html + '</table>';
   }
 
-  function renderTrialLinks(trials, limit) {
-    trials = trials || [];
-    if (!trials.length) return '<span class="muted-text">暂无 NCT</span>';
-    return trials.slice(0, limit || 3).map(function(trial) {
-      return '<a class="pmid-chip" href="' + escapeHref(trial.url || ('https://clinicaltrials.gov/study/' + trial.nct_id)) +
-        '" target="_blank" rel="noopener">' + escapeHtml(trial.nct_id || 'NCT') + '</a>';
-    }).join('');
-  }
-
-  function renderPhaseSteps(stageNumber) {
-    stageNumber = Number(stageNumber || 0);
-    return '<div class="phase-stepper" aria-label="开发阶段">' + [1, 2, 3, 4].map(function(step) {
-      var cls = step < stageNumber ? 'done' : step === stageNumber ? 'active' : '';
-      return '<span class="' + cls + '">' + step + '</span>';
-    }).join('') + '</div>';
-  }
-
-  function renderTargetGroupCell(items) {
-    var first = items[0] || {};
-    var targets = {};
-    items.forEach(function(item) {
-      if (item.target) targets[item.target] = true;
-    });
-    var tags = Object.keys(targets).slice(0, 5).map(function(target) {
-      return '<em>' + escapeHtml(target) + '</em>';
-    }).join('');
-    return '<td class="target-group-cell" rowspan="' + escapeHtml(items.length) + '">' +
-      '<strong>' + escapeHtml(first.target_type || '待补充') + '</strong>' +
-      '<span>' + escapeHtml(items.length) + ' 个药物</span>' +
-      '<div>' + tags + '</div>' +
-    '</td>';
-  }
-
-  function renderClinicalPipelineRows(rows) {
-    var groups = [];
-    rows.forEach(function(item) {
-      var last = groups[groups.length - 1];
-      if (!last || last.key !== item.target_type) {
-        groups.push({ key: item.target_type, items: [item] });
-      } else {
-        last.items.push(item);
-      }
-    });
-    return groups.map(function(group) {
-      return group.items.map(function(item, index) {
-        var keyTrial = item.key_trial || (item.trials || [])[0] || {};
-        var targetCell = index === 0 ? renderTargetGroupCell(group.items) : '';
-        return '<tr>' +
-          targetCell +
-          '<td><strong>' + escapeHtml(item.name) + '</strong><br><span>' + escapeHtml((item.sponsors || []).join(' / ') || item.sponsor_hint || '-') + '</span></td>' +
-          '<td>' + escapeHtml(item.indication || 'Myasthenia Gravis') + '<br><span>' + escapeHtml(item.population || '未标注') + '</span></td>' +
-          '<td><div class="trial-title">' + escapeHtml(keyTrial.title || '-') + '</div><div class="pmid-row">' + renderTrialLinks(item.trials, 2) + '</div></td>' +
-          '<td>' + renderPhaseSteps(item.stage_number) + '<strong class="phase-label">' + escapeHtml(item.highest_phase_label || '-') + '</strong><br><span>' + escapeHtml(item.status_summary || '-') + ' · ' + escapeHtml(item.study_count || 0) + ' 项</span></td>' +
-          '<td>' + escapeHtml(keyTrial.start || '-') + '</td>' +
-          '<td>' + escapeHtml(keyTrial.primary_completion || '-') + '</td>' +
-          '<td>' + escapeHtml(keyTrial.completion || '-') + '<br><span>更新 ' + escapeHtml(item.latest_update || '-') + '</span></td>' +
-        '</tr>';
-      }).join('');
-    }).join('');
-  }
-
-  function renderClinicalPipelineMatrix() {
-    var rows = data.clinical_pipeline_matrix || [];
-    var meta = data.clinical_pipeline_meta || {};
-    var box = $('clinicalPipelineMatrix');
-    if (!box) return;
-    var metaBox = $('clinicalPipelineMeta');
-    if (metaBox) {
-      metaBox.textContent = (meta.source || 'ClinicalTrials.gov') + ' · ' +
-        (meta.generated_at || '-') + ' · ' + (meta.item_count || rows.length || 0) + ' 个对象';
-    }
-    if (!rows.length) {
-      box.innerHTML = '<div class="kg-empty-hint">暂无符合条件的 Phase II+ 临床开发管线。</div>';
-      return;
-    }
-    box.innerHTML = '<table><tr><th>靶点类型</th><th>药物</th><th>适应症/人群</th><th>关键试验</th><th>最高阶段</th><th>开始</th><th>Readout</th><th>结束</th></tr>' +
-      renderClinicalPipelineRows(rows) + '</table>';
-  }
-
-  function renderChinaTrialRegistrySignals() {
-    var host = $('chinaTrialRegistrySignals');
-    if (!host) return;
-    var sourcePayload = window.MG_SOURCE_SIGNALS || { channels: [] };
-    var registryChannel = (sourcePayload.channels || []).filter(function(channel) {
-      return channel.id === 'trialRegistry';
-    })[0] || { items: [] };
-    var records = (registryChannel.items || []).filter(function(item) {
-      return item.registry === 'ChiCTR';
-    });
-    host.innerHTML = records.map(function(item) {
-      var title = escapeHtml(item.title || item.registry_id || 'ChiCTR record');
-      return '<article class="china-trial-registry-card">' +
-        '<div><span>' + escapeHtml(item.registry || 'ChiCTR') + '</span><time>' + escapeHtml(item.date || '日期未标注') + '</time></div>' +
-        (item.url ? '<a href="' + escapeHref(item.url) + '" target="_blank" rel="noopener">' + title + '</a>' : '<strong>' + title + '</strong>') +
-        '<p>' + escapeHtml(item.registry_id || '') + ' · ' + escapeHtml(item.status || 'Unknown') + ' · 阶段 ' + escapeHtml(item.phase || 'Unknown') + '</p>' +
-      '</article>';
-    }).join('') || '<div class="kg-empty-hint">ChiCTR 缓存当前为空；保留最后良好缓存后再刷新。</div>';
-  }
-
   function renderGuidelineSlot(china) {
     var slot = china.guideline_consensus_slot || {};
     var box = $('guidelineConsensusSlot');
@@ -888,8 +790,6 @@
     renderStats();
     renderMonthlyChanges();
     renderCompetitiveMatrix();
-    renderClinicalPipelineMatrix();
-    renderChinaTrialRegistrySignals();
     renderChinaLandscape();
     populateAnswerFilters();
     populateTopicFilters();

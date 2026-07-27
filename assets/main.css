@@ -3831,3 +3831,40 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
 .china-trial-registry-card > div { display: flex; justify-content: space-between; gap: .5rem; color: var(--fg3); font-size: .72rem; }
 .china-trial-registry-card > a, .china-trial-registry-card > strong { display: block; margin-top: .4rem; color: var(--fg); font-weight: 650; line-height: 1.4; }
 .china-trial-registry-card p { margin: .45rem 0 0; color: var(--fg3); font-size: .75rem; }
+
+/* ── 临床试验 tab ── */
+.trials-decision-signals { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: .75rem; margin-bottom: 1.25rem; }
+.trials-signal-card { padding: .85rem 1rem; border: 1px solid var(--border); border-radius: 10px; background: var(--bg2); }
+.trials-signal-card strong { display: block; margin-bottom: .3rem; font-size: .9rem; }
+.trials-signal-card p { margin: 0; color: var(--fg2); font-size: .8rem; line-height: 1.5; }
+.trials-signal-tag { display: inline-block; margin-top: .4rem; padding: .15rem .5rem; border-radius: 4px; background: var(--bg3); font-size: .7rem; color: var(--fg2); }
+.trials-facets { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.25rem; }
+.trials-facets .filter-input { min-width: 140px; flex: 1; max-width: 220px; }
+.trials-source-module { margin-bottom: 1.5rem; }
+.trials-source-module .panel-head { display: flex; align-items: center; justify-content: space-between; gap: .75rem; margin-bottom: .75rem; }
+.trials-source-module .panel-head h3 { margin: 0; font-size: 1rem; }
+.trials-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: .75rem; }
+.trials-card { padding: .85rem 1rem; border: 1px solid var(--border); border-radius: 10px; background: var(--bg2); overflow-wrap: break-word; word-break: break-word; }
+.trials-card-head { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin-bottom: .4rem; }
+.trials-card-status { padding: .1rem .45rem; border-radius: 4px; font-size: .7rem; font-weight: 600; }
+.trials-card-status.status-recruiting { background: #dcfce7; color: #166534; }
+.trials-card-status.status-active { background: #dbeafe; color: #1e40af; }
+.trials-card-status.status-completed { background: var(--bg3); color: var(--fg2); }
+.trials-card-status.status-unknown { background: var(--bg3); color: var(--fg3); }
+.trials-card-phase { font-size: .72rem; color: var(--fg2); }
+.trials-card-title { margin: 0 0 .4rem; font-size: .85rem; font-weight: 600; line-height: 1.4; }
+.trials-card-title a { color: var(--accent); text-decoration: none; }
+.trials-card-title a:hover { text-decoration: underline; }
+.trials-card-meta { display: flex; flex-wrap: wrap; gap: .5rem; font-size: .72rem; color: var(--fg3); }
+.trials-card-sponsor { margin-top: .3rem; font-size: .72rem; color: var(--fg2); }
+.trials-card-linked { margin-top: .4rem; font-size: .7rem; }
+.trials-card-linked a { color: var(--accent); margin-right: .5rem; }
+.trials-freshness-warning { margin-top: .75rem; padding: .6rem .85rem; border-radius: 8px; background: #fef3c7; color: #92400e; font-size: .8rem; }
+.stat-link { color: var(--accent); text-decoration: none; font-size: .75rem; }
+.stat-link:hover { text-decoration: underline; }
+@media (max-width: 760px) {
+  .trials-card-grid { grid-template-columns: 1fr; }
+  .trials-facets { flex-direction: column; }
+  .trials-facets .filter-input { max-width: none; }
+  .trials-decision-signals { grid-template-columns: 1fr; }
+}

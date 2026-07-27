@@ -115,6 +115,22 @@ def _chictr_items(payload: dict[str, Any]) -> list[dict[str, Any]]:
     } for item in payload.get("records") or []]
 
 
+def _cdt_items(payload: dict[str, Any]) -> list[dict[str, Any]]:
+    return [{
+        "id": item.get("registry_id") or "",
+        "registry": "ChinaDrugTrials",
+        "registry_id": item.get("registry_id") or "",
+        "secondary_ids": [],
+        "title": item.get("title") or "",
+        "date": item.get("registered_date") or "",
+        "status": item.get("status") or "Unknown",
+        "source": "ChinaDrugTrials",
+        "url": _safe_http_url(item.get("official_url")),
+        "phase": item.get("phase") or "Unknown",
+        "sponsor": item.get("sponsor") or "",
+    } for item in payload.get("records") or []]
+
+
 def _normalize_title(value: str) -> str:
     return "".join(char for char in value.lower() if char.isalnum())
 

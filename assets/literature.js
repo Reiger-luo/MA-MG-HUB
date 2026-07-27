@@ -731,6 +731,7 @@
           }
         });
       }
+      if (key === 'trials') { renderTrialsTab(); }
       if (el.btnExport) el.btnExport.style.display = key === 'conference' ? 'none' : '';
     }
     if (hub.initTabs) {
@@ -1659,6 +1660,158 @@
       }.bind(this));
     });
   });
+
+  // ── 临床试验 tab ──
+  var trialsData = window.MG_CLINICAL_TRIALS_DATA || { sources: [], decision_signals: [], meta: {} };
+
+  function renderTrialsTab() {
+    renderTrialsBadge();
+    renderTrialsDecisionSignals();
+    populateTrialsFacets();
+    renderTrialsSourceCards();
+  }
+
+  function renderTrialsBadge() {
+    var badge = document.getElementById('trialsBadge');
+    if (!badge) return;
+    var meta = trialsData.meta || {};
+    badge.textContent = (meta.generated_at || '—') + ' · ' + (meta.total_count || 0) + ' 条';
+  }
+
+  function renderTrialsDecisionSignals() {
+    var box = document.getElementById('trialsDecisionSignals');
+    if (!box) return;
+    var signals = trialsData.decision_signals || [];
+    if (!signals.length) {
+      box.innerHTML = '<div class="kg-empty-hint">本期无新增决策信号。</div>';
+      return;
+    }
+    box.innerHTML = signals.map(function(s) {
+      return '<article class="trials-signal-card">' +
+        '<strong>' + escapeHtml(s.title || '') + '</strong>' +
+        '<p>' + escapeHtml(s.detail || '') + '</p>' +
+        '<span class="trials-signal-tag">' + escapeHtml(s.tag || '') + '</span>' +
+      '</article>';
+    }).join('');
+  }
+
+  function populateTrialsFacets() {
+    var sources = trialsData.sources || [];
+    var allRecords = [];
+    sources.forEach(function(src) { allRecords = allRecords.concat(src.records || []); });
+
+    var drugClasses = uniqueTrialValues(allRecords, 'drug_class');
+    var indications = uniqueTrialValues(allRecords, 'indication');
+    var statuses = uniqueTrialValues(allRecords, 'status_label');
+
+    fillTrialSelect('trialsFacetDrugClass', drugClasses, '全部药物分类');
+    fillTrialSelect('trialsFacetIndication', indications, '全部适应症');
+    fillTrialSelect('trialsFacetStatus', statuses, '全部状态');
+    var timeSelect = document.getElementById('trialsFacetTime');
+    if (timeSelect && timeSelect.options.length <= 1) {
+      [['2026', '2026年'], ['2025', '2025年'], ['2024', '2024年及更早']].forEach(function(pair) {
+        var opt = document.createElement('option');
+        opt.value = pair[0]; opt.textContent = pair[1];
+        timeSelect.appendChild(opt);
+      });
+    }
+
+    ['trialsFacetDrugClass', 'trialsFacetIndication', 'trialsFacetStatus', 'trialsFacetTime'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.addEventListener('change', renderTrialsSourceCards);
+    });
+  }
+
+  function uniqueTrialValues(records, field) {
+    var seen = {};
+    records.forEach(function(r) {
+      var v = r[field];
+      if (v && v !== 'Unknown' && v !== '待补充') seen[v] = true;
+    });
+    return Object.keys(seen).sort();
+  }
+
+  function fillTrialSelect(id, values, allLabel) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = '<option value="all">' + allLabel + '</option>';
+    values.forEach(function(v) {
+      var opt = document.createElement('option');
+      opt.value = v; opt.textContent = v;
+      el.appendChild(opt);
+    });
+  }
+
+  function getTrialsFilter() {
+    return {
+      drugClass: (document.getElementById('trialsFacetDrugClass') || {}).value || 'all',
+      indication: (document.getElementById('trialsFacetIndication') || {}).value || 'all',
+      status: (document.getElementById('trialsFacetStatus') || {}).value || 'all',
+      time: (document.getElementById('trialsFacetTime') || {}).value || 'all'
+    };
+  }
+
+  function matchesTrialsFilter(record, filter) {
+    if (filter.drugClass !== 'all' && record.drug_class !== filter.drugClass) return false;
+    if (filter.indication !== 'all' && record.indication !== filter.indication) return false;
+    if (filter.status !== 'all' && record.status_label !== filter.status) return false;
+    if (filter.time !== 'all') {
+      var year = (record.start_date || record.registered_date || '').slice(0, 4);
+      if (filter.time === '2024') { if (year > '2024') return false; }
+      else if (year !== filter.time) return false;
+    }
+    return true;
+  }
+
+  function renderTrialsSourceCards() {
+    var filter = getTrialsFilter();
+    var sources = trialsData.sources || [];
+    var sourceMap = {
+      'ClinicalTrials.gov': { cardsId: 'trialsCtCards', metaId: 'trialsCtMeta' },
+      'ChiCTR': { cardsId: 'trialsChictrCards', metaId: 'trialsChictrMeta' },
+      'ChinaDrugTrials': { cardsId: 'trialsCdtCards', metaId: 'trialsCdtMeta' }
+    };
+
+    sources.forEach(function(src) {
+      var config = sourceMap[src.source];
+      if (!config) return;
+      var cardsBox = document.getElementById(config.cardsId);
+      var metaBox = document.getElementById(config.metaId);
+      if (!cardsBox) return;
+
+      var records = (src.records || []).filter(function(r) { return matchesTrialsFilter(r, filter); });
+      if (metaBox) metaBox.textContent = (src.meta && src.meta.generated_at || '—') + ' · ' + records.length + ' 条';
+
+      if (!records.length) {
+        cardsBox.innerHTML = '<div class="kg-empty-hint">当前筛选无结果。</div>';
+        return;
+      }
+      cardsBox.innerHTML = records.map(function(r) {
+        var linkedHtml = (r.linked_registries || []).map(function(link) {
+          return '<a href="' + escapeHref(link.url) + '" target="_blank" rel="noopener">' + escapeHtml(link.registry + ':' + link.registry_id) + '</a>';
+        }).join(' ');
+        return '<article class="trials-card">' +
+          '<div class="trials-card-head">' +
+            '<span class="trials-card-status status-' + escapeHtml((r.status_class || 'unknown')) + '">' + escapeHtml(r.status_label || r.status || '—') + '</span>' +
+            '<span class="trials-card-phase">' + escapeHtml(r.phase_label || r.phase || '') + '</span>' +
+          '</div>' +
+          '<h4 class="trials-card-title">' + (r.url ? '<a href="' + escapeHref(r.url) + '" target="_blank" rel="noopener">' + escapeHtml(r.title || r.registry_id) + '</a>' : escapeHtml(r.title || r.registry_id)) + '</h4>' +
+          '<div class="trials-card-meta">' +
+            '<span>' + escapeHtml(r.registry_id || '') + '</span>' +
+            '<span>' + escapeHtml(r.drug_class || '') + ' · ' + escapeHtml(r.indication || '') + '</span>' +
+          '</div>' +
+          (r.sponsor ? '<div class="trials-card-sponsor">' + escapeHtml(r.sponsor) + '</div>' : '') +
+          (linkedHtml ? '<div class="trials-card-linked">' + linkedHtml + '</div>' : '') +
+        '</article>';
+      }).join('');
+    });
+
+    var cdtSource = sources.filter(function(s) { return s.source === 'ChinaDrugTrials'; })[0];
+    var warningEl = document.getElementById('trialsCdtWarning');
+    if (warningEl && cdtSource && cdtSource.meta && cdtSource.meta.mode === 'cache') {
+      warningEl.style.display = '';
+    }
+  }
 
   init();
 })();

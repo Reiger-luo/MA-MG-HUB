@@ -167,11 +167,15 @@ def refresh_chictr_cache(cache_path: Path, *, input_path: Path | None = None) ->
         return returned
 
 
-def normalize_registry_trials(clinicaltrials_payload: dict[str, Any], chictr_payload: dict[str, Any]):
+def normalize_registry_trials(clinicaltrials_payload: dict[str, Any], chictr_payload: dict[str, Any], china_drug_trials_payload: dict[str, Any] | None = None):
     """输出保留注册库名称/ID的统一轻量记录，绝不添加 Oxford 等级。"""
     from .source_channels import _ct_items, _chictr_items, deduplicate_trials
 
-    return deduplicate_trials(_ct_items(clinicaltrials_payload) + _chictr_items(chictr_payload))
+    items = _ct_items(clinicaltrials_payload) + _chictr_items(chictr_payload)
+    if china_drug_trials_payload:
+        from .source_channels import _cdt_items
+        items += _cdt_items(china_drug_trials_payload)
+    return deduplicate_trials(items)
 
 
 def compact_raw_clinical_study(study: dict[str, Any]) -> dict[str, Any]:
@@ -315,3 +319,96 @@ def build_clinical_pipeline_matrix(regulatory_map, *, studies=None, meta=None, c
     items.sort(key=lambda item: (order.get(item["target_type"], 90), -item["highest_phase_rank"], item["name"]))
     meta.update({"active_statuses": [STATUS_LABELS[item] for item in sorted(ACTIVE_STATUSES)], "phase_rule": "ClinicalTrials.gov MG interventional Phase I/II+ active pipeline; registry evidence is not Oxford graded.", "item_count": len(items)})
     return {"meta": meta, "items": items}
+
+
+# ── ChinaDrugTrials adapter ──────────────────────────────────────────
+
+CDT_FIELD_ALIASES = {
+    "registry_id": ("registry_id", "registration_number", "ctr_number"),
+    "title": ("title", "drug_name", "study_title"),
+    "drug_name": ("drug_name", "drug", "intervention_name"),
+    "indication": ("indication", "disease", "target_disease"),
+    "status": ("status", "recruitment_status", "study_status"),
+    "phase": ("phase", "study_phase"),
+    "sponsor": ("sponsor", "applicant", "company"),
+    "registered_date": ("registered_date", "registration_date", "first_public_date"),
+    "official_url": ("official_url", "url", "source_url"),
+}
+
+
+def normalize_china_drug_trials_record(source: dict[str, Any]) -> dict[str, Any]:
+    """Normalize a ChinaDrugTrials record. Never fabricate fields."""
+    values = {key: _first(source, aliases) for key, aliases in CDT_FIELD_ALIASES.items()}
+    title = str(values["title"]).strip() or str(values["drug_name"]).strip()
+    return {
+        "registry": "ChinaDrugTrials",
+        "registry_id": str(values["registry_id"]).strip(),
+        "title": title,
+        "drug_name": str(values["drug_name"]).strip(),
+        "indication": str(values["indication"]).strip() or "Unknown",
+        "status": str(values["status"]).strip() or "Unknown",
+        "phase": str(values["phase"]).strip() or "Unknown",
+        "sponsor": str(values["sponsor"]).strip(),
+        "registered_date": str(values["registered_date"]).strip(),
+        "official_url": str(values["official_url"]).strip(),
+    }
+
+
+def load_china_drug_trials_cache(path: Path) -> dict[str, Any]:
+    """Load ChinaDrugTrials cache; return empty schema if unavailable."""
+    if not path.exists():
+        return {
+            "schema_version": "1.0",
+            "source": "ChinaDrugTrials.org.cn",
+            "source_url": "https://www.chinadrugtrials.org.cn/",
+            "mode": "unavailable",
+            "records": [],
+        }
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        payload.setdefault("records", [])
+        payload.setdefault("mode", "cache")
+        payload.setdefault("source", "ChinaDrugTrials.org.cn")
+        return payload
+    except (OSError, json.JSONDecodeError):
+        return {
+            "schema_version": "1.0",
+            "source": "ChinaDrugTrials.org.cn",
+            "source_url": "https://www.chinadrugtrials.org.cn/",
+            "mode": "unavailable",
+            "records": [],
+        }
+
+
+def refresh_china_drug_trials_cache(cache_path: Path, *, input_path: Path | None = None) -> dict[str, Any]:
+    """Refresh from official export; preserve last-good cache on failure."""
+    try:
+        if input_path is None:
+            cached = load_china_drug_trials_cache(cache_path)
+            cached["mode"] = "cache"
+            return cached
+        raw_records = _load_manual(input_path)[0]
+        by_id: dict[str, dict[str, Any]] = {}
+        for raw in raw_records:
+            record = normalize_china_drug_trials_record(raw)
+            if not record["registry_id"] or not record["title"]:
+                continue
+            by_id[record["registry_id"]] = record
+        if not by_id:
+            raise ValueError("No valid ChinaDrugTrials records found")
+        payload = {
+            "schema_version": "1.0",
+            "source": "ChinaDrugTrials.org.cn",
+            "source_url": "https://www.chinadrugtrials.org.cn/",
+            "mode": "manual",
+            "input_sha256": hashlib.sha256(input_path.read_bytes()).hexdigest(),
+            "records": sorted(by_id.values(), key=lambda item: item["registry_id"]),
+        }
+        atomic_write_json(cache_path, payload)
+        return payload
+    except Exception as exc:
+        fallback = load_china_drug_trials_cache(cache_path)
+        returned = dict(fallback)
+        returned["mode"] = "cache"
+        returned["warning"] = str(exc)
+        return returned
