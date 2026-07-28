@@ -1806,12 +1806,12 @@
 
     var autoExpand = searchVal.length > 0;
     var colgroup = '<colgroup>' +
-      '<col style="width:12%"><col style="width:21%"><col style="width:4%"><col style="width:8%">' +
-      '<col style="width:17%"><col style="width:15%"><col style="width:11%"><col style="width:12%">' +
+      '<col style="width:14%"><col style="width:25%"><col style="width:5%"><col style="width:10%">' +
+      '<col style="width:24%"><col style="width:22%">' +
       '</colgroup>';
     var thead = '<thead><tr>' +
       '<th>靶点/机制</th><th>药物</th><th class="th-narrow">研究数</th><th>最高阶段</th>' +
-      '<th>状态摘要</th><th>来源</th><th>关键试验</th><th>时间线</th>' +
+      '<th>状态摘要</th><th>来源</th>' +
       '</tr></thead>';
 
     var html = '';
@@ -1927,22 +1927,6 @@
     if (sources['ChiCTR']) badgesHtml += '<span class="source-badge chictr">ChiCTR ' + sources['ChiCTR'] + '</span>';
     if (sources['ChinaDrugTrials']) badgesHtml += '<span class="source-badge cdt">CDT ' + sources['ChinaDrugTrials'] + '</span>';
 
-    // Key trial link
-    var kt = row.key_trial || {};
-    var keyTrialHtml = kt.url
-      ? '<a href="' + escapeHref(kt.url) + '" target="_blank" rel="noopener">' + escapeHtml(kt.registry_id || '链接') + '</a>'
-      : '—';
-
-    // Timeline: 3 lines — 招募 / Readout / 结束
-    var tl = row.timeline || {};
-    function tlLine(label, value) {
-      return '<div class="tl-line"><span class="tl-label">' + label + '</span>' +
-        '<span class="tl-value">' + (value ? escapeHtml(value) : '<span class="tl-na">—</span>') + '</span></div>';
-    }
-    var timeHtml = '<div class="tl-stack">' +
-      tlLine('招募', tl.start) + tlLine('Readout', tl.readout) + tlLine('结束', tl.completion) +
-    '</div>';
-
     var pmKey = escapeHtml((row.name || '') + '|' + (row.drug_class || ''));
     var mainRow = '<tr>' +
       '<td>' + escapeHtml(row.drug_class || '—') + '</td>' +
@@ -1951,8 +1935,6 @@
       '<td>' + stepsHtml + '<span class="phase-label-text">' + escapeHtml(row.highest_phase_label || '未标注') + '</span></td>' +
       '<td class="td-ellipsis">' + escapeHtml(row.status_summary || '—') + '</td>' +
       '<td>' + badgesHtml + '</td>' +
-      '<td class="td-ellipsis">' + keyTrialHtml + '</td>' +
-      '<td class="td-timeline">' + timeHtml + '</td>' +
     '</tr>';
 
     return mainRow;
