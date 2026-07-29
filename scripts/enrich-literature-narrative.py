@@ -48,7 +48,7 @@ DRUG_REFERENCE_TERMS = {
 }
 
 SYSTEM = """你是重症肌无力（myasthenia gravis, MG）医学事务情报分析师。
-任务：基于给定的近14天 MG-core PubMed records，把单篇候选归纳为文献级 Signal，并在每条 Signal 下生成 KOL talking points。
+任务：基于给定的本周（7 天）MG-core PubMed records，把单篇候选归纳为文献级 Signal，并在每条 Signal 下生成 KOL talking points。
 硬性要求：
 1. 只输出 JSON object，不要 Markdown，不要解释。
 2. records 已通过 MG-core 过滤；不得引入输入 records 以外的研究或数字。
@@ -836,7 +836,8 @@ def main() -> None:
             dashboard["stats"]["signals"] = len(normalized)
         strength_counts = Counter(item.get("strength") for item in normalized)
         for stat_card in dashboard.get("stat_cards", []) or []:
-            if stat_card.get("label") == "14 天信号":
+            if stat_card.get("label") in {"14 天信号", "本周信号"}:
+                stat_card["label"] = "本周信号"
                 stat_card["value"] = len(normalized)
                 stat_card["note"] = "MG-core 聚合 Signal"
         for section in dashboard.get("sections", []) or []:
@@ -849,7 +850,8 @@ def main() -> None:
                 for fact in facts
             ]
         for work_item in dashboard.get("work_items", []) or []:
-            if work_item.get("label") == "近 14 天信号":
+            if work_item.get("label") in {"近 14 天信号", "本周信号"}:
+                work_item["label"] = "本周信号"
                 work_item["count"] = len(normalized)
         atomic_write_js_global(DASHBOARD_PATH, "MG_DASHBOARD_DATA", dashboard)
     llm_covered_count = round(coverage * len(by_pmid))

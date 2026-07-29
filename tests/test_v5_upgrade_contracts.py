@@ -497,16 +497,17 @@ def test_source_channel_builder_has_stable_schema_and_safe_empty_fallbacks(tmp_p
     assert by_id["trialRegistry"]["sources"] == ["ClinicalTrials.gov", "ChiCTR"]
 
 
-def test_source_signal_frontend_contract_is_wired_with_safe_rendering():
+def test_source_signal_board_is_not_exposed_in_literature_frontend():
     html = (ROOT / "pages" / "literature.html").read_text(encoding="utf-8")
     js = (ROOT / "assets" / "literature.js").read_text(encoding="utf-8")
 
-    assert '<script src="../data/source-signals.js"></script>' in html
-    assert "sourceSignalChannels" in html
-    assert "window.MG_SOURCE_SIGNALS" in js
-    assert "safeUrl" in js
-    assert "escapeHtml" in js
-    assert "innerHTML = item.url" not in js
+    assert "其他来源动向" not in html
+    assert "先看本期判断，再逐篇核对研究结果与 PMID" not in html
+    assert "滚动 14 天" not in html
+    assert '<script src="../data/source-signals.js"></script>' not in html
+    assert "sourceSignalChannels" not in html
+    assert "window.MG_SOURCE_SIGNALS" not in js
+    assert "renderSourceSignalChannels" not in js
 
 
 def test_landscape_exposes_chictr_registry_signals_without_oxford_grading():

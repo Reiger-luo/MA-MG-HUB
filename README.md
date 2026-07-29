@@ -13,7 +13,7 @@ MG Intelligence Hub 是面向重症肌无力（myasthenia gravis, MG）医学事
 
 MA-MG-HUB 不是单纯的文献列表，而是医学事务团队的 MG 情报工作台。它重点回答：
 
-- 近 14 天有哪些值得关注的 MG 学术信号？
+- 本周有哪些值得关注的 MG 学术信号？
 - 中国相关证据、机构和作者线索有哪些变化？
 - MG 证据网络形成了哪些主题、机制和治疗社区？
 - 具体治疗问题目前可以形成怎样的 abstract-level 回答？
@@ -25,7 +25,7 @@ MA-MG-HUB 不是单纯的文献列表，而是医学事务团队的 MG 情报工
 | 模块 | 页面 | 主要能力 |
 |---|---|---|
 | 工作台 | [index.html](index.html) | 统计卡片、社区动态、近期信号、工作流状态和数据健康 |
-| 情报中心 | [pages/literature.html](pages/literature.html) | 近一年文献、14 天信号、中国情报、会议摘要；AAN / EAN 支持 MG-core 口径审计、逐条 MA 解读和 KOL 问题 |
+| 情报中心 | [pages/literature.html](pages/literature.html) | 近一年文献、本周信号、中国情报、会议摘要；AAN / EAN 支持 MG-core 口径审计、逐条 MA 解读和 KOL 问题 |
 | 诊治格局 | [pages/landscape.html](pages/landscape.html) | 月度格局洞察、竞争矩阵、ClinicalTrials 管线、Living Answers |
 | 知识库 | [pages/knowledge.html](pages/knowledge.html) | 知识图谱、医学事务社区、证据矩阵、专题层、跨库检索 |
 | MSL 工作台 | [pages/msl.html](pages/msl.html) | 专家画像、内容模块、拜访话题建议、PMID 文献清单 |
@@ -39,7 +39,7 @@ MA-MG-HUB 不是单纯的文献列表，而是医学事务团队的 MG 情报工
 
 | 口径 | 当前规模 | 用途 |
 |---|---:|---|
-| 公开滚动层 | 截至 2026-07-22：近一年严格公开文献 903 篇；中国相关 216 篇；14 天 MG-core 聚合信号 13 条 / 28 篇 PMID | 工作台、情报中心、信号板、中国情报 |
+| 公开滚动层 | 近一年严格公开文献与中国相关证据；信号按当前 1 周批次独立重建 | 工作台、情报中心、信号板、中国情报 |
 | full / 语义底座 | 截至 2026-07-15：full、轻索引与社区层均为 10,672 篇 | 知识图谱、社区归类、专家画像、跨库检索 |
 
 `pipeline-status.js` 分开显示两套口径：`public_rolling_count=903`，`semantic_full_count=10672`。full 口径来自 raw full / full-index / community full 产物；recent 口径分别记录 `literature-recent.js` 与 `communityAssignmentsRecent.js`，生效的 active recent 以实际文件更新时间较新的那个为准。`MG_SEMANTIC_FULL_COUNT` 和 `MG_TOTAL_COUNT` 是 recent 文件头部的语义全量声明与兼容字段；云端 recent fallback 必须保留该声明，不能改成 recent 数量。`dashboard-data.js` 与 `china-intelligence.js` 已由严格 recent 重建，分别显示 903 篇 recent 与 216 篇中国相关文献。
@@ -49,8 +49,8 @@ MA-MG-HUB 不是单纯的文献列表，而是医学事务团队的 MG 情报工
 | 产物 | 当前规模 | 用途 |
 |---|---:|---|
 | `data/literature-recent.js` | 903 篇 | 近一年严格公开文献列表；全部 MG-core 且 evidence I–V |
-| `data/signals-weekly.js` | 13 条父级 Signal / 19 条 KOL talking point / 28 篇 PMID | 近 14 天 MG-core Signal → evidenceItems → KOL key points |
-| `data/source-signals.js` | 5 个独立频道 / 386 条频道项 | 文献证据、指南/共识、中国监管、试验注册、会议线索 |
+| `data/signals-weekly.js` | 每周动态变化 | 当前 1 周 MG-core Signal → evidenceItems → KOL key points |
+| `data/source-signals.js` | 5 个独立频道 / 386 条频道项 | 后台来源缓存与管线审计；信号板不展示 |
 | `data/guideline-consensus-cache.json` | 9 篇 | MG-core 且具有指南/共识主来源标志的独立缓存，不进入 I–V 文献流 |
 | `data/china-intelligence.js` | 中国相关 216 篇；展示最新 120 条摘要 | 严格 recent 的中国情报 |
 | `data/literature-full-index.js` | 10,672 篇 | full 文献轻索引，不含 abstract |

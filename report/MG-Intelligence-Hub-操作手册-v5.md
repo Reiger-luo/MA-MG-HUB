@@ -23,7 +23,7 @@ MG Intelligence Hub 是面向重症肌无力（MG）医学事务团队的静态�
 
 | 用户问题 | 入口 |
 |---|---|
-| 近 14 天有哪些值得关注的 MG 信号？ | 情报中心 / 信号板；工作台信号摘要 |
+| 本周有哪些值得关注的 MG 信号？ | 情报中心 / 信号板；工作台信号摘要 |
 | 中国相关证据有哪些新变化？ | 情报中心 / 中国情报；诊治格局 / 中外差异 |
 | MG 领域证据形成了哪些主题网络？ | 知识库 / 知识图谱、社区视图、证据矩阵 |
 | 某个治疗问题现在可如何回答？ | 诊治格局 / Living Answers |
@@ -143,7 +143,7 @@ PubMed / ClinicalTrials.gov / EasyScholar / 中国监管状态 / 会议来源
 | `data/expert-profiles.js` | 2.4 KB manifest | 专家画像入口、分片路径 | MSL 同步加载 |
 | `data/expert-profiles-china.js` | 8,958 位 | 中国作者-机构索引 | MSL 同步加载 |
 | `data/expert-profiles-international.js` | 43,626 位 | 国外作者-机构索引，仅供离线分析 | 前端不加载 |
-| `data/source-signals.js` | 5 个来源频道 / 386 条频道项 | 文献、指南/共识、监管、注册、会议的独立信号摘要 | 情报中心同步加载 |
+| `data/source-signals.js` | 5 个来源频道 / 386 条频道项 | 文献、指南/共识、监管、注册、会议的独立信号摘要 | 后台缓存与管线审计；当前前台不展示 |
 | `data/guideline-consensus-cache.json` | 9 篇 | MG-core 且具有指南/共识主来源标志的独立缓存；不进入 I–V 文献流 | 构建脚本使用 |
 | `data/chictr-trials-cache.json` | tracked cache | ChiCTR 官方公开研究字段；人工官方导出刷新 | 构建脚本使用 |
 | `data/release-manifest.js` | 当前不存在 | 仅真实 required-step 管线完整成功后生成 coherent run id 与产物哈希 | 数据状态/发布审计 |
@@ -256,7 +256,7 @@ PubMed / ClinicalTrials.gov / EasyScholar / 中国监管状态 / 会议来源
 | Tab | 数据来源 | 用途 |
 |---|---|---|
 | 文献速览 | `literature-recent.js` | 近一年文献浏览、筛选、分页、证据等级展示 |
-| 信号板 | `signals-weekly.js` | 近 14 天 MG-core 聚合 Signal → Talking Points → Evidence |
+| 信号板 | `signals-weekly.js` | 当前 1 周 MG-core 聚合 Signal → Talking Points → Evidence |
 | 中国情报 | `china-intelligence.js` | 中国相关文献、方向、机构/作者线索 |
 | 会议资讯 | `conference-data.js` + `conference.js` | AAN / EAN 会议模块；MGFA / AANEM 仅保留待接入占位 |
 
@@ -309,7 +309,7 @@ EAN 2026 已完成外部文章引用核查。被引用的 31 条 EAN 摘要均�
 - `scripts/enrich-literature-narrative.py` 只负责证据边界内的语义归纳；所有 `refPmids` 必须来自输入记录，程序写入前会去重并核查公开引用覆盖率。
 - 每个 talking point 必须包含 `parentSignalId`、`priorityTier`、`whyKol`、`keyMessages` 和 `refs`；优先级为 `efgar → competitor_response → disease_progress`。
 - 无 API key 或 LLM 返回不合格 JSON 时，保留确定性 MG-core 聚合回退，不阻断基础周更。
-- 2026-07-22 的严格 recent 重建产物为 13 条父级 Signal、19 条 talking point、28 个唯一 PMID；每条 Signal 逐篇保存 finding、gapContribution 与 boundary，PMID 只在证据项中展示一次。该数量随近 14 天 PubMed 窗口变化，不应硬编码到前端逻辑。
+- 每条 Signal 逐篇保存 finding、gapContribution 与 boundary，PMID 只在证据项中展示一次。每次周更只分析当前 1 周 PubMed 批次，数量随本周输入变化，不应硬编码到前端逻辑。
 - 手动重建顺序：`python3 scripts/build-frontend-data.py` → `python3 scripts/enrich-literature-narrative.py` → `python3 scripts/generate-weekly-summary.py` → `python3 scripts/generate-pipeline-status.py`。只重建基础数据时，前两步中的第二步可跳过，但发布前必须确认 `signals-weekly.js` 的 `source_policy` 与 PMID 覆盖率。
 
 ---
@@ -422,7 +422,7 @@ python3 scripts/run-weekly-pipeline.py --run-id weekly-20260715 --resume --from-
 
 周增量先执行 MG-core，再调用证据分类器。明确 MG 题名、可靠 MG MeSH/关键词或重复 MG-core 提及可保留；非 MG 疾病主导题名和单次背景提及排除。之后仅证据等级 I–V 进入 PubMed 文献库。合并脚本对合并后的完整历史候选流再次执行两道门控，而不是只检查 weekly incoming。
 
-历史和 weekly 的 MG-core 指南/共识使用同一检测：研究类型标签之外，还要求 `Practice Guideline` / `Consensus Statement` 等 publication type，或题名中的明确指南/共识主来源标志，避免把正文中提到 guideline 的普通研究误路由。缓存按 PMID 原子、幂等更新，不进入证据文献流。未知、非指南且无 I–V 等级的记录不会进入任何公开证据频道。`source-signals.js` 分为文献证据、指南/共识、中国监管、试验注册和会议五个频道。会议频道只给摘要级信号，完整会议工作区仍留在会议 tab。
+历史和 weekly 的 MG-core 指南/共识使用同一检测：研究类型标签之外，还要求 `Practice Guideline` / `Consensus Statement` 等 publication type，或题名中的明确指南/共识主来源标志，避免把正文中提到 guideline 的普通研究误路由。缓存按 PMID 原子、幂等更新，不进入证据文献流。未知、非指南且无 I–V 等级的记录不会进入任何公开证据频道。`source-signals.js` 继续保留文献证据、指南/共识、中国监管、试验注册和会议五个后台频道用于管线审计，但“其他来源动向”不再在信号板展示；完整会议工作区仍留在会议 tab。
 
 只重建严格 recent、指南缓存、来源频道和状态，不合并 weekly、不写 full：
 

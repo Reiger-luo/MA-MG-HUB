@@ -111,10 +111,40 @@ def test_signal_summary_helper_aggregates_all_normalized_signals_deterministical
         {"label": "FcRn", "count": 2},
         {"label": "安全性", "count": 2},
     ]
-    assert summary["overview"].startswith("近 14 天共形成 4 条信号")
+    assert summary["overview"].startswith("本周共形成 4 条信号")
     assert "治疗证据" in summary["overview"]
     assert "主题乙" in summary["overview"]
     assert "疗效" in summary["overview"]
+
+
+def test_signal_builder_uses_one_week_window():
+    builder = load_enrichment_module().load_builder_module()
+    fetch_source = (PROJECT / "scripts" / "fetch-pubmed-weekly.py").read_text(encoding="utf-8")
+    current = sample_article("current", level="II")
+    current.update({
+        "title": "Randomized trial of efgartigimod in myasthenia gravis",
+        "abstract": "Results: Efgartigimod improved efficacy outcomes in myasthenia gravis.",
+        "entry_date": "2026-07-20",
+    })
+    older = sample_article("older", level="II")
+    older.update({
+        "title": "Randomized trial of efgartigimod in myasthenia gravis",
+        "abstract": "Results: Efgartigimod improved efficacy outcomes in myasthenia gravis.",
+        "entry_date": "2026-07-12",
+    })
+
+    payload = builder.build_signals([current, older])
+    included_pmids = {
+        pmid
+        for signal in payload["signals"]
+        for pmid in signal.get("related_pmids", [])
+    }
+
+    assert builder.SIGNAL_WINDOW_DAYS == 7
+    assert payload["window_days"] == 7
+    assert included_pmids == {"current"}
+    assert "WINDOW_DAYS = 7" in fetch_source
+    assert "WINDOW_DAYS = 14" not in fetch_source
 
 
 def test_dashboard_build_and_enrichment_both_refresh_signal_summary():

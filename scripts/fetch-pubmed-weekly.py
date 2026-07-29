@@ -2,11 +2,11 @@
 """
 fetch-pubmed-weekly.py — MG-HUB PubMed 数据管线
 
-每周抓取过去 14 天新上线的 MG 相关文献，输出 data/literature-weekly.json。
+每周抓取当前 1 周新上线的 MG 相关文献，输出 data/literature-weekly.json。
 
 检索策略：
   ("Myasthenia Gravis"[MeSH] OR myasthenia gravis[Title/Abstract])
-  AND [Date - Entry] 14天窗口
+  AND [Date - Entry] 7 天窗口
 
 字段说明：
   - study_types / evidence_level 留空，待后处理管线回填
@@ -23,7 +23,7 @@ from pathlib import Path
 
 # ── 配置 ──────────────────────────────────────────────
 BASE_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
-WINDOW_DAYS = 14      # 时间窗天数
+WINDOW_DAYS = 7       # 时间窗天数
 RETMAX = 10000         # 最大返回数（safe upper bound）
 BATCH_SIZE = 200
 

@@ -189,9 +189,8 @@
   <section class="intel-tab-panel" id="tab-signals">
     <div class="signal-topline">
       <div>
-        <div class="section-kicker">滚动 14 天窗口 · 每周更新</div>
+        <div class="section-kicker">当前 1 周 · 每周更新</div>
         <h2>信号板</h2>
-        <p class="signal-page-intro">先看本期判断，再逐篇核对研究结果与 PMID；每条证据只出现一次，KOL 要点不重复堆叠引用。</p>
       </div>
       <div class="signal-filter" id="signalFilter">
         <button class="signal-filter-btn active" type="button" data-signal-filter="all">全部</button>
@@ -215,7 +214,7 @@
         <details class="signal-method-details">
           <summary>查看筛选与强度口径</summary>
           <div class="signal-spec">
-            <p>滚动 14 天；先做 MG-core 相关性与证据等级 I–V 门控，再按治疗、机制、人群和路径聚合。</p>
+            <p>仅分析本周更新；先做 MG-core 相关性与证据等级 I–V 门控，再按治疗、机制、人群和路径聚合。</p>
             <ul>
               <li><strong>强</strong>：I/II 级，或 IF ≥ 10 且不是 V 级机制推理。</li>
               <li><strong>中</strong>：IF ≥ 5、III/IV 级或中国相关。</li>
@@ -225,16 +224,6 @@
         </details>
       </aside>
     </div>
-    <section class="source-signal-board" aria-label="独立来源信号频道">
-      <div class="source-signal-head">
-        <div>
-          <h3>其他来源动向</h3>
-          <p>指南/共识、监管、试验注册与会议线索单独呈现，不与上方 PubMed 证据混合分级。</p>
-        </div>
-        <div class="source-signal-channels" id="sourceSignalChannels"></div>
-      </div>
-      <div class="source-signal-cards" id="sourceSignalCards"></div>
-    </section>
   </section>
 
   <section class="intel-tab-panel" id="tab-china">
@@ -382,7 +371,6 @@
 <script src="../assets/common.js"></script>
 <script src="../data/literature-recent.js?v=20260619"></script>
 <script src="../data/signals-weekly.js"></script>
-<script src="../data/source-signals.js"></script>
 <script src="../data/communityTaxonomy.js"></script>
 <script src="../data/clinical-trials-data.js"></script>
 <script src="../assets/literature.js?v=20260729"></script>

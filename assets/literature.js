@@ -9,7 +9,6 @@
   let signalFilter = 'all';
   let signalTopicFilter = null;
   let signalDeepLinkHandled = false;
-  let sourceSignalChannel = 'literatureEvidence';
   let chinaMonthlyChart = null;
   let chinaEvidenceChart = null;
   let chinaQuartileChart = null;
@@ -22,7 +21,7 @@
   let communityOptionById = {};
   let currentPage = 0;
   const PAGE_SIZE = 10;
-  const SIGNAL_WINDOW_DAYS = 14;
+  const SIGNAL_WINDOW_DAYS = 7;
   var echartsLoading = false;
   var chinaDataLoading = false;
   var echartsCallbacks = [];
@@ -952,49 +951,6 @@
     signalItems.sort(compareSignals);
   }
 
-  function renderSourceSignalChannels() {
-    var payload = window.MG_SOURCE_SIGNALS || { channels: [] };
-    var channels = payload.channels || [];
-    var channelHost = document.getElementById('sourceSignalChannels');
-    var cardHost = document.getElementById('sourceSignalCards');
-    if (!channelHost || !cardHost) return;
-    if (!channels.length) {
-      channelHost.innerHTML = '';
-      cardHost.innerHTML = '<div class="empty-state small"><h3>来源频道缓存为空</h3><p>不影响证据文献主列表。</p></div>';
-      return;
-    }
-    if (!channels.some(function(channel) { return channel.id === sourceSignalChannel; })) {
-      sourceSignalChannel = channels[0].id;
-    }
-    channelHost.innerHTML = channels.map(function(channel) {
-      var active = channel.id === sourceSignalChannel;
-      return '<button type="button" class="source-signal-btn' + (active ? ' active' : '') + '" data-source-channel="' + escapeHtml(channel.id) + '" aria-pressed="' + active + '">' +
-        escapeHtml(channel.label) + '<strong>' + (channel.items || []).length + '</strong></button>';
-    }).join('');
-    var selected = channels.filter(function(channel) { return channel.id === sourceSignalChannel; })[0];
-    var items = (selected.items || []).slice(0, 4);
-    cardHost.innerHTML = items.map(function(item) {
-      var source = item.registry ? item.registry + ' · ' + (item.registry_id || item.id || '') : item.source || '';
-      var title = escapeHtml(item.title || '未命名信号');
-      var titleHtml = item.url
-        ? '<a href="' + escapeHref(item.url) + '" target="_blank" rel="noopener">' + title + '</a>'
-        : '<strong>' + title + '</strong>';
-      return '<article class="source-signal-card">' +
-        '<div class="source-signal-meta"><span>' + escapeHtml(source) + '</span><time>' + escapeHtml(item.date || '日期未标注') + '</time></div>' +
-        titleHtml +
-        '<div class="source-signal-status">' + escapeHtml(item.status || '状态未标注') +
-          (item.evidence_level ? ' · 证据 ' + escapeHtml(item.evidence_level) : '') + '</div>' +
-      '</article>';
-    }).join('') || '<div class="empty-state small"><h3>当前频道暂无缓存信号</h3><p>外部源失败时保留空态或最后良好缓存。</p></div>';
-    var buttons = channelHost.querySelectorAll('[data-source-channel]');
-    for (var i = 0; i < buttons.length; i++) {
-      buttons[i].addEventListener('click', function() {
-        sourceSignalChannel = this.getAttribute('data-source-channel');
-        renderSourceSignalChannels();
-      });
-    }
-  }
-
   function renderSignals() {
     if (!el.signalList || !el.signalSummary) return;
     var counts = { all: signalItems.length, '强': 0, '中': 0, '弱': 0, china: 0 };
@@ -1012,7 +968,7 @@
     }
 
     el.signalSummary.innerHTML =
-      '<div class="signal-stat-card"><span>14 天信号</span><strong>' + counts.all + '</strong></div>' +
+      '<div class="signal-stat-card"><span>本周信号</span><strong>' + counts.all + '</strong></div>' +
       '<div class="signal-stat-card strong"><span>强信号</span><strong>' + counts['强'] + '</strong></div>' +
       '<div class="signal-stat-card medium"><span>中信号</span><strong>' + counts['中'] + '</strong></div>' +
       '<div class="signal-stat-card china"><span>中国相关</span><strong>' + counts.china + '</strong></div>';
@@ -1031,7 +987,7 @@
     }
 
     if (filtered.length === 0) {
-      el.signalList.innerHTML = '<div class="empty-state"><h3>近 14 天暂无信号</h3><p>切换筛选条件或等待下一轮数据更新</p></div>';
+      el.signalList.innerHTML = '<div class="empty-state"><h3>本周暂无信号</h3><p>切换筛选条件或等待下一轮数据更新</p></div>';
     } else {
       var requestedSignal = getRequestedSignalId();
       if (!signalDeepLinkHandled && requestedSignal) {
@@ -1641,7 +1597,6 @@
 
       applyFilters();
       buildSignals();
-      renderSourceSignalChannels();
       renderSignals();
       window.addEventListener('resize', resizeChinaCharts);
       document.getElementById('updateBadge').textContent = '数据: ' + allArticles.length + ' 篇';

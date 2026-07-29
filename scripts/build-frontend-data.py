@@ -41,6 +41,7 @@ CHINA_REGULATORY_PATH = DATA_DIR / "china-regulatory-status.json"
 CLINICALTRIALS_CACHE_PATH = DATA_DIR / "clinicaltrials-pipeline-cache.json"
 CHICTR_CACHE_PATH = DATA_DIR / "chictr-trials-cache.json"
 FRONTEND_QUICK_EXPERT_LIMIT = 20
+SIGNAL_WINDOW_DAYS = 7
 
 CHINA_PROFILE_TERMS = [
     "china", "chinese", "people's republic of china", "pr china",
@@ -1411,7 +1412,7 @@ def build_cluster_signal(cluster_id, members, latest, signal_index):
 
 def build_signals(recent):
     latest = max((parse_date(a.get("entry_date")) for a in recent if parse_date(a.get("entry_date"))), default=datetime.now())
-    cutoff = latest - timedelta(days=14)
+    cutoff = latest - timedelta(days=SIGNAL_WINDOW_DAYS)
     candidates = defaultdict(list)
     topic_counter = Counter()
     excluded_conference_records = 0
@@ -1448,7 +1449,7 @@ def build_signals(recent):
             strength = "强"
         elif if_val >= 5 or level in {"III", "IV"} or article.get("china_related"):
             strength = "中"
-        score = if_val + evidence_score(level) + (14 - (latest - dt).days) / 3
+        score = if_val + evidence_score(level) + (SIGNAL_WINDOW_DAYS - (latest - dt).days) / 3
         if article.get("china_related"):
             score += 1.5
         if case_report:
@@ -1486,7 +1487,7 @@ def build_signals(recent):
     signals = [build_cluster_signal(cluster_id, members, latest, idx) for idx, (cluster_id, members) in enumerate(ordered_clusters, 1)]
     return {
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "window_days": 14,
+        "window_days": SIGNAL_WINDOW_DAYS,
         "source_artifact": "data/literature-recent.js",
         "source_policy": {
             "scope": "literature_only",
@@ -1547,7 +1548,7 @@ def build_signal_summary(signals):
     top_topics = rank_counts(topic_counts, topic_order, 3)
     strong_themes = strong_themes[:2]
     total_count = len(normalized)
-    overview_parts = [f"近 14 天共形成 {total_count} 条信号"]
+    overview_parts = [f"本周共形成 {total_count} 条信号"]
     if leading_types:
         overview_parts.append(
             "信号类型以" + "、".join(
@@ -2686,7 +2687,7 @@ def build_dashboard(recent, signals, experts, china, landscape, modules, total_c
             "title": "情报中心",
             "href": "pages/literature.html",
             "metric": f"{len(signals['signals'])} 条信号",
-            "summary": "近一年文献、近 14 天信号、主题热点和中国相关证据。",
+            "summary": "近一年文献、本周信号、主题热点和中国相关证据。",
             "facts": [
                 f"近一年 {len(recent)} 篇",
                 f"中国相关 {china['summary']['recent_year_articles']} 篇",
@@ -2756,7 +2757,7 @@ def build_dashboard(recent, signals, experts, china, landscape, modules, total_c
         },
         "stat_cards": [
             {"label": "近一年文献", "value": len(recent), "note": f"full {total_count} 篇"},
-            {"label": "14 天信号", "value": len(signals["signals"]), "note": "规则评分候选"},
+            {"label": "本周信号", "value": len(signals["signals"]), "note": "规则评分候选"},
             {"label": "中国证据", "value": china["summary"]["recent_year_articles"], "note": f"高等级 {china['summary'].get('high_evidence', 0)} 篇"},
             {"label": "作者画像", "value": expert_count, "note": f"中国 {expert_summary.get('indexed_china_experts', 0)} / 国外 {expert_summary.get('indexed_international_experts', 0)}"},
             {"label": "MSL 模块", "value": len(modules["modules"]), "note": f"学术 {module_summary.get('academic_modules', 0)} / 产品 {module_summary.get('product_modules', 0)}"},
@@ -2787,7 +2788,7 @@ def build_dashboard(recent, signals, experts, china, landscape, modules, total_c
         "signal_summary": build_signal_summary(signals["signals"]),
         "top_signals": signals["signals"][:5],
         "work_items": [
-            {"type": "文献", "label": "近 14 天信号", "count": len(signals["signals"]), "href": "pages/literature.html"},
+            {"type": "文献", "label": "本周信号", "count": len(signals["signals"]), "href": "pages/literature.html"},
             {"type": "专家", "label": "已构建专家画像", "count": expert_count, "href": "pages/msl.html"},
             {"type": "模块", "label": "MSL 内容模块", "count": sum(1 for m in modules["modules"] if not m["verified"]), "href": "pages/msl.html"},
             {"type": "证据", "label": "待确认证据矩阵", "count": len(landscape["evidence_questions"]), "href": "pages/landscape.html"},
@@ -2795,13 +2796,56 @@ def build_dashboard(recent, signals, experts, china, landscape, modules, total_c
     }
 
 
+def refresh_dashboard_signals(signals):
+    """仅刷新周信号及其首页摘要，避免窗口调整时重建无关数据产物。"""
+    dashboard_path = DATA_DIR / "dashboard-data.js"
+    if not dashboard_path.exists():
+        return
+    dashboard = load_public_js(dashboard_path, "MG_DASHBOARD_DATA")
+    signal_items = signals.get("signals") or []
+    dashboard["generated_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    dashboard.setdefault("stats", {})["signals"] = len(signal_items)
+    dashboard["signal_summary"] = build_signal_summary(signal_items)
+    dashboard["top_signals"] = signal_items[:5]
+
+    for stat_card in dashboard.get("stat_cards") or []:
+        if stat_card.get("label") in {"14 天信号", "本周信号"}:
+            stat_card["label"] = "本周信号"
+            stat_card["value"] = len(signal_items)
+            stat_card["note"] = "规则评分候选"
+
+    strong_count = sum(1 for item in signal_items if item.get("strength") == "强")
+    for section in dashboard.get("sections") or []:
+        if section.get("title") != "情报中心":
+            continue
+        section["metric"] = f"{len(signal_items)} 条信号"
+        section["summary"] = "近一年文献、本周信号、主题热点和中国相关证据。"
+        section["facts"] = [
+            f"强信号 {strong_count} 条" if str(fact).startswith("强信号") else fact
+            for fact in section.get("facts") or []
+        ]
+
+    for work_item in dashboard.get("work_items") or []:
+        if work_item.get("label") in {"近 14 天信号", "本周信号"}:
+            work_item["label"] = "本周信号"
+            work_item["count"] = len(signal_items)
+
+    write_js("dashboard-data.js", "MG_DASHBOARD_DATA", dashboard)
+
+
 def main():
     parser = argparse.ArgumentParser(description="Build public frontend data bundles")
     parser.add_argument("--rebuild-experts-from-full", action="store_true", help="手动从本地 full 快照重建专家画像")
+    parser.add_argument("--signals-only", action="store_true", help="仅重建本周信号及首页信号摘要")
     args = parser.parse_args()
 
     recent, full, total_count = load_articles_for_frontend(use_full_experts=args.rebuild_experts_from_full)
     signals = build_signals(recent)
+    if args.signals_only:
+        write_js("signals-weekly.js", "MG_SIGNALS_DATA", signals)
+        refresh_dashboard_signals(signals)
+        return
+
     china = build_china(recent)
     experts = load_or_build_experts(full, recent)
     landscape = build_landscape(recent)

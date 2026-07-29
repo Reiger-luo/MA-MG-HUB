@@ -25,7 +25,7 @@
 | 现有产物 | 当前接口 | 本计划用途 |
 |---|---|---|
 | `data/literature-recent.js` | `window.MG_LITERATURE_DATA` | 严格 MG-core + Evidence I–V 文献证据；问题检索、Claim 支持、Delta 新文献 |
-| `data/signals-weekly.js` | `window.MG_SIGNALS_DATA` | 近 14 天 Signal、talkingPoints、evidenceBoundary、PMID、KOL/机构公开线索 |
+| `data/signals-weekly.js` | `window.MG_SIGNALS_DATA` | 当前 1 周 Signal、talkingPoints、evidenceBoundary、PMID、KOL/机构公开线索 |
 | `data/source-signals.js` | `window.MG_SOURCE_SIGNALS` | 文献、指南/共识、中国监管、试验注册、会议五频道统一入口 |
 | `data/guideline-consensus-cache.json` | JSON `records[]` | 指南/共识来源；不赋 Oxford 等级 |
 | `data/landscape-data.js` | `window.MG_LANDSCAPE_DATA` | 6 个现有 Living Answers、竞争矩阵、临床管线、中国差异框架 |
