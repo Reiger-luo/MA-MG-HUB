@@ -133,6 +133,17 @@
           </div>
         </div>
 
+        <div class="filter-group">
+          <label class="filter-label">关联信号强度</label>
+          <div class="filter-checkbox-list" id="filterSignalStrengthList">
+            <label class="filter-checkbox-item"><input type="checkbox" value="all" checked id="signalStrengthAll"> 全部</label>
+            <label class="filter-checkbox-item"><input type="checkbox" value="强"> 强信号</label>
+            <label class="filter-checkbox-item"><input type="checkbox" value="中"> 中信号</label>
+            <label class="filter-checkbox-item"><input type="checkbox" value="弱"> 弱信号</label>
+          </div>
+          <div class="filter-hint">按本周信号板关联 PMID 筛选。</div>
+        </div>
+
         <div class="filter-stats">
           <span>筛选结果 <strong id="filterCount">0</strong> 篇</span>
         </div>
@@ -373,6 +384,6 @@
 <script src="../data/signals-weekly.js"></script>
 <script src="../data/communityTaxonomy.js"></script>
 <script src="../data/clinical-trials-data.js"></script>
-<script src="../assets/literature.js?v=20260729"></script>
+<script src="../assets/literature.js?v=20260729b"></script>
 </body>
 </html>

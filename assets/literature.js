@@ -8,6 +8,8 @@
   let signalItems = [];
   let signalFilter = 'all';
   let signalTopicFilter = null;
+  let articleSignalStrengthByPmid = {};
+  let activeIntelTab = 'literature';
   let signalDeepLinkHandled = false;
   let chinaMonthlyChart = null;
   let chinaEvidenceChart = null;
@@ -112,6 +114,7 @@
     filterIFList: $('filterIFList'),
     filterQuartileList: $('filterQuartileList'),
     filterEvidenceList: $('filterEvidenceList'),
+    filterSignalStrengthList: $('filterSignalStrengthList'),
     filterCommunityList: $('filterCommunityList'),
     communityFilterSummary: $('communityFilterSummary'),
     communityFilterStatus: $('communityFilterStatus'),
@@ -508,6 +511,7 @@
     var ifState = getCheckedValues(el.filterIFList);
     var quartileState = getCheckedValues(el.filterQuartileList);
     var evState = getCheckedValues(el.filterEvidenceList);
+    var signalStrengthState = getCheckedValues(el.filterSignalStrengthList);
 
     var allSelected = false;
     for (var s = 0; s < selectedMonths.length; s++) {
@@ -575,6 +579,12 @@
         if (!evMatch) continue;
       }
 
+      // 本周信号强度多选
+      if (!signalStrengthState.isAll && signalStrengthState.values.length > 0) {
+        var articleStrength = articleSignalStrengthByPmid[normalizePmid(a.pmid)] || '';
+        if (signalStrengthState.values.indexOf(articleStrength) === -1) continue;
+      }
+
       filteredResults.push(a);
     }
 
@@ -583,6 +593,7 @@
     updateCommunityFilterStatus(selectedCommunityIds, filteredResults.length);
     if (resetPage) currentPage = 0;
     renderResults();
+    updateExportButton();
   }
 
   function renderResults() {
@@ -649,6 +660,11 @@
     var impactFactor = formatImpactFactor(article.journal_if);
     if (impactFactor) tagsHTML += '<span class="badge-metric">IF ' + impactFactor + '</span>';
     if (article.journal_quartile) tagsHTML += '<span class="badge-metric">CAS ' + escapeHtml(String(article.journal_quartile)) + '</span>';
+    var articleSignalStrength = articleSignalStrengthByPmid[normalizePmid(article.pmid)] || '';
+    if (articleSignalStrength) {
+      var signalTone = { '强': 'strong', '中': 'medium', '弱': 'weak' }[articleSignalStrength] || 'weak';
+      tagsHTML += '<span class="badge-signal ' + signalTone + '">' + escapeHtml(articleSignalStrength) + '信号</span>';
+    }
     tagsHTML += renderArticleCommunityBadge(article);
 
     var pmidToken = safeIdToken(article.pmid || 'unknown');
@@ -719,6 +735,7 @@
 
   function bindTabs() {
     function handleTabChange(key) {
+      activeIntelTab = key || 'literature';
       if (key === 'china') {
         ensureChinaInsights();
         resizeChinaCharts();
@@ -732,7 +749,7 @@
         });
       }
       if (key === 'trials') { renderTrialsTab(); }
-      if (el.btnExport) el.btnExport.style.display = key === 'conference' ? 'none' : '';
+      updateExportButton();
     }
     var params = new URLSearchParams(window.location.search || '');
     var requestedTab = params.get('tab') || '';
@@ -951,6 +968,37 @@
     signalItems.sort(compareSignals);
   }
 
+  function rebuildArticleSignalStrengthIndex() {
+    articleSignalStrengthByPmid = {};
+    for (var i = 0; i < signalItems.length; i++) {
+      var item = signalItems[i];
+      var pmids = (item.related_pmids || []).slice();
+      if (item.article && item.article.pmid) pmids.push(item.article.pmid);
+      for (var j = 0; j < (item.refs || []).length; j++) {
+        if (item.refs[j] && item.refs[j].pmid) pmids.push(item.refs[j].pmid);
+      }
+      for (var k = 0; k < (item.evidenceItems || []).length; k++) {
+        if (item.evidenceItems[k] && item.evidenceItems[k].pmid) pmids.push(item.evidenceItems[k].pmid);
+      }
+      for (var p = 0; p < pmids.length; p++) {
+        var pmid = normalizePmid(pmids[p]);
+        if (!pmid) continue;
+        var previous = articleSignalStrengthByPmid[pmid] || '';
+        if (signalStrengthRank(item.strength) > signalStrengthRank(previous)) {
+          articleSignalStrengthByPmid[pmid] = item.strength;
+        }
+      }
+    }
+  }
+
+  function getFilteredSignalItems() {
+    return signalItems.filter(function(item) {
+      if (signalFilter !== 'all' && item.strength !== signalFilter) return false;
+      if (signalTopicFilter && item.topics.indexOf(signalTopicFilter) === -1) return false;
+      return true;
+    });
+  }
+
   function renderSignals() {
     if (!el.signalList || !el.signalSummary) return;
     var counts = { all: signalItems.length, '强': 0, '中': 0, '弱': 0, china: 0 };
@@ -973,18 +1021,7 @@
       '<div class="signal-stat-card medium"><span>中信号</span><strong>' + counts['中'] + '</strong></div>' +
       '<div class="signal-stat-card china"><span>中国相关</span><strong>' + counts.china + '</strong></div>';
 
-    var filtered = [];
-    for (var j = 0; j < signalItems.length; j++) {
-      var ok = signalFilter === 'all' || signalItems[j].strength === signalFilter;
-      if (ok && signalTopicFilter) {
-        var hasTopic = false;
-        for (var t = 0; t < signalItems[j].topics.length; t++) {
-          if (signalItems[j].topics[t] === signalTopicFilter) { hasTopic = true; break; }
-        }
-        ok = hasTopic;
-      }
-      if (ok) filtered.push(signalItems[j]);
-    }
+    var filtered = getFilteredSignalItems();
 
     if (filtered.length === 0) {
       el.signalList.innerHTML = '<div class="empty-state"><h3>本周暂无信号</h3><p>切换筛选条件或等待下一轮数据更新</p></div>';
@@ -1027,6 +1064,7 @@
         renderSignals();
       });
     }
+    updateExportButton();
   }
 
   function getRequestedSignalId() {
@@ -1554,6 +1592,7 @@
       wireCheckboxAll('filterIFList');
       wireCheckboxAll('filterQuartileList');
       wireCheckboxAll('filterEvidenceList');
+      wireCheckboxAll('filterSignalStrengthList');
 
       // 统计
       document.getElementById('statYear').textContent = allArticles.length;
@@ -1595,8 +1634,9 @@
       }
       document.getElementById('statEvDist').textContent = evParts.join(' · ');
 
-      applyFilters();
       buildSignals();
+      rebuildArticleSignalStrengthIndex();
+      applyFilters();
       renderSignals();
       window.addEventListener('resize', resizeChinaCharts);
       document.getElementById('updateBadge').textContent = '数据: ' + allArticles.length + ' 篇';
@@ -1607,41 +1647,221 @@
     }
   }
 
-  el.btnExport.addEventListener('click', function() {
-    var articles = filteredResults.length > 0 ? filteredResults : allArticles;
-    var now = new Date().toLocaleDateString('zh-CN');
+  function getLiteratureFilterSummary() {
+    var parts = [];
+    var keyword = (el.filterKeyword.value || '').trim();
+    if (keyword) parts.push('关键词：' + keyword);
+    var communityIds = getSelectedCommunityIds();
+    if (communityIds.length) {
+      parts.push('社区：' + communityIds.map(getCommunityTitle).join('、'));
+    }
+    var months = getSelectedMonths().filter(function(value) { return value !== 'all'; });
+    if (months.length) parts.push('月份：' + months.join('、'));
+    if (el.chinaOnly.checked) parts.push('仅中国相关');
 
-    // 生成 Markdown
-    var md = '# MA-MG-HUB 文献简报\n生成日期: ' + now + '\n\n当前筛选: ' + articles.length + ' 篇\n\n';
+    var ifState = getCheckedValues(el.filterIFList);
+    if (!ifState.isAll && ifState.values.length) parts.push('IF：' + ifState.values.join('、'));
+    var quartileState = getCheckedValues(el.filterQuartileList);
+    if (!quartileState.isAll && quartileState.values.length) parts.push('CAS：' + quartileState.values.map(function(value) { return value + '区'; }).join('、'));
+    var evidenceState = getCheckedValues(el.filterEvidenceList);
+    if (!evidenceState.isAll && evidenceState.values.length) parts.push('证据等级：' + evidenceState.values.join('、'));
+    var signalState = getCheckedValues(el.filterSignalStrengthList);
+    if (!signalState.isAll && signalState.values.length) parts.push('关联信号：' + signalState.values.join('、'));
+    return parts.length ? parts.join('；') : '近一年全部文献';
+  }
+
+  function buildArticleBrief(articles, title, scope) {
+    var now = new Date().toLocaleDateString('zh-CN');
+    var md = '# ' + title + '\n生成日期: ' + now + '\n\n页面范围: ' + scope + '\n当前结果: ' + articles.length + ' 篇\n\n';
     for (var i = 0; i < Math.min(articles.length, 50); i++) {
-      var a = articles[i];
-      var authors = (a.authors || []).slice(0, 3).join(', ');
+      var article = articles[i];
+      var authors = (article.authors || []).slice(0, 3).join(', ');
       var tags = [];
-      if (a.evidence_level) tags.push('证据等级 ' + a.evidence_level);
-      var impactFactor = formatImpactFactor(a.journal_if);
+      if (article.evidence_level) tags.push('证据等级 ' + article.evidence_level);
+      var impactFactor = formatImpactFactor(article.journal_if);
       if (impactFactor) tags.push('IF ' + impactFactor);
-      if (a.journal_quartile) tags.push('CAS ' + a.journal_quartile);
-      if (a.china_related) tags.push('中国相关');
-      md += (i+1) + '. ' + a.title + '\n';
-      md += '   作者: ' + (authors || '未知') + ' · 期刊: ' + (a.journal || '未知') + '\n';
-      md += '   PMID: ' + (a.pmid || '-') + (tags.length ? ' · ' + tags.join(' · ') : '') + '\n';
-      md += '   ' + a.url + '\n\n';
+      if (article.journal_quartile) tags.push('CAS ' + article.journal_quartile);
+      if (article.china_related) tags.push('中国相关');
+      var signalStrength = articleSignalStrengthByPmid[normalizePmid(article.pmid)];
+      if (signalStrength) tags.push(signalStrength + '信号');
+      md += (i + 1) + '. ' + (article.title || '(无标题)') + '\n';
+      md += '   作者: ' + (authors || '未知') + ' · 期刊: ' + (article.journal || '未知') + '\n';
+      md += '   PMID: ' + (article.pmid || '-') + (tags.length ? ' · ' + tags.join(' · ') : '') + '\n';
+      if (article.url) md += '   ' + article.url + '\n';
+      md += '\n';
     }
     if (articles.length > 50) md += '… 以及 ' + (articles.length - 50) + ' 篇\n';
+    if (!articles.length) md += '当前筛选没有匹配内容。\n';
+    return { title: title, md: md };
+  }
 
-    // 双栏弹窗
+  function uniqueSignalPmids(item) {
+    var pmids = [];
+    var seen = {};
+    var candidates = (item.related_pmids || []).slice();
+    if (item.article && item.article.pmid) candidates.push(item.article.pmid);
+    (item.refs || []).forEach(function(ref) { if (ref && ref.pmid) candidates.push(ref.pmid); });
+    (item.evidenceItems || []).forEach(function(evidence) { if (evidence && evidence.pmid) candidates.push(evidence.pmid); });
+    candidates.forEach(function(value) {
+      var pmid = normalizePmid(value);
+      if (!pmid || seen[pmid]) return;
+      seen[pmid] = true;
+      pmids.push(pmid);
+    });
+    return pmids;
+  }
+
+  function buildSignalBrief() {
+    var items = getFilteredSignalItems();
+    var now = new Date().toLocaleDateString('zh-CN');
+    var filters = [];
+    filters.push('强度：' + (signalFilter === 'all' ? '全部' : signalFilter));
+    if (signalTopicFilter) filters.push('主题：' + signalTopicFilter);
+    var md = '# MA-MG-HUB 信号简报\n生成日期: ' + now + '\n\n页面范围: 信号板（当前 1 周）\n当前筛选: ' + filters.join('；') + '\n信号数量: ' + items.length + ' 条\n\n';
+
+    items.forEach(function(item, index) {
+      var medicalAffairs = item.medical_affairs || {};
+      md += '## ' + (index + 1) + '. [' + (item.strength || '待判定') + '信号] ' + (item.title || item.summary || '未命名信号') + '\n';
+      md += '- 类型: ' + (item.type || '近期证据') + (item.topics.length ? ' · 主题: ' + item.topics.join('、') : '') + '\n';
+      if (item.takeaway || item.summary) md += '- 核心判断: ' + (item.takeaway || item.summary) + '\n';
+      if (item.whySignal) md += '- 为什么是信号: ' + item.whySignal + '\n';
+      if (item.gapFilled) md += '- 已补证据缺口: ' + item.gapFilled + '\n';
+      if (item.remainingGap || item.evidenceBoundary) md += '- 仍需验证: ' + (item.remainingGap || item.evidenceBoundary) + '\n';
+      if (item.maUse || medicalAffairs.implication || item.medical_affairs_implication) {
+        md += '- 医学事务应用: ' + (item.maUse || medicalAffairs.implication || item.medical_affairs_implication) + '\n';
+      }
+      if (medicalAffairs.msl_action) md += '- MSL 行动: ' + medicalAffairs.msl_action + '\n';
+      if (medicalAffairs.suggested_kol_question) md += '- KOL 问题: ' + medicalAffairs.suggested_kol_question + '\n';
+      var pmids = uniqueSignalPmids(item);
+      if (pmids.length) md += '- 关联 PMID: ' + pmids.join('、') + '\n';
+      md += '\n';
+    });
+    if (!items.length) md += '当前筛选没有匹配信号。\n';
+    return { title: 'MA-MG-HUB 信号简报', md: md };
+  }
+
+  function buildChinaBrief() {
+    var chinaPayload = window.MG_CHINA_DATA || null;
+    var articles = chinaPayload && chinaPayload.pubmed_articles
+      ? chinaPayload.pubmed_articles.slice()
+      : allArticles.filter(function(article) { return article.china_related; });
+    articles.sort(function(a, b) { return articleTimeValue(b) - articleTimeValue(a); });
+    var brief = buildArticleBrief(articles, 'MA-MG-HUB 中国情报简报', '中国情报 · 近一年中国相关文献');
+    var evidenceCounts = {};
+    articles.forEach(function(article) {
+      if (article.evidence_level) evidenceCounts[article.evidence_level] = (evidenceCounts[article.evidence_level] || 0) + 1;
+    });
+    var distribution = ['I', 'II', 'III', 'IV', 'V'].map(function(level) {
+      return level + '级 ' + (evidenceCounts[level] || 0) + ' 篇';
+    }).join(' · ');
+    brief.md = brief.md.replace('\n\n页面范围:', '\n证据分布: ' + distribution + '\n\n页面范围:');
+    return brief;
+  }
+
+  function buildConferenceBrief() {
+    var context = window.MgConferenceBrief && window.MgConferenceBrief.getContext
+      ? window.MgConferenceBrief.getContext()
+      : null;
+    var now = new Date().toLocaleDateString('zh-CN');
+    var moduleTitle = context && context.moduleTitle ? context.moduleTitle : '当前会议';
+    var filters = context && context.filters && context.filters.length ? context.filters.join('；') : '全部摘要';
+    var items = context && context.items ? context.items : [];
+    var md = '# MA-MG-HUB 会议简报\n生成日期: ' + now + '\n\n页面范围: 会议资讯 · ' + moduleTitle + '\n当前筛选: ' + filters + '\n摘要数量: ' + items.length + ' 条\n\n';
+    items.slice(0, 50).forEach(function(item, index) {
+      var insight = item.deepInsight || {};
+      md += (index + 1) + '. ' + (item.title || '未命名摘要') + '\n';
+      md += '   ' + [item.researchType, (item.countries || []).join('、'), (item.topics || []).join('、')].filter(Boolean).join(' · ') + '\n';
+      if (insight.clinicalReadoutZh) md += '   临床速读: ' + insight.clinicalReadoutZh + '\n';
+      if (insight.maImplicationZh) md += '   MA 启示: ' + insight.maImplicationZh + '\n';
+      if (insight.evidenceBoundaryZh) md += '   证据边界: ' + insight.evidenceBoundaryZh + '\n';
+      if (item.sourceUrl || item.pageUrl) md += '   ' + (item.sourceUrl || item.pageUrl) + '\n';
+      md += '\n';
+    });
+    if (items.length > 50) md += '… 以及 ' + (items.length - 50) + ' 条摘要\n';
+    if (!context) md += '会议模块仍在加载，请稍后再次导出。\n';
+    else if (!items.length) md += '当前筛选没有匹配摘要。\n';
+    return { title: 'MA-MG-HUB 会议简报', md: md };
+  }
+
+  function getPipelineFilterSummary() {
+    var parts = [];
+    var search = ((document.getElementById('pipelineFilterSearch') || {}).value || '').trim();
+    var status = (document.getElementById('pipelineFilterStatus') || {}).value || 'all';
+    var source = (document.getElementById('pipelineFilterSource') || {}).value || 'all';
+    var phase = (document.getElementById('pipelineFilterPhase') || {}).value || 'all';
+    if (search) parts.push('药物：' + search);
+    if (status !== 'all') parts.push('状态：' + status);
+    if (source !== 'all') parts.push('来源：' + source);
+    if (phase !== 'all') parts.push('阶段：' + phase);
+    return parts.length ? parts.join('；') : '全部管线';
+  }
+
+  function buildTrialsBrief() {
+    var rows = getFilteredPipelineRows();
+    var now = new Date().toLocaleDateString('zh-CN');
+    var md = '# MA-MG-HUB 临床试验简报\n生成日期: ' + now + '\n\n页面范围: 临床试验\n当前筛选: ' + getPipelineFilterSummary() + '\n管线数量: ' + rows.length + ' 个药物\n\n';
+    (trialsData.decision_signals || []).forEach(function(signal) {
+      md += '- ' + (signal.title || '决策信号') + ': ' + (signal.detail || '') + '\n';
+    });
+    if ((trialsData.decision_signals || []).length) md += '\n';
+    rows.slice(0, 50).forEach(function(row, index) {
+      md += (index + 1) + '. ' + (row.name || '未命名药物') + '\n';
+      md += '   ' + [row.drug_class, row.highest_phase_label, row.study_count + ' 项研究', row.status_summary].filter(Boolean).join(' · ') + '\n';
+      if (row.key_trial) {
+        md += '   关键登记: ' + (row.key_trial.registry_id || '-') + ' · ' + (row.key_trial.title || '') + '\n';
+        if (row.key_trial.url) md += '   ' + row.key_trial.url + '\n';
+      }
+      md += '\n';
+    });
+    if (rows.length > 50) md += '… 以及 ' + (rows.length - 50) + ' 个药物管线\n';
+    if (!rows.length) md += '当前筛选没有匹配管线。\n';
+    return { title: 'MA-MG-HUB 临床试验简报', md: md };
+  }
+
+  function buildCurrentBrief() {
+    if (activeIntelTab === 'signals') return buildSignalBrief();
+    if (activeIntelTab === 'china') return buildChinaBrief();
+    if (activeIntelTab === 'conference') return buildConferenceBrief();
+    if (activeIntelTab === 'trials') return buildTrialsBrief();
+    return buildArticleBrief(filteredResults, 'MA-MG-HUB 文献简报', '文献速览 · ' + getLiteratureFilterSummary());
+  }
+
+  function updateExportButton() {
+    if (!el.btnExport) return;
+    var label = '导出文献简报';
+    var detail = filteredResults.length + ' 篇当前筛选文献';
+    if (activeIntelTab === 'signals') {
+      label = signalFilter === 'all' ? '导出信号简报' : '导出' + signalFilter + '信号简报';
+      detail = getFilteredSignalItems().length + ' 条当前筛选信号';
+    } else if (activeIntelTab === 'china') {
+      label = '导出中国简报';
+      detail = allArticles.filter(function(article) { return article.china_related; }).length + ' 篇中国相关文献';
+    } else if (activeIntelTab === 'conference') {
+      label = '导出会议简报';
+      detail = '当前会议及摘要筛选';
+    } else if (activeIntelTab === 'trials') {
+      label = '导出试验简报';
+      detail = getFilteredPipelineRows().length + ' 个当前筛选药物管线';
+    }
+    el.btnExport.textContent = '\uD83D\uDCCB ' + label;
+    el.btnExport.title = '将导出' + detail;
+    el.btnExport.setAttribute('aria-label', label + '，' + detail);
+    el.btnExport.style.display = '';
+  }
+
+  function openBriefModal(brief) {
     var d = document.createElement('div');
     d.className = 'modal-overlay open';
     var closeBtn = '<button class="modal-close" type="button" data-brief-close="1">\u2715</button>';
     var preId = 'brief_' + Date.now();
     d.innerHTML =
-      '<div class="modal literature-brief-modal">' +
+      '<div class="modal literature-brief-modal" role="dialog" aria-modal="true" aria-label="' + escapeHtml(brief.title) + '">' +
         closeBtn +
-        '<h2>\uD83D\uDCCB 文献简报</h2>' +
+        '<h2>\uD83D\uDCCB ' + escapeHtml(brief.title.replace(/^MA-MG-HUB\s*/, '')) + '</h2>' +
         '<div class="literature-brief-layout">' +
           '<div class="literature-brief-preview">' +
             '<div class="literature-brief-label">预览</div>' +
-            '<pre id="' + preId + '" class="literature-brief-pre">' + escapeHtml(md) + '</pre>' +
+            '<pre id="' + preId + '" class="literature-brief-pre">' + escapeHtml(brief.md) + '</pre>' +
           '</div>' +
           '<div class="literature-brief-actions">' +
             '<div class="literature-brief-label">操作</div>' +
@@ -1652,9 +1872,19 @@
       '</div>';
     document.body.appendChild(d);
 
-    d.querySelector('[data-brief-close]').addEventListener('click', function() {
-      d.classList.remove('open');
+    function closeBrief() {
+      document.removeEventListener('keydown', handleKeydown);
+      d.remove();
+    }
+
+    function handleKeydown(event) {
+      if (event.key === 'Escape') closeBrief();
+    }
+
+    d.addEventListener('click', function(event) {
+      if (event.target === d || event.target.getAttribute('data-brief-close') === '1') closeBrief();
     });
+    document.addEventListener('keydown', handleKeydown);
 
     document.getElementById('copy_' + preId).addEventListener('click', function() {
       var text = document.getElementById(preId).textContent;
@@ -1664,6 +1894,10 @@
         setTimeout(function() { self.textContent = '\uD83D\uDCCB 复制'; }, 1500);
       }.bind(this));
     });
+  }
+
+  el.btnExport.addEventListener('click', function() {
+    openBriefModal(buildCurrentBrief());
   });
 
   // ── 临床试验 tab ──
@@ -1737,9 +1971,7 @@
     }
   }
 
-  function renderPipelineMatrix() {
-    var container = document.getElementById('pipelineMatrixContainer');
-    if (!container) return;
+  function getFilteredPipelineRows() {
     var matrix = trialsData.pipeline_matrix || [];
 
     var searchVal = ((document.getElementById('pipelineFilterSearch') || {}).value || '').trim().toLowerCase();
@@ -1747,7 +1979,7 @@
     var sourceFilter = (document.getElementById('pipelineFilterSource') || {}).value || 'all';
     var phaseFilter = (document.getElementById('pipelineFilterPhase') || {}).value || 'all';
 
-    var filtered = matrix.filter(function(row) {
+    return matrix.filter(function(row) {
       // Drug name fuzzy search (case-insensitive, supports Chinese)
       if (searchVal && (row.name || '').toLowerCase().indexOf(searchVal) === -1) return false;
       // Status: at least one trial matches
@@ -1764,6 +1996,14 @@
       if (phaseFilter !== 'all' && row.highest_phase_label !== phaseFilter) return false;
       return true;
     });
+  }
+
+  function renderPipelineMatrix() {
+    var container = document.getElementById('pipelineMatrixContainer');
+    if (!container) return;
+    var searchVal = ((document.getElementById('pipelineFilterSearch') || {}).value || '').trim().toLowerCase();
+    var filtered = getFilteredPipelineRows();
+    updateExportButton();
 
     if (!filtered.length) {
       container.innerHTML = '<div class="kg-empty-hint">当前筛选无结果。</div>';

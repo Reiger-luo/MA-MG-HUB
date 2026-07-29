@@ -1033,5 +1033,24 @@
     render();
   }
 
+  // 向情报中心统一导出入口提供当前会议与筛选后的摘要。
+  window.MgConferenceBrief = {
+    getContext: function() {
+      var module = getModule(state.activeModule);
+      var filters = [];
+      if (state.country !== 'all') filters.push('国家/地区：' + state.country);
+      if (state.researchType !== 'all') filters.push('研究类型：' + state.researchType);
+      if (state.chinaOnly) filters.push('仅中国相关');
+      if (state.topic) filters.push('标签：' + state.topic);
+      if (state.keyword) filters.push('关键词：' + state.keyword);
+      return {
+        moduleId: module.id,
+        moduleTitle: module.title,
+        filters: filters,
+        items: filteredItems.slice()
+      };
+    }
+  };
+
   init();
 })();
