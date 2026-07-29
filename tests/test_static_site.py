@@ -36,20 +36,27 @@ def test_common_js_blocks_dangerous_url_protocols():
     assert "resolved.protocol === 'https:'" in common
 
 
-def test_dashboard_keeps_only_full_width_recent_signals_module():
+def test_dashboard_is_action_first_workbench():
     html = (PROJECT / "index.html").read_text(encoding="utf-8")
     dashboard_js = (PROJECT / "assets" / "dashboard.js").read_text(encoding="utf-8")
-    dashboard_data = (PROJECT / "data" / "dashboard-data.js").read_text(encoding="utf-8")
 
-    assert 'class="dashboard-grid dashboard-grid-single"' in html
-    assert 'id="dashboardWorkflows"' not in html
-    assert 'id="dashboardHealth"' not in html
-    assert "当前工作流" not in html
-    assert "数据健康" not in html
+    assert 'href="#mainContent"' in html
+    assert 'aria-current="page"' in html
+    assert 'id="dashboardReleaseStatus"' in html
+    assert 'id="dashboardTrials"' in html
+    assert "clinicalTrialsSummary.js" in html
+    assert html.index('id="dashboardSignals"') < html.index('id="dashboardCommunityDynamics"')
+    assert 'id="dashboardReviewQueue"' not in html
+    assert 'id="dashboardSections"' not in html
+    assert "待医学复核" not in html
+    assert "工作区入口" not in html
+    assert "communityAudit.js" not in html
 
-    assert "renderWorkflows" not in dashboard_js
-    assert "renderHealth" not in dashboard_js
-
-    # 仅取消首页展示，不改动生成数据契约。
-    assert '"workflows"' in dashboard_data
-    assert '"data_health"' in dashboard_data
+    assert "renderReleaseStatus" in dashboard_js
+    assert "renderTrials" in dashboard_js
+    assert "renderReviewQueue" not in dashboard_js
+    assert "renderSections" not in dashboard_js
+    assert "signalDetailUrl" in dashboard_js
+    assert "level === 'active'" in dashboard_js
+    assert "row.high_evidence_count != null" in dashboard_js
+    assert "row.high_evidence_count ||" not in dashboard_js

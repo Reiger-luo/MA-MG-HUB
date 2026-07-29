@@ -9,6 +9,8 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
 from common.pipeline_runner import (
     PipelineFailure,
     PipelineRunner,
@@ -80,6 +82,11 @@ def pipeline_steps(args, full_available: bool | None = None) -> list[PipelineSte
         PipelineStep("build-landscape-insights", py("buildLandscapeInsights.py"), outputs=[DATA / "landscapeInsights.js"]),
         PipelineStep("build-backend-options", py("buildBackendOptions.py"), outputs=[DATA / "backendOptions.js"]),
         PipelineStep("refresh-chictr-cache", py("refresh-chictr-cache.py"), outputs=[DATA / "chictr-trials-cache.json"], optional=True),
+        PipelineStep(
+            "build-clinical-trials",
+            py("build-clinical-trials-data.py"),
+            outputs=[DATA / "clinical-trials-data.js", DATA / "clinicalTrialsSummary.js"],
+        ),
         PipelineStep("build-source-signals", py("build-source-signals.py"), outputs=[DATA / "source-signals.js"]),
         PipelineStep("generate-weekly-summary", py("generate-weekly-summary.py"), outputs=[DATA / "weekly-summary.md"]),
     ])

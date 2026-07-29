@@ -23,6 +23,7 @@ CT_CACHE_PATH = DATA_DIR / "clinicaltrials-pipeline-cache.json"
 CHICTR_CACHE_PATH = DATA_DIR / "chictr-trials-cache.json"
 CHINA_DRUG_TRIALS_CACHE_PATH = DATA_DIR / "china-drug-trials-cache.json"
 OUTPUT_PATH = DATA_DIR / "clinical-trials-data.js"
+summaryOutputPath = DATA_DIR / "clinicalTrialsSummary.js"
 
 SOURCE_ORDER = ["ClinicalTrials.gov", "ChiCTR", "ChinaDrugTrials"]
 INDICATION = "重症肌无力"
@@ -694,12 +695,19 @@ def build_payload() -> dict[str, Any]:
     sources = [
         {
             "source": "ClinicalTrials.gov",
-            "meta": {"generated_at": ct_generated_at, "mode": "cache"},
+            "meta": {
+                "generated_at": ct_generated_at,
+                "mode": str(ct_payload.get("mode") or "cache"),
+            },
             "records": records_by_source["ClinicalTrials.gov"],
         },
         {
             "source": "ChiCTR",
-            "meta": {"generated_at": chictr_generated_at, "mode": "cache"},
+            "meta": {
+                "generated_at": chictr_generated_at,
+                "mode": str(chictr_payload.get("mode") or "cache"),
+                "warning": str(chictr_payload.get("warning") or ""),
+            },
             "records": records_by_source["ChiCTR"],
         },
         {
@@ -707,7 +715,10 @@ def build_payload() -> dict[str, Any]:
             "meta": {
                 "generated_at": date_part(china_payload.get("generated_at") or china_payload.get("last_verified")),
                 "mode": china_mode,
-                "warning": str(china_payload.get("warning") or "无已验证数据源"),
+                "warning": str(
+                    china_payload.get("warning")
+                    or ("无已验证数据源" if not china_records else "")
+                ),
             },
             "records": china_records,
         },
@@ -727,6 +738,57 @@ def build_payload() -> dict[str, Any]:
     }
 
 
+def buildSummaryPayload(payload: dict[str, Any]) -> dict[str, Any]:
+    """生成首页使用的轻量三源试验摘要，避免加载完整矩阵。"""
+    records = [
+        record
+        for source in payload.get("sources", [])
+        for record in source.get("records", [])
+    ]
+    recruitingKeys = {"RECRUITING", "ENROLLING_BY_INVITATION"}
+    recruitingCount = sum(
+        re.sub(r"[\s-]+", "_", str(record.get("status") or "").upper()) in recruitingKeys
+        for record in records
+    )
+    knownClassCounts = Counter(
+        record["drug_class"]
+        for record in records
+        if record.get("drug_class") not in {"", "其他"}
+    )
+    leadingMechanism = {}
+    if knownClassCounts:
+        leadingLabel, leadingCount = sorted(
+            knownClassCounts.items(),
+            key=lambda item: (-item[1], item[0]),
+        )[0]
+        leadingMechanism = {"label": leadingLabel, "count": leadingCount}
+
+    generatedAt = str((payload.get("meta") or {}).get("generated_at") or "")
+    referenceDate = parse_iso_date(generatedAt)
+    cutoff = six_month_cutoff(referenceDate) if referenceDate else None
+    recentRegistrationCount = sum(
+        bool(registeredDate and cutoff and cutoff <= registeredDate <= referenceDate)
+        for registeredDate in (parse_iso_date(record.get("registered_date")) for record in records)
+    )
+    sourceCounts = [
+        {
+            "source": source.get("source") or "",
+            "count": len(source.get("records") or []),
+            "mode": (source.get("meta") or {}).get("mode") or "",
+        }
+        for source in payload.get("sources", [])
+    ]
+    return {
+        "meta": payload.get("meta") or {},
+        "pipeline_matrix_count": len(payload.get("pipeline_matrix") or []),
+        "recruiting_count": recruitingCount,
+        "recent_registration_count": recentRegistrationCount,
+        "leading_mechanism": leadingMechanism,
+        "source_counts": sourceCounts,
+        "decision_signals": payload.get("decision_signals") or [],
+    }
+
+
 def main() -> None:
     """生成可由浏览器直接加载的 JavaScript 数据文件。"""
     payload = build_payload()
@@ -736,7 +798,15 @@ def main() -> None:
         indent=2,
     ) + ";\n"
     OUTPUT_PATH.write_text(output, encoding="utf-8")
+    summaryPayload = buildSummaryPayload(payload)
+    summaryOutput = "window.MG_CLINICAL_TRIALS_SUMMARY = " + json.dumps(
+        summaryPayload,
+        ensure_ascii=False,
+        indent=2,
+    ) + ";\n"
+    summaryOutputPath.write_text(summaryOutput, encoding="utf-8")
     print(f"Wrote {payload['meta']['total_count']} records to {OUTPUT_PATH.relative_to(PROJECT_ROOT)}")
+    print(f"Wrote dashboard summary to {summaryOutputPath.relative_to(PROJECT_ROOT)}")
 
 
 if __name__ == "__main__":

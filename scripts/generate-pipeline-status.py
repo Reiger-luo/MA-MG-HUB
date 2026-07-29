@@ -27,6 +27,8 @@ PUBLIC_ARTIFACTS = [
     ("literature-full-index.js", "全库文献轻索引", "MG_LITERATURE_FULL_INDEX"),
     ("signals-weekly.js", "候选信号", "MG_SIGNALS_DATA"),
     ("source-signals.js", "独立来源信号频道", "MG_SOURCE_SIGNALS"),
+    ("clinical-trials-data.js", "三源临床试验数据", "MG_CLINICAL_TRIALS_DATA"),
+    ("clinicalTrialsSummary.js", "首页临床试验摘要", "MG_CLINICAL_TRIALS_SUMMARY"),
     ("release-manifest.js", "一致性发布清单", "MG_RELEASE_MANIFEST"),
     ("china-intelligence.js", "中国情报", "MG_CHINA_DATA"),
     ("expert-profiles.js", "专家画像", "MG_EXPERT_PROFILES"),
@@ -483,11 +485,15 @@ def buildStatus():
     regulatoryPath = DATA_DIR / "china-regulatory-status.json"
     clinicalTrialsPath = DATA_DIR / "clinicaltrials-pipeline-cache.json"
     chictrPath = DATA_DIR / "chictr-trials-cache.json"
+    chinaDrugTrialsPath = DATA_DIR / "china-drug-trials-cache.json"
+    chinaDrugTrialsChangesPath = DATA_DIR / "china-drug-trials-changes.json"
     localFullCount = None
     weeklyCount = None
     regulatoryPayload = {}
     clinicalTrialsPayload = {}
     chictrPayload = {}
+    chinaDrugTrialsPayload = {}
+    chinaDrugTrialsChanges = {}
     if fullPath.exists():
         localFullCount = len(loadJson(fullPath))
     if weeklyPath.exists():
@@ -498,6 +504,10 @@ def buildStatus():
         clinicalTrialsPayload = loadJson(clinicalTrialsPath)
     if chictrPath.exists():
         chictrPayload = loadJson(chictrPath)
+    if chinaDrugTrialsPath.exists():
+        chinaDrugTrialsPayload = loadJson(chinaDrugTrialsPath)
+    if chinaDrugTrialsChangesPath.exists():
+        chinaDrugTrialsChanges = loadJson(chinaDrugTrialsChangesPath)
 
     recentCount = len(literature)
     declaredRollingCount = readWindowNumber(DATA_DIR / "literature-recent.js", "MG_PUBLIC_ROLLING_COUNT")
@@ -571,6 +581,22 @@ def buildStatus():
             ),
             "status": "ok" if chictrPayload else "manual",
             "status_label": "缓存可用" if chictrPayload else "待接入",
+        },
+        {
+            "id": "chinaDrugTrials",
+            "name": "ChinaDrugTrials 人工月更",
+            "meta": (
+                f"MG 登记记录 {len(chinaDrugTrialsPayload.get('records') or [])} 项 · "
+                f"mode={chinaDrugTrialsPayload.get('mode', 'cache')} · "
+                f"更新 {chinaDrugTrialsPayload.get('generated_at') or '待提交'} · "
+                f"最近差异 +{chinaDrugTrialsChanges.get('added_count', 0)} "
+                f"~{chinaDrugTrialsChanges.get('updated_count', 0)} "
+                f"-{chinaDrugTrialsChanges.get('removed_count', 0)}"
+                if chinaDrugTrialsPayload
+                else "等待 ChinaDrugTrials 官方月度导出"
+            ),
+            "status": "ok" if chinaDrugTrialsPayload else "manual",
+            "status_label": "缓存可用" if chinaDrugTrialsPayload else "待提交",
         },
         {
             "id": "regulatory",

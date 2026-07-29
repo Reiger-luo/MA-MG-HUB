@@ -8,6 +8,7 @@
   let signalItems = [];
   let signalFilter = 'all';
   let signalTopicFilter = null;
+  let signalDeepLinkHandled = false;
   let sourceSignalChannel = 'literatureEvidence';
   let chinaMonthlyChart = null;
   let chinaEvidenceChart = null;
@@ -907,6 +908,7 @@
     if (window.MG_SIGNALS_DATA && window.MG_SIGNALS_DATA.signals) {
       signalItems = window.MG_SIGNALS_DATA.signals.map(function(signal) {
         return {
+          id: signal.id || '',
           article: signal.article || {},
           date: parseDate(signal.date || signal.article && signal.article.entry_date),
           type: signal.type || '新证据',
@@ -1031,11 +1033,26 @@
     if (filtered.length === 0) {
       el.signalList.innerHTML = '<div class="empty-state"><h3>近 14 天暂无信号</h3><p>切换筛选条件或等待下一轮数据更新</p></div>';
     } else {
+      var requestedSignal = getRequestedSignalId();
+      if (!signalDeepLinkHandled && requestedSignal) {
+        for (var r = 0; r < signalItems.length; r++) {
+          if (String(signalItems[r].id || '') !== requestedSignal) continue;
+          var requestedIndex = filtered.indexOf(signalItems[r]);
+          if (requestedIndex > 0) {
+            filtered.splice(requestedIndex, 1);
+            filtered.unshift(signalItems[r]);
+          } else if (requestedIndex === -1) {
+            filtered.unshift(signalItems[r]);
+          }
+          break;
+        }
+      }
       var html = '';
       for (var n = 0; n < Math.min(filtered.length, 24); n++) {
         html += renderSignalCard(filtered[n]);
       }
       el.signalList.innerHTML = html;
+      focusDeepLinkedSignal();
     }
 
     var topics = Object.keys(topicCounts).sort(function(a, b) { return topicCounts[b] - topicCounts[a]; });
@@ -1054,6 +1071,25 @@
         renderSignals();
       });
     }
+  }
+
+  function getRequestedSignalId() {
+    var params = new URLSearchParams(window.location.search || '');
+    return String(params.get('signal') || '');
+  }
+
+  function focusDeepLinkedSignal() {
+    if (signalDeepLinkHandled) return;
+    var requestedSignal = getRequestedSignalId();
+    if (!requestedSignal) return;
+    var target = document.getElementById('signal-' + safeIdToken(requestedSignal));
+    if (!target) return;
+    signalDeepLinkHandled = true;
+    target.classList.add('is-targeted');
+    window.requestAnimationFrame(function() {
+      target.focus({ preventScroll: true });
+      target.scrollIntoView({ block: 'start' });
+    });
   }
 
   function renderSignalReferenceLinks(refs, renderedPmids) {
@@ -1189,6 +1225,8 @@
 
   function renderSignalCard(item) {
     var a = item.article || {};
+    var signalId = item.id || (a.pmid ? 'pmid-' + a.pmid : '');
+    var signalAnchor = 'signal-' + safeIdToken(signalId || item.title || item.summary || 'item');
     var dateStr = item.date ? item.date.toLocaleDateString('zh-CN') : (a.pub_date || '');
     var topicHtml = '';
     for (var i = 0; i < item.topics.length; i++) {
@@ -1205,7 +1243,8 @@
     var titleHtml = '<h3 class="signal-title">' + escapeHtml(title) + '</h3>';
     var meta = escapeHtml(item.article_count + ' 篇文献 · ' + (item.date_range ? item.date_range.from + '–' + item.date_range.to : dateStr));
     return '' +
-      '<article class="signal-card signal-' + escapeHtml(item.strength) + '">' +
+      '<article id="' + escapeHtml(signalAnchor) + '" data-signal-id="' + escapeHtml(signalId) +
+        '" class="signal-card signal-' + escapeHtml(item.strength) + '" tabindex="-1">' +
         '<div class="signal-card-head">' +
           '<span class="signal-strength">' + escapeHtml(item.strength) + '信号</span>' +
           '<span class="signal-type">' + escapeHtml(item.type) + '</span>' +

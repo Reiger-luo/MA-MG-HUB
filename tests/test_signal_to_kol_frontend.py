@@ -143,22 +143,41 @@ def test_generated_dashboard_signal_summary_matches_all_final_signals():
     assert summary["overview"]
 
 
-def test_dashboard_renders_one_aggregate_signal_summary_with_legacy_fallback():
+def test_dashboard_renders_three_actionable_priority_signals():
     dashboard_js = (PROJECT / "assets" / "dashboard.js").read_text(encoding="utf-8")
     css = (PROJECT / "assets" / "main.css").read_text(encoding="utf-8")
 
     assert "data.signal_summary" in dashboard_js
-    assert "buildSignalSummaryFallback" in dashboard_js
     assert "data.top_signals" in dashboard_js
     assert "data.stats" in dashboard_js
-    assert "dashboard-signal-summary" in dashboard_js
-    assert "dashboard-signal-facts" in dashboard_js
+    assert "signals.slice(0, 3)" in dashboard_js
+    assert "signal.medical_affairs" in dashboard_js
+    assert "'&signal=' + encodeURIComponent(signal.id)" in dashboard_js
+    assert "dashboard-priority-link" in dashboard_js
+    assert "查看详细信号" in dashboard_js
+    assert "dashboard-priority-card" in dashboard_js
+    assert "准备 KOL 讨论" in dashboard_js
     assert "renderDashboardSignalToKol" not in dashboard_js
     assert "PMID" not in dashboard_js
     assert "KOL lead" not in dashboard_js
     assert "signal-card" not in dashboard_js
-    assert ".dashboard-signal-summary" in css
-    assert ".dashboard-signal-facts" in css
+    assert ".dashboard-priority-card" in css
+    assert ".dashboard-priority-link" in css
+    assert ".dashboard-priority-actions" in css
+
+
+def test_literature_signal_deep_link_targets_the_matching_card():
+    literature_js = (PROJECT / "assets" / "literature.js").read_text(encoding="utf-8")
+    css = (PROJECT / "assets" / "main.css").read_text(encoding="utf-8")
+
+    assert "id: signal.id || ''" in literature_js
+    assert "params.get('signal')" in literature_js
+    assert "data-signal-id" in literature_js
+    assert "document.getElementById('signal-' + safeIdToken(requestedSignal))" in literature_js
+    assert "target.scrollIntoView({ block: 'start' })" in literature_js
+    assert "target.classList.add('is-targeted')" in literature_js
+    assert ".signal-card.is-targeted" in css
+    assert ".signal-card[id]" in css
 
 
 def test_literature_signal_card_renders_each_pmid_only_once():

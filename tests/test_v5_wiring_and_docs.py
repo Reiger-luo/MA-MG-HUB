@@ -34,6 +34,7 @@ def test_pipeline_step_selection_preserves_full_assets_when_full_is_absent():
 
     assert "build-frontend" in ids
     assert "--rebuild-experts-from-full" not in frontend.command
+    assert "build-clinical-trials" in ids
     assert "build-source-signals" in ids
     assert "generate-pipeline-status" in ids
     assert "build-full-index" not in ids
@@ -67,14 +68,38 @@ def test_pipeline_and_ci_wire_new_artifacts_and_local_full_gate():
 
     assert "filter-mg-core-literature.py" in runner
     assert "refresh-chictr-cache.py" in runner
+    assert "build-clinical-trials-data.py" in runner
+    assert "clinicalTrialsSummary.js" in runner
     assert "build-source-signals.py" in runner
     assert "release-manifest.js" in runner
     assert "--local-full" in local
     assert "scripts/common/*.py" in workflow
     assert "chictr-trials-cache.json" in workflow
+    assert "CHICTR_COOKIE" in workflow
+    assert "china-drug-trials-cache.json" in workflow
+    assert "china-drug-trials-changes.json" in workflow
     assert "guideline-consensus-cache.json" in workflow
     assert "source-signals.js" in status
     assert "release-manifest.js" in status
+
+
+def test_clinical_trial_maintenance_runbook_defines_monthly_workflows():
+    runbook = (ROOT / "report" / "临床试验数据维护.md").read_text(encoding="utf-8")
+    china_importer = (ROOT / "scripts" / "refresh-china-drug-trials-cache.py").read_text(encoding="utf-8")
+    chictr_refresh = (ROOT / "scripts" / "refresh-chictr-cache.py").read_text(encoding="utf-8")
+
+    for phrase in (
+        "每 28 天",
+        "CHICTR_COOKIE",
+        "DownloadXml",
+        "ChinaDrugTrials",
+        "--dry-run",
+        "--allow-large-drop",
+        "china-drug-trials-changes.json",
+    ):
+        assert phrase in runbook
+    assert "build-clinical-trials-data.py" in china_importer
+    assert "--interval-days" in chictr_refresh
 
 
 def test_current_docs_define_public_msl_non_recording_scope_and_v5_operations():

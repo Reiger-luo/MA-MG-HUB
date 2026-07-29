@@ -169,6 +169,30 @@ def test_builder_china_drug_trials_empty_with_warning():
         )
 
 
+def test_builder_writes_lightweight_dashboard_summary():
+    """首页摘要必须独立于完整矩阵，避免首页加载大体量试验明细。"""
+    builder = _find_builder()
+    result = subprocess.run(
+        [sys.executable, str(builder)],
+        cwd=str(PROJECT),
+        capture_output=True, text=True, timeout=60,
+        env={**__import__("os").environ, "MG_SKIP_CLINICALTRIALS": "1"},
+    )
+    assert result.returncode == 0, f"Builder failed: {result.stderr}"
+
+    summary_path = PROJECT / "data" / "clinicalTrialsSummary.js"
+    summary_text = summary_path.read_text(encoding="utf-8")
+    match = re.search(r'=\s*(\{.*\})\s*;?\s*$', summary_text, re.S)
+    assert match, f"Cannot parse JSON from {summary_path}"
+    summary = json.loads(match.group(1))
+    full_data = _load_trials_data()
+
+    assert summary["meta"]["total_count"] == full_data["meta"]["total_count"]
+    assert summary["pipeline_matrix_count"] == len(full_data["pipeline_matrix"])
+    assert len(summary["source_counts"]) == 3
+    assert summary_path.stat().st_size < 10_000
+
+
 # ── Helpers ───────────────────────────────────────────────────────────
 
 def _find_builder():
