@@ -17139,7 +17139,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "source": "ChiCTR",
       "meta": {
         "generated_at": "2026-07-27",
-        "mode": "cache"
+        "mode": "cache",
+        "warning": ""
       },
       "records": [
         {
@@ -19231,7 +19232,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "meta": {
         "generated_at": "2026-07-27",
         "mode": "cache",
-        "warning": "无已验证数据源"
+        "warning": ""
       },
       "records": [
         {

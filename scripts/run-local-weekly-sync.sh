@@ -142,6 +142,8 @@ else
     data/china-regulatory-status.json \
     data/clinicaltrials-pipeline-cache.json \
     data/chictr-trials-cache.json \
+    data/china-drug-trials-cache.json \
+    data/china-drug-trials-changes.json \
     data/guideline-consensus-cache.json \
     assets/*.js \
     assets/*.css \

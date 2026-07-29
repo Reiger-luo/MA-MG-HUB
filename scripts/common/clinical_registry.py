@@ -324,15 +324,54 @@ def build_clinical_pipeline_matrix(regulatory_map, *, studies=None, meta=None, c
 # ── ChinaDrugTrials adapter ──────────────────────────────────────────
 
 CDT_FIELD_ALIASES = {
-    "registry_id": ("registry_id", "registration_number", "ctr_number"),
-    "title": ("title", "drug_name", "study_title"),
-    "drug_name": ("drug_name", "drug", "intervention_name"),
-    "indication": ("indication", "disease", "target_disease"),
-    "status": ("status", "recruitment_status", "study_status"),
-    "phase": ("phase", "study_phase"),
-    "sponsor": ("sponsor", "applicant", "company"),
-    "registered_date": ("registered_date", "registration_date", "first_public_date"),
-    "official_url": ("official_url", "url", "source_url"),
+    "registry_id": (
+        "registry_id", "registration_number", "ctr_number",
+        "登记号", "试验登记号", "登记编号", "临床试验登记号",
+    ),
+    "title": (
+        "title", "drug_name", "study_title",
+        "试验题目", "临床试验题目", "试验名称",
+    ),
+    "drug_name": (
+        "drug_name", "drug", "intervention_name",
+        "药物名称", "试验药物名称", "药品名称", "试验药品",
+    ),
+    "indication": (
+        "indication", "disease", "target_disease",
+        "适应症", "适应证", "目标适应症", "目标适应证",
+    ),
+    "status": (
+        "status", "recruitment_status", "study_status",
+        "试验状态", "招募状态", "试验进展", "公示状态",
+    ),
+    "phase": ("phase", "study_phase", "试验分期", "临床试验分期", "分期"),
+    "sponsor": (
+        "sponsor", "applicant", "company",
+        "申办者", "申办者名称", "申请人", "申请人名称",
+    ),
+    "registered_date": (
+        "registered_date", "registration_date", "first_public_date",
+        "登记日期", "首次公示日期", "首次公示信息日期", "公示日期",
+    ),
+    "official_url": ("official_url", "url", "source_url", "详情链接", "公示链接", "链接"),
+}
+
+
+CDT_STATUS_MAP = {
+    "进行中 尚未招募": "NOT_YET_RECRUITING",
+    "进行中尚未招募": "NOT_YET_RECRUITING",
+    "尚未招募": "NOT_YET_RECRUITING",
+    "进行中 招募中": "RECRUITING",
+    "进行中招募中": "RECRUITING",
+    "招募中": "RECRUITING",
+    "进行中 招募完成": "ACTIVE_NOT_RECRUITING",
+    "进行中招募完成": "ACTIVE_NOT_RECRUITING",
+    "招募完成": "ACTIVE_NOT_RECRUITING",
+    "已完成": "COMPLETED",
+    "已终止": "TERMINATED",
+    "主动暂停": "SUSPENDED",
+    "暂停": "SUSPENDED",
+    "已撤回": "WITHDRAWN",
 }
 
 
@@ -340,13 +379,17 @@ def normalize_china_drug_trials_record(source: dict[str, Any]) -> dict[str, Any]
     """Normalize a ChinaDrugTrials record. Never fabricate fields."""
     values = {key: _first(source, aliases) for key, aliases in CDT_FIELD_ALIASES.items()}
     title = str(values["title"]).strip() or str(values["drug_name"]).strip()
+    status_input = str(values["status"]).strip()
+    raw_status = str(source.get("status_raw") or status_input).strip()
+    status = CDT_STATUS_MAP.get(status_input, status_input or "Unknown")
     return {
         "registry": "ChinaDrugTrials",
         "registry_id": str(values["registry_id"]).strip(),
         "title": title,
         "drug_name": str(values["drug_name"]).strip(),
         "indication": str(values["indication"]).strip() or "Unknown",
-        "status": str(values["status"]).strip() or "Unknown",
+        "status": status,
+        "status_raw": raw_status,
         "phase": str(values["phase"]).strip() or "Unknown",
         "sponsor": str(values["sponsor"]).strip(),
         "registered_date": str(values["registered_date"]).strip(),

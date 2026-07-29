@@ -59,7 +59,9 @@ MA-MG-HUB 不是单纯的文献列表，而是医学事务团队的 MG 情报工
 | `data/knowledge-graph.js` | 55 节点、337 核心边、180 行证据矩阵 | 知识图谱与证据矩阵 |
 | `data/expert-profiles-china.js` | 8,958 位 | 中国作者-机构画像 |
 | `data/expert-profiles-international.js` | 43,626 位 | 国际作者-机构画像 |
-| `data/chictr-trials-cache.json` | 4 条官方核实种子 | ChiCTR 官方字段缓存；支持人工官方 JSON/CSV 刷新 |
+| `data/chictr-trials-cache.json` | 97 条 | ChiCTR 官方 XML 缓存；每 28 天尝试一次带 WAF Cookie 的自动刷新 |
+| `data/china-drug-trials-cache.json` | 47 条 | ChinaDrugTrials 人工月度官方导出缓存 |
+| `data/china-drug-trials-changes.json` | 最近一次月度差异 | ChinaDrugTrials 新增、更新、移除审计 |
 | `data/release-manifest.js` | 当前不存在 | 仅在真实 required-step 管线完整成功后生成 coherent run id、公开产物哈希与时间戳 |
 | `data/conference-data.js` | 195 条摘要 | AAN、EAN 会议资讯；含会议级 signal-to-kol narrative、覆盖审计和逐条 deepInsight / abstractZh。MGFA / AANEM 后台数据已清空，待新数据源链接后再接入 |
 
@@ -202,13 +204,13 @@ python3 scripts/run-weekly-pipeline.py --run-id weekly-20260715 --resume --from-
 
 审计检查点位于 `.hermes-audit/pipeline-runs/<run-id>.json`。仅当所有 required 步骤成功时才更新 `data/release-manifest.js`；可选语义增强或 ChiCTR 刷新失败使用缓存并记录 warning。
 
-ChiCTR 默认使用 tracked cache。运营人员取得 ChiCTR 官方导出后可确定性刷新：
+ChiCTR 默认使用 tracked cache。周更每 28 天尝试一次官方检索页与 XML 刷新；WAF Cookie 仅通过 `CHICTR_COOKIE` 环境变量提供。运营人员取得 ChiCTR 官方导出后也可确定性刷新：
 
 ```bash
 python3 scripts/refresh-chictr-cache.py --input /path/to/official-chictr-export.csv
 ```
 
-自动访问受 Aliyun WAF 阻断时保持 `mode=cache`，不使用第三方抓取数据，也不再分发 WHO ICTRP 数据。
+自动访问受 Aliyun WAF 阻断时保持 `mode=cache`，不使用第三方抓取数据，也不再分发 WHO ICTRP 数据。ChinaDrugTrials 的月度人工导入、差异对比和网站重建流程见 [`report/临床试验数据维护.md`](report/临床试验数据维护.md)。
 
 常用单项重建：
 
