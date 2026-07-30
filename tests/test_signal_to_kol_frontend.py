@@ -147,6 +147,56 @@ def test_signal_builder_uses_one_week_window():
     assert "WINDOW_DAYS = 14" not in fetch_source
 
 
+def test_efgar_signal_uses_medium_floor_after_strong_standard():
+    builder = load_enrichment_module().load_builder_module()
+
+    for alias in ["efgartigimod", "Vyvgart", "ARGX-113", "艾加莫德"]:
+        article = {
+            "title": f"{alias} in myasthenia gravis",
+            "abstract": "",
+            "evidence_level": "V",
+            "journal_if": 0,
+        }
+        assert builder.literature_cluster_key(
+            article,
+            ["FcRn"],
+            ["efgartigimod"],
+        ) == "efgar"
+        assert builder.classifySignalStrength(article) == "中"
+    assert builder.classifySignalStrength({
+        "title": "Efgartigimod randomized trial",
+        "evidence_level": "II",
+        "journal_if": 0,
+    }) == "强"
+    assert builder.classifySignalStrength({
+        "title": "Efgartigimod narrative review",
+        "evidence_level": None,
+        "journal_if": 2,
+    }) == "中"
+    assert builder.classifySignalStrength({
+        "title": "General myasthenia gravis narrative review",
+        "evidence_level": None,
+        "journal_if": 2,
+    }) == "弱"
+    assert builder.classifySignalStrength({
+        "title": "High-impact myasthenia gravis review",
+        "evidence_level": None,
+        "journal_if": 12,
+    }) == "强"
+    assert builder.cluster_strength(
+        [{"level": "II", "strength": "强", "score": 5}],
+        "efgar",
+    ) == "强"
+    assert builder.cluster_strength(
+        [{"level": "V", "strength": "弱", "score": 5}],
+        "efgar",
+    ) == "中"
+    assert builder.cluster_strength(
+        [{"level": "V", "strength": "弱", "score": 5}],
+        "mechanism_biomarker",
+    ) == "弱"
+
+
 def test_dashboard_build_and_enrichment_both_refresh_signal_summary():
     builder_source = (PROJECT / "scripts" / "build-frontend-data.py").read_text(encoding="utf-8")
     enrichment_source = (PROJECT / "scripts" / "enrich-literature-narrative.py").read_text(encoding="utf-8")

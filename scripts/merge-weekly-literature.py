@@ -22,6 +22,7 @@ from pathlib import Path
 from common.guideline_consensus import isGuidelineConsensus, updateGuidelineCache
 from common.io import atomic_write_json, atomic_write_text, load_json
 from common.mg_relevance import assess_mg_core
+from common.signalStrength import classifySignalStrength
 
 
 PROJECT = Path(__file__).resolve().parent.parent
@@ -194,6 +195,7 @@ def derivePublicArticles(
         "guideline_consensus": 0,
         "missing_evidence_level": 0,
         "mg_core_reason_codes": {},
+        "signal_strength_counts": {"强": 0, "中": 0, "弱": 0},
     }
     for source in articles:
         article = dict(source)
@@ -212,6 +214,9 @@ def derivePublicArticles(
         if article.get("evidence_level") not in EVIDENCE_LEVELS:
             counters["missing_evidence_level"] += 1
             continue
+        signalStrength = classifySignalStrength(article)
+        article["signal_strength"] = signalStrength
+        counters["signal_strength_counts"][signalStrength] += 1
         eligible.append(article)
         counters["kept"] += 1
     if guidelineCachePath is not None:

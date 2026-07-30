@@ -11,8 +11,12 @@
 
 import argparse
 import json
+from collections import Counter
 from datetime import datetime, timedelta
 from pathlib import Path
+
+from common.io import atomic_write_json, atomic_write_text
+from common.signalStrength import classifySignalStrength
 
 PROJECT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT / "data"
@@ -35,8 +39,10 @@ def main():
     cutoff = datetime.now() - timedelta(days=DAYS_RECENT)
 
     recent = []
-    for a in articles:
-        ed = a.get("entry_date", "")
+    strengthCounts = Counter()
+    for source in articles:
+        article = dict(source)
+        ed = article.get("entry_date", "")
         if not ed:
             continue
         try:
@@ -46,11 +52,16 @@ def main():
             continue
         if dt < cutoff:
             continue
-        recent.append(a)
+        signalStrength = classifySignalStrength(article)
+        if signalStrength:
+            article["signal_strength"] = signalStrength
+            strengthCounts[signalStrength] += 1
+        else:
+            article.pop("signal_strength", None)
+        recent.append(article)
     if args.write_json_cache:
         recent_path = DATA_DIR / "literature-recent.json"
-        with open(recent_path, "w") as f:
-            json.dump(recent, f, ensure_ascii=False, indent=2)
+        atomic_write_json(recent_path, recent)
         print(f"✅ literature-recent.json cache ({len(recent)} 篇)")
     else:
         recent_path = DATA_DIR / "literature-recent.json"
@@ -59,16 +70,26 @@ def main():
             print("🧹 已清理 literature-recent.json cache")
 
     recent_js_path = DATA_DIR / "literature-recent.js"
-    with open(recent_js_path, "w") as f:
-        f.write(f"window.MG_PUBLIC_ROLLING_COUNT = {len(recent)};\n")
-        f.write(f"window.MG_SEMANTIC_FULL_COUNT = {len(articles)};\n")
-        f.write(f"window.MG_TOTAL_COUNT = {len(articles)};\n")
-        f.write("window.MG_LITERATURE_DATA = ")
-        json.dump(recent, f, ensure_ascii=False)
-        f.write(";\n")
+    content = (
+        f"window.MG_PUBLIC_ROLLING_COUNT = {len(recent)};\n"
+        f"window.MG_SEMANTIC_FULL_COUNT = {len(articles)};\n"
+        f"window.MG_TOTAL_COUNT = {len(articles)};\n"
+        "window.MG_LITERATURE_DATA = "
+        + json.dumps(recent, ensure_ascii=False, separators=(",", ":"))
+        + ";\n"
+    )
+    atomic_write_text(recent_js_path, content)
     print(f"✅ literature-recent.js ({len(recent)} 篇)，全库 {len(articles):,}")
 
     print(f"\n📊 共 {len(recent)} 篇（近 1 年），全库 {len(articles):,} 篇")
+    print(
+        "🏷️  信号标签：强 {strong} · 中 {medium} · 弱 {weak} · 未标注 {untagged}".format(
+            strong=strengthCounts["强"],
+            medium=strengthCounts["中"],
+            weak=strengthCounts["弱"],
+            untagged=len(recent) - sum(strengthCounts.values()),
+        )
+    )
 
 
 if __name__ == "__main__":

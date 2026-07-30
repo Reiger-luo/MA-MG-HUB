@@ -2,6 +2,7 @@ import importlib.util
 import json
 import os
 import sys
+from datetime import datetime
 from pathlib import Path
 
 import pytest
@@ -391,8 +392,47 @@ def test_derive_only_never_requires_weekly_or_mutates_full(tmp_path, monkeypatch
     module.main()
 
     assert full.read_bytes() == before
-    assert load_js_global(recent, "MG_LITERATURE_DATA")[0]["pmid"] == "keep"
+    recent_articles = load_js_global(recent, "MG_LITERATURE_DATA")
+    assert recent_articles[0]["pmid"] == "keep"
+    assert recent_articles[0]["signal_strength"] == "中"
     assert cache.exists()
+
+
+def test_split_recent_data_preserves_unclassified_records_and_adds_signal_tags(tmp_path, monkeypatch):
+    module = load_script("split-recent-data.py")
+    entry_date = datetime.now().strftime("%Y/%m/%d %H:%M")
+    full = tmp_path / "literature-full.json"
+    full.write_text(json.dumps([
+        {
+            "pmid": "strong",
+            "title": "Randomized myasthenia gravis trial",
+            "entry_date": entry_date,
+            "evidence_level": "II",
+        },
+        {
+            "pmid": "efgar-review",
+            "title": "Efgartigimod narrative review",
+            "entry_date": entry_date,
+            "evidence_level": None,
+        },
+        {
+            "pmid": "general-review",
+            "title": "Myasthenia gravis narrative review",
+            "entry_date": entry_date,
+            "evidence_level": None,
+        },
+    ]), encoding="utf-8")
+    monkeypatch.setattr(module, "DATA_DIR", tmp_path)
+    monkeypatch.setattr(sys, "argv", ["split-recent-data.py"])
+
+    module.main()
+
+    recent = load_js_global(tmp_path / "literature-recent.js", "MG_LITERATURE_DATA")
+    by_pmid = {article["pmid"]: article for article in recent}
+    assert set(by_pmid) == {"strong", "efgar-review", "general-review"}
+    assert by_pmid["strong"]["signal_strength"] == "强"
+    assert by_pmid["efgar-review"]["signal_strength"] == "中"
+    assert by_pmid["general-review"]["signal_strength"] == "弱"
 
 
 def test_cloud_expert_fallback_loads_existing_nonempty_regional_shards(tmp_path, monkeypatch):

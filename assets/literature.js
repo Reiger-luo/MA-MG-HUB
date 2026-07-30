@@ -849,7 +849,7 @@
   }
 
   var DRUG_NAMES = [
-    { name: 'efgartigimod', words: ['efgartigimod', 'vyvgart'] },
+    { name: 'efgartigimod', words: ['efgar', 'vyvgart', 'argx-113', 'argx113', '艾加莫德'] },
     { name: 'rozanolixizumab', words: ['rozanolixizumab'] },
     { name: 'ravulizumab', words: ['ravulizumab'] },
     { name: 'eculizumab', words: ['eculizumab'] },
@@ -889,9 +889,13 @@
 
     if (topics.length === 0 && drugs.length === 0 && !article.china_related) return null;
 
-    var strength = '弱';
-    if (ev === 'I' || ev === 'II' || (ifVal >= 10 && ev !== 'V')) strength = '强';
-    else if (ifVal >= 5 || ev === 'III' || ev === 'IV' || article.china_related) strength = '中';
+    var strength = article.signal_strength;
+    if (['强', '中', '弱'].indexOf(strength) === -1) {
+      strength = '弱';
+      if (ev === 'I' || ev === 'II' || (ifVal >= 10 && ev !== 'V')) strength = '强';
+      else if (hasAny(text, DRUG_NAMES[0].words)) strength = '中';
+      else if (ifVal >= 5 || ev === 'III' || ev === 'IV' || article.china_related) strength = '中';
+    }
 
     var score = ifVal + evidenceRank(ev) + (article.china_related ? 1.5 : 0) + (SIGNAL_WINDOW_DAYS - age) / 3;
     if (strength === '强') score += 10;
@@ -970,6 +974,14 @@
 
   function rebuildArticleSignalStrengthIndex() {
     articleSignalStrengthByPmid = {};
+    for (var articleIndex = 0; articleIndex < allArticles.length; articleIndex++) {
+      var article = allArticles[articleIndex] || {};
+      var articlePmid = normalizePmid(article.pmid);
+      var articleStrength = article.signal_strength || '';
+      if (articlePmid && ['强', '中', '弱'].indexOf(articleStrength) !== -1) {
+        articleSignalStrengthByPmid[articlePmid] = articleStrength;
+      }
+    }
     for (var i = 0; i < signalItems.length; i++) {
       var item = signalItems[i];
       var pmids = (item.related_pmids || []).slice();
@@ -983,6 +995,8 @@
       for (var p = 0; p < pmids.length; p++) {
         var pmid = normalizePmid(pmids[p]);
         if (!pmid) continue;
+        // 近一年文献级标签优先；旧数据缺失标签时再使用本周信号簇兜底。
+        if (articleSignalStrengthByPmid[pmid]) continue;
         var previous = articleSignalStrengthByPmid[pmid] || '';
         if (signalStrengthRank(item.strength) > signalStrengthRank(previous)) {
           articleSignalStrengthByPmid[pmid] = item.strength;

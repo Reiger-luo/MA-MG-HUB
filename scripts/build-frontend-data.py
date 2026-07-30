@@ -19,6 +19,7 @@ from pathlib import Path
 from common.io import atomic_write_json, atomic_write_js_global, load_js_global, load_json as read_json
 from common.expert_outputs import build_expert_manifest, write_expert_outputs as write_expert_shards
 from common.mg_relevance import assess_mg_core
+from common.signalStrength import EFGAR_TERMS, classifySignalStrength, isEfgarRelated
 from common import clinical_registry
 
 try:
@@ -205,7 +206,7 @@ STOPWORDS = {
 }
 
 TOPIC_DEFS = [
-    ("FcRn", ["fcrn", "efgartigimod", "rozanolixizumab", "nipocalimab", "batoclimab"]),
+    ("FcRn", ["fcrn", *EFGAR_TERMS, "rozanolixizumab", "nipocalimab", "batoclimab"]),
     ("补体", ["complement", "zilucoplan", "ravulizumab", "eculizumab", "c5 inhibitor"]),
     ("B细胞", ["b cell", "b-cell", "rituximab", "inebilizumab", "telitacicept", "blys", "april", "cd20", "cd19"]),
     ("抗体分型", ["seronegative", "musk", "achr", "lrp4", "autoantibody"]),
@@ -217,7 +218,7 @@ TOPIC_DEFS = [
 ]
 
 DRUG_KEYWORDS = {
-    "Efgartigimod": ["efgartigimod", "vyvgart"],
+    "Efgartigimod": EFGAR_TERMS,
     "Rozanolixizumab": ["rozanolixizumab"],
     "Ravulizumab": ["ravulizumab"],
     "Eculizumab": ["eculizumab"],
@@ -1192,7 +1193,7 @@ def literature_cluster_key(article, topics, drugs):
     """把单篇候选归入可解释的主题簇；药物优先于泛主题。"""
     text = text_of(article)
     title = str(article.get("title") or "").lower()
-    if any(term in text for term in ("efgartigimod", "vyvgart", "argx-113", "argx113")):
+    if isEfgarRelated(article):
         return "efgar"
     if any(drug in {"nipocalimab", "rozanolixizumab", "batoclimab"} for drug in drugs):
         return "fcrn_competitor"
@@ -1293,10 +1294,15 @@ def aggregate_institution_leads(articles, kol_leads):
     return result[:8]
 
 
-def cluster_strength(members):
+def cluster_strength(members, cluster_id=""):
+    # 聚合后仍优先保留单篇已命中的强信号标准；efgar 其余内容以中信号兜底。
+    if any(item.get("strength") == "强" for item in members):
+        return "强"
     levels = {str(item.get("level") or "") for item in members}
     if levels.intersection({"I", "II"}):
         return "强"
+    if cluster_id == "efgar":
+        return "中"
     if any(item.get("score", 0) >= 12 for item in members) or len(members) >= 2:
         return "中"
     return "弱"
@@ -1308,7 +1314,7 @@ def build_cluster_signal(cluster_id, members, latest, signal_index):
     articles = [item["article"] for item in members]
     pmids = [str(article.get("pmid") or "") for article in articles if article.get("pmid")]
     refs = [compact_article(article) for article in articles]
-    strength = cluster_strength(members)
+    strength = cluster_strength(members, cluster_id)
     max_score = max(item["score"] for item in members)
     cluster_score = max_score + min(4, max(0, len(members) - 1) * 0.8)
     level_counts = Counter(item.get("level") or "未分类" for item in members)
@@ -1444,11 +1450,7 @@ def build_signals(recent):
             continue
         if not high_value_signal and not drug_signal and not article.get("china_related"):
             continue
-        strength = "弱"
-        if level in {"I", "II"} or (if_val >= 10 and level != "V"):
-            strength = "强"
-        elif if_val >= 5 or level in {"III", "IV"} or article.get("china_related"):
-            strength = "中"
+        strength = classifySignalStrength(article)
         score = if_val + evidence_score(level) + (SIGNAL_WINDOW_DAYS - (latest - dt).days) / 3
         if article.get("china_related"):
             score += 1.5
@@ -1470,6 +1472,7 @@ def build_signals(recent):
             "date": dt.strftime("%Y-%m-%d"),
             "pmid": str(article.get("pmid") or ""),
             "level": level,
+            "strength": strength,
             "topics": topics,
             "drugs": drugs,
             "score": score,
@@ -1496,6 +1499,7 @@ def build_signals(recent):
             "signal_count_unlimited": True,
             "analysis_model": "literature-signal-to-kol-v1",
             "aggregation": "mg_core_topic_cluster",
+            "strength_policy": "strong_standard_first_then_efgar_medium_floor",
             "mg_core_policy": "title_explicit_or_repeated_mg_mentions_with_secondary_disease_guard",
             "excluded_non_mg_core": sum(excluded_non_mg_core.values()),
             "excluded_non_mg_core_by_reason": dict(excluded_non_mg_core),
