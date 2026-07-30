@@ -84,7 +84,7 @@ def test_pipeline_and_ci_wire_new_artifacts_and_local_full_gate():
 
 
 def test_clinical_trial_maintenance_runbook_defines_monthly_workflows():
-    runbook = (ROOT / "report" / "临床试验数据维护.md").read_text(encoding="utf-8")
+    runbook = (ROOT / "report" / "runbooks" / "clinicalTrialsMaintenance.md").read_text(encoding="utf-8")
     china_importer = (ROOT / "scripts" / "refresh-china-drug-trials-cache.py").read_text(encoding="utf-8")
     chictr_refresh = (ROOT / "scripts" / "refresh-chictr-cache.py").read_text(encoding="utf-8")
 
@@ -104,7 +104,7 @@ def test_clinical_trial_maintenance_runbook_defines_monthly_workflows():
 
 def test_current_docs_define_public_msl_non_recording_scope_and_v5_operations():
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    manual = (ROOT / "report" / "MG-Intelligence-Hub-操作手册-v5.md").read_text(encoding="utf-8")
+    manual = (ROOT / "report" / "current" / "operationsManual.md").read_text(encoding="utf-8")
     combined = readme + "\n" + manual
 
     for phrase in (
@@ -121,11 +121,11 @@ def test_current_docs_define_public_msl_non_recording_scope_and_v5_operations():
 
 def test_five_minute_review_entry_point_is_linked_and_defines_product_boundary():
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    manual = (ROOT / "report" / "MG-Intelligence-Hub-操作手册-v5.md").read_text(encoding="utf-8")
-    review = (ROOT / "report" / "网站设计与审查速览.md").read_text(encoding="utf-8")
+    manual = (ROOT / "report" / "current" / "operationsManual.md").read_text(encoding="utf-8")
+    review = (ROOT / "report" / "current" / "designReview.md").read_text(encoding="utf-8")
 
-    assert "report/网站设计与审查速览.md" in readme
-    assert "网站设计与审查速览.md" in manual
+    assert "report/current/designReview.md" in readme
+    assert "designReview.md" in manual
     for phrase in (
         "公开证据决策支持和拜访准备来源",
         "不是拜访记录、CRM、follow-up、互动历史或私有数据存储",
@@ -145,8 +145,8 @@ def test_five_minute_review_entry_point_is_linked_and_defines_product_boundary()
 def test_current_docs_have_balanced_fences_and_no_retired_count_claims():
     paths = [
         ROOT / "README.md",
-        ROOT / "report" / "MG-Intelligence-Hub-操作手册-v5.md",
-        ROOT / "report" / "网站设计与审查速览.md",
+        ROOT / "report" / "current" / "operationsManual.md",
+        ROOT / "report" / "current" / "designReview.md",
     ]
     retired = ("1,151", "1,154", "1,165", "10,635", "10,656")
     for path in paths:
@@ -157,7 +157,7 @@ def test_current_docs_have_balanced_fences_and_no_retired_count_claims():
 
 def test_github_actions_and_docs_describe_manual_only_trigger():
     workflow = (ROOT / ".github" / "workflows" / "weekly-pipeline.yml").read_text(encoding="utf-8")
-    manual = (ROOT / "report" / "MG-Intelligence-Hub-操作手册-v5.md").read_text(encoding="utf-8")
+    manual = (ROOT / "report" / "current" / "operationsManual.md").read_text(encoding="utf-8")
 
     assert "workflow_dispatch:" in workflow
     assert "schedule:" not in workflow

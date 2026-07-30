@@ -1,0 +1,101 @@
+# MG Intelligence Hub：网站设计与审查速览
+
+> 五分钟入口。详细操作见 [operationsManual.md](operationsManual.md)，实时状态见网站“数据状态”页。
+
+## 产品边界
+
+MG Intelligence Hub 是面向医学事务与中国大陆 MSL 的**公开证据决策支持和拜访准备来源**。它把 PubMed、指南/共识、监管、试验注册、会议来源和公开作者机构线索组织成可追溯的准备材料。
+
+它**不是拜访记录、CRM、follow-up、互动历史或私有数据存储**。网站不采集拜访笔记、团队反馈、内部专家标签或需要登录保存的个人数据。
+
+## 设计原则
+
+1. 证据先于叙事：公开文献先通过 MG-core 与证据等级 I–V 门控。
+2. 来源分频道：指南/共识、监管、注册和会议不能冒充 Oxford 文献证据。
+3. 可追溯：Signal、talking point 和判断尽量回链 PMID、注册号或官方来源。
+4. 公开最小化：full、中间数据、日志和详细审计留在本地。
+5. 云端不降级覆盖：缺少 full 时保留 last-good full-derived 产物。
+6. 决策支持而非自动结论：abstract-level 结果不替代全文医学审核。
+7. 动态状态单一来源：数量、生成时间和发布一致性只从数据状态产物读取。
+
+## 页面任务
+
+| 页面 | 核心任务 |
+| --- | --- |
+| 工作台 | 快速扫描近期信号和数据状态 |
+| 情报中心 | 回答“最近发生了什么”，并区分文献与其他来源 |
+| 诊治格局 | 回答“证据怎样影响治疗判断” |
+| 知识库 | 浏览社区、图谱、证据矩阵、专题和中国作者网络 |
+| MSL 工作台 | China-only 专家检索、话题建议和 PMID 材料 |
+| 数据状态 | 审查数量口径、产物时间、来源和管线健康 |
+
+## 证据与来源频道层级
+
+```text
+PubMed MG-core + 证据等级 I–V
+  → 公开文献流与文献信号
+
+MG-core 指南/共识
+  → 指南共识频道，不显示 Oxford 等级
+
+监管 / 临床试验注册 / 会议主来源
+  → 各自独立频道，不显示 Oxford 等级
+```
+
+未知、非指南且没有证据等级 I–V 的 PubMed 记录不进入公开证据流。
+
+## MSL 建议工作流
+
+1. 在情报中心确认 Signal 及其 PMID 或官方来源。
+2. 在 MSL 工作台按中国作者、机构和学术兴趣筛选公开画像。
+3. 组合内容模块并生成拜访前话题建议。
+4. 回到全文、指南、注册页或官方监管来源核查关键结论。
+5. 网站之外的获批系统承担实际业务记录。
+
+## 非目标
+
+- 不建设拜访记录、follow-up、CRM 或互动历史。
+- 不保存私有材料、内部专家标签、团队反馈或用户画像。
+- 不把摘要级关联包装成全文级因果结论。
+- 不在无 full 的云端运行中重建或缩小 full-derived 产物。
+- 不在部分管线运行后伪造完整发布证明。
+- 不把自动报告写入长期文档目录。
+
+## 权威产物
+
+| 判断 | 权威产物 |
+| --- | --- |
+| 严格公开文献 | `data/literature-recent.js` |
+| 语义 full 状态 | `data/literature-full-index.js`、community index、`pipeline-status.js` |
+| 指南/共识 | `data/guideline-consensus-cache.json` |
+| 来源频道 | `data/source-signals.js` |
+| China-only MSL 专家 | `data/expert-profiles-china.js` |
+| 管线与数量状态 | `data/pipeline-status.js` |
+| 完整发布证明 | `data/release-manifest.js` |
+| 详细自动审计 | `.hermes-audit/` |
+
+## 5 分钟审查顺序
+
+1. 读“产品边界”和“非目标”。
+2. 打开情报中心，确认来源频道彼此独立。
+3. 打开 MSL 工作台，确认 China-only 且不保存行为。
+4. 打开数据状态，核对公开滚动层与语义底座。
+5. 运行快速验证，确认门控、分片和发布边界。
+
+## 验证命令
+
+```bash
+python3 -m pytest -q
+python3 -m py_compile scripts/*.py scripts/common/*.py
+for file in assets/*.js; do node --check "$file" || exit 1; done
+bash scripts/build-sites-static.sh
+git diff --check
+```
+
+## 已知限制
+
+- 文献、图谱、社区和 Living Answers 主要基于 title/abstract/metadata，正式医学使用前需阅读全文。
+- MG-core 与证据分级是规则系统，需要持续抽样审计。
+- 社区 `unassigned` 和冲突状态表示需要复核，不表示管线失败。
+- ChiCTR 自动访问可能受 WAF 影响，失败时使用 last-good 官方缓存。
+- 当前数量、分片规模、会议覆盖和发布时间会随周更变化，应在数据状态页查看，不在本文档中固定。

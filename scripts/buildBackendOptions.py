@@ -17,7 +17,7 @@ from common.io import atomic_write_js_global, atomic_write_text, load_js_global
 
 PROJECT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT / "data"
-REPORT_DIR = PROJECT / "report"
+AUDIT_REPORT_DIR = PROJECT / ".hermes-audit" / "reports"
 
 
 def load_js(filename: str, global_name: str) -> Any:
@@ -192,8 +192,8 @@ def option_score(option: dict[str, Any]) -> float:
 
 
 def write_report(payload: dict[str, Any]) -> None:
-    REPORT_DIR.mkdir(exist_ok=True)
-    report_path = REPORT_DIR / "backendOptionsPhase6-2026-07-01.md"
+    AUDIT_REPORT_DIR.mkdir(parents=True, exist_ok=True)
+    report_path = AUDIT_REPORT_DIR / "backendOptionsLatest.md"
     summary = payload["summary"]
     lines = [
         "# MA-MG-HUB Phase 6 后端选项评估",

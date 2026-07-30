@@ -1,5 +1,11 @@
 # MA-MG-HUB 医学事务决策情报升级实施计划
 
+> 状态：活跃路线图
+>
+> 当前阶段：R1 设计决定已确认，按 Release 串行实施
+>
+> 维护规则：Release 状态由实现任务同步更新；动态数量和发布时间只进入数据状态产物，不写入本计划
+
 > **For Hermes:** 实施时按“讨论 → 决定 → 构建 → 验收 → 下一模块”串行推进；每个模块先加载 `software-development:mg-hub-website`、`software-development:test-driven-development` 和 `software-development:requesting-code-review`。复杂前端实现满足 Codex 强制条件时交由 Codex CLI，Machine 负责架构、数据合约、医学逻辑、Git 和验收。
 
 **Goal:** 在不引入 CRM、拜访记录、互动历史、私有后端或浏览器持久化的前提下，把 MA-MG-HUB 从“公开证据浏览站”升级为“围绕 EFG 学术推广策略、可追溯的医学问题导航、判断建议和拜访前准备来源”。本计划只处理纯学术与医学策略，不覆盖政务、支付、市场准入或 Health Economics and Outcomes Research（HEOR）。
@@ -919,7 +925,7 @@ pages/msl.html?question=efgPathwayPositioning&expert=<public-expert-id>
 4. TDD：先 contract tests，再 builder，再前端。
 5. Codex 只实现已确定的复杂前端组件；Machine 不在 Codex 运行时改同一文件。
 6. Machine 复核 diff、运行全量质量门、浏览器验收。
-7. 更新 README、操作手册、网站设计与审查速览及本规划状态。
+7. 更新本规划的 Release 状态；只有架构、边界或操作方式变化时才更新 README、操作手册和设计速览。
 8. commit、push、验证 GitHub Pages 及线上数据 hash。
 
 ### 预估执行规模
