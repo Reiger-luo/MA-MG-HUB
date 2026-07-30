@@ -15,6 +15,7 @@ MG Intelligence Hub 是面向重症肌无力（myasthenia gravis, MG）医学事
 MA-MG-HUB 重点回答：
 
 - 本周有哪些值得关注的 MG 学术信号？
+- 如何按当前文献、信号、中国、会议或临床试验筛选生成可复制简报？
 - 中国相关证据、机构和作者线索有哪些变化？
 - MG 证据网络形成了哪些主题、机制和治疗社区？
 - 具体治疗问题目前可以形成怎样的 abstract-level 回答？
@@ -26,7 +27,7 @@ MA-MG-HUB 重点回答：
 | 模块 | 页面 | 主要能力 |
 | --- | --- | --- |
 | 工作台 | [index.html](index.html) | 近期信号、社区动态、工作流状态和数据健康 |
-| 情报中心 | [pages/literature.html](pages/literature.html) | 公开文献、信号板、中国情报、会议摘要和临床试验 |
+| 情报中心 | [pages/literature.html](pages/literature.html) | 公开文献、信号板、中国情报、会议摘要、临床试验和当前上下文简报 |
 | 诊治格局 | [pages/landscape.html](pages/landscape.html) | 格局洞察、竞争矩阵、临床管线和 Living Answers |
 | 知识库 | [pages/knowledge.html](pages/knowledge.html) | 知识图谱、医学事务社区、证据矩阵、专题和中国作者网络 |
 | MSL 工作台 | [pages/msl.html](pages/msl.html) | China-only 专家画像、内容模块、拜访话题建议和 PMID 清单 |
@@ -70,7 +71,7 @@ MG-core gate + 证据等级 I–V gate + 独立来源频道
 
 - PubMed 主文献流同时执行 MG-core 与证据等级 I–V 门控。
 - 指南/共识、监管、注册和会议保留为独立来源频道，不冒充 Oxford 文献证据。
-- MSL 前端只加载 `expert-profiles-china.js`；国际专家分片只供离线分析。
+- MSL 前端只加载 `expert-profiles-china.js`；国际专家分片没有页面加载路径，只供离线分析。该 tracked 文件仍可通过 GitHub Pages 公开访问，因此只能包含公开元数据。
 - 页面不采集拜访记录、团队反馈、内部专家标签或任何需要登录保存的数据。
 - 云端缺少 full 时保留 last-good full-derived 产物，不用 recent 数据覆盖或缩小它们。
 
@@ -80,7 +81,7 @@ MG-core gate + 证据等级 I–V gate + 独立来源频道
 - 数据加载：`window.MG_*` 全局对象
 - 数据管线：Python 3.11+
 - 主发布：GitHub Pages
-- Sites 兼容构建：`scripts/build-sites-static.sh`
+- Sites 受控部署构建：`scripts/build-sites-static.sh`
 - 自动化：本地/Hermes full 驱动周更；GitHub Actions 手动兜底
 
 ## 本地查看

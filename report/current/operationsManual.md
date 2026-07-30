@@ -1,4 +1,4 @@
-# MG Intelligence Hub — 架构设计与操作手册
+# MG Intelligence Hub：架构设计与操作手册
 
 > 本手册是当前操作依据。设计与审查请先读 [designReview.md](designReview.md)，全部长期文档见 [文档入口](../README.md)。
 
@@ -8,7 +8,7 @@ MG Intelligence Hub 是面向 MG 医学事务团队的静态情报工作站。�
 
 核心原则：
 
-- 公开网站只承载必要的 HTML、CSS、JavaScript 和 JSON。
+- 公开网站只承载 Git 管理的公开文件，包括必要的 HTML、CSS、JavaScript、JSON 和当前周报 Markdown。
 - full 文献底座与大体量中间产物保留在本地。
 - 页面通过 `window.MG_*` 数据对象渲染。
 - 社区、图谱、Living Answers 和 MSL action 必须保留来源回链。
@@ -18,8 +18,8 @@ MG Intelligence Hub 是面向 MG 医学事务团队的静态情报工作站。�
 
 | 角色 | 职责 |
 | --- | --- |
-| GitHub Pages | 承载公开静态网站 |
-| Sites 静态构建 | 从 Git 管理的公开文件生成隔离部署包 |
+| GitHub Pages | 承载公开主站 |
+| Sites 受控部署 | 从同一组 Git 管理的公开文件生成隔离静态部署包 |
 | 本地工作站 | 保存 full 文献和中间数据，运行完整重建 |
 | Hermes / 本地计划任务 | 调度 full 驱动周更 |
 | GitHub Actions | 质量门和云端轻量兜底 |
@@ -30,7 +30,7 @@ MG Intelligence Hub 是面向 MG 医学事务团队的静态情报工作站。�
 | 页面 | 文件 | 核心任务 |
 | --- | --- | --- |
 | 工作台 | `index.html` | 扫描近期信号、社区动态和数据状态 |
-| 情报中心 | `pages/literature.html` | 浏览公开文献、信号、中国情报、会议和临床试验 |
+| 情报中心 | `pages/literature.html` | 浏览公开文献、信号、中国情报、会议和临床试验，并按当前标签与筛选条件生成简报 |
 | 诊治格局 | `pages/landscape.html` | 解释格局变化、竞争证据和 Living Answers |
 | 知识库 | `pages/knowledge.html` | 使用图谱、社区、证据矩阵、专题和中国作者网络 |
 | MSL 工作台 | `pages/msl.html` | China-only 专家检索与拜访前准备 |
@@ -91,6 +91,7 @@ MG-core 与证据门控
 
 | 产物 | 用途 |
 | --- | --- |
+| `dashboard-data.js` | 工作台近期信号、页面摘要和数据健康 |
 | `literature-recent.js` | 严格 MG-core + 证据等级 I–V 文献 |
 | `signals-weekly.js` | 当前周 Signal、证据项和 KOL key points |
 | `source-signals.js` | 文献、指南/共识、监管、注册、会议独立频道 |
@@ -101,7 +102,9 @@ MG-core 与证据门控
 | `china-author-network.js` | 中国医院、作者、合作关系和药物线索 |
 | `expert-profiles*.js` | China-only 前端画像与离线国际分片 |
 | `clinical-trials-data.js` | 多注册源临床试验数据 |
+| `clinicalTrialsSummary.js` | 工作台临床试验轻量摘要 |
 | `conference-data.js` | 会议摘要与 signal-to-kol 结构 |
+| `content-modules.js` | MSL 工作台学术与产品内容模块 |
 | `pipeline-status.js` | 当前数据与管线状态 |
 | `release-manifest.js` | 最近一次完整 required-step 发布证明 |
 
@@ -121,7 +124,7 @@ PubMed 主文献流必须先通过 MG-core，再通过证据等级 I–V 门控�
 - 图谱关系属于 abstract-level 线索，不代表全文级因果。
 - 药物标签属于文本相关线索，不代表治疗或疗效判断。
 
-当前分类数量、节点数、合作边和解析率由数据状态页自动显示。
+社区分类数量、图谱节点和关系状态由数据状态页显示。中国作者网络的医院数和合作边在知识库页面显示；机构解析率读取 `data/china-author-network.js` 的 `summary.graph_author_hospital_parse_rate`。数据状态页目前不重复展示该解析率。
 
 ## 7. 情报中心与会议
 
@@ -133,6 +136,18 @@ PubMed 主文献流必须先通过 MG-core，再通过证据等级 I–V 门控�
 - 会议摘要；
 - 临床试验。
 
+文献信号使用当前 7 天 PubMed 增量。信号按主题聚合，并保留强度、证据项、证据边界、KOL 讨论问题、PMID、作者和机构线索。文献列表通过 PMID 关联信号强度，可按强、中、弱信号筛选。
+
+页面右上角的简报操作读取当前标签和筛选状态：
+
+- 文献：输出当前筛选文献，最多列出 50 篇；
+- 信号：输出当前强度和主题筛选下的全部信号；
+- 中国情报：输出中国相关文献及证据等级分布，最多列出 50 篇；
+- 会议：输出当前会议模块和摘要筛选，最多列出 50 条；
+- 临床试验：输出当前药物、状态、来源和阶段筛选，最多列出 50 个药物管线。
+
+简报只在浏览器内生成 Markdown 预览并支持复制。网站不保存简报、筛选条件或复制历史。
+
 会议数据由 `build-conference-data.py` 确定性构建，再由可选 enrich 脚本生成中文摘要和 signal-to-kol 叙事。确定性重建必须保留已经通过校验的 LLM 字段。
 
 无稳定主来源的会议不保留伪完整数据，前端显示待接入状态。
@@ -142,7 +157,7 @@ PubMed 主文献流必须先通过 MG-core，再通过证据等级 I–V 门控�
 MSL 工作台是 China-only：
 
 - 前端加载 `expert-profiles-china.js`；
-- `expert-profiles-international.js` 只供离线分析；
+- `expert-profiles-international.js` 不被任何公开页面加载，只供离线分析；该文件仍由 Git 跟踪并可通过 GitHub Pages 公开访问，因此不得包含私有信息；
 - `expert-profiles.js` 只作为分片 manifest；
 - 输出是公开证据、话题建议和 PMID 材料；
 - 不保存用户选择、行为或历史。

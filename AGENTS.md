@@ -27,5 +27,6 @@
 ## 变更要求
 
 - 修改文档路径时同步更新 README、文档内链接和测试。
+- 修改情报中心标签、筛选、简报导出、发布角色或专家分片公开边界时，同步更新 `report/current/operationsManual.md`、`report/current/designReview.md` 和路线图的现有能力基线。
 - 修改数据管线时继续使用原子写入，并保持 cloud-safe last-good 行为。
-- 提交前运行与改动范围相称的测试；文档结构至少运行 `tests/test_document_lifecycle.py`。
+- 提交前运行与改动范围相称的测试；文档结构和关键能力说明至少运行 `tests/test_document_lifecycle.py`。

@@ -5,14 +5,16 @@
 > 当前阶段：R1 设计决定已确认，按 Release 串行实施
 >
 > 维护规则：Release 状态由实现任务同步更新；动态数量和发布时间只进入数据状态产物，不写入本计划
-
-> **For Hermes:** 实施时按“讨论 → 决定 → 构建 → 验收 → 下一模块”串行推进；每个模块先加载 `software-development:mg-hub-website`、`software-development:test-driven-development` 和 `software-development:requesting-code-review`。复杂前端实现满足 Codex 强制条件时交由 Codex CLI，Machine 负责架构、数据合约、医学逻辑、Git 和验收。
+>
+> 已上线基线：情报中心可按当前标签与筛选条件生成文献、信号、中国、会议和临床试验 Markdown 简报。该功能是来源层的浏览器内摘要，不是本计划中的 Decision Brief。
 
 **Goal:** 在不引入 CRM、拜访记录、互动历史、私有后端或浏览器持久化的前提下，把 MA-MG-HUB 从“公开证据浏览站”升级为“围绕 EFG 学术推广策略、可追溯的医学问题导航、判断建议和拜访前准备来源”。本计划只处理纯学术与医学策略，不覆盖政务、支付、市场准入或 Health Economics and Outcomes Research（HEOR）。
 
 **Architecture:** 保留 GitHub Pages + 静态 `window.MG_*` 数据架构。新增“医学策略问题 → Decision Brief → Claim–Evidence → Evidence Delta → 中国证据与临床实践 → Confidence/Review Labels”派生链。核心输入来自 PubMed、指南/共识、临床试验、会议、MG-wide 图谱、efgar-wiki 策展层、社区层和公开专家数据。监管来源继续留在情报中心，用于必要的适用人群或说明书边界核查，不作为 Decision Brief 的默认主轴或 `Why now` 触发器。确定性程序负责候选、引用、门控、变化检测和降级；LLM 只做可选的证据边界内叙事增强，输出引用必须回验。
 
 **Tech Stack:** Python 3.11、原生 HTML/CSS/JavaScript、GitHub Pages、现有 `scripts/common/io.py` 原子写入、`PipelineRunner`、pytest、可选 `llm_client.py`。
+
+**Current baseline:** `assets/literature.js` 已实现当前标签上下文、筛选摘要、Markdown 预览与复制。R1 复用其上下文建模经验，R6 再把通用序列化、下载和打印能力扩展到 Decision Brief 与 MSL 访前 Brief。
 
 ### 已确认的 R1 设计决定（2026-07-20）
 
@@ -21,8 +23,6 @@
 3. Decision Brief 采用纯学术结构。中国部分聚焦患者证据、临床实践、证据迁移性和研究缺口，弱化监管，排除政务、支付、市场准入和 HEOR。
 4. `Decision state` 固定为四档：明确、条件、探索、不支持结论。
 5. 六大页面和顶级导航不变。R1 只改造现有 `pages/landscape.html` 的 Living Answers 区域；工作台、知识库和 MSL 工作台只消费该数据，不维护平行 Brief。
-
----
 
 ## 0. 当前基础与不可突破的边界
 
@@ -65,6 +65,8 @@
 - `scripts/build-curated-topic-data.py::extract_claims()`：wiki Claim 初始抽取。
 - `scripts/enrich-literature-narrative.py`：LLM 输出 JSON、PMID 回验、中文叙事和 fallback 模式。
 - `assets/common.js`：escape、safe URL、script loading、tabs。
+- `assets/literature.js::buildCurrentBrief()`：按文献、信号、中国、会议和临床试验当前上下文生成 Markdown 预览。
+- `assets/conference.js::MgConferenceBrief.getContext()`：向统一简报入口提供当前会议模块、筛选条件和摘要。
 - `assets/landscape.js::renderAnswers()`：现有 Living Answer 展示入口。
 - `assets/msl.js::generateBrief()`：现有无状态拜访前建议生成器。
 
@@ -78,8 +80,6 @@
 6. Abstract-level 推断必须明确标识，不能替代全文、说明书、指南原文或医学审核。
 7. 云端缺少 full 时，不重建或覆盖 full-derived 产物。
 8. Decision Brief 不讨论政务、支付、市场准入或 HEOR；监管信息不进入默认学术叙事。
-
----
 
 ## 1. 医学问题导航与 Decision Brief
 
@@ -324,8 +324,6 @@ Decision state 回答“这个具体问题能回答到什么程度”，不等�
 
 **验收终止条件：** 6 个新战略问题全部上线；旧问题只作为兼容输入；`pages/landscape.html` 可按问题直达；每张 Brief 均能回到公开原始来源；六大页面和导航不变；无记录功能。
 
----
-
 ## 2. Claim-level Claim–Evidence
 
 ### 2.1 改造目标
@@ -460,8 +458,6 @@ Decision state 回答“这个具体问题能回答到什么程度”，不等�
 
 **验收终止条件：** 每张 Decision Brief 的核心判断、限制、冲突和未知均由 Claim ID 驱动；所有 Claim 可回溯至公开来源或明确标为 open question。
 
----
-
 ## 3. Evidence Delta 变化检测
 
 ### 3.1 改造目标
@@ -583,8 +579,6 @@ snapshot-intelligence
 - snapshot hash 不匹配 → fail closed。
 
 **验收终止条件：** 首页可以回答“本轮哪些判断发生变化”；每个事件有 before/after 和来源；滚动过期不产生伪变化。
-
----
 
 ## 4. 中国证据与临床实践（China Evidence & Practice）
 
@@ -724,8 +718,6 @@ NMPA/CDE/NHSA、政务、支付、市场准入和 HEOR 不进入本模块。监�
 
 **验收终止条件：** 每张 Brief 都能说明中国证据覆盖了什么、能外推到哪里、研究质量如何、下一步缺什么；公开专家和机构匹配完全基于学术证据；监管、政务和 HEOR 不进入默认学术叙事。
 
----
-
 ## 5. 建议可信度与可审查标签
 
 ### 5.1 改造目标
@@ -814,8 +806,6 @@ NMPA/CDE/NHSA、政务、支付、市场准入和 HEOR 不进入本模块。监�
 
 **验收终止条件：** 用户无需理解算法，也能看到建议为何可信、哪里不确定、哪里需要全文核查；数据状态页可审计所有异常。
 
----
-
 ## 6. UI、性能与无状态导出
 
 ### 6.1 页面信息架构
@@ -840,7 +830,7 @@ NMPA/CDE/NHSA、政务、支付、市场准入和 HEOR 不进入本模块。监�
    - `data/claimEvidenceIndex.js`
    - `data/claimEvidence-<question-id>.js`
    - 进入或展开问题时使用 `MgHub.loadScriptOnce()` 懒加载。
-3. MSL 继续只加载 China shard；国际专家文件无加载路径。
+3. MSL 继续只加载 China shard；国际专家文件无页面加载路径。该文件目前仍由 Git 跟踪并可公开访问，因此只能保存公开元数据。若未来要求非公开存储，必须先移出公开仓库与部署包。
 4. 首页只加载 Delta 摘要，不加载完整 Claim 图。
 5. 不引入 bundler 或前端框架；保留零构建 GitHub Pages。
 
@@ -860,13 +850,15 @@ pages/msl.html?question=efgPathwayPositioning&expert=<public-expert-id>
 
 ### 6.4 无状态导出
 
+情报中心已经可以按当前标签和筛选条件生成 Markdown 预览并复制。现有实现覆盖文献、信号、中国、会议和临床试验，但没有文件下载、打印视图或 Decision Brief 专用序列化。R6 复用这套上下文规则，避免维护第二套筛选摘要逻辑。
+
 **Modify:** `assets/common.js`
 
 新增纯客户端 helper：
 
 - `downloadText(filename, content, mime)`：Blob + temporary link，完成后 revoke URL。
 - `printSection(element, title)`：生成临时 print view，不存储。
-- `serializeDecisionBrief(brief, claims, format)`：Markdown / plain text；所有引用保留。
+- `serializeDecisionBrief(brief, claims, format)`：沿用情报中心简报的标题、范围、筛选和来源表达，输出 Markdown / plain text，并保留全部引用。
 
 **Modify:** `assets/landscape.js`
 
@@ -902,20 +894,18 @@ pages/msl.html?question=efgPathwayPositioning&expert=<public-expert-id>
 
 **验收终止条件：** 访前 Brief 和 Decision Brief 可复制、打印、下载；网站不保存任何行为或历史；首屏性能不因 Claim 图退化。
 
----
-
 ## 7. 串行实施与发布顺序
 
 严格按用户认可的 1 → 6 推进，每个模块独立讨论、构建、验收和 push。
 
-| Release | 内容 | 依赖 | 主要产物 | 结束条件 |
-|---|---|---|---|---|
-| R1 | 医学策略问题目录 + Decision Brief | MG-wide 证据 + efgar-wiki 策展层 + 旧 Living Answers 兼容视图 | `medical-affairs-questions.json`, `decision-briefs.js` | 6 个新战略问题上线、可直达、可回链 |
-| R2 | Claim–Evidence | R1 | `claim-evidence.js` | Brief 核心判断由 Claim ID 驱动 |
-| R3 | Evidence Delta | R2 | snapshots, `evidence-delta.js` | 首页显示真实变化，滚动过期不误报 |
-| R4 | 中国证据与临床实践 | R1–R3 | `china-evidence-practice.js` | 每个问题呈现中国患者轨迹、研究质量、证据迁移性或明确缺口 |
-| R5 | Quality/Review Labels | R2–R4 | quality rules + status QA | unsupported affirmative claim 阻断发布 |
-| R6 | UI/性能/无状态导出 | R1–R5 | lazy load、Markdown/print | 可导出但零持久化，性能达标 |
+| Release | 状态 | 内容 | 依赖 | 主要产物 | 结束条件 |
+|---|---|---|---|---|---|
+| R1 | 设计已确认，未实施 | 医学策略问题目录 + Decision Brief | MG-wide 证据 + efgar-wiki 策展层 + 旧 Living Answers 兼容视图 | `medical-affairs-questions.json`, `decision-briefs.js` | 6 个新战略问题上线、可直达、可回链 |
+| R2 | 等待 R1 | Claim–Evidence | R1 | `claim-evidence.js` | Brief 核心判断由 Claim ID 驱动 |
+| R3 | 等待 R2 | Evidence Delta | R2 | snapshots, `evidence-delta.js` | 首页显示真实变化，滚动过期不误报 |
+| R4 | 等待 R1–R3 | 中国证据与临床实践 | R1–R3 | `china-evidence-practice.js` | 每个问题呈现中国患者轨迹、研究质量、证据迁移性或明确缺口 |
+| R5 | 等待 R2–R4 | Quality/Review Labels | R2–R4 | quality rules + status QA | unsupported affirmative claim 阻断发布 |
+| R6 | 等待 R1–R5；情报中心简报基线已上线 | UI、性能、Decision/MSL 无状态导出 | R1–R5 | lazy load、Markdown/print | 可导出但零持久化，性能达标 |
 
 ### 每个 Release 的固定过程
 
@@ -923,20 +913,10 @@ pages/msl.html?question=efgPathwayPositioning&expert=<public-expert-id>
 2. 检查 `git status`、最新 commit、full 是否可用和 current release manifest。
 3. 与用户讨论该 Release 的具体字段和界面；确认后再编码。
 4. TDD：先 contract tests，再 builder，再前端。
-5. Codex 只实现已确定的复杂前端组件；Machine 不在 Codex 运行时改同一文件。
-6. Machine 复核 diff、运行全量质量门、浏览器验收。
+5. 并行实现不得修改同一文件；交接前先同步工作区状态。
+6. 负责收口的实现者复核 diff、运行全量质量门并完成浏览器验收。
 7. 更新本规划的 Release 状态；只有架构、边界或操作方式变化时才更新 README、操作手册和设计速览。
 8. commit、push、验证 GitHub Pages 及线上数据 hash。
-
-### 预估执行规模
-
-- 串行 Release：6 个。
-- 预计编码/验收会话：8–12 个。
-- 预计 Agent 实际执行时间：约 12–20 小时，取决于中国学术证据质量和 Claim 审核返工。
-- 预计工具调用：约 250–400 次；每个 Release 独立收口，避免单次上下文/工具上限中断。
-- 预计 Codex 任务：R1 前端、R2 Claim UI、R3 Delta Dashboard、R4 中国证据与临床实践、R6 导出/移动布局，共约 5–8 次 background coding run。
-
----
 
 ## 8. 完整质量门
 
@@ -976,8 +956,6 @@ Question IDs unique
 7. 导出：Markdown/打印包含来源与限制，刷新后无历史。
 8. GitHub Pages：线上数据文件 SHA 与 commit 一致，无 JS error。
 
----
-
 ## 9. 主要风险与处理
 
 | 风险 | 处理 |
@@ -993,8 +971,6 @@ Question IDs unique
 | 新产物在 cloud-safe 模式覆盖 last-good | 所有 builder 原子写入；输入缺失时 fail closed 或保留 last-good，不写空产物 |
 | 规划实施期间 cron 产生新 commit | 每个 Release 开始重新读取 git 状态和最新数据，禁止基于旧 SHA 直接编码 |
 
----
-
 ## 10. 开放问题（进入对应 Release 时讨论，不阻碍本计划）
 
 1. R1：为每个战略问题拆出哪些 decision claims、患者轨迹节点和最低证据门槛。
@@ -1004,8 +980,6 @@ Question IDs unique
 5. R4：中国指南全文结构化来源尚未接入；需要单独讨论合法、稳定、可引用的数据源和更新方式。
 6. R5：是否允许医学团队在仓库中人工维护 `full_text_verified` 标记；这属于公开内容策展，不是拜访记录，但需要明确维护责任。
 7. R6：导出优先 Markdown + print/PDF；不建议首版引入 DOCX/PPTX，以免扩大模板和合规面。
-
----
 
 ## 11. 推荐的下一次讨论入口
 

@@ -4,15 +4,13 @@
 
 ## 正规来源
 
-1. OCEBM Levels of Evidence Working Group. **The Oxford 2011 Levels of Evidence**. Oxford Centre for Evidence-Based Medicine.  
-   官方页面：https://www.cebm.ox.ac.uk/resources/levels-of-evidence/ocebm-levels-of-evidence  
-   PDF：https://www.cebm.ox.ac.uk/files/levels-of-evidence/cebm-levels-of-evidence-2-1.pdf
+以下来源于 2026-07-29 复核。Oxford CEBM 官方页面仍以 v2.1 为当前表格，并要求结合介绍文件和背景文件阅读。
 
-2. Howick J, Chalmers I, Glasziou P, Greenhalgh T, Heneghan C, Liberati A, Moschetti I, Phillips B, Thornton H. **The 2011 Oxford CEBM Levels of Evidence: Introductory Document**. Oxford Centre for Evidence-Based Medicine.  
-   PDF：https://www.cebm.ox.ac.uk/files/levels-of-evidence/cebm-levels-of-evidence-introduction-2-1.pdf
+1. OCEBM Levels of Evidence Working Group. **The Oxford 2011 Levels of Evidence**. Oxford Centre for Evidence-Based Medicine. [官方说明与下载页](https://www.cebm.ox.ac.uk/resources/levels-of-evidence/ocebm-levels-of-evidence)；[v2.1 表格 PDF](https://www.cebm.ox.ac.uk/files/levels-of-evidence/cebm-levels-of-evidence-2-1.pdf)
 
-3. Howick J, Chalmers I, Glasziou P, Greenhalgh T, Heneghan C, Liberati A, Moschetti I, Phillips B, Thornton H. **Explanation of the 2011 Oxford Centre for Evidence-Based Medicine (OCEBM) Levels of Evidence: Background Document**. Oxford Centre for Evidence-Based Medicine.  
-   PDF：https://www.cebm.ox.ac.uk/files/levels-of-evidence/cebm-levels-of-evidence-background-document-2-1.pdf
+2. Howick J, Chalmers I, Glasziou P, Greenhalgh T, Heneghan C, Liberati A, Moschetti I, Phillips B, Thornton H. **The 2011 Oxford CEBM Levels of Evidence: Introductory Document**. Oxford Centre for Evidence-Based Medicine. [介绍文件 PDF](https://www.cebm.ox.ac.uk/files/levels-of-evidence/cebm-levels-of-evidence-introduction-2-1.pdf)
+
+3. Howick J, Chalmers I, Glasziou P, Greenhalgh T, Heneghan C, Liberati A, Moschetti I, Phillips B, Thornton H. **Explanation of the 2011 Oxford Centre for Evidence-Based Medicine (OCEBM) Levels of Evidence: Background Document**. Oxford Centre for Evidence-Based Medicine. [背景文件 PDF](https://www.cebm.ox.ac.uk/files/levels-of-evidence/cebm-levels-of-evidence-background-document-2-1.pdf)
 
 ## CEBM 2011 使用原则
 
