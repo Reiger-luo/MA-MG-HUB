@@ -17,7 +17,7 @@ from pathlib import Path
 
 projectPath = Path(__file__).resolve().parent.parent
 dataDir = projectPath / "data"
-reportDir = projectPath / "report"
+auditReportDir = projectPath / ".hermes-audit" / "reports"
 taxonomyPath = dataDir / "communityTaxonomy.js"
 cardsPath = dataDir / "communityCards.js"
 auditPath = dataDir / "communityAudit.js"
@@ -347,11 +347,23 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--out",
-        default=str(reportDir / f"communitySemanticQualityAudit-{datetime.now().strftime('%Y-%m-%d')}.md"),
-        help="输出 Markdown 报告路径",
+        help="自定义输出 Markdown 路径；默认覆盖审计区的 latest 文件",
+    )
+    parser.add_argument(
+        "--snapshot",
+        action="store_true",
+        help="在审计区生成带时间戳的显式快照",
     )
     args = parser.parse_args()
-    outputPath = Path(args.out)
+    if args.out and args.snapshot:
+        parser.error("--out 与 --snapshot 不能同时使用")
+    if args.out:
+        outputPath = Path(args.out)
+    elif args.snapshot:
+        stamp = datetime.now().strftime("%Y-%m-%d-%H%M%S")
+        outputPath = auditReportDir / f"communityQuality-{stamp}.md"
+    else:
+        outputPath = auditReportDir / "communityQualityLatest.md"
     if not outputPath.is_absolute():
         outputPath = projectPath / outputPath
     result = buildAuditReport(outputPath)
