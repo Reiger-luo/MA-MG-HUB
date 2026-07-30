@@ -34,7 +34,6 @@
 
   <div class="intel-tabs" role="tablist" aria-label="情报中心视图">
     <button class="intel-tab active" type="button" data-tab="literature">文献速览</button>
-    <button class="intel-tab" type="button" data-tab="signals">信号板</button>
     <button class="intel-tab" type="button" data-tab="china">中国情报</button>
     <span class="intel-tab-separator" aria-hidden="true"></span>
     <button class="intel-tab intel-tab-conference" type="button" data-tab="conference">会议资讯</button>
@@ -194,46 +193,6 @@
         </table>
         <p style="margin-top:0.5rem;font-size:0.8rem;color:var(--fg3);">分类结果来自规则程序自动判定，仅供快速过滤参考。自动分级口径与方法学限制见本页映射表；重要决策请核查原文。</p>
       </div>
-    </div>
-  </section>
-
-  <section class="intel-tab-panel" id="tab-signals">
-    <div class="signal-topline">
-      <div>
-        <div class="section-kicker">当前 1 周 · 每周更新</div>
-        <h2>信号板</h2>
-      </div>
-      <div class="signal-filter" id="signalFilter">
-        <button class="signal-filter-btn active" type="button" data-signal-filter="all">全部</button>
-        <button class="signal-filter-btn" type="button" data-signal-filter="强">强</button>
-        <button class="signal-filter-btn" type="button" data-signal-filter="中">中</button>
-        <button class="signal-filter-btn" type="button" data-signal-filter="弱">弱</button>
-      </div>
-    </div>
-    <div class="signal-summary-grid" id="signalSummary"></div>
-    <div class="signal-layout">
-      <section class="signal-list" id="signalList"></section>
-      <aside class="signal-side">
-        <h3>高频主题</h3>
-        <div class="keyword-cloud" id="signalKeywords"></div>
-        <h3>怎么读</h3>
-        <div class="signal-reading-guide">
-          <p><strong>信号是什么</strong>：本期证据共同改变了哪项判断。</p>
-          <p><strong>证据补了什么</strong>：逐篇列结果、原有 gap 与仍需验证的边界。</p>
-          <p><strong>KOL 怎么聊</strong>：只保留可传递结论和需要追问的问题。</p>
-        </div>
-        <details class="signal-method-details">
-          <summary>查看筛选与强度口径</summary>
-          <div class="signal-spec">
-            <p>仅分析本周更新；先做 MG-core 相关性与证据等级 I–V 门控，再按治疗、机制、人群和路径聚合。</p>
-            <ul>
-              <li><strong>强</strong>：I/II 级，或 IF ≥ 10 且不是 V 级机制推理。</li>
-              <li><strong>中</strong>：IF ≥ 5、III/IV 级、中国相关，或未达到强信号标准的 efgartigimod（艾加莫德）相关内容。</li>
-              <li><strong>弱</strong>：其余达到入选门槛的线索。</li>
-            </ul>
-          </div>
-        </details>
-      </aside>
     </div>
   </section>
 

@@ -19,6 +19,12 @@
   };
   var pipelineData = window.MG_PIPELINE_STATUS || { storage: {} };
   var releaseData = window.MG_RELEASE_MANIFEST || {};
+  var literatureArticles = window.MG_LITERATURE_DATA || [];
+  var signalItems = [];
+  var signalFilter = 'all';
+  var signalTopicFilter = null;
+  var articleSignalStrengthByPmid = {};
+  var signalDeepLinkHandled = false;
 
   function escapeHtml(value) {
     if (hub.escapeText) return hub.escapeText(value);
@@ -73,7 +79,7 @@
   }
 
   function signalDetailUrl(signal) {
-    var path = 'pages/literature.html?tab=signals';
+    var path = 'pages/literature.html?tab=literature';
     if (signal && signal.id) path += '&signal=' + encodeURIComponent(signal.id);
     return pageUrl(path);
   }
@@ -118,7 +124,7 @@
         label: '强信号',
         value: strengthCounts.strong || 0,
         note: formatNumber(signalSummary.total_count || stats.signals || 0) + ' 条聚合信号',
-        href: 'pages/literature.html?tab=signals',
+        href: 'pages/literature.html?tab=literature',
         tone: 'urgent'
       },
       {
@@ -153,7 +159,444 @@
     }).join('');
   }
 
+  function parseDate(value) {
+    if (!value) return null;
+    var normalized = String(value).indexOf('T') === -1 ? String(value).replace(' ', 'T') : String(value);
+    var parsed = new Date(normalized);
+    return Number.isNaN(parsed.getTime()) ? null : parsed;
+  }
+
+  function normalizePmid(value) {
+    return String(value == null ? '' : value).trim();
+  }
+
+  function signalStrengthRank(strength) {
+    return { '强': 3, '中': 2, '弱': 1 }[strength || ''] || 0;
+  }
+
+  function compareSignals(a, b) {
+    var strengthDiff = signalStrengthRank(b.strength) - signalStrengthRank(a.strength);
+    if (strengthDiff !== 0) return strengthDiff;
+    if (b.score !== a.score) return b.score - a.score;
+    return (b.date || 0) - (a.date || 0);
+  }
+
+  function buildSignals() {
+    var sourceSignals = window.MG_SIGNALS_DATA && Array.isArray(window.MG_SIGNALS_DATA.signals) ?
+      window.MG_SIGNALS_DATA.signals : [];
+    signalItems = sourceSignals.map(function(signal) {
+      return {
+        id: signal.id || '',
+        article: signal.article || {},
+        date: parseDate(signal.date || (signal.article && signal.article.entry_date)),
+        type: signal.type || '新证据',
+        title: signal.title || signal.summary || (signal.article && signal.article.title) || '',
+        summary: signal.summary || signal.title || '',
+        strength: signal.strength || '弱',
+        topics: signal.keywords || [],
+        drugs: signal.drugs || [],
+        score: signal.score || 0,
+        age: 0,
+        article_count: signal.article_count || (signal.related_pmids || []).length || 1,
+        date_range: signal.date_range || null,
+        china_related: Boolean(signal.china_related || (signal.article && signal.article.china_related)),
+        related_pmids: signal.related_pmids || [],
+        refs: signal.refs || [],
+        evidenceItems: signal.evidenceItems || [],
+        takeaway: signal.takeaway || '',
+        whySignal: signal.whySignal || '',
+        evidenceBoundary: signal.evidenceBoundary || '',
+        gapBefore: signal.gapBefore || '',
+        gapFilled: signal.gapFilled || '',
+        remainingGap: signal.remainingGap || '',
+        maUse: signal.maUse || '',
+        talkingPoints: signal.talkingPoints || signal.kolFocus || [],
+        signal_to_kol: signal.signal_to_kol || null,
+        kol_leads: signal.kol_leads || [],
+        institution_leads: signal.institution_leads || [],
+        medical_affairs: signal.medical_affairs || {},
+        medical_affairs_implication: signal.medical_affairs_implication ||
+          (signal.medical_affairs && signal.medical_affairs.implication) || ''
+      };
+    });
+    signalItems.sort(compareSignals);
+  }
+
+  function rebuildArticleSignalStrengthIndex() {
+    articleSignalStrengthByPmid = {};
+    for (var i = 0; i < literatureArticles.length; i++) {
+      var article = literatureArticles[i] || {};
+      var articlePmid = normalizePmid(article.pmid);
+      var articleStrength = article.signal_strength || '';
+      if (articlePmid && ['强', '中', '弱'].indexOf(articleStrength) !== -1) {
+        articleSignalStrengthByPmid[articlePmid] = articleStrength;
+      }
+    }
+    for (var signalIndex = 0; signalIndex < signalItems.length; signalIndex++) {
+      var item = signalItems[signalIndex];
+      var pmids = (item.related_pmids || []).slice();
+      if (item.article && item.article.pmid) pmids.push(item.article.pmid);
+      for (var refIndex = 0; refIndex < (item.refs || []).length; refIndex++) {
+        if (item.refs[refIndex] && item.refs[refIndex].pmid) pmids.push(item.refs[refIndex].pmid);
+      }
+      for (var evidenceIndex = 0; evidenceIndex < (item.evidenceItems || []).length; evidenceIndex++) {
+        if (item.evidenceItems[evidenceIndex] && item.evidenceItems[evidenceIndex].pmid) {
+          pmids.push(item.evidenceItems[evidenceIndex].pmid);
+        }
+      }
+      for (var pmidIndex = 0; pmidIndex < pmids.length; pmidIndex++) {
+        var pmid = normalizePmid(pmids[pmidIndex]);
+        if (!pmid) continue;
+        if (articleSignalStrengthByPmid[pmid]) continue;
+        var previous = articleSignalStrengthByPmid[pmid] || '';
+        if (signalStrengthRank(item.strength) > signalStrengthRank(previous)) {
+          articleSignalStrengthByPmid[pmid] = item.strength;
+        }
+      }
+    }
+  }
+
+  function getFilteredSignalItems() {
+    return signalItems.filter(function(item) {
+      if (signalFilter !== 'all' && item.strength !== signalFilter) return false;
+      if (signalTopicFilter && item.topics.indexOf(signalTopicFilter) === -1) return false;
+      return true;
+    });
+  }
+
+  function uniqueSignalPmids(item) {
+    var pmids = [];
+    var seen = {};
+    var candidates = (item.related_pmids || []).slice();
+    if (item.article && item.article.pmid) candidates.push(item.article.pmid);
+    (item.refs || []).forEach(function(ref) { if (ref && ref.pmid) candidates.push(ref.pmid); });
+    (item.evidenceItems || []).forEach(function(evidence) { if (evidence && evidence.pmid) candidates.push(evidence.pmid); });
+    candidates.forEach(function(value) {
+      var pmid = normalizePmid(value);
+      if (!pmid || seen[pmid]) return;
+      seen[pmid] = true;
+      pmids.push(pmid);
+    });
+    return pmids;
+  }
+
+  function stripPmidMentions(value) {
+    var pmidWord = 'P' + 'MID';
+    var pmidPattern = new RegExp(pmidWord + 's?\\s*\\d{6,9}(?:\\s*[、,，/]\\s*(?:' + pmidWord + 's?\\s*)?\\d{6,9})*', 'gi');
+    return String(value || '')
+      .replace(pmidPattern, '')
+      .replace(/（\s*）|\(\s*\)/g, '')
+      .replace(/\s+([，。；：])/g, '$1')
+      .replace(/^[：:、，,；;\s]+|[：:、，,；;\s]+$/g, '')
+      .replace(/\s{2,}/g, ' ')
+      .trim();
+  }
+
+  function getRequestedSignalId() {
+    var params = new URLSearchParams(window.location.search || '');
+    return String(params.get('signal') || '');
+  }
+
+  function focusDeepLinkedSignal() {
+    if (signalDeepLinkHandled) return;
+    var requestedSignal = getRequestedSignalId();
+    if (!requestedSignal) return;
+    var target = document.getElementById('signal-' + safeClass(requestedSignal, 'signal'));
+    if (!target) return;
+    signalDeepLinkHandled = true;
+    target.classList.add('is-targeted');
+    window.requestAnimationFrame(function() {
+      target.focus({ preventScroll: true });
+      target.scrollIntoView({ block: 'start' });
+    });
+  }
+
+  function renderSignalSummary() {
+    var target = document.getElementById('signalSummary');
+    if (!target) return;
+    var counts = { all: signalItems.length, '强': 0, '中': 0, '弱': 0, china: 0 };
+    for (var i = 0; i < signalItems.length; i++) {
+      var signal = signalItems[i];
+      if (counts[signal.strength] == null) counts[signal.strength] = 0;
+      counts[signal.strength]++;
+      if (signal.china_related || (signal.article && signal.article.china_related)) counts.china++;
+    }
+    target.innerHTML =
+      '<div class="signal-stat-card"><span>本周信号</span><strong>' + escapeHtml(formatNumber(counts.all)) + '</strong></div>' +
+      '<div class="signal-stat-card strong"><span>强信号</span><strong>' + escapeHtml(formatNumber(counts['强'])) + '</strong></div>' +
+      '<div class="signal-stat-card medium"><span>中信号</span><strong>' + escapeHtml(formatNumber(counts['中'])) + '</strong></div>' +
+      '<div class="signal-stat-card china"><span>中国相关</span><strong>' + escapeHtml(formatNumber(counts.china)) + '</strong></div>';
+  }
+
+  function renderSignalKeywords() {
+    var target = document.getElementById('signalKeywords');
+    if (!target) return;
+    var topicCounts = {};
+    for (var i = 0; i < signalItems.length; i++) {
+      var topics = signalItems[i].topics || [];
+      for (var j = 0; j < topics.length; j++) {
+        topicCounts[topics[j]] = (topicCounts[topics[j]] || 0) + 1;
+      }
+    }
+    var topicsSorted = Object.keys(topicCounts).sort(function(a, b) {
+      return topicCounts[b] - topicCounts[a] || a.localeCompare(b, 'zh-Hans-CN');
+    });
+    if (!topicsSorted.length) {
+      target.innerHTML = '<span class="muted">暂无主题</span>';
+      return;
+    }
+    target.innerHTML = topicsSorted.slice(0, 12).map(function(topic) {
+      var isActive = topic === signalTopicFilter;
+      return '<button type="button" class="keyword-pill' + (isActive ? ' active' : '') + '" ' +
+        'data-signal-topic="' + escapeHtml(topic) + '" aria-pressed="' + (isActive ? 'true' : 'false') + '">' +
+        escapeHtml(topic) + '<strong>' + escapeHtml(formatNumber(topicCounts[topic])) + '</strong>' +
+      '</button>';
+    }).join('');
+    var buttons = target.querySelectorAll('.keyword-pill');
+    for (var b = 0; b < buttons.length; b++) {
+      buttons[b].addEventListener('click', function() {
+        var topic = this.getAttribute('data-signal-topic');
+        signalTopicFilter = signalTopicFilter === topic ? null : topic;
+        renderSignalBoard();
+      });
+    }
+  }
+
+  function bindSignalFilters() {
+    var btns = document.querySelectorAll('#signalFilter .signal-filter-btn');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].addEventListener('click', function() {
+        for (var b = 0; b < btns.length; b++) btns[b].classList.remove('active');
+        this.classList.add('active');
+        signalFilter = this.getAttribute('data-signal-filter') || 'all';
+        renderSignalBoard();
+      });
+    }
+  }
+
+  function renderSignalEvidence(item, renderedPmids) {
+    var refs = item.refs || [];
+    var refsByPmid = {};
+    refs.forEach(function(ref) {
+      if (ref && ref.pmid) refsByPmid[String(ref.pmid)] = ref;
+    });
+    var evidenceItems = [];
+    var evidenceByPmid = {};
+    (item.evidenceItems || []).forEach(function(evidence) {
+      var pmid = evidence && evidence.pmid ? String(evidence.pmid) : '';
+      if (!pmid || evidenceByPmid[pmid]) return;
+      evidenceByPmid[pmid] = evidence;
+      evidenceItems.push(evidence);
+    });
+    refs.forEach(function(ref) {
+      var pmid = ref && ref.pmid ? String(ref.pmid) : '';
+      if (!pmid || evidenceByPmid[pmid]) return;
+      var fallback = {
+        pmid: pmid,
+        finding: ref.key_evidence || '',
+        gapContribution: '',
+        boundary: ''
+      };
+      evidenceByPmid[pmid] = fallback;
+      evidenceItems.push(fallback);
+    });
+    if (!evidenceItems.length) return '';
+
+    var pmidLabel = 'P' + 'MID';
+    var rows = evidenceItems.map(function(evidence) {
+      var pmid = String(evidence.pmid || '');
+      if (!pmid || renderedPmids[pmid]) return '';
+      renderedPmids[pmid] = true;
+      var ref = refsByPmid[pmid] || {};
+      var href = ref.url || evidence.url || '';
+      var pmidHtml = href
+        ? '<a class="literature-signal-ref" href="' + escapeHref(href) + '" target="_blank" rel="noopener">' + escapeHtml(pmidLabel + ' ' + pmid) + '</a>'
+        : '<span class="literature-signal-ref">' + escapeHtml(pmidLabel + ' ' + pmid) + '</span>';
+      var design = (ref.study_types || evidence.studyTypes || []).slice(0, 2).join(' / ');
+      var articleStrength = articleSignalStrengthByPmid[pmid] || '';
+      var meta = [ref.evidence_level ? '证据 ' + ref.evidence_level : '', design,
+        articleStrength ? '文献级 ' + articleStrength : ''
+      ].filter(Boolean).map(function(value) {
+        return '<span>' + escapeHtml(value) + '</span>';
+      }).join('');
+      var finding = stripPmidMentions(evidence.finding || evidence.keyFinding || ref.key_evidence || '摘要结果待补充，需阅读全文核查。');
+      var contribution = stripPmidMentions(evidence.gapContribution || evidence.contribution || '为该信号补充了一项可追溯的摘要级研究结果。');
+      var boundary = stripPmidMentions(evidence.boundary || evidence.limit || '研究设计与外推范围需结合全文核查。');
+      var evidenceTitle = stripPmidMentions(evidence.title || ref.title || '研究证据');
+      return '<article class="literature-evidence-item">' +
+        '<div class="literature-evidence-head"><div>' + pmidHtml + meta + '</div></div>' +
+        (evidenceTitle ? '<h4>' + escapeHtml(evidenceTitle) + '</h4>' : '') +
+        '<div class="literature-evidence-result"><span>研究结果</span><p>' + escapeHtml(finding) + '</p></div>' +
+        '<div class="literature-evidence-gap"><span>这篇补了什么 gap</span><p>' + escapeHtml(contribution) + '</p></div>' +
+        '<p class="literature-evidence-boundary"><strong>边界</strong> · ' + escapeHtml(boundary) + '</p>' +
+      '</article>';
+    }).join('');
+    return rows ? '<section class="literature-evidence-ledger"><div class="literature-signal-section-title">证据怎么支持</div>' + rows + '</section>' : '';
+  }
+
+  function renderLiteratureTalkingPoints(item) {
+    var points = item.talkingPoints || item.kolFocus || [];
+    if (!item.takeaway && !item.whySignal && !item.evidenceBoundary && !points.length && !(item.refs || []).length) return '';
+    var renderedPmids = {};
+    var pointHtml = points.slice(0, 4).map(function(point, index) {
+      var tier = point.priorityTier || 'disease_progress';
+      var tierLabel = point.priorityLabel || (tier === 'efgar' ? 'efgar重点传递' : tier === 'competitor_response' ? '竞品应对解读' : '疾病进展传递');
+      var seenMessages = {};
+      var messages = (point.keyMessages || []).map(function(message) {
+        var cleanMessage = stripPmidMentions(message);
+        if (!cleanMessage || seenMessages[cleanMessage]) return '';
+        seenMessages[cleanMessage] = true;
+        return '<li>' + escapeHtml(cleanMessage) + '</li>';
+      }).join('');
+      return '<article class="literature-signal-point">' +
+        '<div class="literature-signal-point-head"><span>' + escapeHtml(point.dimension || ('交流 ' + String(index + 1).padStart(2, '0'))) + '</span><em class="literature-signal-tier ' + escapeHtml(tier) + '">' + escapeHtml(tierLabel) + '</em></div>' +
+        '<strong>' + escapeHtml(stripPmidMentions(point.title || '')) + '</strong>' +
+        (point.whyKol ? '<p class="literature-signal-why">' + escapeHtml(stripPmidMentions(point.whyKol)) + '</p>' : '') +
+        (messages ? '<ul>' + messages + '</ul>' : '') +
+      '</article>';
+    }).join('');
+    var gapBefore = stripPmidMentions(item.gapBefore || '');
+    var gapFilled = stripPmidMentions(item.gapFilled || item.whySignal || '');
+    var remainingGap = stripPmidMentions(item.remainingGap || item.evidenceBoundary || '');
+    var gapHtml = [
+      gapBefore ? '<div><span>原有 gap</span><p>' + escapeHtml(gapBefore) + '</p></div>' : '',
+      gapFilled ? '<div class="filled"><span>本期补充</span><p>' + escapeHtml(gapFilled) + '</p></div>' : '',
+      remainingGap ? '<div><span>仍待回答</span><p>' + escapeHtml(remainingGap) + '</p></div>' : ''
+    ].join('');
+    var ma = item.medical_affairs || {};
+    var kolQuestion = stripPmidMentions(ma.suggested_kol_question || '');
+    var mslAction = stripPmidMentions(ma.msl_action || '');
+    var evidenceHtml = renderSignalEvidence(item, renderedPmids);
+    return '<div class="literature-signal-narrative">' +
+      '<section class="literature-signal-change"><div class="literature-signal-section-title">信号是什么</div>' +
+        (item.takeaway ? '<p class="literature-signal-takeaway">' + escapeHtml(stripPmidMentions(item.takeaway)) + '</p>' : '') +
+      '</section>' +
+      (gapHtml ? '<section class="literature-signal-gap-grid"><div class="literature-signal-section-title">为什么构成信号</div>' + gapHtml + '</section>' : '') +
+      evidenceHtml +
+      (pointHtml ? '<section class="literature-signal-points"><div class="literature-signal-section-title">KOL 交流要点</div>' + pointHtml +
+        (kolQuestion ? '<div class="literature-kol-question"><span>建议追问</span><p>' + escapeHtml(kolQuestion) + '</p></div>' : '') +
+        (mslAction ? '<p class="literature-msl-action"><strong>会前动作</strong> · ' + escapeHtml(mslAction) + '</p>' : '') +
+      '</section>' : '') +
+    '</div>';
+  }
+
+  function renderSignalToKol(item) {
+    if ((item.talkingPoints || item.kolFocus || []).length) return '';
+    var leads = item.kol_leads || [];
+    var institutions = item.institution_leads || [];
+    var ma = item.medical_affairs || {};
+    var implication = item.medical_affairs_implication || ma.implication || '';
+    if (!item.signal_to_kol && !leads.length && !institutions.length && !implication) return '';
+    var leadHtml = leads.slice(0, 2).map(function(lead) {
+      var roles = (lead.roles || []).join('/');
+      var meta = [roles, lead.institution, lead.country || lead.region].filter(Boolean).join(' · ');
+      return '<span class="signal-kol-chip"><strong>' + escapeHtml(lead.name || 'Unknown KOL') + '</strong><em>' + escapeHtml(meta) + '</em></span>';
+    }).join('');
+    var institutionHtml = institutions.slice(0, 2).map(function(inst) {
+      var meta = [inst.country || inst.region, (inst.article_author_count ? inst.article_author_count + ' authors' : '')].filter(Boolean).join(' · ');
+      return '<span class="signal-kol-chip institution"><strong>' + escapeHtml(inst.name || 'Unknown institution') + '</strong><em>' + escapeHtml(meta) + '</em></span>';
+    }).join('');
+    var actionHtml = ma.msl_action ? '<p><strong>MSL action</strong>：' + escapeHtml(ma.msl_action) + '</p>' : '';
+    var questionHtml = ma.suggested_kol_question ? '<p><strong>KOL question</strong>：' + escapeHtml(ma.suggested_kol_question) + '</p>' : '';
+    return '<div class="signal-kol-bridge">' +
+      '<div class="signal-kol-kicker">Signal → KOL</div>' +
+      (implication ? '<p>' + escapeHtml(implication) + '</p>' : '') +
+      (leadHtml ? '<div class="signal-kol-row">' + leadHtml + '</div>' : '') +
+      (institutionHtml ? '<div class="signal-kol-row institutions">' + institutionHtml + '</div>' : '') +
+      actionHtml + questionHtml +
+    '</div>';
+  }
+
+  function renderSignalCard(item) {
+    var a = item.article || {};
+    var signalId = item.id || (a.pmid ? 'pmid-' + a.pmid : '');
+    var signalAnchor = 'signal-' + safeClass(signalId || item.title || item.summary || 'item');
+    var signalClass = ['signal', 'card'].join('-');
+    var signalHeadClass = signalClass + '-head';
+    var signalTitleClass = 'signal-title';
+    var signalMetaClass = 'signal-meta';
+    var signalTopicRowClass = 'signal-topic-row';
+    var signalTitle = stripPmidMentions(item.title || item.summary || a.title || '(无标题)');
+    var dateStr = item.date ? item.date.toLocaleDateString('zh-CN') : (a.pub_date || '');
+    var topics = item.topics || [];
+    var drugs = item.drugs || [];
+    var topicHtml = '';
+    for (var i = 0; i < topics.length; i++) {
+      topicHtml += '<span class="signal-topic">' + escapeHtml(topics[i]) + '</span>';
+    }
+    var drugHtml = '';
+    for (var d = 0; d < drugs.length; d++) {
+      drugHtml += '<span class="signal-drug">' + escapeHtml(drugs[d]) + '</span>';
+    }
+    var tagHtml = topicHtml + drugHtml + (item.china_related ? '<span class="signal-topic china">中国相关</span>' : '');
+    var kolHtml = renderSignalToKol(item);
+    var narrativeHtml = renderLiteratureTalkingPoints(item);
+    var meta = escapeHtml(formatNumber(item.article_count || 0) + ' 篇文献 · ' + (item.date_range ? item.date_range.from + '–' + item.date_range.to : dateStr));
+    return '' +
+      '<article id="' + escapeHtml(signalAnchor) + '" data-signal-id="' + escapeHtml(signalId) +
+        '" class="' + signalClass + ' signal-' + escapeHtml(item.strength) + '" tabindex="-1">' +
+        '<div class="' + signalHeadClass + '">' +
+          '<span class="signal-strength">' + escapeHtml(item.strength) + '信号</span>' +
+          '<span class="signal-type">' + escapeHtml(item.type) + '</span>' +
+        '</div>' +
+        '<h3 class="' + signalTitleClass + '">' + escapeHtml(signalTitle) + '</h3>' +
+        '<div class="' + signalMetaClass + '">' + meta + '</div>' +
+        narrativeHtml +
+        kolHtml +
+        '<div class="' + signalTopicRowClass + '">' + tagHtml + '</div>' +
+        '<div class="dashboard-priority-actions">' +
+          '<a class="text-link" href="' + escapeHref(signalDetailUrl(item)) + '">查看文献</a>' +
+          '<a class="text-link" href="' + escapeHref(pageUrl('pages/msl.html')) + '">准备 KOL 讨论</a>' +
+        '</div>' +
+      '</article>';
+  }
+
   function renderSignals() {
+    var target = document.getElementById('signalList');
+    if (!target) return;
+    var filtered = getFilteredSignalItems().slice();
+    if (!filtered.length) {
+      target.innerHTML = '<div class="empty-state small"><h3>本周暂无信号</h3><p>切换筛选条件或等待下一轮数据更新</p></div>';
+      return;
+    }
+
+    var requestedSignal = getRequestedSignalId();
+    if (!signalDeepLinkHandled && requestedSignal) {
+      for (var i = 0; i < signalItems.length; i++) {
+        if (String(signalItems[i].id || '') !== requestedSignal) continue;
+        var requestedIndex = filtered.indexOf(signalItems[i]);
+        if (requestedIndex > 0) {
+          filtered.splice(requestedIndex, 1);
+          filtered.unshift(signalItems[i]);
+        } else if (requestedIndex === -1) {
+          filtered.unshift(signalItems[i]);
+        }
+        break;
+      }
+    }
+
+    target.innerHTML = filtered.map(function(item) {
+      return renderSignalCard(item);
+    }).join('');
+    focusDeepLinkedSignal();
+  }
+
+  function renderSignalBoard() {
+    if (!document.getElementById('signalSummary') || !document.getElementById('signalList') ||
+      !document.getElementById('signalKeywords')) return;
+    renderSignalSummary();
+    renderSignals();
+    renderSignalKeywords();
+  }
+
+  function initSignalBoard() {
+    buildSignals();
+    rebuildArticleSignalStrengthIndex();
+    bindSignalFilters();
+    renderSignalBoard();
+  }
+
+  function renderPrioritySignalsLegacy() {
     var target = document.getElementById('dashboardSignals');
     if (!target) return;
     var signals = Array.isArray(data.top_signals) ? data.top_signals.slice() : [];
@@ -268,7 +711,7 @@
   function init() {
     renderReleaseStatus();
     renderStats();
-    renderSignals();
+    initSignalBoard();
     renderTrials();
     renderCommunityDynamics();
 
