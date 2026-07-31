@@ -646,16 +646,35 @@
     var registryId = String(changeItem.registry_id || '');
     var title = String(changeItem.title || changeItem.registry_id || '(无标题)');
     var url = String(changeItem.url || (registryId ? 'https://clinicaltrials.gov/study/' + registryId : '#'));
-    var metaParts = [registryId];
     var drugName = String(changeItem.drug_name || '');
     var phaseLabel = String(changeItem.phase_label || '');
-    if (drugName) metaParts.push(drugName);
-    if (phaseLabel) metaParts.push(phaseLabel);
+
+    // 主行：变化类型标签 + 药物 + 阶段（优先呈现"变了什么"）
+    var changeLabelMap = {
+      added: '新增', status: '状态变化', results: '结果发布', updated: '更新', removed: '移除'
+    };
+    var changeLabel = changeLabelMap[dotClass] || '更新';
+    var mainParts = [changeLabel];
+    if (drugName) mainParts.push(drugName);
+    if (phaseLabel) mainParts.push(phaseLabel);
+    var mainText = mainParts.join(' · ');
+
+    // 副行：NCT编号 + 变化详情（日期/状态转换等）
+    var metaParts = [];
+    if (registryId) metaParts.push(registryId);
     if (detailText) metaParts.push(detailText);
     var metaText = metaParts.join(' · ');
+
+    // 副行2：研究标题截断（过长时只保留前 80 字符）
+    var shortTitle = title.length > 80 ? title.slice(0, 80) + '…' : title;
+
     return '<a class="dashboard-trial-change-row" href="' + escapeHref(url) + '" target="_blank" rel="noopener">' +
       '<i class="dot ' + escapeHtml(dotClass) + '" aria-hidden="true"></i>' +
-      '<div><strong>' + escapeHtml(title) + '</strong><em>' + escapeHtml(metaText) + '</em></div>' +
+      '<div>' +
+        '<strong>' + escapeHtml(mainText) + '</strong>' +
+        '<em>' + escapeHtml(metaText) + '</em>' +
+        (shortTitle ? '<span class="dashboard-trial-change-title">' + escapeHtml(shortTitle) + '</span>' : '') +
+      '</div>' +
     '</a>';
   }
 

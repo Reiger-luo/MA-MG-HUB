@@ -147,6 +147,19 @@ a, button { touch-action: manipulation; -webkit-tap-highlight-color: rgba(37,99,
   border-radius: 8px; padding: 0.85rem 1rem;
   transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.15s ease;
 }
+/* 4 个按钮默认底色 */
+.signal-stat-card.strong {
+  background: rgba(220,38,38,0.045); border-color: rgba(220,38,38,0.2);
+}
+.signal-stat-card.medium {
+  background: rgba(202,138,4,0.04); border-color: rgba(202,138,4,0.2);
+}
+.signal-stat-card.weak {
+  background: rgba(107,114,128,0.035); border-color: rgba(107,114,128,0.18);
+}
+.signal-stat-card.strong strong { color: #b91c1c; }
+.signal-stat-card.medium strong { color: #a16207; }
+.signal-stat-card.weak strong { color: #4b5563; }
 .signal-stat-card:hover {
   border-color: rgba(37,99,235,0.28);
   transform: translateY(-1px);
@@ -174,22 +187,22 @@ a, button { touch-action: manipulation; -webkit-tap-highlight-color: rgba(37,99,
   color: var(--accent); font-weight: 600;
 }
 .signal-stat-card.strong[aria-pressed="true"] {
-  border-color: rgba(220,38,38,0.45);
-  background: rgba(220,38,38,0.06);
+  border-color: rgba(220,38,38,0.5);
+  background: rgba(220,38,38,0.09);
 }
 .signal-stat-card.strong[aria-pressed="true"] em {
   color: var(--red);
 }
 .signal-stat-card.medium[aria-pressed="true"] {
-  border-color: rgba(202,138,4,0.45);
-  background: rgba(202,138,4,0.06);
+  border-color: rgba(202,138,4,0.5);
+  background: rgba(202,138,4,0.08);
 }
 .signal-stat-card.medium[aria-pressed="true"] em {
   color: var(--yellow);
 }
 .signal-stat-card.weak[aria-pressed="true"] {
-  border-color: rgba(107,114,128,0.45);
-  background: rgba(107,114,128,0.05);
+  border-color: rgba(107,114,128,0.5);
+  background: rgba(107,114,128,0.07);
 }
 .signal-stat-card.weak[aria-pressed="true"] em {
   color: var(--fg2);
@@ -3573,6 +3586,11 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
 .dashboard-trial-change-row em {
   display: block; margin-top: 0.08rem;
   color: var(--fg3); font-size: 0.66rem; font-style: normal; line-height: 1.45;
+}
+.dashboard-trial-change-title {
+  display: block; margin-top: 0.12rem;
+  color: var(--fg3); font-size: 0.64rem; line-height: 1.4;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .dashboard-trial-change-more,
 .dashboard-trial-removed {
