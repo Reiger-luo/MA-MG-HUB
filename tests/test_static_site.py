@@ -49,7 +49,7 @@ def test_dashboard_is_action_first_workbench():
     assert 'id="signalStrengthLegend"' in html
     assert "clinicalTrialsSummary.js" in html
     assert html.index('id="dashboardSignals"') < html.index('id="dashboardCommunityDynamics"')
-    assert html.index('class="dashboard-side-stack"') < html.index('class="workspace-panel dashboard-community-panel"')
+    assert html.index('class="dashboard-side-stack"') < html.index('dashboard-community-panel') < html.index('</aside>')
     assert 'signal-filter-btn' not in html
     assert 'id="dashboardReviewQueue"' not in html
     assert 'id="dashboardSections"' not in html

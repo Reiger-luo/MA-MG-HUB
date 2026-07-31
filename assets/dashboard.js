@@ -318,10 +318,10 @@
       if (counts[signal.strength] != null) counts[signal.strength]++;
     }
     target.innerHTML = [
-      { label: '全部', count: counts.all, filter: 'all', tone: '', state: '本周信号' },
-      { label: '强', count: counts['强'], filter: '强', tone: 'strong', state: '强信号' },
-      { label: '中', count: counts['中'], filter: '中', tone: 'medium', state: '中信号' },
-      { label: '弱', count: counts['弱'], filter: '弱', tone: 'weak', state: '弱信号' }
+      { label: '全部', count: counts.all, filter: 'all', tone: '' },
+      { label: '强', count: counts['强'], filter: '强', tone: 'strong' },
+      { label: '中', count: counts['中'], filter: '中', tone: 'medium' },
+      { label: '弱', count: counts['弱'], filter: '弱', tone: 'weak' }
     ].map(function(card) {
       var isActive = signalFilter === card.filter;
       return '<button type="button" class="signal-stat-card' + (card.tone ? ' ' + card.tone : '') + '" ' +
@@ -642,6 +642,77 @@
     }).join('') + '</div>';
   }
 
+  function renderTrialChangeRow(entry, dotClass, detailText) {
+    var registryId = entry.registry_id || entry.id || '未知编号';
+    var title = entry.title || '未命名研究';
+    var href = entry.url || '#';
+    return '<a class="dashboard-trial-change-row" href="' + escapeHref(href) + '" target="_blank" rel="noopener">' +
+      '<i class="dot ' + escapeHtml(dotClass) + '" aria-hidden="true"></i>' +
+      '<div><strong>' + escapeHtml(title) + '</strong><em>' + escapeHtml(registryId + ' · ' + detailText) + '</em></div>' +
+    '</a>';
+  }
+
+  function renderTrialChanges(weeklyChanges) {
+    var changes = weeklyChanges || {};
+    var previousSnapshotAt = String(changes.previous_snapshot_at || '').trim();
+    var windowDays = numberValue(changes.window_days, 7);
+    var addedItems = Array.isArray(changes.added) ? changes.added : [];
+    var statusChangeItems = Array.isArray(changes.status_changes) ? changes.status_changes : [];
+    var resultsPostedItems = Array.isArray(changes.results_posted) ? changes.results_posted : [];
+    var updatedItems = Array.isArray(changes.updated) ? changes.updated : [];
+    var removedItems = Array.isArray(changes.removed) ? changes.removed : [];
+    var addedCount = numberValue(changes.added_count, addedItems.length);
+    var statusChangeCount = numberValue(changes.status_change_count, statusChangeItems.length);
+    var resultsPostedCount = numberValue(changes.results_posted_count, resultsPostedItems.length);
+    var updatedCount = numberValue(changes.updated_count, updatedItems.length);
+    var removedCount = numberValue(changes.removed_count, removedItems.length);
+    var hasAnyChange = addedCount > 0 || statusChangeCount > 0 || resultsPostedCount > 0 || updatedCount > 0 || removedCount > 0;
+    var rowHtml = [];
+
+    if (!hasAnyChange && !previousSnapshotAt) {
+      return '<p class="dashboard-data-note">ClinicalTrials.gov 为目前唯一周更注册源；变化要点自下一次周更起在此自动呈现。</p>';
+    }
+
+    addedItems.forEach(function(item) {
+      var addedItem = item || {};
+      rowHtml.push(renderTrialChangeRow(addedItem, 'added', String(addedItem.first_post_date || '日期待确认')));
+    });
+    statusChangeItems.forEach(function(item) {
+      var statusItem = item || {};
+      var fromLabel = statusItem.from_label || statusItem.from_status || '未知状态';
+      var toLabel = statusItem.to_label || statusItem.to_status || '未知状态';
+      rowHtml.push(renderTrialChangeRow(statusItem, 'status', fromLabel + ' → ' + toLabel + ' · ' + (statusItem.updated_date || '日期待确认')));
+    });
+    resultsPostedItems.forEach(function(item) {
+      var resultsItem = item || {};
+      rowHtml.push(renderTrialChangeRow(resultsItem, 'results', String(resultsItem.results_post_date || '日期待确认')));
+    });
+    if (updatedItems.length) {
+      updatedItems.slice(0, 4).forEach(function(item) {
+        var updatedItem = item || {};
+        rowHtml.push(renderTrialChangeRow(updatedItem, 'updated', String(updatedItem.updated_date || '日期待确认')));
+      });
+      if (updatedItems.length > 4) {
+        rowHtml.push('<p class="dashboard-trial-change-more">+' +
+          escapeHtml(formatNumber(updatedItems.length - 4)) + ' 项其他更新</p>');
+      }
+    }
+    if (removedCount > 0) {
+      rowHtml.push('<p class="dashboard-trial-removed">移除 ' + escapeHtml(formatNumber(removedCount)) + ' 项</p>');
+    }
+    if (!rowHtml.length && previousSnapshotAt) {
+      rowHtml.push('<p class="dashboard-data-note">本周暂无注册变化。</p>');
+    }
+
+    return '<div class="dashboard-trial-changes">' +
+      '<div class="dashboard-trial-changes-head"><strong>本周注册变化</strong><span>近 ' +
+        escapeHtml(formatNumber(windowDays)) + ' 天 · 对比 ' +
+        escapeHtml(previousSnapshotAt || '首次基线 · 下周起自动对比') +
+      '</span></div>' +
+      rowHtml.join('') +
+    '</div>';
+  }
+
   function renderTrials() {
     var target = document.getElementById('dashboardTrials');
     if (!target) return;
@@ -652,69 +723,10 @@
     var totalCount = meta.total_count || 0;
     var matrixCount = clinicalTrialsData.pipeline_matrix_count || 0;
     var recentCount = clinicalTrialsData.recent_registration_count || 0;
-    var previousSnapshotAt = weeklyChanges.previous_snapshot_at || '';
-    var windowDays = numberValue(weeklyChanges.window_days, 7);
-    var addedItems = Array.isArray(weeklyChanges.added) ? weeklyChanges.added : [];
-    var statusChangeItems = Array.isArray(weeklyChanges.status_changes) ? weeklyChanges.status_changes : [];
-    var resultsPostedItems = Array.isArray(weeklyChanges.results_posted) ? weeklyChanges.results_posted : [];
-    var updatedItems = Array.isArray(weeklyChanges.updated) ? weeklyChanges.updated : [];
-    var removedCount = numberValue(weeklyChanges.removed_count, 0);
-    var hasWeeklyChangeRows = addedItems.length > 0 || statusChangeItems.length > 0 ||
-      resultsPostedItems.length > 0 || updatedItems.length > 0 || removedCount > 0;
 
     if (!totalCount) {
       target.innerHTML = '<div class="empty-state small"><h3>临床试验摘要待生成</h3><p>完整矩阵仍可在情报中心查看。</p></div>';
       return;
-    }
-
-    function renderTrialChangeRow(item, dotClass, detailText) {
-      var registryId = item.registry_id || 'N/A';
-      var title = item.title || registryId;
-      var href = item.url || '#';
-      return '<a class="dashboard-trial-change-row" href="' + escapeHref(href) + '" target="_blank" rel="noopener">' +
-        '<i class="dot ' + escapeHtml(dotClass) + '" aria-hidden="true"></i>' +
-        '<div><strong>' + escapeHtml(title) + '</strong><em>' + escapeHtml(registryId + ' · ' + detailText) + '</em></div>' +
-      '</a>';
-    }
-
-    var weeklyChangesHtml = '';
-    if (!previousSnapshotAt && !hasWeeklyChangeRows) {
-      weeklyChangesHtml = '<p class="dashboard-data-note">ClinicalTrials.gov 为目前唯一周更注册源；变化要点自下一次周更起在此自动呈现。</p>';
-    } else {
-      var weeklyChangeRows = [];
-      var weekLabel = previousSnapshotAt ?
-        '近 ' + escapeHtml(formatNumber(windowDays)) + ' 天 · 对比 ' + escapeHtml(previousSnapshotAt) :
-        '首次基线 · 下周起自动对比';
-
-      addedItems.forEach(function(item) {
-        weeklyChangeRows.push(renderTrialChangeRow(item, 'added', item.first_post_date || '日期待更新'));
-      });
-      statusChangeItems.forEach(function(item) {
-        var fromLabel = item.from_label || item.from_status || '未知状态';
-        var toLabel = item.to_label || item.to_status || '未知状态';
-        weeklyChangeRows.push(renderTrialChangeRow(item, 'status',
-          fromLabel + ' → ' + toLabel + ' · ' + (item.updated_date || '日期待更新')));
-      });
-      resultsPostedItems.forEach(function(item) {
-        weeklyChangeRows.push(renderTrialChangeRow(item, 'results', item.results_post_date || '日期待更新'));
-      });
-      if (updatedItems.length) {
-        updatedItems.slice(0, 4).forEach(function(item) {
-          weeklyChangeRows.push(renderTrialChangeRow(item, 'updated', item.updated_date || '日期待更新'));
-        });
-        if (updatedItems.length > 4) {
-          weeklyChangeRows.push('<p class="dashboard-trial-change-more">+' +
-            escapeHtml(formatNumber(updatedItems.length - 4)) + ' 项其他更新</p>');
-        }
-      }
-      if (removedCount > 0) {
-        weeklyChangeRows.push('<p class="dashboard-trial-removed">移除 ' + escapeHtml(formatNumber(removedCount)) + ' 项</p>');
-      }
-
-      weeklyChangesHtml = '<div class="dashboard-trial-changes">' +
-        '<div class="dashboard-trial-changes-head"><strong>本周注册变化</strong><span>' + weekLabel + '</span></div>' +
-        weeklyChangeRows.join('') +
-      '</div>';
     }
 
     target.innerHTML =
@@ -730,7 +742,7 @@
         return '<span>' + escapeHtml(source.source) + ' <strong>' + escapeHtml(formatNumber(source.count)) + '</strong></span>';
       }).join('') + '</div>' +
       '<p class="dashboard-data-note">数据更新 ' + escapeHtml(formatDateTime(meta.generated_at)) + '</p>' +
-      weeklyChangesHtml;
+      renderTrialChanges(weeklyChanges);
   }
 
   function communityLevel(value) {
