@@ -641,14 +641,21 @@
       '</article>';
     }).join('') + '</div>';
   }
-
-  function renderTrialChangeRow(entry, dotClass, detailText) {
-    var registryId = entry.registry_id || entry.id || '未知编号';
-    var title = entry.title || '未命名研究';
-    var href = entry.url || '#';
-    return '<a class="dashboard-trial-change-row" href="' + escapeHref(href) + '" target="_blank" rel="noopener">' +
+  function renderTrialChangeRow(item, dotClass, detailText) {
+    var changeItem = item || {};
+    var registryId = String(changeItem.registry_id || '');
+    var title = String(changeItem.title || changeItem.registry_id || '(无标题)');
+    var url = String(changeItem.url || (registryId ? 'https://clinicaltrials.gov/study/' + registryId : '#'));
+    var metaParts = [registryId];
+    var drugName = String(changeItem.drug_name || '');
+    var phaseLabel = String(changeItem.phase_label || '');
+    if (drugName) metaParts.push(drugName);
+    if (phaseLabel) metaParts.push(phaseLabel);
+    if (detailText) metaParts.push(detailText);
+    var metaText = metaParts.join(' · ');
+    return '<a class="dashboard-trial-change-row" href="' + escapeHref(url) + '" target="_blank" rel="noopener">' +
       '<i class="dot ' + escapeHtml(dotClass) + '" aria-hidden="true"></i>' +
-      '<div><strong>' + escapeHtml(title) + '</strong><em>' + escapeHtml(registryId + ' · ' + detailText) + '</em></div>' +
+      '<div><strong>' + escapeHtml(title) + '</strong><em>' + escapeHtml(metaText) + '</em></div>' +
     '</a>';
   }
 
@@ -713,6 +720,52 @@
     '</div>';
   }
 
+  function renderTrialInsights(insights) {
+    var data = insights || {};
+    var population = Array.isArray(data.population_distribution) ? data.population_distribution : [];
+    var phases = Array.isArray(data.phase_concentration) ? data.phase_concentration : [];
+    var recent = data.recent_registrations || {};
+    var recentDrugs = Array.isArray(recent.top_drugs) ? recent.top_drugs : [];
+    var recentPhases = Array.isArray(recent.top_phases) ? recent.top_phases : [];
+    var recentCount = numberValue(recent.count, 0);
+    if (!population.length && !phases.length && !recentCount) return '';
+
+    function pills(items, maxItems) {
+      var slice = items.slice(0, maxItems || 6);
+      return slice.map(function(item) {
+        return '<span class="dashboard-insight-pill"><em>' + escapeHtml(item.label) +
+          '</em><strong>' + escapeHtml(formatNumber(item.count)) + '</strong></span>';
+      }).join('');
+    }
+
+    var html = '<div class="dashboard-trial-insights">';
+    if (population.length) {
+      html += '<div class="dashboard-insight-group"><span class="dashboard-insight-label">人群覆盖</span>' +
+        '<div class="dashboard-insight-pills">' + pills(population, 6) + '</div></div>';
+    }
+    if (phases.length) {
+      html += '<div class="dashboard-insight-group"><span class="dashboard-insight-label">阶段集中度</span>' +
+        '<div class="dashboard-insight-pills">' + pills(phases, 6) + '</div></div>';
+    }
+    if (recentCount) {
+      var trendParts = ['近 6 月新开 ' + formatNumber(recentCount) + ' 项'];
+      if (recentDrugs.length) {
+        trendParts.push('药物 ' + recentDrugs.map(function(d) {
+          return escapeHtml(d.label) + '(' + formatNumber(d.count) + ')';
+        }).join('、'));
+      }
+      if (recentPhases.length) {
+        trendParts.push('阶段 ' + recentPhases.map(function(p) {
+          return escapeHtml(p.label) + '(' + formatNumber(p.count) + ')';
+        }).join('、'));
+      }
+      html += '<div class="dashboard-insight-group"><span class="dashboard-insight-label">新开趋势</span>' +
+        '<p class="dashboard-insight-trend">' + trendParts.join(' · ') + '</p></div>';
+    }
+    html += '</div>';
+    return html;
+  }
+
   function renderTrials() {
     var target = document.getElementById('dashboardTrials');
     if (!target) return;
@@ -720,6 +773,7 @@
     var sourceCounts = clinicalTrialsData.source_counts || [];
     var leadingMechanism = clinicalTrialsData.leading_mechanism || {};
     var weeklyChanges = clinicalTrialsData.weekly_changes || {};
+    var trialInsights = clinicalTrialsData.trial_insights || {};
     var totalCount = meta.total_count || 0;
     var matrixCount = clinicalTrialsData.pipeline_matrix_count || 0;
     var recentCount = clinicalTrialsData.recent_registration_count || 0;
@@ -736,11 +790,12 @@
         '<span><em>招募中</em><strong>' + escapeHtml(formatNumber(clinicalTrialsData.recruiting_count || 0)) + '</strong></span>' +
         '<span><em>近 6 月登记</em><strong>' + escapeHtml(formatNumber(recentCount)) + '</strong></span>' +
       '</div>' +
-      (leadingMechanism.label ? '<p class="dashboard-trial-highlight">机制热点：<strong>' +
-        escapeHtml(leadingMechanism.label) + '</strong> · ' + escapeHtml(formatNumber(leadingMechanism.count)) + ' 项</p>' : '') +
       '<div class="dashboard-source-pills">' + sourceCounts.map(function(source) {
         return '<span>' + escapeHtml(source.source) + ' <strong>' + escapeHtml(formatNumber(source.count)) + '</strong></span>';
       }).join('') + '</div>' +
+      (leadingMechanism.label ? '<p class="dashboard-trial-highlight">机制热点：<strong>' +
+        escapeHtml(leadingMechanism.label) + '</strong> · ' + escapeHtml(formatNumber(leadingMechanism.count)) + ' 项</p>' : '') +
+      renderTrialInsights(trialInsights) +
       '<p class="dashboard-data-note">数据更新 ' + escapeHtml(formatDateTime(meta.generated_at)) + '</p>' +
       renderTrialChanges(weeklyChanges);
   }

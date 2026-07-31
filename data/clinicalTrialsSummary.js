@@ -69,33 +69,124 @@ window.MG_CLINICAL_TRIALS_SUMMARY = {
         "registry_id": "NCT07673627",
         "title": "ISA2 to Master Protocol ARGX-999-2-MG-2000 - an Exploratory, Phase 2a, Randomized, Double-Blinded, Placebo-Controlled Study to Evaluate the Safety, Tolerability, and Efficacy of Empasiprubart IV Monotherapy in Participants With AChR-Ab Seropositive Generalized Myasthenia Gravis",
         "updated_date": "2026-07-24",
-        "url": "https://clinicaltrials.gov/study/NCT07673627"
+        "url": "https://clinicaltrials.gov/study/NCT07673627",
+        "drug_name": "Empasiprubart",
+        "phase_label": "Phase 2"
       },
       {
         "registry_id": "NCT06463587",
         "title": "A Phase 3, Randomized, Double-Blind, Placebo-Controlled, 3-Arm, 3-Period Study to Assess the Efficacy and Safety of a New Formulation of Oral Cladribine Compared With Placebo in Participants With Generalized Myasthenia Gravis (MyClad)",
         "updated_date": "2026-07-23",
-        "url": "https://clinicaltrials.gov/study/NCT06463587"
+        "url": "https://clinicaltrials.gov/study/NCT06463587",
+        "drug_name": "Cladribine (克拉屈滨)",
+        "phase_label": "Phase 3"
       },
       {
         "registry_id": "NCT06220201",
         "title": "A Phase 1, Multicenter, Single-arm, Dose-escalation Study of CC-97540 (BMS-986353), CD19-Targeted NEX-T Chimeric Antigen Receptor (CAR) T Cells, Evaluating Safety and Tolerability in Participants With Autoimmune Neurological Diseases: Relapsing Forms of Multiple Sclerosis (RMS), Progressive Forms of Multiple Sclerosis (PMS), or Refractory Myasthenia Gravis (MG).",
         "updated_date": "2026-07-23",
-        "url": "https://clinicaltrials.gov/study/NCT06220201"
+        "url": "https://clinicaltrials.gov/study/NCT06220201",
+        "drug_name": "CC-97540",
+        "phase_label": "Phase 1"
       },
       {
         "registry_id": "NCT07717281",
         "title": "From PAtients to Neuromuscular Organoids in Refractory AChR+ Myasthenia grAvis: End-plate Dysfunction, Biomarker Discovery and Regeneration Strategies",
         "updated_date": "2026-07-21",
-        "url": "https://clinicaltrials.gov/study/NCT07717281"
+        "url": "https://clinicaltrials.gov/study/NCT07717281",
+        "drug_name": "",
+        "phase_label": "未标注"
       },
       {
         "registry_id": "NCT07501702",
         "title": "A Phase 2, Multicenter, Randomized, Double-Blind, Placebo-Controlled Study With a Long-term Extension of Povetacicept in Adults With Generalized Myasthenia Gravis",
         "updated_date": "2026-07-21",
-        "url": "https://clinicaltrials.gov/study/NCT07501702"
+        "url": "https://clinicaltrials.gov/study/NCT07501702",
+        "drug_name": "Povetacicept",
+        "phase_label": "Phase 2"
       }
     ],
     "removed": []
+  },
+  "trial_insights": {
+    "population_distribution": [
+      {
+        "label": "含成人",
+        "count": 341
+      },
+      {
+        "label": "含老年",
+        "count": 324
+      },
+      {
+        "label": "含儿童/青少年",
+        "count": 58
+      }
+    ],
+    "phase_concentration": [
+      {
+        "label": "未标注",
+        "count": 237
+      },
+      {
+        "label": "Phase 3",
+        "count": 69
+      },
+      {
+        "label": "Phase 2",
+        "count": 38
+      },
+      {
+        "label": "Phase 1",
+        "count": 20
+      },
+      {
+        "label": "0",
+        "count": 18
+      },
+      {
+        "label": "Phase 2 / Phase 3",
+        "count": 13
+      },
+      {
+        "label": "Phase 4",
+        "count": 10
+      },
+      {
+        "label": "Early Phase 1",
+        "count": 10
+      }
+    ],
+    "recent_registrations": {
+      "count": 38,
+      "top_drugs": [
+        {
+          "label": "FcRn 拮抗剂",
+          "count": 3
+        },
+        {
+          "label": "补体抑制剂",
+          "count": 2
+        },
+        {
+          "label": "Rozanolixizumab",
+          "count": 2
+        }
+      ],
+      "top_phases": [
+        {
+          "label": "N/A",
+          "count": 13
+        },
+        {
+          "label": "未标注",
+          "count": 9
+        },
+        {
+          "label": "Phase 3",
+          "count": 4
+        }
+      ]
+    }
   }
 };

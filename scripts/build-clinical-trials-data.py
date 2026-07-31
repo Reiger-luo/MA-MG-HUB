@@ -761,15 +761,26 @@ def _ct_snapshot_entry(study: dict[str, Any]) -> dict[str, Any]:
     protocol = study.get("protocolSection") or {}
     ident = protocol.get("identificationModule") or {}
     status = protocol.get("statusModule") or {}
+    design = protocol.get("designModule") or {}
+    arms = protocol.get("armsInterventionsModule") or {}
     nct_id = str(ident.get("nctId") or "").strip()
     if not nct_id:
         return {}
+    # 从 intervention 列表提取药物名称并归一化
+    drug_names: list[str] = []
+    for iv in (arms.get("interventions") or []):
+        if str(iv.get("type") or "").upper() in {"DRUG", "BIOLOGICAL", "COMBINATION_PRODUCT"}:
+            name = normalize_drug_name(str(iv.get("name") or ""))
+            if name and name not in drug_names:
+                drug_names.append(name)
     return {
         "registry_id": nct_id,
         "status": str(status.get("overallStatus") or "").strip(),
         "first_post_date": date_part((status.get("studyFirstPostDateStruct") or {}).get("date")),
         "last_update_date": date_part((status.get("lastUpdatePostDateStruct") or {}).get("date")),
         "results_post_date": date_part((status.get("resultsFirstPostDateStruct") or {}).get("date")),
+        "phase_label": phase_label(design.get("phases") or []),
+        "drug_names": drug_names,
     }
 
 
@@ -842,12 +853,26 @@ def diff_ct_weekly_changes(
     def url_of(registry_id: str) -> str:
         return f"https://clinicaltrials.gov/study/{registry_id}"
 
+    def trial_meta_of(registry_id: str) -> tuple[str, str]:
+        """从当前快照取条目的药物名称和阶段标签。"""
+        entry = current.get(registry_id) or {}
+        names = entry.get("drug_names") or []
+        drug = names[0] if names else ""
+        phase = entry.get("phase_label") or ""
+        return drug, phase
+
+    def format_meta_suffix(registry_id: str) -> str:
+        drug, phase = trial_meta_of(registry_id)
+        parts = [p for p in (drug, phase) if p]
+        return " · ".join(parts) if parts else ""
+
     added = [
         {
             "registry_id": registry_id,
             "title": ct_titles.get(registry_id, ""),
             "first_post_date": entry.get("first_post_date", ""),
             "url": url_of(registry_id),
+            **dict(zip(("drug_name", "phase_label"), trial_meta_of(registry_id))),
         }
         for registry_id, entry in current.items()
         if registry_id not in baseline and within_window(entry.get("first_post_date"))
@@ -863,6 +888,7 @@ def diff_ct_weekly_changes(
         to_status = str(entry.get("status") or "")
         if not to_status or from_status == to_status or not within_window(entry.get("last_update_date")):
             continue
+        drug, phase = trial_meta_of(registry_id)
         status_changes.append({
             "registry_id": registry_id,
             "title": ct_titles.get(registry_id, ""),
@@ -872,6 +898,8 @@ def diff_ct_weekly_changes(
             "to_label": normalize_status(to_status)[0],
             "updated_date": entry.get("last_update_date", ""),
             "url": url_of(registry_id),
+            "drug_name": drug,
+            "phase_label": phase,
         })
     status_changes.sort(key=lambda item: (item["updated_date"], item["registry_id"]), reverse=True)
 
@@ -883,11 +911,14 @@ def diff_ct_weekly_changes(
         previous = baseline.get(registry_id) or {}
         if previous.get("results_post_date") == results_date:
             continue  # 上一期快照已记录过同一结果发布日期
+        drug, phase = trial_meta_of(registry_id)
         results_posted.append({
             "registry_id": registry_id,
             "title": ct_titles.get(registry_id, ""),
             "results_post_date": results_date,
             "url": url_of(registry_id),
+            "drug_name": drug,
+            "phase_label": phase,
         })
     results_posted.sort(key=lambda item: (item["results_post_date"], item["registry_id"]), reverse=True)
 
@@ -900,6 +931,7 @@ def diff_ct_weekly_changes(
             "title": ct_titles.get(registry_id, ""),
             "updated_date": entry.get("last_update_date", ""),
             "url": url_of(registry_id),
+            **dict(zip(("drug_name", "phase_label"), trial_meta_of(registry_id))),
         }
         for registry_id, entry in current.items()
         if registry_id not in status_ids and registry_id not in added_ids
@@ -956,7 +988,80 @@ def build_weekly_changes(ct_payload: dict[str, Any], generated_at: str) -> dict[
     return changes
 
 
-def buildSummaryPayload(payload: dict[str, Any], weeklyChanges: dict[str, Any] | None = None) -> dict[str, Any]:
+def build_trial_insights(ct_payload: dict[str, Any], records: list[dict[str, Any]], reference_date: date | None) -> dict[str, Any]:
+    """提炼首页试验全景洞察：人群分布、阶段集中度、近 6 月新开趋势。"""
+    # 人群分布：从 CT.gov eligibilityModule.stdAges 提取
+    populationCounts: Counter[str] = Counter()
+    for study in ct_payload.get("studies") or []:
+        protocol = study.get("protocolSection") or {}
+        eligibility = protocol.get("eligibilityModule") or {}
+        std_ages = eligibility.get("stdAges") or []
+        if not std_ages:
+            populationCounts["未标注"] += 1
+            continue
+        for age_key in std_ages:
+            label = {"CHILD": "含儿童/青少年", "ADULT": "含成人", "OLDER_ADULT": "含老年"}.get(
+                str(age_key).upper(), str(age_key)
+            )
+            populationCounts[label] += 1
+
+    # 阶段集中度：按 records 中已归一化的 phase_label 统计（合并"未标注"与"N/A"）
+    phaseCounts: Counter[str] = Counter()
+    for record in records:
+        phase = str(record.get("phase_label") or "未标注")
+        if phase in {"N/A", "NA"}:
+            phase = "未标注"
+        phaseCounts[phase] += 1
+
+    # 近 6 月新开趋势：按 registered_date 落在窗口内计数 + 药物分布 top3
+    cutoff = six_month_cutoff(reference_date) if reference_date else None
+    recent_drug_counts: Counter[str] = Counter()
+    recent_phase_counts: Counter[str] = Counter()
+    recent_count = 0
+    for record in records:
+        registered = parse_iso_date(record.get("registered_date"))
+        if not (registered and cutoff and reference_date and cutoff <= registered <= reference_date):
+            continue
+        recent_count += 1
+        drug = str(record.get("drug_name") or record.get("drug_class") or "")
+        if drug and drug != "其他":
+            recent_drug_counts[drug] += 1
+        phase = str(record.get("phase_label") or "未标注")
+        recent_phase_counts[phase] += 1
+
+    population_items = [
+        {"label": label, "count": count}
+        for label, count in populationCounts.most_common(6)
+    ]
+    phase_items = [
+        {"label": label, "count": count}
+        for label, count in phaseCounts.most_common(8)
+    ]
+    recent_drug_items = [
+        {"label": label, "count": count}
+        for label, count in recent_drug_counts.most_common(3)
+    ]
+    recent_phase_items = [
+        {"label": label, "count": count}
+        for label, count in recent_phase_counts.most_common(3)
+    ]
+
+    return {
+        "population_distribution": population_items,
+        "phase_concentration": phase_items,
+        "recent_registrations": {
+            "count": recent_count,
+            "top_drugs": recent_drug_items,
+            "top_phases": recent_phase_items,
+        },
+    }
+
+
+def buildSummaryPayload(
+    payload: dict[str, Any],
+    weeklyChanges: dict[str, Any] | None = None,
+    trialInsights: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     """生成首页使用的轻量三源试验摘要，避免加载完整矩阵。"""
     records = [
         record
@@ -1005,6 +1110,7 @@ def buildSummaryPayload(payload: dict[str, Any], weeklyChanges: dict[str, Any] |
         "source_counts": sourceCounts,
         "decision_signals": payload.get("decision_signals") or [],
         "weekly_changes": weeklyChanges or {},
+        "trial_insights": trialInsights or {},
     }
 
 
@@ -1019,7 +1125,10 @@ def main() -> None:
     OUTPUT_PATH.write_text(output, encoding="utf-8")
     generatedAt = str((payload.get("meta") or {}).get("generated_at") or "")
     weeklyChanges = build_weekly_changes(ctPayload, generatedAt)
-    summaryPayload = buildSummaryPayload(payload, weeklyChanges)
+    referenceDate = parse_iso_date(generatedAt)
+    records = [record for source in payload.get("sources", []) for record in source.get("records", [])]
+    trialInsights = build_trial_insights(ctPayload, records, referenceDate)
+    summaryPayload = buildSummaryPayload(payload, weeklyChanges, trialInsights)
     summaryOutput = "window.MG_CLINICAL_TRIALS_SUMMARY = " + json.dumps(
         summaryPayload,
         ensure_ascii=False,

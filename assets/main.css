@@ -3450,6 +3450,35 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
   border-top: 1px dashed var(--bg3);
   display: grid; gap: 0.35rem;
 }
+.dashboard-trial-insights {
+  margin-top: 0.55rem; padding-top: 0.5rem;
+  border-top: 1px dashed var(--bg3);
+  display: grid; gap: 0.45rem;
+}
+.dashboard-insight-group {
+  display: grid; gap: 0.28rem;
+}
+.dashboard-insight-label {
+  color: var(--fg3); font-size: 0.66rem; font-weight: 600;
+}
+.dashboard-insight-pills {
+  display: flex; flex-wrap: wrap; gap: 0.25rem;
+}
+.dashboard-insight-pill {
+  display: inline-flex; align-items: center; gap: 0.25rem;
+  border: 1px solid var(--bg3); border-radius: 6px;
+  background: var(--bg); padding: 0.12rem 0.38rem;
+}
+.dashboard-insight-pill em {
+  color: var(--fg3); font-size: 0.64rem; font-style: normal;
+}
+.dashboard-insight-pill strong {
+  color: var(--fg); font-size: 0.66rem; font-variant-numeric: tabular-nums;
+}
+.dashboard-insight-trend {
+  color: var(--fg2); font-size: 0.68rem; line-height: 1.5;
+  margin: 0;
+}
 .dashboard-trial-changes-head {
   display: flex; align-items: baseline; justify-content: space-between;
   gap: 0.5rem; flex-wrap: wrap;

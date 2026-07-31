@@ -138,6 +138,40 @@ def test_summary_payload_includes_weekly_changes():
     assert summary["weekly_changes"] == changes
     # 未提供时降级为空对象，前端按占位提示渲染
     assert module.buildSummaryPayload(payload)["weekly_changes"] == {}
+    # trial_insights 同理降级
+    assert module.buildSummaryPayload(payload)["trial_insights"] == {}
+
+
+def test_trial_insights_extract_population_phase_and_recent_trend():
+    module = load_builder_module()
+    ct_payload = {"studies": [
+        {"protocolSection": {
+            "identificationModule": {"nctId": "NCT001"},
+            "designModule": {"phases": ["PHASE3"]},
+            "eligibilityModule": {"stdAges": ["ADULT", "OLDER_ADULT"]},
+            "statusModule": {"studyFirstPostDateStruct": {"date": "2026-06-15"}},
+        }},
+        {"protocolSection": {
+            "identificationModule": {"nctId": "NCT002"},
+            "designModule": {"phases": ["PHASE1"]},
+            "eligibilityModule": {"stdAges": ["CHILD"]},
+            "statusModule": {"studyFirstPostDateStruct": {"date": "2026-01-01"}},
+        }},
+    ]}
+    records = [
+        {"phase_label": "Phase 3", "registered_date": "2026-06-15", "drug_name": "Efgartigimod"},
+        {"phase_label": "Phase 1", "registered_date": "2026-01-01", "drug_name": "Ravulizumab"},
+        {"phase_label": "N/A", "registered_date": "2026-05-01"},
+    ]
+    insights = module.build_trial_insights(ct_payload, records, date(2026, 7, 27))
+    assert {"label": "含成人", "count": 1} in insights["population_distribution"]
+    assert {"label": "含儿童/青少年", "count": 1} in insights["population_distribution"]
+    phase_labels = [p["label"] for p in insights["phase_concentration"]]
+    assert "Phase 3" in phase_labels
+    assert "未标注" in phase_labels  # N/A 合并到未标注
+    assert insights["recent_registrations"]["count"] == 2  # 只有 2026-06-15 落在近 6 月
+    recent_drugs = [d["label"] for d in insights["recent_registrations"]["top_drugs"]]
+    assert "Efgartigimod" in recent_drugs
 
 
 def test_pipeline_and_publish_chain_wires_weekly_changes_snapshot():
