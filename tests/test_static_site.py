@@ -42,10 +42,15 @@ def test_dashboard_is_action_first_workbench():
 
     assert 'href="#mainContent"' in html
     assert 'aria-current="page"' in html
+    assert "MG医学事务工作台" in html
+    assert "学术情报工作台" not in html
     assert 'id="dashboardReleaseStatus"' in html
     assert 'id="dashboardTrials"' in html
+    assert 'id="signalStrengthLegend"' in html
     assert "clinicalTrialsSummary.js" in html
     assert html.index('id="dashboardSignals"') < html.index('id="dashboardCommunityDynamics"')
+    assert html.index('class="dashboard-side-stack"') < html.index('dashboard-community-panel') < html.index('</aside>')
+    assert 'signal-filter-btn' not in html
     assert 'id="dashboardReviewQueue"' not in html
     assert 'id="dashboardSections"' not in html
     assert "待医学复核" not in html
@@ -54,8 +59,14 @@ def test_dashboard_is_action_first_workbench():
 
     assert "renderReleaseStatus" in dashboard_js
     assert "renderTrials" in dashboard_js
+    assert "renderSignalStrengthLegend" in dashboard_js
+    assert "signal-stat-card" in dashboard_js
+    assert "weekly_changes" in dashboard_js
+    assert "dashboard-trial-changes" in dashboard_js
     assert "renderReviewQueue" not in dashboard_js
     assert "renderSections" not in dashboard_js
+    assert "bindSignalFilters" not in dashboard_js
+    assert "renderSignalKeywords" not in dashboard_js
     assert "signalDetailUrl" in dashboard_js
     assert "level === 'active'" in dashboard_js
     assert "row.high_evidence_count != null" in dashboard_js

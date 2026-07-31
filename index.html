@@ -29,7 +29,7 @@
   <div class="page-header dashboard-page-header">
     <div>
       <p class="dashboard-eyebrow">MEDICAL AFFAIRS INTELLIGENCE</p>
-      <h1>MG 学术情报工作台</h1>
+      <h1>MG医学事务工作台</h1>
     </div>
     <div class="page-header-actions">
       <span class="update-badge" id="dashboardBadge" aria-live="polite">加载中…</span>
@@ -56,53 +56,12 @@
         </div>
         <a class="text-link" href="pages/literature.html?tab=literature">进入情报中心</a>
       </div>
-      <div class="signal-topline">
-        <div class="signal-filter" id="signalFilter">
-          <button class="signal-filter-btn active" type="button" data-signal-filter="all">全部</button>
-          <button class="signal-filter-btn" type="button" data-signal-filter="强">强</button>
-          <button class="signal-filter-btn" type="button" data-signal-filter="中">中</button>
-          <button class="signal-filter-btn" type="button" data-signal-filter="弱">弱</button>
-        </div>
-      </div>
       <div class="signal-summary-grid" id="signalSummary"></div>
-      <div class="signal-layout">
-        <section class="signal-list" id="signalList"></section>
-        <aside class="signal-side">
-          <div class="keyword-cloud" id="signalKeywords"></div>
-          <div class="signal-reading-guide">
-            <p><strong>信号是什么</strong>：本期证据共同改变了哪项判断。</p>
-            <p><strong>证据补了什么</strong>：逐篇列结果、原有 gap 与仍需验证的边界。</p>
-            <p><strong>KOL 怎么聊</strong>：只保留可传递结论和需要追问的问题。</p>
-          </div>
-          <details class="signal-method-details">
-            <summary>查看筛选与强度口径</summary>
-            <div class="signal-spec">
-              <p class="signal-spec-intro">仅分析本周更新；先做 MG-core 相关性与证据等级 I–V 门控，再按治疗、机制、人群和路径聚合。</p>
-              <div class="signal-spec-block">
-                <h4>强信号</h4>
-                <ul>
-                  <li>I/II 级，或 IF ≥ 10 且不是 V 级机制推理。</li>
-                </ul>
-              </div>
-              <div class="signal-spec-block">
-                <h4>中信号</h4>
-                <ul>
-                  <li>IF ≥ 5、III/IV 级、中国相关，或未达到强信号标准的 efgartigimod（艾加莫德）相关内容。</li>
-                </ul>
-              </div>
-              <div class="signal-spec-block">
-                <h4>弱信号</h4>
-                <ul>
-                  <li>其余达到入选门槛的线索。</li>
-                </ul>
-              </div>
-            </div>
-          </details>
-        </aside>
-      </div>
+      <div class="signal-strength-legend" id="signalStrengthLegend"></div>
+      <section class="signal-list" id="signalList"></section>
     </section>
 
-    <aside class="dashboard-side-stack" aria-label="临床试验变化">
+    <aside class="dashboard-side-stack" aria-label="临床试验变化与社区动态">
       <section class="workspace-panel dashboard-trials-panel" aria-labelledby="dashboardTrialsTitle">
         <div class="panel-head">
           <div>
@@ -113,19 +72,18 @@
         </div>
         <div id="dashboardTrials"></div>
       </section>
+      <section class="workspace-panel dashboard-community-panel" aria-labelledby="dashboardCommunityTitle">
+        <div class="panel-head">
+          <div>
+            <p class="panel-kicker">社区语义层</p>
+            <h2 id="dashboardCommunityTitle">本周升温社区</h2>
+          </div>
+          <a class="text-link" href="pages/knowledge.html?tab=communities">社区视图</a>
+        </div>
+        <div id="dashboardCommunityDynamics"></div>
+      </section>
     </aside>
   </div>
-
-  <section class="workspace-panel dashboard-community-panel" aria-labelledby="dashboardCommunityTitle">
-    <div class="panel-head">
-      <div>
-        <p class="panel-kicker">社区语义层</p>
-        <h2 id="dashboardCommunityTitle">本周升温社区</h2>
-      </div>
-      <a class="text-link" href="pages/knowledge.html?tab=communities">社区视图</a>
-    </div>
-    <div id="dashboardCommunityDynamics"></div>
-  </section>
 </main>
 
 <script src="assets/common.js" defer></script>
