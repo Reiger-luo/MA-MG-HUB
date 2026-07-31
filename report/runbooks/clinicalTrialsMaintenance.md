@@ -13,8 +13,20 @@
 周更在更新缓存后运行 `scripts/build-clinical-trials-data.py`，因此三源缓存变化会同步进入：
 
 - `data/clinical-trials-data.js`：情报中心完整临床试验页；
-- `data/clinicalTrialsSummary.js`：首页轻量摘要；
+- `data/clinicalTrialsSummary.js`：首页轻量摘要（含 `weekly_changes` 周更变化要点）；
 - `data/release-manifest.js`：成功发布后的文件哈希。
+
+## ClinicalTrials.gov 周更变化提炼
+
+ClinicalTrials.gov 是目前唯一按周抓取的注册源。每次构建时，`build-clinical-trials-data.py` 会把当前 CT.gov 缓存压缩为按 NCT 编号索引的最小快照（状态、首次公示、最近更新、结果发布日期），与上一期快照对比，提炼近 7 天变化并写入首页摘要的 `weekly_changes`：
+
+- 新登记研究（`added`，按首次公示日期落在窗口内）；
+- 状态变化（`status_changes`，如 招募中 → 已完成，附中文标签）；
+- 结果发布（`results_posted`，窗口内新出现的结果公示日期）；
+- 其他字段更新（`updated`，窗口内有更新但不属于以上三类）；
+- 移除（`removed`，上一期存在、本期消失的 NCT）。
+
+每组最多保留 5–6 条明细，计数为真实总数。对比基线保存在 `data/clinicaltrials-weekly-changes-snapshot.json` 并随周更提交（本地脚本与 CI workflow 均已纳入 git add）；基线缺失时（如首次运行或新克隆未提交过快照）回退读取 git HEAD 版本，仍不可用则以本次为基线，下一期起自动产出变化。ChiCTR 与 ChinaDrugTrials 更新节奏不同（28 天/月度），暂不参与周更对比。
 
 ## ChiCTR 月更
 

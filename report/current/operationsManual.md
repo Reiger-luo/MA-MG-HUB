@@ -166,6 +166,8 @@ MSL 工作台是 China-only：
 
 ClinicalTrials.gov、ChiCTR 和 ChinaDrugTrials 采用不同更新方式，但统一进入 `clinical-trials-data.js`。详细流程见 [clinicalTrialsMaintenance.md](../runbooks/clinicalTrialsMaintenance.md)。
 
+ClinicalTrials.gov 是唯一周更注册源。每次构建对比上一期快照（`clinicaltrials-weekly-changes-snapshot.json`），把近 7 天新登记、状态变化、结果发布、字段更新和移除提炼为 `clinicalTrialsSummary.js` 的 `weekly_changes`，在首页工作台"临床试验变化"模块呈现。
+
 失败时保留 last-good cache；不使用低可信第三方数据静默覆盖官方缓存。
 
 ## 10. 周更与恢复

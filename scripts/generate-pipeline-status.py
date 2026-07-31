@@ -29,6 +29,7 @@ PUBLIC_ARTIFACTS = [
     ("source-signals.js", "独立来源信号频道", "MG_SOURCE_SIGNALS"),
     ("clinical-trials-data.js", "三源临床试验数据", "MG_CLINICAL_TRIALS_DATA"),
     ("clinicalTrialsSummary.js", "首页临床试验摘要", "MG_CLINICAL_TRIALS_SUMMARY"),
+    ("clinicaltrials-weekly-changes-snapshot.json", "临床试验周更对比基线", None),
     ("release-manifest.js", "一致性发布清单", "MG_RELEASE_MANIFEST"),
     ("china-intelligence.js", "中国情报", "MG_CHINA_DATA"),
     ("expert-profiles.js", "专家画像", "MG_EXPERT_PROFILES"),

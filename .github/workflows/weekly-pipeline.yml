@@ -55,7 +55,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/*.js data/weekly-summary.md data/china-regulatory-status.json data/clinicaltrials-pipeline-cache.json data/chictr-trials-cache.json data/china-drug-trials-cache.json data/china-drug-trials-changes.json data/guideline-consensus-cache.json assets/*.js assets/*.css pages/*.html index.html
+          git add data/*.js data/weekly-summary.md data/china-regulatory-status.json data/clinicaltrials-pipeline-cache.json data/clinicaltrials-weekly-changes-snapshot.json data/chictr-trials-cache.json data/china-drug-trials-cache.json data/china-drug-trials-changes.json data/guideline-consensus-cache.json assets/*.js assets/*.css pages/*.html index.html
           if git diff --cached --quiet; then
             echo "No public frontend updates."
           else

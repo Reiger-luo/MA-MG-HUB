@@ -5,15 +5,17 @@ from __future__ import annotations
 
 import json
 import re
+import subprocess
 import sys
 from collections import Counter
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from scripts.common.clinical_registry import load_china_drug_trials_cache
+from scripts.common.io import atomic_write_json
 from scripts.common.source_channels import _cdt_items, _chictr_items, _ct_items, deduplicate_trials
 
 
@@ -24,6 +26,9 @@ CHICTR_CACHE_PATH = DATA_DIR / "chictr-trials-cache.json"
 CHINA_DRUG_TRIALS_CACHE_PATH = DATA_DIR / "china-drug-trials-cache.json"
 OUTPUT_PATH = DATA_DIR / "clinical-trials-data.js"
 summaryOutputPath = DATA_DIR / "clinicalTrialsSummary.js"
+# 周更对比基线：本地与 CI 均提交入仓库，保证下一次构建能还原上一期快照
+WEEKLY_CHANGES_SNAPSHOT_PATH = DATA_DIR / "clinicaltrials-weekly-changes-snapshot.json"
+WEEKLY_CHANGES_WINDOW_DAYS = 7
 
 SOURCE_ORDER = ["ClinicalTrials.gov", "ChiCTR", "ChinaDrugTrials"]
 INDICATION = "重症肌无力"
@@ -659,8 +664,8 @@ def build_pipeline_matrix(records: list[dict[str, Any]]) -> list[dict[str, Any]]
     return matrix
 
 
-def build_payload() -> dict[str, Any]:
-    """装配前端要求的三来源数据结构。"""
+def build_payload() -> tuple[dict[str, Any], dict[str, Any]]:
+    """装配前端要求的三来源数据结构，并返回 CT.gov 原始缓存供周更对比。"""
     ct_payload = load_json(CT_CACHE_PATH)
     chictr_payload = load_json(CHICTR_CACHE_PATH)
     china_payload = load_china_drug_trials_cache(CHINA_DRUG_TRIALS_CACHE_PATH)
@@ -726,7 +731,7 @@ def build_payload() -> dict[str, Any]:
 
     pipeline_matrix = build_pipeline_matrix(records)
 
-    return {
+    payload = {
         "meta": {
             "generated_at": generated_at,
             "total_count": sum(len(source["records"]) for source in sources),
@@ -736,9 +741,222 @@ def build_payload() -> dict[str, Any]:
         "pipeline_matrix": pipeline_matrix,
         "sources": sources,
     }
+    return payload, ct_payload
 
 
-def buildSummaryPayload(payload: dict[str, Any]) -> dict[str, Any]:
+def ct_titles_from_payload(ct_payload: dict[str, Any]) -> dict[str, str]:
+    """按 NCT 编号索引 CT.gov 研究官方标题（缺失时退回简短标题）。"""
+    titles: dict[str, str] = {}
+    for study in ct_payload.get("studies") or []:
+        ident = (study.get("protocolSection") or {}).get("identificationModule") or {}
+        nct_id = str(ident.get("nctId") or "").strip()
+        if not nct_id:
+            continue
+        titles[nct_id] = str(ident.get("officialTitle") or ident.get("briefTitle") or "").strip()
+    return titles
+
+
+def _ct_snapshot_entry(study: dict[str, Any]) -> dict[str, Any]:
+    """从单条 CT.gov 研究中提取周更对比所需的最小字段。"""
+    protocol = study.get("protocolSection") or {}
+    ident = protocol.get("identificationModule") or {}
+    status = protocol.get("statusModule") or {}
+    nct_id = str(ident.get("nctId") or "").strip()
+    if not nct_id:
+        return {}
+    return {
+        "registry_id": nct_id,
+        "status": str(status.get("overallStatus") or "").strip(),
+        "first_post_date": date_part((status.get("studyFirstPostDateStruct") or {}).get("date")),
+        "last_update_date": date_part((status.get("lastUpdatePostDateStruct") or {}).get("date")),
+        "results_post_date": date_part((status.get("resultsFirstPostDateStruct") or {}).get("date")),
+    }
+
+
+def build_ct_snapshot(ct_payload: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    """构建当前 CT.gov 对比快照，按 NCT 编号索引。"""
+    snapshot: dict[str, dict[str, Any]] = {}
+    for study in ct_payload.get("studies") or []:
+        entry = _ct_snapshot_entry(study)
+        if entry:
+            snapshot[entry["registry_id"]] = entry
+    return snapshot
+
+
+def load_baseline_ct_snapshot(snapshot_path: Path | None = None) -> tuple[dict[str, dict[str, Any]], str]:
+    """读取上一期 CT.gov 快照。优先本地快照文件，其次 git HEAD 版本。
+
+    返回 (快照字典, 快照日期)；两者都不可用时返回 ({}, "")，
+    本次构建将作为首次基线，下一期起自动产出变化。
+    """
+    path = snapshot_path or WEEKLY_CHANGES_SNAPSHOT_PATH
+    payload: dict[str, Any] | None = None
+    if path.is_file():
+        try:
+            payload = load_json(path)
+        except (OSError, ValueError):
+            payload = None
+    if payload is None:
+        try:
+            rel_path = path.relative_to(PROJECT_ROOT).as_posix()
+        except ValueError:
+            return {}, ""
+        try:
+            result = subprocess.run(
+                ["git", "show", f"HEAD:{rel_path}"],
+                cwd=str(PROJECT_ROOT),
+                capture_output=True,
+                text=True,
+                timeout=30,
+            )
+        except (OSError, subprocess.SubprocessError):
+            return {}, ""
+        if result.returncode != 0 or not result.stdout.strip():
+            return {}, ""
+        try:
+            payload = json.loads(result.stdout)
+        except json.JSONDecodeError:
+            return {}, ""
+    if not isinstance(payload, dict):
+        return {}, ""
+    entries = payload.get("entries") or {}
+    snapshot_date = date_part(payload.get("snapshot_date"))
+    return {str(key): value for key, value in entries.items()}, snapshot_date
+
+
+def diff_ct_weekly_changes(
+    current: dict[str, dict[str, Any]],
+    baseline: dict[str, dict[str, Any]],
+    reference_date: date | None,
+    ct_titles: dict[str, str],
+    previous_snapshot_at: str = "",
+) -> dict[str, Any]:
+    """对比两期 CT.gov 快照，提炼近 WEEKLY_CHANGES_WINDOW_DAYS 天的变化要点。"""
+    window_days = WEEKLY_CHANGES_WINDOW_DAYS
+    window_start = reference_date - timedelta(days=window_days) if reference_date else None
+
+    def within_window(value: Any) -> bool:
+        parsed = parse_iso_date(value)
+        return bool(parsed and window_start and reference_date and window_start <= parsed <= reference_date)
+
+    def url_of(registry_id: str) -> str:
+        return f"https://clinicaltrials.gov/study/{registry_id}"
+
+    added = [
+        {
+            "registry_id": registry_id,
+            "title": ct_titles.get(registry_id, ""),
+            "first_post_date": entry.get("first_post_date", ""),
+            "url": url_of(registry_id),
+        }
+        for registry_id, entry in current.items()
+        if registry_id not in baseline and within_window(entry.get("first_post_date"))
+    ]
+    added.sort(key=lambda item: (item["first_post_date"], item["registry_id"]), reverse=True)
+
+    status_changes = []
+    for registry_id, entry in current.items():
+        previous = baseline.get(registry_id)
+        if not previous:
+            continue
+        from_status = str(previous.get("status") or "")
+        to_status = str(entry.get("status") or "")
+        if not to_status or from_status == to_status or not within_window(entry.get("last_update_date")):
+            continue
+        status_changes.append({
+            "registry_id": registry_id,
+            "title": ct_titles.get(registry_id, ""),
+            "from_status": from_status,
+            "to_status": to_status,
+            "from_label": normalize_status(from_status)[0],
+            "to_label": normalize_status(to_status)[0],
+            "updated_date": entry.get("last_update_date", ""),
+            "url": url_of(registry_id),
+        })
+    status_changes.sort(key=lambda item: (item["updated_date"], item["registry_id"]), reverse=True)
+
+    results_posted = []
+    for registry_id, entry in current.items():
+        results_date = entry.get("results_post_date") or ""
+        if not within_window(results_date):
+            continue
+        previous = baseline.get(registry_id) or {}
+        if previous.get("results_post_date") == results_date:
+            continue  # 上一期快照已记录过同一结果发布日期
+        results_posted.append({
+            "registry_id": registry_id,
+            "title": ct_titles.get(registry_id, ""),
+            "results_post_date": results_date,
+            "url": url_of(registry_id),
+        })
+    results_posted.sort(key=lambda item: (item["results_post_date"], item["registry_id"]), reverse=True)
+
+    status_ids = {change["registry_id"] for change in status_changes}
+    added_ids = {item["registry_id"] for item in added}
+    results_ids = {item["registry_id"] for item in results_posted}
+    updated = [
+        {
+            "registry_id": registry_id,
+            "title": ct_titles.get(registry_id, ""),
+            "updated_date": entry.get("last_update_date", ""),
+            "url": url_of(registry_id),
+        }
+        for registry_id, entry in current.items()
+        if registry_id not in status_ids and registry_id not in added_ids
+        and registry_id not in results_ids
+        and within_window(entry.get("last_update_date"))
+    ]
+    updated.sort(key=lambda item: (item["updated_date"], item["registry_id"]), reverse=True)
+
+    removed = sorted(registry_id for registry_id in baseline if registry_id not in current)
+
+    return {
+        "schema_version": "1.0",
+        "source": "ClinicalTrials.gov",
+        "generated_at": reference_date.isoformat() if reference_date else "",
+        "previous_snapshot_at": previous_snapshot_at,
+        "window_days": window_days,
+        "window_start": window_start.isoformat() if window_start else "",
+        "added_count": len(added),
+        "status_change_count": len(status_changes),
+        "results_posted_count": len(results_posted),
+        "updated_count": len(updated),
+        "removed_count": len(removed),
+        "added": added[:6],
+        "status_changes": status_changes[:6],
+        "results_posted": results_posted[:6],
+        "updated": updated[:5],
+        "removed": removed[:10],
+    }
+
+
+def build_weekly_changes(ct_payload: dict[str, Any], generated_at: str) -> dict[str, Any]:
+    """生成 CT.gov 周更变化要点，并原子更新对比基线快照。"""
+    current = build_ct_snapshot(ct_payload)
+    reference_date = parse_iso_date(generated_at)
+    baseline, previous_snapshot_at = load_baseline_ct_snapshot()
+    changes = diff_ct_weekly_changes(
+        current,
+        baseline,
+        reference_date,
+        ct_titles_from_payload(ct_payload),
+        previous_snapshot_at=previous_snapshot_at,
+    )
+    snapshot_date = date_part(ct_payload.get("generated_at")) or (generated_at or "")
+    atomic_write_json(
+        WEEKLY_CHANGES_SNAPSHOT_PATH,
+        {
+            "schema_version": "1.0",
+            "source": "ClinicalTrials.gov",
+            "snapshot_date": snapshot_date,
+            "entry_count": len(current),
+            "entries": current,
+        },
+    )
+    return changes
+
+
+def buildSummaryPayload(payload: dict[str, Any], weeklyChanges: dict[str, Any] | None = None) -> dict[str, Any]:
     """生成首页使用的轻量三源试验摘要，避免加载完整矩阵。"""
     records = [
         record
@@ -786,19 +1004,22 @@ def buildSummaryPayload(payload: dict[str, Any]) -> dict[str, Any]:
         "leading_mechanism": leadingMechanism,
         "source_counts": sourceCounts,
         "decision_signals": payload.get("decision_signals") or [],
+        "weekly_changes": weeklyChanges or {},
     }
 
 
 def main() -> None:
     """生成可由浏览器直接加载的 JavaScript 数据文件。"""
-    payload = build_payload()
+    payload, ctPayload = build_payload()
     output = "window.MG_CLINICAL_TRIALS_DATA = " + json.dumps(
         payload,
         ensure_ascii=False,
         indent=2,
     ) + ";\n"
     OUTPUT_PATH.write_text(output, encoding="utf-8")
-    summaryPayload = buildSummaryPayload(payload)
+    generatedAt = str((payload.get("meta") or {}).get("generated_at") or "")
+    weeklyChanges = build_weekly_changes(ctPayload, generatedAt)
+    summaryPayload = buildSummaryPayload(payload, weeklyChanges)
     summaryOutput = "window.MG_CLINICAL_TRIALS_SUMMARY = " + json.dumps(
         summaryPayload,
         ensure_ascii=False,
@@ -807,6 +1028,14 @@ def main() -> None:
     summaryOutputPath.write_text(summaryOutput, encoding="utf-8")
     print(f"Wrote {payload['meta']['total_count']} records to {OUTPUT_PATH.relative_to(PROJECT_ROOT)}")
     print(f"Wrote dashboard summary to {summaryOutputPath.relative_to(PROJECT_ROOT)}")
+    print(
+        "Weekly changes (ClinicalTrials.gov): "
+        f"+{weeklyChanges['added_count']} new · "
+        f"{weeklyChanges['status_change_count']} status · "
+        f"{weeklyChanges['results_posted_count']} results · "
+        f"{weeklyChanges['updated_count']} updated · "
+        f"-{weeklyChanges['removed_count']} removed"
+    )
 
 
 if __name__ == "__main__":

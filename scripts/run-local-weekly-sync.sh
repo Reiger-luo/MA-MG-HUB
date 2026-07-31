@@ -141,6 +141,7 @@ else
     data/weekly-summary.md \
     data/china-regulatory-status.json \
     data/clinicaltrials-pipeline-cache.json \
+    data/clinicaltrials-weekly-changes-snapshot.json \
     data/chictr-trials-cache.json \
     data/china-drug-trials-cache.json \
     data/china-drug-trials-changes.json \

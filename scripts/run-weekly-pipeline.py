@@ -85,7 +85,7 @@ def pipeline_steps(args, full_available: bool | None = None) -> list[PipelineSte
         PipelineStep(
             "build-clinical-trials",
             py("build-clinical-trials-data.py"),
-            outputs=[DATA / "clinical-trials-data.js", DATA / "clinicalTrialsSummary.js"],
+            outputs=[DATA / "clinical-trials-data.js", DATA / "clinicalTrialsSummary.js", DATA / "clinicaltrials-weekly-changes-snapshot.json"],
         ),
         PipelineStep("build-source-signals", py("build-source-signals.py"), outputs=[DATA / "source-signals.js"]),
         PipelineStep("generate-weekly-summary", py("generate-weekly-summary.py"), outputs=[DATA / "weekly-summary.md"]),
