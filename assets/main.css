@@ -3592,6 +3592,10 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
   color: var(--fg3); font-size: 0.64rem; line-height: 1.4;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
+.dashboard-trial-change-summary {
+  display: block; margin-top: 0.1rem;
+  color: var(--fg2); font-size: 0.68rem; font-weight: 500; line-height: 1.4;
+}
 .dashboard-trial-change-more,
 .dashboard-trial-removed {
   margin-left: 0.9rem; color: var(--fg3); font-size: 0.66rem; line-height: 1.45;

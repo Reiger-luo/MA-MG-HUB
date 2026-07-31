@@ -648,6 +648,7 @@
     var url = String(changeItem.url || (registryId ? 'https://clinicaltrials.gov/study/' + registryId : '#'));
     var drugName = String(changeItem.drug_name || '');
     var phaseLabel = String(changeItem.phase_label || '');
+    var changeSummary = String(changeItem.change_summary || '');
 
     // 主行：变化类型标签 + 药物 + 阶段（优先呈现"变了什么"）
     var changeLabelMap = {
@@ -673,6 +674,7 @@
       '<div>' +
         '<strong>' + escapeHtml(mainText) + '</strong>' +
         '<em>' + escapeHtml(metaText) + '</em>' +
+        (changeSummary ? '<span class="dashboard-trial-change-summary">' + escapeHtml(changeSummary) + '</span>' : '') +
         (shortTitle ? '<span class="dashboard-trial-change-title">' + escapeHtml(shortTitle) + '</span>' : '') +
       '</div>' +
     '</a>';

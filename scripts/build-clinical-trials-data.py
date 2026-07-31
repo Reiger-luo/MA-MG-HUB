@@ -773,6 +773,14 @@ def _ct_snapshot_entry(study: dict[str, Any]) -> dict[str, Any]:
             name = normalize_drug_name(str(iv.get("name") or ""))
             if name and name not in drug_names:
                 drug_names.append(name)
+    # 样本量信息（用于周更变化摘要）
+    enrollment = design.get("enrollmentInfo") or {}
+    enrollment_count = enrollment.get("count")
+    enrollment_type = str(enrollment.get("type") or "").strip()
+    # 关键日期和地点数（用于周更变化摘要）
+    primary_completion = date_part((status.get("primaryCompletionDateStruct") or {}).get("date"))
+    completion = date_part((status.get("completionDateStruct") or {}).get("date"))
+    locations_count = len((protocol.get("contactsLocationsModule") or {}).get("locations") or [])
     return {
         "registry_id": nct_id,
         "status": str(status.get("overallStatus") or "").strip(),
@@ -781,6 +789,11 @@ def _ct_snapshot_entry(study: dict[str, Any]) -> dict[str, Any]:
         "results_post_date": date_part((status.get("resultsFirstPostDateStruct") or {}).get("date")),
         "phase_label": phase_label(design.get("phases") or []),
         "drug_names": drug_names,
+        "enrollment_count": enrollment_count,
+        "enrollment_type": enrollment_type,
+        "primary_completion_date": primary_completion,
+        "completion_date": completion,
+        "locations_count": locations_count,
     }
 
 
@@ -835,6 +848,62 @@ def load_baseline_ct_snapshot(snapshot_path: Path | None = None) -> tuple[dict[s
     return {str(key): value for key, value in entries.items()}, snapshot_date
 
 
+def _describe_field_changes(
+    previous: dict[str, Any] | None,
+    entry: dict[str, Any],
+) -> str:
+    """对比两期快照的可观测字段，生成一句话变化摘要。
+
+    覆盖：状态变化、样本量变化、阶段变化、药物名称变化；
+    全部一致时返回空字符串（由调用方兜底为"其他字段更新"）。
+    """
+    prev = previous or {}
+    parts: list[str] = []
+
+    # 状态变化
+    from_status = str(prev.get("status") or "").strip()
+    to_status = str(entry.get("status") or "").strip()
+    if from_status and to_status and from_status != to_status:
+        parts.append(f"状态：{normalize_status(from_status)[0]} → {normalize_status(to_status)[0]}")
+
+    # 样本量变化
+    prev_count = prev.get("enrollment_count")
+    cur_count = entry.get("enrollment_count")
+    if prev_count is not None and cur_count is not None and prev_count != cur_count:
+        suffix = "（预估）" if str(entry.get("enrollment_type") or "").upper() == "ESTIMATED" else ""
+        parts.append(f"样本量：{prev_count} → {cur_count}{suffix}")
+
+    # 阶段变化
+    prev_phase = str(prev.get("phase_label") or "").strip()
+    cur_phase = str(entry.get("phase_label") or "").strip()
+    if prev_phase and cur_phase and prev_phase != cur_phase:
+        parts.append(f"阶段：{prev_phase} → {cur_phase}")
+
+    # 药物名称变化（新增/删除干预）
+    prev_drugs = [str(d) for d in (prev.get("drug_names") or [])]
+    cur_drugs = [str(d) for d in (entry.get("drug_names") or [])]
+    added_drugs = [d for d in cur_drugs if d not in prev_drugs]
+    removed_drugs = [d for d in prev_drugs if d not in cur_drugs]
+    if added_drugs:
+        parts.append("新增干预：" + "、".join(added_drugs[:2]))
+    if removed_drugs:
+        parts.append("移除干预：" + "、".join(removed_drugs[:2]))
+
+    # 主要完成日期变化
+    prev_pcd = str(prev.get("primary_completion_date") or "").strip()
+    cur_pcd = str(entry.get("primary_completion_date") or "").strip()
+    if prev_pcd and cur_pcd and prev_pcd != cur_pcd:
+        parts.append(f"主要完成日期：{prev_pcd} → {cur_pcd}")
+
+    # 研究地点数变化
+    prev_locs = prev.get("locations_count")
+    cur_locs = entry.get("locations_count")
+    if prev_locs is not None and cur_locs is not None and prev_locs != cur_locs:
+        parts.append(f"研究地点：{prev_locs} → {cur_locs} 个")
+
+    return "；".join(parts)
+
+
 def diff_ct_weekly_changes(
     current: dict[str, dict[str, Any]],
     baseline: dict[str, dict[str, Any]],
@@ -872,6 +941,7 @@ def diff_ct_weekly_changes(
             "title": ct_titles.get(registry_id, ""),
             "first_post_date": entry.get("first_post_date", ""),
             "url": url_of(registry_id),
+            "change_summary": "新增登记",
             **dict(zip(("drug_name", "phase_label"), trial_meta_of(registry_id))),
         }
         for registry_id, entry in current.items()
@@ -889,15 +959,18 @@ def diff_ct_weekly_changes(
         if not to_status or from_status == to_status or not within_window(entry.get("last_update_date")):
             continue
         drug, phase = trial_meta_of(registry_id)
+        from_label = normalize_status(from_status)[0]
+        to_label = normalize_status(to_status)[0]
         status_changes.append({
             "registry_id": registry_id,
             "title": ct_titles.get(registry_id, ""),
             "from_status": from_status,
             "to_status": to_status,
-            "from_label": normalize_status(from_status)[0],
-            "to_label": normalize_status(to_status)[0],
+            "from_label": from_label,
+            "to_label": to_label,
             "updated_date": entry.get("last_update_date", ""),
             "url": url_of(registry_id),
+            "change_summary": f"状态：{from_label} → {to_label}",
             "drug_name": drug,
             "phase_label": phase,
         })
@@ -917,6 +990,7 @@ def diff_ct_weekly_changes(
             "title": ct_titles.get(registry_id, ""),
             "results_post_date": results_date,
             "url": url_of(registry_id),
+            "change_summary": "结果首次发布",
             "drug_name": drug,
             "phase_label": phase,
         })
@@ -925,19 +999,24 @@ def diff_ct_weekly_changes(
     status_ids = {change["registry_id"] for change in status_changes}
     added_ids = {item["registry_id"] for item in added}
     results_ids = {item["registry_id"] for item in results_posted}
-    updated = [
-        {
+    updated = []
+    for registry_id, entry in current.items():
+        if registry_id in status_ids or registry_id in added_ids or registry_id in results_ids:
+            continue
+        if not within_window(entry.get("last_update_date")):
+            continue
+        previous = baseline.get(registry_id)
+        summary = _describe_field_changes(previous, entry) or "其他字段更新"
+        drug, phase = trial_meta_of(registry_id)
+        updated.append({
             "registry_id": registry_id,
             "title": ct_titles.get(registry_id, ""),
             "updated_date": entry.get("last_update_date", ""),
             "url": url_of(registry_id),
-            **dict(zip(("drug_name", "phase_label"), trial_meta_of(registry_id))),
-        }
-        for registry_id, entry in current.items()
-        if registry_id not in status_ids and registry_id not in added_ids
-        and registry_id not in results_ids
-        and within_window(entry.get("last_update_date"))
-    ]
+            "change_summary": summary,
+            "drug_name": drug,
+            "phase_label": phase,
+        })
     updated.sort(key=lambda item: (item["updated_date"], item["registry_id"]), reverse=True)
 
     removed = sorted(registry_id for registry_id in baseline if registry_id not in current)

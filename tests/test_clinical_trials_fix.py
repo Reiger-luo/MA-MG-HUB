@@ -11,7 +11,26 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
+
 PROJECT = Path(__file__).resolve().parents[1]
+
+
+@pytest.fixture(scope="module", autouse=True)
+def _guard_weekly_snapshot_and_summary():
+    """本文件多个测试以子进程运行 builder，会覆盖周更快照与首页摘要。
+
+    测试前备份、测试后恢复，保证真实基线不被测试副作用污染。
+    """
+    snapshot_path = PROJECT / "data" / "clinicaltrials-weekly-changes-snapshot.json"
+    summary_path = PROJECT / "data" / "clinicalTrialsSummary.js"
+    snapshot_backup = snapshot_path.read_bytes() if snapshot_path.is_file() else None
+    summary_backup = summary_path.read_bytes() if summary_path.is_file() else None
+    yield
+    if snapshot_backup is not None:
+        snapshot_path.write_bytes(snapshot_backup)
+    if summary_backup is not None:
+        summary_path.write_bytes(summary_backup)
 
 
 # ── Defect 1: deep-link ?tab=trials must activate 临床试验 tab ────────
