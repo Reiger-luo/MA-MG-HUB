@@ -199,7 +199,7 @@ a, button { touch-action: manipulation; -webkit-tap-highlight-color: rgba(37,99,
   display: flex; flex-wrap: wrap; gap: 0.45rem 0.9rem;
 }
 .signal-list {
-  display: flex; flex-direction: column; gap: 0.65rem;
+  display: flex; flex-direction: column; gap: 0.85rem;
 }
 .signal-legend-item {
   display: inline-flex; align-items: flex-start; gap: 0.35rem;
@@ -218,7 +218,8 @@ a, button { touch-action: manipulation; -webkit-tap-highlight-color: rgba(37,99,
 }
 .signal-card {
   background: var(--bg2); border: 1px solid var(--bg3);
-  border-radius: 8px; padding: 1rem 1.1rem;
+  border-radius: 8px; padding: 1.05rem 1.15rem;
+  transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
 }
 .signal-card[id] { scroll-margin-top: 5.5rem; }
 .signal-card.is-targeted {
@@ -228,18 +229,53 @@ a, button { touch-action: manipulation; -webkit-tap-highlight-color: rgba(37,99,
 .signal-card:focus-visible {
   outline: 2px solid rgba(37,99,235,0.55); outline-offset: 3px;
 }
-.signal-card.signal-强 { border-left: 4px solid rgba(220,38,38,0.55); }
-.signal-card.signal-中 { border-left: 4px solid rgba(202,138,4,0.55); }
-.signal-card.signal-弱 { border-left: 4px solid rgba(107,114,128,0.45); }
+/* 强中弱信号卡片底色 */
+.signal-card.signal-强 {
+  border-left: 4px solid rgba(220,38,38,0.55);
+  background: linear-gradient(135deg, rgba(220,38,38,0.045), var(--bg2) 60%);
+}
+.signal-card.signal-中 {
+  border-left: 4px solid rgba(202,138,4,0.55);
+  background: linear-gradient(135deg, rgba(202,138,4,0.04), var(--bg2) 60%);
+}
+.signal-card.signal-弱 {
+  border-left: 4px solid rgba(107,114,128,0.45);
+  background: linear-gradient(135deg, rgba(107,114,128,0.035), var(--bg2) 60%);
+}
+.signal-card:hover {
+  border-color: var(--bg3);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.signal-card.signal-强:hover {
+  border-left-color: rgba(220,38,38,0.7);
+  box-shadow: 0 2px 10px rgba(220,38,38,0.06);
+}
+.signal-card.signal-中:hover {
+  border-left-color: rgba(202,138,4,0.7);
+  box-shadow: 0 2px 10px rgba(202,138,4,0.05);
+}
+.signal-card.signal-弱:hover {
+  border-left-color: rgba(107,114,128,0.6);
+  box-shadow: 0 2px 10px rgba(107,114,128,0.04);
+}
 .signal-card-head {
   display: flex; gap: 0.5rem; align-items: center;
   margin-bottom: 0.35rem; flex-wrap: wrap;
 }
 .signal-strength {
   display: inline-flex; align-items: center;
-  font-size: 0.74rem; color: var(--fg);
+  font-size: 0.74rem; font-weight: 600; color: var(--fg);
   background: var(--bg); border: 1px solid var(--bg3);
   padding: 0.12rem 0.42rem; border-radius: 4px;
+}
+.signal-card.signal-强 .signal-strength {
+  color: #b91c1c; background: rgba(220,38,38,0.06); border-color: rgba(220,38,38,0.22);
+}
+.signal-card.signal-中 .signal-strength {
+  color: #a16207; background: rgba(202,138,4,0.06); border-color: rgba(202,138,4,0.22);
+}
+.signal-card.signal-弱 .signal-strength {
+  color: #4b5563; background: rgba(107,114,128,0.06); border-color: rgba(107,114,128,0.2);
 }
 .signal-type { color: var(--fg3); font-size: 0.78rem; }
 .signal-title {
@@ -437,6 +473,19 @@ a.literature-signal-ref:hover { background: rgba(37,99,235,0.12); }
   border: 1px solid rgba(47, 111, 119, 0.2);
   border-radius: 9px;
   background: #f1f7f6;
+}
+/* 跟随信号强度变化底色 */
+.signal-card.signal-强 .literature-signal-change {
+  border-color: rgba(220,38,38,0.18);
+  background: rgba(220,38,38,0.035);
+}
+.signal-card.signal-中 .literature-signal-change {
+  border-color: rgba(202,138,4,0.18);
+  background: rgba(202,138,4,0.03);
+}
+.signal-card.signal-弱 .literature-signal-change {
+  border-color: rgba(107,114,128,0.16);
+  background: rgba(107,114,128,0.025);
 }
 .literature-signal-takeaway {
   margin: 0;
