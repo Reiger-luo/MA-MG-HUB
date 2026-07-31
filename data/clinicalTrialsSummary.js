@@ -67,7 +67,6 @@ window.MG_CLINICAL_TRIALS_SUMMARY = {
         "title": "From PAtients to Neuromuscular Organoids in Refractory AChR+ Myasthenia grAvis: End-plate Dysfunction, Biomarker Discovery and Regeneration Strategies",
         "first_post_date": "2026-07-21",
         "url": "https://clinicaltrials.gov/study/NCT07717281",
-        "change_summary": "新增登记",
         "drug_name": "",
         "phase_label": "未标注"
       },
@@ -76,7 +75,6 @@ window.MG_CLINICAL_TRIALS_SUMMARY = {
         "title": "An Exploratory Clinical Study of Universal STAR-T Cell Injection in Subjects With Generalized Myasthenia Gravis",
         "first_post_date": "2026-07-20",
         "url": "https://clinicaltrials.gov/study/NCT07714798",
-        "change_summary": "新增登记",
         "drug_name": "Universal STAR-T Cell",
         "phase_label": "Phase 1"
       }

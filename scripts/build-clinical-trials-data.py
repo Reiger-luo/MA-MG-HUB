@@ -941,7 +941,6 @@ def diff_ct_weekly_changes(
             "title": ct_titles.get(registry_id, ""),
             "first_post_date": entry.get("first_post_date", ""),
             "url": url_of(registry_id),
-            "change_summary": "新增登记",
             **dict(zip(("drug_name", "phase_label"), trial_meta_of(registry_id))),
         }
         for registry_id, entry in current.items()
@@ -990,7 +989,6 @@ def diff_ct_weekly_changes(
             "title": ct_titles.get(registry_id, ""),
             "results_post_date": results_date,
             "url": url_of(registry_id),
-            "change_summary": "结果首次发布",
             "drug_name": drug,
             "phase_label": phase,
         })

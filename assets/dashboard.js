@@ -707,9 +707,8 @@
     });
     statusChangeItems.forEach(function(item) {
       var statusItem = item || {};
-      var fromLabel = statusItem.from_label || statusItem.from_status || '未知状态';
-      var toLabel = statusItem.to_label || statusItem.to_status || '未知状态';
-      rowHtml.push(renderTrialChangeRow(statusItem, 'status', fromLabel + ' → ' + toLabel + ' · ' + (statusItem.updated_date || '日期待确认')));
+      // 状态转换已由 change_summary 呈现，meta 只留日期，避免重复
+      rowHtml.push(renderTrialChangeRow(statusItem, 'status', String(statusItem.updated_date || '日期待确认')));
     });
     resultsPostedItems.forEach(function(item) {
       var resultsItem = item || {};
