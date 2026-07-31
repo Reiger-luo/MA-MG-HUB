@@ -735,6 +735,7 @@
 
   function bindTabs() {
     function handleTabChange(key) {
+      if (key === 'signals') key = 'literature';
       activeIntelTab = key || 'literature';
       if (key === 'china') {
         ensureChinaInsights();
@@ -753,6 +754,7 @@
     }
     var params = new URLSearchParams(window.location.search || '');
     var requestedTab = params.get('tab') || '';
+    if (requestedTab === 'signals') requestedTab = 'literature';
     if (hub.initTabs) {
       hub.initTabs({
         tabAttr: 'data-tab',
@@ -1580,7 +1582,6 @@
 
   function init() {
     bindTabs();
-    bindSignalFilters();
     el.loading.innerHTML = '';
 
     try {
@@ -1651,7 +1652,6 @@
       buildSignals();
       rebuildArticleSignalStrengthIndex();
       applyFilters();
-      renderSignals();
       window.addEventListener('resize', resizeChinaCharts);
       document.getElementById('updateBadge').textContent = '数据: ' + allArticles.length + ' 篇';
 
@@ -1726,31 +1726,8 @@
   }
 
   function buildSignalBrief() {
-    var items = getFilteredSignalItems();
     var now = new Date().toLocaleDateString('zh-CN');
-    var filters = [];
-    filters.push('强度：' + (signalFilter === 'all' ? '全部' : signalFilter));
-    if (signalTopicFilter) filters.push('主题：' + signalTopicFilter);
-    var md = '# MA-MG-HUB 信号简报\n生成日期: ' + now + '\n\n页面范围: 信号板（当前 1 周）\n当前筛选: ' + filters.join('；') + '\n信号数量: ' + items.length + ' 条\n\n';
-
-    items.forEach(function(item, index) {
-      var medicalAffairs = item.medical_affairs || {};
-      md += '## ' + (index + 1) + '. [' + (item.strength || '待判定') + '信号] ' + (item.title || item.summary || '未命名信号') + '\n';
-      md += '- 类型: ' + (item.type || '近期证据') + (item.topics.length ? ' · 主题: ' + item.topics.join('、') : '') + '\n';
-      if (item.takeaway || item.summary) md += '- 核心判断: ' + (item.takeaway || item.summary) + '\n';
-      if (item.whySignal) md += '- 为什么是信号: ' + item.whySignal + '\n';
-      if (item.gapFilled) md += '- 已补证据缺口: ' + item.gapFilled + '\n';
-      if (item.remainingGap || item.evidenceBoundary) md += '- 仍需验证: ' + (item.remainingGap || item.evidenceBoundary) + '\n';
-      if (item.maUse || medicalAffairs.implication || item.medical_affairs_implication) {
-        md += '- 医学事务应用: ' + (item.maUse || medicalAffairs.implication || item.medical_affairs_implication) + '\n';
-      }
-      if (medicalAffairs.msl_action) md += '- MSL 行动: ' + medicalAffairs.msl_action + '\n';
-      if (medicalAffairs.suggested_kol_question) md += '- KOL 问题: ' + medicalAffairs.suggested_kol_question + '\n';
-      var pmids = uniqueSignalPmids(item);
-      if (pmids.length) md += '- 关联 PMID: ' + pmids.join('、') + '\n';
-      md += '\n';
-    });
-    if (!items.length) md += '当前筛选没有匹配信号。\n';
+    var md = '# MA-MG-HUB 信号简报\n生成日期: ' + now + '\n\n页面范围: 首页工作台 · 文献信号板\n当前状态: 信号板已迁移到首页工作台，情报中心不再提供独立信号板标签。\n\n请返回首页查看完整的信号摘要、信号列表、关键词云和方法学说明。\n';
     return { title: 'MA-MG-HUB 信号简报', md: md };
   }
 
@@ -1844,10 +1821,7 @@
     if (!el.btnExport) return;
     var label = '导出文献简报';
     var detail = filteredResults.length + ' 篇当前筛选文献';
-    if (activeIntelTab === 'signals') {
-      label = signalFilter === 'all' ? '导出信号简报' : '导出' + signalFilter + '信号简报';
-      detail = getFilteredSignalItems().length + ' 条当前筛选信号';
-    } else if (activeIntelTab === 'china') {
+    if (activeIntelTab === 'china') {
       label = '导出中国简报';
       detail = allArticles.filter(function(article) { return article.china_related; }).length + ' 篇中国相关文献';
     } else if (activeIntelTab === 'conference') {

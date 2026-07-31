@@ -18,10 +18,10 @@ def test_literature_html_has_clinical_trials_tab():
 
 
 def test_literature_html_tab_order():
-    """Tabs: 文献速览/信号板/中国情报 | 会议资讯 | 临床试验"""
+    """Tabs: 文献速览/中国情报 | 会议资讯 | 临床试验（信号板已迁移至首页工作台）"""
     html = (PROJECT / "pages" / "literature.html").read_text(encoding="utf-8")
     tab_order = re.findall(r'data-tab="(\w+)"', html)
-    assert tab_order == ["literature", "signals", "china", "conference", "trials"], (
+    assert tab_order == ["literature", "china", "conference", "trials"], (
         f"Tab order wrong: {tab_order}"
     )
 
