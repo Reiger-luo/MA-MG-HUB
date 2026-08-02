@@ -1616,9 +1616,54 @@ def build_signal_summary(signals):
     }
 
 
+# ---------------------------------------------------------------------------
+# 机构家族归一：同一医院以中心/实验室/医院等多种署名出现时，合并为规范名。
+# 每条规则：(匹配子串列表, 规范显示名)。affiliation 命中任一子串即归一。
+# ---------------------------------------------------------------------------
+_INSTITUTION_FAMILY_RULES = [
+    # 石家庄市人民医院 MG 中心体系：同一团队以诊疗中心 / 临床研究中心 /
+    # 重点实验室 / 省 MG 医院等名义署名，均为同一家机构。
+    (
+        (
+            "center of treatment of myasthenia gravis",
+            "treatment center of myasthenia gravis",
+            "hebei provincial clinical research center for myasthenia gravis",
+            "hebei provincial key laboratory of myasthenia gravis",
+            "hebei provincial hospital of myasthenia gravis",
+        ),
+        "Hebei Provincial Center of Myasthenia Gravis",
+    ),
+    # 华山医院体系：Huashan Rare Disease Center 是华山医院内设中心，
+    # 署名常写成 "Huashan Rare Disease Center and Department of Neurology,
+    # Huashan Hospital, ..."，全部归入 Huashan Hospital。
+    (
+        ("huashan",),
+        "Huashan Hospital",
+    ),
+    # 天津医科大学总医院体系：Tianjin Neurological Institute 是总医院
+    # 内设神经病学研究所，署名常单独出现，统一归入总医院。
+    (
+        ("tianjin neurological institute",),
+        "Tianjin Medical University General Hospital",
+    ),
+]
+
+
+def apply_institution_family(affiliation):
+    """命中机构家族规则时返回规范名，否则返回空串。"""
+    low = affiliation.lower()
+    for keys, canonical in _INSTITUTION_FAMILY_RULES:
+        if any(key in low for key in keys):
+            return canonical
+    return ""
+
+
 def normalize_institution(affiliation):
     if not affiliation:
         return ""
+    family = apply_institution_family(affiliation)
+    if family:
+        return family
     parts = [p.strip() for p in re.split(r"[,;]", affiliation) if p.strip()]
     strong_org_keywords = ["hospital", "university", "institute", "college", "center", "centre"]
     fallback_org_keywords = ["school", "clinic"]
@@ -1653,6 +1698,20 @@ def normalize_institution(affiliation):
                 return clean_part(item)
         return ""
 
+    for idx, part in enumerate(parts):
+        low = part.lower()
+        if should_skip(part):
+            continue
+        # 通用规则：存在 hospital 段时优先取 hospital 段，避免被
+        # "X Center and Department of ..., Y Hospital" 开头的
+        # center/institute 段截胡（科室中心一律视为医院内设机构）。
+        if "hospital" in low:
+            clean = clean_part(part)
+            if is_generic_affiliated_hospital(part):
+                context = nearby_context(idx)
+                if context:
+                    return f"{clean} of {context}"[:120]
+            return clean[:90]
     for idx, part in enumerate(parts):
         low = part.lower()
         if should_skip(part):
