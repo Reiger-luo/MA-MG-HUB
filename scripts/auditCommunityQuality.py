@@ -168,7 +168,7 @@ def buildAuditReport(outputPath: Path) -> dict:
             lowCounts.get(communityId, 0),
             conflictCounts.get(communityId, 0),
             coverage.get("topic_count", 0),
-            card.get("recent_14d_count", 0),
+            card.get("weekly_new_count", 0),
         ])
 
     conflictRows = []

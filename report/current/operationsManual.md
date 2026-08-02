@@ -67,6 +67,8 @@ MG Intelligence Hub 是面向 MG 医学事务团队的静态情报工作站。�
   ↓
 MG-core 与证据门控
   ↓
+周更前基线差分，生成本周真实新增 PMID 清单
+  ↓
 公开滚动层 + 独立来源频道
   ↓
 社区语义层 + 知识图谱 + 策展专题 + 中国作者网络
@@ -80,6 +82,7 @@ MG-core 与证据门控
 
 - `data/literature-full.json`
 - `data/literature-weekly.json`
+- `data/literature-ingest-latest.json`
 - `data/communityCorpusPack.jsonl`
 - `data/communityAssignments.jsonl`
 - `data/.llm_cache/`
@@ -121,6 +124,9 @@ PubMed 主文献流必须先通过 MG-core，再通过证据等级 I–V 门控�
 - 社区语义层的长期规则见 [communitySemanticLayer.md](../decisions/communitySemanticLayer.md)。
 - 中国作者医院网络的长期规则见 [chinaAuthorNetwork.md](../decisions/chinaAuthorNetwork.md)。
 - 社区允许 `unassigned` 与冲突状态，避免低置信度文献被强行归类。
+- 社区“本周新增”和专题“本周新证据”只读取 `literature-ingest-latest.json` 中相对周更前基线真正新增的 PMID；14 天重叠抓取只用于防漏，不计为重复新增。
+- 专题的新证据状态按“专题 × 社区”计算：仅传播到该 PMID 的 primary/secondary 社区；专题历史 PMID 作为长期知识底座单独展示。
+- 从社区进入相关专题时保留社区筛选参数；专题页的新证据数量、状态和 PMID 随当前社区过滤，长期专题 PMID 不参与“本周”计数。
 - 图谱关系属于 abstract-level 线索，不代表全文级因果。
 - 药物标签属于文本相关线索，不代表治疗或疗效判断。
 
@@ -191,7 +197,7 @@ python3 scripts/run-weekly-pipeline.py --run-id weekly-example --resume
 python3 scripts/run-weekly-pipeline.py --run-id weekly-example --resume --from-step build-source-signals
 ```
 
-检查点写入 `.hermes-audit/pipeline-runs/`。required 步骤全部成功后才更新 `release-manifest.js`；状态生成与清单采用两遍收口，使 `pipeline-status.js` 的一致性结论也进入最终哈希。当前公开 JS 与清单出现哈希不符、缺失或未入清单时，首页和数据状态显示发布漂移，不再沿用历史“完整发布成功”。optional 步骤失败只记录 warning 并按其定义使用 fallback。
+检查点写入 `.hermes-audit/pipeline-runs/`。`merge-weekly` 原子写入本地 `literature-ingest-latest.json`，记录本周累计真实新增与本次更新 PMID；同一自然周重跑累积新增，跨周自动清空。required 步骤全部成功后才更新 `release-manifest.js`；状态生成与清单采用两遍收口，使 `pipeline-status.js` 的一致性结论也进入最终哈希。当前公开 JS 与清单出现哈希不符、缺失或未入清单时，首页和数据状态显示发布漂移，不再沿用历史“完整发布成功”。optional 步骤失败只记录 warning 并按其定义使用 fallback。
 
 GitHub Actions 仅手动 `workflow_dispatch`，用于质量门和轻量兜底，不替代本地 full 驱动周更。
 

@@ -156,8 +156,9 @@
     }).join('');
   }
 
-  function topicHref(topicId) {
-    return pageUrl('pages/landscape.html?tab=answers&topic=' + encodeURIComponent(topicId || ''));
+  function topicHref(topicId, communityId) {
+    var communityQuery = communityId && communityId !== 'all' ? '&community=' + encodeURIComponent(communityId) : '';
+    return pageUrl('pages/landscape.html?tab=answers&topic=' + encodeURIComponent(topicId || '') + communityQuery);
   }
 
   function toSet(items) {
@@ -242,6 +243,12 @@
 
   function getTopicCoverage(topicId) {
     return topicCoverageById[topicId] || { communities: [] };
+  }
+
+  function topicImpactForCommunity(topic, communityId) {
+    if (!communityId || communityId === 'all') return topic.impact || { status: 'quiet', recent_articles: [] };
+    var communityImpact = (getTopicCoverage(topic.id).community_impacts || {})[communityId];
+    return communityImpact || { status: 'quiet', recent_articles: [] };
   }
 
   function topicHasCommunity(topicId, communityId) {
@@ -376,9 +383,14 @@
     var refsHtml = (topic.evidence_refs || []).length ?
       topic.evidence_refs.slice(0, 8).map(renderReferenceItem).join('') :
       '<li>暂无可校验 PMID；可在 wiki 中补充 evidence_pmids。</li>';
-    var impactItems = ((topic.impact && topic.impact.recent_articles) || []).slice(0, 6);
-    var impactHtml = impactItems.length ? impactItems.map(renderReferenceItem).join('') : '<li>本周未发现明确影响该专题的新 abstract。</li>';
-    var impact = (topic.impact && topic.impact.status) || 'quiet';
+    var communityFilter = (($('answerTopicCommunity') || {}).value || 'all');
+    var scopedImpact = topicImpactForCommunity(topic, communityFilter);
+    var impactItems = (scopedImpact.recent_articles || []).slice(0, 6);
+    var impactHtml = impactItems.length ? impactItems.map(renderReferenceItem).join('') : '<li>本周未发现明确影响该专题的新入库 abstract。</li>';
+    var impact = scopedImpact.status || 'quiet';
+    var communitySelect = $('answerTopicCommunity');
+    var selectedCommunityOption = communitySelect && communitySelect.options[communitySelect.selectedIndex];
+    var impactScope = communityFilter !== 'all' && selectedCommunityOption ? ' · ' + selectedCommunityOption.textContent : '';
 
     detail.innerHTML =
       '<div class="kg-detail-type">' + escapeHtml(sourceTypeLabelForTopic(topic.source_type)) + '</div>' +
@@ -386,7 +398,7 @@
       '<div class="kg-badges">' +
         '<span class="kg-badge conf-' + escapeHtml(topic.confidence === 'high' ? 'high' : topic.confidence === 'medium' ? 'medium' : 'low') + '">' + escapeHtml(topic.confidence || 'unknown') + '</span>' +
         '<span class="kg-badge">' + escapeHtml(topic.status || 'active') + '</span>' +
-        '<span class="kg-badge">' + escapeHtml(impactStatusLabel(impact)) + '</span>' +
+        '<span class="kg-badge">' + escapeHtml(impactStatusLabel(impact) + impactScope) + '</span>' +
         '<span class="kg-badge">更新 ' + escapeHtml(topic.updated || '-') + '</span>' +
       '</div>' +
       '<div class="kg-detail-summary">' + escapeHtml(topic.summary || '') + '</div>' +
@@ -395,8 +407,8 @@
       '<div class="kg-detail-section"><h4>全库锚点</h4><div class="kg-tags">' + anchorHtml + '</div></div>' +
       '<div class="kg-detail-section"><h4>MSL 使用场景</h4><div class="kg-tags">' + useHtml + '</div></div>' +
       '<div class="kg-detail-section"><h4>专题要点</h4>' + claimHtml + '</div>' +
-      '<div class="kg-detail-section"><h4>专题 PMID</h4><ul class="kg-study-list">' + refsHtml + '</ul></div>' +
-      '<div class="kg-detail-section"><h4>本周自动影响提示</h4><ul class="kg-study-list">' + impactHtml + '</ul></div>' +
+      '<div class="kg-detail-section"><h4>本周新入库证据' + escapeHtml(impactScope) + '</h4><ul class="kg-study-list">' + impactHtml + '</ul></div>' +
+      '<div class="kg-detail-section"><h4>专题 PMID（长期知识底座）</h4><ul class="kg-study-list">' + refsHtml + '</ul></div>' +
       '<div class="kg-detail-actions"><a class="kg-obsidian-btn" href="' + escapeHref(topic.obsidian_url || '#') + '">在 Obsidian 中打开</a></div>';
 
     Array.prototype.forEach.call(detail.querySelectorAll('[data-topic-community]'), function(button) {
@@ -423,13 +435,13 @@
     var impactFilter = (($('answerTopicImpact') || {}).value || 'all');
     var communityFilter = (($('answerTopicCommunity') || {}).value || 'all');
     var filtered = curatedTopics.filter(function(topic) {
-      var impact = (topic.impact && topic.impact.status) || 'quiet';
+      var impact = topicImpactForCommunity(topic, communityFilter).status || 'quiet';
       return (!keyword || topicSearchText(topic).indexOf(keyword) !== -1) &&
         (impactFilter === 'all' || impact === impactFilter) &&
         topicHasCommunity(topic.id, communityFilter);
     }).sort(function(a, b) {
-      var impactA = (a.impact && a.impact.status) === 'updatedEvidence' ? 1 : 0;
-      var impactB = (b.impact && b.impact.status) === 'updatedEvidence' ? 1 : 0;
+      var impactA = topicImpactForCommunity(a, communityFilter).status === 'updatedEvidence' ? 1 : 0;
+      var impactB = topicImpactForCommunity(b, communityFilter).status === 'updatedEvidence' ? 1 : 0;
       return impactB - impactA ||
         topicEvidenceCount(b) - topicEvidenceCount(a) ||
         String(a.title || '').localeCompare(String(b.title || ''));
@@ -451,8 +463,9 @@
     var activeId = selectedId && topicById[selectedId] ? selectedId : topics[0].id;
     activeTopicId = activeId;
     list.innerHTML = topics.map(function(topic) {
-      var impactCount = ((topic.impact && topic.impact.recent_articles) || []).length;
-      var impact = (topic.impact && topic.impact.status) || 'quiet';
+      var scopedImpact = topicImpactForCommunity(topic, communityFilter);
+      var impactCount = (scopedImpact.recent_articles || []).length;
+      var impact = scopedImpact.status || 'quiet';
       return '<button class="curated-topic-card' + (topic.id === activeId ? ' active' : '') + '" type="button" data-topic="' + escapeHtml(topic.id) + '">' +
         '<span>' + escapeHtml(sourceTypeLabelForTopic(topic.source_type)) + ' · ' + escapeHtml(impactStatusLabel(impact)) + '</span>' +
         '<strong>' + escapeHtml(topic.title || topic.id) + '</strong>' +
@@ -497,7 +510,8 @@
     activateLandscapeTab('answers');
     renderTopics(topicId);
     if (!skipHistory && window.history && window.history.replaceState) {
-      window.history.replaceState(null, '', topicHref(topicId));
+      var communityId = (($('answerTopicCommunity') || {}).value || 'all');
+      window.history.replaceState(null, '', topicHref(topicId, communityId));
     }
   }
 

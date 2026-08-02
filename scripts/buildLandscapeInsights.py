@@ -161,7 +161,7 @@ def community_score(item: dict[str, Any], card: dict[str, Any]) -> float:
         + int(item.get("high_evidence_count") or 0) * 8
         + int(item.get("china_count") or 0) * 2
         + SIGNAL_SCORE.get(str(item.get("signal_level") or ""), 0)
-        + int(card.get("recent_14d_count") or 0) * 1.5
+        + int(card.get("weekly_new_count") or 0) * 1.5
     )
 
 
@@ -249,7 +249,7 @@ def build_insight(
     community_id = item.get("community_id") or item.get("id") or ""
     profile = COMMUNITY_PROFILES.get(community_id, {})
     title = profile.get("title") or f"{item.get('title') or community_id} 出现新的月度信号"
-    recent_refs = unique_refs((item.get("top_refs") or []) + (card.get("recent_refs") or []), limit=6)
+    recent_refs = unique_refs((item.get("top_refs") or []) + (card.get("weekly_refs") or card.get("recent_refs") or []), limit=6)
     if not recent_refs:
         fill_refs = unique_refs((card.get("representative_refs") or []), limit=3)
         refs = unique_refs(recent_refs + fill_refs, limit=6)
@@ -350,7 +350,7 @@ def build_payload() -> dict[str, Any]:
         if not community_id or community_id == "unassigned":
             continue
         card = cards.get(community_id) or {}
-        refs = (item.get("top_refs") or []) + (card.get("recent_refs") or [])
+        refs = (item.get("top_refs") or []) + (card.get("weekly_refs") or card.get("recent_refs") or [])
         if not refs:
             continue
         candidates.append((community_score(item, card), item, card))

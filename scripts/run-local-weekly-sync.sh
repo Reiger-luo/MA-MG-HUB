@@ -9,6 +9,8 @@ STAMP="$(date '+%Y%m%d-%H%M%S')"
 LOG_FILE="${LOG_DIR}/weekly-sync-${STAMP}.log"
 DRY_RUN="${MG_WEEKLY_DRY_RUN:-0}"
 DRY_RUN_FULL_BACKUP=""
+DRY_RUN_INGEST_BACKUP=""
+DRY_RUN_INGEST_EXISTED="0"
 
 mkdir -p "${LOG_DIR}"
 
@@ -23,6 +25,12 @@ cleanup() {
     if [ -n "${DRY_RUN_FULL_BACKUP}" ] && [ -f "${DRY_RUN_FULL_BACKUP}" ]; then
       cp "${DRY_RUN_FULL_BACKUP}" "${ROOT_DIR}/data/literature-full.json" || true
       rm -f "${DRY_RUN_FULL_BACKUP}" || true
+    fi
+    if [ -n "${DRY_RUN_INGEST_BACKUP}" ] && [ -f "${DRY_RUN_INGEST_BACKUP}" ]; then
+      cp "${DRY_RUN_INGEST_BACKUP}" "${ROOT_DIR}/data/literature-ingest-latest.json" || true
+      rm -f "${DRY_RUN_INGEST_BACKUP}" || true
+    elif [ "${DRY_RUN_INGEST_EXISTED}" = "0" ]; then
+      rm -f "${ROOT_DIR}/data/literature-ingest-latest.json" || true
     fi
     git -C "${ROOT_DIR}" restore --staged --worktree -- data assets pages index.html 2>/dev/null || true
   fi
@@ -54,6 +62,11 @@ fi
 if [ "${DRY_RUN}" = "1" ]; then
   DRY_RUN_FULL_BACKUP="$(mktemp "${LOG_DIR}/literature-full.dry-run.XXXXXX.json")"
   cp "data/literature-full.json" "${DRY_RUN_FULL_BACKUP}"
+  if [ -f "data/literature-ingest-latest.json" ]; then
+    DRY_RUN_INGEST_EXISTED="1"
+    DRY_RUN_INGEST_BACKUP="$(mktemp "${LOG_DIR}/literature-ingest-latest.dry-run.XXXXXX.json")"
+    cp "data/literature-ingest-latest.json" "${DRY_RUN_INGEST_BACKUP}"
+  fi
   echo "MG_WEEKLY_DRY_RUN=1：将完整执行管线和校验，但不 commit/push；退出时恢复本地 full 与 tracked 产物。"
 fi
 

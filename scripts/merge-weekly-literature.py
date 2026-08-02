@@ -31,6 +31,7 @@ DEFAULT_WEEKLY_PATH = DATA_DIR / "literature-weekly.json"
 FULL_PATH = DATA_DIR / "literature-full.json"
 RECENT_JSON_CACHE_PATH = DATA_DIR / "literature-recent.json"
 RECENT_JS_PATH = DATA_DIR / "literature-recent.js"
+INGEST_MANIFEST_PATH = DATA_DIR / "literature-ingest-latest.json"
 GUIDELINE_CACHE_PATH = DATA_DIR / "guideline-consensus-cache.json"
 DAYS_RECENT = 365
 EVIDENCE_LEVELS = {"I", "II", "III", "IV", "V"}
@@ -229,9 +230,15 @@ def derivePublicArticles(
 
 
 def upsertArticles(base, incoming):
+    merged, addedPmids, updatedPmids = upsertArticlesWithChanges(base, incoming)
+    return merged, len(addedPmids), len(updatedPmids)
+
+
+def upsertArticlesWithChanges(base, incoming):
+    """合并文献并返回本次真正新增/更新的 PMID。"""
     byPmid = {article.get("pmid"): article for article in base if article.get("pmid")}
-    added = 0
-    updated = 0
+    addedPmids = []
+    updatedPmids = []
     for article in incoming:
         pmid = article.get("pmid")
         if not pmid:
@@ -240,13 +247,56 @@ def upsertArticles(base, incoming):
             before = byPmid[pmid]
             after = mergeArticle(before, article)
             byPmid[pmid] = after
-            updated += int(after != before)
+            if after != before:
+                updatedPmids.append(str(pmid))
         else:
             byPmid[pmid] = article
-            added += 1
+            addedPmids.append(str(pmid))
     merged = list(byPmid.values())
     merged.sort(key=sortKey, reverse=True)
-    return merged, added, updated
+    return merged, addedPmids, updatedPmids
+
+
+def weekStart(value: datetime) -> datetime:
+    """使用周一作为本地周更周期起点。"""
+    return value.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=value.weekday())
+
+
+def loadPreviousIngestManifest(path: Path):
+    if not path.exists():
+        return {}
+    try:
+        payload = loadJson(path)
+    except (OSError, ValueError):
+        return {}
+    return payload if isinstance(payload, dict) else {}
+
+
+def buildIngestManifest(addedPmids, updatedPmids, generatedAt=None, previous=None, sourceFile="data/literature-weekly.json"):
+    """生成本周真实入库清单；同周重跑时累积新增 PMID。"""
+    generatedAt = generatedAt or datetime.now()
+    currentWeekStart = weekStart(generatedAt)
+    previous = previous or {}
+    previousAdded = previous.get("added_pmids") or []
+    if previous.get("window_start") != currentWeekStart.strftime("%Y-%m-%d"):
+        previousAdded = []
+    cumulativeAdded = list(dict.fromkeys([str(item) for item in previousAdded + list(addedPmids) if item]))
+    return {
+        "schema_version": "1.0",
+        "generated_at": generatedAt.strftime("%Y-%m-%d %H:%M:%S"),
+        "window_start": currentWeekStart.strftime("%Y-%m-%d"),
+        "window_end": generatedAt.strftime("%Y-%m-%d"),
+        "basis": "pmidAbsentFromPreMergeBaseline",
+        "source_file": sourceFile,
+        "added_count": len(cumulativeAdded),
+        "updated_count": len(updatedPmids),
+        "added_pmids": cumulativeAdded,
+        "updated_pmids": list(dict.fromkeys(str(item) for item in updatedPmids if item)),
+    }
+
+
+def writeIngestManifest(path: Path, payload) -> None:
+    atomic_write_json(path, payload)
 
 
 def buildRecentArticles(articles):
@@ -279,15 +329,27 @@ def main():
     gateCounters = {"not_mg_core": 0, "missing_evidence_level": 0}
     added = 0
     updated = 0
+    addedPmids = []
+    updatedPmids = []
     mergedBase = base
     if not args.derive_only:
         weeklyPath = Path(args.weekly)
         if not weeklyPath.exists():
             raise SystemExit(f"缺少 {weeklyPath}")
         weekly, gateCounters = filterEligibleIncoming(loadJson(weeklyPath))
-        mergedBase, added, updated = upsertArticles(base, weekly)
+        mergedBase, addedPmids, updatedPmids = upsertArticlesWithChanges(base, weekly)
+        added = len(addedPmids)
+        updated = len(updatedPmids)
         if hasFull and (added or updated):
             writeFullJson(mergedBase)
+        previousIngest = loadPreviousIngestManifest(INGEST_MANIFEST_PATH)
+        ingestManifest = buildIngestManifest(
+            addedPmids,
+            updatedPmids,
+            previous=previousIngest,
+            sourceFile=str(weeklyPath),
+        )
+        writeIngestManifest(INGEST_MANIFEST_PATH, ingestManifest)
 
     publicBase, publicGateCounters = derivePublicArticles(
         mergedBase,
@@ -312,6 +374,8 @@ def main():
     print(f"   完整公开流门控: {publicGateCounters}")
     print(f"   新增: {added}")
     print(f"   更新: {updated}")
+    if not args.derive_only:
+        print(f"   本周累计新增 PMID: {len(ingestManifest['added_pmids'])}")
     if hasFull:
         print(f"   full 本地分析底座: {len(mergedBase)} 篇")
     else:

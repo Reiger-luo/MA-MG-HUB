@@ -148,6 +148,32 @@ def topicImpactStatus(topic: dict) -> str:
     return (topic.get("impact") or {}).get("status") or "quiet"
 
 
+def topicCommunityImpacts(topic: dict, assignmentsByPmid: dict) -> dict[str, dict]:
+    """把专题新增证据限制到文献实际归属的 primary/secondary 社区。"""
+    impacts: dict[str, dict[str, dict]] = defaultdict(dict)
+    for article in (topic.get("impact") or {}).get("recent_articles") or []:
+        pmid = str(article.get("pmid") or "")
+        assignment = assignmentsByPmid.get(pmid) or {}
+        communityIds = []
+        primaryId = assignment.get("primary")
+        if primaryId and primaryId != "unassigned":
+            communityIds.append(primaryId)
+        for secondary in assignment.get("secondary") or []:
+            communityId = secondary.get("community_id")
+            if communityId and communityId != "unassigned":
+                communityIds.append(communityId)
+        for communityId in dict.fromkeys(communityIds):
+            impacts[communityId][pmid] = article
+    return {
+        communityId: {
+            "status": "updatedEvidence",
+            "recent_article_count": len(byPmid),
+            "recent_articles": list(byPmid.values()),
+        }
+        for communityId, byPmid in impacts.items()
+    }
+
+
 def buildTopicCoverage(topic: dict, nodesById: dict, assignmentsByPmid: dict, titleById: dict, termMap: dict) -> dict:
     scoreByCommunity: Counter = Counter()
     anchorCountByCommunity: Counter = Counter()
@@ -204,12 +230,14 @@ def buildTopicCoverage(topic: dict, nodesById: dict, assignmentsByPmid: dict, ti
         })
 
     top = ranked[0] if ranked else {}
+    communityImpacts = topicCommunityImpacts(topic, assignmentsByPmid)
     return {
         "topic_id": topic.get("id"),
         "title": topic.get("title") or topic.get("id"),
         "source_type": topic.get("source_type") or "topic",
         "status": topic.get("status") or "active",
         "impact_status": topicImpactStatus(topic),
+        "community_impacts": communityImpacts,
         "updated": topic.get("updated") or "",
         "confidence": top.get("confidence") or "unmapped",
         "primary_community_id": top.get("community_id") or "",
@@ -253,15 +281,19 @@ def buildCoveragePayload() -> dict:
     for item in topicCoverage:
         for community in item.get("communities") or []:
             communityId = community["community_id"]
+            communityImpact = (item.get("community_impacts") or {}).get(communityId) or {}
+            impactStatus = communityImpact.get("status") or "quiet"
             communityTopicIndex[communityId].append(item["topic_id"])
             communityTopTopics[communityId].append({
                 "topic_id": item["topic_id"],
                 "title": item["title"],
                 "score": community["score"],
                 "confidence": community["confidence"],
-                "impact_status": item["impact_status"],
+                "impact_status": impactStatus,
+                "recent_article_count": int(communityImpact.get("recent_article_count") or 0),
+                "recent_articles": communityImpact.get("recent_articles") or [],
             })
-            if item["impact_status"] == "updatedEvidence":
+            if impactStatus == "updatedEvidence":
                 updatedCountByCommunity[communityId] += 1
             if community["confidence"] == "high":
                 highConfidenceByCommunity[communityId] += 1
@@ -295,7 +327,7 @@ def buildCoveragePayload() -> dict:
     return {
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "version": "2026.06-v4-phase3",
-        "method": "anchorNodeDominantCommunityPlusEvidencePmidAssignments",
+        "method": "anchorNodeDominantCommunityPlusEvidencePmidAssignmentsAndScopedWeeklyImpact",
         "source_note": "efgar-wiki 专题层作为策展样板；社区归属来自 full MG 图谱节点和 full 级 PMID assignment，不做实时 LLM。",
         "stats": {
             "topic_count": len(topicCoverage),

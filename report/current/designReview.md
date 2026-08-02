@@ -69,6 +69,7 @@ MG-core 指南/共识
 | --- | --- |
 | 严格公开文献 | `data/literature-recent.js` |
 | 当前周文献信号 | `data/signals-weekly.js` |
+| 本周真实新增 PMID 口径 | 本地 `data/literature-ingest-latest.json` → `communityWeekly.js`、`curated-topics.js`、`wikiTopicCoverage.js` |
 | 语义 full 状态 | `data/literature-full-index.js`、community index、`pipeline-status.js` |
 | 指南/共识 | `data/guideline-consensus-cache.json` |
 | 来源频道 | `data/source-signals.js`（试验注册频道覆盖三源） |
@@ -84,9 +85,10 @@ MG-core 指南/共识
 1. 读“产品边界”和“非目标”。
 2. 打开情报中心，确认来源频道彼此独立。
 3. 依次切换文献、信号、中国、会议和临床试验，确认简报跟随当前标签与筛选条件。
-4. 打开 MSL 工作台，确认只加载中国专家分片且不保存行为。
-5. 打开数据状态，核对公开滚动层、语义底座和完整发布哈希一致性；漂移时首页不得显示“完整发布成功”。
-6. 运行快速验证，确认门控、分片和发布边界。
+4. 打开知识库社区，确认“本周新证据”带有社区级新增数量；进入专题后仍保留社区筛选，且本周新入库证据排在长期专题 PMID 之前。
+5. 打开 MSL 工作台，确认只加载中国专家分片且不保存行为。
+6. 打开数据状态，核对公开滚动层、语义底座和完整发布哈希一致性；漂移时首页不得显示“完整发布成功”。
+7. 运行快速验证，确认门控、分片和发布边界。
 
 ## 验证命令
 
@@ -103,6 +105,7 @@ git diff --check
 - 文献、图谱、社区和 Living Answers 主要基于 title/abstract/metadata，正式医学使用前需阅读全文。
 - MG-core 与证据分级是规则系统，需要持续抽样审计。
 - 社区 `unassigned` 和冲突状态表示需要复核，不表示管线失败。
+- “本周新证据”表示相对周更前基线真实新增的 PMID，不等于滚动 14 天，也不包含专题长期 PMID；社区标签只在该 PMID 的 primary/secondary 社区出现。
 - ChiCTR 自动访问可能受 WAF 影响，失败时使用 last-good 官方缓存。
 - 国际专家分片不被页面加载，但仍是 GitHub Pages 可公开访问的 tracked 文件，不能存放私有数据。
 - 当前数量、分片规模、会议覆盖和发布时间会随周更变化，应在数据状态页查看，不在本文档中固定。

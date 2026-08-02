@@ -14,7 +14,7 @@ import os
 import re
 import sys
 from collections import Counter, defaultdict
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
 
 from common.io import atomic_write_js_global, load_js_global, load_json as read_json
@@ -24,6 +24,7 @@ PROJECT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT / "data"
 DEFAULT_VAULT = Path.home() / "Library" / "Mobile Documents" / "iCloud~md~obsidian" / "Documents" / "efgartigimod-wiki"
 FULL_PATH = DATA_DIR / "literature-full.json"
+INGEST_MANIFEST_PATH = DATA_DIR / "literature-ingest-latest.json"
 KNOWLEDGE_PATH = DATA_DIR / "knowledge-graph.js"
 OUT_PATH = DATA_DIR / "curated-topics.js"
 
@@ -393,9 +394,9 @@ def infer_msl_use(text: str, fm: dict) -> list[str]:
     return unique(uses)[:5] or ["拜访前准备", "内容工坊素材"]
 
 
-def find_impact_articles(topic: dict, articles: list[dict], recent_cutoff: datetime | None) -> list[dict]:
-    """找出每周新增且可能影响专题的文献。"""
-    if not recent_cutoff:
+def find_impact_articles(topic: dict, articles: list[dict], added_pmids: set[str]) -> list[dict]:
+    """只在本周真实新增 PMID 中寻找可能影响专题的文献。"""
+    if not added_pmids:
         return []
     anchors = topic.get("anchor_nodes") or []
     anchor_terms = []
@@ -409,10 +410,7 @@ def find_impact_articles(topic: dict, articles: list[dict], recent_cutoff: datet
     hits = []
     for article in articles:
         pmid = str(article.get("pmid") or "")
-        if not pmid or pmid in known_pmids:
-            continue
-        entry_date = parse_date(article.get("entry_date"))
-        if not entry_date or entry_date < recent_cutoff:
+        if not pmid or pmid not in added_pmids or pmid in known_pmids:
             continue
         text = article_text(article)
         primary_match = sum(1 for term in primary_terms if term and term in text)
@@ -482,12 +480,11 @@ def infer_focus_terms(topic: dict) -> list[str]:
     return unique([term.lower() for term in terms])[:18]
 
 
-def scan_topics(vault: Path, valid_nodes: set[str], articles_by_pmid: dict[str, dict], articles: list[dict]) -> tuple[list[dict], list[str]]:
+def scan_topics(vault: Path, valid_nodes: set[str], articles_by_pmid: dict[str, dict], articles: list[dict], ingest_manifest: dict) -> tuple[list[dict], list[str]]:
     """扫描 wiki 专题文件并生成结构化 topics。"""
     topics = []
     warnings = []
-    latest_entry = max((parse_date(article.get("entry_date")) for article in articles if parse_date(article.get("entry_date"))), default=None)
-    recent_cutoff = latest_entry - timedelta(days=14) if latest_entry else None
+    added_pmids = {str(item) for item in ingest_manifest.get("added_pmids") or []}
 
     for dir_name, source_type in CURATED_DIRS.items():
         dir_path = vault / dir_name
@@ -530,9 +527,13 @@ def scan_topics(vault: Path, valid_nodes: set[str], articles_by_pmid: dict[str, 
                 "rel_path": rel_path,
                 "obsidian_url": f"obsidian://open?vault=efgartigimod-wiki&file={rel_path}",
             }
+            impact_articles = find_impact_articles(topic, articles, added_pmids)
             topic["impact"] = {
-                "status": "updatedEvidence" if find_impact_articles(topic, articles, recent_cutoff) else "quiet",
-                "recent_articles": find_impact_articles(topic, articles, recent_cutoff),
+                "status": "updatedEvidence" if impact_articles else "quiet",
+                "basis": ingest_manifest.get("basis") or "ingestManifestMissing",
+                "window_start": ingest_manifest.get("window_start") or "",
+                "window_end": ingest_manifest.get("window_end") or "",
+                "recent_articles": impact_articles,
             }
             topics.append(topic)
 
@@ -581,10 +582,11 @@ def build_bridge(topics: list[dict]) -> dict[str, list[str]]:
 def build_output(vault: Path) -> dict:
     """生成 curated topics 数据。"""
     articles = load_json(FULL_PATH)
+    ingest_manifest = read_json(INGEST_MANIFEST_PATH) if INGEST_MANIFEST_PATH.exists() else {}
     articles_by_pmid = {str(article.get("pmid")): article for article in articles if article.get("pmid")}
     knowledge_graph = load_knowledge_graph()
     valid_nodes = {node["id"] for node in knowledge_graph.get("nodes", [])}
-    topics, warnings = scan_topics(vault, valid_nodes, articles_by_pmid, articles)
+    topics, warnings = scan_topics(vault, valid_nodes, articles_by_pmid, articles, ingest_manifest)
     bridge = build_bridge(topics)
     impact_count = sum(1 for topic in topics if topic.get("impact", {}).get("status") == "updatedEvidence")
     anchor_counter = Counter(node_id for topic in topics for node_id in topic.get("anchor_nodes") or [])
@@ -593,6 +595,11 @@ def build_output(vault: Path) -> dict:
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "source": "efgartigimod-wiki curated layer",
         "vault_label": "efgartigimod-wiki",
+        "impact_window": {
+            "start": ingest_manifest.get("window_start") or "",
+            "end": ingest_manifest.get("window_end") or "",
+            "basis": ingest_manifest.get("basis") or "ingestManifestMissing",
+        },
         "stats": {
             "topics": len(topics),
             "active_topics": sum(1 for topic in topics if topic.get("status") == "active"),

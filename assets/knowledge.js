@@ -234,8 +234,9 @@
     return path;
   }
 
-  function topicHref(topicId) {
-    return pageUrl('pages/landscape.html?tab=answers&topic=' + encodeURIComponent(topicId || ''));
+  function topicHref(topicId, communityId) {
+    var communityQuery = communityId ? '&community=' + encodeURIComponent(communityId) : '';
+    return pageUrl('pages/landscape.html?tab=answers&topic=' + encodeURIComponent(topicId || '') + communityQuery);
   }
 
   function safeClassToken(value, fallback) {
@@ -970,7 +971,7 @@
       topic.evidence_refs.slice(0, 8).map(renderReferenceItem).join('') :
       '<li>暂无可校验 PMID；可在 wiki 中补充 evidence_pmids。</li>';
     var impactItems = ((topic.impact && topic.impact.recent_articles) || []).slice(0, 6);
-    var impactHtml = impactItems.length ? impactItems.map(renderReferenceItem).join('') : '<li>本周未发现明确影响该专题的新 abstract。</li>';
+    var impactHtml = impactItems.length ? impactItems.map(renderReferenceItem).join('') : '<li>本周未发现明确影响该专题的新入库 abstract。</li>';
     var communityHtml = renderTopicCommunitySection(topic.id);
 
     elTopicDetail.innerHTML =
@@ -986,8 +987,8 @@
       '<div class="kg-detail-section"><h4>全库锚点</h4><div class="kg-tags">' + anchorHtml + '</div></div>' +
       '<div class="kg-detail-section"><h4>MSL 使用场景</h4><div class="kg-tags">' + useHtml + '</div></div>' +
       '<div class="kg-detail-section"><h4>专题要点</h4>' + claimHtml + '</div>' +
-      '<div class="kg-detail-section"><h4>专题 PMID</h4><ul class="kg-study-list">' + refsHtml + '</ul></div>' +
-      '<div class="kg-detail-section"><h4>本周自动影响提示</h4><ul class="kg-study-list">' + impactHtml + '</ul></div>' +
+      '<div class="kg-detail-section"><h4>本周新入库证据</h4><ul class="kg-study-list">' + impactHtml + '</ul></div>' +
+      '<div class="kg-detail-section"><h4>专题 PMID（长期知识底座）</h4><ul class="kg-study-list">' + refsHtml + '</ul></div>' +
       '<div class="kg-detail-actions"><a class="kg-obsidian-btn" href="' + escapeHref(topic.obsidian_url || '#') + '">在 Obsidian 中打开</a></div>';
 
     Array.prototype.forEach.call(elTopicDetail.querySelectorAll('[data-node]'), function (button) {
@@ -1253,7 +1254,7 @@
       return (!keyword || text.indexOf(keyword) !== -1) &&
         (signalFilter === 'all' || signal === signalFilter);
     }).sort(function (a, b) {
-      return (b.recent_14d_count || 0) - (a.recent_14d_count || 0) ||
+      return (b.weekly_new_count || 0) - (a.weekly_new_count || 0) ||
         (b.article_count || 0) - (a.article_count || 0);
     });
 
@@ -1270,7 +1271,7 @@
     elCommunityList.innerHTML = rows.map(function (row) {
       var weekly = weeklyByCommunityId[row.id] || {};
       var signal = row.signal_level || communityFilterSignal(weekly.signal_level);
-      var meta = compactNumber(row.article_count || 0) + ' 篇 · 本周 ' + compactNumber(row.recent_14d_count || weekly.recent_count || 0) +
+      var meta = compactNumber(row.article_count || 0) + ' 篇 · 本周新增 ' + compactNumber(row.weekly_new_count || weekly.recent_count || 0) +
         ' · 高等级 ' + compactNumber(row.high_evidence_count || weekly.high_evidence_count || 0);
       return '<button class="curated-topic-card community-card' + (row.id === activeCommunityId ? ' active' : '') + '" type="button" data-community="' + escapeHtml(row.id) + '">' +
         '<span class="community-signal">' + escapeHtml(communitySignalText(signal)) + '</span>' +
@@ -1312,8 +1313,9 @@
     }
     return '<div class="kg-detail-section"><h4>相关专题</h4><div class="kg-relation-list">' +
       topics.slice(0, 6).map(function (topic) {
-        var state = topic.impact_status === 'updatedEvidence' ? '本周新证据' : '专题';
-        return '<button class="kg-relation-row" type="button" data-topic="' + escapeHtml(topic.topic_id) + '">' +
+        var recentCount = Number(topic.recent_article_count || 0);
+        var state = topic.impact_status === 'updatedEvidence' && recentCount ? '本周新证据 · ' + recentCount : '专题';
+        return '<button class="kg-relation-row" type="button" data-topic="' + escapeHtml(topic.topic_id) + '" data-topic-community="' + escapeHtml(communityId) + '">' +
           '<span>' + escapeHtml(state) + '</span>' +
           '<strong>' + escapeHtml(topic.title) + '</strong>' +
           '<em>' + escapeHtml(topic.confidence || 'low') + ' · score ' + escapeHtml(topic.score || 0) + '</em>' +
@@ -1355,7 +1357,7 @@
     var refsHtml = (row.representative_refs || []).length ?
       row.representative_refs.slice(0, 6).map(renderReferenceItem).join('') :
       '<li>暂无代表 PMID；等待社区层下一轮重建。</li>';
-    var recentRefs = (weekly.top_refs && weekly.top_refs.length) ? weekly.top_refs : (row.recent_refs || []);
+    var recentRefs = (weekly.top_refs && weekly.top_refs.length) ? weekly.top_refs : (row.weekly_refs || []);
     var recentHtml = recentRefs.length ?
       recentRefs.slice(0, 6).map(renderReferenceItem).join('') :
       '<li>本周未发现明确进入该社区的新 abstract。</li>';
@@ -1369,7 +1371,7 @@
       '<div class="kg-badges">' +
         '<span class="kg-badge conf-' + escapeHtml(communitySignalClass(signal)) + '">' + escapeHtml(communitySignalText(signal)) + '</span>' +
         '<span class="kg-badge">' + escapeHtml(compactNumber(row.article_count || 0)) + ' 篇</span>' +
-        '<span class="kg-badge">本周 ' + escapeHtml(compactNumber(row.recent_14d_count || weekly.recent_count || 0)) + '</span>' +
+        '<span class="kg-badge">本周新增 ' + escapeHtml(compactNumber(row.weekly_new_count || weekly.recent_count || 0)) + '</span>' +
         '<span class="kg-badge">中国 ' + escapeHtml(compactNumber(row.china_count || weekly.china_count || 0)) + '</span>' +
       '</div>' +
       '<div class="kg-detail-summary">' + escapeHtml(row.summary || row.definition || '') + '</div>' +
@@ -1379,8 +1381,8 @@
       '<div class="kg-detail-section"><h4>MSL 使用场景</h4><div class="kg-tags">' + useHtml + '</div></div>' +
       '<div class="kg-detail-section"><h4>Facet 与关键词</h4><div class="kg-tags">' + facetHtml + termHtml + '</div></div>' +
       '<div class="kg-detail-section"><h4>证据结构</h4><div class="community-profile-grid">' + profileHtml + '</div></div>' +
-      '<div class="kg-detail-section"><h4>代表 PMID</h4><ul class="kg-study-list">' + refsHtml + '</ul></div>' +
-      '<div class="kg-detail-section"><h4>本周动态</h4><ul class="kg-study-list">' + recentHtml + '</ul></div>' +
+      '<div class="kg-detail-section"><h4>本周新入库证据</h4><ul class="kg-study-list">' + recentHtml + '</ul></div>' +
+      '<div class="kg-detail-section"><h4>代表 PMID（长期知识底座）</h4><ul class="kg-study-list">' + refsHtml + '</ul></div>' +
       '<div class="kg-detail-section"><h4>全量归类文献</h4><div class="community-assignment-panel" id="communityAssignmentPanel" data-community="' + escapeHtml(row.id) + '">' +
         '<button class="kg-obsidian-btn" type="button" data-load-community-assignments="' + escapeHtml(row.id) + '">加载全量 PMID</button>' +
         '<span>按需加载该社区 assignment 分片；显示 primary community 的 PMID、置信度和质量标记。</span>' +
@@ -1416,7 +1418,7 @@
     });
     Array.prototype.forEach.call(elCommunityDetail.querySelectorAll('[data-topic]'), function (button) {
       button.addEventListener('click', function () {
-        openTopic(button.getAttribute('data-topic'));
+        openTopic(button.getAttribute('data-topic'), button.getAttribute('data-topic-community'));
       });
     });
 
@@ -1450,8 +1452,8 @@
     renderCommunities();
   }
 
-  function openTopic(topicId) {
-    window.location.href = topicHref(topicId);
+  function openTopic(topicId, communityId) {
+    window.location.href = topicHref(topicId, communityId);
   }
 
   function openCommunity(communityId) {

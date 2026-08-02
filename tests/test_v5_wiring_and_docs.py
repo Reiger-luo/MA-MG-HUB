@@ -43,6 +43,8 @@ def test_pipeline_step_selection_preserves_full_assets_when_full_is_absent():
     assert "build-community" not in ids
     assert "build-knowledge" not in ids
     assert "build-china-author-network" not in ids
+    assert "build-curated-topics" not in ids
+    assert "build-wiki-coverage" not in ids
 
 
 def test_pipeline_step_selection_keeps_full_dependent_builds_when_full_exists():
@@ -58,8 +60,20 @@ def test_pipeline_step_selection_keeps_full_dependent_builds_when_full_exists():
         "build-community",
         "build-knowledge",
         "build-china-author-network",
+        "build-curated-topics",
+        "build-wiki-coverage",
     ):
         assert step_id in ids
+
+
+def test_merge_step_declares_the_true_weekly_ingest_manifest():
+    module = load_pipeline_module()
+    args = pipeline_args()
+    args.skip_fetch = False
+    steps = module.pipeline_steps(args, full_available=True)
+    merge = next(step for step in steps if step.id == "merge-weekly")
+
+    assert ROOT / "data" / "literature-ingest-latest.json" in merge.outputs
 
 
 def test_pipeline_and_ci_wire_new_artifacts_and_local_full_gate():
@@ -77,6 +91,8 @@ def test_pipeline_and_ci_wire_new_artifacts_and_local_full_gate():
     assert runner.count("generate_release_manifest(") == 2
     assert "Hermes 主机本地时间" in status
     assert "--local-full" in local
+    assert "DRY_RUN_INGEST_BACKUP" in local
+    assert "data/literature-ingest-latest.json" in local
     assert "scripts/common/*.py" in workflow
     assert "chictr-trials-cache.json" in workflow
     assert "CHICTR_COOKIE" in workflow

@@ -39,9 +39,9 @@
 | `data/knowledge-graph.js` | `window.MG_KNOWLEDGE_GRAPH` | 节点、关系、evidence matrix、PMID、社区映射 |
 | `data/communityTaxonomy.js` | `window.MG_COMMUNITY_TAXONOMY` | 10 个医学事务问题域和边界 |
 | `data/communityCards.js` | `window.MG_COMMUNITY_CARDS` | 社区摘要、代表证据、MSL use cases |
-| `data/communityWeekly.js` | `window.MG_COMMUNITY_WEEKLY` | 14 天社区增量、高等级证据、中国证据 |
-| `data/curated-topics.js` | `window.MG_CURATED_TOPICS` | 已策展 Claims、PMID、confidence、impact |
-| `data/wikiTopicCoverage.js` | `window.MG_WIKI_TOPIC_COVERAGE` | 专题与社区/图谱桥接及 coverage gaps |
+| `data/communityWeekly.js` | `window.MG_COMMUNITY_WEEKLY` | 基于周更前基线差分的本周真实新增 PMID、社区、高等级证据和中国证据 |
+| `data/curated-topics.js` | `window.MG_CURATED_TOPICS` | 已策展 Claims、长期 PMID、confidence、本周真实新增 impact |
+| `data/wikiTopicCoverage.js` | `window.MG_WIKI_TOPIC_COVERAGE` | 专题与社区/图谱桥接、按 primary/secondary 社区限定的周更 impact 及 coverage gaps |
 | `data/content-modules.js` | `window.MG_CONTENT_MODULES` | 现有 6 个 MSL 内容模块、claims、references、boundary |
 | `data/china-intelligence.js` | `window.MG_CHINA_DATA` | 严格 recent 的中国文献、机构、期刊和证据结构 |
 | `data/china-author-network.js` | `window.MG_CHINA_AUTHOR_NETWORK` | 中国机构合作、作者、主题、药物和 PMID |

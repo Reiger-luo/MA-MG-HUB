@@ -370,6 +370,7 @@ def test_recent_fallback_merge_writes_previous_semantic_count(tmp_path, monkeypa
     monkeypatch.setattr(module, "FULL_PATH", tmp_path / "missing-full.json")
     monkeypatch.setattr(module, "RECENT_JS_PATH", recent_path)
     monkeypatch.setattr(module, "RECENT_JSON_CACHE_PATH", tmp_path / "missing-recent.json")
+    monkeypatch.setattr(module, "INGEST_MANIFEST_PATH", tmp_path / "literature-ingest-latest.json")
     monkeypatch.setattr(module, "GUIDELINE_CACHE_PATH", tmp_path / "guidelines.json")
     monkeypatch.setattr(sys, "argv", [
         "merge-weekly-literature.py", "--weekly", str(weekly_path),

@@ -22,6 +22,7 @@ projectPath = Path(__file__).resolve().parent.parent
 dataDir = projectPath / "data"
 fullPath = dataDir / "literature-full.json"
 recentJsPath = dataDir / "literature-recent.js"
+ingestManifestPath = dataDir / "literature-ingest-latest.json"
 taxonomyJsPath = dataDir / "communityTaxonomy.js"
 assignmentIndexJsPath = dataDir / "communityAssignmentIndex.js"
 legacyAssignmentsJsPath = dataDir / "communityAssignments.js"
@@ -37,6 +38,7 @@ reviewQueuePath = dataDir / "communityReviewQueue.json"
 levelScore = {"I": 7, "II": 6, "III": 4, "IV": 3, "V": 2}
 levelRank = {"I": 1, "II": 2, "III": 3, "IV": 4, "V": 5}
 semanticVersion = "2026.07-v4e-medical-affairs-signal"
+weeklyEvidenceVersion = "2026.08-v1-true-ingest"
 semanticMethod = "ruleBasedMedicalAffairsReview"
 
 communitySpecs = [
@@ -212,6 +214,20 @@ def loadArticles() -> tuple[list[dict], str, str]:
     if recentJsPath.exists():
         return loadPublicJs(recentJsPath, "MG_LITERATURE_DATA"), "recent_fallback", "data/literature-recent.js"
     raise FileNotFoundError("需要 data/literature-full.json 或 data/literature-recent.js")
+
+
+def loadIngestManifest() -> dict:
+    """读取本周真实入库清单；缺失时宁可展示空周更，也不回退旧时间窗。"""
+    if not ingestManifestPath.exists():
+        return {
+            "window_start": "",
+            "window_end": "",
+            "basis": "ingestManifestMissing",
+            "added_pmids": [],
+            "updated_pmids": [],
+        }
+    payload = loadJson(ingestManifestPath)
+    return payload if isinstance(payload, dict) else {}
 
 
 def parseDate(value: str | None):
@@ -1036,37 +1052,36 @@ def buildTaxonomy(generatedAt: str) -> dict:
     }
 
 
-def buildCards(articles: list[dict], assignmentsByPmid: dict, latest: datetime, generatedAt: str) -> dict:
+def buildCards(articles: list[dict], assignmentsByPmid: dict, weeklyAddedPmids: set[str], generatedAt: str) -> dict:
     groupedArticles = defaultdict(list)
     for article in articles:
         assignment = assignmentsByPmid.get(str(article.get("pmid") or ""))
         if assignment and assignment["primary"] != "unassigned":
             groupedArticles[assignment["primary"]].append(article)
 
-    recentCutoff = latest - timedelta(days=14)
     cards = []
     for spec in communitySpecs:
         communityArticles = groupedArticles.get(spec["id"], [])
-        recentArticles = [article for article in communityArticles if withinWindow(article, recentCutoff)]
+        weeklyArticles = [article for article in communityArticles if str(article.get("pmid") or "") in weeklyAddedPmids]
         highEvidence = [article for article in communityArticles if article.get("evidence_level") in {"I", "II"}]
         chinaArticles = [article for article in communityArticles if article.get("china_related")]
         representativeArticles = sorted(communityArticles, key=articleSortKey, reverse=True)[:6]
-        recentTopArticles = sorted(recentArticles, key=articleSortKey, reverse=True)[:4]
+        weeklyTopArticles = sorted(weeklyArticles, key=articleSortKey, reverse=True)[:4]
         evidenceCounter = Counter(article.get("evidence_level") or "未分类" for article in communityArticles)
         studyCounter = Counter(
             studyType
             for article in communityArticles
             for studyType in (article.get("study_types") or ["未标注"])
         )
-        signalLevel = medicalAffairsSignalLevel(recentArticles)
+        signalLevel = medicalAffairsSignalLevel(weeklyArticles)
         cards.append({
             "id": spec["id"],
             "title": spec["title"],
             "definition": spec["definition"],
             "boundary": spec["boundary"],
-            "summary": buildCardSummary(spec, communityArticles, recentArticles, highEvidence, chinaArticles),
+            "summary": buildCardSummary(spec, communityArticles, weeklyArticles, highEvidence, chinaArticles),
             "article_count": len(communityArticles),
-            "recent_14d_count": len(recentArticles),
+            "weekly_new_count": len(weeklyArticles),
             "high_evidence_count": len(highEvidence),
             "china_count": len(chinaArticles),
             "china_ratio": round(len(chinaArticles) / len(communityArticles), 3) if communityArticles else 0,
@@ -1076,25 +1091,26 @@ def buildCards(articles: list[dict], assignmentsByPmid: dict, latest: datetime, 
             "representative_nodes": spec["representativeNodes"],
             "msl_use_cases": spec["mslUseCases"],
             "representative_refs": [compactArticle(article) for article in representativeArticles],
-            "recent_refs": [compactArticle(article) for article in recentTopArticles],
+            "weekly_refs": [compactArticle(article) for article in weeklyTopArticles],
             "limitations": "基于 PubMed title/abstract/metadata 的规则归类；社区边界需结合人工 review 持续校准。",
         })
 
     cards.sort(key=lambda item: (
         signalSortRank(item["signal_level"]),
         -item["high_evidence_count"],
-        -item["recent_14d_count"],
+        -item["weekly_new_count"],
         -item["article_count"],
     ))
     return {
         "generated_at": generatedAt,
         "version": semanticVersion,
+        "weekly_evidence_version": weeklyEvidenceVersion,
         "method": semanticMethod,
         "cards": cards,
     }
 
 
-def buildCardSummary(spec: dict, communityArticles: list[dict], recentArticles: list[dict], highEvidence: list[dict], chinaArticles: list[dict]) -> str:
+def buildCardSummary(spec: dict, communityArticles: list[dict], weeklyArticles: list[dict], highEvidence: list[dict], chinaArticles: list[dict]) -> str:
     if not communityArticles:
         return f"{spec['title']} 暂未在当前数据源中形成稳定证据社区。"
     parts = [
@@ -1102,16 +1118,16 @@ def buildCardSummary(spec: dict, communityArticles: list[dict], recentArticles: 
         f"其中高等级证据 {len(highEvidence)} 篇",
         f"中国相关 {len(chinaArticles)} 篇",
     ]
-    if recentArticles:
-        parts.append(f"近 14 天新增 {len(recentArticles)} 篇，建议纳入本周情报检查")
+    if weeklyArticles:
+        parts.append(f"本周真实入库新增 {len(weeklyArticles)} 篇，建议纳入情报检查")
     else:
-        parts.append("近 14 天暂无明显新增，作为稳定知识底座维护")
+        parts.append("本周暂无新入库文献，作为稳定知识底座维护")
     return "；".join(parts) + "。"
 
 
-def buildWeekly(articles: list[dict], assignmentsByPmid: dict, latest: datetime, generatedAt: str) -> dict:
-    windowStart = latest - timedelta(days=14)
-    recentArticles = [article for article in articles if withinWindow(article, windowStart)]
+def buildWeekly(articles: list[dict], assignmentsByPmid: dict, ingestManifest: dict, generatedAt: str) -> dict:
+    weeklyAddedPmids = {str(item) for item in ingestManifest.get("added_pmids") or []}
+    recentArticles = [article for article in articles if str(article.get("pmid") or "") in weeklyAddedPmids]
     groupedRecent = defaultdict(list)
     for article in recentArticles:
         assignment = assignmentsByPmid.get(str(article.get("pmid") or ""))
@@ -1139,8 +1155,10 @@ def buildWeekly(articles: list[dict], assignmentsByPmid: dict, latest: datetime,
     ))
     return {
         "generated_at": generatedAt,
-        "window_start": windowStart.strftime("%Y-%m-%d"),
-        "window_end": latest.strftime("%Y-%m-%d"),
+        "weekly_evidence_version": weeklyEvidenceVersion,
+        "window_start": ingestManifest.get("window_start") or "",
+        "window_end": ingestManifest.get("window_end") or "",
+        "basis": ingestManifest.get("basis") or "ingestManifestMissing",
         "method": semanticMethod,
         "recent_article_count": len(recentArticles),
         "unassigned_recent_count": len(groupedRecent.get("unassigned", [])),
@@ -1149,13 +1167,12 @@ def buildWeekly(articles: list[dict], assignmentsByPmid: dict, latest: datetime,
     }
 
 
-def buildAudit(articles: list[dict], assignments: list[dict], assignmentsByPmid: dict, latest: datetime, generatedAt: str) -> tuple[dict, list[dict]]:
+def buildAudit(articles: list[dict], assignments: list[dict], assignmentsByPmid: dict, latest: datetime, weeklyAddedPmids: set[str], generatedAt: str) -> tuple[dict, list[dict]]:
     articleByPmid = {str(article.get("pmid") or ""): article for article in articles}
     unassigned = [item for item in assignments if item["primary"] == "unassigned"]
     lowConfidence = [item for item in assignments if "lowConfidence" in item.get("flags", [])]
     conflicts = [item for item in assignments if "crossCommunityConflict" in item.get("flags", [])]
-    latestCutoff = latest - timedelta(days=14)
-    recentUnassigned = [item for item in unassigned if withinWindow(articleByPmid.get(item["pmid"], {}), latestCutoff)]
+    recentUnassigned = [item for item in unassigned if item["pmid"] in weeklyAddedPmids]
     groupedCounts = Counter(item["primary"] for item in assignments if item["primary"] != "unassigned")
     oversizedCommunities = [
         {"community_id": communityId, "article_count": count}
@@ -1279,7 +1296,7 @@ def buildCandidates(cardsPayload: dict, auditPayload: dict, generatedAt: str) ->
             "title": card["title"],
             "method": "seedTaxonomyRuleAggregate",
             "article_count": card["article_count"],
-            "recent_14d_count": card["recent_14d_count"],
+            "weekly_new_count": card["weekly_new_count"],
             "representative_nodes": card["representative_nodes"],
             "representative_pmids": [ref["pmid"] for ref in card["representative_refs"]],
             "confidence": "seed",
@@ -1290,7 +1307,7 @@ def buildCandidates(cardsPayload: dict, auditPayload: dict, generatedAt: str) ->
             "title": f"新兴候选：{term['term']}",
             "method": "recentUnassignedTitleTerm",
             "article_count": term["count"],
-            "recent_14d_count": term["count"],
+            "weekly_new_count": term["count"],
             "representative_nodes": [],
             "representative_pmids": [],
             "confidence": "low",
@@ -1474,6 +1491,8 @@ def main() -> int:
     args = parser.parse_args()
 
     articles, sourceMode, sourceFile = loadArticles()
+    ingestManifest = loadIngestManifest()
+    weeklyAddedPmids = {str(item) for item in ingestManifest.get("added_pmids") or []}
     generatedAt = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     latest = latestDate(articles)
     assignments = [assignArticle(article) for article in articles]
@@ -1481,9 +1500,9 @@ def main() -> int:
 
     taxonomyPayload = buildTaxonomy(generatedAt)
     assignmentIndexPayload, assignmentShardPayloads, recentAssignmentsPayload = buildAssignmentOutputs(assignments, articles, sourceMode, sourceFile, latest, generatedAt)
-    cardsPayload = buildCards(articles, assignmentsByPmid, latest, generatedAt)
-    weeklyPayload = buildWeekly(articles, assignmentsByPmid, latest, generatedAt)
-    auditPayload, reviewQueue = buildAudit(articles, assignments, assignmentsByPmid, latest, generatedAt)
+    cardsPayload = buildCards(articles, assignmentsByPmid, weeklyAddedPmids, generatedAt)
+    weeklyPayload = buildWeekly(articles, assignmentsByPmid, ingestManifest, generatedAt)
+    auditPayload, reviewQueue = buildAudit(articles, assignments, assignmentsByPmid, latest, weeklyAddedPmids, generatedAt)
     candidatesPayload = buildCandidates(cardsPayload, auditPayload, generatedAt)
 
     writeJs(taxonomyJsPath, "MG_COMMUNITY_TAXONOMY", taxonomyPayload)

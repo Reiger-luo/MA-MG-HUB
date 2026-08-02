@@ -37,7 +37,7 @@ def pipeline_steps(args, full_available: bool | None = None) -> list[PipelineSte
         steps.extend([
             PipelineStep("fetch-pubmed", py("fetch-pubmed-weekly.py"), outputs=[DATA / "literature-weekly.json"]),
             PipelineStep("enrich-weekly", py("enrich-weekly-literature.py"), outputs=[DATA / "literature-weekly.json", DATA / "guideline-consensus-cache.json"]),
-            PipelineStep("merge-weekly", py("merge-weekly-literature.py"), outputs=[DATA / "literature-recent.js"]),
+            PipelineStep("merge-weekly", py("merge-weekly-literature.py"), outputs=[DATA / "literature-recent.js", DATA / "literature-ingest-latest.json"]),
         ])
     if args.local_full and full_available:
         steps.extend([
@@ -83,10 +83,10 @@ def pipeline_steps(args, full_available: bool | None = None) -> list[PipelineSte
             PipelineStep("build-community", py("buildCommunityData.py"), outputs=[DATA / "communityAssignmentIndex.js", DATA / "communityCards.js", DATA / "communityWeekly.js"]),
             PipelineStep("build-knowledge", py("build-knowledge-data.py"), outputs=[DATA / "knowledge-graph.js", DATA / "graphHealth.js"]),
             PipelineStep("build-china-author-network", py("buildChinaAuthorNetwork.py"), outputs=[DATA / "china-author-network.js"]),
+            PipelineStep("build-curated-topics", py("build-curated-topic-data.py"), outputs=[DATA / "curated-topics.js"]),
+            PipelineStep("build-wiki-coverage", py("buildWikiTopicCoverage.py"), outputs=[DATA / "wikiTopicCoverage.js"]),
         ])
     steps.extend([
-        PipelineStep("build-curated-topics", py("build-curated-topic-data.py"), outputs=[DATA / "curated-topics.js"]),
-        PipelineStep("build-wiki-coverage", py("buildWikiTopicCoverage.py"), outputs=[DATA / "wikiTopicCoverage.js"]),
         PipelineStep("build-landscape-insights", py("buildLandscapeInsights.py"), outputs=[DATA / "landscapeInsights.js"]),
         PipelineStep("build-backend-options", py("buildBackendOptions.py"), outputs=[DATA / "backendOptions.js"]),
         PipelineStep(
@@ -131,7 +131,7 @@ def main() -> int:
         parser.error("--local-full 需要 data/literature-full.json")
     steps = pipeline_steps(args, full_available=full_available)
     if not full_available:
-        print("ℹ️ cloud-safe mode: 保留 full index/community/knowledge/china-author-network last-good 产物")
+        print("ℹ️ cloud-safe mode: 保留 full index/community/knowledge/curated topics/wiki coverage/china-author-network last-good 产物")
     print(f"MA-MG-HUB weekly pipeline · run-id={run_id}")
     runner = PipelineRunner(PROJECT, AUDIT_DIR, default_timeout=args.step_timeout)
     try:
