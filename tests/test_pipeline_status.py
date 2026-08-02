@@ -61,3 +61,26 @@ def test_pipeline_status_counts_expert_and_community_shards():
     communityArtifactShardTotal = communityArtifact["shard_total_count"]
     assert communityArtifactShardTotal == communityShardTotal
     assert communityArtifact["updated_at"] == communityIndex["generated_at"]
+
+
+def test_release_consistency_detects_hash_drift_and_unlisted_artifacts(tmp_path):
+    module = loadPipelineModule()
+    artifact = tmp_path / "artifact.js"
+    artifact.write_text("window.TEST = {};\n", encoding="utf-8")
+    manifest = {
+        "run_id": "test-run",
+        "released_at": "2026-08-01T00:00:00+00:00",
+        "pipeline_status": "success",
+        "artifacts": [{"path": "data/artifact.js", "sha256": module.sha256_file(artifact)}],
+    }
+
+    consistent = module.releaseConsistency(manifest, dataDir=tmp_path)
+    assert consistent["status"] == "ok"
+    assert consistent["mismatched"] == []
+
+    artifact.write_text("window.TEST = {changed: true};\n", encoding="utf-8")
+    (tmp_path / "new.js").write_text("window.NEW = {};\n", encoding="utf-8")
+    drifted = module.releaseConsistency(manifest, dataDir=tmp_path)
+    assert drifted["status"] == "warning"
+    assert drifted["mismatched"] == ["artifact.js"]
+    assert drifted["unlisted"] == ["new.js"]

@@ -13,6 +13,7 @@ from datetime import datetime
 from pathlib import Path
 
 from common.io import atomic_write_js_global, load_js_global, load_json
+from common.pipeline_runner import sha256_file
 
 
 PROJECT = Path(__file__).resolve().parent.parent
@@ -65,6 +66,51 @@ def safeLoadJs(filename: str, globalName: str):
     if not path.exists():
         return None
     return loadJs(filename, globalName)
+
+
+def releaseConsistency(manifest: dict | None, *, dataDir: Path = DATA_DIR) -> dict:
+    """核对公开 JS 与完整发布清单，避免局部改动仍显示为完整发布成功。"""
+    if not manifest:
+        return {
+            "status": "missing",
+            "status_label": "等待发布证明",
+            "run_id": "",
+            "released_at": "",
+            "artifact_count": 0,
+            "mismatched": [],
+            "missing": [],
+            "unlisted": [],
+        }
+
+    manifestArtifacts = manifest.get("artifacts") or []
+    manifestByName = {
+        Path(str(item.get("path") or "")).name: item
+        for item in manifestArtifacts
+        if item.get("path")
+    }
+    currentPaths = sorted(path for path in dataDir.glob("*.js") if path.name != "release-manifest.js")
+    currentByName = {path.name: path for path in currentPaths}
+    missing = sorted(name for name in manifestByName if name not in currentByName)
+    unlisted = sorted(name for name in currentByName if name not in manifestByName)
+    mismatched = sorted(
+        name
+        for name, path in currentByName.items()
+        if name in manifestByName and sha256_file(path) != manifestByName[name].get("sha256")
+    )
+    pipelineStatus = manifest.get("pipeline_status")
+    validPipelineStatus = pipelineStatus in {"success", "success_with_warnings"}
+    consistent = validPipelineStatus and not (missing or unlisted or mismatched)
+    return {
+        "status": "ok" if consistent else "warning",
+        "status_label": "一致" if consistent else "产物漂移",
+        "run_id": manifest.get("run_id") or "",
+        "released_at": manifest.get("released_at") or "",
+        "pipeline_status": pipelineStatus or "",
+        "artifact_count": len(manifestArtifacts),
+        "mismatched": mismatched,
+        "missing": missing,
+        "unlisted": unlisted,
+    }
 
 
 def numberValue(value):
@@ -479,6 +525,8 @@ def buildStatus():
     communityIndex = safeLoadJs("communityAssignmentIndex.js", "MG_COMMUNITY_ASSIGNMENT_INDEX") or {}
     communityRecent = safeLoadJs("communityAssignmentsRecent.js", "MG_COMMUNITY_RECENT_ASSIGNMENTS") or {}
     communityAudit = safeLoadJs("communityAudit.js", "MG_COMMUNITY_AUDIT") or {}
+    releaseManifest = safeLoadJs("release-manifest.js", "MG_RELEASE_MANIFEST") or {}
+    releaseCheck = releaseConsistency(releaseManifest)
 
     stats = dashboard.get("stats") or {}
     fullPath = DATA_DIR / "literature-full.json"
@@ -535,7 +583,18 @@ def buildStatus():
     storageMode = "local_full_first" if fullPath.exists() else ("semantic_full_index" if semanticFullCount else "recent_fallback")
     countWarningCount = sum(1 for check in countChecks if check.get("status") == "warning")
 
+    driftCount = sum(len(releaseCheck[key]) for key in ("mismatched", "missing", "unlisted"))
     sources = [
+        {
+            "id": "releaseConsistency",
+            "name": "完整发布一致性",
+            "meta": (
+                f"run {releaseCheck.get('run_id') or '待生成'} · {releaseCheck.get('artifact_count', 0)} 项清单 · "
+                f"{driftCount} 项漂移"
+            ),
+            "status": releaseCheck["status"],
+            "status_label": releaseCheck["status_label"],
+        },
         {
             "id": "pubmed",
             "name": "PubMed 公开 rolling 源",
@@ -653,10 +712,16 @@ def buildStatus():
         logs.append(f"[{generatedAt[:10]}] 本地 raw full 分析底座 {localFullCount} 篇；周更只 upsert 新增/更新文献。")
     if countWarningCount:
         logs.append(f"[{generatedAt[:10]}] 计数校验存在 {countWarningCount} 个 warning；详见 storage.count_checks。")
+    if releaseCheck["status"] != "ok":
+        logs.append(
+            f"[{generatedAt[:10]}] 完整发布一致性为 {releaseCheck['status']}："
+            f"哈希不符 {len(releaseCheck['mismatched'])}、缺失 {len(releaseCheck['missing'])}、未入清单 {len(releaseCheck['unlisted'])}。"
+        )
 
     return {
         "generated_at": generatedAt,
         "site_url": SITE_URL,
+        "release_consistency": releaseCheck,
         "storage": {
             "mode": storageMode,
             "recent_count": recentCount,
@@ -681,7 +746,7 @@ def buildStatus():
         "pipeline": {
             "local_command": "bash scripts/run-local-weekly-sync.sh",
             "workflow": "Hermes 本地周更主流程；GitHub Actions 仅手动兜底",
-            "schedule": "每周一 03:15 Asia/Shanghai；排在 efgar-wiki 周更/社区摘要之后读取本地 vault",
+            "schedule": "每周一 03:15 Hermes 主机本地时间；排在 efgar-wiki 周更/社区摘要之后读取本地 vault",
             "policy": "以本地 full 为源头；weekly 先 upsert full/recent，再重扫 full 的近一年窗口，读取 efgar-wiki 策展层，最后一次性生成 full-derived 公开产物并 push。",
             "upstream_sync": [
                 {

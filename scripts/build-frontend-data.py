@@ -1643,15 +1643,20 @@ def normalize_institution(affiliation):
 
 def build_rank_items(counts, article_map, limit=10, article_limit=10):
     items = []
-    for name, count in counts.most_common(limit):
+    for name, _count in counts.most_common(limit):
+        unique_refs = {}
+        for article in article_map.get(name, []):
+            # 同一篇 PubMed 文献可能因多位作者属于同一机构而重复进入列表。
+            article_key = str(article.get("pmid") or article.get("url") or article.get("title") or id(article))
+            unique_refs.setdefault(article_key, article)
         refs = sorted(
-            article_map.get(name, []),
+            unique_refs.values(),
             key=lambda a: parse_date(a.get("entry_date")) or datetime.min,
             reverse=True,
         )
         items.append({
             "name": name,
-            "count": count,
+            "count": len(refs),
             "articles": [compact_article(a) for a in refs[:article_limit]],
         })
     return items
@@ -1686,11 +1691,15 @@ def build_china(recent):
         journal = article.get("journal") or "Unknown"
         journals[journal] += 1
         journal_articles[journal].append(article)
+        article_institutions = set()
         for affiliation in article.get("affiliations") or []:
             inst = normalize_institution(affiliation)
             if inst:
-                institutions[inst] += 1
-                institution_articles[inst].append(article)
+                article_institutions.add(inst)
+        for inst in article_institutions:
+            # 机构排名按去重 PMID 计数，不按同机构作者或 affiliation 行数计数。
+            institutions[inst] += 1
+            institution_articles[inst].append(article)
     articles.sort(key=lambda a: parse_date(a.get("entry_date")) or datetime.min, reverse=True)
     return {
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),

@@ -58,7 +58,11 @@
 
   function formatDateTime(value) {
     if (!value) return '时间待确认';
-    var normalized = String(value).indexOf('T') === -1 ? String(value).replace(' ', 'T') : String(value);
+    var rawValue = String(value).trim();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(rawValue)) {
+      return rawValue.slice(5).replace('-', '/');
+    }
+    var normalized = rawValue.indexOf('T') === -1 ? rawValue.replace(' ', 'T') : rawValue;
     var parsed = new Date(normalized);
     if (Number.isNaN(parsed.getTime())) return String(value);
     return new Intl.DateTimeFormat('zh-CN', {
@@ -88,11 +92,16 @@
     var target = document.getElementById('dashboardReleaseStatus');
     if (!target) return;
     var storage = pipelineData.storage || {};
+    var consistency = pipelineData.release_consistency || {};
     var releaseStatus = releaseData.pipeline_status || '';
-    var releaseOk = releaseStatus === 'success' || releaseStatus === 'success_with_warnings';
-    var releaseLabel = releaseStatus === 'success_with_warnings' ? '完整发布有提示' :
+    var releaseRecorded = releaseStatus === 'success' || releaseStatus === 'success_with_warnings';
+    var consistencyRecorded = Boolean(consistency.status);
+    var releaseOk = releaseRecorded && (!consistencyRecorded || consistency.status === 'ok');
+    var releaseLabel = consistency.status === 'warning' ? '发布产物已漂移' :
+      consistency.status === 'missing' ? '等待完整发布证明' :
+      releaseStatus === 'success_with_warnings' ? '完整发布有提示' :
       releaseOk ? '完整发布成功' : '等待完整发布证明';
-    var releaseClass = releaseStatus === 'success' ? 'ok' : 'warn';
+    var releaseClass = releaseOk ? 'ok' : 'warn';
     var releasedAt = releaseData.released_at || data.generated_at || '';
     var publicCount = storage.public_rolling_count != null ?
       storage.public_rolling_count : (data.stats || {}).recent_articles;
@@ -695,9 +704,10 @@
     var updatedCount = numberValue(changes.updated_count, updatedItems.length);
     var removedCount = numberValue(changes.removed_count, removedItems.length);
     var hasAnyChange = addedCount > 0 || statusChangeCount > 0 || resultsPostedCount > 0 || updatedCount > 0 || removedCount > 0;
+    var comparisonAvailable = changes.comparison_available !== false && Boolean(previousSnapshotAt || hasAnyChange);
     var rowHtml = [];
 
-    if (!hasAnyChange && !previousSnapshotAt) {
+    if (!comparisonAvailable) {
       return '<p class="dashboard-data-note">ClinicalTrials.gov 为目前唯一周更注册源；变化要点自下一次周更起在此自动呈现。</p>';
     }
 

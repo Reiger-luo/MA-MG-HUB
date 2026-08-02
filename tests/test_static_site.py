@@ -39,6 +39,7 @@ def test_common_js_blocks_dangerous_url_protocols():
 def test_dashboard_is_action_first_workbench():
     html = (PROJECT / "index.html").read_text(encoding="utf-8")
     dashboard_js = (PROJECT / "assets" / "dashboard.js").read_text(encoding="utf-8")
+    main_css = (PROJECT / "assets" / "main.css").read_text(encoding="utf-8")
 
     assert 'href="#mainContent"' in html
     assert 'aria-current="page"' in html
@@ -58,6 +59,14 @@ def test_dashboard_is_action_first_workbench():
     assert "communityAudit.js" not in html
 
     assert "renderReleaseStatus" in dashboard_js
+    assert "release_consistency" in dashboard_js
+    assert "发布产物已漂移" in dashboard_js
+    assert "^\\d{4}-\\d{2}-\\d{2}$" in dashboard_js
+    assert "changes.comparison_available !== false" in dashboard_js
+    assert "assets/main.css?v=20260801" in html
+    assert "assets/dashboard.js?v=20260801" in html
+    assert ".dashboard-side-stack { display: contents; }" in main_css
+    assert ".dashboard-trials-panel { order: 0; }" in main_css
     assert "renderTrials" in dashboard_js
     assert "renderSignalStrengthLegend" in dashboard_js
     assert "signal-stat-card" in dashboard_js

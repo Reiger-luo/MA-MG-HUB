@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import re
+import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -53,6 +54,12 @@ def pipeline_steps(args, full_available: bool | None = None) -> list[PipelineSte
         ])
     if args.skip_downstream:
         return steps
+    steps.append(PipelineStep(
+        "refresh-chictr-cache",
+        py("refresh-chictr-cache.py"),
+        outputs=[DATA / "chictr-trials-cache.json"],
+        optional=True,
+    ))
     buildFrontendCommand = py("build-frontend-data.py")
     if full_available:
         buildFrontendCommand.append("--rebuild-experts-from-full")
@@ -62,6 +69,7 @@ def pipeline_steps(args, full_available: bool | None = None) -> list[PipelineSte
             DATA / "signals-weekly.js", DATA / "china-intelligence.js", DATA / "dashboard-data.js",
             DATA / "expert-profiles.js", DATA / "expert-profiles-china.js",
             DATA / "expert-profiles-international.js", DATA / "landscape-data.js", DATA / "content-modules.js",
+            DATA / "clinicaltrials-pipeline-cache.json",
         ],
     ))
     if not args.skip_llm:
@@ -81,7 +89,6 @@ def pipeline_steps(args, full_available: bool | None = None) -> list[PipelineSte
         PipelineStep("build-wiki-coverage", py("buildWikiTopicCoverage.py"), outputs=[DATA / "wikiTopicCoverage.js"]),
         PipelineStep("build-landscape-insights", py("buildLandscapeInsights.py"), outputs=[DATA / "landscapeInsights.js"]),
         PipelineStep("build-backend-options", py("buildBackendOptions.py"), outputs=[DATA / "backendOptions.js"]),
-        PipelineStep("refresh-chictr-cache", py("refresh-chictr-cache.py"), outputs=[DATA / "chictr-trials-cache.json"], optional=True),
         PipelineStep(
             "build-clinical-trials",
             py("build-clinical-trials-data.py"),
@@ -133,7 +140,14 @@ def main() -> int:
         print(f"❌ required step {exc.step_id}: {exc}", file=sys.stderr)
         return exc.return_code
     if not args.skip_downstream and result["status"] in {"success", "success_with_warnings"}:
+        # 第一次清单供状态生成器核对；状态刷新后再生成最终清单，避免状态文件自引用哈希漂移。
         generate_release_manifest(result, public_artifacts(), DATA / "release-manifest.js", project=PROJECT)
+        if not args.skip_status:
+            statusResult = subprocess.run(py("generate-pipeline-status.py"), cwd=PROJECT, check=False)
+            if statusResult.returncode != 0:
+                print("❌ release consistency status refresh failed", file=sys.stderr)
+                return statusResult.returncode
+            generate_release_manifest(result, public_artifacts(), DATA / "release-manifest.js", project=PROJECT)
         print(f"✅ coherent release manifest: data/release-manifest.js · run-id={run_id}")
     else:
         print("ℹ️ partial/ingest-only run: release manifest not updated")

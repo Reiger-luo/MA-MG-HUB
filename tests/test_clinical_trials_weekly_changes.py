@@ -58,7 +58,7 @@ def test_snapshot_and_diff_detect_added_status_results_and_removal():
         "NCT003": {"registry_id": "NCT003", "status": "RECRUITING", "first_post_date": "2026-01-01",
                    "last_update_date": "2026-07-23", "results_post_date": ""},
         "NCT004": {"registry_id": "NCT004", "status": "RECRUITING", "first_post_date": "2026-01-01",
-                   "last_update_date": "2026-07-22", "results_post_date": ""},
+                   "last_update_date": "2026-07-15", "results_post_date": ""},
         "NCT005": {"registry_id": "NCT005", "status": "RECRUITING", "first_post_date": "2026-01-01",
                    "last_update_date": "2026-06-01", "results_post_date": ""},
         "NCT999": {"registry_id": "NCT999", "status": "RECRUITING", "first_post_date": "2026-01-01",
@@ -119,15 +119,32 @@ def test_build_weekly_changes_writes_baseline_and_reports_first_run(tmp_path, mo
     }
     changes = module.build_weekly_changes(payload, "2026-07-27")
     assert changes["previous_snapshot_at"] == ""
-    assert changes["added_count"] == 1
-    assert changes["added"][0]["registry_id"] == "NCT010"
-    assert changes["updated_count"] == 1
-    assert changes["updated"][0]["registry_id"] == "NCT011"
+    assert changes["comparison_available"] is False
+    assert changes["added_count"] == 0
+    assert changes["added"] == []
+    assert changes["updated_count"] == 0
+    assert changes["updated"] == []
 
     snapshot = json.loads(snapshot_path.read_text(encoding="utf-8"))
     assert snapshot["entry_count"] == 2
     assert "NCT010" in snapshot["entries"]
     assert snapshot["entries"]["NCT010"]["status"] == "RECRUITING"
+
+
+def test_identical_snapshot_is_idempotent():
+    module = load_builder_module()
+    payload = {"studies": [
+        make_study("NCT020", first_post="2026-07-20", last_update="2026-07-25", title="Stable"),
+    ]}
+    current = module.build_ct_snapshot(payload)
+    changes = module.diff_ct_weekly_changes(
+        current, current, date(2026, 7, 27), module.ct_titles_from_payload(payload),
+        previous_snapshot_at="2026-07-20",
+    )
+
+    assert changes["comparison_available"] is True
+    for key in ("added_count", "status_change_count", "results_posted_count", "updated_count", "removed_count"):
+        assert changes[key] == 0
 
 
 def test_summary_payload_includes_weekly_changes():
@@ -162,6 +179,7 @@ def test_trial_insights_extract_population_phase_and_recent_trend():
         {"phase_label": "Phase 3", "registered_date": "2026-06-15", "drug_name": "Efgartigimod"},
         {"phase_label": "Phase 1", "registered_date": "2026-01-01", "drug_name": "Ravulizumab"},
         {"phase_label": "N/A", "registered_date": "2026-05-01"},
+        {"phase_label": "0", "registered_date": "2026-04-01"},
     ]
     insights = module.build_trial_insights(ct_payload, records, date(2026, 7, 27))
     assert {"label": "含成人", "count": 1} in insights["population_distribution"]
@@ -169,9 +187,21 @@ def test_trial_insights_extract_population_phase_and_recent_trend():
     phase_labels = [p["label"] for p in insights["phase_concentration"]]
     assert "Phase 3" in phase_labels
     assert "未标注" in phase_labels  # N/A 合并到未标注
-    assert insights["recent_registrations"]["count"] == 2  # 只有 2026-06-15 落在近 6 月
+    assert "N/A" not in phase_labels
+    assert "0" not in phase_labels
+    assert next(p["count"] for p in insights["phase_concentration"] if p["label"] == "未标注") == 2
+    assert insights["recent_registrations"]["count"] == 3
+    recent_phases = insights["recent_registrations"]["top_phases"]
+    assert {"label": "未标注", "count": 2} in recent_phases
     recent_drugs = [d["label"] for d in insights["recent_registrations"]["top_drugs"]]
     assert "Efgartigimod" in recent_drugs
+
+
+def test_public_outputs_use_atomic_text_writes():
+    source = BUILDER_PATH.read_text(encoding="utf-8")
+    assert "atomic_write_text(OUTPUT_PATH, output)" in source
+    assert "atomic_write_text(summaryOutputPath, summaryOutput)" in source
+    assert "OUTPUT_PATH.write_text" not in source
 
 
 def test_pipeline_and_publish_chain_wires_weekly_changes_snapshot():

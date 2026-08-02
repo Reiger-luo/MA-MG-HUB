@@ -114,7 +114,7 @@ python3 scripts/run-weekly-pipeline.py --run-id weekly-example --resume
 python3 scripts/run-weekly-pipeline.py --run-id weekly-example --resume --from-step build-source-signals
 ```
 
-审计检查点写入 `.hermes-audit/pipeline-runs/`。只有 required 步骤完整成功才更新 `data/release-manifest.js`。
+审计检查点写入 `.hermes-audit/pipeline-runs/`。只有 required 步骤完整成功才更新 `data/release-manifest.js`；网站会核对清单哈希，局部产物漂移时明确显示警告。
 
 ChinaDrugTrials 的人工导入流程见 [临床试验数据维护](report/runbooks/clinicalTrialsMaintenance.md)。
 

@@ -4114,6 +4114,10 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
   .kg-canvas-wrap { height: 440px; }
   .kg-detail { max-height: none; }
   .dashboard-priority-grid { grid-template-columns: 1fr; }
+  .dashboard-side-stack { display: contents; }
+  .dashboard-trials-panel { order: 0; }
+  .dashboard-signals { order: 1; }
+  .dashboard-community-panel { order: 2; }
   .dashboard-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .dashboard-signals .dashboard-signal-summary-head { grid-template-columns: 1fr; }
   .compliance-box, .compliance-box.compact { grid-template-columns: 1fr; }

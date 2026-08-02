@@ -15,7 +15,7 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from scripts.common.clinical_registry import load_china_drug_trials_cache
-from scripts.common.io import atomic_write_json
+from scripts.common.io import atomic_write_json, atomic_write_text
 from scripts.common.source_channels import _cdt_items, _chictr_items, _ct_items, deduplicate_trials
 
 
@@ -177,6 +177,15 @@ def phase_label(value: Any) -> str:
     raw_phase = str(value or "").strip()
     phase_key = raw_phase.upper().replace(" ", "_")
     labels = {
+        "0": "未标注",
+        "1": "Phase 1",
+        "1-2": "Phase 1 / Phase 2",
+        "1/2": "Phase 1 / Phase 2",
+        "2": "Phase 2",
+        "2-3": "Phase 2 / Phase 3",
+        "2/3": "Phase 2 / Phase 3",
+        "3": "Phase 3",
+        "4": "Phase 4",
         "EARLY_PHASE1": "Early Phase 1",
         "PHASE1": "Phase 1",
         "PHASE1_PHASE2": "Phase 1/2",
@@ -184,8 +193,8 @@ def phase_label(value: Any) -> str:
         "PHASE2_PHASE3": "Phase 2/3",
         "PHASE3": "Phase 3",
         "PHASE4": "Phase 4",
-        "NA": "N/A",
-        "N/A": "N/A",
+        "NA": "未标注",
+        "N/A": "未标注",
         "UNKNOWN": "未标注",
     }
     return labels.get(phase_key, raw_phase or "未标注")
@@ -914,6 +923,32 @@ def diff_ct_weekly_changes(
     """对比两期 CT.gov 快照，提炼近 WEEKLY_CHANGES_WINDOW_DAYS 天的变化要点。"""
     window_days = WEEKLY_CHANGES_WINDOW_DAYS
     window_start = reference_date - timedelta(days=window_days) if reference_date else None
+    comparison_available = bool(baseline)
+
+    def empty_changes() -> dict[str, Any]:
+        """首次基线只保存快照，不把现存记录伪装成本周变化。"""
+        return {
+            "schema_version": "1.0",
+            "source": "ClinicalTrials.gov",
+            "generated_at": reference_date.isoformat() if reference_date else "",
+            "previous_snapshot_at": previous_snapshot_at,
+            "comparison_available": False,
+            "window_days": window_days,
+            "window_start": window_start.isoformat() if window_start else "",
+            "added_count": 0,
+            "status_change_count": 0,
+            "results_posted_count": 0,
+            "updated_count": 0,
+            "removed_count": 0,
+            "added": [],
+            "status_changes": [],
+            "results_posted": [],
+            "updated": [],
+            "removed": [],
+        }
+
+    if not comparison_available:
+        return empty_changes()
 
     def within_window(value: Any) -> bool:
         parsed = parse_iso_date(value)
@@ -929,11 +964,6 @@ def diff_ct_weekly_changes(
         drug = names[0] if names else ""
         phase = entry.get("phase_label") or ""
         return drug, phase
-
-    def format_meta_suffix(registry_id: str) -> str:
-        drug, phase = trial_meta_of(registry_id)
-        parts = [p for p in (drug, phase) if p]
-        return " · ".join(parts) if parts else ""
 
     added = [
         {
@@ -1001,9 +1031,12 @@ def diff_ct_weekly_changes(
     for registry_id, entry in current.items():
         if registry_id in status_ids or registry_id in added_ids or registry_id in results_ids:
             continue
-        if not within_window(entry.get("last_update_date")):
+        current_update_date = entry.get("last_update_date") or ""
+        if not within_window(current_update_date):
             continue
         previous = baseline.get(registry_id)
+        if not previous or previous.get("last_update_date") == current_update_date:
+            continue
         summary = _describe_field_changes(previous, entry) or "其他字段更新"
         drug, phase = trial_meta_of(registry_id)
         updated.append({
@@ -1024,6 +1057,7 @@ def diff_ct_weekly_changes(
         "source": "ClinicalTrials.gov",
         "generated_at": reference_date.isoformat() if reference_date else "",
         "previous_snapshot_at": previous_snapshot_at,
+        "comparison_available": True,
         "window_days": window_days,
         "window_start": window_start.isoformat() if window_start else "",
         "added_count": len(added),
@@ -1085,9 +1119,7 @@ def build_trial_insights(ct_payload: dict[str, Any], records: list[dict[str, Any
     # 阶段集中度：按 records 中已归一化的 phase_label 统计（合并"未标注"与"N/A"）
     phaseCounts: Counter[str] = Counter()
     for record in records:
-        phase = str(record.get("phase_label") or "未标注")
-        if phase in {"N/A", "NA"}:
-            phase = "未标注"
+        phase = phase_label(record.get("phase_label"))
         phaseCounts[phase] += 1
 
     # 近 6 月新开趋势：按 registered_date 落在窗口内计数 + 药物分布 top3
@@ -1103,7 +1135,7 @@ def build_trial_insights(ct_payload: dict[str, Any], records: list[dict[str, Any
         drug = str(record.get("drug_name") or record.get("drug_class") or "")
         if drug and drug != "其他":
             recent_drug_counts[drug] += 1
-        phase = str(record.get("phase_label") or "未标注")
+        phase = phase_label(record.get("phase_label"))
         recent_phase_counts[phase] += 1
 
     population_items = [
@@ -1199,7 +1231,7 @@ def main() -> None:
         ensure_ascii=False,
         indent=2,
     ) + ";\n"
-    OUTPUT_PATH.write_text(output, encoding="utf-8")
+    atomic_write_text(OUTPUT_PATH, output)
     generatedAt = str((payload.get("meta") or {}).get("generated_at") or "")
     weeklyChanges = build_weekly_changes(ctPayload, generatedAt)
     referenceDate = parse_iso_date(generatedAt)
@@ -1211,7 +1243,7 @@ def main() -> None:
         ensure_ascii=False,
         indent=2,
     ) + ";\n"
-    summaryOutputPath.write_text(summaryOutput, encoding="utf-8")
+    atomic_write_text(summaryOutputPath, summaryOutput)
     print(f"Wrote {payload['meta']['total_count']} records to {OUTPUT_PATH.relative_to(PROJECT_ROOT)}")
     print(f"Wrote dashboard summary to {summaryOutputPath.relative_to(PROJECT_ROOT)}")
     print(

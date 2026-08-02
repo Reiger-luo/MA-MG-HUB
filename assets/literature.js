@@ -1402,7 +1402,7 @@
     var html = '<ol class="rank-list">';
     for (var i = 0; i < Math.min(items.length, limit); i++) {
       var item = items[i];
-      var articles = item.articles || [];
+      var articles = uniqueRankArticles(item.articles || []);
       var payloadId = 'rank-payload-' + groupType + '-' + i;
       html += '<li class="rank-list-item">' +
         '<span class="rank-name">' + escapeHtml(item.name || '') + '</span>' +
@@ -1416,8 +1416,22 @@
     return html;
   }
 
+  function uniqueRankArticles(articles) {
+    var seen = Object.create(null);
+    var unique = [];
+    for (var i = 0; i < articles.length; i++) {
+      var article = articles[i] || {};
+      var key = article.pmid || article.url || [article.title, article.journal, article.entry_date || article.pub_date].join('|');
+      if (key && seen[key]) continue;
+      if (key) seen[key] = true;
+      unique.push(article);
+    }
+    return unique;
+  }
+
   function renderRankArticles(articles) {
-    if (!articles || !articles.length) return '<div class="muted">暂无关联文献</div>';
+    articles = uniqueRankArticles(articles || []);
+    if (!articles.length) return '<div class="muted">暂无关联文献</div>';
     var html = '';
     for (var i = 0; i < articles.length; i++) {
       html += renderCompactArticle(articles[i]);

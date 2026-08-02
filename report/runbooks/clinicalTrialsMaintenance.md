@@ -10,10 +10,11 @@
 | ChiCTR | 每 28 天检查一次 | 官方检索页 → 详情页 → `DownloadXml` | WAF 或 XML 失败时保留最后良好缓存，下周继续尝试 |
 | ChinaDrugTrials | 每月人工提供文件 | 官方 JSON/CSV/XLS/XLSX 导入 | 文件异常、非完整导出或数量骤降时拒绝覆盖 |
 
-周更在更新缓存后运行 `scripts/build-clinical-trials-data.py`，因此三源缓存变化会同步进入：
+周更先运行 ChiCTR 刷新，再生成诊治格局、临床试验数据和来源频道，避免同一次发布混用新旧缓存。`scripts/build-clinical-trials-data.py` 会统一阶段标签（包括把 `0`、`N/A` 和空值归为“未标注”），并通过原子写入更新公开产物，因此三源缓存变化会同步进入：
 
 - `data/clinical-trials-data.js`：情报中心完整临床试验页；
 - `data/clinicalTrialsSummary.js`：首页轻量摘要（含 `weekly_changes` 周更变化要点）；
+- `data/source-signals.js`：ClinicalTrials.gov、ChiCTR、ChinaDrugTrials 三源注册信号；
 - `data/release-manifest.js`：成功发布后的文件哈希。
 
 ## ClinicalTrials.gov 周更变化提炼
@@ -26,7 +27,7 @@ ClinicalTrials.gov 是目前唯一按周抓取的注册源。每次构建时，`
 - 其他字段更新（`updated`，窗口内有更新但不属于以上三类）；
 - 移除（`removed`，上一期存在、本期消失的 NCT）。
 
-每组最多保留 5–6 条明细，计数为真实总数。对比基线保存在 `data/clinicaltrials-weekly-changes-snapshot.json` 并随周更提交（本地脚本与 CI workflow 均已纳入 git add）；基线缺失时（如首次运行或新克隆未提交过快照）回退读取 git HEAD 版本，仍不可用则以本次为基线，下一期起自动产出变化。ChiCTR 与 ChinaDrugTrials 更新节奏不同（28 天/月度），暂不参与周更对比。
+每组最多保留 5–6 条明细，计数为真实总数。“其他字段更新”只有在本期与基线上次更新时间确实不同时才计入，重复运行同一快照不会重复报变化。对比基线保存在 `data/clinicaltrials-weekly-changes-snapshot.json` 并随周更提交（本地脚本与 CI workflow 均已纳入 git add）；基线缺失时（如首次运行或新克隆未提交过快照）回退读取 git HEAD 版本，仍不可用则仅保存本次基线并返回 `comparison_available=false`，不把现存研究伪装成新增或更新。ChiCTR 与 ChinaDrugTrials 更新节奏不同（28 天/月度），暂不参与周更对比。
 
 ## ChiCTR 月更
 
@@ -108,5 +109,7 @@ python3 scripts/build-clinical-trials-data.py
 
 - 差异报告中的新增、更新、移除数量是否合理；
 - 三源记录数是否与缓存一致；
+- 相同 CT.gov 快照重复构建时是否保持零变化；
+- `source-signals.js` 的试验注册频道是否列出并汇总三套注册源；
 - ChinaDrugTrials 是否出现异常大批量移除；
 - 临床试验页的更新时间、来源筛选、状态和药物分类是否正常。

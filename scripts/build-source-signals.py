@@ -20,6 +20,7 @@ def main() -> int:
         regulatory_path=DATA / "china-regulatory-status.json",
         clinicaltrials_path=DATA / "clinicaltrials-pipeline-cache.json",
         chictr_path=DATA / "chictr-trials-cache.json",
+        china_drug_trials_path=DATA / "china-drug-trials-cache.json",
         conference_path=DATA / "conference-data.json",
     )
     target = DATA / "source-signals.js"

@@ -94,7 +94,7 @@ MG-core 与证据门控
 | `dashboard-data.js` | 工作台近期信号、页面摘要和数据健康 |
 | `literature-recent.js` | 严格 MG-core + 证据等级 I–V 文献 |
 | `signals-weekly.js` | 当前周 Signal、证据项和 KOL key points |
-| `source-signals.js` | 文献、指南/共识、监管、注册、会议独立频道 |
+| `source-signals.js` | 文献、指南/共识、监管、三源试验注册、会议独立频道 |
 | `china-intelligence.js` | 严格 recent 的中国相关文献 |
 | `community*.js` | taxonomy、卡片、周更、分配和质量审计 |
 | `knowledge-graph.js`、`graphHealth.js` | 图谱、证据矩阵和图谱健康 |
@@ -164,9 +164,9 @@ MSL 工作台是 China-only：
 
 ## 9. 临床试验数据
 
-ClinicalTrials.gov、ChiCTR 和 ChinaDrugTrials 采用不同更新方式，但统一进入 `clinical-trials-data.js`。详细流程见 [clinicalTrialsMaintenance.md](../runbooks/clinicalTrialsMaintenance.md)。
+ClinicalTrials.gov、ChiCTR 和 ChinaDrugTrials 采用不同更新方式，但统一进入 `clinical-trials-data.js` 和 `source-signals.js` 的试验注册频道。周更先刷新 ChiCTR，再生成消费该缓存的诊治格局和临床试验产物。详细流程见 [clinicalTrialsMaintenance.md](../runbooks/clinicalTrialsMaintenance.md)。
 
-ClinicalTrials.gov 是唯一周更注册源。每次构建对比上一期快照（`clinicaltrials-weekly-changes-snapshot.json`），把近 7 天新登记、状态变化、结果发布、字段更新和移除提炼为 `clinicalTrialsSummary.js` 的 `weekly_changes`，在首页工作台"临床试验变化"模块呈现。
+ClinicalTrials.gov 是唯一周更注册源。每次构建对比上一期快照（`clinicaltrials-weekly-changes-snapshot.json`），把近 7 天新登记、状态变化、结果发布、字段更新和移除提炼为 `clinicalTrialsSummary.js` 的 `weekly_changes`，在首页工作台“临床试验变化”模块呈现。首次运行只建立基线；相同快照重复构建保持零变化。阶段字段统一归一化，公开 JS 和对比快照均使用原子写入。
 
 失败时保留 last-good cache；不使用低可信第三方数据静默覆盖官方缓存。
 
@@ -191,7 +191,7 @@ python3 scripts/run-weekly-pipeline.py --run-id weekly-example --resume
 python3 scripts/run-weekly-pipeline.py --run-id weekly-example --resume --from-step build-source-signals
 ```
 
-检查点写入 `.hermes-audit/pipeline-runs/`。required 步骤全部成功后才更新 `release-manifest.js`；optional 步骤失败只记录 warning 并按其定义使用 fallback。
+检查点写入 `.hermes-audit/pipeline-runs/`。required 步骤全部成功后才更新 `release-manifest.js`；状态生成与清单采用两遍收口，使 `pipeline-status.js` 的一致性结论也进入最终哈希。当前公开 JS 与清单出现哈希不符、缺失或未入清单时，首页和数据状态显示发布漂移，不再沿用历史“完整发布成功”。optional 步骤失败只记录 warning 并按其定义使用 fallback。
 
 GitHub Actions 仅手动 `workflow_dispatch`，用于质量门和轻量兜底，不替代本地 full 驱动周更。
 

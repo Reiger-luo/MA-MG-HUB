@@ -145,6 +145,28 @@ def test_china_builder_defensively_enforces_mg_core_and_evidence_gate():
     assert payload["pubmed_articles"][0]["evidence_level"] == "III"
 
 
+def test_china_builder_counts_each_institution_pmid_once():
+    module = load_script("build-frontend-data.py")
+    record = {
+        "pmid": "institution-dedup",
+        "title": "Generalized myasthenia gravis cohort in China",
+        "china_related": True,
+        "evidence_level": "III",
+        "entry_date": "2026-07-20",
+        "affiliations": [
+            "Department of Neurology, Test Hospital, Beijing, China",
+            "Clinical Center, Test Hospital, Beijing, China",
+            "Research Unit, Test Hospital, Beijing, China",
+        ],
+    }
+
+    payload = module.build_china([record])
+    institution = next(item for item in payload["top_institutions"] if item["name"] == "Test Hospital")
+
+    assert institution["count"] == 1
+    assert [article["pmid"] for article in institution["articles"]] == ["institution-dedup"]
+
+
 def test_weekly_processing_applies_mg_gate_before_evidence_and_routes_guidelines(tmp_path):
     module = load_script("enrich-weekly-literature.py")
     guideline_cache = tmp_path / "guidelines.json"
@@ -520,6 +542,7 @@ def test_source_channel_builder_has_stable_schema_and_safe_empty_fallbacks(tmp_p
         regulatory_path=tmp_path / "missing-regulatory.json",
         clinicaltrials_path=tmp_path / "missing-ct.json",
         chictr_path=tmp_path / "missing-chictr.json",
+        china_drug_trials_path=tmp_path / "missing-china-drug-trials.json",
         conference_path=tmp_path / "missing-conference.json",
     )
 
@@ -534,7 +557,34 @@ def test_source_channel_builder_has_stable_schema_and_safe_empty_fallbacks(tmp_p
     by_id = {item["id"]: item for item in payload["channels"]}
     assert by_id["literatureEvidence"]["evidence_required"] is True
     assert all(item["items"] == [] for item in payload["channels"])
-    assert by_id["trialRegistry"]["sources"] == ["ClinicalTrials.gov", "ChiCTR"]
+    assert by_id["trialRegistry"]["sources"] == ["ClinicalTrials.gov", "ChiCTR", "ChinaDrugTrials"]
+
+
+def test_source_channel_builder_includes_china_drug_trials(tmp_path):
+    from scripts.common.source_channels import build_source_signals
+
+    china_path = tmp_path / "china-drug-trials.json"
+    china_path.write_text(json.dumps({"records": [{
+        "registry_id": "CTR20260001",
+        "title": "重症肌无力药物临床试验",
+        "drug_name": "Test drug",
+        "status": "RECRUITING",
+        "registered_date": "2026-07-30",
+        "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistdetail.dhtml?id=1",
+    }]}), encoding="utf-8")
+    payload = build_source_signals(
+        literature_signals_path=tmp_path / "missing-signals.js",
+        guideline_cache_path=tmp_path / "missing-guidelines.json",
+        regulatory_path=tmp_path / "missing-regulatory.json",
+        clinicaltrials_path=tmp_path / "missing-ct.json",
+        chictr_path=tmp_path / "missing-chictr.json",
+        china_drug_trials_path=china_path,
+        conference_path=tmp_path / "missing-conference.json",
+    )
+
+    trial_channel = next(item for item in payload["channels"] if item["id"] == "trialRegistry")
+    assert [item["registry_id"] for item in trial_channel["items"]] == ["CTR20260001"]
+    assert trial_channel["items"][0]["registry"] == "ChinaDrugTrials"
 
 
 def test_source_signal_board_is_not_exposed_in_literature_frontend():

@@ -33,6 +33,8 @@ def test_pipeline_step_selection_preserves_full_assets_when_full_is_absent():
     frontend = next(step for step in steps if step.id == "build-frontend")
 
     assert "build-frontend" in ids
+    assert ids.index("refresh-chictr-cache") < ids.index("build-frontend")
+    assert ROOT / "data" / "clinicaltrials-pipeline-cache.json" in frontend.outputs
     assert "--rebuild-experts-from-full" not in frontend.command
     assert "build-clinical-trials" in ids
     assert "build-source-signals" in ids
@@ -72,6 +74,8 @@ def test_pipeline_and_ci_wire_new_artifacts_and_local_full_gate():
     assert "clinicalTrialsSummary.js" in runner
     assert "build-source-signals.py" in runner
     assert "release-manifest.js" in runner
+    assert runner.count("generate_release_manifest(") == 2
+    assert "Hermes 主机本地时间" in status
     assert "--local-full" in local
     assert "scripts/common/*.py" in workflow
     assert "chictr-trials-cache.json" in workflow

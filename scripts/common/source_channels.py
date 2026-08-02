@@ -225,13 +225,15 @@ def deduplicate_trials(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 def build_source_signals(
     *, literature_signals_path: Path, guideline_cache_path: Path, regulatory_path: Path,
-    clinicaltrials_path: Path, chictr_path: Path, conference_path: Path,
+    clinicaltrials_path: Path, chictr_path: Path, china_drug_trials_path: Path,
+    conference_path: Path,
 ) -> dict[str, Any]:
     literature = _js(literature_signals_path, "MG_SIGNALS_DATA", {})
     guidelines = _json(guideline_cache_path, {})
     regulatory = _json(regulatory_path, {})
     clinicaltrials = _json(clinicaltrials_path, {})
     chictr = _json(chictr_path, {})
+    china_drug_trials = _json(china_drug_trials_path, {})
     conference = _json(conference_path, {})
     conference_items = [{
         "id": str(item.get("id") or item.get("abstractId") or item.get("abstract_id") or ""),
@@ -241,13 +243,16 @@ def build_source_signals(
         "source": item.get("conference") or item.get("meeting") or "Conference",
         "url": _safe_http_url(item.get("url") or item.get("sourceUrl")),
     } for item in (conference.get("abstracts") or conference.get("items") or [])][:40]
-    trials = deduplicate_trials(_ct_items(clinicaltrials) + _chictr_items(chictr))
+    trials = deduplicate_trials(
+        _ct_items(clinicaltrials) + _chictr_items(chictr) + _cdt_items(china_drug_trials)
+    )
     generated_at = (
         literature.get("generated_at")
         or clinicaltrials.get("generated_at")
         or conference.get("generated_at")
         or regulatory.get("generated_at")
         or chictr.get("last_verified")
+        or china_drug_trials.get("generated_at")
         or ""
     )
     return {
@@ -257,7 +262,7 @@ def build_source_signals(
             {"id": "literatureEvidence", "label": "文献证据", "evidence_required": True, "sources": ["PubMed"], "items": _literature_items(literature)},
             {"id": "guidelineConsensus", "label": "指南 / 共识", "evidence_required": False, "sources": ["PubMed cache"], "items": _guideline_items(guidelines)},
             {"id": "chinaRegulatory", "label": "中国监管", "evidence_required": False, "sources": ["NMPA", "CDE", "NHSA"], "items": _regulatory_items(regulatory)},
-            {"id": "trialRegistry", "label": "试验注册", "evidence_required": False, "sources": ["ClinicalTrials.gov", "ChiCTR"], "items": trials},
+            {"id": "trialRegistry", "label": "试验注册", "evidence_required": False, "sources": ["ClinicalTrials.gov", "ChiCTR", "ChinaDrugTrials"], "items": trials},
             {"id": "conference", "label": "会议线索", "evidence_required": False, "sources": ["Conference primary sources"], "items": conference_items},
         ],
     }

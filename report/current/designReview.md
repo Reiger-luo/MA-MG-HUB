@@ -39,7 +39,7 @@ PubMed MG-core + 证据等级 I–V
 MG-core 指南/共识
   → 指南共识频道，不显示 Oxford 等级
 
-监管 / 临床试验注册 / 会议主来源
+监管 / 临床试验注册（ClinicalTrials.gov、ChiCTR、ChinaDrugTrials）/ 会议主来源
   → 各自独立频道，不显示 Oxford 等级
 ```
 
@@ -71,12 +71,12 @@ MG-core 指南/共识
 | 当前周文献信号 | `data/signals-weekly.js` |
 | 语义 full 状态 | `data/literature-full-index.js`、community index、`pipeline-status.js` |
 | 指南/共识 | `data/guideline-consensus-cache.json` |
-| 来源频道 | `data/source-signals.js` |
+| 来源频道 | `data/source-signals.js`（试验注册频道覆盖三源） |
 | 会议摘要 | `data/conference-data.js` |
 | 多源临床试验 | `data/clinical-trials-data.js` |
 | China-only MSL 专家 | `data/expert-profiles-china.js` |
 | 管线与数量状态 | `data/pipeline-status.js` |
-| 完整发布证明 | `data/release-manifest.js` |
+| 完整发布证明 | `data/release-manifest.js`；其哈希一致性结论由 `pipeline-status.js` 展示 |
 | 详细自动审计 | `.hermes-audit/` |
 
 ## 5 分钟审查顺序
@@ -85,7 +85,7 @@ MG-core 指南/共识
 2. 打开情报中心，确认来源频道彼此独立。
 3. 依次切换文献、信号、中国、会议和临床试验，确认简报跟随当前标签与筛选条件。
 4. 打开 MSL 工作台，确认只加载中国专家分片且不保存行为。
-5. 打开数据状态，核对公开滚动层与语义底座。
+5. 打开数据状态，核对公开滚动层、语义底座和完整发布哈希一致性；漂移时首页不得显示“完整发布成功”。
 6. 运行快速验证，确认门控、分片和发布边界。
 
 ## 验证命令
