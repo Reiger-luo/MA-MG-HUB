@@ -1333,7 +1333,7 @@
       var sourceHtml = '';
       if (chinaPayload && chinaPayload.top_journals && chinaPayload.top_journals.length) {
         sourceHtml += '<div class="source-block"><h4>主要期刊</h4>' + renderRankItems(chinaPayload.top_journals, 10, 'journal') + '</div>';
-        sourceHtml += '<div class="source-block"><h4>机构线索（第一作者机构出现频次排序）</h4>' + renderRankItems(chinaPayload.top_institutions || [], 10, 'institution') + '</div>';
+        sourceHtml += '<div class="source-block"><h4>机构线索（第一作者机构出现频次排序）</h4>' + renderRankItems(chinaPayload.top_institutions || [], 12, 'institution') + '</div>';
       } else {
         var journalCounts = {};
         var institutionCounts = {};
@@ -1348,7 +1348,7 @@
           }
         }
         sourceHtml += '<div class="source-block"><h4>主要期刊</h4>' + renderRankList(journalCounts, 10) + '</div>';
-        sourceHtml += '<div class="source-block"><h4>机构线索（第一作者机构出现频次排序）</h4>' + renderRankList(institutionCounts, 10) + '</div>';
+        sourceHtml += '<div class="source-block"><h4>机构线索（第一作者机构出现频次排序）</h4>' + renderRankList(institutionCounts, 12) + '</div>';
       }
       el.chinaSourceList.innerHTML = sourceHtml;
       bindRankLinks();
