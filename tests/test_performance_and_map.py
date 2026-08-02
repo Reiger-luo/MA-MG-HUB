@@ -44,8 +44,8 @@ def test_china_network_map_asset_and_render_hook_exist():
     assert 'viewBox="0 0 774 569"' in map_js
     assert 'id="beijing"' in map_js
     assert 'id="shanghai"' in map_js
-    map_script = '<script src="../assets/china-provinces-map.js"></script>'
-    network_script = '<script src="../assets/chinaAuthorNetwork.js"></script>'
+    map_script = '../assets/china-provinces-map.js?v='
+    network_script = '../assets/chinaAuthorNetwork.js?v='
     assert map_script in html
     assert html.index(map_script) < html.index(network_script)
     assert "window.MG_CHINA_PROVINCES_SVG" in frontend

@@ -34,7 +34,7 @@ def loadRecentJs(path: Path) -> list[dict]:
 
 
 def loadArticles(inputPath: Path) -> tuple[list[dict], str, str]:
-    """优先读取 full；没有 full 时回退 recent，保证 GitHub Actions 可兜底。"""
+    """优先读取 full；直接运行脚本时可回退 recent，但发布管线只允许 full。"""
     if inputPath.exists():
         payload = loadJson(inputPath)
         articles = payload if isinstance(payload, list) else payload.get("articles") or payload.get("items") or []

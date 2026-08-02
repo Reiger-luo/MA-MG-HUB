@@ -11,6 +11,7 @@
 
 import argparse
 import json
+import os
 from collections import Counter
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -36,7 +37,8 @@ def main():
     with open(full_path) as f:
         articles = json.load(f)
 
-    cutoff = datetime.now() - timedelta(days=DAYS_RECENT)
+    generatedAt = datetime.now()
+    cutoffDate = generatedAt.date() - timedelta(days=DAYS_RECENT)
 
     recent = []
     strengthCounts = Counter()
@@ -50,7 +52,7 @@ def main():
             dt = datetime(int(parts[0]), int(parts[1]), int(parts[2].split()[0]))
         except (ValueError, IndexError):
             continue
-        if dt < cutoff:
+        if dt.date() < cutoffDate:
             continue
         signalStrength = classifySignalStrength(article)
         if signalStrength:
@@ -70,10 +72,24 @@ def main():
             print("🧹 已清理 literature-recent.json cache")
 
     recent_js_path = DATA_DIR / "literature-recent.js"
+    metadata = {
+        "schema_version": "1.0",
+        "generated_at": generatedAt.strftime("%Y-%m-%d %H:%M:%S"),
+        "run_id": os.environ.get("MG_PIPELINE_RUN_ID", ""),
+        "source_mode": "local_full_first",
+        "window_days": DAYS_RECENT,
+        "window_start": cutoffDate.isoformat(),
+        "window_end": generatedAt.strftime("%Y-%m-%d"),
+        "item_count": len(recent),
+        "semantic_full_count": len(articles),
+    }
     content = (
         f"window.MG_PUBLIC_ROLLING_COUNT = {len(recent)};\n"
         f"window.MG_SEMANTIC_FULL_COUNT = {len(articles)};\n"
         f"window.MG_TOTAL_COUNT = {len(articles)};\n"
+        "window.MG_LITERATURE_META = "
+        + json.dumps(metadata, ensure_ascii=False, separators=(",", ":"))
+        + ";\n"
         "window.MG_LITERATURE_DATA = "
         + json.dumps(recent, ensure_ascii=False, separators=(",", ":"))
         + ";\n"

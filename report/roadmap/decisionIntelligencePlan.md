@@ -6,7 +6,7 @@
 >
 > 维护规则：Release 状态由实现任务同步更新；动态数量和发布时间只进入数据状态产物，不写入本计划
 >
-> 已上线基线：首页工作台已承载完整文献信号板，情报中心可按当前标签与筛选条件生成文献、中国、会议和临床试验 Markdown 简报；试验注册频道已覆盖 ClinicalTrials.gov、ChiCTR、ChinaDrugTrials，完整发布状态会校验清单哈希并显式提示漂移。该功能是来源层的浏览器内摘要，不是本计划中的 Decision Brief。
+> 已上线基线：首页工作台已承载完整文献信号板，情报中心可按当前标签与筛选条件生成文献、中国、会议和临床试验 Markdown 简报；试验注册频道已覆盖 ClinicalTrials.gov、ChiCTR、ChinaDrugTrials。公开 rolling 与社区 recent 已统一 PMID 窗口，周信号只读取 ingest 真实新增；完整发布使用显式产物契约、统一缓存 run id 和清单 hash，GitHub Actions 只读校验。该功能是来源层的浏览器内摘要，不是本计划中的 Decision Brief。
 
 **Goal:** 在不引入 CRM、拜访记录、互动历史、私有后端或浏览器持久化的前提下，把 MA-MG-HUB 从“公开证据浏览站”升级为“围绕 EFG 学术推广策略、可追溯的医学问题导航、判断建议和拜访前准备来源”。本计划只处理纯学术与医学策略，不覆盖政务、支付、市场准入或 Health Economics and Outcomes Research（HEOR）。
 
@@ -269,7 +269,7 @@ Decision state 回答“这个具体问题能回答到什么程度”，不等�
 - 在 `build-landscape-insights` 后添加 required step：
   - `build-decision-briefs`
   - output: `data/decision-briefs.js`
-- cloud-safe 模式可运行，因为其所有输入均有 tracked last-good 版本。
+- 该 required step 只在 `authoritative-full` / `rebuild-full` 中运行；GitHub Actions 的 `validate-only` 只核对已提交的 tracked last-good 与 release contract，不生成新 Brief。
 
 ### 1.5 前端改造
 
@@ -968,7 +968,7 @@ Question IDs unique
 | 中国作者地理归属可能被文章级 China 标记污染 | R4 前先拆分 article geography 与 author/institution geography |
 | LLM 生成医学叙事偏离证据 | LLM 可选；候选、Claim ID、source ref、event type 和 gate 全部由确定性程序控制并回验 |
 | Claim 文件增大影响性能 | 超过 500 KB 才启用按 question shard；首屏不加载 Claim 全量 |
-| 新产物在 cloud-safe 模式覆盖 last-good | 所有 builder 原子写入；输入缺失时 fail closed 或保留 last-good，不写空产物 |
+| 无 full 的云端运行误覆盖新产物或 last-good | GitHub Actions 固定 `validate-only` 且仓库权限只读；完整/重建模式缺 full 时在生成前 fail closed；所有 builder 保持原子写入 |
 | 规划实施期间 cron 产生新 commit | 每个 Release 开始重新读取 git 状态和最新数据，禁止基于旧 SHA 直接编码 |
 
 ## 10. 开放问题（进入对应 Release 时讨论，不阻碍本计划）

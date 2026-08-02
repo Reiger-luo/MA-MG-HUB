@@ -22,7 +22,7 @@ MG Intelligence Hub 是面向 MG 医学事务团队的静态情报工作站。�
 | Sites 受控部署 | 从同一组 Git 管理的公开文件生成隔离静态部署包 |
 | 本地工作站 | 保存 full 文献和中间数据，运行完整重建 |
 | Hermes / 本地计划任务 | 调度 full 驱动周更 |
-| GitHub Actions | 质量门和云端轻量兜底 |
+| GitHub Actions | 测试、静态构建与当前 release 只读校验；不生成或提交数据 |
 | AI coding agent | 实现、测试和维护；不替代医学审核 |
 
 ## 3. 页面与导航
@@ -44,7 +44,7 @@ MG Intelligence Hub 是面向 MG 医学事务团队的静态情报工作站。�
 
 | 口径 | 权威产物 | 用途 |
 | --- | --- | --- |
-| 公开滚动层 | `literature-recent.js`、`signals-weekly.js`、`china-intelligence.js` | 近期公开证据和信号 |
+| 公开滚动层 | `literature-recent.js`、`signals-weekly.js`、`china-intelligence.js` | 近期公开证据和信号；`literature-recent.js` 的 PMID 集合是社区 recent 的唯一窗口契约 |
 | full / 语义底座 | 本地 full、full index、community、knowledge graph | 全库关系、分类、专家和检索 |
 
 `MG_PUBLIC_ROLLING_COUNT` 表示公开滚动层；`MG_SEMANTIC_FULL_COUNT` 和兼容字段 `MG_TOTAL_COUNT` 表示语义底座。两者不能相互替代。
@@ -143,7 +143,7 @@ PubMed 主文献流必须先通过 MG-core，再通过证据等级 I–V 门控�
 - 会议摘要；
 - 临床试验。
 
-文献信号使用当前 7 天 PubMed 增量，在首页文献信号板呈现。信号按主题聚合，并保留强度、证据项、证据边界、KOL 讨论问题、PMID、作者和机构线索。文献列表通过 PMID 关联信号强度，可按强、中、弱信号筛选。
+文献信号只使用 `literature-ingest-latest.json` 的 `added_pmids`，窗口起止日期沿用该 ingest manifest，不再按文献最大日期反推“最近 7 天”。信号在首页文献信号板呈现，按主题聚合，并保留强度、证据项、证据边界、KOL 讨论问题、PMID、作者和机构线索。文献列表通过 PMID 关联信号强度，可按强、中、弱信号筛选。
 
 页面右上角的简报操作读取当前标签和筛选状态：
 
@@ -193,13 +193,17 @@ MG_WEEKLY_DRY_RUN=1 bash scripts/run-local-weekly-sync.sh
 恢复指定运行：
 
 ```bash
-python3 scripts/run-weekly-pipeline.py --run-id weekly-example --resume
-python3 scripts/run-weekly-pipeline.py --run-id weekly-example --resume --from-step build-source-signals
+python3 scripts/run-weekly-pipeline.py --mode authoritative-full --run-id weekly-example --resume
+python3 scripts/run-weekly-pipeline.py --mode authoritative-full --run-id weekly-example --resume --from-step build-source-signals
 ```
 
-检查点写入 `.hermes-audit/pipeline-runs/`。`merge-weekly` 原子写入本地 `literature-ingest-latest.json`，记录本周累计真实新增与本次更新 PMID；同一自然周重跑累积新增，跨周自动清空。required 步骤全部成功后才更新 `release-manifest.js`；状态生成与清单采用两遍收口，使 `pipeline-status.js` 的一致性结论也进入最终哈希。当前公开 JS 与清单出现哈希不符、缺失或未入清单时，首页和数据状态显示发布漂移，不再沿用历史“完整发布成功”。optional 步骤失败只记录 warning 并按其定义使用 fallback。
+三个模式的边界固定如下：`authoritative-full` 抓取、合并、完整重建并发布；`rebuild-full --reuse-ingest` 只在人工确认复用当前自然周 ingest 时重建；`validate-only` 只读核对当前公开产物和 release manifest。检查点写入 `.hermes-audit/pipeline-runs/`。`merge-weekly` 原子写入本地 `literature-ingest-latest.json`，记录本周累计真实新增与本次更新 PMID；同一自然周重跑累积新增，跨周自动清空。
 
-GitHub Actions 仅手动 `workflow_dispatch`，用于质量门和轻量兜底，不替代本地 full 驱动周更。
+完整发布使用集中维护的公开产物白名单，检查声明的全局变量、社区分片、文献/社区 recent PMID 集合、信号 ingest 口径、工作台计数和 release hash。required 步骤全部成功后才更新 `release-manifest.js`；状态生成与清单采用两遍收口，使 `pipeline-status.js` 的一致性结论也进入最终哈希。活动页面的 CSS、脚本和数据 URL 同步使用该 run id 作为缓存版本。当前公开 JS 与清单出现哈希不符、缺失或未入清单时，首页和数据状态显示发布漂移，不再沿用历史“完整发布成功”。optional 步骤失败只记录 warning 并按其定义使用 fallback。
+
+GitHub Actions 仅手动 `workflow_dispatch`，运行测试、`validate-only` 和静态构建；权限为只读，不替代本地 full 驱动周更，也不会提交局部生成结果。
+
+数据状态中的“更新时间”优先读取产物自身 `generated_at`、`last_verified` 或 `snapshot_date`，不以文件 mtime 伪装数据新鲜度。公开 rolling 权威源固定为 `literature-recent.js`；社区 recent 只用于覆盖核对。过期来源显示黄色 warning，缺失或错误显示红色。
 
 ## 11. 文档与自动报告
 

@@ -8,18 +8,21 @@ generate-pipeline-status.py — 生成 MA-MG-HUB 数据管线状态。
 from __future__ import annotations
 
 import json
+import os
 import re
 from datetime import datetime
 from pathlib import Path
+from urllib.parse import urlparse
 
 from common.io import atomic_write_js_global, load_js_global, load_json
 from common.pipeline_runner import sha256_file
+from common.publicDataContract import publicArtifactNames
 
 
 PROJECT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT / "data"
-SITE_URL = "https://reiger-luo.github.io/MA-MG-HUB/"
-PUBLIC_PATH_PREFIX = "/MA-MG-HUB/"
+SITE_URL = os.environ.get("MG_SITE_URL", "https://reiger-luo.github.io/MA-MG-HUB/").rstrip("/") + "/"
+PUBLIC_PATH_PREFIX = urlparse(SITE_URL).path.rstrip("/") + "/"
 
 
 PUBLIC_ARTIFACTS = [
@@ -65,7 +68,11 @@ def safeLoadJs(filename: str, globalName: str):
     path = DATA_DIR / filename
     if not path.exists():
         return None
-    return loadJs(filename, globalName)
+    try:
+        return loadJs(filename, globalName)
+    except (OSError, ValueError, json.JSONDecodeError):
+        # 兼容首次升级前尚未携带新 metadata global 的 last-good 产物。
+        return None
 
 
 def releaseConsistency(manifest: dict | None, *, dataDir: Path = DATA_DIR) -> dict:
@@ -88,9 +95,11 @@ def releaseConsistency(manifest: dict | None, *, dataDir: Path = DATA_DIR) -> di
         for item in manifestArtifacts
         if item.get("path")
     }
+    useProjectContract = dataDir.resolve() == DATA_DIR.resolve()
+    requiredNames = set(publicArtifactNames()) if useProjectContract else set()
     currentPaths = sorted(path for path in dataDir.glob("*.js") if path.name != "release-manifest.js")
     currentByName = {path.name: path for path in currentPaths}
-    missing = sorted(name for name in manifestByName if name not in currentByName)
+    missing = sorted((set(manifestByName) | requiredNames) - set(currentByName))
     unlisted = sorted(name for name in currentByName if name not in manifestByName)
     mismatched = sorted(
         name
@@ -149,6 +158,16 @@ def generatedAtFromPayload(payload):
         value = payload.get(key)
         if isinstance(value, str) and value.strip():
             return value.strip()
+    meta = payload.get("meta") or {}
+    if isinstance(meta, dict):
+        for key in ("generated_at", "generatedAt", "updated_at", "last_updated"):
+            value = meta.get(key)
+            if isinstance(value, str) and value.strip():
+                return value.strip()
+    for key in ("snapshot_date", "last_verified"):
+        value = payload.get(key)
+        if isinstance(value, str) and value.strip():
+            return value.strip()
     return None
 
 
@@ -158,6 +177,32 @@ def fileUpdatedAt(path: Path):
 
 def fileUpdatedEpoch(path: Path):
     return path.stat().st_mtime if path.exists() else None
+
+
+def parseTimestamp(value):
+    if not value:
+        return None
+    text = str(value).strip().replace("Z", "+00:00")
+    try:
+        return datetime.fromisoformat(text).replace(tzinfo=None)
+    except ValueError:
+        pass
+    for pattern in ("%Y/%m/%d %H:%M", "%Y/%m/%d", "%Y-%m-%d"):
+        try:
+            return datetime.strptime(text[:16] if "%H" in pattern else text[:10], pattern)
+        except ValueError:
+            continue
+    return None
+
+
+def freshnessStatus(value, maxDays: int):
+    generated = parseTimestamp(value)
+    if not generated:
+        return "manual", "待核对", None
+    ageDays = max(0, (datetime.now() - generated).days)
+    if ageDays > maxDays:
+        return "warning", "已过期", ageDays
+    return "ok", "正常", ageDays
 
 
 def shardDeclaredTotal(shards):
@@ -183,7 +228,7 @@ def countPayload(payload):
         direct = firstNumber(payload, ("item_count", "total_count", "count"))
         if direct is not None:
             return direct
-        summary = payload.get("summary") or {}
+        summary = payload.get("summary") or payload.get("meta") or {}
         summaryCount = firstNumber(summary, ("indexed_experts", "total_experts", "total_articles", "article_count"))
         if summaryCount is not None:
             return summaryCount
@@ -312,6 +357,9 @@ def artifactInfo(filename: str, label: str, globalName: str | None):
     if globalName:
         payload = loadJs(filename, globalName)
         count = countPayload(payload)
+    elif path.suffix == ".json":
+        payload = loadJson(path)
+        count = countPayload(payload)
 
     shards = None
     if filename == "expert-profiles.js" and isinstance(payload, dict):
@@ -340,7 +388,10 @@ def artifactInfo(filename: str, label: str, globalName: str | None):
                 "message": f"item_count {itemCount} 与 items {len(items)} 不一致",
             })
 
-    generatedAt = generatedAtFromPayload(payload)
+    metadataPayload = None
+    if filename == "literature-recent.js":
+        metadataPayload = safeLoadJs(filename, "MG_LITERATURE_META")
+    generatedAt = generatedAtFromPayload(metadataPayload or payload)
     updatedAt = generatedAt or fileUpdatedAt(path)
     info = {
         "id": filename,
@@ -381,38 +432,42 @@ def semanticFullCounts(fullPath: Path, fullIndex: dict, communityIndex: dict, co
     return counts
 
 
-def recentSourceRows(literature: list, communityRecent: dict):
+def recentSourceRows(literature: list, literatureMeta: dict, communityRecent: dict):
     rows = []
     literaturePath = DATA_DIR / "literature-recent.js"
     if literaturePath.exists():
+        generatedAt = generatedAtFromPayload(literatureMeta)
         rows.append({
             "id": "literature-recent.js",
             "label": "公开文献 recent",
             "count": len(literature),
-            "updated_at": fileUpdatedAt(literaturePath),
+            "updated_at": generatedAt or fileUpdatedAt(literaturePath),
+            "generated_at": generatedAt,
             "updated_epoch": fileUpdatedEpoch(literaturePath),
             "role": "literature",
+            "authoritative": True,
         })
 
     communityRecentPath = DATA_DIR / "communityAssignmentsRecent.js"
     if communityRecentPath.exists() and isinstance(communityRecent, dict):
+        generatedAt = generatedAtFromPayload(communityRecent)
         rows.append({
             "id": "communityAssignmentsRecent.js",
             "label": "社区归类 recent",
             "count": countPayload(communityRecent),
-            "updated_at": fileUpdatedAt(communityRecentPath),
-            "generated_at": generatedAtFromPayload(communityRecent),
+            "updated_at": generatedAt or fileUpdatedAt(communityRecentPath),
+            "generated_at": generatedAt,
             "updated_epoch": fileUpdatedEpoch(communityRecentPath),
             "role": "community_assignments",
+            "authoritative": False,
         })
-    rows.sort(key=lambda item: (item.get("updated_epoch") or 0, item["id"]), reverse=True)
     return rows
 
 
 def activeRecentSource(recentRows):
     if not recentRows:
         return None
-    return recentRows[0]
+    return next((row for row in recentRows if row.get("role") == "literature"), recentRows[0])
 
 
 def buildCountChecks(publicRollingCount, declaredPublicRollingCount, legacyTotalCount, declaredSemanticFullCount, semanticCountRows, recentRows):
@@ -491,25 +546,22 @@ def buildCountChecks(publicRollingCount, declaredPublicRollingCount, legacyTotal
             "id": "activeRecentSource",
             "label": "active recent source",
             "status": "ok",
-            "message": f"当前采用最新 recent 文件 {activeRecent['id']}={activeRecent['count']} 条；更新时间 {activeRecent.get('updated_at') or '-'}",
+            "message": f"公开 rolling 权威源固定为 {activeRecent['id']}={activeRecent['count']} 条；生成时间 {activeRecent.get('updated_at') or '-'}",
         })
 
     if recentAssignmentCount is not None and recentAssignmentCount != publicRollingCount:
-        if activeRecent:
-            staleRows = [row for row in recentRows if row["id"] != activeRecent["id"]]
-            staleText = "；".join(f"{row['id']}={row['count']} ({row.get('updated_at') or '-'})" for row in staleRows) or "无"
-            checks.append({
-                "id": "recentSourceDivergence",
-                "label": "recent source divergence",
-                "status": "ok",
-                "message": f"recent 文件计数不同，按最新文件 {activeRecent['id']}={activeRecent['count']} 条生效；较旧文件：{staleText}",
-            })
-            return checks
         checks.append({
-            "id": "recentAssignmentWindow",
-            "label": "recent assignment window",
+            "id": "recentSourceDivergence",
+            "label": "recent assignment coverage",
             "status": "warning",
-            "message": f"近一年社区归类 {recentAssignmentCount} 条，公开 rolling {publicRollingCount} 篇；需确认 cutoff 口径",
+            "message": f"近一年社区归类 {recentAssignmentCount} 条，公开 rolling {publicRollingCount} 篇；两者必须使用同一 PMID 集合",
+        })
+    elif recentAssignmentCount is not None:
+        checks.append({
+            "id": "recentSourceDivergence",
+            "label": "recent assignment coverage",
+            "status": "ok",
+            "message": f"社区 recent 与公开 rolling 均为 {publicRollingCount} 条",
         })
 
     return checks
@@ -518,6 +570,7 @@ def buildCountChecks(publicRollingCount, declaredPublicRollingCount, legacyTotal
 def buildStatus():
     dashboard = safeLoadJs("dashboard-data.js", "MG_DASHBOARD_DATA") or {}
     literature = safeLoadJs("literature-recent.js", "MG_LITERATURE_DATA") or []
+    literatureMeta = safeLoadJs("literature-recent.js", "MG_LITERATURE_META") or {}
     fullIndex = safeLoadJs("literature-full-index.js", "MG_LITERATURE_FULL_INDEX") or {}
     signals = safeLoadJs("signals-weekly.js", "MG_SIGNALS_DATA") or {}
     modules = safeLoadJs("content-modules.js", "MG_CONTENT_MODULES") or []
@@ -566,7 +619,7 @@ def buildStatus():
     semanticFullCount = semanticCountRows[0]["count"] if semanticCountRows and len({row["count"] for row in semanticCountRows}) == 1 else (
         localFullCount or countPayload(fullIndex) or countPayload(communityIndex)
     )
-    recentRows = recentSourceRows(literature, communityRecent)
+    recentRows = recentSourceRows(literature, literatureMeta, communityRecent)
     activeRecent = activeRecentSource(recentRows)
     activeRecentCount = activeRecent.get("count") if activeRecent else recentCount
     recentAssignmentCount = next((row.get("count") for row in recentRows if row["id"] == "communityAssignmentsRecent.js"), None)
@@ -582,6 +635,21 @@ def buildStatus():
     generatedAt = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     storageMode = "local_full_first" if fullPath.exists() else ("semantic_full_index" if semanticFullCount else "recent_fallback")
     countWarningCount = sum(1 for check in countChecks if check.get("status") == "warning")
+    pubmedWarning = any(
+        check.get("id") in {"publicRollingDeclaredCount", "recentSourceDivergence"}
+        and check.get("status") == "warning"
+        for check in countChecks
+    )
+    clinicalStatus, clinicalStatusLabel, clinicalAge = freshnessStatus(clinicalTrialsPayload.get("generated_at"), 8)
+    chictrStatus, chictrStatusLabel, chictrAge = freshnessStatus(
+        chictrPayload.get("last_verified") or chictrPayload.get("generated_at"),
+        35,
+    )
+    chinaTrialsStatus, chinaTrialsStatusLabel, chinaTrialsAge = freshnessStatus(
+        chinaDrugTrialsPayload.get("generated_at") or chinaDrugTrialsPayload.get("last_verified"),
+        35,
+    )
+    regulatoryStatus, regulatoryStatusLabel, regulatoryAge = freshnessStatus(regulatoryPayload.get("generated_at"), 90)
 
     driftCount = sum(len(releaseCheck[key]) for key in ("mismatched", "missing", "unlisted"))
     sources = [
@@ -599,8 +667,8 @@ def buildStatus():
             "id": "pubmed",
             "name": "PubMed 公开 rolling 源",
             "meta": f"{recentCount} 篇近1年公开文献 · {stats.get('china_articles', 0)} 篇中国相关 · {signalCount} 条候选信号",
-            "status": "warning" if any(check.get("id") == "publicRollingDeclaredCount" and check.get("status") == "warning" for check in countChecks) else "ok",
-            "status_label": "需核对" if any(check.get("id") == "publicRollingDeclaredCount" and check.get("status") == "warning" for check in countChecks) else "正常",
+            "status": "warning" if pubmedWarning else "ok",
+            "status_label": "需核对" if pubmedWarning else "正常",
         },
         {
             "id": "fullStorage",
@@ -628,8 +696,8 @@ def buildStatus():
                 if clinicalTrialsPayload
                 else "等待 ClinicalTrials.gov 缓存"
             ),
-            "status": "ok" if clinicalTrialsPayload else "manual",
-            "status_label": "已接入" if clinicalTrialsPayload else "待接入",
+            "status": clinicalStatus if clinicalTrialsPayload else "manual",
+            "status_label": clinicalStatusLabel if clinicalTrialsPayload else "待接入",
         },
         {
             "id": "chictr",
@@ -639,8 +707,8 @@ def buildStatus():
                 if chictrPayload
                 else "等待 ChiCTR 官方 JSON/CSV 缓存"
             ),
-            "status": "ok" if chictrPayload else "manual",
-            "status_label": "缓存可用" if chictrPayload else "待接入",
+            "status": chictrStatus if chictrPayload else "manual",
+            "status_label": chictrStatusLabel if chictrPayload else "待接入",
         },
         {
             "id": "chinaDrugTrials",
@@ -655,8 +723,8 @@ def buildStatus():
                 if chinaDrugTrialsPayload
                 else "等待 ChinaDrugTrials 官方月度导出"
             ),
-            "status": "ok" if chinaDrugTrialsPayload else "manual",
-            "status_label": "缓存可用" if chinaDrugTrialsPayload else "待提交",
+            "status": chinaTrialsStatus if chinaDrugTrialsPayload else "manual",
+            "status_label": chinaTrialsStatusLabel if chinaDrugTrialsPayload else "待提交",
         },
         {
             "id": "regulatory",
@@ -666,8 +734,8 @@ def buildStatus():
                 if regulatoryPayload
                 else "等待 data/china-regulatory-status.json"
             ),
-            "status": "ok" if regulatoryPayload else "manual",
-            "status_label": "已接入" if regulatoryPayload else "待接入",
+            "status": regulatoryStatus if regulatoryPayload else "manual",
+            "status_label": regulatoryStatusLabel if regulatoryPayload else "待接入",
         },
         {
             "id": "frontendArtifacts",
@@ -726,6 +794,10 @@ def buildStatus():
             "mode": storageMode,
             "recent_count": recentCount,
             "public_rolling_count": recentCount,
+            "public_rolling_generated_at": generatedAtFromPayload(literatureMeta),
+            "public_rolling_window_start": literatureMeta.get("window_start"),
+            "public_rolling_window_end": literatureMeta.get("window_end"),
+            "public_rolling_run_id": literatureMeta.get("run_id"),
             "active_recent_count": activeRecentCount,
             "active_recent_source": activeRecent.get("id") if activeRecent else "literature-recent.js",
             "public_rolling_declared_count": declaredRollingCount,
@@ -745,9 +817,9 @@ def buildStatus():
         },
         "pipeline": {
             "local_command": "bash scripts/run-local-weekly-sync.sh",
-            "workflow": "Hermes 本地周更主流程；GitHub Actions 仅手动兜底",
+            "workflow": "Hermes 本地周更主流程；GitHub Actions 仅执行只读发布校验",
             "schedule": "每周一 03:15 Hermes 主机本地时间；排在 efgar-wiki 周更/社区摘要之后读取本地 vault",
-            "policy": "以本地 full 为源头；weekly 先 upsert full/recent，再重扫 full 的近一年窗口，读取 efgar-wiki 策展层，最后一次性生成 full-derived 公开产物并 push。",
+            "policy": "authoritative-full 负责抓取、合并和发布；rebuild-full 仅显式复用当周 ingest；validate-only 只读校验当前发布。",
             "upstream_sync": [
                 {
                     "id": "efgar-wiki",

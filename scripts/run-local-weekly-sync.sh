@@ -53,8 +53,8 @@ if [ ! -f "data/literature-full.json" ]; then
   exit 2
 fi
 
-if ! git diff --quiet || ! git diff --cached --quiet; then
-  echo "存在未提交的 tracked 改动，停止周更以避免混入自动提交。" >&2
+if git status --porcelain --untracked-files=all -- data assets pages index.html | grep -q . || ! git diff --quiet || ! git diff --cached --quiet; then
+  echo "存在未提交改动或公开目录未跟踪文件，停止周更以避免混入自动提交。" >&2
   git status --short
   exit 3
 fi
@@ -80,7 +80,7 @@ git fetch origin main
 git pull --ff-only origin main
 
 # full 模式在合并后执行 MG-core 原子过滤/归档，再重分类并完成全部公开产物；所有步骤共用同一审计 run id。
-python3 scripts/run-weekly-pipeline.py --local-full --run-id "local-${STAMP}"
+python3 scripts/run-weekly-pipeline.py --mode authoritative-full --run-id "local-${STAMP}"
 
 python3 - <<'PY'
 import json
@@ -149,20 +149,13 @@ PY
 if [ "${DRY_RUN}" = "1" ]; then
   echo "MG_WEEKLY_DRY_RUN=1，跳过 git add/commit/push。"
 else
-  git add \
-    data/*.js \
-    data/weekly-summary.md \
-    data/china-regulatory-status.json \
-    data/clinicaltrials-pipeline-cache.json \
-    data/clinicaltrials-weekly-changes-snapshot.json \
-    data/chictr-trials-cache.json \
-    data/china-drug-trials-cache.json \
-    data/china-drug-trials-changes.json \
-    data/guideline-consensus-cache.json \
-    assets/*.js \
-    assets/*.css \
-    pages/*.html \
-    index.html
+  if git ls-files --others --exclude-standard -- data assets pages index.html | grep -q .; then
+    echo "管线生成了未纳入版本控制的公开文件，停止提交；请先审查并显式加入仓库。" >&2
+    git ls-files --others --exclude-standard -- data assets pages index.html >&2
+    exit 5
+  fi
+  # 只暂存已经纳入版本控制的公开产物，避免通配符把意外文件带入发布。
+  git add -u -- data assets pages index.html
 
   if git diff --cached --quiet; then
     echo "没有公开数据变更需要提交。"

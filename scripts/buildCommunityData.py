@@ -15,7 +15,7 @@ from collections import Counter, defaultdict
 from datetime import datetime, timedelta
 from pathlib import Path
 
-from common.io import atomic_write_json, atomic_write_js_global, atomic_write_text, load_js_global, load_json as read_json
+from common.io import atomic_text_writer, atomic_write_json, atomic_write_js_global, atomic_write_text, load_js_global, load_json as read_json
 
 
 projectPath = Path(__file__).resolve().parent.parent
@@ -228,6 +228,22 @@ def loadIngestManifest() -> dict:
         }
     payload = loadJson(ingestManifestPath)
     return payload if isinstance(payload, dict) else {}
+
+
+def loadLiteratureRecentContract() -> tuple[set[str], dict]:
+    """读取前端真实公开 recent PMID 集合，社区筛选必须与其完全同窗。"""
+    if not recentJsPath.exists():
+        return set(), {}
+    articles = loadPublicJs(recentJsPath, "MG_LITERATURE_DATA")
+    try:
+        metadata = loadPublicJs(recentJsPath, "MG_LITERATURE_META")
+    except ValueError:
+        metadata = {}
+    return {
+        str(article.get("pmid") or "")
+        for article in articles
+        if article.get("pmid")
+    }, metadata
 
 
 def parseDate(value: str | None):
@@ -1320,7 +1336,7 @@ def buildCandidates(cardsPayload: dict, auditPayload: dict, generatedAt: str) ->
 
 
 def writeCorpusPack(articles: list[dict], assignmentsByPmid: dict) -> None:
-    with corpusPackPath.open("w", encoding="utf-8") as output:
+    with atomic_text_writer(corpusPackPath) as output:
         for article in articles:
             pmid = str(article.get("pmid") or "")
             item = {
@@ -1339,7 +1355,7 @@ def writeCorpusPack(articles: list[dict], assignmentsByPmid: dict) -> None:
 
 
 def writeAssignmentsJsonl(assignments: list[dict]) -> None:
-    with assignmentsJsonlPath.open("w", encoding="utf-8") as output:
+    with atomic_text_writer(assignmentsJsonlPath) as output:
         for item in assignments:
             output.write(json.dumps(item, ensure_ascii=False) + "\n")
 
@@ -1408,18 +1424,29 @@ def writeRecentAssignments(path: Path, payload: dict) -> None:
     atomic_write_js_global(path, "MG_COMMUNITY_RECENT_ASSIGNMENTS", payload, header)
 
 
-def buildAssignmentOutputs(assignments: list[dict], articles: list[dict], sourceMode: str, sourceFile: str, latest: datetime, generatedAt: str) -> tuple[dict, list[tuple[str, dict]], dict]:
+def buildAssignmentOutputs(
+    assignments: list[dict],
+    articles: list[dict],
+    sourceMode: str,
+    sourceFile: str,
+    latest: datetime,
+    generatedAt: str,
+    recentPmids: set[str] | None = None,
+    recentMeta: dict | None = None,
+) -> tuple[dict, list[tuple[str, dict]], dict]:
     articleByPmid = {str(article.get("pmid") or ""): article for article in articles}
     groupedItems = defaultdict(list)
     for item in assignments:
         article = articleByPmid.get(item["pmid"], {})
         groupedItems[item["primary"]].append(assignmentPublicItem(item, article))
 
+    recentMeta = recentMeta or {}
     recentCutoff = latest - timedelta(days=365)
     recentItems = []
     for item in assignments:
         article = articleByPmid.get(item["pmid"], {})
-        if withinWindow(article, recentCutoff):
+        inPublicRecent = item["pmid"] in recentPmids if recentPmids is not None else withinWindow(article, recentCutoff)
+        if inPublicRecent:
             recentItems.append(assignmentPublicItem(item, article))
     recentItems.sort(key=lambda item: (item.get("entry_date") or item.get("pub_date") or ""), reverse=True)
     confidenceCounts = Counter(item["confidence"] for item in assignments)
@@ -1477,8 +1504,11 @@ def buildAssignmentOutputs(assignments: list[dict], articles: list[dict], source
         "version": semanticVersion,
         "method": semanticMethod,
         "source_mode": sourceMode,
-        "source_file": sourceFile,
+        "source_file": "data/literature-recent.js" if recentPmids is not None else sourceFile,
+        "basis": "literatureRecentPmidSet" if recentPmids is not None else "latestArticleRollingWindow",
         "window_days": 365,
+        "window_start": recentMeta.get("window_start") or "",
+        "window_end": recentMeta.get("window_end") or "",
         "item_count": len(recentItems),
         "items": recentItems,
     }
@@ -1492,6 +1522,7 @@ def main() -> int:
 
     articles, sourceMode, sourceFile = loadArticles()
     ingestManifest = loadIngestManifest()
+    recentPmids, recentMeta = loadLiteratureRecentContract()
     weeklyAddedPmids = {str(item) for item in ingestManifest.get("added_pmids") or []}
     generatedAt = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     latest = latestDate(articles)
@@ -1499,7 +1530,16 @@ def main() -> int:
     assignmentsByPmid = {item["pmid"]: item for item in assignments}
 
     taxonomyPayload = buildTaxonomy(generatedAt)
-    assignmentIndexPayload, assignmentShardPayloads, recentAssignmentsPayload = buildAssignmentOutputs(assignments, articles, sourceMode, sourceFile, latest, generatedAt)
+    assignmentIndexPayload, assignmentShardPayloads, recentAssignmentsPayload = buildAssignmentOutputs(
+        assignments,
+        articles,
+        sourceMode,
+        sourceFile,
+        latest,
+        generatedAt,
+        recentPmids=recentPmids,
+        recentMeta=recentMeta,
+    )
     cardsPayload = buildCards(articles, assignmentsByPmid, weeklyAddedPmids, generatedAt)
     weeklyPayload = buildWeekly(articles, assignmentsByPmid, ingestManifest, generatedAt)
     auditPayload, reviewQueue = buildAudit(articles, assignments, assignmentsByPmid, latest, weeklyAddedPmids, generatedAt)

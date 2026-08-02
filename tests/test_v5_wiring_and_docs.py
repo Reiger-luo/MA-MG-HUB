@@ -18,33 +18,37 @@ def load_pipeline_module():
 
 def pipeline_args():
     return SimpleNamespace(
+        mode="authoritative-full",
         skip_fetch=True,
         local_full=False,
+        reuse_ingest=True,
         skip_downstream=False,
         skip_llm=True,
         skip_status=False,
     )
 
 
-def test_pipeline_step_selection_preserves_full_assets_when_full_is_absent():
+def test_pipeline_step_selection_is_read_only_when_full_is_absent():
     module = load_pipeline_module()
-    steps = module.pipeline_steps(pipeline_args(), full_available=False)
+    args = pipeline_args()
+    args.mode = "validate-only"
+    steps = module.pipeline_steps(args, full_available=False)
     ids = [step.id for step in steps]
-    frontend = next(step for step in steps if step.id == "build-frontend")
 
-    assert "build-frontend" in ids
-    assert ids.index("refresh-chictr-cache") < ids.index("build-frontend")
-    assert ROOT / "data" / "clinicaltrials-pipeline-cache.json" in frontend.outputs
-    assert "--rebuild-experts-from-full" not in frontend.command
-    assert "build-clinical-trials" in ids
-    assert "build-source-signals" in ids
-    assert "generate-pipeline-status" in ids
-    assert "build-full-index" not in ids
-    assert "build-community" not in ids
-    assert "build-knowledge" not in ids
-    assert "build-china-author-network" not in ids
-    assert "build-curated-topics" not in ids
-    assert "build-wiki-coverage" not in ids
+    assert ids == ["validate-current-release"]
+    assert "--source-only" in steps[0].command
+    assert "--require-release" in steps[0].command
+
+
+def test_pipeline_without_an_explicit_mode_defaults_to_read_only_validation():
+    module = load_pipeline_module()
+    args = pipeline_args()
+    args.mode = None
+    args.local_full = False
+
+    steps = module.pipeline_steps(args, full_available=True)
+
+    assert [step.id for step in steps] == ["validate-current-release"]
 
 
 def test_pipeline_step_selection_keeps_full_dependent_builds_when_full_exists():
@@ -90,15 +94,13 @@ def test_pipeline_and_ci_wire_new_artifacts_and_local_full_gate():
     assert "release-manifest.js" in runner
     assert runner.count("generate_release_manifest(") == 2
     assert "Hermes 主机本地时间" in status
-    assert "--local-full" in local
+    assert "--mode authoritative-full" in local
     assert "DRY_RUN_INGEST_BACKUP" in local
     assert "data/literature-ingest-latest.json" in local
-    assert "scripts/common/*.py" in workflow
-    assert "chictr-trials-cache.json" in workflow
-    assert "CHICTR_COOKIE" in workflow
-    assert "china-drug-trials-cache.json" in workflow
-    assert "china-drug-trials-changes.json" in workflow
-    assert "guideline-consensus-cache.json" in workflow
+    assert "--mode validate-only" in workflow
+    assert "contents: read" in workflow
+    assert "git push" not in workflow
+    assert "CHICTR_COOKIE" not in workflow
     assert "source-signals.js" in status
     assert "release-manifest.js" in status
 

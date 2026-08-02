@@ -27,6 +27,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 
 from studyClassifier import classifyEvidence
+from common.io import atomic_write_json
 
 PROJECT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT / "data"
@@ -76,12 +77,12 @@ def process_file(path: Path, modes: set[str], recent_days: int | None = None) ->
 
     stats = Counter()
     changed_examples = []
-    cutoff = datetime.now() - timedelta(days=recent_days) if recent_days else None
+    cutoffDate = datetime.now().date() - timedelta(days=recent_days) if recent_days else None
 
     for article in articles:
-        if cutoff:
+        if cutoffDate:
             dt = parse_date(article.get("entry_date")) or parse_date(article.get("pub_date"))
-            if not dt or dt < cutoff:
+            if not dt or dt.date() < cutoffDate:
                 stats["skipped_outside_window"] += 1
                 continue
         if not should_recheck(article, modes):
@@ -108,8 +109,7 @@ def process_file(path: Path, modes: set[str], recent_days: int | None = None) ->
         else:
             stats["unchanged"] += 1
 
-    with open(path, "w") as f:
-        json.dump(articles, f, ensure_ascii=False, indent=2)
+    atomic_write_json(path, articles)
 
     return {
         "path": str(path),
@@ -131,6 +131,11 @@ def main() -> int:
         default=None,
         help="Only recheck records whose entry_date/pub_date falls within this many days",
     )
+    parser.add_argument(
+        "--skip-frontend-build",
+        action="store_true",
+        help="只重分类并刷新 recent；由外层管线统一重建前端产物",
+    )
     args = parser.parse_args()
     modes = {m.strip().upper() for m in args.modes.split(",") if m.strip()}
 
@@ -151,7 +156,8 @@ def main() -> int:
             print(json.dumps(report["examples"], ensure_ascii=False, indent=2))
 
     subprocess.run([sys.executable, "scripts/split-recent-data.py"], cwd=PROJECT, check=True)
-    subprocess.run([sys.executable, "scripts/build-frontend-data.py"], cwd=PROJECT, check=True)
+    if not args.skip_frontend_build:
+        subprocess.run([sys.executable, "scripts/build-frontend-data.py"], cwd=PROJECT, check=True)
     return 0
 
 

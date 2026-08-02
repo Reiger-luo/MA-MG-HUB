@@ -14,10 +14,12 @@ MG Intelligence Hub 是面向医学事务与中国大陆 MSL 的**公开证据�
 2. 来源分频道：指南/共识、监管、注册和会议不能冒充 Oxford 文献证据。
 3. 可追溯：Signal、talking point 和判断尽量回链 PMID、注册号或官方来源。
 4. 公开最小化：full、中间数据、日志和详细审计留在本地。
-5. 云端不降级覆盖：缺少 full 时保留 last-good full-derived 产物。
+5. 云端只读校验：没有 full 的 GitHub Actions 不执行生成或提交，保留 last-good release。
 6. 决策支持而非自动结论：abstract-level 结果不替代全文医学审核。
 7. 动态状态单一来源：数量、生成时间和发布一致性只从数据状态产物读取。
 8. 简报跟随当前上下文：复制内容必须反映当前标签、筛选条件和来源边界。
+9. 周更口径显式：公开 rolling 以 `literature-recent.js` 为权威，社区 recent 使用相同 PMID 集合，周信号只来自 ingest `added_pmids`。
+10. 发布不可混版：公开文件必须满足显式白名单与 hash 契约，活动页面资源统一使用 release run id。
 
 ## 页面任务
 
@@ -69,7 +71,7 @@ MG-core 指南/共识
 | --- | --- |
 | 严格公开文献 | `data/literature-recent.js` |
 | 当前周文献信号 | `data/signals-weekly.js` |
-| 本周真实新增 PMID 口径 | 本地 `data/literature-ingest-latest.json` → `communityWeekly.js`、`curated-topics.js`、`wikiTopicCoverage.js` |
+| 本周真实新增 PMID 口径 | 本地 `data/literature-ingest-latest.json` → `signals-weekly.js`、`communityWeekly.js`、`curated-topics.js`、`wikiTopicCoverage.js` |
 | 语义 full 状态 | `data/literature-full-index.js`、community index、`pipeline-status.js` |
 | 指南/共识 | `data/guideline-consensus-cache.json` |
 | 来源频道 | `data/source-signals.js`（试验注册频道覆盖三源） |
@@ -84,7 +86,7 @@ MG-core 指南/共识
 
 1. 读“产品边界”和“非目标”。
 2. 打开情报中心，确认来源频道彼此独立。
-3. 依次切换文献、信号、中国、会议和临床试验，确认简报跟随当前标签与筛选条件。
+3. 依次切换文献、中国、会议和临床试验，确认简报跟随当前标签与筛选条件；信号简报从首页文献信号板生成。
 4. 打开知识库社区，确认“本周新证据”带有社区级新增数量；进入专题后仍保留社区筛选，且本周新入库证据排在长期专题 PMID 之前。
 5. 打开 MSL 工作台，确认只加载中国专家分片且不保存行为。
 6. 打开数据状态，核对公开滚动层、语义底座和完整发布哈希一致性；漂移时首页不得显示“完整发布成功”。
@@ -106,6 +108,7 @@ git diff --check
 - MG-core 与证据分级是规则系统，需要持续抽样审计。
 - 社区 `unassigned` 和冲突状态表示需要复核，不表示管线失败。
 - “本周新证据”表示相对周更前基线真实新增的 PMID，不等于滚动 14 天，也不包含专题长期 PMID；社区标签只在该 PMID 的 primary/secondary 社区出现。
+- 来源新鲜度读取产物语义时间而非文件 mtime；黄色表示过期或待核对，红色表示缺失或错误。
 - ChiCTR 自动访问可能受 WAF 影响，失败时使用 last-good 官方缓存。
 - 国际专家分片不被页面加载，但仍是 GitHub Pages 可公开访问的 tracked 文件，不能存放私有数据。
 - 当前数量、分片规模、会议覆盖和发布时间会随周更变化，应在数据状态页查看，不在本文档中固定。

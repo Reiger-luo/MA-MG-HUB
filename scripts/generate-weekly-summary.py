@@ -6,6 +6,7 @@ generate-weekly-summary.py — 生成当前通讯渠道可直接使用的 MA-MG-
 from __future__ import annotations
 
 import argparse
+import os
 from datetime import datetime
 from pathlib import Path
 
@@ -14,7 +15,7 @@ from common.io import atomic_write_text, load_js_global
 
 PROJECT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT / "data"
-SITE_URL = "https://reiger-luo.github.io/MA-MG-HUB/"
+SITE_URL = os.environ.get("MG_SITE_URL", "https://reiger-luo.github.io/MA-MG-HUB/").rstrip("/") + "/"
 
 
 def load_js_data(filename: str, global_name: str):
@@ -81,6 +82,8 @@ def build_summary() -> str:
         "# MA-MG-HUB 周更",
         "",
         f"生成时间：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
+        f"周更窗口：{signals.get('window_start') or '-'} 至 {signals.get('window_end') or '-'}",
+        f"周更口径：{signals.get('window_basis') or '未声明'}",
         "",
         "## 数据状态",
         "",

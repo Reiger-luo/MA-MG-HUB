@@ -2,12 +2,13 @@ import importlib.util
 import json
 import os
 import sys
+import xml.etree.ElementTree as ET
 from datetime import datetime
 from pathlib import Path
 
 import pytest
 
-from scripts.common.io import atomic_write_js_global, atomic_write_text, load_js_global
+from scripts.common.io import atomic_text_writer, atomic_write_js_global, atomic_write_text, load_js_global
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -81,6 +82,61 @@ def test_atomic_write_failure_preserves_target_and_cleans_unique_temp(tmp_path, 
 
     assert target.read_text(encoding="utf-8") == "old"
     assert list(tmp_path.glob(".artifact.json.*.tmp")) == []
+
+
+def test_atomic_stream_failure_preserves_target_and_cleans_unique_temp(tmp_path):
+    target = tmp_path / "artifact.jsonl"
+    target.write_text("old\n", encoding="utf-8")
+
+    with pytest.raises(RuntimeError, match="simulated stream failure"):
+        with atomic_text_writer(target) as output:
+            output.write("partial\n")
+            raise RuntimeError("simulated stream failure")
+
+    assert target.read_text(encoding="utf-8") == "old\n"
+    assert list(tmp_path.glob(".artifact.jsonl.*.tmp")) == []
+
+
+def test_pubmed_article_uses_xml_entrez_date_when_esummary_is_missing():
+    module = load_script("fetch-pubmed-weekly.py")
+    article = ET.fromstring("""
+        <PubmedArticle>
+          <MedlineCitation>
+            <PMID>12345</PMID>
+            <Article>
+              <ArticleTitle>Myasthenia gravis study</ArticleTitle>
+              <Journal><JournalIssue><PubDate><Year>2026</Year></PubDate></JournalIssue></Journal>
+            </Article>
+          </MedlineCitation>
+          <PubmedData>
+            <History>
+              <PubMedPubDate PubStatus="entrez"><Year>2026</Year><Month>08</Month><Day>01</Day><Hour>03</Hour><Minute>04</Minute></PubMedPubDate>
+            </History>
+          </PubmedData>
+        </PubmedArticle>
+    """)
+
+    parsed = module.parse_article_xml(article, {})
+
+    assert parsed["entry_date"] == "2026/08/01 03:04"
+
+
+def test_pubmed_fetch_rejects_truncated_esearch_before_writing(monkeypatch):
+    module = load_script("fetch-pubmed-weekly.py")
+    monkeypatch.setattr(
+        module,
+        "eutils_get",
+        lambda *args, **kwargs: json.dumps({"esearchresult": {"count": "1", "idlist": []}}),
+    )
+    monkeypatch.setattr(
+        module,
+        "_write_output",
+        lambda *args, **kwargs: pytest.fail("must preserve last-good weekly input"),
+    )
+    monkeypatch.setattr(sys, "argv", ["fetch-pubmed-weekly.py"])
+
+    with pytest.raises(SystemExit, match="esearch 返回不完整"):
+        module.main()
 
 
 def test_mg_core_relevance_excludes_single_background_mention_and_keeps_true_mg():
@@ -421,6 +477,22 @@ def test_derive_only_never_requires_weekly_or_mutates_full(tmp_path, monkeypatch
     assert cache.exists()
 
 
+def test_recent_window_includes_the_entire_start_date():
+    module = load_script("merge-weekly-literature.py")
+    generatedAt = datetime(2026, 8, 1, 23, 59)
+    recent, dropped = module.buildRecentArticles(
+        [
+            {"pmid": "boundary", "entry_date": "2025/08/01 00:00"},
+            {"pmid": "older", "entry_date": "2025/07/31 23:59"},
+            {"pmid": "undated", "entry_date": ""},
+        ],
+        generatedAt=generatedAt,
+    )
+
+    assert [item["pmid"] for item in recent] == ["boundary"]
+    assert dropped == 2
+
+
 def test_split_recent_data_preserves_unclassified_records_and_adds_signal_tags(tmp_path, monkeypatch):
     module = load_script("split-recent-data.py")
     entry_date = datetime.now().strftime("%Y/%m/%d %H:%M")
@@ -520,7 +592,7 @@ def test_default_frontend_build_preserves_nonempty_expert_files_even_when_full_e
         "build_experts",
         lambda *args, **kwargs: pytest.fail("default preservation must not rebuild experts from full"),
     )
-    monkeypatch.setattr(module, "build_signals", lambda recent: {})
+    monkeypatch.setattr(module, "build_signals", lambda recent, ingestManifest=None, requireIngest=False: {})
     monkeypatch.setattr(module, "build_china", lambda recent: {})
     monkeypatch.setattr(module, "build_landscape", lambda recent: {})
     monkeypatch.setattr(module, "build_modules", lambda recent, landscape: {})

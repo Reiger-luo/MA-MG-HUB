@@ -92,13 +92,19 @@ def test_release_manifest_written_only_for_successful_required_run(tmp_path):
     artifact = tmp_path / "data" / "artifact.js"
     artifact.parent.mkdir()
     artifact.write_text("window.X = {};", encoding="utf-8")
-    audit_payload = {"run_id": "coherent", "status": "success", "steps": []}
+    audit_payload = {
+        "run_id": "coherent",
+        "status": "success",
+        "completed_at": "2026-08-01T12:34:56+00:00",
+        "steps": [],
+    }
     target = tmp_path / "data" / "release-manifest.js"
 
     payload = generate_release_manifest(audit_payload, [artifact], target, project=tmp_path)
     loaded = load_js_global(target, "MG_RELEASE_MANIFEST")
     assert loaded == payload
     assert loaded["run_id"] == "coherent"
+    assert loaded["released_at"] == audit_payload["completed_at"]
     assert loaded["artifacts"][0]["sha256"]
 
     with pytest.raises(ValueError, match="required"):

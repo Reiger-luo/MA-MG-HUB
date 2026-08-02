@@ -21,6 +21,8 @@ from urllib.request import urlopen, Request
 from urllib.parse import urlencode
 from pathlib import Path
 
+from common.io import atomic_write_json
+
 # ── 配置 ──────────────────────────────────────────────
 BASE_URL = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
 WINDOW_DAYS = 7       # 时间窗天数
@@ -394,6 +396,11 @@ def parse_article_xml(article_elem, edat_map):
     url = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
     full_text_url = f"https://www.ncbi.nlm.nih.gov/pmc/articles/{pmcid}/" if pmcid else (f"https://doi.org/{doi}" if doi else "")
     entry_date = edat_map.get(pmid, "")
+    if not entry_date:
+        for date_elem in article_elem.findall(".//PubmedData/History/PubMedPubDate"):
+            if date_elem.get("PubStatus") == "entrez":
+                entry_date = parse_pubmed_history_date(date_elem)
+                break
     pub_types = collect_pub_types(medline)
 
     return {
@@ -546,6 +553,16 @@ def main():
     total_count = search_data.get("esearchresult", {}).get("count", "0")
     print(f"   命中: {total_count} 篇（本次拉取: {len(pmids)}）")
 
+    try:
+        declared_count = int(total_count)
+    except (TypeError, ValueError):
+        raise SystemExit("PubMed esearch count 无法解析；保留上一份 weekly 输入并停止发布")
+    if declared_count != len(pmids):
+        raise SystemExit(
+            f"PubMed esearch 返回不完整：声明 {declared_count}，idlist {len(pmids)}；"
+            "保留上一份 weekly 输入并停止发布"
+        )
+
     if not pmids:
         print("   无新文献，输出空文件。")
         _write_output([], archive=args.archive)
@@ -585,6 +602,13 @@ def main():
     missing_pmids = [pmid for pmid in pmids if pmid not in parsed_pmids]
     if missing_pmids:
         print(f"   ⚠ 未解析 PMID: {len(missing_pmids)} 个（示例: {', '.join(missing_pmids[:8])}）")
+        raise SystemExit("PubMed 返回集未完整解析；保留上一份 weekly 输入并停止发布")
+    undated_pmids = [article["pmid"] for article in all_articles if not article.get("entry_date")]
+    if undated_pmids:
+        raise SystemExit(
+            f"PubMed 有 {len(undated_pmids)} 篇缺少 entry date（示例: {', '.join(undated_pmids[:8])}）；"
+            "保留上一份 weekly 输入并停止发布"
+        )
     print()
 
     # Step 4: 输出
@@ -609,16 +633,14 @@ def _write_output(articles, archive=False):
 
     # 主文件
     main_path = DATA_DIR / "literature-weekly.json"
-    with open(main_path, "w", encoding="utf-8") as f:
-        json.dump(articles, f, ensure_ascii=False, indent=2)
+    atomic_write_json(main_path, articles)
     print(f"📝 输出: {main_path} ({len(articles)} 篇)")
 
     if archive:
         ARCHIVE_DIR.mkdir(parents=True, exist_ok=True)
         date_str = TODAY.strftime("%Y-%m-%d")
         archive_path = ARCHIVE_DIR / f"literature_{date_str}.json"
-        with open(archive_path, "w", encoding="utf-8") as f:
-            json.dump(articles, f, ensure_ascii=False, indent=2)
+        atomic_write_json(archive_path, articles)
         print(f"📦 归档: {archive_path}")
     else:
         print("📦 归档: 跳过（需要时使用 --archive）")

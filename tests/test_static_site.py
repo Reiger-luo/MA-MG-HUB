@@ -1,4 +1,9 @@
+import posixpath
+import re
+import subprocess
+from html.parser import HTMLParser
 from pathlib import Path
+from urllib.parse import urlparse
 
 
 PROJECT = Path(__file__).resolve().parents[1]
@@ -14,6 +19,17 @@ ACTIVE_PAGES = [
 ]
 
 
+class LocalReferenceParser(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.references = []
+
+    def handle_starttag(self, tag, attrs):
+        for key, value in attrs:
+            if key in {"src", "href"}:
+                self.references.append(value)
+
+
 def test_active_pages_load_common_before_page_scripts():
     for path in ACTIVE_PAGES:
         html = path.read_text(encoding="utf-8")
@@ -27,6 +43,29 @@ def test_active_pages_use_relative_navigation():
         html = path.read_text(encoding="utf-8")
         assert 'href="/MA-MG-HUB/' not in html
         assert 'src="/MA-MG-HUB/' not in html
+
+
+def test_all_local_html_references_match_tracked_paths_case_sensitively():
+    tracked = set(
+        subprocess.check_output(["git", "ls-files"], cwd=PROJECT, text=True).splitlines()
+    )
+    pages = [PROJECT / "index.html", *sorted((PROJECT / "pages").glob("*.html"))]
+
+    for page in pages:
+        parser = LocalReferenceParser()
+        parser.feed(page.read_text(encoding="utf-8"))
+        pageName = page.relative_to(PROJECT).as_posix()
+        base = posixpath.dirname(pageName)
+        for value in parser.references:
+            if not value or value.startswith(
+                ("#", "data:", "mailto:", "tel:", "javascript:", "http://", "https://", "obsidian:")
+            ):
+                continue
+            cleanPath = urlparse(value).path
+            resolved = posixpath.normpath(posixpath.join(base, cleanPath))
+            if cleanPath.endswith("/") or resolved == ".":
+                resolved = "index.html"
+            assert resolved in tracked, f"{pageName}: {value} 未精确匹配 Git 路径 {resolved}"
 
 
 def test_common_js_blocks_dangerous_url_protocols():
@@ -63,8 +102,11 @@ def test_dashboard_is_action_first_workbench():
     assert "发布产物已漂移" in dashboard_js
     assert "^\\d{4}-\\d{2}-\\d{2}$" in dashboard_js
     assert "changes.comparison_available !== false" in dashboard_js
-    assert "assets/main.css?v=20260801" in html
-    assert "assets/dashboard.js?v=20260801" in html
+    style_version = re.search(r'assets/main\.css\?v=([A-Za-z0-9._-]+)', html)
+    script_version = re.search(r'assets/dashboard\.js\?v=([A-Za-z0-9._-]+)', html)
+    assert style_version
+    assert script_version
+    assert style_version.group(1) == script_version.group(1)
     assert ".dashboard-side-stack { display: contents; }" in main_css
     assert ".dashboard-trials-panel { order: 0; }" in main_css
     assert "renderTrials" in dashboard_js

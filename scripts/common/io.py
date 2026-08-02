@@ -6,8 +6,9 @@ import json
 import os
 import re
 import tempfile
+from contextlib import contextmanager
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterator, TextIO
 
 
 def load_json(path: Path) -> Any:
@@ -29,8 +30,9 @@ def load_js_global(path: Path, global_name: str) -> Any:
     return payload
 
 
-def atomic_write_text(path: Path, content: str, *, fsync: bool = False) -> None:
-    """使用同目录唯一临时文件写入，失败时保留旧目标并清理临时文件。"""
+@contextmanager
+def atomic_text_writer(path: Path, *, fsync: bool = False) -> Iterator[TextIO]:
+    """提供同目录临时文本流，成功后原子替换目标，异常时保留 last-good。"""
     path.parent.mkdir(parents=True, exist_ok=True)
     fd, tmp_name = tempfile.mkstemp(
         dir=path.parent,
@@ -40,7 +42,7 @@ def atomic_write_text(path: Path, content: str, *, fsync: bool = False) -> None:
     tmp = Path(tmp_name)
     try:
         with os.fdopen(fd, "w", encoding="utf-8") as handle:
-            handle.write(content)
+            yield handle
             handle.flush()
             if fsync:
                 os.fsync(handle.fileno())
@@ -54,6 +56,12 @@ def atomic_write_text(path: Path, content: str, *, fsync: bool = False) -> None:
     finally:
         if tmp.exists():
             tmp.unlink()
+
+
+def atomic_write_text(path: Path, content: str, *, fsync: bool = False) -> None:
+    """使用同目录唯一临时文件写入，失败时保留旧目标并清理临时文件。"""
+    with atomic_text_writer(path, fsync=fsync) as handle:
+        handle.write(content)
 
 
 def atomic_write_json(path: Path, payload: Any, *, indent: int | None = 2) -> None:

@@ -40,6 +40,10 @@ def test_pipeline_status_separates_public_rolling_and_semantic_full_counts():
     checkById = {item["id"]: item for item in storage["count_checks"]}
     assert checkById["semanticFullConsistency"]["status"] == "ok"
     assert checkById["activeRecentSource"]["status"] == "ok"
+    literatureMeta = load_js_global(PROJECT / "data" / "literature-recent.js", "MG_LITERATURE_META")
+    literatureArtifact = next(item for item in status["artifacts"] if item["id"] == "literature-recent.js")
+    assert literatureArtifact["generated_at"] == literatureMeta["generated_at"]
+    assert literatureArtifact["updated_at"] == literatureMeta["generated_at"]
 
 
 def test_pipeline_status_counts_expert_and_community_shards():

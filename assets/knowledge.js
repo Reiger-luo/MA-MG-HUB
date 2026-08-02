@@ -1036,7 +1036,8 @@
   }
 
   function loadScriptOnce(src, callback) {
-    var existing = document.querySelector('script[src="' + attrSelectorEscape(src) + '"]');
+    var finalSrc = hub.withReleaseVersion ? hub.withReleaseVersion(src) : src;
+    var existing = document.querySelector('script[src="' + attrSelectorEscape(finalSrc) + '"]');
     if (existing && existing.getAttribute('data-loaded') === '1') {
       callback(true);
       return;
@@ -1048,7 +1049,7 @@
     }
     if (existing) existing.remove();
     var script = document.createElement('script');
-    script.src = src;
+    script.src = finalSrc;
     script.setAttribute('data-loading', '1');
     script.onload = function () {
       script.setAttribute('data-loaded', '1');

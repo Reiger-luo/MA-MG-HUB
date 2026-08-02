@@ -41,6 +41,7 @@ ENTITY_NORMALIZATION_INDEX_PATH = DATA_DIR / "pubmed-entity-normalization-index.
 CHINA_REGULATORY_PATH = DATA_DIR / "china-regulatory-status.json"
 CLINICALTRIALS_CACHE_PATH = DATA_DIR / "clinicaltrials-pipeline-cache.json"
 CHICTR_CACHE_PATH = DATA_DIR / "chictr-trials-cache.json"
+INGEST_MANIFEST_PATH = DATA_DIR / "literature-ingest-latest.json"
 FRONTEND_QUICK_EXPERT_LIMIT = 20
 SIGNAL_WINDOW_DAYS = 7
 
@@ -854,6 +855,18 @@ def load_articles_for_frontend(use_full_experts=False):
     return recent, full, total_count
 
 
+def load_weekly_ingest_manifest():
+    """读取本轮真实新增清单；生产构建不再从文献最大日期推测“本周”。"""
+    if not INGEST_MANIFEST_PATH.exists():
+        return {}
+    try:
+        payload = load_json(INGEST_MANIFEST_PATH)
+    except Exception as exc:
+        print(f"⚠️  weekly ingest manifest 读取失败: {exc}")
+        return {}
+    return payload if isinstance(payload, dict) else {}
+
+
 def load_or_build_experts(full, recent):
     if full is not None:
         return build_experts(full, write_backend_index=True)
@@ -1416,8 +1429,25 @@ def build_cluster_signal(cluster_id, members, latest, signal_index):
     }
 
 
-def build_signals(recent):
-    latest = max((parse_date(a.get("entry_date")) for a in recent if parse_date(a.get("entry_date"))), default=datetime.now())
+def build_signals(recent, ingestManifest=None, requireIngest=False):
+    ingestManifest = ingestManifest or {}
+    hasIngestWindow = bool(
+        ingestManifest.get("window_start")
+        and ingestManifest.get("window_end")
+        and isinstance(ingestManifest.get("added_pmids"), list)
+    )
+    allowedPmids = (
+        {str(item) for item in ingestManifest.get("added_pmids") or [] if item}
+        if hasIngestWindow
+        else (set() if requireIngest else None)
+    )
+    eligibleDates = [
+        parse_date(article.get("entry_date"))
+        for article in recent
+        if parse_date(article.get("entry_date"))
+        and (allowedPmids is None or str(article.get("pmid") or "") in allowedPmids)
+    ]
+    latest = max(eligibleDates, default=parse_date(ingestManifest.get("window_end")) or datetime.now())
     cutoff = latest - timedelta(days=SIGNAL_WINDOW_DAYS)
     candidates = defaultdict(list)
     topic_counter = Counter()
@@ -1426,7 +1456,12 @@ def build_signals(recent):
 
     for article in recent:
         dt = parse_date(article.get("entry_date"))
-        if not dt or dt < cutoff:
+        pmid = str(article.get("pmid") or "")
+        if not dt:
+            continue
+        if allowedPmids is not None and pmid not in allowedPmids:
+            continue
+        if allowedPmids is None and dt < cutoff:
             continue
         if is_conference_or_meeting_record(article):
             excluded_conference_records += 1
@@ -1491,6 +1526,10 @@ def build_signals(recent):
     return {
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "window_days": SIGNAL_WINDOW_DAYS,
+        "window_start": ingestManifest.get("window_start") or cutoff.strftime("%Y-%m-%d"),
+        "window_end": ingestManifest.get("window_end") or latest.strftime("%Y-%m-%d"),
+        "window_basis": "trueIngestAddedPmids" if hasIngestWindow else ("ingestManifestMissing" if requireIngest else "latestArticleFallback"),
+        "ingest_added_count": len(allowedPmids) if allowedPmids is not None else None,
         "source_artifact": "data/literature-recent.js",
         "source_policy": {
             "scope": "literature_only",
@@ -1505,6 +1544,7 @@ def build_signals(recent):
             "excluded_non_mg_core_by_reason": dict(excluded_non_mg_core),
             "excluded_conference_records": excluded_conference_records,
             "conference_meeting_policy": "excluded_by_source_type_pub_type_title_guard",
+            "weekly_selection": "literature-ingest-latest.json added_pmids" if hasIngestWindow else "fallback",
         },
         "topic_hotspots": [{"topic": k, "count": v} for k, v in topic_counter.most_common()],
         "signals": signals,
@@ -2853,7 +2893,8 @@ def main():
     args = parser.parse_args()
 
     recent, full, total_count = load_articles_for_frontend(use_full_experts=args.rebuild_experts_from_full)
-    signals = build_signals(recent)
+    ingestManifest = load_weekly_ingest_manifest()
+    signals = build_signals(recent, ingestManifest, requireIngest=True)
     if args.signals_only:
         write_js("signals-weekly.js", "MG_SIGNALS_DATA", signals)
         refresh_dashboard_signals(signals)

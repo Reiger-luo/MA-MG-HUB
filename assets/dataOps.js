@@ -23,7 +23,7 @@
     const backendOptionNote = document.getElementById('backendOptionNote');
     const opsLog = document.getElementById('opsLog');
     const pipelineNote = document.getElementById('pipelineNote');
-    const colorMap = { ok: 'green', generated: 'green', planned: 'yellow', manual: 'yellow', defer: 'yellow', missing: 'red' };
+    const colorMap = { ok: 'green', generated: 'green', planned: 'yellow', manual: 'yellow', defer: 'yellow', warning: 'yellow', stale: 'yellow', missing: 'red', error: 'red' };
     const communityTitleById = {};
     (communityTaxonomy.communities || []).forEach(function(item) {
       communityTitleById[item.id] = item.title || item.id;
@@ -117,8 +117,9 @@
       artifactGrid.innerHTML = artifacts.map(function(item) {
         const count = item.count === null || item.count === undefined ? '' : ' · ' + item.count + ' 条';
         const size = item.size_kb === null || item.size_kb === undefined ? '' : ' · ' + item.size_kb + ' KB';
-        return '<div class="artifact-item">' +
-          '<div class="artifact-name">' + escapeHtml(item.label) + '</div>' +
+        const state = escapeClassToken(item.status || 'ok', 'ok');
+        return '<div class="artifact-item ' + state + '">' +
+          '<div class="artifact-name">' + escapeHtml(item.label) + ' · ' + escapeHtml(item.status_label || item.status || '-') + '</div>' +
           '<div class="artifact-meta">' + escapeHtml(item.id) + count + size + '<br>更新时间 ' + escapeHtml(item.updated_at || '-') + '</div>' +
         '</div>';
       }).join('');

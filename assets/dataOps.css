@@ -34,6 +34,8 @@
   background: var(--bg2); border: 1px solid var(--bg3); border-radius: 8px;
   padding: 0.8rem 0.9rem;
 }
+.artifact-item.warning, .artifact-item.stale { border-color: rgba(180, 132, 36, 0.42); background: rgba(180, 132, 36, 0.045); }
+.artifact-item.missing, .artifact-item.error { border-color: rgba(192, 74, 74, 0.42); background: rgba(192, 74, 74, 0.045); }
 .artifact-name { font-size: 0.84rem; color: var(--fg); font-weight: 500; }
 .artifact-meta { font-size: 0.76rem; color: var(--fg3); margin-top: 0.2rem; line-height: 1.5; }
 .community-audit-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; }

@@ -13,7 +13,7 @@
     var scripts = document.getElementsByTagName('script');
     for (var i = 0; i < scripts.length; i++) {
       var src = scripts[i].getAttribute('src') || '';
-      if (src.indexOf('/assets/common.js') === -1 && src !== 'assets/common.js' && src !== '../assets/common.js') continue;
+      if (!/(^|\/)assets\/common\.js(?:[?#]|$)/.test(src)) continue;
       try {
         var url = new URL(src, window.location.href);
         var pathname = url.pathname.replace(/\/assets\/common\.js$/, '');
@@ -85,6 +85,22 @@
     return toPath(path);
   }
 
+  function currentReleaseId() {
+    var manifest = window.MG_RELEASE_MANIFEST || {};
+    return String(manifest.run_id || '').trim();
+  }
+
+  function withReleaseVersion(src) {
+    var value = String(src || '');
+    var releaseId = currentReleaseId();
+    if (!releaseId || /^(https?:)?\/\//i.test(value)) return value;
+    if (!/(^|\/)(assets|data)\//.test(value)) return value;
+    if (/[?&]v=/.test(value)) {
+      return value.replace(/([?&])v=[^&]*/, '$1v=' + encodeURIComponent(releaseId));
+    }
+    return value + (value.indexOf('?') === -1 ? '?' : '&') + 'v=' + encodeURIComponent(releaseId);
+  }
+
   function safeUrl(value, fallback) {
     var raw = String(value || '').trim();
     var fallbackUrl = fallback || '#';
@@ -106,7 +122,7 @@
   }
 
   function loadScript(src, callback) {
-    var finalSrc = /^(https?:)?\/\//i.test(src) ? src : assetUrl(src);
+    var finalSrc = /^(https?:)?\/\//i.test(src) ? src : withReleaseVersion(assetUrl(src));
     var selectorSrc = finalSrc.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
     var existing = document.querySelector('script[src="' + selectorSrc + '"]');
     if (existing && existing.getAttribute('data-loaded') === '1') {
@@ -201,6 +217,8 @@
     safeUrl: safeUrl,
     assetUrl: assetUrl,
     pageUrl: pageUrl,
+    releaseId: currentReleaseId,
+    withReleaseVersion: withReleaseVersion,
     loadScript: loadScript,
     initTabs: initTabs
   };

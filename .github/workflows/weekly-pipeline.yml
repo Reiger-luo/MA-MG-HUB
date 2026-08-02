@@ -1,13 +1,13 @@
-name: MA-MG-HUB Weekly Pipeline
+name: MA-MG-HUB Release Validation
 
 on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  weekly-pipeline:
+  release-validation:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -35,30 +35,8 @@ jobs:
       - name: Run tests
         run: python -m pytest -q
 
-      - name: Run pipeline
-        env:
-          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-          NCBI_API_KEY: ${{ secrets.NCBI_API_KEY }}
-          CHICTR_COOKIE: ${{ secrets.CHICTR_COOKIE }}
+      - name: Validate current public release
         run: |
-          python scripts/run-weekly-pipeline.py
-
-      - name: Publish weekly summary
-        run: |
-          if [ -f data/weekly-summary.md ]; then
-            cat data/weekly-summary.md >> "$GITHUB_STEP_SUMMARY"
-          else
-            echo "weekly-summary.md not generated." >> "$GITHUB_STEP_SUMMARY"
-          fi
-
-      - name: Commit updated public data
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/*.js data/weekly-summary.md data/china-regulatory-status.json data/clinicaltrials-pipeline-cache.json data/clinicaltrials-weekly-changes-snapshot.json data/chictr-trials-cache.json data/china-drug-trials-cache.json data/china-drug-trials-changes.json data/guideline-consensus-cache.json assets/*.js assets/*.css pages/*.html index.html
-          if git diff --cached --quiet; then
-            echo "No public frontend updates."
-          else
-            git commit -m "chore: update MG hub weekly data"
-            git push
-          fi
+          python scripts/run-weekly-pipeline.py --mode validate-only --run-id "ci-${GITHUB_RUN_ID}"
+          bash scripts/build-sites-static.sh
+          git diff --exit-code

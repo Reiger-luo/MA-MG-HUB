@@ -9,12 +9,14 @@ merge-weekly-literature.py — 把每周 PubMed 增量合入本地 full，并派
 
 运行策略：
   - 本地工作站有 literature-full.json：weekly → full → recent.js
-  - GitHub Actions 没有 literature-full.json：weekly → recent.js 轻量兜底
+  - 直接运行脚本时仍兼容 recent fallback，但该路径不属于发布模式，也不能更新 release manifest
+  - GitHub Actions 只执行 validate-only，不调用本脚本生成公开数据
 """
 
 from __future__ import annotations
 
 import argparse
+import os
 import re
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -149,13 +151,28 @@ def writeFullJson(articles):
     atomic_write_json(FULL_PATH, articles)
 
 
-def writeRecentJs(articles, totalCount=None):
+def writeRecentJs(articles, totalCount=None, generatedAt=None, sourceMode=""):
     import json
+    generatedAt = generatedAt or datetime.now()
     semanticFullCount = totalCount if totalCount is not None else len(articles)
+    metadata = {
+        "schema_version": "1.0",
+        "generated_at": generatedAt.strftime("%Y-%m-%d %H:%M:%S"),
+        "run_id": os.environ.get("MG_PIPELINE_RUN_ID", ""),
+        "source_mode": sourceMode or "unknown",
+        "window_days": DAYS_RECENT,
+        "window_start": (generatedAt - timedelta(days=DAYS_RECENT)).strftime("%Y-%m-%d"),
+        "window_end": generatedAt.strftime("%Y-%m-%d"),
+        "item_count": len(articles),
+        "semantic_full_count": semanticFullCount,
+    }
     content = (
         f"window.MG_PUBLIC_ROLLING_COUNT = {len(articles)};\n"
         f"window.MG_SEMANTIC_FULL_COUNT = {semanticFullCount};\n"
         f"window.MG_TOTAL_COUNT = {semanticFullCount};\n"
+        "window.MG_LITERATURE_META = "
+        + json.dumps(metadata, ensure_ascii=False, separators=(",", ":"))
+        + ";\n"
         "window.MG_LITERATURE_DATA = "
         + json.dumps(articles, ensure_ascii=False, separators=(",", ":"))
         + ";\n"
@@ -299,13 +316,13 @@ def writeIngestManifest(path: Path, payload) -> None:
     atomic_write_json(path, payload)
 
 
-def buildRecentArticles(articles):
-    cutoff = datetime.now() - timedelta(days=DAYS_RECENT)
+def buildRecentArticles(articles, generatedAt=None):
+    cutoffDate = (generatedAt or datetime.now()).date() - timedelta(days=DAYS_RECENT)
     recent = []
     dropped = 0
     for article in articles:
         dt = parseDate(article.get("entry_date")) or parseDate(article.get("pub_date"))
-        if dt and dt < cutoff:
+        if not dt or dt.date() < cutoffDate:
             dropped += 1
             continue
         recent.append(article)
@@ -356,9 +373,15 @@ def main():
         guidelineCachePath=GUIDELINE_CACHE_PATH,
         replaceGuidelineCache=hasFull,
     )
-    recent, dropped = buildRecentArticles(publicBase)
+    generatedAt = datetime.now()
+    recent, dropped = buildRecentArticles(publicBase, generatedAt=generatedAt)
     semanticCount = len(mergedBase) if hasFull else declaredSemanticCount
-    writeRecentJs(recent, totalCount=semanticCount)
+    writeRecentJs(
+        recent,
+        totalCount=semanticCount,
+        generatedAt=generatedAt,
+        sourceMode="local_full_first" if hasFull else "recent_fallback",
+    )
     if args.write_json_cache:
         writeRecentJson(recent)
     elif RECENT_JSON_CACHE_PATH.exists():

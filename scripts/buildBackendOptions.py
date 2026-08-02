@@ -38,9 +38,9 @@ def bool_label(value: bool) -> str:
 
 def build_payload() -> dict[str, Any]:
     generated_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    pipeline = maybe_load_js("pipeline-status.js", "MG_PIPELINE_STATUS") or {}
-    storage = pipeline.get("storage") or {}
     artifact_ids = {path.name for path in DATA_DIR.glob("*") if path.is_file()}
+    storageMode = "local_full_first" if (DATA_DIR / "literature-full.json").exists() else "recent_fallback"
+    semanticFullAvailable = "literature-full-index.js" in artifact_ids and "communityAssignmentIndex.js" in artifact_ids
 
     # Phase 6 的关键是触发条件。当前静态站没有登录、私有笔记、实时问答或后端密钥。
     triggers = [
@@ -169,8 +169,8 @@ def build_payload() -> dict[str, Any]:
             },
         ],
         "current_site_evidence": {
-            "storage_mode": storage.get("mode") or ("local_full_first" if (DATA_DIR / "literature-full.json").exists() else "recent_fallback"),
-            "full_available_on_site": bool(storage.get("full_available")),
+            "storage_mode": storageMode,
+            "full_available_on_site": semanticFullAvailable,
             "public_artifact_count": len([name for name in artifact_ids if name.endswith((".js", ".md", ".json"))]),
             "has_landscape_insights": "landscapeInsights.js" in artifact_ids,
             "has_community_layer": "communityTaxonomy.js" in artifact_ids and "communityCards.js" in artifact_ids,

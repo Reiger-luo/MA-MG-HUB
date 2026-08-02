@@ -200,7 +200,7 @@ def generate_release_manifest(audit_payload, artifacts, target, *, project: Path
     payload = {
         "schema_version": "1.0",
         "run_id": audit_payload.get("run_id"),
-        "released_at": _now(),
+        "released_at": audit_payload.get("completed_at") or _now(),
         "pipeline_status": audit_payload.get("status"),
         "artifacts": entries,
     }

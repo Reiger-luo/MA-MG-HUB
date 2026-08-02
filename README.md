@@ -41,7 +41,7 @@ MA-MG-HUB 重点回答：
 
 | 口径 | 权威产物 | 用途 |
 | --- | --- | --- |
-| 公开滚动层 | `literature-recent.js`、`signals-weekly.js`、`china-intelligence.js` | 工作台、情报中心、信号板和中国情报 |
+| 公开滚动层 | `literature-recent.js`、`signals-weekly.js`、`china-intelligence.js` | 工作台、情报中心、信号板和中国情报；社区 recent 与文献 recent 共用同一 PMID 集合 |
 | full / 语义底座 | 本地 full、`literature-full-index.js`、community、knowledge graph | 知识图谱、社区归类、专家画像和跨库检索 |
 
 当前数量、生成时间和一致性状态不写入本文档，统一查看：
@@ -73,7 +73,7 @@ MG-core gate + 证据等级 I–V gate + 独立来源频道
 - 指南/共识、监管、注册和会议保留为独立来源频道，不冒充 Oxford 文献证据。
 - MSL 前端只加载 `expert-profiles-china.js`；国际专家分片没有页面加载路径，只供离线分析。该 tracked 文件仍可通过 GitHub Pages 公开访问，因此只能包含公开元数据。
 - 页面不采集拜访记录、团队反馈、内部专家标签或任何需要登录保存的数据。
-- 云端缺少 full 时保留 last-good full-derived 产物，不用 recent 数据覆盖或缩小它们。
+- GitHub Actions 不持有 full，也不生成公开数据；它只读校验已提交 release，避免部分构建覆盖 last-good 产物。
 
 ## 技术栈
 
@@ -82,7 +82,7 @@ MG-core gate + 证据等级 I–V gate + 独立来源频道
 - 数据管线：Python 3.11+
 - 主发布：GitHub Pages
 - Sites 受控部署构建：`scripts/build-sites-static.sh`
-- 自动化：本地/Hermes full 驱动周更；GitHub Actions 手动兜底
+- 自动化：本地/Hermes full 驱动周更；GitHub Actions 手动只读发布校验
 
 ## 本地查看
 
@@ -109,12 +109,12 @@ MG_WEEKLY_DRY_RUN=1 bash scripts/run-local-weekly-sync.sh
 可恢复管线：
 
 ```bash
-python3 scripts/run-weekly-pipeline.py --run-id weekly-example
-python3 scripts/run-weekly-pipeline.py --run-id weekly-example --resume
-python3 scripts/run-weekly-pipeline.py --run-id weekly-example --resume --from-step build-source-signals
+python3 scripts/run-weekly-pipeline.py --mode authoritative-full --run-id weekly-example
+python3 scripts/run-weekly-pipeline.py --mode authoritative-full --run-id weekly-example --resume
+python3 scripts/run-weekly-pipeline.py --mode authoritative-full --run-id weekly-example --resume --from-step build-source-signals
 ```
 
-审计检查点写入 `.hermes-audit/pipeline-runs/`。只有 required 步骤完整成功才更新 `data/release-manifest.js`；网站会核对清单哈希，局部产物漂移时明确显示警告。
+只读验证使用 `python3 scripts/run-weekly-pipeline.py --mode validate-only`；仅在明确复用当前自然周 `literature-ingest-latest.json` 时，才可使用 `--mode rebuild-full --reuse-ingest`。审计检查点写入 `.hermes-audit/pipeline-runs/`。只有完整公开产物契约全部生成、跨产物口径校验通过后才更新 `data/release-manifest.js`；同一 run id 同时写入活动页面资源 URL，降低 HTML、脚本和数据的缓存混版风险。
 
 ChinaDrugTrials 的人工导入流程见 [临床试验数据维护](report/runbooks/clinicalTrialsMaintenance.md)。
 

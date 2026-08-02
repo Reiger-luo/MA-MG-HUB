@@ -147,6 +147,35 @@ def test_signal_builder_uses_one_week_window():
     assert "WINDOW_DAYS = 14" not in fetch_source
 
 
+def test_signal_builder_uses_only_true_ingest_pmids_when_manifest_is_present():
+    builder = load_enrichment_module().load_builder_module()
+    included = sample_article("included", level="II")
+    excluded = sample_article("excluded", level="II")
+    for article in (included, excluded):
+        article.update({
+            "title": "Randomized trial of efgartigimod in myasthenia gravis",
+            "abstract": "Results: Efgartigimod improved efficacy outcomes in myasthenia gravis.",
+            "entry_date": "2026-07-31",
+        })
+    manifest = {
+        "window_start": "2026-07-27",
+        "window_end": "2026-08-01",
+        "added_pmids": ["included"],
+    }
+
+    payload = builder.build_signals([included, excluded], manifest, requireIngest=True)
+    relatedPmids = {
+        pmid
+        for signal in payload["signals"]
+        for pmid in signal.get("related_pmids", [])
+    }
+
+    assert relatedPmids == {"included"}
+    assert payload["window_basis"] == "trueIngestAddedPmids"
+    assert payload["window_start"] == manifest["window_start"]
+    assert payload["window_end"] == manifest["window_end"]
+
+
 def test_efgar_signal_uses_medium_floor_after_strong_standard():
     builder = load_enrichment_module().load_builder_module()
 

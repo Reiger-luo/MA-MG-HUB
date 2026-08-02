@@ -209,5 +209,8 @@ def test_pipeline_and_publish_chain_wires_weekly_changes_snapshot():
     local = (PROJECT / "scripts" / "run-local-weekly-sync.sh").read_text(encoding="utf-8")
     workflow = (PROJECT / ".github" / "workflows" / "weekly-pipeline.yml").read_text(encoding="utf-8")
     status = (PROJECT / "scripts" / "generate-pipeline-status.py").read_text(encoding="utf-8")
-    for text in (runner, local, workflow, status):
+    for text in (runner, status):
         assert "clinicaltrials-weekly-changes-snapshot.json" in text
+    assert "git add -u -- data assets pages index.html" in local
+    assert "--mode validate-only" in workflow
+    assert "git push" not in workflow

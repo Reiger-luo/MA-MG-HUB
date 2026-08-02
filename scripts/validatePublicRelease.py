@@ -1,0 +1,209 @@
+#!/usr/bin/env python3
+"""校验 MA-MG-HUB 公开数据契约；本脚本只读，不改写产物。"""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import re
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from common.io import load_js_global, load_json
+from common.publicDataContract import (
+    communityShardNames,
+    publicArtifactNames,
+    publicDataGlobals,
+)
+
+
+projectPath = Path(__file__).resolve().parent.parent
+dataDir = projectPath / "data"
+
+
+def sha256File(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def loadCommunityShard(path: Path) -> dict:
+    text = path.read_text(encoding="utf-8")
+    match = re.search(r"window\.MG_COMMUNITY_ASSIGNMENT_SHARDS\[[^\]]+\]\s*=\s*", text)
+    if not match:
+        raise ValueError("缺少 MG_COMMUNITY_ASSIGNMENT_SHARDS 赋值")
+    payload, _ = json.JSONDecoder().raw_decode(text[match.end():].lstrip())
+    return payload
+
+
+def pmidSet(items) -> set[str]:
+    return {
+        str(item.get("pmid") or "").strip()
+        for item in (items or [])
+        if str(item.get("pmid") or "").strip()
+    }
+
+
+def validateArtifacts() -> list[str]:
+    errors = []
+    expectedNames = set(publicArtifactNames())
+    actualNames = {
+        path.name for path in dataDir.glob("*.js")
+        if path.name != "release-manifest.js"
+    }
+    missing = sorted(expectedNames - actualNames)
+    unexpected = sorted(actualNames - expectedNames)
+    if missing:
+        errors.append("缺少公开 JS：" + "、".join(missing))
+    if unexpected:
+        errors.append("未登记公开 JS：" + "、".join(unexpected))
+
+    for name, globalName in publicDataGlobals.items():
+        path = dataDir / name
+        if not path.exists():
+            continue
+        try:
+            load_js_global(path, globalName)
+        except Exception as exc:
+            errors.append(f"{name} 无法按 window.{globalName} 解析：{exc}")
+
+    shardTotal = 0
+    for name in communityShardNames:
+        path = dataDir / name
+        if not path.exists():
+            continue
+        try:
+            payload = loadCommunityShard(path)
+            items = payload.get("items") or []
+            if payload.get("item_count") != len(items):
+                errors.append(f"{name} item_count 与 items 长度不一致")
+            shardTotal += len(items)
+        except Exception as exc:
+            errors.append(f"{name} 无法解析：{exc}")
+
+    indexPath = dataDir / "communityAssignmentIndex.js"
+    if indexPath.exists():
+        indexPayload = load_js_global(indexPath, "MG_COMMUNITY_ASSIGNMENT_INDEX")
+        declaredNames = {
+            Path(str(item.get("path") or item.get("file") or "")).name
+            for item in (indexPayload.get("shards") or [])
+        }
+        if declaredNames != set(communityShardNames):
+            errors.append("communityAssignmentIndex.js 的分片列表与公开契约不一致")
+        if indexPayload.get("item_count") != shardTotal:
+            errors.append(
+                f"社区主计数 {indexPayload.get('item_count')} 与分片合计 {shardTotal} 不一致"
+            )
+    return errors
+
+
+def validateRecentContracts() -> list[str]:
+    errors = []
+    literature = load_js_global(dataDir / "literature-recent.js", "MG_LITERATURE_DATA")
+    literatureMeta = load_js_global(dataDir / "literature-recent.js", "MG_LITERATURE_META")
+    assignments = load_js_global(
+        dataDir / "communityAssignmentsRecent.js",
+        "MG_COMMUNITY_RECENT_ASSIGNMENTS",
+    )
+    signals = load_js_global(dataDir / "signals-weekly.js", "MG_SIGNALS_DATA")
+    dashboard = load_js_global(dataDir / "dashboard-data.js", "MG_DASHBOARD_DATA")
+
+    literaturePmids = pmidSet(literature)
+    assignmentPmids = pmidSet(assignments.get("items") or [])
+    if literaturePmids != assignmentPmids:
+        errors.append(
+            "公开 recent 与社区 recent PMID 不一致："
+            f"缺归类 {len(literaturePmids - assignmentPmids)}，多余 {len(assignmentPmids - literaturePmids)}"
+        )
+    if literatureMeta.get("item_count") != len(literature):
+        errors.append("MG_LITERATURE_META.item_count 与公开数组长度不一致")
+    if assignments.get("item_count") != len(assignments.get("items") or []):
+        errors.append("communityAssignmentsRecent.js item_count 与 items 长度不一致")
+
+    stats = dashboard.get("stats") or {}
+    if stats.get("recent_articles") != len(literature):
+        errors.append("dashboard recent_articles 与 literature recent 长度不一致")
+    if stats.get("signals") != len(signals.get("signals") or []):
+        errors.append("dashboard signals 与 signals-weekly.js 不一致")
+    if signals.get("window_basis") != "trueIngestAddedPmids":
+        errors.append("signals-weekly.js 未声明 trueIngestAddedPmids 窗口口径")
+    return errors
+
+
+def validateWeeklyIngest() -> list[str]:
+    """本地完整发布额外核对真实 ingest；该文件不进入公开仓库。"""
+    errors = []
+    ingestPath = dataDir / "literature-ingest-latest.json"
+    if not ingestPath.exists():
+        return ["缺少本轮 literature-ingest-latest.json"]
+    ingest = load_json(ingestPath)
+    signals = load_js_global(dataDir / "signals-weekly.js", "MG_SIGNALS_DATA")
+    addedPmids = {str(item) for item in ingest.get("added_pmids") or []}
+    signalPmids = set()
+    for signal in signals.get("signals") or []:
+        signalPmids.update(str(item) for item in signal.get("related_pmids") or [] if item)
+    if not signalPmids.issubset(addedPmids):
+        errors.append(f"本周信号含 {len(signalPmids - addedPmids)} 个非本轮真实新增 PMID")
+    if signals.get("window_start") != ingest.get("window_start"):
+        errors.append("signals-weekly.js window_start 与 ingest manifest 不一致")
+    if signals.get("window_end") != ingest.get("window_end"):
+        errors.append("signals-weekly.js window_end 与 ingest manifest 不一致")
+    return errors
+
+
+def validateReleaseManifest() -> list[str]:
+    errors = []
+    manifestPath = dataDir / "release-manifest.js"
+    if not manifestPath.exists():
+        return ["缺少 release-manifest.js"]
+    manifest = load_js_global(manifestPath, "MG_RELEASE_MANIFEST")
+    manifestByName = {
+        Path(str(item.get("path") or "")).name: item
+        for item in manifest.get("artifacts") or []
+        if item.get("path")
+    }
+    expectedNames = set(publicArtifactNames())
+    if set(manifestByName) != expectedNames:
+        missing = sorted(expectedNames - set(manifestByName))
+        unlisted = sorted(set(manifestByName) - expectedNames)
+        if missing:
+            errors.append("release manifest 缺少：" + "、".join(missing))
+        if unlisted:
+            errors.append("release manifest 含未登记项：" + "、".join(unlisted))
+    for name in sorted(expectedNames & set(manifestByName)):
+        path = dataDir / name
+        if path.exists() and sha256File(path) != manifestByName[name].get("sha256"):
+            errors.append(f"release manifest 哈希不符：{name}")
+    if manifest.get("pipeline_status") not in {"success", "success_with_warnings"}:
+        errors.append("release manifest pipeline_status 不是可发布状态")
+    return errors
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--require-release", action="store_true", help="同时核对最终 release manifest")
+    parser.add_argument("--source-only", action="store_true", help="只核对当前仓库已发布产物，不要求本地 ingest")
+    args = parser.parse_args()
+
+    errors = validateArtifacts()
+    errors.extend(validateRecentContracts())
+    if not args.source_only:
+        errors.extend(validateWeeklyIngest())
+    if args.require_release:
+        errors.extend(validateReleaseManifest())
+    if errors:
+        for error in errors:
+            print(f"❌ {error}", file=sys.stderr)
+        return 1
+    scope = "公开文件与发布清单" if args.require_release else "公开文件契约"
+    print(f"✅ {scope}校验通过：{len(publicArtifactNames())} 个 JS 产物")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
