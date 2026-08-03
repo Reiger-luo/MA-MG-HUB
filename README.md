@@ -116,7 +116,7 @@ python3 scripts/run-weekly-pipeline.py --mode authoritative-full --run-id weekly
 
 只读验证使用 `python3 scripts/run-weekly-pipeline.py --mode validate-only`；仅在明确复用当前自然周 `literature-ingest-latest.json` 时，才可使用 `--mode rebuild-full --reuse-ingest`。审计检查点写入 `.hermes-audit/pipeline-runs/`。只有完整公开产物契约全部生成、跨产物口径校验通过后才更新 `data/release-manifest.js`；同一 run id 同时写入活动页面资源 URL，降低 HTML、脚本和数据的缓存混版风险。
 
-ChinaDrugTrials 的人工导入流程见 [临床试验数据维护](report/runbooks/clinicalTrialsMaintenance.md)。
+ChinaDrugTrials 的人工导入流程见 [临床试验数据维护](report/runbooks/clinicalTrialsMaintenance.md)。手工修改 `data/*.js` 后出现发布漂移时，按 [Release Manifest 漂移修复](report/runbooks/releaseManifestRepair.md) 重建清单。
 
 ## 质量检查
 
