@@ -324,6 +324,25 @@ def test_generated_signal_narratives_do_not_repeat_pmid_labels():
         assert "PMID" not in json.dumps(narrative, ensure_ascii=False).upper()
 
 
+def test_homepage_signal_board_keeps_the_approved_display_contract():
+    dashboard_js = (PROJECT / "assets" / "dashboard.js").read_text(encoding="utf-8")
+    index_html = (PROJECT / "index.html").read_text(encoding="utf-8")
+    signal_card_renderer = dashboard_js.split("function renderSignalCard", 1)[1].split(
+        "function renderSignals", 1
+    )[0]
+
+    assert "function renderSignalEvidence(item, renderedPmids)" in dashboard_js
+    assert "signal-takeaway" in signal_card_renderer
+    assert "为什么构成信号" in dashboard_js
+    assert "证据怎么支持" in dashboard_js
+    assert "signal-topic-row" not in signal_card_renderer
+    assert "准备 KOL 讨论" not in signal_card_renderer
+    assert "查看文献" not in signal_card_renderer
+    assert "function buildSignalBrief()" in dashboard_js
+    assert "getFilteredSignalItems().slice()" in dashboard_js
+    assert 'id="btnExportSignalBrief"' in index_html
+
+
 def test_enrichment_prompt_requires_chinese_and_separates_narrative_roles():
     module = load_enrichment_module()
     prompt = module.SYSTEM + "\n" + module.build_prompt([])

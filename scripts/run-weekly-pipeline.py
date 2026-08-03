@@ -105,7 +105,8 @@ def pipeline_steps(args, full_available: bool | None = None) -> list[PipelineSte
     if not args.skip_llm:
         steps.append(PipelineStep(
             "enrich-literature-narrative", py("enrich-literature-narrative.py"),
-            outputs=[DATA / "signals-weekly.js"], optional=True,
+            # 完整中文 finding 是正式发布契约；enrich 失败时不得静默发布占位文案。
+            outputs=[DATA / "signals-weekly.js"],
         ))
     if full_available:
         steps.extend([

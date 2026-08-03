@@ -50,6 +50,22 @@ def test_recent_community_and_dashboard_use_one_public_window():
     assert dashboard["stats"]["signals"] == len(signals["signals"])
 
 
+def test_published_signals_keep_complete_chinese_article_findings():
+    signals = load_js_global(DATA / "signals-weekly.js", "MG_SIGNALS_DATA")
+
+    assert signals["source_policy"]["llm_enrichment"] is True
+    for signal in signals["signals"]:
+        assert {str(item["pmid"]) for item in signal["evidenceItems"]} == {
+            str(pmid) for pmid in signal["related_pmids"]
+        }
+        for evidence in signal["evidenceItems"]:
+            finding = evidence["finding"].strip()
+            chineseCount = len(re.findall(r"[\u3400-\u9fff]", finding))
+            latinCount = len(re.findall(r"[A-Za-z]", finding))
+            assert chineseCount >= 4 and chineseCount >= latinCount * 0.35
+            assert not finding.endswith(("…", "..."))
+
+
 def test_active_pages_load_release_manifest_first_and_share_one_token():
     releaseIds = set()
     for page in ACTIVE_PAGES:

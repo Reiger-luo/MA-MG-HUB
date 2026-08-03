@@ -49,6 +49,15 @@ def pmidSet(items) -> set[str]:
     }
 
 
+def isPredominantlyChinese(value) -> bool:
+    text = str(value or "").strip()
+    if not text:
+        return False
+    chineseCount = len(re.findall(r"[\u3400-\u9fff]", text))
+    latinCount = len(re.findall(r"[A-Za-z]", text))
+    return chineseCount >= 4 and chineseCount >= latinCount * 0.35
+
+
 def validateArtifacts() -> list[str]:
     errors = []
     expectedNames = set(publicArtifactNames())
@@ -132,6 +141,22 @@ def validateRecentContracts() -> list[str]:
         errors.append("dashboard signals 与 signals-weekly.js 不一致")
     if signals.get("window_basis") != "trueIngestAddedPmids":
         errors.append("signals-weekly.js 未声明 trueIngestAddedPmids 窗口口径")
+    sourcePolicy = signals.get("source_policy") or {}
+    if sourcePolicy.get("llm_enrichment") is not True:
+        errors.append("signals-weekly.js 未完成 LLM 中文叙事 enrich，禁止发布占位 finding")
+    for signal in signals.get("signals") or []:
+        signalId = signal.get("id") or "未编号"
+        relatedPmids = {str(item) for item in signal.get("related_pmids") or [] if item}
+        evidenceItems = signal.get("evidenceItems") or []
+        evidencePmids = {str(item.get("pmid") or "") for item in evidenceItems if item.get("pmid")}
+        if evidencePmids != relatedPmids:
+            errors.append(f"信号 {signalId} 的逐篇证据与 related_pmids 不一致")
+        for evidence in evidenceItems:
+            finding = str(evidence.get("finding") or "").strip()
+            if not isPredominantlyChinese(finding):
+                errors.append(f"信号 {signalId} 含非中文或空 finding")
+            if finding.endswith(("…", "...")):
+                errors.append(f"信号 {signalId} 含截断 finding")
     return errors
 
 

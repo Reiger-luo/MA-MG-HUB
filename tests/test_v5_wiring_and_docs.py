@@ -70,6 +70,15 @@ def test_pipeline_step_selection_keeps_full_dependent_builds_when_full_exists():
         assert step_id in ids
 
 
+def test_literature_narrative_enrichment_is_a_required_publish_step():
+    args = pipeline_args()
+    args.skip_llm = False
+    steps = load_pipeline_module().pipeline_steps(args, full_available=True)
+    enrichment = next(step for step in steps if step.id == "enrich-literature-narrative")
+
+    assert enrichment.optional is False
+
+
 def test_merge_step_declares_the_true_weekly_ingest_manifest():
     module = load_pipeline_module()
     args = pipeline_args()
