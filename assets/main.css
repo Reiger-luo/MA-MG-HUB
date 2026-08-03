@@ -292,11 +292,13 @@ a, button { touch-action: manipulation; -webkit-tap-highlight-color: rgba(37,99,
 }
 .signal-type { color: var(--fg3); font-size: 0.78rem; }
 .signal-title {
-  display: block; color: var(--accent); text-decoration: none;
+  display: block; color: var(--fg);
   margin: 0;
   font-size: 1.02rem; font-weight: 650; line-height: 1.45;
 }
-.signal-title:hover { text-decoration: underline; }
+.signal-takeaway {
+  margin: 0.32rem 0 0; color: var(--fg3); font-size: 0.78rem; line-height: 1.6;
+}
 .signal-meta {
   margin-top: 0.3rem; color: var(--fg3); font-size: 0.78rem;
 }

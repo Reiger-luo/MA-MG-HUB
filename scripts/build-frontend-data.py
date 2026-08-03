@@ -1163,7 +1163,7 @@ def build_medical_affairs_bridge(article, topics, drugs, signal_type, strength):
     }
 
 
-def compact_article(article):
+def compact_article(article, topics=None, drugs=None):
     assessment = assess_mg_core(article)
     return {
         "pmid": article.get("pmid", ""),
@@ -1177,6 +1177,8 @@ def compact_article(article):
         "journal_quartile": article.get("journal_quartile"),
         "china_related": bool(article.get("china_related")),
         "study_types": article.get("study_types") or [],
+        "topics": list(topics or []),
+        "drugs": list(drugs or []),
         "key_evidence": evidence_excerpt(article),
         "mg_core": assessment.is_core,
         "mg_core_reason": assessment.reason_code,
@@ -1326,7 +1328,7 @@ def build_cluster_signal(cluster_id, members, latest, signal_index):
     members = sorted(members, key=lambda item: (-item["score"], -evidence_score(item.get("level")), item["date"], item["pmid"]))
     articles = [item["article"] for item in members]
     pmids = [str(article.get("pmid") or "") for article in articles if article.get("pmid")]
-    refs = [compact_article(article) for article in articles]
+    refs = [compact_article(item["article"], item.get("topics"), item.get("drugs")) for item in members]
     strength = cluster_strength(members, cluster_id)
     max_score = max(item["score"] for item in members)
     cluster_score = max_score + min(4, max(0, len(members) - 1) * 0.8)

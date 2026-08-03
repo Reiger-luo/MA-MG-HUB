@@ -389,9 +389,67 @@
     }).join('');
   }
 
-  function renderLiteratureTalkingPoints(item) {
-    var points = item.talkingPoints || item.kolFocus || [];
-    if (!item.takeaway && !item.whySignal && !item.evidenceBoundary && !points.length && !(item.refs || []).length) return '';
+  function renderSignalEvidence(item, renderedPmids) {
+    var refs = item.refs || [];
+    var refsByPmid = {};
+    refs.forEach(function(ref) {
+      if (ref && ref.pmid) refsByPmid[String(ref.pmid)] = ref;
+    });
+    var evidenceItems = [];
+    var evidenceByPmid = {};
+    (item.evidenceItems || []).forEach(function(evidence) {
+      var pmid = evidence && evidence.pmid ? String(evidence.pmid) : '';
+      if (!pmid || evidenceByPmid[pmid]) return;
+      evidenceByPmid[pmid] = evidence;
+      evidenceItems.push(evidence);
+    });
+    refs.forEach(function(ref) {
+      var pmid = ref && ref.pmid ? String(ref.pmid) : '';
+      if (!pmid || evidenceByPmid[pmid]) return;
+      var fallback = {
+        pmid: pmid,
+        finding: ref.key_evidence || '',
+        gapContribution: '',
+        boundary: ''
+      };
+      evidenceByPmid[pmid] = fallback;
+      evidenceItems.push(fallback);
+    });
+    if (!evidenceItems.length) return '';
+
+    var pmidLabel = 'P' + 'MID';
+    var rows = evidenceItems.map(function(evidence) {
+      var pmid = String(evidence.pmid || '');
+      if (!pmid || renderedPmids[pmid]) return '';
+      renderedPmids[pmid] = true;
+      var ref = refsByPmid[pmid] || {};
+      var href = ref.url || evidence.url || '';
+      var pmidHtml = href
+        ? '<a class="literature-signal-ref" href="' + escapeHref(href) + '" target="_blank" rel="noopener">' + escapeHtml(pmidLabel + ' ' + pmid) + '</a>'
+        : '<span class="literature-signal-ref">' + escapeHtml(pmidLabel + ' ' + pmid) + '</span>';
+      var design = (ref.study_types || evidence.studyTypes || []).slice(0, 2).join(' / ');
+      var articleStrength = articleSignalStrengthByPmid[pmid] || '';
+      var meta = [ref.evidence_level ? '证据 ' + ref.evidence_level : '', design,
+        articleStrength ? '文献级 ' + articleStrength : ''
+      ].filter(Boolean).map(function(value) {
+        return '<span>' + escapeHtml(value) + '</span>';
+      }).join('');
+      var finding = stripPmidMentions(evidence.finding || evidence.keyFinding || ref.key_evidence || '摘要结果待补充，需阅读全文核查。');
+      var contribution = stripPmidMentions(evidence.gapContribution || evidence.contribution || '为该信号补充了一项可追溯的摘要级研究结果。');
+      var boundary = stripPmidMentions(evidence.boundary || evidence.limit || '研究设计与外推范围需结合全文核查。');
+      var evidenceTitle = stripPmidMentions(evidence.title || ref.title || '研究证据');
+      return '<article class="literature-evidence-item">' +
+        '<div class="literature-evidence-head"><div>' + pmidHtml + meta + '</div></div>' +
+        (evidenceTitle ? '<h4>' + escapeHtml(evidenceTitle) + '</h4>' : '') +
+        '<div class="literature-evidence-result"><span>研究结果</span><p>' + escapeHtml(finding) + '</p></div>' +
+        '<div class="literature-evidence-gap"><span>这篇补了什么 gap</span><p>' + escapeHtml(contribution) + '</p></div>' +
+        '<p class="literature-evidence-boundary"><strong>边界</strong> · ' + escapeHtml(boundary) + '</p>' +
+      '</article>';
+    }).join('');
+    return rows ? '<section class="literature-evidence-ledger"><div class="literature-signal-section-title">证据怎么支持</div>' + rows + '</section>' : '';
+  }
+
+  function renderSignalGap(item) {
     var gapBefore = stripPmidMentions(item.gapBefore || '');
     var gapFilled = stripPmidMentions(item.gapFilled || item.whySignal || '');
     var remainingGap = stripPmidMentions(item.remainingGap || item.evidenceBoundary || '');
@@ -400,13 +458,38 @@
       gapFilled ? '<div class="filled"><span>本期补充</span><p>' + escapeHtml(gapFilled) + '</p></div>' : '',
       remainingGap ? '<div><span>仍待回答</span><p>' + escapeHtml(remainingGap) + '</p></div>' : ''
     ].join('');
+    if (!gapHtml) return '';
     return '<div class="literature-signal-narrative">' +
-      '<section class="literature-signal-change"><div class="literature-signal-section-title">信号是什么</div>' +
-        (item.takeaway ? '<p class="literature-signal-takeaway">' + escapeHtml(stripPmidMentions(item.takeaway)) + '</p>' : '') +
-      '</section>' +
-      (gapHtml ? '<section class="literature-signal-gap-grid"><div class="literature-signal-section-title">为什么构成信号</div>' + gapHtml + '</section>' : '') +
+      '<section class="literature-signal-gap-grid"><div class="literature-signal-section-title">为什么构成信号</div>' + gapHtml + '</section>' +
     '</div>';
   }
+
+  function collectEvidenceTags(item) {
+    var refs = item.refs || [];
+    var topics = [];
+    var drugs = [];
+    var china = false;
+    var seenTopic = {};
+    var seenDrug = {};
+    for (var i = 0; i < refs.length; i++) {
+      var ref = refs[i] || {};
+      if (ref.china_related) china = true;
+      (ref.topics || []).forEach(function(topic) {
+        if (topic && !seenTopic[topic]) { seenTopic[topic] = true; topics.push(topic); }
+      });
+      (ref.drugs || []).forEach(function(drug) {
+        if (drug && !seenDrug[drug]) { seenDrug[drug] = true; drugs.push(drug); }
+      });
+    }
+    // 兜底：证据篇目无逐篇标签时，回退到信号级聚合标签
+    if (!topics.length && !drugs.length) {
+      topics = item.topics || [];
+      drugs = item.drugs || [];
+      china = china || Boolean(item.china_related);
+    }
+    return { topics: topics, drugs: drugs, china: china };
+  }
+
 
   function renderSignalToKol(item) {
     if ((item.talkingPoints || item.kolFocus || []).length) return '';
@@ -442,24 +525,23 @@
     var signalClass = ['signal', 'card'].join('-');
     var signalHeadClass = signalClass + '-head';
     var signalTitleClass = 'signal-title';
-    var signalMetaClass = 'signal-meta';
     var signalTopicRowClass = 'signal-topic-row';
     var signalTitle = stripPmidMentions(item.title || item.summary || a.title || '(无标题)');
-    var dateStr = item.date ? item.date.toLocaleDateString('zh-CN') : (a.pub_date || '');
-    var topics = item.topics || [];
-    var drugs = item.drugs || [];
+    var renderedPmids = {};
+    var evidenceHtml = renderSignalEvidence(item, renderedPmids);
+    var gapHtml = renderSignalGap(item);
+    var tags = collectEvidenceTags(item);
     var topicHtml = '';
-    for (var i = 0; i < topics.length; i++) {
-      topicHtml += '<span class="signal-topic">' + escapeHtml(topics[i]) + '</span>';
+    for (var i = 0; i < tags.topics.length; i++) {
+      topicHtml += '<span class="signal-topic">' + escapeHtml(tags.topics[i]) + '</span>';
     }
     var drugHtml = '';
-    for (var d = 0; d < drugs.length; d++) {
-      drugHtml += '<span class="signal-drug">' + escapeHtml(drugs[d]) + '</span>';
+    for (var d = 0; d < tags.drugs.length; d++) {
+      drugHtml += '<span class="signal-drug">' + escapeHtml(tags.drugs[d]) + '</span>';
     }
-    var tagHtml = topicHtml + drugHtml + (item.china_related ? '<span class="signal-topic china">中国相关</span>' : '');
+    var tagHtml = topicHtml + drugHtml + (tags.china ? '<span class="signal-topic china">中国相关</span>' : '');
     var kolHtml = renderSignalToKol(item);
-    var narrativeHtml = renderLiteratureTalkingPoints(item);
-    var meta = escapeHtml(formatNumber(item.article_count || 0) + ' 篇文献 · ' + (item.date_range ? item.date_range.from + '–' + item.date_range.to : dateStr));
+    var takeaway = stripPmidMentions(item.takeaway || '');
     return '' +
       '<article id="' + escapeHtml(signalAnchor) + '" data-signal-id="' + escapeHtml(signalId) +
         '" class="' + signalClass + ' signal-' + escapeHtml(item.strength) + '" tabindex="-1">' +
@@ -468,14 +550,11 @@
           '<span class="signal-type">' + escapeHtml(item.type) + '</span>' +
         '</div>' +
         '<h3 class="' + signalTitleClass + '">' + escapeHtml(signalTitle) + '</h3>' +
-        '<div class="' + signalMetaClass + '">' + meta + '</div>' +
-        narrativeHtml +
+        (takeaway ? '<p class="signal-takeaway">' + escapeHtml(takeaway) + '</p>' : '') +
+        gapHtml +
+        evidenceHtml +
         kolHtml +
-        '<div class="' + signalTopicRowClass + '">' + tagHtml + '</div>' +
-        '<div class="dashboard-priority-actions">' +
-          '<a class="text-link" href="' + escapeHref(signalDetailUrl(item)) + '">查看文献</a>' +
-          '<a class="text-link" href="' + escapeHref(pageUrl('pages/msl.html')) + '">准备 KOL 讨论</a>' +
-        '</div>' +
+        (tagHtml ? '<div class="' + signalTopicRowClass + '">' + tagHtml + '</div>' : '') +
       '</article>';
   }
 
