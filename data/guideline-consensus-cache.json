@@ -40,7 +40,7 @@
         "Guideline/Consensus"
       ],
       "evidence_level": null,
-      "journal_if": 2.3,
+      "journal_if": 2.5,
       "journal_quartile": "3区",
       "author_affiliations": [
         {
@@ -190,7 +190,7 @@
         "Practice Guideline"
       ],
       "evidence_level": null,
-      "journal_if": 3.2,
+      "journal_if": 3.1,
       "journal_quartile": "3区",
       "author_affiliations": [
         {
@@ -555,7 +555,7 @@
         "Guideline/Consensus"
       ],
       "evidence_level": null,
-      "journal_if": 3.9,
+      "journal_if": 4.3,
       "journal_quartile": "2区",
       "author_affiliations": [
         {
@@ -653,7 +653,7 @@
         "Guideline/Consensus"
       ],
       "evidence_level": null,
-      "journal_if": 3.9,
+      "journal_if": 4.3,
       "journal_quartile": "2区",
       "author_affiliations": [
         {
