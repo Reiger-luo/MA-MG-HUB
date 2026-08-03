@@ -10,7 +10,7 @@ JSON 响应，无需反爬处理。速率限制：每秒最多 1 次请求。
     
     api = EasyScholarAPI()
     result = api.query("Neurology")
-    # → {"IF": 8.9, "sciBase": "1区", "sci": "Q1", "esi": "神经科学",
+    # → {"IF": 8.9, "quartile": "1区", "sci": "Q1", "esi": "神经科学",
     #     "found": True, "journal": "Neurology"}
     
     # 批量查询（自动限速）
@@ -24,10 +24,16 @@ JSON 响应，无需反爬处理。速率限制：每秒最多 1 次请求。
 import json
 import os
 import re
+import ssl
 import time
 import urllib.request
 import urllib.parse
 import urllib.error
+
+try:
+    import certifi
+except ImportError:  # pragma: no cover
+    certifi = None
 
 # ── 配置 ─────────────────────────────────────────────────────────────
 
@@ -35,6 +41,20 @@ BASE_URL = "https://www.easyscholar.cc/open/getPublicationRank"
 
 # 速率限制：每秒最多 1 次请求（按 API 文档要求）
 MIN_INTERVAL = 1.0
+
+
+def create_ssl_context():
+    """
+    使用 certifi 的 CA 包创建 SSL 上下文。
+    系统 CA 可能无法验证 easyscholar.cc 的证书链，certifi 通常可以。
+    若 certifi 不可用，则退回到不验证（仅作最后兜底）。
+    """
+    if certifi:
+        return ssl.create_default_context(cafile=certifi.where())
+    ctx = ssl.create_default_context()
+    ctx.check_hostname = False
+    ctx.verify_mode = ssl.CERT_NONE
+    return ctx
 
 
 def load_secret_key(secret_key=None):
@@ -88,9 +108,8 @@ class EasyScholarAPI:
             journal: str      — 查询的期刊名
             IF: float|None    — SCI 影响因子（sciif）。None 表示无数据
             sciif5: float|None— 5年影响因子
-            sciBase: str|None — 中科院分区（已提取纯 X 区，去掉"医学"等前缀）
+            quartile: str|None— 新锐分区（从 API 的 xr 字段提取纯 X 区，如"1区"）
             sci: str|None     — SCI JCR 分区（Q1/Q2/Q3/Q4）
-            sciUp: str|None   — 中科院升级版分区
             esi: str|None     — ESI 学科分类
             jci: float|None   — 期刊引文指标
             found: bool       — 是否查到有效数据
@@ -112,7 +131,8 @@ class EasyScholarAPI:
         
         try:
             req = urllib.request.Request(url)
-            with urllib.request.urlopen(req, timeout=15) as resp:
+            ctx = create_ssl_context()
+            with urllib.request.urlopen(req, timeout=15, context=ctx) as resp:
                 body = resp.read().decode("utf-8")
             data = json.loads(body)
         except Exception as e:
@@ -141,9 +161,8 @@ class EasyScholarAPI:
         sciif_raw = rank_all.get("sciif")
         sciif5_raw = rank_all.get("sciif5")
         jci_raw = rank_all.get("jci")
-        sci_base = rank_all.get("sciBase", "")  # e.g. "医学1区"
+        quartile_raw = rank_all.get("xr", "")  # 新锐分区，取代旧 sciBase
         sci = rank_all.get("sci", "")            # e.g. "Q1"
-        sci_up = rank_all.get("sciUp", "")       # e.g. "医学1区"
         esi = rank_all.get("esi", "")            # e.g. "神经科学与行为"
         
         result = {
@@ -151,9 +170,8 @@ class EasyScholarAPI:
             "IF": self._parse_float(sciif_raw),
             "sciif5": self._parse_float(sciif5_raw),
             "jci": self._parse_float(jci_raw),
-            "sciBase": self._extract_zone(sci_base),
+            "quartile": self._extract_zone(quartile_raw),
             "sci": sci.strip() if sci else None,
-            "sciUp": self._extract_zone(sci_up),
             "esi": esi.strip() if esi else None,
             "found": True,
             "raw": rank_all,
@@ -197,7 +215,7 @@ class EasyScholarAPI:
             if res["IF"] is not None:
                 cache_dict[j] = {
                     "IF": res["IF"],
-                    "CAS": res["sciBase"],
+                    "quartile": res["quartile"],
                     "updated": time.strftime("%Y-%m-%d"),
                     "source": "easyscholar",
                 }
@@ -205,7 +223,7 @@ class EasyScholarAPI:
                 # 查不到但也是有效结果——标记 IF=0 避免反复查
                 cache_dict[j] = {
                     "IF": 0,
-                    "CAS": None,
+                    "quartile": None,
                     "updated": time.strftime("%Y-%m-%d"),
                     "source": "easyscholar",
                 }
@@ -231,16 +249,16 @@ class EasyScholarAPI:
             if res["IF"] is not None:
                 cache[j] = {
                     "IF": res["IF"],
-                    "CAS": res["sciBase"],
+                    "quartile": res["quartile"],
                     "updated": time.strftime("%Y-%m-%d"),
                     "source": "easyscholar",
                 }
-                print(f"  ✅ ({j}): IF={res['IF']}, {res['sciBase']}")
+                print(f"  ✅ ({j}): IF={res['IF']}, {res['quartile']}")
             else:
                 # 未查到，但仍写入 cache 避免下次再查
                 cache[j] = {
                     "IF": 0,
-                    "CAS": None,
+                    "quartile": None,
                     "updated": time.strftime("%Y-%m-%d"),
                     "source": "easyscholar",
                 }
@@ -255,7 +273,7 @@ class EasyScholarAPI:
         res = self.query(journal_name)
         if not res["found"] or res["IF"] is None:
             return None, None
-        return res["IF"], res["sciBase"]
+        return res["IF"], res["quartile"]
     
     @staticmethod
     def _parse_float(val):
@@ -269,12 +287,13 @@ class EasyScholarAPI:
     @staticmethod
     def _extract_zone(raw):
         """
-        从中科院分区字符串中提取纯 X 区。
-        
+        从分区字符串中提取纯 X 区（兼容旧 sciBase 与新 xr 字段）。
+
         '医学1区' → '1区'
-        '医学2区' → '2区'
-        '暂无'    → None
-        ''       → None
+        '新锐1区' → '1区'
+        '1区'      → '1区'
+        '暂无'     → None
+        ''         → None
         """
         if not raw or not isinstance(raw, str):
             return None
@@ -291,9 +310,8 @@ class EasyScholarAPI:
             "IF": None,
             "sciif5": None,
             "jci": None,
-            "sciBase": None,
+            "quartile": None,
             "sci": None,
-            "sciUp": None,
             "esi": None,
             "found": False,
             "raw": None,
@@ -321,6 +339,6 @@ if __name__ == "__main__":
     
     for j, r in results.items():
         if r["found"]:
-            print(f"✅ {j}: IF={r['IF']}, 分区={r['sciBase']}, JCR={r['sci']}, ESI={r['esi']}")
+            print(f"✅ {j}: IF={r['IF']}, 新锐分区={r['quartile']}, JCR={r['sci']}, ESI={r['esi']}")
         else:
             print(f"⏭️  {j}: 未查到")

@@ -119,11 +119,11 @@ def main():
         api = EasyScholarAPI()
         res = api.query(journal)
         if res["found"]:
-            print(f"✅ {journal}: IF={res['IF']}, 分区={res['sciBase']}")
+            print(f"✅ {journal}: IF={res['IF']}, 新锐分区={res['quartile']}")
             cache = load_cache()
             cache[journal] = {
                 "IF": res["IF"],
-                "CAS": res["sciBase"],
+                "quartile": res["quartile"],
                 "updated": time.strftime("%Y-%m-%d"),
                 "source": "easyscholar",
             }
@@ -162,17 +162,17 @@ def main():
             if res["found"]:
                 cache[journal] = {
                     "IF": res["IF"],
-                    "CAS": res["sciBase"],
+                    "quartile": res["quartile"],
                     "updated": time.strftime("%Y-%m-%d"),
                     "source": "easyscholar",
                 }
                 hit += 1
-                print(f"IF={res['IF']}, {res['sciBase']}")
+                print(f"IF={res['IF']}, 新锐分区={res['quartile']}")
             else:
                 # 未查到也写入 cache（IF=0），避免下次再查
                 cache[journal] = {
                     "IF": 0,
-                    "CAS": None,
+                    "quartile": None,
                     "updated": time.strftime("%Y-%m-%d"),
                     "source": "easyscholar",
                 }

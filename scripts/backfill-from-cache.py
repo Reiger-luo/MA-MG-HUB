@@ -12,7 +12,7 @@ backfill-from-cache.py — 将期刊 cache 映射回文献数据
 数据流：
   assets/journal_metrics.json（期刊字典）
       │
-      ▼  逐篇匹配 journal → IF/CAS
+      ▼  逐篇匹配 journal → IF/新锐分区
   data/literature-full.json
       │
       ▼  split-recent-data.py → 前端
@@ -101,12 +101,13 @@ def backfill(cache, articles):
                 a["journal_if"] = entry["IF"]
                 overwritten_if += 1
         # 分区
-        if entry.get("CAS"):
+        quartile = entry.get("quartile") or entry.get("CAS")
+        if quartile:
             if a.get("journal_quartile") is None:
-                a["journal_quartile"] = entry["CAS"]
+                a["journal_quartile"] = quartile
                 filled_quart += 1
-            elif a["journal_quartile"] != entry["CAS"]:
-                a["journal_quartile"] = entry["CAS"]
+            elif a["journal_quartile"] != quartile:
+                a["journal_quartile"] = quartile
                 overwritten_quart += 1
 
     return filled_if, filled_quart, overwritten_if, overwritten_quart

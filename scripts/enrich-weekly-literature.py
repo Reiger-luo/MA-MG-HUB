@@ -6,7 +6,7 @@ enrich-weekly-literature.py — 只富集每周新增 PubMed 文献。
   - 只处理 data/literature-weekly.json
   - 不读取、不写入 literature-full.json
   - 先补 study_types / evidence_level；无证据等级的新文献不进入后续周更
-  - 有证据等级的文献再补 IF/CAS；只使用 assets/journal_metrics.json 已有缓存，不在周更流程里爬站
+  - 有证据等级的文献再补 IF/新锐分区；只使用 assets/journal_metrics.json 已有缓存，不在周更流程里爬站
 """
 
 from __future__ import annotations
@@ -133,7 +133,7 @@ def enrichMetrics(article, cache, normalized):
             article["journal_if"] = metrics.get("IF")
             metricsFilled = True
         if article.get("journal_quartile") is None:
-            article["journal_quartile"] = metrics.get("CAS")
+            article["journal_quartile"] = metrics.get("quartile") or metrics.get("CAS")
             metricsFilled = True
     return metricsFilled
 
@@ -192,7 +192,7 @@ def main():
     print(f"   补充研究类型/证据等级: {counters['classified']}")
     print(f"   指南/共识独立路由: {counters['routed_guideline_consensus']}")
     print(f"   无 I–V 证据等级剔除: {counters['dropped_no_evidence']}")
-    print(f"   补充 IF/CAS: {counters['metrics_filled']}")
+    print(f"   补充 IF/新锐分区: {counters['metrics_filled']}")
 
 
 if __name__ == "__main__":

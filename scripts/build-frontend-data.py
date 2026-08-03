@@ -2790,7 +2790,7 @@ def build_dashboard(recent, signals, experts, china, landscape, modules, total_c
     pipeline_policy = {
         "label": "周更管线",
         "value": "每周日 23:00",
-        "note": "PubMed 周更、证据分级、IF/CAS、前端数据同步",
+        "note": "PubMed 周更、证据分级、IF/新锐分区、前端数据同步",
         "href": "pages/data-ops.html",
     }
     section_cards = [

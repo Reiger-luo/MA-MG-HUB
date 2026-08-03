@@ -659,7 +659,7 @@
       tagsHTML += '<span class="badge-pending">' + escapeHtml(studyTypes[0]) + '</span>';
     var impactFactor = formatImpactFactor(article.journal_if);
     if (impactFactor) tagsHTML += '<span class="badge-metric">IF ' + impactFactor + '</span>';
-    if (article.journal_quartile) tagsHTML += '<span class="badge-metric">CAS ' + escapeHtml(String(article.journal_quartile)) + '</span>';
+    if (article.journal_quartile) tagsHTML += '<span class="badge-metric">新锐 ' + escapeHtml(String(article.journal_quartile)) + '</span>';
     var articleSignalStrength = articleSignalStrengthByPmid[normalizePmid(article.pmid)] || '';
     if (articleSignalStrength) {
       var signalTone = { '强': 'strong', '中': 'medium', '弱': 'weak' }[articleSignalStrength] || 'weak';
@@ -729,7 +729,7 @@
     if (article.evidence_level) meta.push('证据等级 ' + escapeHtml(article.evidence_level));
     var impactFactor = formatImpactFactor(article.journal_if);
     if (impactFactor) meta.push('IF ' + escapeHtml(impactFactor));
-    if (article.journal_quartile) meta.push('CAS ' + escapeHtml(String(article.journal_quartile)));
+    if (article.journal_quartile) meta.push('新锐 ' + escapeHtml(String(article.journal_quartile)));
     return meta.join(' · ');
   }
 
@@ -1690,7 +1690,7 @@
     var ifState = getCheckedValues(el.filterIFList);
     if (!ifState.isAll && ifState.values.length) parts.push('IF：' + ifState.values.join('、'));
     var quartileState = getCheckedValues(el.filterQuartileList);
-    if (!quartileState.isAll && quartileState.values.length) parts.push('CAS：' + quartileState.values.map(function(value) { return value + '区'; }).join('、'));
+    if (!quartileState.isAll && quartileState.values.length) parts.push('新锐分区：' + quartileState.values.map(function(value) { return value + '区'; }).join('、'));
     var evidenceState = getCheckedValues(el.filterEvidenceList);
     if (!evidenceState.isAll && evidenceState.values.length) parts.push('证据等级：' + evidenceState.values.join('、'));
     var signalState = getCheckedValues(el.filterSignalStrengthList);
@@ -1708,7 +1708,7 @@
       if (article.evidence_level) tags.push('证据等级 ' + article.evidence_level);
       var impactFactor = formatImpactFactor(article.journal_if);
       if (impactFactor) tags.push('IF ' + impactFactor);
-      if (article.journal_quartile) tags.push('CAS ' + article.journal_quartile);
+      if (article.journal_quartile) tags.push('新锐 ' + article.journal_quartile);
       if (article.china_related) tags.push('中国相关');
       var signalStrength = articleSignalStrengthByPmid[normalizePmid(article.pmid)];
       if (signalStrength) tags.push(signalStrength + '信号');
