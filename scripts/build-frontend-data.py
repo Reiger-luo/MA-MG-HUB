@@ -1345,8 +1345,13 @@ def build_cluster_signal(cluster_id, members, latest, signal_index):
     )
     takeaway = f"{gap['filled']} 本期共有 {len(members)} 项研究结果，证据构成为 {level_text}。"
     top_members = members[: min(3, len(members))]
+    # 确定性兜底不直接发布英文摘要原文；LLM enrich 成功时会生成带数字的中文消息
     messages = [
-        f"摘要结果：{evidence_excerpt(item['article'])}"
+        (
+            f"{' / '.join(str(value) for value in (item['article'].get('study_types') or [])[:2]) or '该研究'}，"
+            f"证据 {item['article'].get('evidence_level') or '未分类'} 级，提供了相关人群的结局数据；"
+            "摘要级定位，具体数字与外推边界需核查原文。"
+        )
         for item in top_members
     ]
     evidence_items = []
@@ -1355,7 +1360,7 @@ def build_cluster_signal(cluster_id, members, latest, signal_index):
         design = " / ".join(str(value) for value in (article.get("study_types") or [])[:2]) or "研究设计待补充"
         evidence_items.append({
             "pmid": str(article.get("pmid") or ""),
-            "finding": f"摘要结果原文：{evidence_excerpt(article)}",
+            "finding": f"{design}提供了相关人群的初步结果数据，摘要级定位，需阅读全文确认具体数字与外推边界。",
             "gapContribution": f"为“{meta['title']}”补充了一项 {design} 结果，使该判断可定位到具体研究人群与结局。",
             "boundary": f"{design}，证据 {article.get('evidence_level') or '未分类'} 级；摘要级定位，因果解释与人群外推需核查全文。",
         })
