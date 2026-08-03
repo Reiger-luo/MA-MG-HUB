@@ -544,6 +544,9 @@ a.literature-signal-ref:hover { background: rgba(37,99,235,0.12); }
 .literature-evidence-gap p,
 .literature-kol-question p {
   margin: 0;
+  font-size: 0.79rem;
+  line-height: 1.6;
+  word-break: break-word;
 }
 .literature-evidence-ledger {
   display: grid;
@@ -1616,6 +1619,13 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
 .panel-head {
   display: flex; justify-content: space-between; align-items: center; gap: 1rem;
   margin-bottom: 0.8rem;
+}
+.panel-head-actions {
+  display: flex; align-items: center; gap: 0.75rem;
+}
+.panel-head-actions .btn {
+  font-size: 0.82rem; padding: 0.32rem 0.7rem;
+  white-space: nowrap;
 }
 .panel-head h2 { margin: 0; font-size: 1rem; }
 .followup-list { display: flex; flex-direction: column; gap: 0.6rem; }

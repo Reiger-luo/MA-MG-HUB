@@ -59,7 +59,7 @@ SYSTEM = """你是重症肌无力（myasthenia gravis, MG）医学事务情报�
    - efgar：efgartigimod / Vyvgart / ARGX-113 相关数据；只要确实是该条交流点的证据，优先传递。
    - competitor_response：其他治疗或机制；必须从机制、人群、终点、给药、安全性、证据成熟度与 efgar 区隔，不得虚构 head-to-head。
    - disease_progress：诊断、监测、患者负担、特殊人群、疾病机制等非直接产品进展。
-7. evidenceItems 必须与 refPmids 一一对应；每篇写清 finding（实际结果）、gapContribution（补上哪块信息）和 boundary（这篇证据不能推出什么）。keyMessages 只能使用 records 的 title、abstract、evidenceLevel、studyTypes、journal 和已有 metrics；优先保留原始结果段中的人群、样本量、终点、时间点和数字。
+7. evidenceItems 必须与 refPmids 一一对应；每篇写清 finding（实际结果）、gapContribution（补上哪块信息）和 boundary（这篇证据不能推出什么）。finding 必须完整翻译摘要结果段的全部关键数字与结论（样本量、终点、效应值、区间、时间点），不得截断、不得以省略号结尾、不得只写一句概括。keyMessages 只能使用 records 的 title、abstract、evidenceLevel、studyTypes、journal 和已有 metrics；优先保留原始结果段中的人群、样本量、终点、时间点和数字。
 8. 设计、探索性、病例或摘要级证据必须明确写“探索性/病例级/摘要级/需全文核查/疗效数据待公布”等边界；不能把关联写成因果，不能把不同研究横向比较成 head-to-head。
    网络荟萃分析/ITC 只能写“间接估计的改善幅度数值更大/排序靠前”，不能写“优于”；评论或 V 级机制推理只能写“报道/提示”，不能写“证实/证明”。
 9. refPmids 只能填写输入 records 的 PMID，且每条 signal/talking point 至少绑定 1 个 PMID；每个 PMID 最多归入一个 signal，必须尽量覆盖全部 records。
@@ -156,7 +156,8 @@ def records_for_prompt(articles: list[dict], baseline_by_pmid: dict[str, dict] |
             {
                 "pmid": pmid,
                 "title": article.get("title", ""),
-                "abstract": normalize_text(article.get("abstract"))[:1800],
+                # 摘要必须完整传入：截断会让模型看不到结果段，导致 finding 不完整
+                "abstract": normalize_text(article.get("abstract"))[:4000],
                 "evidenceLevel": article.get("evidence_level"),
                 "studyTypes": article.get("study_types") or [],
                 "journal": article.get("journal", ""),
@@ -227,7 +228,7 @@ def build_prompt(records: list[dict]) -> str:
                 "evidenceItems": [
                     {
                         "pmid": "PMID",
-                        "finding": "必须使用中文；保留样本量、人群、终点、时间点、效应值和区间等实际结果",
+                        "finding": "必须使用中文；完整写出研究结果的全部关键内容：样本量、人群、干预、主要终点、时间点、效应值及区间/置信区间，按摘要原文逐项翻译，不得省略、概括或以省略号结尾；药物名、量表名可保留英文",
                         "gapContribution": "必须使用中文；说明这篇结果单独补上什么信息",
                         "boundary": "必须使用中文；说明设计和外推限制",
                     }
@@ -795,7 +796,9 @@ def main() -> None:
     literature = load_js_global(LITERATURE_PATH, "MG_LITERATURE_DATA")
     builder = load_builder_module()
     # 每次都从确定性主题簇重新起步，避免重复执行 enrichment 后信号越拆越细。
-    payload = builder.build_signals(literature)
+    # 窗口口径必须与正式构建一致：传入 ingest manifest 并强制 trueIngestAddedPmids。
+    ingest_manifest = builder.load_weekly_ingest_manifest()
+    payload = builder.build_signals(literature, ingest_manifest, requireIngest=True)
     candidate_pmid_order = list(dict.fromkeys(
         str(pmid)
         for signal in payload.get("signals", [])

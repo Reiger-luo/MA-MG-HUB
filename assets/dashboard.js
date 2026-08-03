@@ -464,33 +464,6 @@
     '</div>';
   }
 
-  function collectEvidenceTags(item) {
-    var refs = item.refs || [];
-    var topics = [];
-    var drugs = [];
-    var china = false;
-    var seenTopic = {};
-    var seenDrug = {};
-    for (var i = 0; i < refs.length; i++) {
-      var ref = refs[i] || {};
-      if (ref.china_related) china = true;
-      (ref.topics || []).forEach(function(topic) {
-        if (topic && !seenTopic[topic]) { seenTopic[topic] = true; topics.push(topic); }
-      });
-      (ref.drugs || []).forEach(function(drug) {
-        if (drug && !seenDrug[drug]) { seenDrug[drug] = true; drugs.push(drug); }
-      });
-    }
-    // 兜底：证据篇目无逐篇标签时，回退到信号级聚合标签
-    if (!topics.length && !drugs.length) {
-      topics = item.topics || [];
-      drugs = item.drugs || [];
-      china = china || Boolean(item.china_related);
-    }
-    return { topics: topics, drugs: drugs, china: china };
-  }
-
-
   function renderSignalToKol(item) {
     if ((item.talkingPoints || item.kolFocus || []).length) return '';
     var leads = item.kol_leads || [];
@@ -525,21 +498,10 @@
     var signalClass = ['signal', 'card'].join('-');
     var signalHeadClass = signalClass + '-head';
     var signalTitleClass = 'signal-title';
-    var signalTopicRowClass = 'signal-topic-row';
     var signalTitle = stripPmidMentions(item.title || item.summary || a.title || '(无标题)');
     var renderedPmids = {};
     var evidenceHtml = renderSignalEvidence(item, renderedPmids);
     var gapHtml = renderSignalGap(item);
-    var tags = collectEvidenceTags(item);
-    var topicHtml = '';
-    for (var i = 0; i < tags.topics.length; i++) {
-      topicHtml += '<span class="signal-topic">' + escapeHtml(tags.topics[i]) + '</span>';
-    }
-    var drugHtml = '';
-    for (var d = 0; d < tags.drugs.length; d++) {
-      drugHtml += '<span class="signal-drug">' + escapeHtml(tags.drugs[d]) + '</span>';
-    }
-    var tagHtml = topicHtml + drugHtml + (tags.china ? '<span class="signal-topic china">中国相关</span>' : '');
     var kolHtml = renderSignalToKol(item);
     var takeaway = stripPmidMentions(item.takeaway || '');
     return '' +
@@ -554,7 +516,6 @@
         gapHtml +
         evidenceHtml +
         kolHtml +
-        (tagHtml ? '<div class="' + signalTopicRowClass + '">' + tagHtml + '</div>' : '') +
       '</article>';
   }
 
@@ -599,6 +560,152 @@
     buildSignals();
     rebuildArticleSignalStrengthIndex();
     renderSignalBoard();
+    initSignalBriefExport();
+  }
+
+  function signalFilterLabel() {
+    return signalFilter === 'all' ? '全部' : (signalFilter + ' 信号');
+  }
+
+  function buildSignalBrief() {
+    var now = new Date();
+    var dateStr = now.getFullYear() + '-' +
+      String(now.getMonth() + 1).padStart(2, '0') + '-' +
+      String(now.getDate()).padStart(2, '0') + ' ' +
+      String(now.getHours()).padStart(2, '0') + ':' +
+      String(now.getMinutes()).padStart(2, '0');
+    var signals = getFilteredSignalItems().slice();
+    var md = '# MA-MG-HUB 信号简报\n';
+    md += '生成时间: ' + dateStr + '\n';
+    md += '信号板筛选: ' + signalFilterLabel() + '\n';
+    md += '信号数量: ' + signals.length + ' 条\n';
+    var windowFrom = null;
+    var windowTo = null;
+    signals.forEach(function(signal) {
+      var range = signal.date_range || {};
+      if (range.from) { var f = String(range.from); if (!windowFrom || f < windowFrom) windowFrom = f; }
+      if (range.to) { var t = String(range.to); if (!windowTo || t > windowTo) windowTo = t; }
+    });
+    if (windowFrom || windowTo) md += '信号覆盖窗口: ' + (windowFrom || '?') + ' — ' + (windowTo || '?') + '\n';
+    md += '\n';
+
+    signals.forEach(function(signal, index) {
+      var strengthLabel = signal.strength || '待判定';
+      md += '## ' + (index + 1) + '. [' + strengthLabel + '信号 · ' + (signal.type || '新证据') + '] ' + (signal.title || '(无标题)') + '\n';
+      if (signal.takeaway) md += '信号是什么：' + signal.takeaway + '\n';
+      md += '\n';
+      if (signal.gapBefore || signal.gapFilled || signal.remainingGap) {
+        md += '**为什么构成信号**\n';
+        if (signal.gapBefore) md += '- 原有 gap：' + signal.gapBefore + '\n';
+        if (signal.gapFilled) md += '- 本期补充：' + signal.gapFilled + '\n';
+        if (signal.remainingGap) md += '- 仍待回答：' + signal.remainingGap + '\n';
+        md += '\n';
+      }
+      if (signal.whySignal) { md += '证据怎么支持：' + signal.whySignal + '\n\n'; }
+      var evidence = (signal.evidenceItems || []).slice();
+      if (evidence.length) {
+        md += '**证据明细**\n';
+        evidence.forEach(function(item) {
+          var pmid = normalizePmid(item && item.pmid);
+          var pmidWord = 'P' + 'MID';
+          md += '- ' + (pmid ? pmidWord + ' ' + pmid + '：' : '') + (item && item.finding ? item.finding : '') + '\n';
+          if (item && item.gapContribution) md += '   补的 gap：' + item.gapContribution + '\n';
+          if (item && item.boundary) md += '   边界：' + item.boundary + '\n';
+        });
+        md += '\n';
+      }
+    });
+
+    // 文献清单（去重）
+    var seen = {};
+    var litRows = [];
+    signals.forEach(function(signal) {
+      (signal.refs || []).forEach(function(ref) {
+        if (!ref || !ref.pmid) return;
+        var pmid = normalizePmid(ref.pmid);
+        if (!pmid || seen[pmid]) return;
+        seen[pmid] = true;
+        litRows.push(ref);
+      });
+      var article = signal.article || {};
+      if (article && article.pmid) {
+        var articlePmid = normalizePmid(article.pmid);
+        if (articlePmid && !seen[articlePmid]) {
+          seen[articlePmid] = true;
+          litRows.push(article);
+        }
+      }
+    });
+    if (litRows.length) {
+      md += '## 文献清单（' + litRows.length + ' 篇）\n';
+      litRows.forEach(function(ref, index) {
+        var pmidWord = 'P' + 'MID';
+        var journal = ref.journal || '';
+        var level = ref.evidence_level || '';
+        var meta = [journal, (level ? '证据 ' + level : ''), (ref.study_types || []).join(' / ')]
+          .filter(Boolean).join(' · ');
+        md += (index + 1) + '. ' + (ref.title || '(无标题)') + ' ' + pmidWord + ' ' + normalizePmid(ref.pmid) + '\n';
+        if (meta) md += '   ' + meta + '\n';
+        if (ref.url) md += '   ' + ref.url + '\n';
+      });
+      md += '\n';
+    }
+    return { title: 'MA-MG-HUB 信号简报', md: md };
+  }
+
+  function openSignalBriefModal(brief) {
+    var overlay = document.createElement('div');
+    overlay.className = 'modal-overlay open';
+    var preId = 'signal_brief_' + Date.now();
+    overlay.innerHTML =
+      '<div class="modal literature-brief-modal" role="dialog" aria-modal="true" aria-label="' + escapeHtml(brief.title) + '">' +
+        '<button class="modal-close" type="button" data-brief-close="1">✕</button>' +
+        '<h2>📋 ' + escapeHtml(brief.title.replace(/^MA-MG-HUB\s*/, '')) + '</h2>' +
+        '<div class="literature-brief-layout">' +
+          '<div class="literature-brief-preview">' +
+            '<div class="literature-brief-label">预览</div>' +
+            '<pre id="' + preId + '" class="literature-brief-pre">' + escapeHtml(brief.md) + '</pre>' +
+          '</div>' +
+          '<div class="literature-brief-actions">' +
+            '<div class="literature-brief-label">操作</div>' +
+            '<button class="btn literature-brief-copy" id="copy_' + preId + '">📋 复制</button>' +
+            '<p>复制后可粘贴到微信/飞书/邮件</p>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(overlay);
+
+    function closeBrief() {
+      document.removeEventListener('keydown', handleKeydown);
+      overlay.remove();
+    }
+    function handleKeydown(event) {
+      if (event.key === 'Escape') closeBrief();
+    }
+    overlay.addEventListener('click', function(event) {
+      if (event.target === overlay || (event.target.getAttribute && event.target.getAttribute('data-brief-close') === '1')) {
+        closeBrief();
+      }
+    });
+    document.addEventListener('keydown', handleKeydown);
+    var copyBtn = document.getElementById('copy_' + preId);
+    if (copyBtn) {
+      copyBtn.addEventListener('click', function() {
+        var text = document.getElementById(preId).textContent;
+        navigator.clipboard.writeText(text).then(function() {
+          copyBtn.textContent = '✅ 已复制';
+          setTimeout(function() { copyBtn.textContent = '📋 复制'; }, 1500);
+        });
+      });
+    }
+  }
+
+  function initSignalBriefExport() {
+    var button = document.getElementById('btnExportSignalBrief');
+    if (!button) return;
+    button.addEventListener('click', function() {
+      openSignalBriefModal(buildSignalBrief());
+    });
   }
 
   function renderPrioritySignalsLegacy() {
