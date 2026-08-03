@@ -389,87 +389,9 @@
     }).join('');
   }
 
-  function renderSignalEvidence(item, renderedPmids) {
-    var refs = item.refs || [];
-    var refsByPmid = {};
-    refs.forEach(function(ref) {
-      if (ref && ref.pmid) refsByPmid[String(ref.pmid)] = ref;
-    });
-    var evidenceItems = [];
-    var evidenceByPmid = {};
-    (item.evidenceItems || []).forEach(function(evidence) {
-      var pmid = evidence && evidence.pmid ? String(evidence.pmid) : '';
-      if (!pmid || evidenceByPmid[pmid]) return;
-      evidenceByPmid[pmid] = evidence;
-      evidenceItems.push(evidence);
-    });
-    refs.forEach(function(ref) {
-      var pmid = ref && ref.pmid ? String(ref.pmid) : '';
-      if (!pmid || evidenceByPmid[pmid]) return;
-      var fallback = {
-        pmid: pmid,
-        finding: ref.key_evidence || '',
-        gapContribution: '',
-        boundary: ''
-      };
-      evidenceByPmid[pmid] = fallback;
-      evidenceItems.push(fallback);
-    });
-    if (!evidenceItems.length) return '';
-
-    var pmidLabel = 'P' + 'MID';
-    var rows = evidenceItems.map(function(evidence) {
-      var pmid = String(evidence.pmid || '');
-      if (!pmid || renderedPmids[pmid]) return '';
-      renderedPmids[pmid] = true;
-      var ref = refsByPmid[pmid] || {};
-      var href = ref.url || evidence.url || '';
-      var pmidHtml = href
-        ? '<a class="literature-signal-ref" href="' + escapeHref(href) + '" target="_blank" rel="noopener">' + escapeHtml(pmidLabel + ' ' + pmid) + '</a>'
-        : '<span class="literature-signal-ref">' + escapeHtml(pmidLabel + ' ' + pmid) + '</span>';
-      var design = (ref.study_types || evidence.studyTypes || []).slice(0, 2).join(' / ');
-      var articleStrength = articleSignalStrengthByPmid[pmid] || '';
-      var meta = [ref.evidence_level ? '证据 ' + ref.evidence_level : '', design,
-        articleStrength ? '文献级 ' + articleStrength : ''
-      ].filter(Boolean).map(function(value) {
-        return '<span>' + escapeHtml(value) + '</span>';
-      }).join('');
-      var finding = stripPmidMentions(evidence.finding || evidence.keyFinding || ref.key_evidence || '摘要结果待补充，需阅读全文核查。');
-      var contribution = stripPmidMentions(evidence.gapContribution || evidence.contribution || '为该信号补充了一项可追溯的摘要级研究结果。');
-      var boundary = stripPmidMentions(evidence.boundary || evidence.limit || '研究设计与外推范围需结合全文核查。');
-      var evidenceTitle = stripPmidMentions(evidence.title || ref.title || '研究证据');
-      return '<article class="literature-evidence-item">' +
-        '<div class="literature-evidence-head"><div>' + pmidHtml + meta + '</div></div>' +
-        (evidenceTitle ? '<h4>' + escapeHtml(evidenceTitle) + '</h4>' : '') +
-        '<div class="literature-evidence-result"><span>研究结果</span><p>' + escapeHtml(finding) + '</p></div>' +
-        '<div class="literature-evidence-gap"><span>这篇补了什么 gap</span><p>' + escapeHtml(contribution) + '</p></div>' +
-        '<p class="literature-evidence-boundary"><strong>边界</strong> · ' + escapeHtml(boundary) + '</p>' +
-      '</article>';
-    }).join('');
-    return rows ? '<section class="literature-evidence-ledger"><div class="literature-signal-section-title">证据怎么支持</div>' + rows + '</section>' : '';
-  }
-
   function renderLiteratureTalkingPoints(item) {
     var points = item.talkingPoints || item.kolFocus || [];
     if (!item.takeaway && !item.whySignal && !item.evidenceBoundary && !points.length && !(item.refs || []).length) return '';
-    var renderedPmids = {};
-    var pointHtml = points.slice(0, 4).map(function(point, index) {
-      var tier = point.priorityTier || 'disease_progress';
-      var tierLabel = point.priorityLabel || (tier === 'efgar' ? 'efgar重点传递' : tier === 'competitor_response' ? '竞品应对解读' : '疾病进展传递');
-      var seenMessages = {};
-      var messages = (point.keyMessages || []).map(function(message) {
-        var cleanMessage = stripPmidMentions(message);
-        if (!cleanMessage || seenMessages[cleanMessage]) return '';
-        seenMessages[cleanMessage] = true;
-        return '<li>' + escapeHtml(cleanMessage) + '</li>';
-      }).join('');
-      return '<article class="literature-signal-point">' +
-        '<div class="literature-signal-point-head"><span>' + escapeHtml(point.dimension || ('交流 ' + String(index + 1).padStart(2, '0'))) + '</span><em class="literature-signal-tier ' + escapeHtml(tier) + '">' + escapeHtml(tierLabel) + '</em></div>' +
-        '<strong>' + escapeHtml(stripPmidMentions(point.title || '')) + '</strong>' +
-        (point.whyKol ? '<p class="literature-signal-why">' + escapeHtml(stripPmidMentions(point.whyKol)) + '</p>' : '') +
-        (messages ? '<ul>' + messages + '</ul>' : '') +
-      '</article>';
-    }).join('');
     var gapBefore = stripPmidMentions(item.gapBefore || '');
     var gapFilled = stripPmidMentions(item.gapFilled || item.whySignal || '');
     var remainingGap = stripPmidMentions(item.remainingGap || item.evidenceBoundary || '');
@@ -478,19 +400,11 @@
       gapFilled ? '<div class="filled"><span>本期补充</span><p>' + escapeHtml(gapFilled) + '</p></div>' : '',
       remainingGap ? '<div><span>仍待回答</span><p>' + escapeHtml(remainingGap) + '</p></div>' : ''
     ].join('');
-    var ma = item.medical_affairs || {};
-    var kolQuestion = stripPmidMentions(ma.suggested_kol_question || '');
-    var mslAction = stripPmidMentions(ma.msl_action || '');
-    var evidenceHtml = renderSignalEvidence(item, renderedPmids);
     return '<div class="literature-signal-narrative">' +
       '<section class="literature-signal-change"><div class="literature-signal-section-title">信号是什么</div>' +
         (item.takeaway ? '<p class="literature-signal-takeaway">' + escapeHtml(stripPmidMentions(item.takeaway)) + '</p>' : '') +
       '</section>' +
       (gapHtml ? '<section class="literature-signal-gap-grid"><div class="literature-signal-section-title">为什么构成信号</div>' + gapHtml + '</section>' : '') +
-      evidenceHtml +
-      (pointHtml ? '<section class="literature-signal-points"><div class="literature-signal-section-title">KOL 交流要点</div>' + pointHtml +
-        (kolQuestion ? '<div class="literature-kol-question"><span>建议追问</span><p>' + escapeHtml(kolQuestion) + '</p></div>' : '') +
-      '</section>' : '') +
     '</div>';
   }
 
