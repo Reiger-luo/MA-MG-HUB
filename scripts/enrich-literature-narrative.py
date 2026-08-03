@@ -479,9 +479,8 @@ def normalize_evidence_items(raw_items: Any, articles: list[dict], fallback: dic
         raw = raw_by_pmid.get(pmid, {})
         design = " / ".join(str(value) for value in (article.get("study_types") or [])[:2]) or "研究设计待补充"
         level = str(article.get("evidence_level") or "未分类")
-        original_excerpt = excerpt(article)
         raw_finding = apply_evidence_language(raw.get("finding") or raw.get("keyFinding"), [article])
-        finding = raw_finding if is_predominantly_chinese(raw_finding) else f"摘要结果原文：{original_excerpt}"
+        finding = raw_finding if is_predominantly_chinese(raw_finding) else f"本期 {design} 提供了相关人群的初步结果数据，摘要级定位，需阅读全文确认具体数字与外推边界。"
         contribution = apply_evidence_language(chinese_or_fallback(
             raw.get("gapContribution") or raw.get("contribution"),
             "这项研究提供了可定位到具体人群和结局的结果，使该信号不再只停留在主题层面。",

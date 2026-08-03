@@ -490,7 +490,6 @@
       evidenceHtml +
       (pointHtml ? '<section class="literature-signal-points"><div class="literature-signal-section-title">KOL 交流要点</div>' + pointHtml +
         (kolQuestion ? '<div class="literature-kol-question"><span>建议追问</span><p>' + escapeHtml(kolQuestion) + '</p></div>' : '') +
-        (mslAction ? '<p class="literature-msl-action"><strong>会前动作</strong> · ' + escapeHtml(mslAction) + '</p>' : '') +
       '</section>' : '') +
     '</div>';
   }

@@ -352,10 +352,11 @@ a, button { touch-action: manipulation; -webkit-tap-highlight-color: rgba(37,99,
   background: rgba(22,163,74,0.055);
 }
 .signal-kol-chip {
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
   gap: 0.08rem;
-  max-width: 280px;
+  flex: 1 1 160px;
+  min-width: 160px;
   padding: 0.34rem 0.48rem;
   border-radius: 6px;
   border: 1px solid rgba(37,99,235,0.18);
