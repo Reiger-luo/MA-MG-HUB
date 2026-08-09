@@ -1,0 +1,26 @@
+#:schema https://developers.openai.com/codex/config-schema.json
+
+[mcp_servers.code-review-graph]
+command = "uvx"
+args = [
+  "--from",
+  "code-review-graph==2.3.7",
+  "code-review-graph",
+  "serve",
+  "--tools",
+  "build_or_update_graph_tool,get_minimal_context_tool,detect_changes_tool,get_review_context_tool,get_impact_radius_tool,get_affected_flows_tool,query_graph_tool,semantic_search_nodes_tool,get_architecture_overview_tool",
+]
+startup_timeout_sec = 30
+tool_timeout_sec = 120
+required = false
+enabled_tools = [
+  "build_or_update_graph_tool",
+  "get_minimal_context_tool",
+  "detect_changes_tool",
+  "get_review_context_tool",
+  "get_impact_radius_tool",
+  "get_affected_flows_tool",
+  "query_graph_tool",
+  "semantic_search_nodes_tool",
+  "get_architecture_overview_tool",
+]

@@ -14,12 +14,13 @@ MG Intelligence Hub 是面向医学事务与中国大陆 MSL 的**公开证据�
 2. 来源分频道：指南/共识、监管、注册和会议不能冒充 Oxford 文献证据。
 3. 可追溯：Signal、talking point 和判断尽量回链 PMID、注册号或官方来源。
 4. 公开最小化：full、中间数据、日志和详细审计留在本地。
-5. 云端只读校验：没有 full 的 GitHub Actions 不执行生成或提交，保留 last-good release。
+5. 云端发布只读：没有 full 的发布验证 workflow 不执行生成或提交，保留 last-good release；PR 代码图 workflow 只输出 advisory 评论，post-push workflow 只重建 Graph 并留证。
 6. 决策支持而非自动结论：abstract-level 结果不替代全文医学审核。
 7. 动态状态单一来源：数量、生成时间和发布一致性只从数据状态产物读取。
 8. 简报跟随当前上下文：复制内容必须反映当前标签、筛选条件和来源边界。
 9. 周更口径显式：公开 rolling 以 `literature-recent.js` 为权威，社区 recent 使用相同 PMID 集合，周信号只来自 ingest `added_pmids`。
 10. 发布不可混版：公开文件必须满足显式白名单与 hash 契约，活动页面资源统一使用 release run id。
+11. 代码图只作辅助：CRG 的影响半径和测试关系必须回到实际 diff、动态数据契约与仓库测试验证，低风险分数不等于安全；获批源码上线后本地与 `main` 云端两次完整重建共同闭环。
 
 ## 页面任务
 
@@ -91,6 +92,8 @@ MG-core 指南/共识
 5. 打开 MSL 工作台，确认只加载中国专家分片且不保存行为。
 6. 打开数据状态，核对公开滚动层、语义底座和完整发布哈希一致性；漂移时首页不得显示“完整发布成功”。
 7. 运行快速验证，确认门控、分片和发布边界。
+
+代码变更另按 [Code Review Graph 审查流程](../runbooks/codeReviewGraph.md) 执行 findings-first review。图谱只覆盖可解析源码，不替代本页的产品、来源、发布和医学边界检查。
 
 ## 验证命令
 

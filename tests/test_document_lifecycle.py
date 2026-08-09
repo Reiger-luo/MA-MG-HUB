@@ -1,5 +1,6 @@
 from pathlib import Path
 import re
+import tomllib
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -16,6 +17,7 @@ def test_long_lived_documents_use_the_expected_categories():
         REPORT / "current" / "operationsManual.md",
         REPORT / "current" / "designReview.md",
         REPORT / "roadmap" / "decisionIntelligencePlan.md",
+        REPORT / "runbooks" / "codeReviewGraph.md",
         REPORT / "runbooks" / "clinicalTrialsMaintenance.md",
         REPORT / "reference" / "evidenceGrading.md",
         REPORT / "decisions" / "communitySemanticLayer.md",
@@ -95,6 +97,86 @@ def test_agent_rules_require_capability_docs_to_follow_site_changes():
     assert "report/current/operationsManual.md" in rules
     assert "report/current/designReview.md" in rules
     assert "路线图的现有能力基线" in rules
+
+
+def test_code_review_graph_contract_is_project_scoped_and_advisory():
+    rules = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
+    runbook = (REPORT / "runbooks" / "codeReviewGraph.md").read_text(encoding="utf-8")
+    workflow = (
+        ROOT / ".github" / "workflows" / "code-review-graph.yml"
+    ).read_text(encoding="utf-8")
+    refresh_workflow = (
+        ROOT / ".github" / "workflows" / "code-review-graph-refresh.yml"
+    ).read_text(encoding="utf-8")
+    skill_root = ROOT / ".agents" / "skills" / "refresh-review-graph"
+    skill = (skill_root / "SKILL.md").read_text(encoding="utf-8")
+    skill_metadata = (skill_root / "agents" / "openai.yaml").read_text(
+        encoding="utf-8"
+    )
+    refresh_script = (
+        skill_root / "scripts" / "refreshGraphAfterPush.sh"
+    ).read_text(encoding="utf-8")
+    ignore = (ROOT / ".code-review-graphignore").read_text(encoding="utf-8")
+    gitignore = (ROOT / ".gitignore").read_text(encoding="utf-8")
+    config = tomllib.loads((ROOT / ".codex" / "config.toml").read_text(encoding="utf-8"))
+    server = config["mcp_servers"]["code-review-graph"]
+
+    assert server["command"] == "uvx"
+    assert "code-review-graph==2.3.7" in server["args"]
+    assert server["required"] is False
+    assert "detect_changes_tool" in server["enabled_tools"]
+    assert "get_review_context_tool" in server["enabled_tools"]
+    assert all("refactor" not in tool for tool in server["enabled_tools"])
+
+    assert "/data/**" in ignore
+    assert ".code-review-graph/" in gitignore
+    assert "pull_request:" in workflow
+    assert 'fail-on-risk: "none"' in workflow
+    assert "6a1ee1c7063cc35cfa5ff12b8198c29360f3e4ad" in workflow
+    assert "github.event.pull_request.head.repo.full_name == github.repository" in workflow
+    assert '"data/**"' not in workflow
+
+    assert "push:" in refresh_workflow
+    assert "- main" in refresh_workflow
+    assert "workflow_dispatch:" in refresh_workflow
+    assert '"code-review-graph==2.3.7"' in refresh_workflow
+    assert "ece7cb06caefa5fff74198d8649806c4678c61a1" in refresh_workflow
+    assert "code-review-graph build" in refresh_workflow
+    assert "GITHUB_STEP_SUMMARY" in refresh_workflow
+    assert "pull-requests: write" not in refresh_workflow
+    assert '"data/**"' not in refresh_workflow
+
+    assert "name: refresh-review-graph" in skill
+    assert "after user-approved code changes are pushed or deployed" in skill
+    assert "Never infer push or deployment permission" in skill
+    assert "refreshGraphAfterPush.sh" in skill
+    assert "allow_implicit_invocation: true" in skill_metadata
+    assert 'default_prompt: "Use $refresh-review-graph' in skill_metadata
+    assert 'currentHead" != "$upstreamHead' in refresh_script
+    assert "graph-covered paths contain uncommitted changes" in refresh_script
+    assert "build --repo" in refresh_script
+    assert "detect-changes --repo" in refresh_script
+    assert "update --repo" not in refresh_script
+
+    for phrase in (
+        "只提供辅助信号",
+        "findings 为先",
+        "不得阻塞审查",
+        "不开放自动重构写入",
+        "$refresh-review-graph",
+        "Skill 触发本身不构成 push 或部署授权",
+    ):
+        assert phrase in rules
+
+    for phrase in (
+        "Review 顺序",
+        "findings-first",
+        "不因风险分数阻断合并",
+        "CRG 不得成为审查单点故障",
+        "修改与上线后的闭环",
+        "完整重建 Graph",
+    ):
+        assert phrase in runbook
 
 
 def test_current_docs_do_not_restore_obsolete_agent_workflow_instructions():

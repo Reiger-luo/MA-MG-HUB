@@ -186,13 +186,31 @@ def test_current_docs_have_balanced_fences_and_no_retired_count_claims():
         assert not any(value in text for value in retired)
 
 
-def test_github_actions_and_docs_describe_manual_only_trigger():
-    workflow = (ROOT / ".github" / "workflows" / "weekly-pipeline.yml").read_text(encoding="utf-8")
+def test_release_validation_stays_manual_and_pr_review_is_separate():
+    release_workflow = (
+        ROOT / ".github" / "workflows" / "weekly-pipeline.yml"
+    ).read_text(encoding="utf-8")
+    review_workflow = (
+        ROOT / ".github" / "workflows" / "code-review-graph.yml"
+    ).read_text(encoding="utf-8")
+    refresh_workflow = (
+        ROOT / ".github" / "workflows" / "code-review-graph-refresh.yml"
+    ).read_text(encoding="utf-8")
     manual = (ROOT / "report" / "current" / "operationsManual.md").read_text(encoding="utf-8")
 
-    assert "workflow_dispatch:" in workflow
-    assert "schedule:" not in workflow
-    assert "仅手动 `workflow_dispatch`" in manual
+    assert "workflow_dispatch:" in release_workflow
+    assert "pull_request:" not in release_workflow
+    assert "schedule:" not in release_workflow
+    assert "pull_request:" in review_workflow
+    assert 'fail-on-risk: "none"' in review_workflow
+    assert '"data/**"' not in review_workflow
+    assert "push:" in refresh_workflow
+    assert "- main" in refresh_workflow
+    assert "code-review-graph build" in refresh_workflow
+    assert '"data/**"' not in refresh_workflow
+    assert "发布验证 workflow 仍仅手动 `workflow_dispatch`" in manual
+    assert "advisory 评论" in manual
+    assert "Post-push Graph workflow" in manual
 
 
 def test_msl_has_no_visit_recording_or_browser_persistence_surface():

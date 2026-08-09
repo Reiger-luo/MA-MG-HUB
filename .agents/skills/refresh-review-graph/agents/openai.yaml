@@ -1,0 +1,7 @@
+interface:
+  display_name: "Refresh Review Graph"
+  short_description: "Refresh CRG after approved code pushes"
+  default_prompt: "Use $refresh-review-graph after pushing approved code changes to refresh and verify the repository graph."
+
+policy:
+  allow_implicit_invocation: true

@@ -9,6 +9,7 @@
 | [架构设计与操作手册](current/operationsManual.md) | 系统边界、页面、数据流、周更和维护操作 | 架构、管线或运维方式变化 |
 | [网站设计与审查速览](current/designReview.md) | 五分钟产品和设计审查入口 | 产品边界或审查顺序变化 |
 | [医学事务决策情报升级计划](roadmap/decisionIntelligencePlan.md) | 当前 R1–R6 实施路线 | Release 状态或范围变化 |
+| [Code Review Graph 审查流程](runbooks/codeReviewGraph.md) | 代码图准备、review 顺序、结论格式和故障降级 | 代码审查工具或规则变化 |
 | [临床试验数据维护](runbooks/clinicalTrialsMaintenance.md) | ClinicalTrials.gov、ChiCTR、ChinaDrugTrials 维护流程 | 数据源或导入流程变化 |
 | [Oxford CEBM 证据等级参考](reference/evidenceGrading.md) | 证据等级的方法学和脚本映射 | 分类规则或正式依据变化 |
 

@@ -73,7 +73,7 @@ MG-core gate + 证据等级 I–V gate + 独立来源频道
 - 指南/共识、监管、注册和会议保留为独立来源频道，不冒充 Oxford 文献证据。
 - MSL 前端只加载 `expert-profiles-china.js`；国际专家分片没有页面加载路径，只供离线分析。该 tracked 文件仍可通过 GitHub Pages 公开访问，因此只能包含公开元数据。
 - 页面不采集拜访记录、团队反馈、内部专家标签或任何需要登录保存的数据。
-- GitHub Actions 不持有 full，也不生成公开数据；它只读校验已提交 release，避免部分构建覆盖 last-good 产物。
+- GitHub Actions 不持有 full，也不生成公开数据；发布验证工作流只读校验已提交 release，PR 代码图工作流只输出 advisory review 评论，post-push 工作流只完整重建 Graph 并留证，均不得覆盖 last-good 产物。
 
 ## 技术栈
 
@@ -82,7 +82,7 @@ MG-core gate + 证据等级 I–V gate + 独立来源频道
 - 数据管线：Python 3.11+
 - 主发布：GitHub Pages
 - Sites 受控部署构建：`scripts/build-sites-static.sh`
-- 自动化：本地/Hermes full 驱动周更；GitHub Actions 手动只读发布校验
+- 自动化：本地/Hermes full 驱动周更；GitHub Actions 手动只读发布校验 + 同仓代码 PR advisory 审查 + `main` 源码 push 后 Graph 重建
 
 ## 本地查看
 
@@ -117,6 +117,19 @@ python3 scripts/run-weekly-pipeline.py --mode authoritative-full --run-id weekly
 只读验证使用 `python3 scripts/run-weekly-pipeline.py --mode validate-only`；仅在明确复用当前自然周 `literature-ingest-latest.json` 时，才可使用 `--mode rebuild-full --reuse-ingest`。审计检查点写入 `.hermes-audit/pipeline-runs/`。只有完整公开产物契约全部生成、跨产物口径校验通过后才更新 `data/release-manifest.js`；同一 run id 同时写入活动页面资源 URL，降低 HTML、脚本和数据的缓存混版风险。
 
 ChinaDrugTrials 的人工导入流程见 [临床试验数据维护](report/runbooks/clinicalTrialsMaintenance.md)。手工修改 `data/*.js` 后出现发布漂移时，按 [Release Manifest 漂移修复](report/runbooks/releaseManifestRepair.md) 重建清单。
+
+## 代码审查
+
+仓库使用项目级 `.codex/config.toml` 接入固定版本的 `code-review-graph`，用于辅助识别调用关系、影响半径和测试关系。`data/**` 生成产物不进入代码图；HTML/CSS、`window.MG_*` 动态契约、发布一致性和医学边界仍由直接源码检查与现有测试验证。
+
+本地 review 前可运行：
+
+```bash
+code-review-graph update --brief
+code-review-graph detect-changes --brief --base origin/main
+```
+
+同仓分支 PR 的代码图 workflow 只给出 advisory 评论，不阻断合并，也不替代发布验证。用户批准的源码修改成功 push 后，仓库 Skill `$refresh-review-graph` 负责在已推送 commit 上完整重建本地图谱；graph-covered 源码进入 `main` 后，独立 workflow 会再次完整重建并留下 summary。首次准备、review 顺序、上线后闭环、结论格式和降级方式见 [Code Review Graph 审查流程](report/runbooks/codeReviewGraph.md)。
 
 ## 质量检查
 

@@ -22,7 +22,8 @@ MG Intelligence Hub 是面向 MG 医学事务团队的静态情报工作站。�
 | Sites 受控部署 | 从同一组 Git 管理的公开文件生成隔离静态部署包 |
 | 本地工作站 | 保存 full 文献和中间数据，运行完整重建 |
 | Hermes / 本地计划任务 | 调度 full 驱动周更 |
-| GitHub Actions | 测试、静态构建与当前 release 只读校验；不生成或提交数据 |
+| GitHub Actions（发布验证） | 手动运行测试、静态构建与当前 release 只读校验；不生成或提交数据 |
+| GitHub Actions（代码图） | 对同仓代码 PR 输出 advisory 评论；graph-covered 源码进入 `main` 后完整重建 Graph 并在 summary 留证；不读取 full、不生成数据、不阻断合并 |
 | AI coding agent | 实现、测试和维护；不替代医学审核 |
 
 ## 3. 页面与导航
@@ -201,7 +202,7 @@ python3 scripts/run-weekly-pipeline.py --mode authoritative-full --run-id weekly
 
 完整发布使用集中维护的公开产物白名单，检查声明的全局变量、社区分片、文献/社区 recent PMID 集合、信号 ingest 口径、工作台计数和 release hash。required 步骤全部成功后才更新 `release-manifest.js`；状态生成与清单采用两遍收口，使 `pipeline-status.js` 的一致性结论也进入最终哈希。活动页面的 CSS、脚本和数据 URL 同步使用该 run id 作为缓存版本。当前公开 JS 与清单出现哈希不符、缺失或未入清单时，首页和数据状态显示发布漂移，不再沿用历史“完整发布成功”。optional 步骤失败只记录 warning 并按其定义使用 fallback。
 
-GitHub Actions 仅手动 `workflow_dispatch`，运行测试、`validate-only` 和静态构建；权限为只读，不替代本地 full 驱动周更，也不会提交局部生成结果。
+发布验证 workflow 仍仅手动 `workflow_dispatch`，运行测试、`validate-only` 和静态构建；权限为只读，不替代本地 full 驱动周更，也不会提交局部生成结果。PR 代码图 workflow 由同仓代码 PR 触发，只对 `scripts/**`、`assets/*.js`、`worker/**` 和 `tests/**` 输出 advisory 评论。Post-push Graph workflow 在这些源码或 Graph 配置进入 `main` 后完整重建一次并把证据写入 summary；两个 workflow 都不读取 full、不生成 `data/**`、不更新 release manifest，也不以风险分数阻断合并。
 
 数据状态中的“更新时间”优先读取产物自身 `generated_at`、`last_verified` 或 `snapshot_date`，不以文件 mtime 伪装数据新鲜度。公开 rolling 权威源固定为 `literature-recent.js`；社区 recent 只用于覆盖核对。过期来源显示黄色 warning，缺失或错误显示红色。
 
@@ -225,6 +226,8 @@ GitHub Actions 仅手动 `workflow_dispatch`，运行测试、`validate-only` �
 - Python 数据写入优先使用 `scripts/common/io.py` 的原子写入。
 - API key 只从环境变量读取。
 - 修改主导航时同步所有主页面。
+- 代码 review 遵循 [Code Review Graph 审查流程](../runbooks/codeReviewGraph.md)：图谱可用时先做变更与影响分析，再读 diff、核对动态契约并运行测试；CRG 不可用时降级为源码检索和测试。
+- 用户批准的源码修改成功 push 或上线后，调用仓库 Skill `$refresh-review-graph` 在已推送 commit 上完整重建本地图谱并做二次影响检查；Skill 不替代 push 授权，失败必须在交付结果中披露。
 
 ## 13. 验证
 

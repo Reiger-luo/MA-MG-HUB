@@ -4,6 +4,7 @@ __pycache__/
 node_modules/
 .hermes-audit/
 dist/
+.code-review-graph/
 
 # 大体积本地数据（公开前端 .js 产物入仓库，原始 json 留本地）
 data/literature-full.json

@@ -1,0 +1,70 @@
+name: MA-MG-HUB Post-Push Graph Refresh
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "scripts/**"
+      - "assets/*.js"
+      - "worker/**"
+      - "tests/**"
+      - ".code-review-graphignore"
+      - ".codex/config.toml"
+      - ".agents/skills/refresh-review-graph/**"
+      - ".github/workflows/code-review-graph*.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: code-review-graph-refresh-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  refresh-graph:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout deployed commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: "3.11"
+
+      - name: Build fresh code graph
+        run: |
+          python -m pip install --quiet "code-review-graph==2.3.7"
+          code-review-graph build
+
+      - name: Publish graph refresh evidence
+        env:
+          pushBefore: ${{ github.event.before }}
+        run: |
+          set -euo pipefail
+          baseRef="${pushBefore}"
+          if [[ -z "${baseRef}" ]] || [[ "${baseRef}" == "0000000000000000000000000000000000000000" ]]; then
+            baseRef="HEAD~1"
+          elif ! git cat-file -e "${baseRef}^{commit}" 2>/dev/null; then
+            baseRef="HEAD~1"
+          fi
+
+          summaryFile=$(mktemp)
+          {
+            printf '## Code Review Graph post-push refresh\n\n'
+            printf -- '- Head: `%s`\n' "$(git rev-parse HEAD)"
+            printf -- '- Base: `%s`\n\n' "${baseRef}"
+            printf '### Graph status\n\n```text\n'
+            code-review-graph status
+            printf '```\n\n### Change impact\n\n```text\n'
+            code-review-graph detect-changes --brief --base "${baseRef}"
+            printf '```\n'
+          } > "${summaryFile}"
+
+          cat "${summaryFile}"
+          cat "${summaryFile}" >> "${GITHUB_STEP_SUMMARY}"
