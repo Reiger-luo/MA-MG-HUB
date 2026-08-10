@@ -3,7 +3,7 @@
 set -euo pipefail
 
 showUsage() {
-  printf 'Usage: bash refreshGraphAfterPush.sh --base <pre-push-commit> [--upstream <remote-ref>]\n' >&2
+  printf 'Usage: bash scripts/refreshReviewGraphAfterPush.sh --base <pre-push-commit> [--upstream <remote-ref>]\n' >&2
 }
 
 baseRef=""

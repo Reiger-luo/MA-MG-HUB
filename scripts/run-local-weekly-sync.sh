@@ -32,7 +32,7 @@ cleanup() {
     elif [ "${DRY_RUN_INGEST_EXISTED}" = "0" ]; then
       rm -f "${ROOT_DIR}/data/literature-ingest-latest.json" || true
     fi
-    git -C "${ROOT_DIR}" restore --staged --worktree -- data assets pages index.html 2>/dev/null || true
+    git -C "${ROOT_DIR}" restore --staged --worktree -- data pages index.html 2>/dev/null || true
   fi
   rmdir "${LOCK_DIR}" 2>/dev/null || true
   return "${status}"
@@ -53,8 +53,8 @@ if [ ! -f "data/literature-full.json" ]; then
   exit 2
 fi
 
-if git status --porcelain --untracked-files=all -- data assets pages index.html | grep -q . || ! git diff --quiet || ! git diff --cached --quiet; then
-  echo "存在未提交改动或公开目录未跟踪文件，停止周更以避免混入自动提交。" >&2
+if git status --porcelain --untracked-files=all | grep -q .; then
+  echo "工作树存在未提交或未跟踪文件，停止周更以避免混入自动提交。" >&2
   git status --short
   exit 3
 fi
@@ -146,22 +146,51 @@ print(f"  latest_full: {full_item.get('pmid')} {full_item.get('entry_date')}")
 print(f"  latest_recent: {recent_item.get('pmid')} {recent_item.get('entry_date')}")
 PY
 
+# 后台任务只允许改动声明的生成产物；源码或其他路径漂移时必须停下等待人工审查。
+unexpectedChanges=()
+while IFS= read -r filePath; do
+  case "$filePath" in
+    data/*|pages/*|index.html)
+      ;;
+    *)
+      unexpectedChanges+=("$filePath")
+      ;;
+  esac
+done < <(
+  {
+    git diff --name-only
+    git diff --cached --name-only
+    git ls-files --others --exclude-standard
+  } | sort -u
+)
+
+if (( ${#unexpectedChanges[@]} > 0 )); then
+  echo "管线修改了后台发布白名单之外的文件，停止自动提交；请先人工 review。" >&2
+  printf '  %s\n' "${unexpectedChanges[@]}" >&2
+  exit 6
+fi
+
 if [ "${DRY_RUN}" = "1" ]; then
   echo "MG_WEEKLY_DRY_RUN=1，跳过 git add/commit/push。"
 else
-  if git ls-files --others --exclude-standard -- data assets pages index.html | grep -q .; then
+  if git ls-files --others --exclude-standard -- data pages index.html | grep -q .; then
     echo "管线生成了未纳入版本控制的公开文件，停止提交；请先审查并显式加入仓库。" >&2
-    git ls-files --others --exclude-standard -- data assets pages index.html >&2
+    git ls-files --others --exclude-standard -- data pages index.html >&2
     exit 5
   fi
   # 只暂存已经纳入版本控制的公开产物，避免通配符把意外文件带入发布。
-  git add -u -- data assets pages index.html
+  git add -u -- data pages index.html
 
   if git diff --cached --quiet; then
     echo "没有公开数据变更需要提交。"
   else
     git commit -m "chore: update MG hub weekly data"
+    pushBase=$(git rev-parse origin/main)
     git push origin main
+    if ! bash scripts/refreshReviewGraphAfterPush.sh --base "$pushBase"; then
+      echo "公开产物已 push，但 post-push Graph 校验失败；不要重复 push，请按日志中的 base SHA 手动重试。" >&2
+      exit 8
+    fi
   fi
 fi
 

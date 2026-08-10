@@ -106,6 +106,8 @@ def test_pipeline_and_ci_wire_new_artifacts_and_local_full_gate():
     assert "--mode authoritative-full" in local
     assert "DRY_RUN_INGEST_BACKUP" in local
     assert "data/literature-ingest-latest.json" in local
+    assert "后台发布白名单之外的文件" in local
+    assert "refreshReviewGraphAfterPush.sh" in local
     assert "--mode validate-only" in workflow
     assert "contents: read" in workflow
     assert "git push" not in workflow
@@ -211,6 +213,7 @@ def test_release_validation_stays_manual_and_pr_review_is_separate():
     assert "发布验证 workflow 仍仅手动 `workflow_dispatch`" in manual
     assert "advisory 评论" in manual
     assert "Post-push Graph workflow" in manual
+    assert "常规数据/HTML 周更记录 `CRG_REFRESH_SKIPPED`" in manual
 
 
 def test_msl_has_no_visit_recording_or_browser_persistence_surface():

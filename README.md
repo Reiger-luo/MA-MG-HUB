@@ -106,6 +106,8 @@ bash scripts/run-local-weekly-sync.sh
 MG_WEEKLY_DRY_RUN=1 bash scripts/run-local-weekly-sync.sh
 ```
 
+后台周更只会自动提交 `data/**`、`pages/**` 和 `index.html` 中已纳入版本控制的生成产物；若管线意外修改源码或其他路径，任务会停止并等待人工 review。成功 push 后同一任务调用共享 post-push Graph 脚本：普通数据/HTML 周更输出 `CRG_REFRESH_SKIPPED`，只有 graph-covered 源码变更才完整重建，不需要第二次提交或 push。
+
 可恢复管线：
 
 ```bash
@@ -129,7 +131,7 @@ code-review-graph update --brief
 code-review-graph detect-changes --brief --base origin/main
 ```
 
-同仓分支 PR 的代码图 workflow 只给出 advisory 评论，不阻断合并，也不替代发布验证。用户批准的源码修改成功 push 后，仓库 Skill `$refresh-review-graph` 负责在已推送 commit 上完整重建本地图谱；graph-covered 源码进入 `main` 后，独立 workflow 会再次完整重建并留下 summary。首次准备、review 顺序、上线后闭环、结论格式和降级方式见 [Code Review Graph 审查流程](report/runbooks/codeReviewGraph.md)。
+同仓分支 PR 的代码图 workflow 只给出 advisory 评论，不阻断合并，也不替代发布验证。用户批准的源码修改成功 push 后，仓库 Skill `$refresh-review-graph` 通过 `scripts/refreshReviewGraphAfterPush.sh` 在已推送 commit 上完整重建本地图谱；同一共享脚本也供已授权的后台发布器在单次 push 后做条件刷新。graph-covered 源码进入 `main` 后，独立 workflow 会再次完整重建并留下 summary。首次准备、review 顺序、上线后闭环、结论格式和降级方式见 [Code Review Graph 审查流程](report/runbooks/codeReviewGraph.md)。
 
 ## 质量检查
 

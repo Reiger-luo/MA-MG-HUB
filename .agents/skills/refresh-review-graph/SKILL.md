@@ -19,10 +19,10 @@ Close the review loop after an authorized push by rebuilding the local CRG graph
 3. Only after the push succeeds, run:
 
    ```bash
-   bash .agents/skills/refresh-review-graph/scripts/refreshGraphAfterPush.sh --base "$prePushHead"
+   bash scripts/refreshReviewGraphAfterPush.sh --base "$prePushHead"
    ```
 
-4. The script performs a full build at the pushed commit, then analyzes the pushed range. If the MCP server is available, rerun `detect_changes_tool` and `get_review_context_tool` against the same base to confirm affected flows and test gaps.
+4. The shared repository script performs a full build at the pushed commit, then analyzes the pushed range. If the MCP server is available, rerun `detect_changes_tool` and `get_review_context_tool` against the same base to confirm affected flows and test gaps.
 5. Report the pushed SHA, Graph status, changed nodes or skip reason, impact summary, test gaps, and the post-push GitHub workflow status when available.
 
 ## Safety and completion rules

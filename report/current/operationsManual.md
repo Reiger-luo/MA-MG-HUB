@@ -191,6 +191,8 @@ bash scripts/run-local-weekly-sync.sh
 MG_WEEKLY_DRY_RUN=1 bash scripts/run-local-weekly-sync.sh
 ```
 
+后台周更从干净的 `main` 开始，只允许自动提交 `data/**`、`pages/**` 和 `index.html` 中已跟踪的生成产物。若构建过程修改 `scripts/**`、`assets/*.js`、`worker/**`、`tests/**` 或其他白名单外路径，任务在 commit 前 fail closed，保留现场等待人工 review。成功 push 后脚本以 push 前远端 SHA 调用 `scripts/refreshReviewGraphAfterPush.sh`；常规数据/HTML 周更记录 `CRG_REFRESH_SKIPPED`，不产生第二次 commit/push。
+
 恢复指定运行：
 
 ```bash
@@ -228,6 +230,7 @@ python3 scripts/run-weekly-pipeline.py --mode authoritative-full --run-id weekly
 - 修改主导航时同步所有主页面。
 - 代码 review 遵循 [Code Review Graph 审查流程](../runbooks/codeReviewGraph.md)：图谱可用时先做变更与影响分析，再读 diff、核对动态契约并运行测试；CRG 不可用时降级为源码检索和测试。
 - 用户批准的源码修改成功 push 或上线后，调用仓库 Skill `$refresh-review-graph` 在已推送 commit 上完整重建本地图谱并做二次影响检查；Skill 不替代 push 授权，失败必须在交付结果中披露。
+- 已获准运行的后台发布器在单次 push 后调用同一共享 Graph 脚本；自动提交严格限制在声明的生成产物白名单，任何源码漂移都必须转入人工 review。
 
 ## 13. 验证
 

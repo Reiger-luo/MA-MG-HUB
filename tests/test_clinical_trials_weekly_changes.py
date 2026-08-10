@@ -211,6 +211,7 @@ def test_pipeline_and_publish_chain_wires_weekly_changes_snapshot():
     status = (PROJECT / "scripts" / "generate-pipeline-status.py").read_text(encoding="utf-8")
     for text in (runner, status):
         assert "clinicaltrials-weekly-changes-snapshot.json" in text
-    assert "git add -u -- data assets pages index.html" in local
+    assert "git add -u -- data pages index.html" in local
+    assert "git add -u -- data assets pages index.html" not in local
     assert "--mode validate-only" in workflow
     assert "git push" not in workflow

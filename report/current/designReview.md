@@ -21,6 +21,7 @@ MG Intelligence Hub 是面向医学事务与中国大陆 MSL 的**公开证据�
 9. 周更口径显式：公开 rolling 以 `literature-recent.js` 为权威，社区 recent 使用相同 PMID 集合，周信号只来自 ingest `added_pmids`。
 10. 发布不可混版：公开文件必须满足显式白名单与 hash 契约，活动页面资源统一使用 release run id。
 11. 代码图只作辅助：CRG 的影响半径和测试关系必须回到实际 diff、动态数据契约与仓库测试验证，低风险分数不等于安全；获批源码上线后本地与 `main` 云端两次完整重建共同闭环。
+12. 后台发布 fail closed：周更只自动提交声明的数据/HTML 产物，源码或其他路径漂移先转人工 review；单次 push 后条件刷新 Graph，数据更新不制造空提交。
 
 ## 页面任务
 

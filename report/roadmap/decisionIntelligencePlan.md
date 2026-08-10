@@ -969,7 +969,7 @@ Question IDs unique
 | LLM 生成医学叙事偏离证据 | LLM 可选；候选、Claim ID、source ref、event type 和 gate 全部由确定性程序控制并回验 |
 | Claim 文件增大影响性能 | 超过 500 KB 才启用按 question shard；首屏不加载 Claim 全量 |
 | 无 full 的云端运行误覆盖新产物或 last-good | 发布验证 workflow 固定 `validate-only` 且仓库内容权限只读；PR 与 post-push 代码图 workflow 只分析源码，不生成数据或更新 release manifest；完整/重建模式缺 full 时在生成前 fail closed；所有 builder 保持原子写入 |
-| 规划实施期间 cron 产生新 commit | 每个 Release 开始重新读取 git 状态和最新数据，禁止基于旧 SHA 直接编码 |
+| 规划实施期间 cron 产生新 commit | 每个 Release 开始重新读取 git 状态和最新数据，禁止基于旧 SHA 直接编码；后台同步只自动提交数据/HTML 白名单，源码漂移 fail closed，单次 push 后执行共享 Graph 条件刷新 |
 
 ## 10. 开放问题（进入对应 Release 时讨论，不阻碍本计划）
 

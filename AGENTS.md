@@ -40,3 +40,4 @@
 - 项目 MCP 只暴露构图和只读分析工具，不开放自动重构写入。详细流程见 `report/runbooks/codeReviewGraph.md`。
 - 用户明确批准的源码修改成功 push 或上线后，必须使用 `$refresh-review-graph`：push 前记录 upstream SHA，push 后在已推送 commit 上完整重建 Graph，再重新检查影响范围和测试缺口。Skill 触发本身不构成 push 或部署授权；Graph 更新失败时必须披露，不得把任务标记为完整成功。
 - `main` 上的 graph-covered 源码 push 另由 `.github/workflows/code-review-graph-refresh.yml` 完整重建并在 workflow summary 留证；本地 Skill 与云端重建是互补校验，不能互相替代。
+- 后台发布任务只允许自动提交 `data/**`、`pages/**` 和 `index.html` 生成产物；出现源码或其他路径变更时必须 fail closed 并等待人工 review。成功 push 后统一调用 `scripts/refreshReviewGraphAfterPush.sh`；纯数据/HTML 更新记录 `CRG_REFRESH_SKIPPED`，不得为更新 Graph 再做一次提交或 push。

@@ -113,9 +113,11 @@ def test_code_review_graph_contract_is_project_scoped_and_advisory():
     skill_metadata = (skill_root / "agents" / "openai.yaml").read_text(
         encoding="utf-8"
     )
-    refresh_script = (
-        skill_root / "scripts" / "refreshGraphAfterPush.sh"
-    ).read_text(encoding="utf-8")
+    refresh_script_path = ROOT / "scripts" / "refreshReviewGraphAfterPush.sh"
+    refresh_script = refresh_script_path.read_text(encoding="utf-8")
+    weekly_sync = (ROOT / "scripts" / "run-local-weekly-sync.sh").read_text(
+        encoding="utf-8"
+    )
     ignore = (ROOT / ".code-review-graphignore").read_text(encoding="utf-8")
     gitignore = (ROOT / ".gitignore").read_text(encoding="utf-8")
     config = tomllib.loads((ROOT / ".codex" / "config.toml").read_text(encoding="utf-8"))
@@ -149,7 +151,8 @@ def test_code_review_graph_contract_is_project_scoped_and_advisory():
     assert "name: refresh-review-graph" in skill
     assert "after user-approved code changes are pushed or deployed" in skill
     assert "Never infer push or deployment permission" in skill
-    assert "refreshGraphAfterPush.sh" in skill
+    assert "scripts/refreshReviewGraphAfterPush.sh" in skill
+    assert not (skill_root / "scripts" / "refreshGraphAfterPush.sh").exists()
     assert "allow_implicit_invocation: true" in skill_metadata
     assert 'default_prompt: "Use $refresh-review-graph' in skill_metadata
     assert 'currentHead" != "$upstreamHead' in refresh_script
@@ -157,6 +160,15 @@ def test_code_review_graph_contract_is_project_scoped_and_advisory():
     assert "build --repo" in refresh_script
     assert "detect-changes --repo" in refresh_script
     assert "update --repo" not in refresh_script
+
+    assert "data/*|pages/*|index.html" in weekly_sync
+    assert "git add -u -- data pages index.html" in weekly_sync
+    assert "git add -u -- data assets pages index.html" not in weekly_sync
+    assert 'pushBase=$(git rev-parse origin/main)' in weekly_sync
+    assert 'bash scripts/refreshReviewGraphAfterPush.sh --base "$pushBase"' in weekly_sync
+    assert weekly_sync.index("git push origin main") < weekly_sync.index(
+        'bash scripts/refreshReviewGraphAfterPush.sh --base "$pushBase"'
+    )
 
     for phrase in (
         "只提供辅助信号",

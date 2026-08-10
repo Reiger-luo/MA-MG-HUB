@@ -50,11 +50,13 @@ uvx --from "code-review-graph==2.3.7" code-review-graph status
 
 1. push 前记录当前 upstream SHA；
 2. 完成获批的验证、commit、push 和部署；
-3. push 成功后运行 `refreshGraphAfterPush.sh --base <pre-push-sha>`；
+3. push 成功后运行 `scripts/refreshReviewGraphAfterPush.sh --base <pre-push-sha>`；
 4. 在已推送 commit 上完整重建 Graph，并重新检查影响范围、执行流和测试缺口；
 5. 在交付结果中报告 pushed SHA、Graph 状态、风险摘要和未覆盖边界。
 
 脚本会验证本地 `HEAD` 已等于 upstream，并拒绝把 push 后新增的未提交源码混入 Graph。每次使用完整重建而非依赖历史增量状态，确保 Graph 对应当前上线 commit；纯数据、HTML、CSS 或文档 push 没有 CRG 可解析变更时，只报告不适用原因。
+
+Hermes/本地周更等已经获准自动发布的后台任务调用同一个共享脚本，不复制第二套 Graph 逻辑。后台任务在 push 前记录远端 SHA，只进行一次 commit/push，随后以该 SHA 为 base 执行脚本。常规周更只改 `data/**`、`pages/**` 和 `index.html`，因此返回 `CRG_REFRESH_SKIPPED`；若管线生成源码或其他白名单外变更，必须在 commit 前 fail closed 并等待人工 review，不能为了刷新 Graph 追加第二次提交。
 
 ## 5. 结论规则
 
@@ -90,5 +92,5 @@ code-review-graph build
 push 已成功但本地 Graph 刷新失败时，不回滚或重复 push。应明确报告失败，并在修复环境后运行：
 
 ```bash
-bash .agents/skills/refresh-review-graph/scripts/refreshGraphAfterPush.sh --base <pre-push-sha>
+bash scripts/refreshReviewGraphAfterPush.sh --base <pre-push-sha>
 ```
