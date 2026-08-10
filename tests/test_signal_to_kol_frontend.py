@@ -67,15 +67,29 @@ def test_signals_data_contains_literature_signal_to_kol_schema():
     payload = load_js_global(PROJECT / "data" / "signals-weekly.js", "MG_SIGNALS_DATA")
     signals = payload.get("signals") or []
 
-    assert signals
     assert payload["source_policy"]["scope"] == "literature_only"
     assert payload["source_policy"]["auto_publish"] is True
     assert payload["source_policy"]["review_required"] is False
     assert payload["source_policy"]["signal_count_unlimited"] is True
+    if not signals:
+        # 零信号周（无新增 MG-core 文献）为合法发布；校验"合法空"契约，防止真错误混入。
+        _assert_legitimate_empty_signals_payload(payload)
+        return
     assert all(signal.get("signal_to_kol") for signal in signals)
     assert all("kol_leads" in signal for signal in signals)
     assert all("institution_leads" in signal for signal in signals)
     assert all("medical_affairs" in signal for signal in signals)
+
+
+def _assert_legitimate_empty_signals_payload(payload):
+    """零信号周必须走 no_new_mg_core_signals 跳过分支，且满足发布契约。"""
+    policy = payload.get("source_policy") or {}
+    assert policy.get("llm_enrichment") is True
+    assert policy.get("llm_skip_reason") == "no_new_mg_core_signals"
+    assert payload.get("window_basis") == "trueIngestAddedPmids"
+    assert policy.get("analysis_model") == "literature-signal-to-kol-v3"
+    assert policy.get("llm_reference_coverage") == 0.0
+    assert policy.get("published_reference_coverage") == 0.0
 
 
 def test_signal_to_kol_is_rendered_on_literature_page():
@@ -115,6 +129,65 @@ def test_signal_summary_helper_aggregates_all_normalized_signals_deterministical
     assert "治疗证据" in summary["overview"]
     assert "主题乙" in summary["overview"]
     assert "疗效" in summary["overview"]
+
+
+def test_enrich_skips_llm_and_publishes_empty_payload_when_no_new_mg_core_signals(tmp_path, monkeypatch):
+    """无新增 MG-core 信号时，enrich 应优雅跳过 LLM、发布合法空 payload（exit 0）。"""
+    module = load_enrichment_module()
+
+    # 用空 requireIngest 窗口构造"本周无新增"的确定性 payload。
+    empty_payload = {
+        "signals": [],
+        "window_basis": "trueIngestAddedPmids",
+        "window_start": "2026-08-03",
+        "window_end": "2026-08-10",
+        "source_policy": {
+            "scope": "literature_only",
+            "auto_publish": True,
+            "review_required": False,
+            "signal_count_unlimited": True,
+        },
+    }
+
+    class EmptyBuilder:
+        @staticmethod
+        def load_weekly_ingest_manifest():
+            return {"window_start": "2026-08-03", "window_end": "2026-08-10", "added_pmids": []}
+
+        @staticmethod
+        def build_signals(_literature, _manifest, requireIngest=False):
+            assert requireIngest is True
+            return dict(empty_payload)
+
+    written = {}
+
+    signals_out = tmp_path / "signals-weekly.js"
+    monkeypatch.setattr(module, "SIGNALS_PATH", signals_out)
+    monkeypatch.setattr(module, "LITERATURE_PATH", tmp_path / "literature-recent.js")
+    monkeypatch.setattr(module, "DASHBOARD_PATH", tmp_path / "dashboard-data.js")
+    monkeypatch.setattr(module, "load_js_global", lambda _path, _name: [] if "literature" in str(_path) else {})
+    monkeypatch.setattr(module, "load_builder_module", lambda: EmptyBuilder)
+    # main() 用 argparse 读取 sys.argv；注入干净 argv 避免把 pytest 参数误当 --force。
+    monkeypatch.setattr(sys, "argv", ["enrich-literature-narrative.py"])
+    monkeypatch.setattr(
+        module,
+        "atomic_write_js_global",
+        lambda path, name, payload: written.update({"path": path, "name": name, "payload": payload}),
+    )
+    # 防御：空记录路径绝不应触发 LLM 调用。
+    monkeypatch.setattr(
+        module,
+        "collect_llm_signals",
+        lambda _records: (_ for _ in ()).throw(AssertionError("空记录路径不应调用 LLM")),
+    )
+
+    module.main()
+
+    assert written["path"] == signals_out
+    payload = written["payload"]
+    assert payload["signals"] == []
+    assert payload["window_basis"] == "trueIngestAddedPmids"
+    _assert_legitimate_empty_signals_payload(payload)
 
 
 def test_signal_builder_uses_one_week_window():
@@ -247,6 +320,10 @@ def test_generated_dashboard_signal_summary_matches_all_final_signals():
         "medium": sum(signal.get("strength") == "中" for signal in signals),
         "weak": sum(signal.get("strength") == "弱" for signal in signals),
     }
+    if not signals:
+        # 零信号周：汇总为空属合法，仅校验与 payload 的"合法空"契约一致。
+        _assert_legitimate_empty_signals_payload(signal_payload)
+        return
     assert summary["leading_types"]
     assert summary["top_topics"]
     assert summary["overview"]
@@ -554,11 +631,15 @@ def test_literature_signals_use_parent_child_evidence_chain_without_duplicate_pm
     policy = payload.get("source_policy") or {}
     pmids = [str(pmid) for signal in signals for pmid in signal.get("related_pmids", [])]
 
+    assert policy["analysis_model"].startswith("literature-signal-to-kol-")
+    assert policy["aggregation"].startswith("mg_core_topic_cluster")
+    if not signals:
+        # 零信号周：无 parent-child 链可查，仅校验"合法空"契约。
+        _assert_legitimate_empty_signals_payload(payload)
+        return
     assert len(signals) < len(pmids)
     assert len(pmids) == len(set(pmids))
     assert sum(signal.get("article_count", 0) for signal in signals) == len(pmids)
-    assert policy["analysis_model"].startswith("literature-signal-to-kol-")
-    assert policy["aggregation"].startswith("mg_core_topic_cluster")
     if policy.get("llm_enrichment"):
         assert policy["published_reference_coverage"] == 1.0
     # 严格 recent 上游已可能排除全部 non-core；构建器的混合输入防御另有单测覆盖。

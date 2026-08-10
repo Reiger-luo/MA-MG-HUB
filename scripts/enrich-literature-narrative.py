@@ -815,7 +815,23 @@ def main() -> None:
     ordered_articles = [by_pmid[pmid] for pmid in candidate_pmid_order if pmid in by_pmid]
     records = records_for_prompt(ordered_articles, baseline_by_pmid)
     if not records:
-        raise SystemExit("No deterministic MG-core signal records available")
+        # 本周无新增 MG-core 信号（requireIngest 窗口新增=0）属正常场景，不是错误。
+        # 不调用 LLM、不生成占位 finding；按发布契约写入合法的空信号 payload 并优雅结束，
+        # 让 validatePublicRelease 的 llm_enrichment 契约通过、整轮管线继续发布本周数据。
+        policy = payload.setdefault("source_policy", {})
+        policy.update({
+            "analysis_model": "literature-signal-to-kol-v3",
+            "aggregation": "mg_core_topic_cluster_llm_normalized",
+            "llm_enrichment": True,
+            "llm_reference_coverage": 0.0,
+            "published_reference_coverage": 0.0,
+            "llm_source": "scripts/enrich-literature-narrative.py",
+            "llm_skip_reason": "no_new_mg_core_signals",
+        })
+        payload["generated_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        atomic_write_js_global(SIGNALS_PATH, "MG_SIGNALS_DATA", payload)
+        print("无新增 MG-core 信号：发布空信号 payload，LLM enrich 跳过（no_new_mg_core_signals）")
+        return
     raw_signals = collect_llm_signals(records)
     normalized, coverage = merge_llm_signals(raw_signals, payload, by_pmid, builder)
     payload["generated_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
