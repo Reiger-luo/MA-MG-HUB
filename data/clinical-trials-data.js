@@ -1,6 +1,6 @@
 window.MG_CLINICAL_TRIALS_DATA = {
   "meta": {
-    "generated_at": "2026-07-27",
+    "generated_at": "2026-08-10",
     "total_count": 453,
     "sources_order": [
       "ClinicalTrials.gov",
@@ -11,7 +11,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
   "decision_signals": [
     {
       "title": "招募中试验",
-      "detail": "当前共有 139 项招募中或邀请入组试验。",
+      "detail": "当前共有 138 项招募中或邀请入组试验。",
       "tag": "招募"
     },
     {
@@ -21,7 +21,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "title": "近 6 个月新登记",
-      "detail": "截至 2026-07-27，近 6 个月登记 38 项试验。",
+      "detail": "截至 2026-08-10，近 6 个月登记 34 项试验。",
       "tag": "近期登记"
     }
   ],
@@ -1089,7 +1089,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "start_date": "2021-07-15",
           "readout_date": "2023-11-17",
-          "completion_date": "2029-03-30",
+          "completion_date": "2029-03-29",
           "sponsor": "Janssen Research & Development, LLC",
           "url": "https://clinicaltrials.gov/study/NCT04951622"
         },
@@ -1101,7 +1101,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "status_class": "recruiting",
           "phase_label": "Phase 2 / Phase 3",
           "start_date": "2022-07-20",
-          "readout_date": "2026-06-26",
+          "readout_date": "2027-06-30",
           "completion_date": "2029-07-02",
           "sponsor": "Janssen Research & Development, LLC",
           "url": "https://clinicaltrials.gov/study/NCT05265273"
@@ -2337,55 +2337,6 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "first_registered": "2020-08-24",
       "latest_registered": "2025-05-23",
       "linked_registries": []
-    },
-    {
-      "drug_class": "B细胞/抗CD19/CD20",
-      "name": "Descartes-08",
-      "highest_phase_label": "Phase 2",
-      "stage_number": 2,
-      "study_count": 1,
-      "status_summary": "招募 0 · 进行 1 · 完成 0",
-      "sponsors": [
-        "Cartesian Therapeutics"
-      ],
-      "sources": {
-        "ClinicalTrials.gov": 1
-      },
-      "key_trial": {
-        "registry": "ClinicalTrials.gov",
-        "registry_id": "NCT04146051",
-        "title": "Descartes-08 CAR-T Cells in Generalized Myasthenia Gravis (MG)",
-        "url": "https://clinicaltrials.gov/study/NCT04146051"
-      },
-      "trials": [
-        {
-          "registry": "ClinicalTrials.gov",
-          "registry_id": "NCT04146051",
-          "title": "Descartes-08 CAR-T Cells in Generalized Myasthenia Gravis (MG)",
-          "status_label": "进行中",
-          "status_class": "active",
-          "phase_label": "Phase 2",
-          "start_date": "2019-12-04",
-          "readout_date": "2025-07-31",
-          "completion_date": "2026-03-31",
-          "sponsor": "Cartesian Therapeutics",
-          "url": "https://clinicaltrials.gov/study/NCT04146051"
-        }
-      ],
-      "timeline": {
-        "start": "2019-12-04",
-        "readout": "2025-07-31",
-        "completion": "2026-03-31"
-      },
-      "first_registered": "2019-10-31",
-      "latest_registered": "2019-10-31",
-      "linked_registries": [
-        {
-          "registry": "ClinicalTrials.gov",
-          "registry_id": "NCT06381284",
-          "url": "https://clinicaltrials.gov/study/NCT06381284"
-        }
-      ]
     },
     {
       "drug_class": "B细胞/抗CD19/CD20",
@@ -6487,7 +6438,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "highest_phase_label": "Phase 1",
       "stage_number": 1,
       "study_count": 3,
-      "status_summary": "招募 2 · 进行 0 · 完成 0 · 终止 1",
+      "status_summary": "招募 1 · 进行 1 · 完成 0 · 终止 1",
       "sponsors": [
         "Juno Therapeutics, Inc., a Bristol-Myers Squibb Company",
         "Kite, A Gilead Company",
@@ -6520,8 +6471,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry": "ClinicalTrials.gov",
           "registry_id": "NCT06220201",
           "title": "A Study to Evaluate the Safety, Tolerability, Efficacy, and Drug Levels of CC-97540 in Participants With Relapsing Forms of Multiple Sclerosis, Progressive Forms of Multiple Sclerosis or Refractory Myasthenia Gravis (MG) (Breakfree-2)",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status_label": "进行中",
+          "status_class": "active",
           "phase_label": "Phase 1",
           "start_date": "2024-03-28",
           "readout_date": "2027-07-15",
@@ -6629,7 +6580,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "highest_phase_label": "Phase 1",
       "stage_number": 1,
       "study_count": 2,
-      "status_summary": "招募 2 · 进行 0 · 完成 0",
+      "status_summary": "招募 1 · 进行 1 · 完成 0",
       "sponsors": [
         "Juno Therapeutics, Inc., a Bristol-Myers Squibb Company",
         "Kite, A Gilead Company"
@@ -6648,8 +6599,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry": "ClinicalTrials.gov",
           "registry_id": "NCT06220201",
           "title": "A Study to Evaluate the Safety, Tolerability, Efficacy, and Drug Levels of CC-97540 in Participants With Relapsing Forms of Multiple Sclerosis, Progressive Forms of Multiple Sclerosis or Refractory Myasthenia Gravis (MG) (Breakfree-2)",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status_label": "进行中",
+          "status_class": "active",
           "phase_label": "Phase 1",
           "start_date": "2024-03-28",
           "readout_date": "2027-07-15",
@@ -6785,7 +6736,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "highest_phase_label": "Phase 1",
       "stage_number": 1,
       "study_count": 1,
-      "status_summary": "招募 1 · 进行 0 · 完成 0",
+      "status_summary": "招募 0 · 进行 1 · 完成 0",
       "sponsors": [
         "Juno Therapeutics, Inc., a Bristol-Myers Squibb Company"
       ],
@@ -6803,8 +6754,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry": "ClinicalTrials.gov",
           "registry_id": "NCT06220201",
           "title": "A Study to Evaluate the Safety, Tolerability, Efficacy, and Drug Levels of CC-97540 in Participants With Relapsing Forms of Multiple Sclerosis, Progressive Forms of Multiple Sclerosis or Refractory Myasthenia Gravis (MG) (Breakfree-2)",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status_label": "进行中",
+          "status_class": "active",
           "phase_label": "Phase 1",
           "start_date": "2024-03-28",
           "readout_date": "2027-07-15",
@@ -9191,9 +9142,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "highest_phase_label": "未标注",
       "stage_number": 0,
       "study_count": 1,
-      "status_summary": "招募 0 · 进行 0 · 完成 0",
+      "status_summary": "招募 1 · 进行 0 · 完成 0",
       "sponsors": [
-        "Myasthenia Gravis Rare Disease Network"
+        "George Washington University"
       ],
       "sources": {
         "ClinicalTrials.gov": 1
@@ -9209,20 +9160,20 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry": "ClinicalTrials.gov",
           "registry_id": "NCT06259071",
           "title": "MuSK Myasthenia 1000 Study",
-          "status_label": "未知",
-          "status_class": "other",
+          "status_label": "招募中",
+          "status_class": "recruiting",
           "phase_label": "未标注",
           "start_date": "2023-08-23",
-          "readout_date": "2025-08-23",
-          "completion_date": "2025-12-31",
-          "sponsor": "Myasthenia Gravis Rare Disease Network",
+          "readout_date": "2027-08-23",
+          "completion_date": "2027-12-31",
+          "sponsor": "George Washington University",
           "url": "https://clinicaltrials.gov/study/NCT06259071"
         }
       ],
       "timeline": {
         "start": "2023-08-23",
-        "readout": "2025-08-23",
-        "completion": "2025-12-31"
+        "readout": "2027-08-23",
+        "completion": "2027-12-31"
       },
       "first_registered": "2024-02-14",
       "latest_registered": "2024-02-14",
@@ -10476,7 +10427,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
     {
       "source": "ClinicalTrials.gov",
       "meta": {
-        "generated_at": "2026-07-27",
+        "generated_at": "2026-08-10",
         "mode": "cache"
       },
       "records": [
@@ -12353,34 +12304,6 @@ window.MG_CLINICAL_TRIALS_DATA = {
         },
         {
           "registry": "ClinicalTrials.gov",
-          "registry_id": "NCT04146051",
-          "title": "Descartes-08 CAR-T Cells in Generalized Myasthenia Gravis (MG)",
-          "url": "https://clinicaltrials.gov/study/NCT04146051",
-          "status": "ACTIVE_NOT_RECRUITING",
-          "status_label": "进行中",
-          "status_class": "active",
-          "drug_class": "B细胞/抗CD19/CD20",
-          "drug_name": "Descartes-08",
-          "drug_names": [
-            "Descartes-08"
-          ],
-          "indication": "重症肌无力",
-          "phase_label": "Phase 2",
-          "sponsor": "Cartesian Therapeutics",
-          "start_date": "2019-12-04",
-          "readout_date": "2025-07-31",
-          "completion_date": "2026-03-31",
-          "registered_date": "2019-10-31",
-          "linked_registries": [
-            {
-              "registry": "ClinicalTrials.gov",
-              "registry_id": "NCT06381284",
-              "url": "https://clinicaltrials.gov/study/NCT06381284"
-            }
-          ]
-        },
-        {
-          "registry": "ClinicalTrials.gov",
           "registry_id": "NCT04158661",
           "title": "Influence of Minimally Invasive Thymectomy on the Subsequent Clinical Course of Myasthenia Gravis",
           "url": "https://clinicaltrials.gov/study/NCT04158661",
@@ -12989,7 +12912,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "sponsor": "Janssen Research & Development, LLC",
           "start_date": "2021-07-15",
           "readout_date": "2023-11-17",
-          "completion_date": "2029-03-30",
+          "completion_date": "2029-03-29",
           "registered_date": "2021-07-07",
           "linked_registries": []
         },
@@ -13257,9 +13180,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "NCT05214612",
           "title": "Predictors and Prognostic Factors of Myasthenia Gravis Outcome",
           "url": "https://clinicaltrials.gov/study/NCT05214612",
-          "status": "RECRUITING",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status": "UNKNOWN",
+          "status_label": "未知",
+          "status_class": "other",
           "drug_class": "其他",
           "drug_name": "",
           "drug_names": [],
@@ -13351,7 +13274,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2 / Phase 3",
           "sponsor": "Janssen Research & Development, LLC",
           "start_date": "2022-07-20",
-          "readout_date": "2026-06-26",
+          "readout_date": "2027-06-30",
           "completion_date": "2029-07-02",
           "registered_date": "2022-03-03",
           "linked_registries": []
@@ -14199,9 +14122,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "NCT06220201",
           "title": "A Study to Evaluate the Safety, Tolerability, Efficacy, and Drug Levels of CC-97540 in Participants With Relapsing Forms of Multiple Sclerosis, Progressive Forms of Multiple Sclerosis or Refractory Myasthenia Gravis (MG) (Breakfree-2)",
           "url": "https://clinicaltrials.gov/study/NCT06220201",
-          "status": "RECRUITING",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status": "ACTIVE_NOT_RECRUITING",
+          "status_label": "进行中",
+          "status_class": "active",
           "drug_class": "其他",
           "drug_name": "CC-97540",
           "drug_names": [
@@ -14307,18 +14230,18 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "NCT06259071",
           "title": "MuSK Myasthenia 1000 Study",
           "url": "https://clinicaltrials.gov/study/NCT06259071",
-          "status": "UNKNOWN",
-          "status_label": "未知",
-          "status_class": "other",
+          "status": "RECRUITING",
+          "status_label": "招募中",
+          "status_class": "recruiting",
           "drug_class": "其他",
           "drug_name": "",
           "drug_names": [],
           "indication": "重症肌无力",
           "phase_label": "未标注",
-          "sponsor": "Myasthenia Gravis Rare Disease Network",
+          "sponsor": "George Washington University",
           "start_date": "2023-08-23",
-          "readout_date": "2025-08-23",
-          "completion_date": "2025-12-31",
+          "readout_date": "2027-08-23",
+          "completion_date": "2027-12-31",
           "registered_date": "2024-02-14",
           "linked_registries": []
         },
@@ -14496,6 +14419,32 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "completion_date": "2026-12-01",
           "registered_date": "2024-04-17",
           "linked_registries": []
+        },
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT06381284",
+          "title": "Expediting Myasthenia Gravis (MG) Diagnostic Evaluation: A Novel, Proof-of-Concept for Undiagnosed, Symptomatic Patients That Uses Social Media Targeting and Self-Assessment",
+          "url": "https://clinicaltrials.gov/study/NCT06381284",
+          "status": "COMPLETED",
+          "status_label": "已完成",
+          "status_class": "completed",
+          "drug_class": "其他",
+          "drug_name": "",
+          "drug_names": [],
+          "indication": "重症肌无力",
+          "phase_label": "未标注",
+          "sponsor": "ZS Associates",
+          "start_date": "2024-03-28",
+          "readout_date": "2025-03-03",
+          "completion_date": "2025-03-03",
+          "registered_date": "2024-04-24",
+          "linked_registries": [
+            {
+              "registry": "ClinicalTrials.gov",
+              "registry_id": "NCT04146051",
+              "url": "https://clinicaltrials.gov/study/NCT04146051"
+            }
+          ]
         },
         {
           "registry": "ClinicalTrials.gov",
