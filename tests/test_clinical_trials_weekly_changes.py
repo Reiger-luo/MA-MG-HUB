@@ -86,6 +86,10 @@ def test_snapshot_and_diff_detect_added_status_results_and_removal():
     assert changes["previous_snapshot_at"] == "2026-07-20"
     assert changes["window_days"] == 7
     assert changes["window_start"] == "2026-07-20"
+    assert len(changes["candidate_changes"]) == 5
+    assert {item["registry_id"] for item in changes["candidate_changes"]} == {
+        "NCT001", "NCT002", "NCT003", "NCT004", "NCT999",
+    }
 
 
 def test_baseline_loader_prefers_local_file_and_returns_empty_outside_repo(tmp_path):
@@ -147,6 +151,30 @@ def test_identical_snapshot_is_idempotent():
         assert changes[key] == 0
 
 
+def test_repeated_build_preserves_nonempty_diff_for_the_same_source_window():
+    module = load_builder_module()
+    computed = {
+        "generated_at": "2026-08-10", "comparison_available": True,
+        "added_count": 0, "status_change_count": 0, "results_posted_count": 0,
+        "updated_count": 0, "removed_count": 0,
+    }
+    previous_changes = {
+        **computed, "status_change_count": 3, "updated_count": 2,
+        "status_changes": [{"registry_id": "NCT1"}],
+    }
+    previous_summary = {
+        "weekly_changes": previous_changes,
+        "source_updates": {"ClinicalTrials.gov": {"revision": "semantic-v1:same"}},
+    }
+
+    assert module.preserve_same_window_weekly_changes(
+        computed, previous_summary, "semantic-v1:same"
+    ) == previous_changes
+    assert module.preserve_same_window_weekly_changes(
+        computed, previous_summary, "semantic-v1:different"
+    ) == computed
+
+
 def test_summary_payload_includes_weekly_changes():
     module = load_builder_module()
     payload = {"meta": {"generated_at": "2026-07-27"}, "sources": [], "pipeline_matrix": [], "decision_signals": []}
@@ -157,6 +185,30 @@ def test_summary_payload_includes_weekly_changes():
     assert module.buildSummaryPayload(payload)["weekly_changes"] == {}
     # trial_insights 同理降级
     assert module.buildSummaryPayload(payload)["trial_insights"] == {}
+
+
+def test_source_revision_is_stable_and_summary_exposes_three_source_versions():
+    module = load_builder_module()
+    assert module.source_revision({"b": 2, "a": 1}) == module.source_revision({"a": 1, "b": 2})
+    assert module.source_revision({"a": 1}) != module.source_revision({"a": 2})
+    assert module.source_revision({"records": [1], "generated_at": "old"}) == module.source_revision(
+        {"records": [1], "generated_at": "new"}
+    )
+    assert module.source_revision({"records": [1]}).startswith("semantic-v1:")
+
+    payload = {
+        "meta": {"generated_at": "2026-08-10"},
+        "pipeline_matrix": [],
+        "decision_signals": [],
+        "sources": [
+            {"source": source, "meta": {"generated_at": f"2026-08-{index:02d}", "revision": f"rev-{index}"}, "records": []}
+            for index, source in enumerate(("ClinicalTrials.gov", "ChiCTR", "ChinaDrugTrials"), 1)
+        ],
+    }
+
+    summary = module.buildSummaryPayload(payload)
+    assert set(summary["source_updates"]) == {"ClinicalTrials.gov", "ChiCTR", "ChinaDrugTrials"}
+    assert summary["source_updates"]["ChiCTR"]["revision"] == "rev-2"
 
 
 def test_trial_insights_extract_population_phase_and_recent_trend():

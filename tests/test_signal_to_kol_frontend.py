@@ -403,27 +403,26 @@ def test_generated_dashboard_signal_summary_matches_all_final_signals():
     assert summary["overview"]
 
 
-def test_dashboard_renders_three_actionable_priority_signals():
+def test_dashboard_renders_two_source_internal_signal_groups():
     dashboard_js = (PROJECT / "assets" / "dashboard.js").read_text(encoding="utf-8")
     css = (PROJECT / "assets" / "main.css").read_text(encoding="utf-8")
+    html = (PROJECT / "index.html").read_text(encoding="utf-8")
 
     assert "data.signal_summary" in dashboard_js
-    assert "data.top_signals" in dashboard_js
-    assert "data.stats" in dashboard_js
-    assert "signals.slice(0, 3)" in dashboard_js
-    assert "signal.medical_affairs" in dashboard_js
-    assert "'&signal=' + encodeURIComponent(signal.id)" in dashboard_js
-    assert "dashboard-priority-link" in dashboard_js
-    assert "查看详细信号" in dashboard_js
-    assert "dashboard-priority-card" in dashboard_js
-    assert "准备 KOL 讨论" in dashboard_js
-    assert "renderDashboardSignalToKol" not in dashboard_js
-    assert "PMID" not in dashboard_js
-    assert "KOL lead" not in dashboard_js
-    assert "signal-card" not in dashboard_js
-    assert ".dashboard-priority-card" in css
-    assert ".dashboard-priority-link" in css
-    assert ".dashboard-priority-actions" in css
+    assert "trialSignalsData.signal_summary" in dashboard_js
+    assert "function renderSignalSummary()" in dashboard_js
+    assert "function renderTrialSignalSummary()" in dashboard_js
+    assert "data-signal-filter" in dashboard_js
+    assert "data-trial-signal-filter" in dashboard_js
+    assert "trialSignalFilter" in dashboard_js
+    assert "注册/开发信号，不代表疗效证据" in dashboard_js
+    assert "不与文献证据强度横向比较" in dashboard_js
+    assert 'id="literatureSignalGroupTitle"' in html
+    assert 'id="trialSignalGroupTitle"' in html
+    assert 'id="dashboardTrials"' not in html
+    assert "trial-signals-weekly.js" in html
+    assert ".signal-board-group" in css
+    assert ".trial-signal-card" in css
 
 
 def test_literature_signal_deep_link_targets_the_matching_card():
@@ -491,6 +490,9 @@ def test_homepage_signal_board_keeps_the_approved_display_contract():
     assert "查看文献" not in signal_card_renderer
     assert "function buildSignalBrief()" in dashboard_js
     assert "getFilteredSignalItems().slice()" in dashboard_js
+    assert "getFilteredTrialSignalItems().slice()" in dashboard_js
+    assert "## 文献信号" in dashboard_js
+    assert "## 临床试验信号" in dashboard_js
     assert 'id="btnExportSignalBrief"' in index_html
 
 

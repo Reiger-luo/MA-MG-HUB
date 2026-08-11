@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>工作台 · MA-MG-HUB</title>
 <link rel="icon" href="data:,">
-<link rel="stylesheet" href="assets/main.css?v=local-20260810-084925">
+<link rel="stylesheet" href="assets/main.css?v=signal-board-workflow-20260811T153600Z">
 </head>
 <body>
 
@@ -52,52 +52,50 @@
       <div class="panel-head">
         <div>
           <p class="panel-kicker">本周行动入口</p>
-          <h2 id="dashboardSignalsTitle">文献信号板</h2>
+          <h2 id="dashboardSignalsTitle">信号板</h2>
         </div>
         <div class="panel-head-actions">
           <button class="btn" id="btnExportSignalBrief" type="button">📋 导出简报</button>
           <a class="text-link" href="pages/literature.html?tab=literature">进入情报中心</a>
         </div>
       </div>
-      <div class="signal-summary-grid" id="signalSummary"></div>
-      <div class="signal-strength-legend" id="signalStrengthLegend"></div>
-      <section class="signal-list" id="signalList"></section>
-    </section>
+      <section class="signal-board-group literature-group" aria-labelledby="literatureSignalGroupTitle">
+        <div class="signal-board-group-head">
+          <div>
+            <p class="panel-kicker">PubMed · 临床证据与增量价值</p>
+            <h3 id="literatureSignalGroupTitle">文献信号</h3>
+          </div>
+        </div>
+        <div class="signal-summary-grid" id="signalSummary"></div>
+        <div class="signal-strength-legend" id="signalStrengthLegend"></div>
+        <section class="signal-list" id="signalList"></section>
+      </section>
 
-    <aside class="dashboard-side-stack" aria-label="临床试验变化与社区动态">
-      <section class="workspace-panel dashboard-trials-panel" aria-labelledby="dashboardTrialsTitle">
-        <div class="panel-head">
+      <section class="signal-board-group trial-group" aria-labelledby="trialSignalGroupTitle">
+        <div class="signal-board-group-head">
           <div>
-            <p class="panel-kicker">三源注册数据</p>
-            <h2 id="dashboardTrialsTitle">临床试验变化</h2>
+            <p class="panel-kicker">三源注册 · 来源内里程碑优先级</p>
+            <h3 id="trialSignalGroupTitle">临床试验信号</h3>
           </div>
-          <a class="text-link" href="pages/literature.html?tab=trials">进入管线矩阵</a>
+          <div class="trial-signal-window" id="trialSignalWindow"></div>
         </div>
-        <div id="dashboardTrials"></div>
+        <div class="signal-summary-grid" id="trialSignalSummary"></div>
+        <div class="signal-strength-legend" id="trialSignalStrengthLegend"></div>
+        <section class="signal-list trial-signal-list" id="trialSignalList"></section>
       </section>
-      <section class="workspace-panel dashboard-community-panel" aria-labelledby="dashboardCommunityTitle">
-        <div class="panel-head">
-          <div>
-            <p class="panel-kicker">社区语义层</p>
-            <h2 id="dashboardCommunityTitle">本周升温社区</h2>
-          </div>
-          <a class="text-link" href="pages/knowledge.html?tab=communities">社区视图</a>
-        </div>
-        <div id="dashboardCommunityDynamics"></div>
-      </section>
-    </aside>
+    </section>
   </div>
 </main>
 
-<script src="data/release-manifest.js?v=local-20260810-084925" defer></script>
-<script src="assets/common.js?v=local-20260810-084925" defer></script>
-<script src="data/dashboard-data.js?v=local-20260810-084925" defer></script>
-<script src="data/communityWeekly.js?v=local-20260810-084925" defer></script>
-<script src="data/expert-profiles.js?v=local-20260810-084925" defer></script>
-<script src="data/clinicalTrialsSummary.js?v=local-20260810-084925" defer></script>
-<script src="data/pipeline-status.js?v=local-20260810-084925" defer></script>
-<script src="data/signals-weekly.js?v=local-20260810-084925" defer></script>
-<script src="data/literature-recent.js?v=local-20260810-084925" defer></script>
-<script src="assets/dashboard.js?v=local-20260810-084925" defer></script>
+<script src="data/release-manifest.js?v=signal-board-workflow-20260811T153600Z" defer></script>
+<script src="assets/common.js?v=signal-board-workflow-20260811T153600Z" defer></script>
+<script src="data/dashboard-data.js?v=signal-board-workflow-20260811T153600Z" defer></script>
+<script src="data/expert-profiles.js?v=signal-board-workflow-20260811T153600Z" defer></script>
+<script src="data/clinicalTrialsSummary.js?v=signal-board-workflow-20260811T153600Z" defer></script>
+<script src="data/pipeline-status.js?v=signal-board-workflow-20260811T153600Z" defer></script>
+<script src="data/signals-weekly.js?v=signal-board-workflow-20260811T153600Z" defer></script>
+<script src="data/trial-signals-weekly.js?v=signal-board-workflow-20260811T153600Z" defer></script>
+<script src="data/literature-recent.js?v=signal-board-workflow-20260811T153600Z" defer></script>
+<script src="assets/dashboard.js?v=signal-board-workflow-20260811T153600Z" defer></script>
 </body>
 </html>

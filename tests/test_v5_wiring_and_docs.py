@@ -79,6 +79,21 @@ def test_literature_narrative_enrichment_is_a_required_publish_step():
     assert enrichment.optional is False
 
 
+def test_clinical_trial_signal_enrichment_is_required_and_follows_trial_diff():
+    args = pipeline_args()
+    args.skip_llm = False
+    steps = load_pipeline_module().pipeline_steps(args, full_available=True)
+    ids = [step.id for step in steps]
+    enrichment = next(step for step in steps if step.id == "enrich-clinical-trial-signals")
+
+    assert enrichment.optional is False
+    assert ROOT / "data" / "trial-signals-weekly.js" in enrichment.outputs
+    assert ids.index("build-clinical-trials") < ids.index("enrich-clinical-trial-signals")
+    assert ids.index("enrich-clinical-trial-signals") < ids.index("build-source-signals")
+    assert ids.index("build-source-signals") < ids.index("generate-weekly-summary")
+    assert ids.index("enrich-clinical-trial-signals") < ids.index("generate-weekly-summary")
+
+
 def test_merge_step_declares_the_true_weekly_ingest_manifest():
     module = load_pipeline_module()
     args = pipeline_args()
@@ -99,6 +114,8 @@ def test_pipeline_and_ci_wire_new_artifacts_and_local_full_gate():
     assert "refresh-chictr-cache.py" in runner
     assert "build-clinical-trials-data.py" in runner
     assert "clinicalTrialsSummary.js" in runner
+    assert "enrich-clinical-trial-signals.py" in runner
+    assert "trial-signals-weekly.js" in runner
     assert "build-source-signals.py" in runner
     assert "release-manifest.js" in runner
     assert runner.count("generate_release_manifest(") == 2
@@ -113,6 +130,7 @@ def test_pipeline_and_ci_wire_new_artifacts_and_local_full_gate():
     assert "git push" not in workflow
     assert "CHICTR_COOKIE" not in workflow
     assert "source-signals.js" in status
+    assert "trial-signals-weekly.js" in status
     assert "release-manifest.js" in status
 
 

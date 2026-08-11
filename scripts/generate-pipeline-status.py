@@ -30,6 +30,7 @@ PUBLIC_ARTIFACTS = [
     ("literature-recent.js", "近一年文献公开库", "MG_LITERATURE_DATA"),
     ("literature-full-index.js", "全库文献轻索引", "MG_LITERATURE_FULL_INDEX"),
     ("signals-weekly.js", "候选信号", "MG_SIGNALS_DATA"),
+    ("trial-signals-weekly.js", "临床试验信号", "MG_TRIAL_SIGNALS_DATA"),
     ("source-signals.js", "独立来源信号频道", "MG_SOURCE_SIGNALS"),
     ("clinical-trials-data.js", "三源临床试验数据", "MG_CLINICAL_TRIALS_DATA"),
     ("clinicalTrialsSummary.js", "首页临床试验摘要", "MG_CLINICAL_TRIALS_SUMMARY"),

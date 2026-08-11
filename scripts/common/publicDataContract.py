@@ -37,6 +37,7 @@ publicDataGlobals = {
     "pipeline-status.js": "MG_PIPELINE_STATUS",
     "signals-weekly.js": "MG_SIGNALS_DATA",
     "source-signals.js": "MG_SOURCE_SIGNALS",
+    "trial-signals-weekly.js": "MG_TRIAL_SIGNALS_DATA",
     "wikiTopicCoverage.js": "MG_WIKI_TOPIC_COVERAGE",
 }
 

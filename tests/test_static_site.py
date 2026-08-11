@@ -47,7 +47,11 @@ def test_active_pages_use_relative_navigation():
 
 def test_all_local_html_references_match_tracked_paths_case_sensitively():
     tracked = set(
-        subprocess.check_output(["git", "ls-files"], cwd=PROJECT, text=True).splitlines()
+        subprocess.check_output(
+            ["git", "ls-files", "--cached", "--others", "--exclude-standard"],
+            cwd=PROJECT,
+            text=True,
+        ).splitlines()
     )
     pages = [PROJECT / "index.html", *sorted((PROJECT / "pages").glob("*.html"))]
 
@@ -85,11 +89,15 @@ def test_dashboard_is_action_first_workbench():
     assert "MG医学事务工作台" in html
     assert "学术情报工作台" not in html
     assert 'id="dashboardReleaseStatus"' in html
-    assert 'id="dashboardTrials"' in html
+    assert 'id="dashboardTrials"' not in html
     assert 'id="signalStrengthLegend"' in html
+    assert 'id="trialSignalStrengthLegend"' in html
+    assert 'id="trialSignalWindow"' in html
     assert "clinicalTrialsSummary.js" in html
-    assert html.index('id="dashboardSignals"') < html.index('id="dashboardCommunityDynamics"')
-    assert html.index('class="dashboard-side-stack"') < html.index('dashboard-community-panel') < html.index('</aside>')
+    assert "trial-signals-weekly.js" in html
+    assert 'id="dashboardCommunityDynamics"' not in html
+    assert "本周升温社区" not in html
+    assert "communityWeekly.js" not in html
     assert 'signal-filter-btn' not in html
     assert 'id="dashboardReviewQueue"' not in html
     assert 'id="dashboardSections"' not in html
@@ -107,21 +115,20 @@ def test_dashboard_is_action_first_workbench():
     assert style_version
     assert script_version
     assert style_version.group(1) == script_version.group(1)
-    assert ".dashboard-side-stack { display: contents; }" in main_css
-    assert ".dashboard-trials-panel { order: 0; }" in main_css
-    assert "renderTrials" in dashboard_js
+    assert "grid-template-columns: minmax(0, 1fr);" in main_css
+    assert ".trial-signal-card" in main_css
+    assert "renderCommunityDynamics" not in dashboard_js
+    assert "renderTrialSignals" in dashboard_js
     assert "renderSignalStrengthLegend" in dashboard_js
+    assert "renderTrialSignalStrengthLegend" in dashboard_js
     assert "signal-stat-card" in dashboard_js
-    assert "weekly_changes" in dashboard_js
-    assert "dashboard-trial-changes" in dashboard_js
+    assert "source_windows" in dashboard_js
+    assert "注册/开发信号，不代表疗效证据" in dashboard_js
     assert "renderReviewQueue" not in dashboard_js
     assert "renderSections" not in dashboard_js
     assert "bindSignalFilters" not in dashboard_js
     assert "renderSignalKeywords" not in dashboard_js
     assert "signalDetailUrl" in dashboard_js
-    assert "level === 'active'" in dashboard_js
-    assert "row.high_evidence_count != null" in dashboard_js
-    assert "row.high_evidence_count ||" not in dashboard_js
 
 
 def test_intelligence_brief_export_follows_active_tab_and_filters():

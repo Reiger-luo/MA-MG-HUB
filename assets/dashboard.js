@@ -10,12 +10,16 @@
     signal_summary: null,
     top_signals: []
   };
-  var communityWeeklyData = window.MG_COMMUNITY_WEEKLY || { communities: [], hot_communities: [] };
   var expertData = window.MG_EXPERT_PROFILES || { summary: {} };
   var clinicalTrialsData = window.MG_CLINICAL_TRIALS_SUMMARY || {
     meta: {},
     source_counts: [],
     decision_signals: []
+  };
+  var trialSignalsData = window.MG_TRIAL_SIGNALS_DATA || {
+    source_windows: {},
+    signal_summary: { total_count: 0, strength_counts: {} },
+    signals: []
   };
   var pipelineData = window.MG_PIPELINE_STATUS || { storage: {} };
   var releaseData = window.MG_RELEASE_MANIFEST || {};
@@ -23,6 +27,9 @@
   var signalItems = [];
   var signalFilter = 'all';
   var signalSummaryFilterBound = false;
+  var trialSignalItems = [];
+  var trialSignalFilter = 'all';
+  var trialSignalSummaryFilterBound = false;
   var articleSignalStrengthByPmid = {};
   var signalDeepLinkHandled = false;
 
@@ -124,16 +131,18 @@
     if (!target) return;
     var stats = data.stats || {};
     var signalSummary = data.signal_summary || {};
-    var strengthCounts = signalSummary.strength_counts || {};
+    var trialSignalSummary = trialSignalsData.signal_summary || {};
+    var literatureSignalCount = numberValue(signalSummary.total_count || stats.signals, 0);
+    var trialSignalCount = numberValue(trialSignalSummary.total_count, 0);
     var trialMeta = clinicalTrialsData.meta || {};
     var expertSummary = expertData.summary || {};
     var chinaStat = findStatCard('中国证据');
     var cards = [
       {
-        label: '强信号',
-        value: strengthCounts.strong || 0,
-        note: formatNumber(signalSummary.total_count || stats.signals || 0) + ' 条聚合信号',
-        href: 'pages/literature.html?tab=literature',
+        label: '本周信号',
+        value: literatureSignalCount + trialSignalCount,
+        note: '文献 ' + formatNumber(literatureSignalCount) + ' / 试验 ' + formatNumber(trialSignalCount),
+        href: '#dashboardSignals',
         tone: 'urgent'
       },
       {
@@ -231,6 +240,40 @@
     signalItems.sort(compareSignals);
   }
 
+  function buildTrialSignals() {
+    var sourceSignals = Array.isArray(trialSignalsData.signals) ? trialSignalsData.signals : [];
+    trialSignalItems = sourceSignals.map(function(signal) {
+      return {
+        id: signal.id || '',
+        date: parseDate(signal.date),
+        type: signal.type || '开发进展',
+        title: signal.title || '',
+        strength: signal.strength || '弱',
+        trialImportance: signal.trialImportance || '早期/探索',
+        keyTrialRationale: signal.keyTrialRationale || '',
+        updateMateriality: signal.updateMateriality || '轻微',
+        materialityRationale: signal.materialityRationale || '',
+        strengthRationale: signal.strengthRationale || '',
+        eventType: signal.eventType || 'updated',
+        phase: signal.phase || '未标注',
+        fromStatus: signal.fromStatus || '',
+        toStatus: signal.toStatus || '',
+        changeSummary: signal.changeSummary || '',
+        interventions: signal.interventions || [],
+        conditions: signal.conditions || [],
+        registryRefs: signal.registryRefs || [],
+        registryIds: signal.registryIds || [],
+        takeaway: signal.takeaway || '',
+        whySignal: signal.whySignal || '',
+        evidenceBoundary: signal.evidenceBoundary || '',
+        maUse: signal.maUse || '',
+        kolQuestion: signal.kolQuestion || '',
+        mslAction: signal.mslAction || ''
+      };
+    });
+    trialSignalItems.sort(compareSignals);
+  }
+
   function rebuildArticleSignalStrengthIndex() {
     articleSignalStrengthByPmid = {};
     for (var i = 0; i < literatureArticles.length; i++) {
@@ -268,6 +311,12 @@
   function getFilteredSignalItems() {
     return signalItems.filter(function(item) {
       return signalFilter === 'all' || item.strength === signalFilter;
+    });
+  }
+
+  function getFilteredTrialSignalItems() {
+    return trialSignalItems.filter(function(item) {
+      return trialSignalFilter === 'all' || item.strength === trialSignalFilter;
     });
   }
 
@@ -367,17 +416,17 @@
       {
         tone: 'strong',
         label: '强信号',
-        detail: 'I/II 级，或 IF ≥ 10 且不是 V 级机制推理。'
+        detail: '高成熟度临床证据，或足以改变当前判断的明确增量。'
       },
       {
         tone: 'medium',
         label: '中信号',
-        detail: 'IF ≥ 5、III/IV 级、中国相关，或未达到强信号标准的 efgartigimod（艾加莫德）相关内容。'
+        detail: '有解释价值的临床、转化或疾病概念进展，但仍受设计或外推边界限制。'
       },
       {
         tone: 'weak',
         label: '弱信号',
-        detail: '其余达到入选门槛的线索。'
+        detail: '新颖但成熟度较低，适合作为跟踪线索而非临床结论。'
       }
     ];
     target.innerHTML = legendItems.map(function(item) {
@@ -549,15 +598,139 @@
     focusDeepLinkedSignal();
   }
 
+  function renderTrialSignalSummary() {
+    var target = document.getElementById('trialSignalSummary');
+    if (!target) return;
+    var counts = { all: trialSignalItems.length, '强': 0, '中': 0, '弱': 0 };
+    trialSignalItems.forEach(function(signal) {
+      if (counts[signal.strength] != null) counts[signal.strength]++;
+    });
+    target.innerHTML = [
+      { label: '全部', count: counts.all, filter: 'all', tone: '' },
+      { label: '强', count: counts['强'], filter: '强', tone: 'strong' },
+      { label: '中', count: counts['中'], filter: '中', tone: 'medium' },
+      { label: '弱', count: counts['弱'], filter: '弱', tone: 'weak' }
+    ].map(function(card) {
+      var isActive = trialSignalFilter === card.filter;
+      return '<button type="button" class="signal-stat-card' + (card.tone ? ' ' + card.tone : '') + '" ' +
+        'data-trial-signal-filter="' + escapeHtml(card.filter) + '" aria-pressed="' + (isActive ? 'true' : 'false') + '">' +
+        '<span>' + escapeHtml(card.label) + '</span>' +
+        '<strong>' + escapeHtml(formatNumber(card.count)) + '</strong>' +
+        '<em>' + escapeHtml(isActive ? '筛选中' : '点击筛选') + '</em>' +
+      '</button>';
+    }).join('');
+
+    if (!trialSignalSummaryFilterBound) {
+      target.addEventListener('click', function(event) {
+        var button = event.target;
+        while (button && button !== target && button.tagName !== 'BUTTON') button = button.parentNode;
+        if (!button || button === target) return;
+        var nextFilter = button.getAttribute('data-trial-signal-filter') || 'all';
+        trialSignalFilter = nextFilter === 'all' || trialSignalFilter === nextFilter ? 'all' : nextFilter;
+        renderSignalBoard();
+      });
+      trialSignalSummaryFilterBound = true;
+    }
+  }
+
+  function renderTrialSignalStrengthLegend() {
+    var target = document.getElementById('trialSignalStrengthLegend');
+    if (!target) return;
+    var legendItems = [
+      { tone: 'strong', label: '强试验信号', detail: '新增关键试验，或关键试验发生高实质更新。' },
+      { tone: 'medium', label: '中试验信号', detail: '关键试验的中等更新、一般试验的高实质更新，或战略性早期项目的重要变化。' },
+      { tone: 'weak', label: '弱试验信号', detail: '真实但尚不足以改变开发判断的早期或有限更新。' }
+    ];
+    target.innerHTML = legendItems.map(function(item) {
+      return '<span class="signal-legend-item ' + escapeHtml(item.tone) + '">' +
+        '<i aria-hidden="true"></i><strong>' + escapeHtml(item.label) + '</strong>' + escapeHtml(item.detail) +
+      '</span>';
+    }).join('') + '<p class="trial-signal-scale-note">试验强度只表示注册/开发里程碑的跟踪优先级，不与文献证据强度横向比较。</p>';
+  }
+
+  function trialWindowLabel(source, windowData) {
+    var cadence = ({ weekly: '每周', '28_days': '28 天', monthly_manual: '月度人工' })[windowData.cadence] || '按来源节奏';
+    var windowLabel = windowData.window_start || windowData.window_end ?
+      formatDateTime(windowData.window_start) + ' — ' + formatDateTime(windowData.window_end) : '本轮比较';
+    return '<span class="trial-source-window"><strong>' + escapeHtml(source) + '</strong>' +
+      '<em>变化 ' + escapeHtml(formatNumber(windowData.raw_change_count || 0)) + ' · ' + escapeHtml(cadence) + '</em>' +
+      '<small>' + escapeHtml(windowLabel) + ' · 更新 ' + escapeHtml(formatDateTime(windowData.updated_at)) + '</small></span>';
+  }
+
+  function renderTrialSignalWindow() {
+    var target = document.getElementById('trialSignalWindow');
+    if (!target) return;
+    var windows = trialSignalsData.source_windows || {};
+    var sources = ['ClinicalTrials.gov', 'ChiCTR', 'ChinaDrugTrials'];
+    target.innerHTML = '<div class="trial-source-window-list">' + sources.map(function(source) {
+      return trialWindowLabel(source, windows[source] || {});
+    }).join('') + '</div>' +
+      '<a class="text-link trial-pipeline-link" href="' + escapeHref(pageUrl('pages/literature.html?tab=trials')) + '">进入管线矩阵</a>';
+  }
+
+  function renderTrialRegistryRefs(item) {
+    var refs = item.registryRefs || [];
+    if (!refs.length) return '';
+    return '<div class="trial-signal-refs"><span>官方登记</span><div>' + refs.map(function(ref) {
+      var label = [ref.registry, ref.registryId].filter(Boolean).join(' · ');
+      return ref.url ? '<a href="' + escapeHref(ref.url) + '" target="_blank" rel="noopener">' + escapeHtml(label) + '</a>' :
+        '<strong>' + escapeHtml(label) + '</strong>';
+    }).join('') + '</div></div>';
+  }
+
+  function renderTrialSignalCard(item) {
+    var statusChange = [item.fromStatus, item.toStatus].filter(Boolean).join(' → ');
+    var changeText = item.changeSummary || item.materialityRationale || '本轮注册变化请打开官方登记页核查。';
+    var interventionText = (item.interventions || []).slice(0, 4).join(' / ');
+    return '<article class="signal-card trial-signal-card signal-' + escapeHtml(item.strength) + '">' +
+      '<div class="signal-card-head"><div>' +
+        '<span class="signal-strength">' + escapeHtml(item.strength) + '信号</span>' +
+        '<span class="signal-type">' + escapeHtml(item.type) + '</span>' +
+      '</div><span class="trial-importance-badge ' + (item.trialImportance === '关键' ? 'key' : '') + '">' +
+        escapeHtml(item.trialImportance) + '试验</span></div>' +
+      '<h3 class="signal-title">' + escapeHtml(item.title || '(无标题)') + '</h3>' +
+      '<div class="trial-signal-meta"><span>' + escapeHtml(item.phase) + '</span>' +
+        (statusChange ? '<span>' + escapeHtml(statusChange) + '</span>' : '') +
+        (interventionText ? '<span>' + escapeHtml(interventionText) + '</span>' : '') + '</div>' +
+      (item.takeaway ? '<p class="signal-takeaway">' + escapeHtml(item.takeaway) + '</p>' : '') +
+      '<div class="trial-signal-change"><span>本轮更新 · ' + escapeHtml(item.updateMateriality) + '实质性</span><p>' + escapeHtml(changeText) + '</p></div>' +
+      '<div class="trial-signal-rationale"><div><span>为何值得关注</span><p>' + escapeHtml(item.whySignal || item.strengthRationale) + '</p></div>' +
+        '<div><span>试验定位</span><p>' + escapeHtml(item.keyTrialRationale) + '</p></div></div>' +
+      '<p class="trial-signal-boundary"><strong>证据边界</strong> · ' + escapeHtml(item.evidenceBoundary || '注册/开发信号，不代表疗效证据。') + '</p>' +
+      renderTrialRegistryRefs(item) +
+      ((item.kolQuestion || item.mslAction) ? '<div class="trial-signal-action">' +
+        (item.kolQuestion ? '<p><strong>KOL 追问</strong>：' + escapeHtml(item.kolQuestion) + '</p>' : '') +
+        (item.mslAction ? '<p><strong>MSL action</strong>：' + escapeHtml(item.mslAction) + '</p>' : '') + '</div>' : '') +
+      '<p class="trial-signal-disclaimer">注册/开发信号，不代表疗效证据</p>' +
+    '</article>';
+  }
+
+  function renderTrialSignals() {
+    var target = document.getElementById('trialSignalList');
+    if (!target) return;
+    var filtered = getFilteredTrialSignalItems();
+    if (!filtered.length) {
+      var emptyTitle = trialSignalItems.length ? '当前筛选下暂无试验信号' : '本轮无合格试验信号';
+      target.innerHTML = '<div class="empty-state small"><h3>' + escapeHtml(emptyTitle) + '</h3><p>行政性变化、非 MG-core 与未经确认的记录不会为填充页面而上板。</p></div>';
+      return;
+    }
+    target.innerHTML = filtered.map(renderTrialSignalCard).join('');
+  }
+
   function renderSignalBoard() {
     if (!document.getElementById('signalSummary') || !document.getElementById('signalList')) return;
     renderSignalSummary();
     renderSignalStrengthLegend();
     renderSignals();
+    renderTrialSignalWindow();
+    renderTrialSignalSummary();
+    renderTrialSignalStrengthLegend();
+    renderTrialSignals();
   }
 
   function initSignalBoard() {
     buildSignals();
+    buildTrialSignals();
     rebuildArticleSignalStrengthIndex();
     renderSignalBoard();
     initSignalBriefExport();
@@ -565,6 +738,10 @@
 
   function signalFilterLabel() {
     return signalFilter === 'all' ? '全部' : (signalFilter + ' 信号');
+  }
+
+  function trialSignalFilterLabel() {
+    return trialSignalFilter === 'all' ? '全部' : (trialSignalFilter + ' 信号');
   }
 
   function buildSignalBrief() {
@@ -575,10 +752,11 @@
       String(now.getHours()).padStart(2, '0') + ':' +
       String(now.getMinutes()).padStart(2, '0');
     var signals = getFilteredSignalItems().slice();
+    var trialSignals = getFilteredTrialSignalItems().slice();
     var md = '# MA-MG-HUB 信号简报\n';
     md += '生成时间: ' + dateStr + '\n';
-    md += '信号板筛选: ' + signalFilterLabel() + '\n';
-    md += '信号数量: ' + signals.length + ' 条\n';
+    md += '筛选: 文献 ' + signalFilterLabel() + ' / 试验 ' + trialSignalFilterLabel() + '\n';
+    md += '信号数量: 文献 ' + signals.length + ' 条 / 试验 ' + trialSignals.length + ' 条\n';
     var windowFrom = null;
     var windowTo = null;
     signals.forEach(function(signal) {
@@ -587,7 +765,8 @@
       if (range.to) { var t = String(range.to); if (!windowTo || t > windowTo) windowTo = t; }
     });
     if (windowFrom || windowTo) md += '信号覆盖窗口: ' + (windowFrom || '?') + ' — ' + (windowTo || '?') + '\n';
-    md += '\n';
+    md += '\n## 文献信号（' + signals.length + ' 条）\n';
+    md += '强/中/弱表示文献证据成熟度与增量价值；不与临床试验信号横向比较。\n\n';
 
     signals.forEach(function(signal, index) {
       var strengthLabel = signal.strength || '待判定';
@@ -650,6 +829,29 @@
       });
       md += '\n';
     }
+    md += '## 临床试验信号（' + trialSignals.length + ' 条）\n';
+    md += '强：新增关键试验或关键试验高实质更新；中：关键试验中等更新、一般试验高实质更新或战略性早期重要变化；弱：真实但有限的开发变化。\n';
+    md += '边界：注册/开发信号不代表疗效证据，也不与文献信号强度横向比较。\n\n';
+    if (!trialSignals.length) {
+      md += '本轮无合格试验信号。\n\n';
+    }
+    trialSignals.forEach(function(signal, index) {
+      md += '### ' + (index + 1) + '. [' + (signal.strength || '待判定') + '试验信号 · ' +
+        (signal.trialImportance || '待判定') + '试验] ' + (signal.title || '(无标题)') + '\n';
+      md += '阶段/状态：' + [signal.phase, [signal.fromStatus, signal.toStatus].filter(Boolean).join(' → ')].filter(Boolean).join(' · ') + '\n';
+      md += '更新实质性：' + (signal.updateMateriality || '待判定') + ' · ' +
+        (signal.changeSummary || signal.materialityRationale || '') + '\n';
+      if (signal.takeaway) md += '专家解读：' + signal.takeaway + '\n';
+      if (signal.whySignal) md += '战略意义：' + signal.whySignal + '\n';
+      if (signal.evidenceBoundary) md += '证据边界：' + signal.evidenceBoundary + '\n';
+      if (signal.kolQuestion) md += 'KOL 追问：' + signal.kolQuestion + '\n';
+      if (signal.mslAction) md += 'MSL action：' + signal.mslAction + '\n';
+      (signal.registryRefs || []).forEach(function(ref) {
+        md += '- 官方登记：' + [ref.registry, ref.registryId].filter(Boolean).join(' · ') +
+          (ref.url ? ' · ' + ref.url : '') + '\n';
+      });
+      md += '\n';
+    });
     return { title: 'MA-MG-HUB 信号简报', md: md };
   }
 
@@ -929,52 +1131,10 @@
       renderTrialChanges(weeklyChanges);
   }
 
-  function communityLevel(value) {
-    var level = String(value || '').toLowerCase();
-    if (level === 'active' || level === 'high') return { label: '活跃', className: 'active' };
-    if (level === 'medium' || level === 'watch') return { label: '观察', className: 'watch' };
-    return { label: '平稳', className: 'stable' };
-  }
-
-  function renderCommunityDynamics() {
-    var target = document.getElementById('dashboardCommunityDynamics');
-    if (!target) return;
-    var source = (communityWeeklyData.hot_communities && communityWeeklyData.hot_communities.length) ?
-      communityWeeklyData.hot_communities : (communityWeeklyData.communities || []);
-    var rows = source.slice().sort(function(a, b) {
-      return numberValue(b.recent_count) - numberValue(a.recent_count) ||
-        numberValue(b.high_evidence_count) - numberValue(a.high_evidence_count);
-    }).slice(0, 3);
-    if (!rows.length) {
-      target.innerHTML = '<div class="empty-state small"><h3>暂无社区动态</h3><p>请前往数据状态检查社区周更。</p></div>';
-      return;
-    }
-
-    target.innerHTML = '<div class="dashboard-community-list">' + rows.map(function(row) {
-      var communityId = row.community_id || row.id;
-      var topRef = (row.top_refs || [])[0] || {};
-      var level = communityLevel(row.signal_level);
-      var highEvidenceCount = row.high_evidence_count != null ? row.high_evidence_count : 0;
-      var href = pageUrl('pages/knowledge.html?tab=communities&community=' + encodeURIComponent(communityId));
-      return '<a class="dashboard-community-row level-' + safeClass(level.className) + '" href="' + escapeHref(href) + '">' +
-        '<div class="dashboard-community-head">' +
-          '<span>' + escapeHtml(level.label) + '</span>' +
-          '<em>本周 ' + escapeHtml(formatNumber(row.recent_count || 0)) + ' 篇</em>' +
-        '</div>' +
-        '<strong>' + escapeHtml(row.title || communityId) + '</strong>' +
-        '<small>高等级新增 ' + escapeHtml(formatNumber(highEvidenceCount)) +
-          ' · 中国相关 ' + escapeHtml(formatNumber(row.china_count || 0)) + '</small>' +
-        (topRef.title ? '<p>' + escapeHtml(topRef.title) + '</p>' : '') +
-      '</a>';
-    }).join('') + '</div>';
-  }
-
   function init() {
     renderReleaseStatus();
     renderStats();
     initSignalBoard();
-    renderTrials();
-    renderCommunityDynamics();
 
     var badge = document.getElementById('dashboardBadge');
     var releasedAt = releaseData.released_at || data.generated_at || '';

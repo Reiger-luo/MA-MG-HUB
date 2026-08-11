@@ -32,6 +32,23 @@ window.MG_CLINICAL_TRIALS_SUMMARY = {
       "mode": "cache"
     }
   ],
+  "source_updates": {
+    "ClinicalTrials.gov": {
+      "updated_at": "2026-08-10",
+      "revision": "semantic-v1:b156e21e65b6291da02fe6336eeb30cae10b8ecc5109c65ecf41682664830007",
+      "mode": "cache"
+    },
+    "ChiCTR": {
+      "updated_at": "2026-07-27",
+      "revision": "semantic-v1:dad6676eb2c9afecefd2f8bcab384ac73c01c4ebf18a969f73db64265b048cdb",
+      "mode": "cache"
+    },
+    "ChinaDrugTrials": {
+      "updated_at": "2026-07-27",
+      "revision": "semantic-v1:abe903f88f1382f84ac7c9d15dbed8ce5780408848ef48373b78cfb5000dbcad",
+      "mode": "cache"
+    }
+  },
   "decision_signals": [
     {
       "title": "招募中试验",

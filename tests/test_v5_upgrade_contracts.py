@@ -713,6 +713,39 @@ def test_source_channel_builder_includes_china_drug_trials(tmp_path):
     assert trial_channel["items"][0]["registry"] == "ChinaDrugTrials"
 
 
+def test_source_channel_keeps_curated_trial_signals_separate_from_raw_registry_items(tmp_path):
+    from scripts.common.source_channels import build_source_signals
+
+    trial_signals_path = tmp_path / "trial-signals-weekly.js"
+    trial_signals_path.write_text(
+        'window.MG_TRIAL_SIGNALS_DATA = {"signal_summary":{"total_count":1,"strength_counts":{"强":1,"中":0,"弱":0}},'
+        '"source_windows":{"ClinicalTrials.gov":{"raw_change_count":3}},"signals":[{'
+        '"id":"T01","title":"关键Ⅲ期试验进入招募","strength":"强","trialImportance":"关键",'
+        '"updateMateriality":"高","takeaway":"关键开发节点已更新","evidenceBoundary":"不代表疗效证据",'
+        '"phase":"Phase 3","eventType":"status_change","changeSummary":"尚未招募 → 招募中",'
+        '"registryRefs":[{"registry":"ClinicalTrials.gov","registryId":"NCT00000001",'
+        '"url":"https://clinicaltrials.gov/study/NCT00000001"}]}]};',
+        encoding="utf-8",
+    )
+    payload = build_source_signals(
+        literature_signals_path=tmp_path / "missing-signals.js",
+        guideline_cache_path=tmp_path / "missing-guidelines.json",
+        regulatory_path=tmp_path / "missing-regulatory.json",
+        clinicaltrials_path=tmp_path / "missing-ct.json",
+        chictr_path=tmp_path / "missing-chictr.json",
+        china_drug_trials_path=tmp_path / "missing-cdt.json",
+        conference_path=tmp_path / "missing-conference.json",
+        trial_signals_path=trial_signals_path,
+    )
+
+    trial_channel = next(item for item in payload["channels"] if item["id"] == "trialRegistry")
+    assert trial_channel["items"] == []
+    assert [item["id"] for item in trial_channel["weekly_signals"]] == ["T01"]
+    assert trial_channel["signal_summary"]["total_count"] == 1
+    assert trial_channel["source_windows"]["ClinicalTrials.gov"]["raw_change_count"] == 3
+    assert trial_channel["strength_scale"] == "source_internal_trial_milestone_priority"
+
+
 def test_source_signal_board_is_not_exposed_in_literature_frontend():
     html = (ROOT / "pages" / "literature.html").read_text(encoding="utf-8")
     js = (ROOT / "assets" / "literature.js").read_text(encoding="utf-8")

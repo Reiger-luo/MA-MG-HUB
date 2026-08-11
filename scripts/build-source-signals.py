@@ -22,6 +22,7 @@ def main() -> int:
         chictr_path=DATA / "chictr-trials-cache.json",
         china_drug_trials_path=DATA / "china-drug-trials-cache.json",
         conference_path=DATA / "conference-data.json",
+        trial_signals_path=DATA / "trial-signals-weekly.js",
     )
     target = DATA / "source-signals.js"
     atomic_write_js_global(target, "MG_SOURCE_SIGNALS", payload)

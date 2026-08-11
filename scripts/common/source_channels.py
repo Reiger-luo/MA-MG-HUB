@@ -189,6 +189,26 @@ def _cdt_items(payload: dict[str, Any]) -> list[dict[str, Any]]:
     } for item in payload.get("records") or []]
 
 
+def _trial_signal_items(payload: dict[str, Any]) -> list[dict[str, Any]]:
+    """把已门控的试验周信号投影到来源频道，不混入原始注册全量列表。"""
+    return [{
+        "id": str(item.get("id") or item.get("candidateId") or ""),
+        "candidate_id": str(item.get("candidateId") or ""),
+        "title": item.get("title") or "",
+        "date": item.get("date") or "",
+        "strength": item.get("strength") or "",
+        "trial_importance": item.get("trialImportance") or "",
+        "update_materiality": item.get("updateMateriality") or "",
+        "takeaway": item.get("takeaway") or "",
+        "evidence_boundary": item.get("evidenceBoundary") or "",
+        "registry_refs": [{
+            "registry": ref.get("registry") or "",
+            "registry_id": ref.get("registryId") or "",
+            "url": _safe_http_url(ref.get("url")),
+        } for ref in item.get("registryRefs") or []],
+    } for item in payload.get("signals") or []]
+
+
 def _normalize_title(value: str) -> str:
     return "".join(char for char in value.lower() if char.isalnum())
 
@@ -226,7 +246,7 @@ def deduplicate_trials(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
 def build_source_signals(
     *, literature_signals_path: Path, guideline_cache_path: Path, regulatory_path: Path,
     clinicaltrials_path: Path, chictr_path: Path, china_drug_trials_path: Path,
-    conference_path: Path,
+    conference_path: Path, trial_signals_path: Path | None = None,
 ) -> dict[str, Any]:
     literature = _js(literature_signals_path, "MG_SIGNALS_DATA", {})
     guidelines = _json(guideline_cache_path, {})
@@ -235,6 +255,7 @@ def build_source_signals(
     chictr = _json(chictr_path, {})
     china_drug_trials = _json(china_drug_trials_path, {})
     conference = _json(conference_path, {})
+    trial_signals = _js(trial_signals_path, "MG_TRIAL_SIGNALS_DATA", {}) if trial_signals_path else {}
     conference_items = [{
         "id": str(item.get("id") or item.get("abstractId") or item.get("abstract_id") or ""),
         "title": item.get("title") or "",
@@ -262,7 +283,14 @@ def build_source_signals(
             {"id": "literatureEvidence", "label": "文献证据", "evidence_required": True, "sources": ["PubMed"], "items": _literature_items(literature)},
             {"id": "guidelineConsensus", "label": "指南 / 共识", "evidence_required": False, "sources": ["PubMed cache"], "items": _guideline_items(guidelines)},
             {"id": "chinaRegulatory", "label": "中国监管", "evidence_required": False, "sources": ["NMPA", "CDE", "NHSA"], "items": _regulatory_items(regulatory)},
-            {"id": "trialRegistry", "label": "试验注册", "evidence_required": False, "sources": ["ClinicalTrials.gov", "ChiCTR", "ChinaDrugTrials"], "items": trials},
+            {
+                "id": "trialRegistry", "label": "试验注册", "evidence_required": False,
+                "sources": ["ClinicalTrials.gov", "ChiCTR", "ChinaDrugTrials"], "items": trials,
+                "weekly_signals": _trial_signal_items(trial_signals),
+                "signal_summary": trial_signals.get("signal_summary") or {"total_count": 0, "strength_counts": {"强": 0, "中": 0, "弱": 0}},
+                "source_windows": trial_signals.get("source_windows") or {},
+                "strength_scale": "source_internal_trial_milestone_priority",
+            },
             {"id": "conference", "label": "会议线索", "evidence_required": False, "sources": ["Conference primary sources"], "items": conference_items},
         ],
     }

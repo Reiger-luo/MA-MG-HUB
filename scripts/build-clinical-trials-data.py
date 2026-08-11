@@ -15,8 +15,9 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from scripts.common.clinical_registry import load_china_drug_trials_cache
-from scripts.common.io import atomic_write_json, atomic_write_text
+from scripts.common.io import atomic_write_json, atomic_write_text, load_js_global
 from scripts.common.source_channels import _cdt_items, _chictr_items, _ct_items, deduplicate_trials
+from scripts.common.trial_source_version import source_revision
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -44,6 +45,7 @@ STATUS_MAP = {
     "NOT_YET_RECRUITING": ("尚未招募", "recruiting"),
     "UNKNOWN": ("未知", "other"),
 }
+
 
 DRUG_CLASS_TERMS = (
     (
@@ -712,6 +714,7 @@ def build_payload() -> tuple[dict[str, Any], dict[str, Any]]:
             "meta": {
                 "generated_at": ct_generated_at,
                 "mode": str(ct_payload.get("mode") or "cache"),
+                "revision": source_revision(ct_payload),
             },
             "records": records_by_source["ClinicalTrials.gov"],
         },
@@ -721,6 +724,7 @@ def build_payload() -> tuple[dict[str, Any], dict[str, Any]]:
                 "generated_at": chictr_generated_at,
                 "mode": str(chictr_payload.get("mode") or "cache"),
                 "warning": str(chictr_payload.get("warning") or ""),
+                "revision": source_revision(chictr_payload),
             },
             "records": records_by_source["ChiCTR"],
         },
@@ -733,6 +737,7 @@ def build_payload() -> tuple[dict[str, Any], dict[str, Any]]:
                     china_payload.get("warning")
                     or ("无已验证数据源" if not china_records else "")
                 ),
+                "revision": source_revision(china_payload),
             },
             "records": china_records,
         },
@@ -1052,6 +1057,18 @@ def diff_ct_weekly_changes(
 
     removed = sorted(registry_id for registry_id in baseline if registry_id not in current)
 
+    # 信号分析必须看到全部真实变化，不能受首页明细截断数量影响。
+    candidate_changes = []
+    for event_type, items in (
+        ("added", added),
+        ("status_change", status_changes),
+        ("results_posted", results_posted),
+        ("updated", updated),
+    ):
+        for item in items:
+            candidate_changes.append({"event_type": event_type, **item})
+    candidate_changes.extend({"event_type": "removed", "registry_id": registry_id} for registry_id in removed)
+
     return {
         "schema_version": "1.0",
         "source": "ClinicalTrials.gov",
@@ -1070,6 +1087,7 @@ def diff_ct_weekly_changes(
         "results_posted": results_posted[:6],
         "updated": updated[:5],
         "removed": removed[:10],
+        "candidate_changes": candidate_changes,
     }
 
 
@@ -1210,6 +1228,14 @@ def buildSummaryPayload(
         }
         for source in payload.get("sources", [])
     ]
+    sourceUpdates = {
+        source.get("source") or "": {
+            "updated_at": (source.get("meta") or {}).get("generated_at") or "",
+            "revision": (source.get("meta") or {}).get("revision") or "",
+            "mode": (source.get("meta") or {}).get("mode") or "",
+        }
+        for source in payload.get("sources", []) if source.get("source")
+    }
     return {
         "meta": payload.get("meta") or {},
         "pipeline_matrix_count": len(payload.get("pipeline_matrix") or []),
@@ -1217,14 +1243,42 @@ def buildSummaryPayload(
         "recent_registration_count": recentRegistrationCount,
         "leading_mechanism": leadingMechanism,
         "source_counts": sourceCounts,
+        "source_updates": sourceUpdates,
         "decision_signals": payload.get("decision_signals") or [],
         "weekly_changes": weeklyChanges or {},
         "trial_insights": trialInsights or {},
     }
 
 
+def preserve_same_window_weekly_changes(
+    computed: dict[str, Any],
+    previous_summary: dict[str, Any],
+    current_ct_revision: str,
+) -> dict[str, Any]:
+    """同一 CT.gov 缓存重复构建时保留已发布差分，避免第二次运行把本周变化清零。"""
+    previous = previous_summary.get("weekly_changes") or {}
+    countKeys = ("added_count", "status_change_count", "results_posted_count", "updated_count", "removed_count")
+    computedCount = sum(int(computed.get(key) or 0) for key in countKeys)
+    previousCount = sum(int(previous.get(key) or 0) for key in countKeys)
+    previousRevision = str(
+        (((previous_summary.get("source_updates") or {}).get("ClinicalTrials.gov") or {}).get("revision"))
+        or ""
+    )
+    sameWindow = bool(computed.get("generated_at")) and computed.get("generated_at") == previous.get("generated_at")
+    sameRevision = not previousRevision or previousRevision == current_ct_revision
+    if sameWindow and sameRevision and computedCount == 0 and previousCount > 0:
+        return previous
+    return computed
+
+
 def main() -> None:
     """生成可由浏览器直接加载的 JavaScript 数据文件。"""
+    previousSummary = {}
+    if summaryOutputPath.exists():
+        try:
+            previousSummary = load_js_global(summaryOutputPath, "MG_CLINICAL_TRIALS_SUMMARY")
+        except (OSError, ValueError):
+            previousSummary = {}
     payload, ctPayload = build_payload()
     output = "window.MG_CLINICAL_TRIALS_DATA = " + json.dumps(
         payload,
@@ -1234,6 +1288,11 @@ def main() -> None:
     atomic_write_text(OUTPUT_PATH, output)
     generatedAt = str((payload.get("meta") or {}).get("generated_at") or "")
     weeklyChanges = build_weekly_changes(ctPayload, generatedAt)
+    weeklyChanges = preserve_same_window_weekly_changes(
+        weeklyChanges,
+        previousSummary,
+        source_revision(ctPayload),
+    )
     referenceDate = parse_iso_date(generatedAt)
     records = [record for source in payload.get("sources", []) for record in source.get("records", [])]
     trialInsights = build_trial_insights(ctPayload, records, referenceDate)

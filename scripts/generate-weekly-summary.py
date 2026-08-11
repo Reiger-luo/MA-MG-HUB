@@ -57,6 +57,25 @@ def signal_to_kol_line(signal: dict, index: int) -> str:
     return f"{index}. PMID {pmid}｜{implication}｜{kol_lead_text(signal)}｜{action}"
 
 
+def trial_signal_line(signal: dict, index: int) -> str:
+    registry_ids = " / ".join(signal.get("registryIds") or []) or "登记号待核对"
+    phase = signal.get("phase") or "阶段未标注"
+    change = signal.get("changeSummary") or signal.get("takeaway") or "注册信息更新"
+    takeaway = signal.get("takeaway") or "开发意义待复核"
+    boundary = signal.get("evidenceBoundary") or "注册/开发信号，不代表疗效证据。"
+    return (
+        f"{index}. [{signal.get('strength') or '-'}] {signal.get('title') or '未命名试验信号'}"
+        f"（{registry_ids}；{phase}）｜{change}｜{takeaway}｜边界：{boundary}"
+    )
+
+
+def trial_window_line(source: str, window: dict) -> str:
+    start = window.get("window_start") or "-"
+    end = window.get("window_end") or window.get("updated_at") or "-"
+    updated = window.get("updated_at") or "-"
+    return f"- {source}：原始变化 {window.get('raw_change_count', 0)}；比较窗口 {start} 至 {end}；更新 {updated}"
+
+
 def article_line(article: dict, index: int) -> str:
     title = article.get("title") or "Untitled"
     pmid = article.get("pmid", "-")
@@ -68,10 +87,13 @@ def article_line(article: dict, index: int) -> str:
 def build_summary() -> str:
     dashboard = load_js_data("dashboard-data.js", "MG_DASHBOARD_DATA")
     signals = load_js_data("signals-weekly.js", "MG_SIGNALS_DATA")
+    trial_signals = load_js_data("trial-signals-weekly.js", "MG_TRIAL_SIGNALS_DATA")
     china = load_js_data("china-intelligence.js", "MG_CHINA_DATA")
 
     stats = dashboard.get("stats") or {}
     signal_items = signals.get("signals") or []
+    trial_items = trial_signals.get("signals") or []
+    trial_windows = trial_signals.get("source_windows") or {}
     top_signals = (dashboard.get("top_signals") or signal_items)[:3]
     top_signal_to_kol = signal_items[:3]
     china_articles = (china.get("pubmed_articles") or [])[:3]
@@ -82,19 +104,20 @@ def build_summary() -> str:
         "# MA-MG-HUB 周更",
         "",
         f"生成时间：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
-        f"周更窗口：{signals.get('window_start') or '-'} 至 {signals.get('window_end') or '-'}",
-        f"周更口径：{signals.get('window_basis') or '未声明'}",
+        f"文献周更窗口：{signals.get('window_start') or '-'} 至 {signals.get('window_end') or '-'}",
+        f"文献周更口径：{signals.get('window_basis') or '未声明'}",
         "",
         "## 数据状态",
         "",
         f"- 近1年文献：{stats.get('recent_articles', 0)}",
         f"- 中国相关：{stats.get('china_articles', 0)}",
-        f"- 候选信号：{stats.get('signals', 0)}",
+        f"- 文献信号：{len(signal_items)}",
+        f"- 临床试验信号：{len(trial_items)}",
         f"- 文献级 Signal-to-KOL：{len(signal_items)}（自动审核发布）",
         f"- 专家画像：{stats.get('experts', 0)}",
         f"- 内容模块：{stats.get('modules', 0)}",
         "",
-        "## 优先 Signal Top 3",
+        "## 优先文献信号 Top 3",
         "",
     ]
     lines.extend(signal_line(signal, idx) for idx, signal in enumerate(top_signals, 1))
@@ -104,6 +127,22 @@ def build_summary() -> str:
         lines.extend(signal_to_kol_line(signal, idx) for idx, signal in enumerate(top_signal_to_kol, 1))
     else:
         lines.append("- 暂无")
+
+    lines.extend([
+        "", "## 临床试验信号", "",
+        "强度口径（仅在试验组内比较）：强=新增关键试验或关键试验高实质更新；中=关键试验中等更新、一般试验高实质更新等；弱=真实但判断影响有限的早期或一般试验更新。",
+        "",
+        "注册/开发信号，不代表疗效证据；完成或上传结果也不等于达到主要终点。",
+        "",
+    ])
+    if trial_items:
+        lines.extend(trial_signal_line(signal, idx) for idx, signal in enumerate(trial_items, 1))
+    else:
+        lines.append("- 本轮无合格试验信号（允许空组，不补造弱信号）。")
+
+    lines.extend(["", "### 三源比较窗口", ""])
+    for source in ("ClinicalTrials.gov", "ChiCTR", "ChinaDrugTrials"):
+        lines.append(trial_window_line(source, trial_windows.get(source) or {}))
 
     lines.extend(["", "## 中国情报 Top 3", ""])
     lines.extend(article_line(article, idx) for idx, article in enumerate(china_articles, 1))

@@ -125,6 +125,11 @@ def pipeline_steps(args, full_available: bool | None = None) -> list[PipelineSte
             py("build-clinical-trials-data.py"),
             outputs=[DATA / "clinical-trials-data.js", DATA / "clinicalTrialsSummary.js", DATA / "clinicaltrials-weekly-changes-snapshot.json"],
         ),
+        *([] if args.skip_llm else [PipelineStep(
+            "enrich-clinical-trial-signals",
+            py("enrich-clinical-trial-signals.py"),
+            outputs=[DATA / "trial-signals-weekly.js"],
+        )]),
         PipelineStep("build-source-signals", py("build-source-signals.py"), outputs=[DATA / "source-signals.js"]),
         PipelineStep("generate-weekly-summary", py("generate-weekly-summary.py"), outputs=[DATA / "weekly-summary.md"]),
         PipelineStep("update-release-token", py("updateFrontendReleaseToken.py"), outputs=ACTIVE_HTML),
@@ -166,7 +171,7 @@ def validateReusedIngest(parser, mode: str, args) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Run MA-MG-HUB weekly data pipeline")
     parser.add_argument("--skip-fetch", action="store_true", help="跳过 PubMed 增量抓取")
-    parser.add_argument("--skip-llm", action="store_true", help="跳过文献语义增强")
+    parser.add_argument("--skip-llm", action="store_true", help="跳过文献与临床试验语义增强")
     parser.add_argument("--skip-status", action="store_true", help="跳过管线状态生成")
     parser.add_argument("--skip-downstream", action="store_true", help="只执行抓取/富集/存储同步")
     parser.add_argument(

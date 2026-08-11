@@ -1753,7 +1753,7 @@
 
   function buildSignalBrief() {
     var now = new Date().toLocaleDateString('zh-CN');
-    var md = '# MA-MG-HUB 信号简报\n生成日期: ' + now + '\n\n页面范围: 首页工作台 · 文献信号板\n当前状态: 信号板已迁移到首页工作台，情报中心不再提供独立信号板标签。\n\n请返回首页查看完整的信号摘要、信号列表、关键词云和方法学说明。\n';
+    var md = '# MA-MG-HUB 信号简报\n生成日期: ' + now + '\n\n页面范围: 首页工作台 · 信号板\n当前状态: 首页按“文献信号 / 临床试验信号”分组展示，情报中心不再提供独立信号板标签。\n\n请返回首页查看两组独立强度口径、信号列表和方法学说明。\n';
     return { title: 'MA-MG-HUB 信号简报', md: md };
   }
 

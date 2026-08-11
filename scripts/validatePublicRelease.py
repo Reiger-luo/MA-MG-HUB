@@ -18,6 +18,7 @@ from common.publicDataContract import (
     publicArtifactNames,
     publicDataGlobals,
 )
+from common.trial_source_version import source_revision
 
 
 projectPath = Path(__file__).resolve().parent.parent
@@ -121,6 +122,8 @@ def validateRecentContracts() -> list[str]:
     )
     signals = load_js_global(dataDir / "signals-weekly.js", "MG_SIGNALS_DATA")
     dashboard = load_js_global(dataDir / "dashboard-data.js", "MG_DASHBOARD_DATA")
+    clinicalTrialsSummary = load_js_global(dataDir / "clinicalTrialsSummary.js", "MG_CLINICAL_TRIALS_SUMMARY")
+    trialSignals = load_js_global(dataDir / "trial-signals-weekly.js", "MG_TRIAL_SIGNALS_DATA")
 
     literaturePmids = pmidSet(literature)
     assignmentPmids = pmidSet(assignments.get("items") or [])
@@ -157,6 +160,85 @@ def validateRecentContracts() -> list[str]:
                 errors.append(f"信号 {signalId} 含非中文或空 finding")
             if finding.endswith(("…", "...")):
                 errors.append(f"信号 {signalId} 含截断 finding")
+
+    trialPolicy = trialSignals.get("source_policy") or {}
+    if trialPolicy.get("llm_enrichment") is not True:
+        errors.append("trial-signals-weekly.js 未完成 MG 专家 enrichment")
+    cohort = trialSignals.get("analysis_cohort") or []
+    decisions = trialSignals.get("selection_decisions") or []
+    cohortIds = [str(item.get("candidateId") or "") for item in cohort if item.get("candidateId")]
+    decisionIds = [str(item.get("candidateId") or "") for item in decisions if item.get("candidateId")]
+    if len(cohortIds) != len(set(cohortIds)) or set(cohortIds) != set(decisionIds):
+        errors.append("trial-signals-weekly.js 的候选队列与逐项裁决不一致")
+    windows = trialSignals.get("source_windows") or {}
+    if set(windows) != {"ClinicalTrials.gov", "ChiCTR", "ChinaDrugTrials"}:
+        errors.append("trial-signals-weekly.js 未完整记录三源比较窗口")
+    sourceUpdates = clinicalTrialsSummary.get("source_updates") or {}
+    expectedSources = {"ClinicalTrials.gov", "ChiCTR", "ChinaDrugTrials"}
+    if set(sourceUpdates) != expectedSources:
+        errors.append("clinicalTrialsSummary.js 未完整声明三源 revision 接口")
+    for source in sorted(expectedSources):
+        expectedRevision = str((sourceUpdates.get(source) or {}).get("revision") or "")
+        signalRevision = str((windows.get(source) or {}).get("source_revision") or "")
+        if not expectedRevision or expectedRevision != signalRevision:
+            errors.append(f"试验信号窗口落后于 {source} 当前缓存 revision")
+    cachePaths = {
+        "ClinicalTrials.gov": dataDir / "clinicaltrials-pipeline-cache.json",
+        "ChiCTR": dataDir / "chictr-trials-cache.json",
+        "ChinaDrugTrials": dataDir / "china-drug-trials-cache.json",
+    }
+    for source, cachePath in cachePaths.items():
+        try:
+            cachePayload = load_json(cachePath)
+        except (OSError, ValueError):
+            cachePayload = {}
+        cacheRevision = source_revision(cachePayload)
+        summaryRevision = str((sourceUpdates.get(source) or {}).get("revision") or "")
+        if not cacheRevision or cacheRevision != summaryRevision:
+            errors.append(f"clinicalTrialsSummary.js 落后于 {source} 当前缓存")
+    ctWindowId = str(((clinicalTrialsSummary.get("weekly_changes") or {}).get("generated_at")) or "")
+    if ctWindowId and ctWindowId != str((windows.get("ClinicalTrials.gov") or {}).get("updated_at") or ""):
+        errors.append("试验信号的 ClinicalTrials.gov 周窗口与当前差分不一致")
+    cohortById = {str(item.get("candidateId")): item for item in cohort if item.get("candidateId")}
+    includedDecisionIds = {
+        str(item.get("candidateId")) for item in decisions if item.get("decision") == "include"
+    }
+    signalItems = trialSignals.get("signals") or []
+    signalCandidateIds = [str(item.get("candidateId") or "") for item in signalItems]
+    if len(signalCandidateIds) != len(set(signalCandidateIds)) or set(signalCandidateIds) != includedDecisionIds:
+        errors.append("trial-signals-weekly.js 的 include 裁决与上板信号不一致")
+    strengthRank = {"弱": 1, "中": 2, "强": 3}
+    for signal in signalItems:
+        signalId = signal.get("id") or "未编号"
+        if signal.get("strength") not in {"强", "中", "弱"}:
+            errors.append(f"试验信号 {signalId} 缺少有效强度")
+        if signal.get("strengthScale") != "trial_milestone_priority":
+            errors.append(f"试验信号 {signalId} 未声明来源内强度口径")
+        if not signal.get("registryRefs") or not signal.get("evidenceBoundary"):
+            errors.append(f"试验信号 {signalId} 缺少登记引用或证据边界")
+        candidate = cohortById.get(str(signal.get("candidateId") or "")) or {}
+        if strengthRank.get(signal.get("strength"), 0) > strengthRank.get(candidate.get("deterministicStrength"), 0):
+            errors.append(f"试验信号 {signalId} 突破确定性强度上限")
+        allowedRefs = {
+            (str(ref.get("registry") or ""), str(ref.get("registryId") or ""), str(ref.get("url") or ""))
+            for ref in candidate.get("registryRefs") or []
+        }
+        actualRefs = {
+            (str(ref.get("registry") or ""), str(ref.get("registryId") or ""), str(ref.get("url") or ""))
+            for ref in signal.get("registryRefs") or []
+        }
+        if actualRefs != allowedRefs:
+            errors.append(f"试验信号 {signalId} 的官方登记引用与确定性候选不一致")
+        if signal.get("eventType") in {"results_posted", "status_change"}:
+            narrative = " ".join(str(signal.get(key) or "") for key in ("takeaway", "whySignal", "evidenceBoundary"))
+            if re.search(r"(?:证实|证明|显示|表明|提示).{0,24}(?:疗效|有效|改善|降低|优于|阳性|达到主要终点)", narrative, re.I):
+                errors.append(f"试验信号 {signalId} 把注册状态夸大为疗效结论")
+    summary = trialSignals.get("signal_summary") or {}
+    expectedStrengthCounts = {
+        label: sum(item.get("strength") == label for item in signalItems) for label in ("强", "中", "弱")
+    }
+    if summary.get("total_count") != len(signalItems) or summary.get("strength_counts") != expectedStrengthCounts:
+        errors.append("trial-signals-weekly.js 的信号汇总与信号列表不一致")
     return errors
 
 

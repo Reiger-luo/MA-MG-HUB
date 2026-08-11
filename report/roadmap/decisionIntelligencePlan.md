@@ -6,7 +6,7 @@
 >
 > 维护规则：Release 状态由实现任务同步更新；动态数量和发布时间只进入数据状态产物，不写入本计划
 >
-> 已上线基线：首页工作台已承载完整文献信号板，情报中心可按当前标签与筛选条件生成文献、中国、会议和临床试验 Markdown 简报；试验注册频道已覆盖 ClinicalTrials.gov、ChiCTR、ChinaDrugTrials。公开 rolling 与社区 recent 已统一 PMID 窗口，周信号只读取 ingest 真实新增；完整发布使用显式产物契约、统一缓存 run id 和清单 hash，GitHub Actions 发布验证只读，代码 PR 另有不阻断合并的 advisory 图谱审查，获批源码 push 后执行本地与 `main` 云端两次完整重建。该功能是来源层的浏览器内摘要，不是本计划中的 Decision Brief。
+> 已上线基线：首页工作台以统一“信号板”分别呈现文献信号与临床试验信号，两组拥有独立强度口径、筛选和简报章节，不跨来源比较；试验注册频道与来源内信号均覆盖 ClinicalTrials.gov、ChiCTR、ChinaDrugTrials，并以来源 revision 门禁防止新缓存搭配旧分析。情报中心可按当前标签与筛选条件生成文献、中国、会议和临床试验 Markdown 简报。公开 rolling 与社区 recent 已统一 PMID 窗口，文献周信号只读取 ingest 真实新增；完整发布使用显式产物契约、统一缓存 run id 和清单 hash，GitHub Actions 发布验证只读，代码 PR 另有不阻断合并的 advisory 图谱审查，获批源码 push 后执行本地与 `main` 云端两次完整重建。该功能是来源层的浏览器内摘要，不是本计划中的 Decision Brief。
 
 **Goal:** 在不引入 CRM、拜访记录、互动历史、私有后端或浏览器持久化的前提下，把 MA-MG-HUB 从“公开证据浏览站”升级为“围绕 EFG 学术推广策略、可追溯的医学问题导航、判断建议和拜访前准备来源”。本计划只处理纯学术与医学策略，不覆盖政务、支付、市场准入或 Health Economics and Outcomes Research（HEOR）。
 
@@ -32,6 +32,7 @@
 |---|---|---|
 | `data/literature-recent.js` | `window.MG_LITERATURE_DATA` | 严格 MG-core + Evidence I–V 文献证据；问题检索、Claim 支持、Delta 新文献 |
 | `data/signals-weekly.js` | `window.MG_SIGNALS_DATA` | 当前 1 周 Signal、talkingPoints、evidenceBoundary、PMID、KOL/机构公开线索 |
+| `data/trial-signals-weekly.js` | `window.MG_TRIAL_SIGNALS_DATA` | 三源原生比较窗口、逐项裁决、试验重要性、更新实质性、来源内强度与 MG 专家解读 |
 | `data/source-signals.js` | `window.MG_SOURCE_SIGNALS` | 文献、指南/共识、中国监管、试验注册、会议五频道统一入口 |
 | `data/guideline-consensus-cache.json` | JSON `records[]` | 指南/共识来源；不赋 Oxford 等级 |
 | `data/landscape-data.js` | `window.MG_LANDSCAPE_DATA` | 6 个现有 Living Answers、竞争矩阵、临床管线、中国差异框架 |

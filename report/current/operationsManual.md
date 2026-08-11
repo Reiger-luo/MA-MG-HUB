@@ -30,7 +30,7 @@ MG Intelligence Hub 是面向 MG 医学事务团队的静态情报工作站。�
 
 | 页面 | 文件 | 核心任务 |
 | --- | --- | --- |
-| 工作台 | `index.html` | 扫描本周文献信号板、社区动态和数据状态 |
+| 工作台 | `index.html` | 全宽分组扫描本周文献信号、临床试验信号和数据状态 |
 | 情报中心 | `pages/literature.html` | 浏览公开文献、中国情报、会议和临床试验，并按当前标签与筛选条件生成简报 |
 | 诊治格局 | `pages/landscape.html` | 解释格局变化、竞争证据和 Living Answers |
 | 知识库 | `pages/knowledge.html` | 使用图谱、社区、证据矩阵、专题和中国作者网络 |
@@ -45,7 +45,7 @@ MG Intelligence Hub 是面向 MG 医学事务团队的静态情报工作站。�
 
 | 口径 | 权威产物 | 用途 |
 | --- | --- | --- |
-| 公开滚动层 | `literature-recent.js`、`signals-weekly.js`、`china-intelligence.js` | 近期公开证据和信号；`literature-recent.js` 的 PMID 集合是社区 recent 的唯一窗口契约 |
+| 公开滚动层 | `literature-recent.js`、`signals-weekly.js`、`trial-signals-weekly.js`、`china-intelligence.js` | 近期公开证据和分来源信号；`literature-recent.js` 的 PMID 集合是社区 recent 的唯一窗口契约 |
 | full / 语义底座 | 本地 full、full index、community、knowledge graph | 全库关系、分类、专家和检索 |
 
 `MG_PUBLIC_ROLLING_COUNT` 表示公开滚动层；`MG_SEMANTIC_FULL_COUNT` 和兼容字段 `MG_TOTAL_COUNT` 表示语义底座。两者不能相互替代。
@@ -98,6 +98,7 @@ MG-core 与证据门控
 | `dashboard-data.js` | 工作台近期信号、页面摘要和数据健康 |
 | `literature-recent.js` | 严格 MG-core + 证据等级 I–V 文献 |
 | `signals-weekly.js` | 当前周 Signal、证据项和 KOL key points |
+| `trial-signals-weekly.js` | 三源试验冻结窗口、逐项裁决、来源内强度与 MG 专家解读 |
 | `source-signals.js` | 文献、指南/共识、监管、三源试验注册、会议独立频道 |
 | `china-intelligence.js` | 严格 recent 的中国相关文献 |
 | `community*.js` | taxonomy、卡片、周更、分配和质量审计 |
@@ -116,7 +117,7 @@ MG-core 与证据门控
 
 PubMed 主文献流必须先通过 MG-core，再通过证据等级 I–V 门控。分类由 `scripts/studyClassifier.py` 执行，方法学依据见 [evidenceGrading.md](../reference/evidenceGrading.md)。
 
-指南/共识、监管、临床试验注册和会议来源不赋 Oxford 等级，统一通过 `source-signals.js` 保留独立来源身份。
+指南/共识、监管、临床试验注册和会议来源不赋 Oxford 等级，统一通过 `source-signals.js` 保留独立来源身份。临床试验信号另按“试验重要性 × 本轮更新实质性”给出来源内强/中/弱；它表示注册与开发里程碑的跟踪优先级，不与文献证据强度比较，也不代表疗效结论。
 
 所有自动判断均用于筛选、排序、问题发现和拜访前准备；正式医学结论必须核查全文或官方原始来源。
 
@@ -135,7 +136,7 @@ PubMed 主文献流必须先通过 MG-core，再通过证据等级 I–V 门控�
 
 ## 7. 情报中心与会议
 
-首页工作台承载完整文献信号板，提供强度筛选、摘要、列表、关键词云和方法学说明；情报中心不再显示信号 tab。
+首页工作台承载统一“信号板”，按“文献信号 / 临床试验信号”分组。两组分别提供强度统计、筛选和方法学说明，不跨来源聚合或比较；情报中心不再显示信号 tab。
 
 情报中心保持独立频道：
 
@@ -144,7 +145,7 @@ PubMed 主文献流必须先通过 MG-core，再通过证据等级 I–V 门控�
 - 会议摘要；
 - 临床试验。
 
-文献信号只使用 `literature-ingest-latest.json` 的 `added_pmids`，窗口起止日期沿用该 ingest manifest，不再按文献最大日期反推“最近 7 天”。信号在首页文献信号板呈现，按主题聚合，并保留强度、证据项、证据边界、KOL 讨论问题、PMID、作者和机构线索。文献列表通过 PMID 关联信号强度，可按强、中、弱信号筛选。
+文献信号只使用 `literature-ingest-latest.json` 的 `added_pmids`，窗口起止日期沿用该 ingest manifest，不再按文献最大日期反推“最近 7 天”。信号在首页“文献信号”组呈现，按主题聚合，并保留强度、证据项、证据边界、KOL 讨论问题、PMID、作者和机构线索。文献列表通过 PMID 关联信号强度，可按强、中、弱信号筛选。
 
 页面右上角的简报操作读取当前标签和筛选状态：
 
@@ -153,7 +154,7 @@ PubMed 主文献流必须先通过 MG-core，再通过证据等级 I–V 门控�
 - 会议：输出当前会议模块和摘要筛选，最多列出 50 条；
 - 临床试验：输出当前药物、状态、来源和阶段筛选，最多列出 50 个药物管线。
 
-文献列表与中国情报的期刊分区统一采用 EasyScholar `xr` 字段返回的“新锐分区”（如 1 区、2 区），旧中科院分区（CAS/sciBase）已不再使用。简报只在浏览器内生成 Markdown 预览并支持复制。信号简报从首页文献信号板生成；情报中心不保存简报、筛选条件或复制历史。
+文献列表与中国情报的期刊分区统一采用 EasyScholar `xr` 字段返回的“新锐分区”（如 1 区、2 区），旧中科院分区（CAS/sciBase）已不再使用。简报只在浏览器内生成 Markdown 预览并支持复制。信号简报从首页信号板生成，按文献与试验两节分别解释强/中/弱；情报中心不保存简报、筛选条件或复制历史。
 
 会议数据由 `build-conference-data.py` 确定性构建，再由可选 enrich 脚本生成中文摘要和 signal-to-kol 叙事。确定性重建必须保留已经通过校验的 LLM 字段。
 
@@ -171,9 +172,13 @@ MSL 工作台是 China-only：
 
 ## 9. 临床试验数据
 
-ClinicalTrials.gov、ChiCTR 和 ChinaDrugTrials 采用不同更新方式，但统一进入 `clinical-trials-data.js` 和 `source-signals.js` 的试验注册频道。周更先刷新 ChiCTR，再生成消费该缓存的诊治格局和临床试验产物。详细流程见 [clinicalTrialsMaintenance.md](../runbooks/clinicalTrialsMaintenance.md)。
+ClinicalTrials.gov、ChiCTR 和 ChinaDrugTrials 采用不同更新方式，但统一进入 `clinical-trials-data.js` 和 `source-signals.js` 的试验注册频道。三源分别按每周、每 28 天和月度人工节奏产生候选；`trial-signals-weekly.js` 为每个来源保留自己的最新比较窗口，因此未到更新节奏或来源暂时失败时不会清空 last-good。来源频道同时保留原始 `items` 与门控后的 `weekly_signals`，两者不可互相替代。详细流程见 [clinicalTrialsMaintenance.md](../runbooks/clinicalTrialsMaintenance.md)。
 
-ClinicalTrials.gov 是唯一周更注册源。每次构建对比上一期快照（`clinicaltrials-weekly-changes-snapshot.json`），把近 7 天新登记、状态变化、结果发布、字段更新和移除提炼为 `clinicalTrialsSummary.js` 的 `weekly_changes`，在首页工作台“临床试验变化”模块呈现。首次运行只建立基线；相同快照重复构建保持零变化。阶段字段统一归一化，公开 JS 和对比快照均使用原子写入。
+ClinicalTrials.gov 每次构建对比上一期快照（`clinicaltrials-weekly-changes-snapshot.json`），把近 7 天新登记、状态变化、结果发布、字段更新和移除提炼为 `clinicalTrialsSummary.js` 的 `weekly_changes`。全部变化作为试验信号候选，不受首页展示条数截断影响。首次运行只建立基线；相同快照重复构建保持零变化。阶段字段统一归一化，公开 JS 和对比快照均使用原子写入。
+
+试验信号先经过严格 MG-core、移除/重复/行政变化排除，再由确定性规则给出 `trialImportance`、`updateMateriality` 和强度上限。关键试验新增或发生高实质更新可为强；关键试验的中等更新、一般试验的高实质更新或战略性早期项目的重要变化可为中；其余真实而有限的开发变化为弱。MG 专家 LLM 只接收结构化注册字段并解释临床/开发意义、限制和追踪问题，不得提高强度、改写登记号，或把“结果已上传”“研究完成”写成疗效阳性。首页试验组显示三源变化计数、比较窗口、更新时间与管线矩阵入口；完整原始变化继续在临床试验页查看。
+
+`clinicalTrialsSummary.js.source_updates` 为三源缓存记录稳定 revision，必须同时等于原始缓存的当前语义 revision 和 `trial-signals-weekly.js.source_windows[*].source_revision`；CT.gov 的差分日期还必须与其信号窗口一致。任一来源缓存推进但摘要或信号分析未更新时，公开发布校验失败。来源频道和 `weekly-summary.md` 均在试验 enrichment 之后生成，周报按文献/试验分节并允许合法空试验组，不能沿用旧的纯文献周报逻辑。
 
 失败时保留 last-good cache；不使用低可信第三方数据静默覆盖官方缓存。
 
