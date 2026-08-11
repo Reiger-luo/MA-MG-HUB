@@ -87,7 +87,7 @@ def _assert_legitimate_empty_signals_payload(payload):
     assert policy.get("llm_enrichment") is True
     assert policy.get("llm_skip_reason") == "no_new_mg_core_signals"
     assert payload.get("window_basis") == "trueIngestAddedPmids"
-    assert policy.get("analysis_model") == "literature-signal-to-kol-v3"
+    assert policy.get("analysis_model") == "literature-signal-to-kol-v4"
     assert policy.get("llm_reference_coverage") == 0.0
     assert policy.get("published_reference_coverage") == 0.0
 
@@ -100,6 +100,8 @@ def test_signal_to_kol_is_rendered_on_literature_page():
         assert token in literature_js
     assert "renderSignalToKol" in literature_js
     assert "signal-kol-bridge" in css
+    assert "strategicNoveltyScore" in literature_js
+    assert "signal-novelty" in literature_js and ".signal-novelty" in css
 
 
 def test_signal_summary_helper_aggregates_all_normalized_signals_deterministically():
@@ -190,6 +192,78 @@ def test_enrich_skips_llm_and_publishes_empty_payload_when_no_new_mg_core_signal
     _assert_legitimate_empty_signals_payload(payload)
 
 
+def test_replay_current_window_freezes_published_cohort_without_using_empty_ingest(tmp_path, monkeypatch):
+    module = load_enrichment_module()
+    published = {
+        "signals": [
+            {"id": "L01", "title": "候选一", "related_pmids": ["5101"], "source_policy": {}},
+            {"id": "L02", "title": "候选二", "related_pmids": ["5102"], "source_policy": {}},
+        ],
+        "window_basis": "trueIngestAddedPmids",
+        "window_start": "2026-08-03",
+        "window_end": "2026-08-08",
+        "source_policy": {"weekly_selection": "literature-ingest-latest.json added_pmids"},
+    }
+    literature = [sample_article("5101", "II"), sample_article("5102", "IV")]
+
+    class ReplayBuilder(FakeBuilder):
+        @staticmethod
+        def load_weekly_ingest_manifest():
+            raise AssertionError("重放不得读取当前的空 ingest manifest")
+
+        @staticmethod
+        def build_signals(*_args, **_kwargs):
+            raise AssertionError("重放不得重建或推进周更窗口")
+
+    captured = {}
+    signals_out = tmp_path / "signals-weekly.js"
+    monkeypatch.setattr(module, "SIGNALS_PATH", signals_out)
+    monkeypatch.setattr(module, "LITERATURE_PATH", tmp_path / "literature-recent.js")
+    monkeypatch.setattr(module, "DASHBOARD_PATH", tmp_path / "missing-dashboard.js")
+    monkeypatch.setattr(
+        module,
+        "load_js_global",
+        lambda _path, name: published if name == "MG_SIGNALS_DATA" else literature,
+    )
+    monkeypatch.setattr(module, "load_builder_module", lambda: ReplayBuilder)
+    monkeypatch.setattr(sys, "argv", ["enrich-literature-narrative.py", "--replay-current-window"])
+
+    def fake_analysis(records, batch_size):
+        captured["recordPmids"] = [record["pmid"] for record in records]
+        captured["candidateIds"] = [record["candidateSignalId"] for record in records]
+        captured["batchSize"] = batch_size
+        return {
+            "signals": [{"title": "重放后的信号", "refPmids": ["5101"]}],
+            "decisions": {
+                "5101": {"pmid": "5101", "decision": "include", "valueScore": 4},
+                "5102": {"pmid": "5102", "decision": "background", "valueScore": 2},
+            },
+        }
+
+    monkeypatch.setattr(module, "collect_llm_analysis", fake_analysis)
+    monkeypatch.setattr(
+        module,
+        "merge_llm_signals",
+        lambda *_args, **_kwargs: ([{"id": "L01", "related_pmids": ["5101"]}], 1.0),
+    )
+    monkeypatch.setattr(
+        module,
+        "atomic_write_js_global",
+        lambda path, name, payload: captured.update({"path": path, "name": name, "payload": payload}),
+    )
+
+    module.main()
+
+    assert captured["recordPmids"] == ["5101", "5102"]
+    assert captured["candidateIds"] == ["", ""]
+    assert captured["batchSize"] == 2
+    assert captured["payload"]["window_start"] == "2026-08-03"
+    assert captured["payload"]["window_end"] == "2026-08-08"
+    assert captured["payload"]["analysis_cohort_pmids"] == ["5101", "5102"]
+    assert captured["payload"]["source_policy"]["weekly_selection"] == "replay_current_published_window"
+    assert captured["payload"]["source_policy"]["replay_window_preserved"] is True
+
+
 def test_signal_builder_uses_one_week_window():
     builder = load_enrichment_module().load_builder_module()
     fetch_source = (PROJECT / "scripts" / "fetch-pubmed-weekly.py").read_text(encoding="utf-8")
@@ -249,7 +323,7 @@ def test_signal_builder_uses_only_true_ingest_pmids_when_manifest_is_present():
     assert payload["window_end"] == manifest["window_end"]
 
 
-def test_efgar_signal_uses_medium_floor_after_strong_standard():
+def test_signal_strength_uses_evidence_baseline_without_product_or_if_floor():
     builder = load_enrichment_module().load_builder_module()
 
     for alias in ["efgartigimod", "Vyvgart", "ARGX-113", "艾加莫德"]:
@@ -264,7 +338,7 @@ def test_efgar_signal_uses_medium_floor_after_strong_standard():
             ["FcRn"],
             ["efgartigimod"],
         ) == "efgar"
-        assert builder.classifySignalStrength(article) == "中"
+        assert builder.classifySignalStrength(article) == "弱"
     assert builder.classifySignalStrength({
         "title": "Efgartigimod randomized trial",
         "evidence_level": "II",
@@ -274,7 +348,7 @@ def test_efgar_signal_uses_medium_floor_after_strong_standard():
         "title": "Efgartigimod narrative review",
         "evidence_level": None,
         "journal_if": 2,
-    }) == "中"
+    }) == "弱"
     assert builder.classifySignalStrength({
         "title": "General myasthenia gravis narrative review",
         "evidence_level": None,
@@ -284,7 +358,7 @@ def test_efgar_signal_uses_medium_floor_after_strong_standard():
         "title": "High-impact myasthenia gravis review",
         "evidence_level": None,
         "journal_if": 12,
-    }) == "强"
+    }) == "弱"
     assert builder.cluster_strength(
         [{"level": "II", "strength": "强", "score": 5}],
         "efgar",
@@ -292,7 +366,7 @@ def test_efgar_signal_uses_medium_floor_after_strong_standard():
     assert builder.cluster_strength(
         [{"level": "V", "strength": "弱", "score": 5}],
         "efgar",
-    ) == "中"
+    ) == "弱"
     assert builder.cluster_strength(
         [{"level": "V", "strength": "弱", "score": 5}],
         "mechanism_biomarker",
@@ -422,13 +496,27 @@ def test_homepage_signal_board_keeps_the_approved_display_contract():
 
 def test_enrichment_prompt_requires_chinese_and_separates_narrative_roles():
     module = load_enrichment_module()
-    prompt = module.SYSTEM + "\n" + module.build_prompt([])
+    prompt = module.SYSTEM + "\n" + module.build_prompt([{
+        "pmid": "prompt-test",
+        "candidateSignalId": "candidate-1",
+        "candidateSignalTitle": "候选主题",
+    }])
 
     assert "所有面向用户的叙事字段必须使用中文" in prompt
-    assert "takeaway=研究实际发现及其解释" in prompt
+    assert "takeaway=MG 专家临床结论" in prompt
     assert "gapBefore=此前不知道什么" in prompt
     assert "gapFilled=本期证据补了什么" in prompt
-    assert "remainingGap=仍不知道什么" in prompt
+    assert "remainingGap=限制应用的关键缺口" in prompt
+    assert "recordDecisions" in prompt
+    assert "strategicNoveltyScore" in prompt
+    assert "concept_reframing" in prompt and "pharmacology_threshold" in prompt
+    assert "新术语”本身不等于新概念" in prompt
+    assert "补体介导疾病" in prompt and "C5 抑制浓度阈值" in prompt
+    assert "background" in prompt and "exclude" in prompt
+    assert "数量由证据自然决定，可以为 0" in prompt
+    assert "candidateSignalId 只用于组织批次，不是最终医学分类" in prompt
+    assert "普通病例/小病例系列" in prompt
+    assert "不同工具、不同治疗、不同暴露或不同决策节点必须拆开" in prompt
     assert "evidenceItems 必须逐篇覆盖 refPmids" in prompt
     assert "PMID 只放结构化的 refPmids/evidenceItems.pmid" in prompt
     assert "keyMessages" in prompt and "必须使用中文" in prompt
@@ -484,7 +572,7 @@ def test_all_batched_llm_results_cover_all_26_pmids_exactly_once():
     )
 
     assert [len(batch) for batch in requested_batches] == [8, 8, 8, 2]
-    assert all("本批每个 PMID 必须恰好分配一次" in module.build_prompt(batch) for batch in requested_batches)
+    assert all("本批每个 PMID 必须在 recordDecisions 中恰好裁决一次" in module.build_prompt(batch) for batch in requested_batches)
     result_pmids = [pmid for signal in raw_signals for pmid in signal["refPmids"]]
     assert sorted(result_pmids) == sorted(record["pmid"] for record in records)
     assert len(result_pmids) == len(set(result_pmids))
@@ -517,6 +605,311 @@ def test_llm_batch_retries_only_omitted_pmids_with_a_bounded_attempt_count():
     assert requested_pmids == [["3000", "3001", "3002"], ["3002"]]
     result_pmids = [pmid for signal in raw_signals for pmid in signal["refPmids"]]
     assert result_pmids == ["3000", "3001", "3002"]
+
+
+def test_llm_analysis_resolves_background_without_publishing_it_as_a_signal():
+    module = load_enrichment_module()
+    records = [{"pmid": "4101", "title": "Incremental MG trial"}, {"pmid": "4102", "title": "Background MG case"}]
+    requests = []
+
+    def fake_complete(prompt, **_kwargs):
+        prompt_records = json.loads(prompt.split("records = ", 1)[1])
+        requests.append([record["pmid"] for record in prompt_records])
+        return json.dumps({
+            "recordDecisions": [
+                {"pmid": "4101", "decision": "include", "category": "治疗疗效与定位", "valueScore": 4, "reason": "提供新的比较性临床结果。"},
+                {"pmid": "4102", "decision": "background", "category": "病例级警示", "valueScore": 1, "reason": "病例级证据未形成新的安全警示。"},
+            ],
+            "signals": [{
+                "type": "治疗证据",
+                "strength": "强",
+                "signalScore": 4,
+                "title": "治疗证据推进临床判断",
+                "refPmids": ["4101"],
+                "talkingPoints": [],
+            }],
+        }, ensure_ascii=False)
+
+    analysis = module.collect_llm_analysis(records, complete_fn=fake_complete, batch_size=8, max_attempts=2)
+
+    assert requests == [["4101", "4102"]]
+    assert [signal["refPmids"] for signal in analysis["signals"]] == [["4101"]]
+    assert analysis["decisions"]["4101"]["decision"] == "include"
+    assert analysis["decisions"]["4102"]["decision"] == "background"
+
+
+def test_mixed_include_and_background_narrative_is_retried_without_contamination():
+    module = load_enrichment_module()
+    records = [{"pmid": "4151", "title": "Included trial"}, {"pmid": "4152", "title": "Background case"}]
+    requests = []
+
+    def fake_complete(prompt, **_kwargs):
+        batch = json.loads(prompt.split("records = ", 1)[1])
+        pmids = [record["pmid"] for record in batch]
+        requests.append(pmids)
+        if len(pmids) == 2:
+            return json.dumps({
+                "recordDecisions": [
+                    {"pmid": "4151", "decision": "include", "valueScore": 4},
+                    {"pmid": "4152", "decision": "background", "valueScore": 2},
+                ],
+                "signals": [{"title": "被背景文献污染的合并叙事", "refPmids": ["4151", "4152"]}],
+            }, ensure_ascii=False)
+        return json.dumps({
+            "recordDecisions": [{"pmid": "4151", "decision": "include", "valueScore": 4}],
+            "signals": [{"title": "干净的单篇试验信号", "refPmids": ["4151"], "talkingPoints": []}],
+        }, ensure_ascii=False)
+
+    analysis = module.collect_llm_analysis(records, complete_fn=fake_complete, max_attempts=2)
+
+    assert requests == [["4151", "4152"], ["4151"]]
+    assert [signal["title"] for signal in analysis["signals"]] == ["干净的单篇试验信号"]
+    assert analysis["decisions"]["4152"]["decision"] == "background"
+
+
+def test_merge_does_not_fallback_explicit_background_or_excluded_pmids():
+    module = load_enrichment_module()
+    by_pmid = {pmid: sample_article(pmid) for pmid in ("4201", "4202", "4203")}
+    payload = {
+        "signals": [
+            {"id": "old-1", "related_pmids": ["4201", "4202", "4203"], "score": 8, "keywords": []},
+        ]
+    }
+    raw_signals = [{
+        "type": "预后与流行病学",
+        "strength": "中",
+        "signalScore": 4,
+        "title": "队列结果推进风险判断",
+        "takeaway": "队列结果补充了风险判断。",
+        "whySignal": "该结果推进了风险人群识别。",
+        "refPmids": ["4201"],
+        "talkingPoints": [],
+    }]
+    decisions = {
+        "4201": {"pmid": "4201", "decision": "include", "valueScore": 4},
+        "4202": {"pmid": "4202", "decision": "background", "valueScore": 2},
+        "4203": {"pmid": "4203", "decision": "exclude", "valueScore": 1},
+    }
+
+    signals, coverage = module.merge_llm_signals(raw_signals, payload, by_pmid, FakeBuilder(), decisions=decisions)
+
+    assert coverage == 1.0
+    assert [pmid for signal in signals for pmid in signal["related_pmids"]] == ["4201"]
+    assert not any(signal["signal_to_kol"]["analysis_model"].endswith("-fallback") for signal in signals)
+
+
+def test_mg_expert_strength_and_type_are_bounded_by_evidence_design():
+    module = load_enrichment_module()
+    case_article = sample_article("4301", "V")
+    case_article.update({"title": "A case report in myasthenia gravis", "study_types": ["Case Report"]})
+    cohort_article = sample_article("4302", "IV")
+    rct_article = sample_article("4303", "II")
+    rct_article.update({"title": "Randomized trial in generalized myasthenia gravis", "study_types": ["RCT"]})
+
+    assert module.normalize_signal_strength("强", [case_article], 5) == "弱"
+    assert module.normalize_signal_strength("强", [cohort_article], 4) == "中"
+    assert module.normalize_signal_strength("强", [rct_article], 5) == "强"
+    assert module.normalize_signal_strength("中", [cohort_article], 3) == "弱"
+    assert module.normalize_signal_type("诊断与监测", [cohort_article], "真实世界") == "诊断与监测"
+
+    case_decision = module.apply_decision_evidence_ceiling(
+        {"decision": "include", "category": "病例级警示", "valueScore": 4, "reason": "病例有趣。"},
+        module.records_for_prompt([case_article])[0],
+    )
+    assert case_decision["decision"] == "background"
+    assert case_decision["valueScore"] == 2
+
+    animal_record = module.records_for_prompt([{
+        **case_article,
+        "pmid": "4304",
+        "title": "Feline myasthenia gravis case report",
+    }])[0]
+    animal_decision = module.apply_decision_evidence_ceiling(
+        {"decision": "include", "category": "病例级警示", "valueScore": 3, "reason": "动物病例。"},
+        animal_record,
+    )
+    assert animal_decision["decision"] == "exclude"
+
+    exploratory_exclusion = module.apply_decision_evidence_ceiling(
+        {"decision": "exclude", "category": "机制与转化", "valueScore": 1, "reason": "纯计算探索，无临床数据。"},
+        module.records_for_prompt([{
+            **cohort_article,
+            "pmid": "4306",
+            "title": "Computational study in myasthenia gravis",
+        }])[0],
+    )
+    assert exploratory_exclusion["decision"] == "background"
+
+    concept_record = module.records_for_prompt([{
+        **cohort_article,
+        "pmid": "4307",
+        "title": "Machine learning model refines an effective-concentration threshold",
+        "abstract": "The model pooled generalized myasthenia gravis and other diseases to estimate a pharmacodynamic concentration threshold.",
+        "study_types": ["Prediction Model Development"],
+    }])[0]
+    concept_decision = module.apply_decision_evidence_ceiling(
+        {
+            "decision": "background",
+            "category": "机制与转化",
+            "valueScore": 2,
+            "strategicNoveltyScore": 5,
+            "noveltyType": "pharmacology_threshold",
+            "conceptAdvance": "跨适应证模型对既有完全抑制浓度阈值提出了可验证挑战。",
+            "clinicalImplication": "若前瞻性验证，可能影响重症肌无力的药物监测和无应答解释。",
+            "reason": "目前仅为模型研究。",
+        },
+        concept_record,
+    )
+    assert concept_decision["decision"] == "include"
+    assert concept_decision["valueScore"] == 3
+
+    concept_signal = module.normalize_signal(
+        {
+            "type": "机制与转化",
+            "strength": "中",
+            "signalScore": 4,
+            "strategicNoveltyScore": 5,
+            "noveltyType": "pharmacology_threshold",
+            "conceptAdvance": concept_decision["conceptAdvance"],
+            "clinicalImplication": concept_decision["clinicalImplication"],
+            "title": "模型挑战完全补体抑制的传统浓度阈值",
+            "refPmids": ["4307"],
+            "talkingPoints": [],
+        },
+        1,
+        {"4307": {**cohort_article, "pmid": "4307", "study_types": ["Prediction Model Development"]}},
+        {},
+        FakeBuilder(),
+    )
+    assert concept_signal["strength"] == "弱"
+    assert concept_signal["signalScore"] == 3
+    assert concept_signal["strategicNoveltyScore"] == 5
+    assert concept_signal["noveltyLabel"] == "高战略新颖性"
+
+    national_matched = {
+        **cohort_article,
+        "pmid": "4308",
+        "title": "Propensity-matched national database cohort in myasthenia gravis",
+        "study_types": ["Prognostic Cohort"],
+        "evidence_level": "IV",
+    }
+    prospective_unmet = {
+        **cohort_article,
+        "pmid": "4309",
+        "title": "Prospective study in severe exacerbation requiring ventilatory support",
+        "abstract": "Clinical efficacy was assessed with MG-ADL and QMG after enteral support.",
+        "study_types": ["Single Arm"],
+        "evidence_level": "IV",
+    }
+    assert module.expert_signal_score_floor([national_matched]) == 4
+    assert module.expert_signal_score_floor([prospective_unmet]) == 4
+    prospective_diagnostic = {
+        **cohort_article,
+        "pmid": "4310",
+        "title": "Prospective diagnostic study to distinguish myasthenia gravis",
+        "abstract": "Diagnostic performance included AUC, sensitivity, and specificity.",
+        "study_types": ["Cross-Sectional"],
+        "evidence_level": "IV",
+    }
+    assert module.expert_signal_score_floor([prospective_diagnostic]) == 4
+    direct_signal = module.normalize_signal(
+        {
+            "type": "预后与流行病学",
+            "strength": "弱",
+            "signalScore": 3,
+            "title": "全国匹配队列量化围手术期风险",
+            "refPmids": ["4308"],
+            "talkingPoints": [],
+        },
+        1,
+        {"4308": national_matched},
+        {},
+        FakeBuilder(),
+    )
+    assert direct_signal["strength"] == "中"
+    assert direct_signal["signalScore"] == 4
+
+    descriptive_record = module.records_for_prompt([{
+        **cohort_article,
+        "pmid": "4305",
+        "title": "MG outcomes at a tertiary center - A retrospective cohort study",
+        "abstract": "Methods: We conducted a retrospective single-center cohort without a comparator.",
+        "study_types": ["Single Arm"],
+    }])[0]
+    descriptive_decision = module.apply_decision_evidence_ceiling(
+        {"decision": "include", "category": "预后与流行病学", "valueScore": 4, "reason": "描述本地负担。"},
+        descriptive_record,
+    )
+    assert descriptive_decision["decision"] == "background"
+
+
+def test_noncomparative_language_cannot_imply_standard_rescue_replacement_or_screening_policy():
+    module = load_enrichment_module()
+    single_arm = sample_article("4351", "IV")
+    single_arm["study_types"] = ["Single Arm"]
+    cohort = sample_article("4352", "IV")
+    cohort["study_types"] = ["Cross-Sectional"]
+
+    rescue_claim = module.apply_evidence_language(
+        "该结果可能改变当前急性期治疗路径中对PLEX/IVIG的依赖，但证据级别低。",
+        [single_arm],
+    )
+    screening_claim = module.apply_evidence_language(
+        "临床可考虑在MG诊断前两年加强自身免疫病筛查，但需前瞻性验证。",
+        [cohort],
+    )
+    precursor_claim = module.apply_evidence_language(
+        "这些疾病可能作为MG前驱标志。",
+        [cohort],
+    )
+    monitoring_claim = module.apply_evidence_language(
+        "临床实践中应考虑在MG诊断时及前后监测这些共病。",
+        [cohort],
+    )
+
+    assert "尚不能据此替代或减少 PLEX/IVIG" in rescue_claim
+    assert "仅提示值得在标准救援治疗背景下进一步验证" in module.apply_evidence_language(
+        "该结果提示FcRn阻断可能成为急性期治疗的替代选择。",
+        [single_arm],
+    )
+    assert "不足以直接支持扩大筛查" in screening_claim
+    assert "不能据此认定为前驱标志" in precursor_claim
+    assert "不足以直接支持新增常规筛查或监测策略" in monitoring_claim
+    assert "不足以直接支持改变筛查策略" in module.apply_evidence_language(
+        "该结果提示临床医生应关注既往自身免疫疾病，可能影响早期筛查策略。",
+        [cohort],
+    )
+
+
+def test_cross_candidate_cluster_merge_requires_explicit_clinical_coherence():
+    module = load_enrichment_module()
+    records = {
+        "4401": {"candidateSignalId": "candidate-a"},
+        "4402": {"candidateSignalId": "candidate-b"},
+    }
+    rejected = module._accepted_batch_signals(
+        [{"title": "过宽聚合", "refPmids": ["4401", "4402"], "talkingPoints": []}],
+        {"4401", "4402"},
+        set(),
+        {"4401", "4402"},
+        records,
+    )
+    accepted = module._accepted_batch_signals(
+        [{
+            "title": "同一临床问题的合并证据",
+            "clinicalQuestion": "该治疗能否改善同类全身型重症肌无力患者的疾病控制？",
+            "aggregationRationale": "两篇研究针对相同疾病阶段和治疗节点，结局均用于判断疾病控制，因此可共同支持这一临床问题。",
+            "refPmids": ["4401", "4402"],
+            "talkingPoints": [],
+        }],
+        {"4401", "4402"},
+        set(),
+        {"4401", "4402"},
+        records,
+    )
+
+    assert rejected == []
+    assert [signal["refPmids"] for signal in accepted] == [["4401", "4402"]]
 
 
 def test_partial_llm_coverage_keeps_valid_clusters_and_falls_back_without_pmid_loss():
@@ -637,11 +1030,12 @@ def test_literature_signals_use_parent_child_evidence_chain_without_duplicate_pm
         # 零信号周：无 parent-child 链可查，仅校验"合法空"契约。
         _assert_legitimate_empty_signals_payload(payload)
         return
-    assert len(signals) < len(pmids)
+    # 多篇可以归为同一信号，但聚合不是配额要求；本周也可能每条高价值证据恰好回答不同问题。
+    assert len(signals) <= len(pmids)
     assert len(pmids) == len(set(pmids))
     assert sum(signal.get("article_count", 0) for signal in signals) == len(pmids)
     if policy.get("llm_enrichment"):
-        assert policy["published_reference_coverage"] == 1.0
+        assert 0.0 < policy["published_reference_coverage"] <= policy["llm_reference_coverage"] <= 1.0
     # 严格 recent 上游已可能排除全部 non-core；构建器的混合输入防御另有单测覆盖。
     assert policy["excluded_non_mg_core"] >= 0
 
@@ -666,6 +1060,19 @@ def test_literature_signals_use_parent_child_evidence_chain_without_duplicate_pm
             assert point.get("whyKol")
             assert point.get("keyMessages")
             assert point.get("refs")
+
+    concept_signals = [
+        signal for signal in signals
+        if signal.get("strategicNoveltyScore", 0) >= 4
+        and signal.get("noveltyType") in {"concept_reframing", "pharmacology_threshold"}
+    ]
+    for signal in concept_signals:
+        assert signal["strength"] == "弱"
+        assert signal["signalScore"] <= 3
+        assert signal["noveltyLabel"] == "高战略新颖性"
+        assert signal.get("conceptAdvance")
+        assert signal.get("clinicalImplication")
+        assert "当前" in signal["whySignal"] or "验证" in signal["whySignal"]
 
 
 def test_mg_core_guard_rejects_secondary_disease_comparator():

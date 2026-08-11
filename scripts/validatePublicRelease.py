@@ -163,11 +163,37 @@ def validateRecentContracts() -> list[str]:
 def validateWeeklyIngest() -> list[str]:
     """本地完整发布额外核对真实 ingest；该文件不进入公开仓库。"""
     errors = []
+    signals = load_js_global(dataDir / "signals-weekly.js", "MG_SIGNALS_DATA")
+    sourcePolicy = signals.get("source_policy") or {}
+    if sourcePolicy.get("weekly_selection") == "replay_current_published_window":
+        # 受控重放保留已发布窗口，不应被后来生成的空 ingest 清空；但冻结队列必须可完整审计。
+        cohort = [str(item) for item in signals.get("analysis_cohort_pmids") or [] if item]
+        decisions = signals.get("selection_decisions") or []
+        decisionPmids = [str(item.get("pmid") or "") for item in decisions if item.get("pmid")]
+        signalPmids = {
+            str(item)
+            for signal in signals.get("signals") or []
+            for item in signal.get("related_pmids") or []
+            if item
+        }
+        if sourcePolicy.get("replay_window_preserved") is not True:
+            errors.append("signals-weekly.js 重放模式未声明 replay_window_preserved")
+        if not signals.get("window_start") or not signals.get("window_end"):
+            errors.append("signals-weekly.js 重放模式缺少冻结窗口")
+        if not cohort or len(cohort) != len(set(cohort)):
+            errors.append("signals-weekly.js 重放队列为空或含重复 PMID")
+        if set(decisionPmids) != set(cohort) or len(decisionPmids) != len(cohort):
+            errors.append("signals-weekly.js 重放逐篇裁决未完整覆盖冻结队列")
+        if sourcePolicy.get("replay_source_count") != len(cohort):
+            errors.append("signals-weekly.js replay_source_count 与冻结队列不一致")
+        if not signalPmids.issubset(set(cohort)):
+            errors.append("signals-weekly.js 重放信号含冻结队列以外 PMID")
+        return errors
+
     ingestPath = dataDir / "literature-ingest-latest.json"
     if not ingestPath.exists():
         return ["缺少本轮 literature-ingest-latest.json"]
     ingest = load_json(ingestPath)
-    signals = load_js_global(dataDir / "signals-weekly.js", "MG_SIGNALS_DATA")
     addedPmids = {str(item) for item in ingest.get("added_pmids") or []}
     signalPmids = set()
     for signal in signals.get("signals") or []:

@@ -922,6 +922,9 @@
   function compareSignals(a, b) {
     var strengthDiff = signalStrengthRank(b.strength) - signalStrengthRank(a.strength);
     if (strengthDiff !== 0) return strengthDiff;
+    var expertScoreDiff = Math.max(Number(b.signalScore || 0), Number(b.strategicNoveltyScore || 0)) -
+      Math.max(Number(a.signalScore || 0), Number(a.strategicNoveltyScore || 0));
+    if (expertScoreDiff !== 0) return expertScoreDiff;
     if (b.score !== a.score) return b.score - a.score;
     return (b.date || 0) - (a.date || 0);
   }
@@ -937,6 +940,12 @@
           title: signal.title || signal.summary || (signal.article && signal.article.title) || '',
           summary: signal.summary || signal.title || '',
           strength: signal.strength || '弱',
+          signalScore: Number(signal.signalScore || 0),
+          strategicNoveltyScore: Number(signal.strategicNoveltyScore || 0),
+          noveltyType: signal.noveltyType || 'none',
+          noveltyLabel: signal.noveltyLabel || '',
+          conceptAdvance: signal.conceptAdvance || '',
+          clinicalImplication: signal.clinicalImplication || '',
           topics: signal.keywords || [],
           drugs: signal.drugs || [],
           score: signal.score || 0,
@@ -1247,6 +1256,8 @@
       drugHtml += '<span class="signal-drug">' + escapeHtml(item.drugs[d]) + '</span>';
     }
     var tagHtml = topicHtml + drugHtml + (item.china_related ? '<span class="signal-topic china">中国相关</span>' : '');
+    var noveltyHtml = item.strategicNoveltyScore >= 4 && item.noveltyType !== 'none' ?
+      '<span class="signal-novelty">' + escapeHtml(item.noveltyLabel || '高战略新颖性') + '</span>' : '';
     var kolHtml = renderSignalToKol(item);
     var narrativeHtml = renderLiteratureTalkingPoints(item);
     var title = stripPmidMentions(item.title || item.summary || a.title || '(无标题)');
@@ -1258,6 +1269,7 @@
         '<div class="signal-card-head">' +
           '<span class="signal-strength">' + escapeHtml(item.strength) + '信号</span>' +
           '<span class="signal-type">' + escapeHtml(item.type) + '</span>' +
+          noveltyHtml +
         '</div>' +
         titleHtml +
         '<div class="signal-meta">' + meta + '</div>' +

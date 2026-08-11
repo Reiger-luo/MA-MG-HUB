@@ -139,6 +139,59 @@ def test_pubmed_fetch_rejects_truncated_esearch_before_writing(monkeypatch):
         module.main()
 
 
+def test_public_release_validator_accepts_auditable_frozen_signal_replay(tmp_path, monkeypatch):
+    module = load_script("validatePublicRelease.py")
+    monkeypatch.setattr(module, "dataDir", tmp_path)
+    atomic_write_js_global(
+        tmp_path / "signals-weekly.js",
+        "MG_SIGNALS_DATA",
+        {
+            "window_start": "2026-08-03",
+            "window_end": "2026-08-08",
+            "analysis_cohort_pmids": ["5101", "5102"],
+            "selection_decisions": [
+                {"pmid": "5101", "decision": "include"},
+                {"pmid": "5102", "decision": "background"},
+            ],
+            "signals": [{"related_pmids": ["5101"]}],
+            "source_policy": {
+                "weekly_selection": "replay_current_published_window",
+                "replay_window_preserved": True,
+                "replay_source_count": 2,
+            },
+        },
+    )
+
+    assert module.validateWeeklyIngest() == []
+
+
+def test_public_release_validator_rejects_incomplete_frozen_signal_replay(tmp_path, monkeypatch):
+    module = load_script("validatePublicRelease.py")
+    monkeypatch.setattr(module, "dataDir", tmp_path)
+    atomic_write_js_global(
+        tmp_path / "signals-weekly.js",
+        "MG_SIGNALS_DATA",
+        {
+            "window_start": "2026-08-03",
+            "window_end": "2026-08-08",
+            "analysis_cohort_pmids": ["5101", "5102"],
+            "selection_decisions": [{"pmid": "5101", "decision": "include"}],
+            "signals": [{"related_pmids": ["9999"]}],
+            "source_policy": {
+                "weekly_selection": "replay_current_published_window",
+                "replay_window_preserved": True,
+                "replay_source_count": 1,
+            },
+        },
+    )
+
+    errors = module.validateWeeklyIngest()
+
+    assert "signals-weekly.js 重放逐篇裁决未完整覆盖冻结队列" in errors
+    assert "signals-weekly.js replay_source_count 与冻结队列不一致" in errors
+    assert "signals-weekly.js 重放信号含冻结队列以外 PMID" in errors
+
+
 def test_mg_core_relevance_excludes_single_background_mention_and_keeps_true_mg():
     from scripts.common.mg_relevance import assess_mg_core
 
@@ -526,7 +579,7 @@ def test_split_recent_data_preserves_unclassified_records_and_adds_signal_tags(t
     by_pmid = {article["pmid"]: article for article in recent}
     assert set(by_pmid) == {"strong", "efgar-review", "general-review"}
     assert by_pmid["strong"]["signal_strength"] == "强"
-    assert by_pmid["efgar-review"]["signal_strength"] == "中"
+    assert by_pmid["efgar-review"]["signal_strength"] == "弱"
     assert by_pmid["general-review"]["signal_strength"] == "弱"
 
 

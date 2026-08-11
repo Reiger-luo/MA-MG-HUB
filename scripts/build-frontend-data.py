@@ -1310,15 +1310,13 @@ def aggregate_institution_leads(articles, kol_leads):
 
 
 def cluster_strength(members, cluster_id=""):
-    # 聚合后仍优先保留单篇已命中的强信号标准；efgar 其余内容以中信号兜底。
+    # 确定性构建只提供证据设计基线；最终价值由 MG 专家 enrichment 判定。
     if any(item.get("strength") == "强" for item in members):
         return "强"
     levels = {str(item.get("level") or "") for item in members}
     if levels.intersection({"I", "II"}):
         return "强"
-    if cluster_id == "efgar":
-        return "中"
-    if any(item.get("score", 0) >= 12 for item in members) or len(members) >= 2:
+    if levels.intersection({"III", "IV"}):
         return "中"
     return "弱"
 
@@ -1545,7 +1543,7 @@ def build_signals(recent, ingestManifest=None, requireIngest=False):
             "signal_count_unlimited": True,
             "analysis_model": "literature-signal-to-kol-v1",
             "aggregation": "mg_core_topic_cluster",
-            "strength_policy": "strong_standard_first_then_efgar_medium_floor",
+            "strength_policy": "evidence_level_baseline_then_mg_expert_value",
             "mg_core_policy": "title_explicit_or_repeated_mg_mentions_with_secondary_disease_guard",
             "excluded_non_mg_core": sum(excluded_non_mg_core.values()),
             "excluded_non_mg_core_by_reason": dict(excluded_non_mg_core),

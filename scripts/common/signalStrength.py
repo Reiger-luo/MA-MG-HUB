@@ -24,18 +24,10 @@ def isEfgarRelated(article):
 
 
 def classifySignalStrength(article):
-    """按强信号优先、efgar 中信号兜底的顺序返回文献级标签。"""
+    """按证据设计提供强度基线；产品、地区和期刊声望不直接抬高价值。"""
     evidenceLevel = str(article.get("evidence_level") or "")
-
-    try:
-        impactFactor = float(article.get("journal_if") or 0)
-    except (TypeError, ValueError):
-        impactFactor = 0.0
-
-    if evidenceLevel in {"I", "II"} or (impactFactor >= 10 and evidenceLevel != "V"):
+    if evidenceLevel in {"I", "II"}:
         return "强"
-    if isEfgarRelated(article):
-        return "中"
-    if impactFactor >= 5 or evidenceLevel in {"III", "IV"} or article.get("china_related"):
+    if evidenceLevel in {"III", "IV"}:
         return "中"
     return "弱"
