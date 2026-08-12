@@ -3414,7 +3414,7 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
 .dashboard-release-chip time { color: var(--fg); font-variant-numeric: tabular-nums; }
 
 .dashboard-stats {
-  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.75rem; margin-bottom: 1rem;
 }
 .dashboard-kpi-card {

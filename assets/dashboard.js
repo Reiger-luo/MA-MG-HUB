@@ -10,7 +10,6 @@
     signal_summary: null,
     top_signals: []
   };
-  var expertData = window.MG_EXPERT_PROFILES || { summary: {} };
   var clinicalTrialsData = window.MG_CLINICAL_TRIALS_SUMMARY || {
     meta: {},
     source_counts: [],
@@ -135,7 +134,6 @@
     var literatureSignalCount = numberValue(signalSummary.total_count || stats.signals, 0);
     var trialSignalCount = numberValue(trialSignalSummary.total_count, 0);
     var trialMeta = clinicalTrialsData.meta || {};
-    var expertSummary = expertData.summary || {};
     var chinaStat = findStatCard('中国证据');
     var cards = [
       {
@@ -158,13 +156,6 @@
         note: formatNumber(trialMeta.total_count || 0) + ' 条 · 3 个注册源',
         href: 'pages/literature.html?tab=trials',
         tone: 'trial'
-      },
-      {
-        label: '中国作者索引',
-        value: expertSummary.indexed_china_experts || 0,
-        note: 'China-only MSL 索引',
-        href: 'pages/msl.html',
-        tone: 'msl'
       }
     ];
 
