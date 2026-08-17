@@ -1,7 +1,7 @@
 window.MG_CLINICAL_TRIALS_DATA = {
   "meta": {
-    "generated_at": "2026-08-10",
-    "total_count": 453,
+    "generated_at": "2026-08-17",
+    "total_count": 454,
     "sources_order": [
       "ClinicalTrials.gov",
       "ChiCTR",
@@ -11,7 +11,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
   "decision_signals": [
     {
       "title": "招募中试验",
-      "detail": "当前共有 138 项招募中或邀请入组试验。",
+      "detail": "当前共有 139 项招募中或邀请入组试验。",
       "tag": "招募"
     },
     {
@@ -21,7 +21,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "title": "近 6 个月新登记",
-      "detail": "截至 2026-08-10，近 6 个月登记 34 项试验。",
+      "detail": "截至 2026-08-17，近 6 个月登记 35 项试验。",
       "tag": "近期登记"
     }
   ],
@@ -1634,7 +1634,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "highest_phase_label": "Phase 3",
       "stage_number": 3,
       "study_count": 9,
-      "status_summary": "招募 4 · 进行 1 · 完成 4",
+      "status_summary": "招募 4 · 进行 0 · 完成 5",
       "sponsors": [
         "Centre Hospitalier Universitaire de Nice",
         "Miriam Freimer",
@@ -1680,12 +1680,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry": "ClinicalTrials.gov",
           "registry_id": "NCT04225871",
           "title": "Open-Label Extension of Zilucoplan in Subjects With Generalized Myasthenia Gravis",
-          "status_label": "进行中",
-          "status_class": "active",
+          "status_label": "已完成",
+          "status_class": "completed",
           "phase_label": "Phase 3",
           "start_date": "2019-12-23",
-          "readout_date": "2026-07-27",
-          "completion_date": "2026-07-27",
+          "readout_date": "2026-07-31",
+          "completion_date": "2026-07-31",
           "sponsor": "UCB Biopharma SRL",
           "url": "https://clinicaltrials.gov/study/NCT04225871"
         },
@@ -2340,6 +2340,55 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "drug_class": "B细胞/抗CD19/CD20",
+      "name": "Descartes-08",
+      "highest_phase_label": "Phase 2",
+      "stage_number": 2,
+      "study_count": 1,
+      "status_summary": "招募 0 · 进行 1 · 完成 0",
+      "sponsors": [
+        "Cartesian Therapeutics"
+      ],
+      "sources": {
+        "ClinicalTrials.gov": 1
+      },
+      "key_trial": {
+        "registry": "ClinicalTrials.gov",
+        "registry_id": "NCT04146051",
+        "title": "Descartes-08 CAR-T Cells in Generalized Myasthenia Gravis (MG)",
+        "url": "https://clinicaltrials.gov/study/NCT04146051"
+      },
+      "trials": [
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT04146051",
+          "title": "Descartes-08 CAR-T Cells in Generalized Myasthenia Gravis (MG)",
+          "status_label": "进行中",
+          "status_class": "active",
+          "phase_label": "Phase 2",
+          "start_date": "2019-12-04",
+          "readout_date": "2026-01-05",
+          "completion_date": "2026-09-30",
+          "sponsor": "Cartesian Therapeutics",
+          "url": "https://clinicaltrials.gov/study/NCT04146051"
+        }
+      ],
+      "timeline": {
+        "start": "2019-12-04",
+        "readout": "2026-01-05",
+        "completion": "2026-09-30"
+      },
+      "first_registered": "2019-10-31",
+      "latest_registered": "2019-10-31",
+      "linked_registries": [
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT06381284",
+          "url": "https://clinicaltrials.gov/study/NCT06381284"
+        }
+      ]
+    },
+    {
+      "drug_class": "B细胞/抗CD19/CD20",
       "name": "Cizutamig",
       "highest_phase_label": "Phase 1",
       "stage_number": 1,
@@ -2652,7 +2701,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "Phase 1",
-          "start_date": "2025-01-08",
+          "start_date": "2025-03-04",
           "readout_date": "2028-12-01",
           "completion_date": "2033-05-01",
           "sponsor": "CSPC ZhongQi Pharmaceutical Technology Co., Ltd.",
@@ -2660,7 +2709,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         }
       ],
       "timeline": {
-        "start": "2025-01-08",
+        "start": "2025-03-04",
         "readout": "2028-12-01",
         "completion": "2033-05-01"
       },
@@ -5435,7 +5484,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "highest_phase_label": "Phase 3",
       "stage_number": 3,
       "study_count": 1,
-      "status_summary": "招募 1 · 进行 0 · 完成 0",
+      "status_summary": "招募 0 · 进行 1 · 完成 0",
       "sponsors": [
         "Novartis Pharmaceuticals"
       ],
@@ -5453,8 +5502,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry": "ClinicalTrials.gov",
           "registry_id": "NCT06517758",
           "title": "A Phase III Study to Investigate Efficacy, Safety and Tolerability of Iptacopan Compared With Placebo in Participants Aged 18 to 85 Years With gMG.",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status_label": "进行中",
+          "status_class": "active",
           "phase_label": "Phase 3",
           "start_date": "2024-07-31",
           "readout_date": "2027-04-30",
@@ -6671,9 +6720,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "status_label": "尚未招募",
           "status_class": "recruiting",
           "phase_label": "Phase 1",
-          "start_date": "2026-05-05",
+          "start_date": "2026-12-31",
           "readout_date": "2027-05-31",
-          "completion_date": "2027-12-31",
+          "completion_date": "2028-12-31",
           "sponsor": "Shenzhen MagicRNA Biotechnology Co., Ltd",
           "url": "https://clinicaltrials.gov/study/NCT07556120"
         }
@@ -6681,7 +6730,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "timeline": {
         "start": "2026-01-19",
         "readout": "2027-05-31",
-        "completion": "2027-12-31"
+        "completion": "2028-12-31"
       },
       "first_registered": "2025-05-11",
       "latest_registered": "2026-04-29",
@@ -7745,16 +7794,16 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "status_class": "recruiting",
           "phase_label": "Phase 2 / Phase 3",
           "start_date": "2024-07-01",
-          "readout_date": "2026-06-30",
-          "completion_date": "2026-06-30",
+          "readout_date": "2026-12-30",
+          "completion_date": "2026-12-30",
           "sponsor": "Shanghai Jiaolian Drug Research and Development Co., Ltd",
           "url": "https://clinicaltrials.gov/study/NCT06447597"
         }
       ],
       "timeline": {
         "start": "2024-07-01",
-        "readout": "2026-06-30",
-        "completion": "2026-06-30"
+        "readout": "2026-12-30",
+        "completion": "2026-12-30"
       },
       "first_registered": "2024-06-07",
       "latest_registered": "2024-06-07",
@@ -8411,7 +8460,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "highest_phase_label": "未标注",
       "stage_number": 0,
       "study_count": 1,
-      "status_summary": "招募 0 · 进行 1 · 完成 0",
+      "status_summary": "招募 1 · 进行 0 · 完成 0",
       "sponsors": [
         "Cabaletta Bio"
       ],
@@ -8429,8 +8478,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry": "ClinicalTrials.gov",
           "registry_id": "NCT06359041",
           "title": "RESET-MG: A Study to Evaluate the Safety and Efficacy of CABA-201 in Participants With Generalized Myasthenia Gravis",
-          "status_label": "进行中",
-          "status_class": "active",
+          "status_label": "招募中",
+          "status_class": "recruiting",
           "phase_label": "Phase 1 / Phase 2",
           "start_date": "2024-12-17",
           "readout_date": "",
@@ -10427,9 +10476,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
     {
       "source": "ClinicalTrials.gov",
       "meta": {
-        "generated_at": "2026-08-10",
+        "generated_at": "2026-08-17",
         "mode": "cache",
-        "revision": "semantic-v1:b156e21e65b6291da02fe6336eeb30cae10b8ecc5109c65ecf41682664830007"
+        "revision": "semantic-v1:4520592c3bf4eca4f641a34efa69685356236eaced57dd375aed8685f4e309f0"
       },
       "records": [
         {
@@ -12305,6 +12354,34 @@ window.MG_CLINICAL_TRIALS_DATA = {
         },
         {
           "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT04146051",
+          "title": "Descartes-08 CAR-T Cells in Generalized Myasthenia Gravis (MG)",
+          "url": "https://clinicaltrials.gov/study/NCT04146051",
+          "status": "ACTIVE_NOT_RECRUITING",
+          "status_label": "进行中",
+          "status_class": "active",
+          "drug_class": "B细胞/抗CD19/CD20",
+          "drug_name": "Descartes-08",
+          "drug_names": [
+            "Descartes-08"
+          ],
+          "indication": "重症肌无力",
+          "phase_label": "Phase 2",
+          "sponsor": "Cartesian Therapeutics",
+          "start_date": "2019-12-04",
+          "readout_date": "2026-01-05",
+          "completion_date": "2026-09-30",
+          "registered_date": "2019-10-31",
+          "linked_registries": [
+            {
+              "registry": "ClinicalTrials.gov",
+              "registry_id": "NCT06381284",
+              "url": "https://clinicaltrials.gov/study/NCT06381284"
+            }
+          ]
+        },
+        {
+          "registry": "ClinicalTrials.gov",
           "registry_id": "NCT04158661",
           "title": "Influence of Minimally Invasive Thymectomy on the Subsequent Clinical Course of Myasthenia Gravis",
           "url": "https://clinicaltrials.gov/study/NCT04158661",
@@ -12432,9 +12509,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "NCT04225871",
           "title": "Open-Label Extension of Zilucoplan in Subjects With Generalized Myasthenia Gravis",
           "url": "https://clinicaltrials.gov/study/NCT04225871",
-          "status": "ACTIVE_NOT_RECRUITING",
-          "status_label": "进行中",
-          "status_class": "active",
+          "status": "COMPLETED",
+          "status_label": "已完成",
+          "status_class": "completed",
           "drug_class": "补体抑制剂",
           "drug_name": "zilucoplan (RA101495)",
           "drug_names": [
@@ -12444,8 +12521,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "UCB Biopharma SRL",
           "start_date": "2019-12-23",
-          "readout_date": "2026-07-27",
-          "completion_date": "2026-07-27",
+          "readout_date": "2026-07-31",
+          "completion_date": "2026-07-31",
           "registered_date": "2020-01-13",
           "linked_registries": []
         },
@@ -14306,7 +14383,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "sponsor": "argenx",
           "start_date": "2024-04-16",
           "readout_date": "2025-06-30",
-          "completion_date": "2027-06",
+          "completion_date": "2028-06",
           "registered_date": "2024-03-07",
           "linked_registries": []
         },
@@ -14381,9 +14458,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "NCT06359041",
           "title": "RESET-MG: A Study to Evaluate the Safety and Efficacy of CABA-201 in Participants With Generalized Myasthenia Gravis",
           "url": "https://clinicaltrials.gov/study/NCT06359041",
-          "status": "ACTIVE_NOT_RECRUITING",
-          "status_label": "进行中",
-          "status_class": "active",
+          "status": "RECRUITING",
+          "status_label": "招募中",
+          "status_class": "recruiting",
           "drug_class": "其他",
           "drug_name": "CABA-201",
           "drug_names": [
@@ -14420,32 +14497,6 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "completion_date": "2026-12-01",
           "registered_date": "2024-04-17",
           "linked_registries": []
-        },
-        {
-          "registry": "ClinicalTrials.gov",
-          "registry_id": "NCT06381284",
-          "title": "Expediting Myasthenia Gravis (MG) Diagnostic Evaluation: A Novel, Proof-of-Concept for Undiagnosed, Symptomatic Patients That Uses Social Media Targeting and Self-Assessment",
-          "url": "https://clinicaltrials.gov/study/NCT06381284",
-          "status": "COMPLETED",
-          "status_label": "已完成",
-          "status_class": "completed",
-          "drug_class": "其他",
-          "drug_name": "",
-          "drug_names": [],
-          "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "ZS Associates",
-          "start_date": "2024-03-28",
-          "readout_date": "2025-03-03",
-          "completion_date": "2025-03-03",
-          "registered_date": "2024-04-24",
-          "linked_registries": [
-            {
-              "registry": "ClinicalTrials.gov",
-              "registry_id": "NCT04146051",
-              "url": "https://clinicaltrials.gov/study/NCT04146051"
-            }
-          ]
         },
         {
           "registry": "ClinicalTrials.gov",
@@ -14615,8 +14666,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2 / Phase 3",
           "sponsor": "Shanghai Jiaolian Drug Research and Development Co., Ltd",
           "start_date": "2024-07-01",
-          "readout_date": "2026-06-30",
-          "completion_date": "2026-06-30",
+          "readout_date": "2026-12-30",
+          "completion_date": "2026-12-30",
           "registered_date": "2024-06-07",
           "linked_registries": []
         },
@@ -14751,9 +14802,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "NCT06517758",
           "title": "A Phase III Study to Investigate Efficacy, Safety and Tolerability of Iptacopan Compared With Placebo in Participants Aged 18 to 85 Years With gMG.",
           "url": "https://clinicaltrials.gov/study/NCT06517758",
-          "status": "RECRUITING",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status": "ACTIVE_NOT_RECRUITING",
+          "status_label": "进行中",
+          "status_class": "active",
           "drug_class": "其他",
           "drug_name": "Iptacopan",
           "drug_names": [
@@ -15035,7 +15086,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "Phase 1",
           "sponsor": "CSPC ZhongQi Pharmaceutical Technology Co., Ltd.",
-          "start_date": "2025-01-08",
+          "start_date": "2025-03-04",
           "readout_date": "2028-12-01",
           "completion_date": "2033-05-01",
           "registered_date": "2024-11-14",
@@ -16783,9 +16834,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "Phase 1",
           "sponsor": "Shenzhen MagicRNA Biotechnology Co., Ltd",
-          "start_date": "2026-05-05",
+          "start_date": "2026-12-31",
           "readout_date": "2027-05-31",
-          "completion_date": "2027-12-31",
+          "completion_date": "2028-12-31",
           "registered_date": "2026-04-29",
           "linked_registries": []
         },
@@ -17081,6 +17132,26 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "readout_date": "2028-03-31",
           "completion_date": "2028-03-31",
           "registered_date": "2026-07-21",
+          "linked_registries": []
+        },
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT07761026",
+          "title": "AXIS MG Patient Registry",
+          "url": "https://clinicaltrials.gov/study/NCT07761026",
+          "status": "RECRUITING",
+          "status_label": "招募中",
+          "status_class": "recruiting",
+          "drug_class": "其他",
+          "drug_name": "",
+          "drug_names": [],
+          "indication": "重症肌无力",
+          "phase_label": "未标注",
+          "sponsor": "Autoimmune Neurology Alliance",
+          "start_date": "2026-03-19",
+          "readout_date": "2036-03",
+          "completion_date": "2036-03",
+          "registered_date": "2026-08-12",
           "linked_registries": []
         }
       ]
