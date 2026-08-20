@@ -824,6 +824,8 @@ NMPA/CDE/NHSA、政务、支付、市场准入和 HEOR 不进入本模块。监�
 
 页面布局方案只指现有 `pages/landscape.html`。R1 改造该页的 Living Answers 区域，不重构另外五个页面，也不改变六大页面或顶级导航。工作台只链接高影响 Delta，知识库只展开 Claim 关系，MSL 工作台只读取同一 Brief 生成访前准备。
 
+当前 MSL 专家画像基线：不在首屏展示默认候选；用户须先输入搜索关键词，才显示列表与详情，左侧其他筛选项仅细化该关键词结果。
+
 ### 6.2 性能策略
 
 1. `decision-briefs.js`、`evidence-delta.js`、`china-evidence-practice.js` 预计较小，可直接加载。

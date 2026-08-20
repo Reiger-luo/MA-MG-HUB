@@ -30,6 +30,16 @@ def test_msl_expert_detail_uses_page_flow_without_changing_list_scroll_contract(
     assert "overflow-y: auto" in shared_rule.group(1)
 
 
+def test_msl_expert_profiles_require_a_search_keyword_before_rendering_results():
+    js = (PROJECT / "assets" / "msl.js").read_text(encoding="utf-8")
+
+    assert "function hasProfileSearchQuery(keyword)" in js
+    assert "if (!hasProfileSearchQuery(keyword)) return [];" in js
+    assert "请输入关键词搜索专家" in js
+    assert "请输入关键词后显示匹配结果" in js
+    assert "在左侧搜索框输入关键词后查看专家画像。" in js
+
+
 def test_living_answers_remove_nested_height_caps_only_inside_answer_layout():
     css = (PROJECT / "assets" / "main.css").read_text(encoding="utf-8")
 

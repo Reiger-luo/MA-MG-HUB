@@ -186,13 +186,8 @@
     return timeline;
   }
 
-  function isDefaultProfileQuery(keyword, institutionKeyword) {
-    return !keyword &&
-      !institutionKeyword &&
-      selectedTopic === 'all' &&
-      selectedLocation === 'all' &&
-      selectedProductivity === 'all' &&
-      selectedActive === 'all';
+  function hasProfileSearchQuery(keyword) {
+    return Boolean(normalizeText(keyword));
   }
 
   function quickExperts() {
@@ -422,9 +417,8 @@
   function filteredExperts() {
     var keyword = el.search ? (el.search.value || '').trim() : '';
     var institutionKeyword = el.institutionFilter ? (el.institutionFilter.value || '').trim() : '';
-    if (isDefaultProfileQuery(keyword, institutionKeyword)) {
-      return quickExperts();
-    }
+    // 专家画像仅在用户输入关键词后展示，避免首屏默认列出候选专家。
+    if (!hasProfileSearchQuery(keyword)) return [];
     var list = sortedExperts(keyword);
     if (selectedTopic !== 'all') {
       list = list.filter(function(expert) {
@@ -487,8 +481,14 @@
 
   function renderExperts() {
     var keyword = el.search ? (el.search.value || '').trim() : '';
-    var institutionKeyword = el.institutionFilter ? (el.institutionFilter.value || '').trim() : '';
-    var defaultMode = isDefaultProfileQuery(keyword, institutionKeyword);
+    if (!hasProfileSearchQuery(keyword)) {
+      selectedProfileExpertId = '';
+      el.expertCount.textContent = '0';
+      el.expertList.innerHTML = '<div class="empty-state"><h3>请输入关键词搜索专家</h3><p>可按姓名、拼音、机构、省份或研究方向查询。</p></div>';
+      el.expertDetail.innerHTML = '<div class="empty-state"><h3>等待搜索专家</h3><p>在左侧搜索框输入关键词后查看专家画像。</p></div>';
+      if (el.expertResultMeta) el.expertResultMeta.textContent = '请输入关键词后显示匹配结果';
+      return;
+    }
     var list = filteredExperts();
     el.expertCount.textContent = list.length;
     if (!list.length) {
@@ -502,9 +502,7 @@
     var visibleList = list.slice(0, expertResultLimit);
     el.expertList.innerHTML = visibleList.map(renderExpertRow).join('');
     if (el.expertResultMeta) {
-      el.expertResultMeta.textContent = defaultMode
-        ? '快速候选 ' + visibleList.length + ' 位 · 搜索可查全部'
-        : list.length > visibleList.length
+      el.expertResultMeta.textContent = list.length > visibleList.length
         ? '显示前 ' + visibleList.length + ' / 共 ' + list.length + ' 位'
         : '共 ' + list.length + ' 位';
     }
@@ -538,7 +536,7 @@
   }
 
   function getSelectedProfileExpert() {
-    return findExpertById(selectedProfileExpertId) || expertPool[0] || profiles[0];
+    return findExpertById(selectedProfileExpertId);
   }
 
   function getSelectedVisitExpert() {
@@ -1127,7 +1125,6 @@
   function initSelectedExpert() {
     var profileExperts = sortedExperts('');
     var visitExperts = sortedVisitExperts('');
-    selectedProfileExpertId = (profileExperts[0] || expertPool[0] || profiles[0] || {}).id || '';
     selectedVisitExpertId = (visitExperts[0] || profileExperts[0] || expertPool[0] || profiles[0] || {}).id || '';
   }
 

@@ -167,6 +167,7 @@ MSL 工作台是 China-only：
 - 前端加载 `expert-profiles-china.js`；
 - `expert-profiles-international.js` 不被任何公开页面加载，只供离线分析；该文件仍由 Git 跟踪并可通过 GitHub Pages 公开访问，因此不得包含私有信息；
 - `expert-profiles.js` 只作为分片 manifest；
+- 专家画像首屏不展示默认候选；须在左侧搜索框输入关键词后，才显示匹配列表与画像详情，其他筛选项只用于细化该检索结果；
 - 输出是公开证据、话题建议和 PMID 材料；
 - 不保存用户选择、行为或历史。
 
