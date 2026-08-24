@@ -3538,11 +3538,6 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
   color: var(--accent); font-size: 0.68rem; font-weight: 500; text-decoration: none;
 }
 .trial-signal-refs a:hover { background: rgba(37,99,235,0.12); }
-.trial-signal-action {
-  display: grid; gap: 0.22rem; margin-top: 0.55rem; border-top: 1px dashed var(--bg3); padding-top: 0.5rem;
-}
-.trial-signal-action p { margin: 0; color: var(--fg3); font-size: 0.7rem; line-height: 1.5; }
-.trial-signal-action strong { color: var(--fg2); }
 .trial-signal-disclaimer {
   margin: 0.55rem 0 0; color: #0f766e; font-size: 0.68rem; font-weight: 600;
 }

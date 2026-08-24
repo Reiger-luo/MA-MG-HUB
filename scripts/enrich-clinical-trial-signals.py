@@ -688,7 +688,7 @@ def build_prompt(candidates: list[dict[str, Any]]) -> str:
             "candidateId": "ID", "type": "关键试验 | 开发进展 | 结果里程碑 | 安全性/终止 | 中国开发 | 早期探索",
             "title": "中文信号标题", "takeaway": "本次注册变化是什么及其开发含义",
             "whySignal": "为什么现在值得关注", "evidenceBoundary": "不能从登记信息推出什么",
-            "maUse": "医学事务用途", "kolQuestion": "向KOL追问的问题", "mslAction": "会前核查动作",
+            "maUse": "医学事务用途",
             "strategicNoveltyScore": "1-5整数",
         }],
     }
@@ -713,9 +713,7 @@ def deterministic_fallback(candidate: dict[str, Any]) -> dict[str, str]:
         "takeaway": f"本期可核实的变化为“{change}”，其意义应按{candidate.get('trialImportance')}试验的开发阶段解读。",
         "whySignal": f"该变化属于{candidate.get('updateMateriality')}更新，可能影响后续招募、读出或开发路径的跟踪优先级。",
         "evidenceBoundary": "这是注册与开发里程碑信号，不代表疗效、安全性或主要终点已经得到临床证实。",
-        "maUse": "用于核对试验设计、预计读出和竞争格局变化，并准备后续专家交流问题。",
-        "kolQuestion": "这项注册变化是否会影响您对该开发项目临床定位或患者入组可行性的判断？",
-        "mslAction": "会前打开官方登记页，核对阶段、主要终点、关键人群、状态原因和最近更新时间。",
+        "maUse": "用于核对试验设计、预计读出和竞争格局变化。",
     }
 
 
@@ -731,8 +729,6 @@ def normalize_signal(candidate: dict[str, Any], raw: dict[str, Any], index: int)
         "whySignal": chinese_text(raw.get("whySignal"), fallback["whySignal"]),
         "evidenceBoundary": chinese_text(raw.get("evidenceBoundary"), fallback["evidenceBoundary"]),
         "maUse": chinese_text(raw.get("maUse"), fallback["maUse"]),
-        "kolQuestion": chinese_text(raw.get("kolQuestion"), fallback["kolQuestion"]),
-        "mslAction": chinese_text(raw.get("mslAction"), fallback["mslAction"]),
         "signalScore": int(candidate.get("signalScore") or 3),
         "strategicNoveltyScore": max(1, min(5, int(raw.get("strategicNoveltyScore") or (4 if candidate.get("strategicContext") else 2)))),
         "trialImportance": candidate.get("trialImportance"), "keyTrialRationale": candidate.get("keyTrialRationale"),
@@ -743,10 +739,6 @@ def normalize_signal(candidate: dict[str, Any], raw: dict[str, Any], index: int)
         "interventions": candidate.get("interventions") or [], "conditions": candidate.get("conditions") or [],
         "date": candidate.get("date") or candidate.get("updatedAt") or "", "registryRefs": registry_refs,
         "registryIds": [ref.get("registryId") for ref in registry_refs if ref.get("registryId")],
-        "medical_affairs": {},
-    }
-    signal["medical_affairs"] = {
-        "suggested_kol_question": signal["kolQuestion"], "msl_action": signal["mslAction"],
     }
     no_result_data = candidate.get("eventType") in {"results_posted", "status_change"}
     overclaim_pattern = r"(?:证实|证明|显示|表明|提示).{0,24}(?:疗效|有效|改善|降低|优于|阳性|达到主要终点)"
@@ -852,7 +844,7 @@ def main() -> int:
     payload = {
         "schema_version": "1.0", "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "source_policy": {
-            "analysis_model": "clinical-trial-signal-to-kol-v1", "llm_enrichment": True,
+            "analysis_model": "clinical-trial-signal-enrichment-v2", "llm_enrichment": True,
             "strength_scale": "source_internal_trial_milestone_priority",
             "mg_core_policy": "strict_title_condition_population_guard",
             "cross_source_comparison": False, "replay_window_preserved": bool(args.replay_current_window),

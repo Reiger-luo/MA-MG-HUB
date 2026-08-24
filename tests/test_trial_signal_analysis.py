@@ -217,8 +217,6 @@ def test_llm_cannot_raise_strength_or_turn_results_registration_into_positive_ef
                 "whySignal": "可用于跟踪后续招募与设计演进",
                 "evidenceBoundary": "尚无疗效或安全性结果可以判断",
                 "maUse": "用于准备开发格局讨论",
-                "kolQuestion": "该设计对患者筛选有何影响？",
-                "mslAction": "核对官方登记的终点与人群。",
             }],
         }, ensure_ascii=False)
 
@@ -234,11 +232,17 @@ def test_llm_cannot_raise_strength_or_turn_results_registration_into_positive_ef
         "whySignal": "结果记录出现改变了后续核查优先级",
         "evidenceBoundary": "尚未核对完整结果与统计分析",
         "maUse": "用于结果核查",
+        # 历史 LLM 缓存即使仍携带这些字段，也不可重新发布。
         "kolQuestion": "如何看待后续结果披露？",
         "mslAction": "打开官方登记核对结果模块。",
     }, 1)
     assert "疗效有效" not in normalized["takeaway"]
     assert "尚未核对" in normalized["evidenceBoundary"]
+    assert "kolQuestion" not in normalized
+    assert "mslAction" not in normalized
+    assert "medical_affairs" not in normalized
+    assert "kolQuestion" not in module.build_prompt([result_candidate])
+    assert "mslAction" not in module.build_prompt([result_candidate])
 
 
 def test_incomplete_llm_decisions_fail_closed():

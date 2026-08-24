@@ -177,7 +177,7 @@ ClinicalTrials.gov、ChiCTR 和 ChinaDrugTrials 采用不同更新方式，但�
 
 ClinicalTrials.gov 每次构建对比上一期快照（`clinicaltrials-weekly-changes-snapshot.json`），把近 7 天新登记、状态变化、结果发布、字段更新和移除提炼为 `clinicalTrialsSummary.js` 的 `weekly_changes`。全部变化作为试验信号候选，不受首页展示条数截断影响。首次运行只建立基线；相同快照重复构建保持零变化。阶段字段统一归一化，公开 JS 和对比快照均使用原子写入。
 
-试验信号先经过严格 MG-core、移除/重复/行政变化排除，再由确定性规则给出 `trialImportance`、`updateMateriality` 和强度上限。关键试验新增或发生高实质更新可为强；关键试验的中等更新、一般试验的高实质更新或战略性早期项目的重要变化可为中；其余真实而有限的开发变化为弱。MG 专家 LLM 只接收结构化注册字段并解释临床/开发意义、限制和追踪问题，不得提高强度、改写登记号，或把“结果已上传”“研究完成”写成疗效阳性。首页试验组显示三源变化计数、比较窗口、更新时间与管线矩阵入口；完整原始变化继续在临床试验页查看。
+试验信号先经过严格 MG-core、移除/重复/行政变化排除，再由确定性规则给出 `trialImportance`、`updateMateriality` 和强度上限。关键试验新增或发生高实质更新可为强；关键试验的中等更新、一般试验的高实质更新或战略性早期项目的重要变化可为中；其余真实而有限的开发变化为弱。MG 专家 LLM 只接收结构化注册字段并解释临床/开发意义与证据限制，不得提高强度、改写登记号，或把“结果已上传”“研究完成”写成疗效阳性。首页试验组显示三源变化计数、比较窗口、更新时间与管线矩阵入口；不展示或导出 KOL 追问与 MSL action。完整原始变化继续在临床试验页查看。
 
 `clinicalTrialsSummary.js.source_updates` 为三源缓存记录稳定 revision，必须同时等于原始缓存的当前语义 revision 和 `trial-signals-weekly.js.source_windows[*].source_revision`；CT.gov 的差分日期还必须与其信号窗口一致。任一来源缓存推进但摘要或信号分析未更新时，公开发布校验失败。来源频道和 `weekly-summary.md` 均在试验 enrichment 之后生成，周报按文献/试验分节并允许合法空试验组，不能沿用旧的纯文献周报逻辑。
 

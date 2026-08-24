@@ -257,9 +257,7 @@
         takeaway: signal.takeaway || '',
         whySignal: signal.whySignal || '',
         evidenceBoundary: signal.evidenceBoundary || '',
-        maUse: signal.maUse || '',
-        kolQuestion: signal.kolQuestion || '',
-        mslAction: signal.mslAction || ''
+        maUse: signal.maUse || ''
       };
     });
     trialSignalItems.sort(compareSignals);
@@ -689,9 +687,6 @@
         '<div><span>试验定位</span><p>' + escapeHtml(item.keyTrialRationale) + '</p></div></div>' +
       '<p class="trial-signal-boundary"><strong>证据边界</strong> · ' + escapeHtml(item.evidenceBoundary || '注册/开发信号，不代表疗效证据。') + '</p>' +
       renderTrialRegistryRefs(item) +
-      ((item.kolQuestion || item.mslAction) ? '<div class="trial-signal-action">' +
-        (item.kolQuestion ? '<p><strong>KOL 追问</strong>：' + escapeHtml(item.kolQuestion) + '</p>' : '') +
-        (item.mslAction ? '<p><strong>MSL action</strong>：' + escapeHtml(item.mslAction) + '</p>' : '') + '</div>' : '') +
       '<p class="trial-signal-disclaimer">注册/开发信号，不代表疗效证据</p>' +
     '</article>';
   }
@@ -835,8 +830,6 @@
       if (signal.takeaway) md += '专家解读：' + signal.takeaway + '\n';
       if (signal.whySignal) md += '战略意义：' + signal.whySignal + '\n';
       if (signal.evidenceBoundary) md += '证据边界：' + signal.evidenceBoundary + '\n';
-      if (signal.kolQuestion) md += 'KOL 追问：' + signal.kolQuestion + '\n';
-      if (signal.mslAction) md += 'MSL action：' + signal.mslAction + '\n';
       (signal.registryRefs || []).forEach(function(ref) {
         md += '- 官方登记：' + [ref.registry, ref.registryId].filter(Boolean).join(' · ') +
           (ref.url ? ' · ' + ref.url : '') + '\n';
