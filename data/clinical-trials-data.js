@@ -1,7 +1,7 @@
 window.MG_CLINICAL_TRIALS_DATA = {
   "meta": {
-    "generated_at": "2026-08-17",
-    "total_count": 454,
+    "generated_at": "2026-08-31",
+    "total_count": 455,
     "sources_order": [
       "ClinicalTrials.gov",
       "ChiCTR",
@@ -11,7 +11,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
   "decision_signals": [
     {
       "title": "招募中试验",
-      "detail": "当前共有 139 项招募中或邀请入组试验。",
+      "detail": "当前共有 140 项招募中或邀请入组试验。",
       "tag": "招募"
     },
     {
@@ -21,7 +21,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "title": "近 6 个月新登记",
-      "detail": "截至 2026-08-17，近 6 个月登记 35 项试验。",
+      "detail": "截至 2026-08-31，近 6 个月登记 34 项试验。",
       "tag": "近期登记"
     }
   ],
@@ -727,8 +727,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "status_class": "active",
           "phase_label": "Phase 2 / Phase 3",
           "start_date": "2024-06-14",
-          "readout_date": "2026-08-10",
-          "completion_date": "2026-10-19",
+          "readout_date": "2026-10-05",
+          "completion_date": "2026-10-05",
           "sponsor": "UCB Biopharma SRL",
           "url": "https://clinicaltrials.gov/study/NCT06149559"
         },
@@ -778,7 +778,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "status_label": "尚未招募",
           "status_class": "recruiting",
           "phase_label": "Phase 3",
-          "start_date": "2026-07-27",
+          "start_date": "2026-09-16",
           "readout_date": "2031-01-23",
           "completion_date": "2031-01-23",
           "sponsor": "UCB Biopharma SRL",
@@ -2322,7 +2322,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "Phase 2",
-          "start_date": "2026-08-31",
+          "start_date": "2026-07-21",
           "readout_date": "2030-03-13",
           "completion_date": "2030-03-13",
           "sponsor": "Amgen",
@@ -5419,7 +5419,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "Phase 3",
-          "start_date": "",
+          "start_date": "2026-06-29",
           "readout_date": "",
           "completion_date": "",
           "sponsor": "Dianthus Therapeutics",
@@ -10476,9 +10476,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
     {
       "source": "ClinicalTrials.gov",
       "meta": {
-        "generated_at": "2026-08-17",
+        "generated_at": "2026-08-31",
         "mode": "cache",
-        "revision": "semantic-v1:4520592c3bf4eca4f641a34efa69685356236eaced57dd375aed8685f4e309f0"
+        "revision": "semantic-v1:9ecc414777a53aacf6a2f0340d9cc281260f0e7434824152df339896582d1656"
       },
       "records": [
         {
@@ -14147,8 +14147,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2 / Phase 3",
           "sponsor": "UCB Biopharma SRL",
           "start_date": "2024-06-14",
-          "readout_date": "2026-08-10",
-          "completion_date": "2026-10-19",
+          "readout_date": "2026-10-05",
+          "completion_date": "2026-10-05",
           "registered_date": "2023-11-29",
           "linked_registries": []
         },
@@ -14166,7 +14166,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "未标注",
           "sponsor": "Hacettepe University",
-          "start_date": "2022-12-28",
+          "start_date": "2023-11-23",
           "readout_date": "2024-07-09",
           "completion_date": "2024-12-25",
           "registered_date": "2023-12-06",
@@ -15852,7 +15852,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "Phase 2",
           "sponsor": "Amgen",
-          "start_date": "2026-08-31",
+          "start_date": "2026-07-21",
           "readout_date": "2030-03-13",
           "completion_date": "2030-03-13",
           "registered_date": "2025-05-23",
@@ -16686,7 +16686,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "Phase 3",
           "sponsor": "UCB Biopharma SRL",
-          "start_date": "2026-07-27",
+          "start_date": "2026-09-16",
           "readout_date": "2031-01-23",
           "completion_date": "2031-01-23",
           "registered_date": "2026-03-11",
@@ -16982,7 +16982,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "Phase 3",
           "sponsor": "Dianthus Therapeutics",
-          "start_date": "2026-07",
+          "start_date": "2026-06-29",
           "readout_date": "2028-12",
           "completion_date": "2031-09",
           "registered_date": "2026-06-15",
@@ -17152,6 +17152,26 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "readout_date": "2036-03",
           "completion_date": "2036-03",
           "registered_date": "2026-08-12",
+          "linked_registries": []
+        },
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT07787247",
+          "title": "Feasibility of Remote Monitoring of Patients With Myasthenia Gravis",
+          "url": "https://clinicaltrials.gov/study/NCT07787247",
+          "status": "RECRUITING",
+          "status_label": "招募中",
+          "status_class": "recruiting",
+          "drug_class": "其他",
+          "drug_name": "",
+          "drug_names": [],
+          "indication": "重症肌无力",
+          "phase_label": "未标注",
+          "sponsor": "George Washington University",
+          "start_date": "2026-08-19",
+          "readout_date": "2028-10",
+          "completion_date": "2028-10",
+          "registered_date": "2026-08-26",
           "linked_registries": []
         }
       ]
