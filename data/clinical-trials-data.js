@@ -1,6 +1,6 @@
 window.MG_CLINICAL_TRIALS_DATA = {
   "meta": {
-    "generated_at": "2026-08-31",
+    "generated_at": "2026-09-07",
     "total_count": 455,
     "sources_order": [
       "ClinicalTrials.gov",
@@ -11,7 +11,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
   "decision_signals": [
     {
       "title": "招募中试验",
-      "detail": "当前共有 140 项招募中或邀请入组试验。",
+      "detail": "当前共有 135 项招募中或邀请入组试验。",
       "tag": "招募"
     },
     {
@@ -21,7 +21,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "title": "近 6 个月新登记",
-      "detail": "截至 2026-08-31，近 6 个月登记 34 项试验。",
+      "detail": "截至 2026-09-07，近 6 个月登记 34 项试验。",
       "tag": "近期登记"
     }
   ],
@@ -32,7 +32,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "highest_phase_label": "Phase 4",
       "stage_number": 4,
       "study_count": 43,
-      "status_summary": "招募 21 · 进行 5 · 完成 11",
+      "status_summary": "招募 20 · 进行 5 · 完成 11",
       "sponsors": [
         "Affiliated Hospital of Zunyi Medical University",
         "BioSensics",
@@ -444,8 +444,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry": "ClinicalTrials.gov",
           "registry_id": "NCT06587867",
           "title": "Seronegative Myasthenia Gravis - Efgartigimod IV",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status_label": "未知",
+          "status_class": "other",
           "phase_label": "Phase 3",
           "start_date": "2023-06-01",
           "readout_date": "",
@@ -2337,55 +2337,6 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "first_registered": "2020-08-24",
       "latest_registered": "2025-05-23",
       "linked_registries": []
-    },
-    {
-      "drug_class": "B细胞/抗CD19/CD20",
-      "name": "Descartes-08",
-      "highest_phase_label": "Phase 2",
-      "stage_number": 2,
-      "study_count": 1,
-      "status_summary": "招募 0 · 进行 1 · 完成 0",
-      "sponsors": [
-        "Cartesian Therapeutics"
-      ],
-      "sources": {
-        "ClinicalTrials.gov": 1
-      },
-      "key_trial": {
-        "registry": "ClinicalTrials.gov",
-        "registry_id": "NCT04146051",
-        "title": "Descartes-08 CAR-T Cells in Generalized Myasthenia Gravis (MG)",
-        "url": "https://clinicaltrials.gov/study/NCT04146051"
-      },
-      "trials": [
-        {
-          "registry": "ClinicalTrials.gov",
-          "registry_id": "NCT04146051",
-          "title": "Descartes-08 CAR-T Cells in Generalized Myasthenia Gravis (MG)",
-          "status_label": "进行中",
-          "status_class": "active",
-          "phase_label": "Phase 2",
-          "start_date": "2019-12-04",
-          "readout_date": "2026-01-05",
-          "completion_date": "2026-09-30",
-          "sponsor": "Cartesian Therapeutics",
-          "url": "https://clinicaltrials.gov/study/NCT04146051"
-        }
-      ],
-      "timeline": {
-        "start": "2019-12-04",
-        "readout": "2026-01-05",
-        "completion": "2026-09-30"
-      },
-      "first_registered": "2019-10-31",
-      "latest_registered": "2019-10-31",
-      "linked_registries": [
-        {
-          "registry": "ClinicalTrials.gov",
-          "registry_id": "NCT06381284",
-          "url": "https://clinicaltrials.gov/study/NCT06381284"
-        }
-      ]
     },
     {
       "drug_class": "B细胞/抗CD19/CD20",
@@ -5441,7 +5392,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "highest_phase_label": "Phase 3",
       "stage_number": 3,
       "study_count": 1,
-      "status_summary": "招募 1 · 进行 0 · 完成 0",
+      "status_summary": "招募 0 · 进行 1 · 完成 0",
       "sponsors": [
         "Cartesian Therapeutics"
       ],
@@ -5459,11 +5410,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry": "ClinicalTrials.gov",
           "registry_id": "NCT06799247",
           "title": "Investigating an mRNA CAR T-cell Therapy, Known as Descartes-08, as a Potential Approach to Treat Myasthenia Gravis",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status_label": "进行中",
+          "status_class": "active",
           "phase_label": "Phase 3",
           "start_date": "2025-05-06",
-          "readout_date": "2026-11-30",
+          "readout_date": "2026-12-30",
           "completion_date": "2027-09-30",
           "sponsor": "Cartesian Therapeutics",
           "url": "https://clinicaltrials.gov/study/NCT06799247"
@@ -5471,7 +5422,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
       ],
       "timeline": {
         "start": "2025-05-06",
-        "readout": "2026-11-30",
+        "readout": "2026-12-30",
         "completion": "2027-09-30"
       },
       "first_registered": "2025-01-29",
@@ -8331,7 +8282,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "highest_phase_label": "未标注",
       "stage_number": 0,
       "study_count": 1,
-      "status_summary": "招募 1 · 进行 0 · 完成 0",
+      "status_summary": "招募 0 · 进行 0 · 完成 0",
       "sponsors": [
         "Cheng, yu-ting"
       ],
@@ -8349,8 +8300,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry": "ClinicalTrials.gov",
           "registry_id": "NCT06881173",
           "title": "The Effectiveness of Bu Zhong Yi Qi Tang in Patients with Myasthenia Gravis",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status_label": "未知",
+          "status_class": "other",
           "phase_label": "未标注",
           "start_date": "2022-06-14",
           "readout_date": "2025-06-13",
@@ -10476,9 +10427,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
     {
       "source": "ClinicalTrials.gov",
       "meta": {
-        "generated_at": "2026-08-31",
+        "generated_at": "2026-09-07",
         "mode": "cache",
-        "revision": "semantic-v1:9ecc414777a53aacf6a2f0340d9cc281260f0e7434824152df339896582d1656"
+        "revision": "semantic-v1:4ffc72a653e13bae149a358cdcc1e3bcd77d89ae848eac2ea98149211c159479"
       },
       "records": [
         {
@@ -12351,34 +12302,6 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "completion_date": "2021-09-01",
           "registered_date": "2019-10-14",
           "linked_registries": []
-        },
-        {
-          "registry": "ClinicalTrials.gov",
-          "registry_id": "NCT04146051",
-          "title": "Descartes-08 CAR-T Cells in Generalized Myasthenia Gravis (MG)",
-          "url": "https://clinicaltrials.gov/study/NCT04146051",
-          "status": "ACTIVE_NOT_RECRUITING",
-          "status_label": "进行中",
-          "status_class": "active",
-          "drug_class": "B细胞/抗CD19/CD20",
-          "drug_name": "Descartes-08",
-          "drug_names": [
-            "Descartes-08"
-          ],
-          "indication": "重症肌无力",
-          "phase_label": "Phase 2",
-          "sponsor": "Cartesian Therapeutics",
-          "start_date": "2019-12-04",
-          "readout_date": "2026-01-05",
-          "completion_date": "2026-09-30",
-          "registered_date": "2019-10-31",
-          "linked_registries": [
-            {
-              "registry": "ClinicalTrials.gov",
-              "registry_id": "NCT06381284",
-              "url": "https://clinicaltrials.gov/study/NCT06381284"
-            }
-          ]
         },
         {
           "registry": "ClinicalTrials.gov",
@@ -14500,6 +14423,32 @@ window.MG_CLINICAL_TRIALS_DATA = {
         },
         {
           "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT06381284",
+          "title": "Expediting Myasthenia Gravis (MG) Diagnostic Evaluation: A Novel, Proof-of-Concept for Undiagnosed, Symptomatic Patients That Uses Social Media Targeting and Self-Assessment",
+          "url": "https://clinicaltrials.gov/study/NCT06381284",
+          "status": "COMPLETED",
+          "status_label": "已完成",
+          "status_class": "completed",
+          "drug_class": "其他",
+          "drug_name": "",
+          "drug_names": [],
+          "indication": "重症肌无力",
+          "phase_label": "未标注",
+          "sponsor": "ZS Associates",
+          "start_date": "2024-03-28",
+          "readout_date": "2025-03-03",
+          "completion_date": "2025-03-03",
+          "registered_date": "2024-04-24",
+          "linked_registries": [
+            {
+              "registry": "ClinicalTrials.gov",
+              "registry_id": "NCT04146051",
+              "url": "https://clinicaltrials.gov/study/NCT04146051"
+            }
+          ]
+        },
+        {
+          "registry": "ClinicalTrials.gov",
           "registry_id": "NCT06392386",
           "title": "A Study of Efgartigimod PH20 SC in Children Between 2 and Less Than 18 Years of Age With Generalized Myasthenia Gravis",
           "url": "https://clinicaltrials.gov/study/NCT06392386",
@@ -14824,9 +14773,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "NCT06539169",
           "title": "FLOWER: Following Longitudinal Outcomes With Epidemiology for Rare Diseases",
           "url": "https://clinicaltrials.gov/study/NCT06539169",
-          "status": "RECRUITING",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status": "UNKNOWN",
+          "status_label": "未知",
+          "status_class": "other",
           "drug_class": "其他",
           "drug_name": "",
           "drug_names": [],
@@ -14886,9 +14835,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "NCT06587867",
           "title": "Seronegative Myasthenia Gravis - Efgartigimod IV",
           "url": "https://clinicaltrials.gov/study/NCT06587867",
-          "status": "RECRUITING",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status": "UNKNOWN",
+          "status_label": "未知",
+          "status_class": "other",
           "drug_class": "FcRn 拮抗剂",
           "drug_name": "efgartigimod",
           "drug_names": [
@@ -15117,9 +15066,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "NCT06704269",
           "title": "Study to Assess Safety, Efficacy, and Cellular Kinetics of YTB323 in Generalized Myasthenia Gravis",
           "url": "https://clinicaltrials.gov/study/NCT06704269",
-          "status": "RECRUITING",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status": "ACTIVE_NOT_RECRUITING",
+          "status_label": "进行中",
+          "status_class": "active",
           "drug_class": "其他",
           "drug_name": "",
           "drug_names": [],
@@ -15347,9 +15296,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "NCT06799247",
           "title": "Investigating an mRNA CAR T-cell Therapy, Known as Descartes-08, as a Potential Approach to Treat Myasthenia Gravis",
           "url": "https://clinicaltrials.gov/study/NCT06799247",
-          "status": "RECRUITING",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status": "ACTIVE_NOT_RECRUITING",
+          "status_label": "进行中",
+          "status_class": "active",
           "drug_class": "其他",
           "drug_name": "Decartes-08",
           "drug_names": [
@@ -15359,7 +15308,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Cartesian Therapeutics",
           "start_date": "2025-05-06",
-          "readout_date": "2026-11-30",
+          "readout_date": "2026-12-30",
           "completion_date": "2027-09-30",
           "registered_date": "2025-01-29",
           "linked_registries": []
@@ -15620,9 +15569,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "NCT06881173",
           "title": "The Effectiveness of Bu Zhong Yi Qi Tang in Patients with Myasthenia Gravis",
           "url": "https://clinicaltrials.gov/study/NCT06881173",
-          "status": "RECRUITING",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status": "UNKNOWN",
+          "status_label": "未知",
+          "status_class": "other",
           "drug_class": "其他",
           "drug_name": "Bu Zhong Yi Qi Tang",
           "drug_names": [
