@@ -1,6 +1,6 @@
 window.MG_CLINICAL_TRIALS_DATA = {
   "meta": {
-    "generated_at": "2026-09-07",
+    "generated_at": "2026-09-14",
     "total_count": 455,
     "sources_order": [
       "ClinicalTrials.gov",
@@ -11,7 +11,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
   "decision_signals": [
     {
       "title": "招募中试验",
-      "detail": "当前共有 135 项招募中或邀请入组试验。",
+      "detail": "当前共有 136 项招募中或邀请入组试验。",
       "tag": "招募"
     },
     {
@@ -21,7 +21,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "title": "近 6 个月新登记",
-      "detail": "截至 2026-09-07，近 6 个月登记 34 项试验。",
+      "detail": "截至 2026-09-14，近 6 个月登记 31 项试验。",
       "tag": "近期登记"
     }
   ],
@@ -1428,12 +1428,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry": "ClinicalTrials.gov",
           "registry_id": "NCT07596784",
           "title": "Efficacy and Safety of Ravulizumab in Chinese Adults Participants With Generalized Myasthenia Gravis (gMG)",
-          "status_label": "尚未招募",
+          "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "Phase 3",
-          "start_date": "2026-07-30",
-          "readout_date": "2027-08-27",
-          "completion_date": "2027-08-27",
+          "start_date": "2026-07-20",
+          "readout_date": "2027-08-17",
+          "completion_date": "2027-08-17",
           "sponsor": "Alexion Pharmaceuticals, Inc.",
           "url": "https://clinicaltrials.gov/study/NCT07596784"
         }
@@ -10427,9 +10427,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
     {
       "source": "ClinicalTrials.gov",
       "meta": {
-        "generated_at": "2026-09-07",
+        "generated_at": "2026-09-14",
         "mode": "cache",
-        "revision": "semantic-v1:4ffc72a653e13bae149a358cdcc1e3bcd77d89ae848eac2ea98149211c159479"
+        "revision": "semantic-v1:8aab31270a4e911eb2d4951c15635ba90c4e19546e2dacfb40faad3d13eec4d7"
       },
       "records": [
         {
@@ -16854,8 +16854,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "NCT07596784",
           "title": "Efficacy and Safety of Ravulizumab in Chinese Adults Participants With Generalized Myasthenia Gravis (gMG)",
           "url": "https://clinicaltrials.gov/study/NCT07596784",
-          "status": "NOT_YET_RECRUITING",
-          "status_label": "尚未招募",
+          "status": "RECRUITING",
+          "status_label": "招募中",
           "status_class": "recruiting",
           "drug_class": "补体抑制剂",
           "drug_name": "Ravulizumab",
@@ -16865,9 +16865,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "Phase 3",
           "sponsor": "Alexion Pharmaceuticals, Inc.",
-          "start_date": "2026-07-30",
-          "readout_date": "2027-08-27",
-          "completion_date": "2027-08-27",
+          "start_date": "2026-07-20",
+          "readout_date": "2027-08-17",
+          "completion_date": "2027-08-17",
           "registered_date": "2026-05-19",
           "linked_registries": []
         },
