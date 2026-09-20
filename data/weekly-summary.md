@@ -1,30 +1,28 @@
 # MA-MG-HUB 周更
 
-生成时间：2026-09-14 20:05:21
-文献周更窗口：2026-09-14 至 2026-09-14
+生成时间：2026-09-21 02:05:25
+文献周更窗口：2026-09-21 至 2026-09-21
 文献周更口径：trueIngestAddedPmids
 
 ## 数据状态
 
-- 近1年文献：868
-- 中国相关：224
-- 文献信号：3
-- 临床试验信号：1
-- 文献级 Signal-to-KOL：3（自动审核发布）
-- 专家画像：39956
+- 近1年文献：871
+- 中国相关：227
+- 文献信号：2
+- 临床试验信号：2
+- 文献级 Signal-to-KOL：2（自动审核发布）
+- 专家画像：40041
 - 内容模块：6
 
 ## 优先文献信号 Top 3
 
-1. [中] 单周期 efgartigimod 与 IVIg 在真实世界 gMG 中的早期与中期疗效对比（PMID 42710422）
-2. [中] 长期低剂量 RTX 维持治疗 MG 的感染与低丙种球蛋白血症风险（PMID 42729211）
-3. [弱] 儿童JMG的RNS诊断策略：面神经优先、3 Hz为主、5 Hz补充与CMAP面积递减（PMID 42731559）
+1. [中] efgartigimod 在东欧真实世界 AChR 阳性 gMG 中显示快速、跨亚域改善与激素减量（PMID 42756311）
+2. [弱] 免疫治疗初治MG中糖代谢异常与1年结局及激素负担的关联（PMID 42749642）
 
 ## 文献级 Signal-to-KOL Top 3
 
-1. PMID 42710422｜1 篇 MG-core 文献聚合为“单周期 efgartigimod 与 IVIg 在真实世界 gMG 中的早期与中期疗效对比”，可用于结构化 KOL 交流和后续证据追踪。｜Da Yuwei（末位作者/通讯作者；Xuanwu Hospital, Capital Medical University）｜会前核查该研究的具体入组标准、伴随免疫抑制方案及 MSE 定义，以便与 KOL 讨论时准确对比。
-2. PMID 42729211｜1 篇 MG-core 文献聚合为“长期低剂量 RTX 维持治疗 MG 的感染与低丙种球蛋白血症风险”，可用于结构化 KOL 交流和后续证据追踪。｜Chang Ting（末位作者；Tangdu Hospital, Air Force Medical University）｜会前核查该研究中 RTX 的具体剂量方案、HGG 定义及感染判定标准，以便与 KOL 讨论时准确对比。
-3. PMID 42731559｜1 篇 MG-core 文献聚合为“儿童JMG的RNS诊断策略：面神经优先、3 Hz为主、5 Hz补充与CMAP面积递减”，可用于结构化 KOL 交流和后续证据追踪。｜Zheng Huixiao（第一作者/通讯作者；Hebei Children's Hospital）｜会前核查本中心儿童RNS操作规范中神经选择、刺激频率与振幅/面积评估的现状，准备与上述策略对比。
+1. PMID 42756311｜1 篇 MG-core 文献聚合为“efgartigimod 在东欧真实世界 AChR 阳性 gMG 中显示快速、跨亚域改善与激素减量”，可用于结构化 KOL 交流和后续证据追踪。｜Grecu Nicolae（第一作者；University Emergency Hospital Bucharest）｜会前核查该研究中 QMG 呼吸域的具体基线特征与随访时长，并与 ADAPT 系列 RCT 的呼吸域数据进行对比。
+2. PMID 42749642｜1 篇 MG-core 文献聚合为“免疫治疗初治MG中糖代谢异常与1年结局及激素负担的关联”，可用于结构化 KOL 交流和后续证据追踪。｜Kuwabara Satoshi（末位作者；Chiba University）｜会前核查该研究的人群定义、糖代谢异常标准及1年终点，准备与KOL讨论其与本地MG患者代谢共病管理路径的差异。
 
 ## 临床试验信号
 
@@ -32,32 +30,33 @@
 
 注册/开发信号，不代表疗效证据；完成或上传结果也不等于达到主要终点。
 
-1. [强] Ravulizumab 中国成人 gMG Phase 3 试验进入招募阶段（NCT07596784；Phase 3）｜状态：尚未招募 → 招募中｜NCT07596784 的注册状态由 NOT_YET_RECRUITING 更新为 RECRUITING，表明该 Phase 3 试验已启动受试者入组。该研究面向中国成人全身型重症肌无力（gMG）人群，评估 Ravulizumab 的疗效与安全性。｜边界：登记状态变化仅反映招募启动，不能推断疗效、安全性、终点达成情况或与既有疗法的比较结果；入组开始也不代表研究将按期完成或获得阳性结论。
+1. [中] Batoclimab治疗gMG的Phase 3试验终止（NCT05403541；Phase 3）｜状态：进行中 → 已终止｜Batoclimab用于gMG诱导与维持治疗的Phase 3试验状态由进行中变更为已终止，注册平台记录终止原因为申办方决定。｜边界：这是注册与开发里程碑信号，不代表疗效、安全性或主要终点已经得到临床证实。
+2. [弱] EA5注射剂在抗AChR抗体阳性gMG中启动Phase 1b剂量递增试验（NCT07818291；Phase 1）｜ClinicalTrials.gov新增一项EA5注射剂在成人抗AChR抗体阳性gMG患者中的开放标签、剂量递增Phase 1b试验，当前状态为尚未招募。｜ClinicalTrials.gov新增一项EA5注射剂在成人抗AChR抗体阳性gMG患者中的开放标签、剂量递增Phase 1b试验，当前状态为尚未招募。｜边界：登记信息仅反映试验设计与计划状态，不能推断EA5的疗效、安全性或相对于现有治疗的优劣。
 
 ### 三源比较窗口
 
-- ClinicalTrials.gov：原始变化 7；比较窗口 2026-09-07 至 2026-09-14；更新 2026-09-14
+- ClinicalTrials.gov：原始变化 10；比较窗口 2026-09-13 至 2026-09-20；更新 2026-09-20
 - ChiCTR：原始变化 0；比较窗口 2026-07-27T08:57:44+08:00 至 2026-07-27T08:57:44+08:00；更新 2026-07-27T08:57:44+08:00
 - ChinaDrugTrials：原始变化 0；比较窗口 2026-07-27 至 2026-07-27；更新 2026-07-27
 
 ## 中国情报 Top 3
 
-1. Repetitive nerve stimulation in juvenile myasthenia gravis: Diagnostic strategy and area decrement value.（European journal of paediatric neurology : EJPN : official journal of the European Paediatric Neurology Society；PMID 42731559；证据 IV）
-2. Infections and hypogammaglobulinemia in myasthenia gravis patients receiving low-dose rituximab: a real-world cohort study.（Frontiers in immunology；PMID 42729211；证据 III）
-3. Genetic Evidence Supports the Prioritization of CD40 Among Prespecified Immune-Related Candidate Drug Targets in Myasthenia Gravis.（The International journal of neuroscience；PMID 42727063；证据 IV）
+1. Case Report: Recurrent metastatic thymoma-associated multiple paraneoplastic syndromes: myasthenia gravis, dysgeusia, and acute intestinal pseudo-obstruction.（Frontiers in oncology；PMID 42761102；证据 IV）
+2. Effectiveness and safety of telitacicept in refractory ocular myasthenia gravis: a retrospective, real-world study.（Frontiers in immunology；PMID 42756105；证据 IV）
+3. A case report of sequential efgartigimod and rituximab treatment for tSNMG.（Frontiers in immunology；PMID 42755762；证据 IV）
 
 ## 热点主题
 
-- 疗效: 8
-- 真实世界: 7
-- B细胞: 6
-- 安全性: 5
-- 补体: 2
+- 疗效: 9
+- 真实世界: 8
+- 抗体分型: 6
+- 机制: 6
+- 安全性: 3
 
 ## 待处理
 
-- 本周信号: 3
-- 已构建专家画像: 39956
+- 本周信号: 2
+- 已构建专家画像: 40041
 - MSL 内容模块: 6
 - 待确认证据矩阵: 6
 

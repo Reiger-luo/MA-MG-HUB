@@ -1,7 +1,7 @@
 window.MG_CLINICAL_TRIALS_DATA = {
   "meta": {
-    "generated_at": "2026-09-14",
-    "total_count": 455,
+    "generated_at": "2026-09-20",
+    "total_count": 456,
     "sources_order": [
       "ClinicalTrials.gov",
       "ChiCTR",
@@ -21,7 +21,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "title": "近 6 个月新登记",
-      "detail": "截至 2026-09-14，近 6 个月登记 31 项试验。",
+      "detail": "截至 2026-09-20，近 6 个月登记 28 项试验。",
       "tag": "近期登记"
     }
   ],
@@ -422,8 +422,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "status_class": "recruiting",
           "phase_label": "Phase 2 / Phase 3",
           "start_date": "2024-06-28",
-          "readout_date": "2026-09-30",
-          "completion_date": "2026-09-30",
+          "readout_date": "",
+          "completion_date": "",
           "sponsor": "argenx",
           "url": "https://clinicaltrials.gov/study/NCT06392386"
         },
@@ -856,7 +856,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "highest_phase_label": "Phase 3",
       "stage_number": 3,
       "study_count": 11,
-      "status_summary": "招募 0 · 进行 1 · 完成 6 · 终止 1",
+      "status_summary": "招募 0 · 进行 0 · 完成 6 · 终止 2",
       "sponsors": [
         "Harbour BioMed (Guangzhou) Co. Ltd.",
         "Huashan Hospital Affiliated to Fudan University",
@@ -1008,12 +1008,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry": "ClinicalTrials.gov",
           "registry_id": "NCT05403541",
           "title": "Phase 3 Study to Assess the Efficacy and Safety of Batoclimab as Induction and Maintenance Therapy in Adult Participants With Generalized Myasthenia Gravis",
-          "status_label": "进行中",
-          "status_class": "active",
+          "status_label": "已终止",
+          "status_class": "terminated",
           "phase_label": "Phase 3",
           "start_date": "2022-06-27",
           "readout_date": "2025-01-10",
-          "completion_date": "",
+          "completion_date": "2026-08-07",
           "sponsor": "Immunovant Sciences GmbH",
           "url": "https://clinicaltrials.gov/study/NCT05403541"
         }
@@ -1021,7 +1021,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "timeline": {
         "start": "2019-04-10",
         "readout": "2025-01-10",
-        "completion": "2024-04-26"
+        "completion": "2026-08-07"
       },
       "first_registered": "2018-12-11",
       "latest_registered": "2022-06-03",
@@ -6947,6 +6947,49 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "drug_class": "其他",
+      "name": "EA5",
+      "highest_phase_label": "Phase 1",
+      "stage_number": 1,
+      "study_count": 1,
+      "status_summary": "招募 1 · 进行 0 · 完成 0",
+      "sponsors": [
+        "Shanghai Lanyi Therapeutics Co., Ltd."
+      ],
+      "sources": {
+        "ClinicalTrials.gov": 1
+      },
+      "key_trial": {
+        "registry": "ClinicalTrials.gov",
+        "registry_id": "NCT07818291",
+        "title": "An Open-label, Dose-escalation Phase Ib Study of EA5 Injection in Adults With Anti-AChR Antibody-Positive Generalized Myasthenia Gravis",
+        "url": "https://clinicaltrials.gov/study/NCT07818291"
+      },
+      "trials": [
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT07818291",
+          "title": "An Open-label, Dose-escalation Phase Ib Study of EA5 Injection in Adults With Anti-AChR Antibody-Positive Generalized Myasthenia Gravis",
+          "status_label": "尚未招募",
+          "status_class": "recruiting",
+          "phase_label": "Phase 1",
+          "start_date": "2026-09-15",
+          "readout_date": "2027-12-31",
+          "completion_date": "2027-12-31",
+          "sponsor": "Shanghai Lanyi Therapeutics Co., Ltd.",
+          "url": "https://clinicaltrials.gov/study/NCT07818291"
+        }
+      ],
+      "timeline": {
+        "start": "2026-09-15",
+        "readout": "2027-12-31",
+        "completion": "2027-12-31"
+      },
+      "first_registered": "2026-09-14",
+      "latest_registered": "2026-09-14",
+      "linked_registries": []
+    },
+    {
+      "drug_class": "其他",
       "name": "G-CSF",
       "highest_phase_label": "Phase 1",
       "stage_number": 1,
@@ -10427,9 +10470,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
     {
       "source": "ClinicalTrials.gov",
       "meta": {
-        "generated_at": "2026-09-14",
+        "generated_at": "2026-09-20",
         "mode": "cache",
-        "revision": "semantic-v1:8aab31270a4e911eb2d4951c15635ba90c4e19546e2dacfb40faad3d13eec4d7"
+        "revision": "semantic-v1:a7707b605bee7590a24336fafa8707b35d8902935e733f1dd888007b74d50f2a"
       },
       "records": [
         {
@@ -13431,9 +13474,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "NCT05403541",
           "title": "Phase 3 Study to Assess the Efficacy and Safety of Batoclimab as Induction and Maintenance Therapy in Adult Participants With Generalized Myasthenia Gravis",
           "url": "https://clinicaltrials.gov/study/NCT05403541",
-          "status": "ACTIVE_NOT_RECRUITING",
-          "status_label": "进行中",
-          "status_class": "active",
+          "status": "TERMINATED",
+          "status_label": "已终止",
+          "status_class": "terminated",
           "drug_class": "FcRn 拮抗剂",
           "drug_name": "Batoclimab 680 mg SC weekly",
           "drug_names": [
@@ -13444,7 +13487,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "sponsor": "Immunovant Sciences GmbH",
           "start_date": "2022-06-27",
           "readout_date": "2025-01-10",
-          "completion_date": "2027-02",
+          "completion_date": "2026-08-07",
           "registered_date": "2022-06-03",
           "linked_registries": []
         },
@@ -14464,8 +14507,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2 / Phase 3",
           "sponsor": "argenx",
           "start_date": "2024-06-28",
-          "readout_date": "2026-09-30",
-          "completion_date": "2026-09-30",
+          "readout_date": "2027-09",
+          "completion_date": "2027-09",
           "registered_date": "2024-04-30",
           "linked_registries": []
         },
@@ -17121,6 +17164,28 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "readout_date": "2028-10",
           "completion_date": "2028-10",
           "registered_date": "2026-08-26",
+          "linked_registries": []
+        },
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT07818291",
+          "title": "An Open-label, Dose-escalation Phase Ib Study of EA5 Injection in Adults With Anti-AChR Antibody-Positive Generalized Myasthenia Gravis",
+          "url": "https://clinicaltrials.gov/study/NCT07818291",
+          "status": "NOT_YET_RECRUITING",
+          "status_label": "尚未招募",
+          "status_class": "recruiting",
+          "drug_class": "其他",
+          "drug_name": "EA5",
+          "drug_names": [
+            "EA5"
+          ],
+          "indication": "重症肌无力",
+          "phase_label": "Phase 1",
+          "sponsor": "Shanghai Lanyi Therapeutics Co., Ltd.",
+          "start_date": "2026-09-15",
+          "readout_date": "2027-12-31",
+          "completion_date": "2027-12-31",
+          "registered_date": "2026-09-14",
           "linked_registries": []
         }
       ]
