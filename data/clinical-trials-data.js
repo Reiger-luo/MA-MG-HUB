@@ -1,7 +1,7 @@
 window.MG_CLINICAL_TRIALS_DATA = {
   "meta": {
-    "generated_at": "2026-09-27",
-    "total_count": 456,
+    "generated_at": "2026-10-04",
+    "total_count": 457,
     "sources_order": [
       "ClinicalTrials.gov",
       "ChiCTR",
@@ -11,7 +11,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
   "decision_signals": [
     {
       "title": "招募中试验",
-      "detail": "当前共有 137 项招募中或邀请入组试验。",
+      "detail": "当前共有 133 项招募中或邀请入组试验。",
       "tag": "招募"
     },
     {
@@ -21,7 +21,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "title": "近 6 个月新登记",
-      "detail": "截至 2026-09-27，近 6 个月登记 28 项试验。",
+      "detail": "截至 2026-10-04，近 6 个月登记 26 项试验。",
       "tag": "近期登记"
     }
   ],
@@ -2111,7 +2111,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "highest_phase_label": "Phase 3",
       "stage_number": 3,
       "study_count": 10,
-      "status_summary": "招募 2 · 进行 1 · 完成 5",
+      "status_summary": "招募 1 · 进行 1 · 完成 5",
       "sponsors": [
         "Assistance Publique - Hôpitaux de Paris",
         "Beijing Hospital",
@@ -2223,8 +2223,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry": "ClinicalTrials.gov",
           "registry_id": "NCT05868837",
           "title": "Rituximab EfFicacy IN MyasthEnia Gravis (REFINE)",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status_label": "未知",
+          "status_class": "other",
           "phase_label": "Phase 3",
           "start_date": "2022-02-28",
           "readout_date": "2025-07-31",
@@ -3896,7 +3896,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "highest_phase_label": "Phase 3",
       "stage_number": 3,
       "study_count": 2,
-      "status_summary": "招募 2 · 进行 0 · 完成 0",
+      "status_summary": "招募 1 · 进行 1 · 完成 0",
       "sponsors": [
         "Novartis Pharmaceuticals"
       ],
@@ -3928,8 +3928,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry": "ClinicalTrials.gov",
           "registry_id": "NCT06744920",
           "title": "A Study to Investigate the Efficacy, Safety and Tolerability of Remibrutinib Versus Placebo in Adult Patients With Generalized Myasthenia Gravis",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status_label": "进行中",
+          "status_class": "active",
           "phase_label": "Phase 3",
           "start_date": "2025-02-07",
           "readout_date": "2028-02-25",
@@ -9832,7 +9832,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "highest_phase_label": "未标注",
       "stage_number": 0,
       "study_count": 1,
-      "status_summary": "招募 1 · 进行 0 · 完成 0",
+      "status_summary": "招募 0 · 进行 0 · 完成 0",
       "sponsors": [
         "Peking Union Medical College Hospital"
       ],
@@ -9850,8 +9850,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry": "ClinicalTrials.gov",
           "registry_id": "NCT06006832",
           "title": "A Prospective Cohort Study of Myasthenia Gravis in China",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status_label": "未知",
+          "status_class": "other",
           "phase_label": "未标注",
           "start_date": "2023-08-20",
           "readout_date": "2026-09-30",
@@ -10519,9 +10519,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
     {
       "source": "ClinicalTrials.gov",
       "meta": {
-        "generated_at": "2026-09-27",
+        "generated_at": "2026-10-04",
         "mode": "cache",
-        "revision": "semantic-v1:eed423151fa4867785a744b85d93c04b6501f816b1cc0e7088012836bb1c04f3"
+        "revision": "semantic-v1:dc333ba5b7214cfbcc4ebe2452ba8cfa996f11a9dba432ceb80e312c6ad28372"
       },
       "records": [
         {
@@ -12176,7 +12176,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "drug_names": [],
           "indication": "重症肌无力",
           "phase_label": "未标注",
-          "sponsor": "Rigshospitalet, Denmark",
+          "sponsor": "Copenhagen University Hospital, Rigshospitalet",
           "start_date": "2019-08",
           "readout_date": "2021-01-01",
           "completion_date": "2021-01-01",
@@ -12196,7 +12196,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "drug_names": [],
           "indication": "重症肌无力",
           "phase_label": "未标注",
-          "sponsor": "Rigshospitalet, Denmark",
+          "sponsor": "Copenhagen University Hospital, Rigshospitalet",
           "start_date": "2019-02-10",
           "readout_date": "2020-01-10",
           "completion_date": "2020-01-10",
@@ -12216,7 +12216,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "drug_names": [],
           "indication": "重症肌无力",
           "phase_label": "未标注",
-          "sponsor": "Rigshospitalet, Denmark",
+          "sponsor": "Copenhagen University Hospital, Rigshospitalet",
           "start_date": "2019-06-01",
           "readout_date": "2020-04-10",
           "completion_date": "2020-10-10",
@@ -12980,9 +12980,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "NCT04837625",
           "title": "Study of Myasthenic Crisis in China",
           "url": "https://clinicaltrials.gov/study/NCT04837625",
-          "status": "RECRUITING",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status": "UNKNOWN",
+          "status_label": "未知",
+          "status_class": "other",
           "drug_class": "其他",
           "drug_name": "",
           "drug_names": [],
@@ -13867,9 +13867,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "NCT05868837",
           "title": "Rituximab EfFicacy IN MyasthEnia Gravis (REFINE)",
           "url": "https://clinicaltrials.gov/study/NCT05868837",
-          "status": "RECRUITING",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status": "UNKNOWN",
+          "status_label": "未知",
+          "status_class": "other",
           "drug_class": "B细胞/抗CD19/CD20",
           "drug_name": "Rituximab",
           "drug_names": [
@@ -14052,9 +14052,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "NCT06006832",
           "title": "A Prospective Cohort Study of Myasthenia Gravis in China",
           "url": "https://clinicaltrials.gov/study/NCT06006832",
-          "status": "RECRUITING",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status": "UNKNOWN",
+          "status_label": "未知",
+          "status_class": "other",
           "drug_class": "其他",
           "drug_name": "Steroid Drug",
           "drug_names": [
@@ -15262,9 +15262,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "NCT06744920",
           "title": "A Study to Investigate the Efficacy, Safety and Tolerability of Remibrutinib Versus Placebo in Adult Patients With Generalized Myasthenia Gravis",
           "url": "https://clinicaltrials.gov/study/NCT06744920",
-          "status": "RECRUITING",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status": "ACTIVE_NOT_RECRUITING",
+          "status_label": "进行中",
+          "status_class": "active",
           "drug_class": "免疫抑制剂",
           "drug_name": "Remibrutinib (Blinded)",
           "drug_names": [
@@ -17237,6 +17237,26 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "readout_date": "2027-12-31",
           "completion_date": "2027-12-31",
           "registered_date": "2026-09-14",
+          "linked_registries": []
+        },
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT07853378",
+          "title": "Incidence and Predictors of Early Clinical Relapse Within Six Months After Thymectomy in Patients With Myasthenia Gravis",
+          "url": "https://clinicaltrials.gov/study/NCT07853378",
+          "status": "NOT_YET_RECRUITING",
+          "status_label": "尚未招募",
+          "status_class": "recruiting",
+          "drug_class": "其他",
+          "drug_name": "",
+          "drug_names": [],
+          "indication": "重症肌无力",
+          "phase_label": "未标注",
+          "sponsor": "Assiut University",
+          "start_date": "2026-10",
+          "readout_date": "2027-10",
+          "completion_date": "2027-11",
+          "registered_date": "2026-10-01",
           "linked_registries": []
         }
       ]
