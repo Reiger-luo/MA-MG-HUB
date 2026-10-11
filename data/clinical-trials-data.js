@@ -1,6 +1,6 @@
 window.MG_CLINICAL_TRIALS_DATA = {
   "meta": {
-    "generated_at": "2026-10-04",
+    "generated_at": "2026-10-11",
     "total_count": 457,
     "sources_order": [
       "ClinicalTrials.gov",
@@ -21,7 +21,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "title": "近 6 个月新登记",
-      "detail": "截至 2026-10-04，近 6 个月登记 26 项试验。",
+      "detail": "截至 2026-10-11，近 6 个月登记 25 项试验。",
       "tag": "近期登记"
     }
   ],
@@ -2337,55 +2337,6 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "first_registered": "2020-08-24",
       "latest_registered": "2025-05-23",
       "linked_registries": []
-    },
-    {
-      "drug_class": "B细胞/抗CD19/CD20",
-      "name": "Descartes-08",
-      "highest_phase_label": "Phase 2",
-      "stage_number": 2,
-      "study_count": 1,
-      "status_summary": "招募 0 · 进行 1 · 完成 0",
-      "sponsors": [
-        "Cartesian Therapeutics"
-      ],
-      "sources": {
-        "ClinicalTrials.gov": 1
-      },
-      "key_trial": {
-        "registry": "ClinicalTrials.gov",
-        "registry_id": "NCT04146051",
-        "title": "Descartes-08 CAR-T Cells in Generalized Myasthenia Gravis (MG)",
-        "url": "https://clinicaltrials.gov/study/NCT04146051"
-      },
-      "trials": [
-        {
-          "registry": "ClinicalTrials.gov",
-          "registry_id": "NCT04146051",
-          "title": "Descartes-08 CAR-T Cells in Generalized Myasthenia Gravis (MG)",
-          "status_label": "进行中",
-          "status_class": "active",
-          "phase_label": "Phase 2",
-          "start_date": "2019-12-04",
-          "readout_date": "2026-01-05",
-          "completion_date": "2026-09-30",
-          "sponsor": "Cartesian Therapeutics",
-          "url": "https://clinicaltrials.gov/study/NCT04146051"
-        }
-      ],
-      "timeline": {
-        "start": "2019-12-04",
-        "readout": "2026-01-05",
-        "completion": "2026-09-30"
-      },
-      "first_registered": "2019-10-31",
-      "latest_registered": "2019-10-31",
-      "linked_registries": [
-        {
-          "registry": "ClinicalTrials.gov",
-          "registry_id": "NCT06381284",
-          "url": "https://clinicaltrials.gov/study/NCT06381284"
-        }
-      ]
     },
     {
       "drug_class": "B细胞/抗CD19/CD20",
@@ -10519,9 +10470,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
     {
       "source": "ClinicalTrials.gov",
       "meta": {
-        "generated_at": "2026-10-04",
+        "generated_at": "2026-10-11",
         "mode": "cache",
-        "revision": "semantic-v1:dc333ba5b7214cfbcc4ebe2452ba8cfa996f11a9dba432ceb80e312c6ad28372"
+        "revision": "semantic-v1:708ffc49cc27bb52f186bc0217e4674d1d30b94e4c362a407e7619fb264dab2d"
       },
       "records": [
         {
@@ -12394,34 +12345,6 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "completion_date": "2021-09-01",
           "registered_date": "2019-10-14",
           "linked_registries": []
-        },
-        {
-          "registry": "ClinicalTrials.gov",
-          "registry_id": "NCT04146051",
-          "title": "Descartes-08 CAR-T Cells in Generalized Myasthenia Gravis (MG)",
-          "url": "https://clinicaltrials.gov/study/NCT04146051",
-          "status": "ACTIVE_NOT_RECRUITING",
-          "status_label": "进行中",
-          "status_class": "active",
-          "drug_class": "B细胞/抗CD19/CD20",
-          "drug_name": "Descartes-08",
-          "drug_names": [
-            "Descartes-08"
-          ],
-          "indication": "重症肌无力",
-          "phase_label": "Phase 2",
-          "sponsor": "Cartesian Therapeutics",
-          "start_date": "2019-12-04",
-          "readout_date": "2026-01-05",
-          "completion_date": "2026-09-30",
-          "registered_date": "2019-10-31",
-          "linked_registries": [
-            {
-              "registry": "ClinicalTrials.gov",
-              "registry_id": "NCT06381284",
-              "url": "https://clinicaltrials.gov/study/NCT06381284"
-            }
-          ]
         },
         {
           "registry": "ClinicalTrials.gov",
@@ -14540,6 +14463,32 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "completion_date": "2026-12-01",
           "registered_date": "2024-04-17",
           "linked_registries": []
+        },
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT06381284",
+          "title": "Expediting Myasthenia Gravis (MG) Diagnostic Evaluation: A Novel, Proof-of-Concept for Undiagnosed, Symptomatic Patients That Uses Social Media Targeting and Self-Assessment",
+          "url": "https://clinicaltrials.gov/study/NCT06381284",
+          "status": "COMPLETED",
+          "status_label": "已完成",
+          "status_class": "completed",
+          "drug_class": "其他",
+          "drug_name": "",
+          "drug_names": [],
+          "indication": "重症肌无力",
+          "phase_label": "未标注",
+          "sponsor": "ZS Associates",
+          "start_date": "2024-03-28",
+          "readout_date": "2025-03-03",
+          "completion_date": "2025-03-03",
+          "registered_date": "2024-04-24",
+          "linked_registries": [
+            {
+              "registry": "ClinicalTrials.gov",
+              "registry_id": "NCT04146051",
+              "url": "https://clinicaltrials.gov/study/NCT04146051"
+            }
+          ]
         },
         {
           "registry": "ClinicalTrials.gov",
