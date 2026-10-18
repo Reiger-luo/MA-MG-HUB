@@ -1,6 +1,6 @@
 window.MG_CLINICAL_TRIALS_DATA = {
   "meta": {
-    "generated_at": "2026-10-11",
+    "generated_at": "2026-10-18",
     "total_count": 457,
     "sources_order": [
       "ClinicalTrials.gov",
@@ -11,7 +11,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
   "decision_signals": [
     {
       "title": "招募中试验",
-      "detail": "当前共有 133 项招募中或邀请入组试验。",
+      "detail": "当前共有 131 项招募中或邀请入组试验。",
       "tag": "招募"
     },
     {
@@ -21,7 +21,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "title": "近 6 个月新登记",
-      "detail": "截至 2026-10-11，近 6 个月登记 25 项试验。",
+      "detail": "截至 2026-10-18，近 6 个月登记 24 项试验。",
       "tag": "近期登记"
     }
   ],
@@ -564,7 +564,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "status_label": "尚未招募",
           "status_class": "recruiting",
           "phase_label": "未标注",
-          "start_date": "2026-01-15",
+          "start_date": "2027-03-15",
           "readout_date": "2028-01-31",
           "completion_date": "2028-03-31",
           "sponsor": "BioSensics",
@@ -625,7 +625,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "highest_phase_label": "Phase 4",
       "stage_number": 4,
       "study_count": 12,
-      "status_summary": "招募 7 · 进行 1 · 完成 4",
+      "status_summary": "招募 6 · 进行 1 · 完成 5",
       "sponsors": [
         "Centre Hospitalier Universitaire de Nice",
         "UCB Biopharma SRL"
@@ -723,8 +723,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry": "ClinicalTrials.gov",
           "registry_id": "NCT06149559",
           "title": "A Study of Rozanolixizumab in Pediatric Study Participants With Moderate to Severe Generalized Myasthenia Gravis",
-          "status_label": "进行中",
-          "status_class": "active",
+          "status_label": "已完成",
+          "status_class": "completed",
           "phase_label": "Phase 2 / Phase 3",
           "start_date": "2024-06-14",
           "readout_date": "2026-10-05",
@@ -736,12 +736,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry": "ClinicalTrials.gov",
           "registry_id": "NCT06540144",
           "title": "An Extension Study Evaluating 6-week Treatment Cycles of Rozanolixizumab in Pediatric Study Participants With Generalized Myasthenia Gravis",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status_label": "进行中",
+          "status_class": "active",
           "phase_label": "Phase 3",
           "start_date": "2024-10-08",
-          "readout_date": "2027-08-17",
-          "completion_date": "2027-08-17",
+          "readout_date": "2027-10-05",
+          "completion_date": "2027-10-05",
           "sponsor": "UCB Biopharma SRL",
           "url": "https://clinicaltrials.gov/study/NCT06540144"
         },
@@ -1889,7 +1889,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "highest_phase_label": "Phase 4",
       "stage_number": 4,
       "study_count": 14,
-      "status_summary": "招募 7 · 进行 0 · 完成 2",
+      "status_summary": "招募 6 · 进行 1 · 完成 2",
       "sponsors": [
         "First Affiliated Hospital of Wenzhou Medical University",
         "Huashan Hospital, Fudan University",
@@ -2028,8 +2028,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry": "ClinicalTrials.gov",
           "registry_id": "NCT06456580",
           "title": "A Study of Telitacicept for the Treatment of Generalized Myasthenia Gravis (UPSTREAM MG)",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status_label": "进行中",
+          "status_class": "active",
           "phase_label": "Phase 3",
           "start_date": "2024-07-17",
           "readout_date": "",
@@ -10470,9 +10470,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
     {
       "source": "ClinicalTrials.gov",
       "meta": {
-        "generated_at": "2026-10-11",
+        "generated_at": "2026-10-18",
         "mode": "cache",
-        "revision": "semantic-v1:708ffc49cc27bb52f186bc0217e4674d1d30b94e4c362a407e7619fb264dab2d"
+        "revision": "semantic-v1:2752f63588cb57bc8043febf6d3e5cc43e880a0cca5ee83c4739ebce094b6fbc"
       },
       "records": [
         {
@@ -14101,9 +14101,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "NCT06149559",
           "title": "A Study of Rozanolixizumab in Pediatric Study Participants With Moderate to Severe Generalized Myasthenia Gravis",
           "url": "https://clinicaltrials.gov/study/NCT06149559",
-          "status": "ACTIVE_NOT_RECRUITING",
-          "status_label": "进行中",
-          "status_class": "active",
+          "status": "COMPLETED",
+          "status_label": "已完成",
+          "status_class": "completed",
           "drug_class": "FcRn 拮抗剂",
           "drug_name": "rozanolixizumab",
           "drug_names": [
@@ -14668,9 +14668,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "NCT06456580",
           "title": "A Study of Telitacicept for the Treatment of Generalized Myasthenia Gravis (UPSTREAM MG)",
           "url": "https://clinicaltrials.gov/study/NCT06456580",
-          "status": "RECRUITING",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status": "ACTIVE_NOT_RECRUITING",
+          "status_label": "进行中",
+          "status_class": "active",
           "drug_class": "B细胞/抗CD19/CD20",
           "drug_name": "Telitacicept",
           "drug_names": [
@@ -14680,7 +14680,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Vor Biopharma",
           "start_date": "2024-07-17",
-          "readout_date": "2027-05",
+          "readout_date": "2027-03",
           "completion_date": "2029-01",
           "registered_date": "2024-06-13",
           "linked_registries": []
@@ -14836,9 +14836,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "NCT06540144",
           "title": "An Extension Study Evaluating 6-week Treatment Cycles of Rozanolixizumab in Pediatric Study Participants With Generalized Myasthenia Gravis",
           "url": "https://clinicaltrials.gov/study/NCT06540144",
-          "status": "ENROLLING_BY_INVITATION",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status": "ACTIVE_NOT_RECRUITING",
+          "status_label": "进行中",
+          "status_class": "active",
           "drug_class": "FcRn 拮抗剂",
           "drug_name": "rozanolixizumab",
           "drug_names": [
@@ -14848,8 +14848,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "UCB Biopharma SRL",
           "start_date": "2024-10-08",
-          "readout_date": "2027-08-17",
-          "completion_date": "2027-08-17",
+          "readout_date": "2027-10-05",
+          "completion_date": "2027-10-05",
           "registered_date": "2024-08-06",
           "linked_registries": []
         },
@@ -16247,7 +16247,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "未标注",
           "sponsor": "BioSensics",
-          "start_date": "2026-01-15",
+          "start_date": "2027-03-15",
           "readout_date": "2028-01-31",
           "completion_date": "2028-03-31",
           "registered_date": "2025-11-12",
