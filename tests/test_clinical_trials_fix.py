@@ -209,7 +209,14 @@ def test_builder_writes_lightweight_dashboard_summary():
     assert summary["meta"]["total_count"] == full_data["meta"]["total_count"]
     assert summary["pipeline_matrix_count"] == len(full_data["pipeline_matrix"])
     assert len(summary["source_counts"]) == 3
-    assert summary_path.stat().st_size < 10_000
+
+    # 首页摘要必须远小于完整明细：用相对比例约束，避免试验数量自然增长后阈值失效。
+    summary_size = summary_path.stat().st_size
+    full_size = (PROJECT / "data" / "clinical-trials-data.js").stat().st_size
+    assert summary_size < 64_000, f"首页摘要过大: {summary_size} bytes"
+    assert summary_size < full_size * 0.05, (
+        f"首页摘要应远小于完整明细: summary={summary_size} full={full_size}"
+    )
 
 
 # ── Helpers ───────────────────────────────────────────────────────────
