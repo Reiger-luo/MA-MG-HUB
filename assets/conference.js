@@ -105,6 +105,7 @@
     moduleKpis: $('conferenceModuleKpis'),
     briefTakeaways: $('conferenceBriefTakeaways'),
     strategicNarrative: $('conferenceStrategicNarrative'),
+    awards: $('conferenceAwards'),
     countryRank: $('conferenceCountryRank'),
     typeRank: $('conferenceTypeRank'),
     topicCloud: $('conferenceTopicCloud'),
@@ -149,6 +150,71 @@
     return (payload.abstracts || []).filter(function(item) {
       return module.meetingKeys.indexOf(item.conference) !== -1;
     });
+  }
+
+  function getAwardCategoryRank(category) {
+    var ranks = [
+      'Golseth Young Investigator Award',
+      'Best Abstract Award',
+      'Pediatric Research Award',
+      'Residency and Fellowship Member Award',
+      'Medical Student Research Award',
+      'International Physician Scholarship'
+    ];
+    var normalized = String(category || '');
+    for (var i = 0; i < ranks.length; i++) {
+      if (normalized.indexOf(ranks[i]) === 0) return i;
+    }
+    return ranks.length;
+  }
+
+  function renderAwards(module, items) {
+    if (!el.awards) return;
+    if (module.id !== 'aanem') {
+      el.awards.innerHTML = '';
+      el.awards.style.display = 'none';
+      return;
+    }
+
+    var abstractsByPoster = {};
+    (items || []).forEach(function(item) {
+      var match = String(item.id || '').match(/::poster-(\d+)$/i);
+      if (match) abstractsByPoster[match[1]] = item;
+    });
+    var winners = ((payload.awardWinners || {})['AANEM 2026'] || []).map(function(winner) {
+      var posterNumber = String(winner.posterNumber == null ? '' : winner.posterNumber);
+      var abstractItem = abstractsByPoster[posterNumber];
+      if (!abstractItem) return null;
+      return {
+        category: winner.category || '',
+        recipient: winner.recipient || '',
+        title: abstractItem.title || winner.title || '',
+        posterNumber: posterNumber
+      };
+    }).filter(Boolean).sort(function(a, b) {
+      return getAwardCategoryRank(a.category) - getAwardCategoryRank(b.category) ||
+        String(a.category).localeCompare(String(b.category)) ||
+        Number(a.posterNumber) - Number(b.posterNumber);
+    });
+
+    if (!winners.length) {
+      el.awards.innerHTML = '';
+      el.awards.style.display = 'none';
+      return;
+    }
+    el.awards.style.display = '';
+    el.awards.innerHTML = '<div class="result-panel-head conference-awards-head">' +
+      '<div><h2 id="conferenceAwardsTitle">AANEM 2026 奖项亮点</h2>' +
+      '<p class="conference-section-note">仅展示可与站内 MG 摘要按海报编号对应的获奖条目。</p></div>' +
+    '</div><div class="conference-awards-grid">' + winners.map(function(winner) {
+      return '<article class="conference-awards-card">' +
+        '<span class="conference-awards-badge">' + escapeHtml(winner.category) + '</span>' +
+        '<strong class="conference-awards-recipient">' + escapeHtml(winner.recipient) + '</strong>' +
+        '<h3>' + escapeHtml(winner.title) + '</h3>' +
+        '<div class="conference-awards-footer"><span>Poster # ' + escapeHtml(winner.posterNumber) + '</span>' +
+        '<button class="btn conference-awards-action" type="button" data-conference-award-poster="' + escapeHtml(winner.posterNumber) + '">查看摘要</button></div>' +
+      '</article>';
+    }).join('') + '</div>';
   }
 
   function countValues(items, getter) {
@@ -815,6 +881,7 @@
     if (state.keyword) {
       var haystack = [
         item.title, item.authors, item.abstract, item.researchType,
+        item.id,
         (item.topics || []).join(' '), (item.drugs || []).join(' '), (item.countries || []).join(' '),
         item.deepInsight && item.deepInsight.clinicalReadoutZh,
         item.deepInsight && item.deepInsight.maImplicationZh,
@@ -929,6 +996,17 @@
       event.preventDefault();
       focusAbstract(target.getAttribute('data-conference-focus'));
     });
+    root.addEventListener('click', function(event) {
+      var target = event.target.closest && event.target.closest('[data-conference-award-poster]');
+      if (!target) return;
+      event.preventDefault();
+      // 用摘要 id 片段精确命中单条摘要，避免纯数字命中样本量等无关文本
+      state.keyword = 'poster-' + target.getAttribute('data-conference-award-poster');
+      state.page = 0;
+      if (el.keyword) el.keyword.value = state.keyword;
+      applyFilters();
+      scrollToResults();
+    });
   }
 
   function renderFutureMeetings() {
@@ -1018,6 +1096,7 @@
     renderMeetingCards();
     renderKpis(module, summary);
     renderStrategicNarrative(module, currentItems);
+    renderAwards(module, currentItems);
     renderRank(el.countryRank, summary.countries, 8, 'country');
     renderRank(el.typeRank, summary.types, 8, 'researchType');
     renderTopics(summary);

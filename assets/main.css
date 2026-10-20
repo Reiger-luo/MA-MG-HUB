@@ -1064,6 +1064,32 @@ a.literature-signal-ref:hover { background: rgba(37,99,235,0.12); }
 .conference-strategic-narrative {
   margin-top: 0.9rem;
 }
+.conference-awards {
+  margin-top: 0.9rem; padding: 1rem;
+  border: 1px solid var(--bg3); background: var(--bg2); border-radius: 8px;
+}
+.conference-awards-head { margin-bottom: 0.8rem; }
+.conference-awards-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.65rem;
+}
+.conference-awards-card {
+  display: flex; flex-direction: column; gap: 0.45rem;
+  border: 1px solid rgba(15,118,110,0.16); background: var(--bg);
+  border-radius: 8px; padding: 0.78rem;
+}
+.conference-awards-badge {
+  align-self: flex-start; color: #0f766e; background: rgba(15,118,110,0.08);
+  border: 1px solid rgba(15,118,110,0.18); border-radius: 5px;
+  padding: 0.12rem 0.38rem; font-size: 0.68rem; font-weight: 700; line-height: 1.4;
+}
+.conference-awards-recipient { color: var(--fg); font-size: 0.82rem; line-height: 1.35; }
+.conference-awards-card h3 { color: var(--fg2); font-size: 0.84rem; line-height: 1.5; }
+.conference-awards-footer {
+  display: flex; align-items: center; justify-content: space-between; gap: 0.55rem;
+  margin-top: auto; padding-top: 0.5rem; border-top: 1px dashed var(--bg3);
+}
+.conference-awards-footer > span { color: var(--fg3); font-size: 0.72rem; }
+.conference-awards-action { flex: 0 0 auto; padding: 0.35rem 0.55rem; font-size: 0.72rem; }
 .conference-narrative-panel {
   border: 1px solid rgba(15,118,110,0.18);
   background: linear-gradient(180deg, rgba(15,118,110,0.055), #fff 52%, var(--bg2));
@@ -4247,6 +4273,7 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
   .conference-chapter-grid {
     grid-template-columns: 1fr;
   }
+  .conference-awards-grid { grid-template-columns: 1fr; }
   .conference-meeting-card { height: auto; min-height: 164px; }
   .conference-brief-head { flex-direction: column; }
   .conference-filter-row { grid-template-columns: 1fr; }
