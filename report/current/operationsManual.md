@@ -160,6 +160,8 @@ PubMed 主文献流必须先通过 MG-core，再通过证据等级 I–V 门控�
 
 无稳定主来源的会议不保留伪完整数据，前端显示待接入状态。
 
+会议源接入方式：AAN 通过 Mirasmart 公开摘要检索页接入，EAN 通过官方 abstract book 接入；AANEM 2026 通过官方 Abstracts Guide 接入。该指南包含两段独立编号：AANEM poster 摘要区（编号 1 起）与 MGFA Scientific Session 摘要区（编号重新从 1 起），因此分别作为 `AANEM 2026` 与 `MGFA 2026` 两个模块入库，摘要 id 前缀分别为 `poster-` 与 `mgfa-`。指南前置的 ANF 奖项页解析后只保留可对齐到 poster 编号的获奖条目，输出在 `awardWinners`。AANEM 摘要作者字段形如 `Name (City, ST)`，国家判定以机构字段为主，并用美国州/加拿大省缩写补判，避免 Cambridge/Birmingham 等美国同名城市被误判为英国。
+
 ## 8. MSL 工作台
 
 MSL 工作台是 China-only：

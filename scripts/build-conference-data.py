@@ -116,6 +116,52 @@ SOURCES = [
         "url": "https://www.ean.org/fileadmin/user_upload/ean/Congress-2026/Abstracts/ENE_v33_iS1_Congress_Abstract_Book.pdf",
         "pageUrl": "https://www.ean.org/congress2026/abstracts/important-information/ean-2026-congress-abstract-book",
     },
+    {
+        "id": "aanem-2026-abstract-guide",
+        "meetingId": "aanem-2026",
+        "parser": "aanem-guide",
+        "sourceLabel": "American Association of Neuromuscular & Electrodiagnostic Medicine",
+        "title": "2026 AANEM Annual Meeting Abstracts Guide",
+        "shortTitle": "AANEM 2026",
+        "year": 2026,
+        "date": "2026-09-29 to 2026-10-02",
+        "location": "Orlando, Florida (Signia by Hilton Orlando Bonnet Creek)",
+        "theme": "Beyond EMG: The Future of Neuromuscular Medicine",
+        "presentationType": "Poster",
+        "url": "https://www.aanem.org/meetings/annual-meeting",
+        "pageUrl": "https://www.aanem.org/meetings/annual-meeting",
+        # 官方 Abstract Guide PDF 需注册获取，站内使用本地归档副本（data/.conference_cache/，不入库）
+        "localFile": "data/.conference_cache/AANEM-2026-Abstracts-Guide.pdf",
+        "startPage": 22,   # 0 基索引：第 23 页起为 poster 摘要区
+        "endPage": 297,    # 排他上界：第 297 页止
+        "idPrefix": "poster",
+        "track": "AANEM Poster",
+        "countriesFromAffiliations": True,
+        "awardStartPage": 2,
+        "awardEndPage": 21,
+    },
+    {
+        "id": "mgfa-2026-scientific-session",
+        "meetingId": "mgfa-2026",
+        "parser": "aanem-guide",
+        "sourceLabel": "Myasthenia Gravis Foundation of America",
+        "title": "2026 MGFA Scientific Session (held within the AANEM Annual Meeting)",
+        "shortTitle": "MGFA 2026",
+        "year": 2026,
+        "date": "2026-09-29 to 2026-10-02",
+        "location": "Orlando, Florida (AANEM Annual Meeting)",
+        "theme": "MGFA Scientific Session",
+        "presentationType": "MGFA Scientific Session",
+        "url": "https://myasthenia.org/events/2026-scientific-session/",
+        "pageUrl": "https://myasthenia.org/events/2026-scientific-session/",
+        "localFile": "data/.conference_cache/AANEM-2026-Abstracts-Guide.pdf",
+        "startPage": 298,  # 第 299 页起为 MGFA Scientific Session 摘要区（编号重新从 1 开始）
+        "endPage": 401,
+        "idPrefix": "mgfa",
+        "track": "MGFA Scientific Session",
+        "countriesFromAffiliations": True,
+        "exclusionPrinciple": "MGFA Scientific Session 为 MG 专病专场，全量入库；仍按 MG 规则剔除个别非 MG 神经肌接头疾病条目。",
+    },
 ]
 
 SOURCE_MONITOR = [
@@ -134,6 +180,22 @@ SOURCE_MONITOR = [
         "nextAction": "按 MG 关键词筛选 Wiley/EAN abstract book，并保留 ePoster Virtual 仅题名作者的条目。",
         "url": "https://www.ean.org/congress2026",
         "evidence": "EAN 2026 abstract book 在线公开，官网说明 accepted abstracts 作为 European Journal of Neurology online supplement 发布。",
+    },
+    {
+        "id": "aanem",
+        "organization": "AANEM Annual Meeting",
+        "status": "已抓取",
+        "nextAction": "基于 Abstracts Guide 全量摘要按 MG 规则筛选；跟进 FcRn/补体/BCMA-CAR 等靶向治疗、MSE/MSD 终点标准化、儿童与眼肌型 gMG、真实世界换药与卫生经济学线索。",
+        "url": "https://www.aanem.org/meetings/annual-meeting",
+        "evidence": "2026 AANEM Annual Meeting（9/29–10/2, Orlando）Abstracts Guide 已发布；摘要集含 AANEM poster 摘要区（编号 1–438）与 MGFA Scientific Session 摘要区（编号重新从 1 开始），两段均已结构化入站。",
+    },
+    {
+        "id": "mgfa",
+        "organization": "Myasthenia Gravis Foundation of America",
+        "status": "已抓取",
+        "nextAction": "MGFA 专病专场按治疗机制、患者旅程、数字终点和卫生经济学继续拆解；会后跟进作者团队与合作研究机会。",
+        "url": "https://myasthenia.org/events/2026-scientific-session/",
+        "evidence": "2026 MGFA Scientific Session 在 AANEM Annual Meeting 内举办，摘要以专章收录于 AANEM Abstracts Guide（第 299 页起）。",
     },
 ]
 
@@ -154,32 +216,82 @@ FUTURE_MEETINGS = [
         "status": "待官网更新",
         "url": "https://www.ean.org/congress2026",
     },
+    {
+        "meeting": "AANEM Annual Meeting 2027",
+        "organization": "AANEM",
+        "date": "2027（待官网公布）",
+        "location": "TBD",
+        "status": "摘要投稿窗口 2027-01-01 至 2027-03-15",
+        "url": "https://www.aanem.org/meetings/annual-meeting",
+    },
 ]
 
 COUNTRY_RULES = [
-    ("中国", ["china", "chinese", "beijing", "shanghai", "fudan", "huashan", "guangzhou", "hong kong", "taiwan"]),
-    ("美国", ["usa", "u.s.a", "united states", "boston", "new york", "california", "mayo clinic", "duke", "yale", "harvard"]),
-    ("日本", ["japan", "tokyo", "osaka", "nagoya", "kyoto", "hanamaki"]),
-    ("德国", ["germany", "berlin", "munich", "charité", "hamburg", "essen", "münster"]),
-    ("意大利", ["italy", "milan", "naples", "rome", "palermo", "pavia", "florence"]),
-    ("英国", ["united kingdom", "uk", "london", "birmingham", "oxford", "cambridge"]),
-    ("法国", ["france", "paris", "marseille", "lyon"]),
-    ("西班牙", ["spain", "barcelona", "madrid", "valencia"]),
-    ("荷兰", ["netherlands", "leiden", "maastricht", "amsterdam"]),
-    ("比利时", ["belgium", "ghent", "brussels", "beerse"]),
-    ("加拿大", ["canada", "toronto", "ottawa", "vancouver"]),
-    ("澳大利亚", ["australia", "sydney", "melbourne"]),
-    ("瑞士", ["switzerland", "zurich", "geneva", "basel", "bulle"]),
-    ("丹麦", ["denmark", "copenhagen"]),
-    ("瑞典", ["sweden", "stockholm", "uppsala"]),
-    ("波兰", ["poland", "warsaw", "katowice"]),
-    ("土耳其", ["turkey", "türkiye", "istanbul"]),
-    ("以色列", ["israel", "jerusalem"]),
-    ("葡萄牙", ["portugal", "lisbon"]),
-    ("希腊", ["greece", "athens"]),
-    ("印度", ["india", "delhi", "mumbai"]),
-    ("巴西", ["brazil", "sao paulo"]),
-]
+    (("中国"), ["china", "chinese", "beijing", "shanghai", "fudan", "huashan", "guangzhou", "hong kong", "taiwan"]),
+        ("美国", ["usa", "u.s.a", "united states", "boston", "new york", "california", "mayo clinic", "duke", "yale", "harvard"]),
+        ("日本", ["japan", "tokyo", "osaka", "nagoya", "kyoto", "hanamaki"]),
+        ("德国", ["germany", "berlin", "munich", "charité", "hamburg", "essen", "münster", "monheim"]),
+        ("意大利", ["italy", "milan", "naples", "rome", "palermo", "pavia", "florence"]),
+        ("英国", ["united kingdom", "uk", "london", "birmingham", "oxford", "cambridge", "sheffield", "slough"]),
+        ("法国", ["france", "paris", "marseille", "lyon", "nice"]),
+        ("西班牙", ["spain", "barcelona", "madrid", "valencia"]),
+        ("荷兰", ["netherlands", "leiden", "maastricht", "amsterdam"]),
+        ("比利时", ["belgium", "ghent", "brussels", "beerse", "leuven"]),
+        ("加拿大", ["canada", "toronto", "ottawa", "vancouver"]),
+        ("澳大利亚", ["australia", "sydney", "melbourne"]),
+        ("瑞士", ["switzerland", "zurich", "geneva", "basel", "bulle"]),
+        ("丹麦", ["denmark", "copenhagen"]),
+        ("瑞典", ["sweden", "stockholm", "uppsala"]),
+        ("挪威", ["norway", "oslo"]),
+        ("芬兰", ["finland", "helsinki"]),
+        ("爱尔兰", ["ireland", "dublin"]),
+        ("奥地利", ["austria", "vienna", "wien"]),
+        ("捷克", ["czech", "prague"]),
+        ("匈牙利", ["hungary", "budapest"]),
+        ("罗马尼亚", ["romania", "bucharest", "cluj"]),
+        ("塞尔维亚", ["serbia", "belgrade"]),
+        ("克罗地亚", ["croatia", "zagreb"]),
+        ("斯洛文尼亚", ["slovenia", "ljubljana"]),
+        ("保加利亚", ["bulgaria", "sofia"]),
+        ("波兰", ["poland", "warsaw", "katowice", "bydgoszcz"]),
+        ("土耳其", ["turkey", "türkiye", "istanbul", "ankara"]),
+        ("以色列", ["israel", "jerusalem", "tel aviv"]),
+        ("葡萄牙", ["portugal", "lisbon", "porto"]),
+        ("希腊", ["greece", "athens", "patras", "rion"]),
+        ("俄罗斯", ["russia", "moscow", "st petersburg"]),
+        ("乌克兰", ["ukraine", "kyiv", "kiev"]),
+        ("韩国", ["south korea", "korea", "seoul"]),
+        ("印度", ["india", "delhi", "mumbai", "bangalore", "hyderabad", "chennai"]),
+        ("巴基斯坦", ["pakistan", "karachi", "lahore"]),
+        ("孟加拉", ["bangladesh", "dhaka"]),
+        ("斯里兰卡", ["sri lanka", "colombo"]),
+        ("尼泊尔", ["nepal", "kathmandu"]),
+        ("新加坡", ["singapore"]),
+        ("马来西亚", ["malaysia", "kuala lumpur"]),
+        ("泰国", ["thailand", "bangkok"]),
+        ("越南", ["vietnam", "hanoi", "ho chi minh"]),
+        ("菲律宾", ["philippines", "manila"]),
+        ("印度尼西亚", ["indonesia", "jakarta"]),
+        ("沙特阿拉伯", ["saudi", "riyadh", "jeddah"]),
+        ("阿联酋", ["united arab emirates", "uae", "dubai", "abu dhabi"]),
+        ("卡塔尔", ["qatar", "doha"]),
+        ("约旦", ["jordan", "amman"]),
+        ("黎巴嫩", ["lebanon", "beirut"]),
+        ("埃及", ["egypt", "cairo"]),
+        ("南非", ["south africa", "cape town", "johannesburg"]),
+        ("尼日利亚", ["nigeria", "lagos"]),
+        ("摩洛哥", ["morocco", "casablanca"]),
+        ("墨西哥", ["mexico", "guadalajara", "monterrey"]),
+        ("巴西", ["brazil", "sao paulo", "rio de janeiro"]),
+        ("阿根廷", ["argentina", "buenos aires"]),
+        ("智利", ["chile", "santiago"]),
+        ("哥伦比亚", ["colombia", "bogota", "medellin"]),
+        ("秘鲁", ["peru", "lima"]),
+        ("厄瓜多尔", ["ecuador", "quito"]),
+        ("乌拉圭", ["uruguay", "montevideo"]),
+        ("新西兰", ["new zealand", "auckland"]),
+        ("哈萨克斯坦", ["kazakhstan", "almaty", "astana"]),
+    ]
 
 TOPIC_RULES = [
     ("FcRn", ["fcrn", "efgartigimod", "nipocalimab", "rozanolixizumab", "batoclimab"]),
@@ -239,11 +351,19 @@ def cache_path_for_url(url: str) -> Path:
     return CACHE_DIR / f"{stem}-{digest}{suffix}"
 
 
-def download(url: str, refresh: bool = False) -> Path:
+def download(url: str, refresh: bool = False, local_file: str | None = None) -> Path:
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
     path = cache_path_for_url(url)
     if path.exists() and not refresh:
         return path
+    if local_file:
+        candidate = Path(local_file)
+        if not candidate.is_absolute():
+            candidate = PROJECT / candidate
+        if candidate.exists():
+            path.write_bytes(candidate.read_bytes())
+            return path
+        print(f"⚠ 本地归档缺失：{candidate}", file=sys.stderr)
     headers = {"User-Agent": "MA-MG-HUB/1.0 (+conference abstract monitor)"}
     resp = requests.get(url, headers=headers, timeout=90)
     resp.raise_for_status()
@@ -650,6 +770,384 @@ def parse_aan_mirasmart(source: dict, refresh: bool = False) -> list[dict]:
     return parsed
 
 
+AANEM_NUM_RE = re.compile(r"^\d{1,3}$")
+AANEM_AWARD_HEADER_RE = re.compile(
+    r"(Golseth Young Investigator Award|Best Abstract Award|Technologist Best Abstract Award|"
+    r"Pediatric Research Award|President.s Research Initiative Award|"
+    r"Residency and Fellowship Member Award|Medical Student Research Award|"
+    r"International Physician Scholarship)",
+    re.I,
+)
+AANEM_AWARD_INLINE_RE = re.compile(
+    r"^(?P<cat>Golseth Young Investigator Award Runner[ -]?Up|Golseth Young Investigator Award|"
+    r"Best Abstract Award Runner[ -]?Up|Best Abstract Award|Technologist Best Abstract Award|"
+    r"Pediatric Research Award|President.s Research Initiative Award|"
+    r"Residency and Fellowship Member Award|Medical Student Research Award)\s*[-–]\s*(?P<who>.+)$",
+    re.I,
+)
+AANEM_PERSON_RE = re.compile(
+    r"^(?P<name>[A-Z][A-Za-z.\-'\u00c0-\u017f ]{2,60}?),\s*"
+    r"(?:MD|DO|MBBS|MPH|MS|MSc|MMSc|PhD|BS|BA|BSc|CNCT|RN|MSN|MBA|DPT|PT|MSOT|OTR|APRN|DC)\b"
+)
+AANEM_POSTER_REF_RE = re.compile(r"\(Poster\s*#\s*(\d+)\)", re.I)
+# AANEM 摘要正文用 "关键字段：" 形式；必须带冒号（或独占一行），
+# 否则 "RESULTS OF ADAPT SERON" 这类题名末行会被误判为正文起点。
+AANEM_SECTION_RE = re.compile(
+    r"^(INTRODUCTION(?:\s*(?:/|AND)\s*BACKGROUND)?|ABSTRACT|"
+    r"(?:BACKGROUND|INTRODUCTION)\s*(?:/|AND)\s*(?:AIMS?)?|BACKGROUND(?:\s*AND\s*AIMS)?|"
+    r"OBJECTIVE|OBJECTIVES|AIM|AIMS|"
+    r"METHODS|MATERIALS AND METHODS|RESULTS|SUMMARY/CONCLUSION|CONCLUSION|CONCLUSIONS|"
+    r"DISCLOSURE|DISCLOSURES|SIGNIFICANCE|PURPOSE)\s*(?::|$)",
+    re.I,
+)
+AANEM_PLACE_RE = re.compile(r"\(([^()]{2,60})\)")
+AANEM_PLACE_LIKE_RE = re.compile(r"^[A-Z][^\W\d_][\w .\-']{1,40},\s*[^\W\d_][\w .]{1,30}$")
+US_STATE_CODES = {
+    "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID", "IL", "IN",
+    "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH",
+    "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT",
+    "VT", "VA", "WA", "WV", "WI", "WY", "PR",
+}
+CA_PROVINCE_CODES = {"ON", "QC", "BC", "AB", "MB", "SK", "NS", "NB", "NL", "PE", "YT", "NT", "NU"}
+# AANEM 摘要题名全大写；转句首大写时保留的专有缩写/基因/量表名。
+AANEM_KEEP_TOKENS = {
+    "MG", "GMG", "OMG", "ACH", "ACHR", "MUSK", "LRP4", "AGRN", "RYR", "TITIN", "VGCC", "CASPR2",
+    "EMG", "NCS", "RNS", "SFEMG", "MUAP", "CMAP", "SNAP", "EDX", "NMJ", "NMUS", "MRI", "CT",
+    "IV", "SC", "IM", "IG", "IVIG", "SCIG", "PLEX", "ICU", "AE", "AES", "SAE", "FDA", "EMA",
+    "AI", "LLM", "RAG", "GPT", "NLP", "ML", "CAR", "T", "BCMA", "CD3", "CD19", "CD20", "FCRN",
+    "C5", "C1", "C1S", "C2", "QMG", "MSE", "MSD", "MGII", "PRO", "QOL", "ADL", "MGFA", "MGC",
+    "RCT", "CI", "OR", "HR", "SD", "SE", "IQR", "PH20", "ARGX", "DNTH", "VYVGART", "US", "USA",
+    "UK", "EU", "ALS", "SMA", "CIDP", "GBS", "MMN", "IMNM", "DM", "PM", "IBM", "CMS", "LEMS",
+    "DMD", "FSHD", "CMT", "TTR", "ATTR", "MGUS", "POEMS", "LGI1", "NMDAR", "GFAP", "MOG",
+    "MG-ADL", "MG-QOL15", "QMG-13", "SF-36", "EQ-5D", "HADS", "PHQ-9", "II", "III", "IVIG",
+}
+AANEM_LOWERCASE_ALWAYS = {
+    "AN", "THE", "OF", "IN", "ON", "WITH", "WITHOUT", "FOR", "TO", "FROM", "BY", "AND",
+    "OR", "VS", "VERSUS", "AT", "AS", "AFTER", "BEFORE", "DURING", "AMONG", "BETWEEN", "INTO",
+    "IS", "ARE", "WAS", "WERE", "BE", "NOT", "NO", "ITS", "IT", "THIS", "THAT", "THESE",
+    "THOSE", "CAN", "MAY", "DOES", "DO", "MORE", "LESS", "THAN", "UP", "OUT", "OVER", "UNDER",
+    "VIA", "PER", "EACH", "ALL", "NEW", "TWO", "ONE", "THREE", "FOUR", "FIVE", "SIX", "SEVEN",
+    "EIGHT", "NINE", "TEN", "HOW", "WHY", "WHAT", "WHEN", "WHO", "WHERE", "A", "I",
+}
+# 研究缩写（非基因/药物）在句首大写化时保持全大写
+AANEM_KEEP_TOKENS |= {"ADAPT", "OCULUS", "SERON", "NXT", "JR", "MINT", "RAISE", "XT", "VIVACITY", "MYSTIC", "MOMENTUM"}
+AANEM_LABEL_WORDS = {
+    "PART", "TYPE", "GROUP", "PHASE", "CLASS", "STAGE", "ARM", "TRIAL", "COHORT",
+    "STUDY", "VITAMIN", "GRADE", "LEVEL", "APPENDIX", "FIGURE", "TABLE", "PANEL",
+}
+# 全大写 token 的正确书写形式（基因/抗体/量表专名）
+AANEM_DISPLAY_CANON = {
+    "ACHR": "AChR", "MUSK": "MuSK", "GMG": "gMG", "OMG": "oMG", "LRP4": "LRP4",
+    "AGRN": "agrin", "RYR": "RyR", "VGCC": "VGCC", "TITIN": "titin",
+    "AB": "Ab", "IGG": "IgG", "IGM": "IgM", "IGA": "IgA", "C3D": "C3d",
+}
+
+
+def is_all_caps_heading(line: str) -> bool:
+    letters = re.sub(r"[^A-Za-z]", "", line)
+    if len(letters) < 12:
+        return False
+    return sum(1 for ch in letters if ch.isupper()) >= 0.85 * len(letters)
+
+
+def aanem_title_case(title: str) -> str:
+    """把 AANEM 全大写题名恢复成 Title Case，保留专有缩写（AChR/MuSK/ADAPT/Part A 等）并按规范书写。"""
+    if not title or not is_all_caps_heading(title):
+        return title
+    # 先合并 PDF 行末连字符断词（"ACHR-AB- NEGATIVE" → "ACHR-AB-NEGATIVE"）
+    merged: list[str] = []
+    pending = ""
+    for raw_token in title.split(" "):
+        candidate = f"{pending}{raw_token}" if pending else raw_token
+        if candidate.endswith("-") and len(candidate) > 1:
+            pending = candidate
+            continue
+        merged.append(candidate)
+        pending = ""
+    if pending:
+        merged.append(pending.rstrip("-"))
+    tokens = merged
+    out: list[str] = []
+    sentence_start = True
+    prev_core = ""
+    for pos, raw in enumerate(tokens):
+        core = raw.strip(",;:()[]")
+        if not core:
+            out.append(raw)
+            continue
+
+        def convert(segment: str, at_start: bool, in_compound: bool = False) -> str:
+            upper = segment.upper()
+            bare = re.sub(r"[^A-Za-z0-9]", "", upper)
+            if upper in AANEM_DISPLAY_CANON:
+                return AANEM_DISPLAY_CANON[upper]
+            if upper in AANEM_KEEP_TOKENS or bare in AANEM_KEEP_TOKENS:
+                return segment
+            if re.search(r"\d", segment) and segment.isupper():
+                return segment
+            if in_compound:
+                # 连字符后半段按普通词小写：AChR-Ab-negative
+                return segment.lower()
+            if upper in AANEM_LOWERCASE_ALWAYS and not at_start:
+                return segment.lower()
+            return segment[:1] + segment[1:].lower()
+
+        # 连字符复合词（ACHR-AB-NEGATIVE、ADAPT-SERON-INFORMED）逐段处理
+        pieces = core.split("-")
+        word = "-".join(
+            convert(piece, sentence_start and index == 0, in_compound=index > 0)
+            for index, piece in enumerate(pieces)
+        )
+        if len(core) == 1 and core.isupper():
+            label_ctx = prev_core.upper() in AANEM_LABEL_WORDS
+            if label_ctx or pos == len(tokens) - 1:
+                word = core  # 标签语境的单字母保留大写：Part A / Vitamin D / Group B
+            elif not sentence_start:
+                word = core.lower()
+        out.append(raw.replace(core, word, 1))
+        sentence_start = bool(re.search(r"[:?.\-–]$", raw))
+        prev_core = core
+    text = " ".join(out)
+    return text[:1].upper() + text[1:]
+
+
+def aanem_place_countries(text: str) -> list[str]:
+    """AANEM 作者以 (City, ST) 标注；用邮政缩写补充国家判定。"""
+    inferred: list[str] = []
+    for match in re.finditer(r"\(([^()]{2,70}),\s*([A-Z]{2})\)", text):
+        code = match.group(2)
+        if code in US_STATE_CODES and "美国" not in inferred:
+            inferred.append("美国")
+        elif code in CA_PROVINCE_CODES and "加拿大" not in inferred:
+            inferred.append("加拿大")
+    return inferred
+
+
+def looks_like_aanem_author_line(line: str) -> bool:
+    """判断一行是否为 AANEM 作者块起始行：含 "(City, State/Country)" 形式的地点括号。"""
+    for match in re.finditer(r"\(([^()]{2,60})\)", line):
+        inner = match.group(1)
+        if re.fullmatch(r"[A-Z][^\W\d_][\w .\-']{1,30},\s*[^\W\d_][\w .]{1,30}", inner.strip()):
+            return True
+    return False
+
+
+def split_aanem_authors(block: str) -> tuple[str, str]:
+    # 只把 "(City, State/Country)" 形态的括号当地点；"(MG)"、"(n=12)" 等不算
+    places = [
+        clean_line(m.group(1))
+        for m in AANEM_PLACE_RE.finditer(block)
+        if AANEM_PLACE_LIKE_RE.match(clean_line(m.group(1)))
+    ]
+    places = [place for place in dict.fromkeys(places) if place]
+    names = [clean_line(part) for part in AANEM_PLACE_RE.sub("", block).split(",")]
+    names = [name for name in names if name]
+    return "; ".join(names), "; ".join(places)
+
+
+def parse_aanem_guide(path: Path, source: dict) -> list[dict]:
+    """解析 AANEM Abstracts Guide：编号行 + 全大写题名 + 作者(City, ST) + 结构化正文。
+
+    AANEM 摘要集内有两段独立编号：AANEM poster 摘要区与 MGFA Scientific Session 区，
+    由 source 的 startPage / endPage / idPrefix 区分。
+    """
+    doc = fitz.open(str(path))
+    stream: list[tuple[int, str]] = []
+    for page_index in range(source.get("startPage", 22), min(source.get("endPage", doc.page_count), doc.page_count)):
+        for raw in doc[page_index].get_text("text").splitlines():
+            line = clean_line(raw)
+            if line:
+                stream.append((page_index + 1, line))
+
+    raw_entries: list[dict] = []
+    current: dict | None = None
+    index = 0
+    while index < len(stream):
+        page, line = stream[index]
+        if AANEM_NUM_RE.match(line) and index + 1 < len(stream) and is_all_caps_heading(stream[index + 1][1]):
+            if current:
+                raw_entries.append(current)
+            current = {"number": int(line), "page": page, "lines": []}
+            index += 1
+            continue
+        if current is not None:
+            current["lines"].append(line)
+        index += 1
+    if current:
+        raw_entries.append(current)
+
+    parsed: list[dict] = []
+    seen_titles: set[str] = set()
+    for entry in raw_entries:
+        lines = entry["lines"]
+        section_idx = next((idx for idx, line in enumerate(lines) if AANEM_SECTION_RE.match(line)), len(lines))
+        preface = lines[:section_idx]
+        body_lines = lines[section_idx:]
+        if not preface or not body_lines:
+            continue
+        author_idx = next(
+            (idx for idx, line in enumerate(preface) if looks_like_aanem_author_line(line)),
+            next(
+                (idx for idx, line in enumerate(preface) if re.search(r"\([^()]*,[^()]*\)", line) and idx > 0),
+                next((idx for idx, line in enumerate(preface) if idx > 0 and "," in line and re.search(r"[a-z]", line)), len(preface)),
+            ),
+        )
+        title_lines = preface[:author_idx]
+        author_block_lines = preface[author_idx:]
+        if author_block_lines:
+            # PDF 常把题名末行和作者首行挤在同一行：在第一个 "Name Surname (" 前切开（作者名可能含变音字母）
+            first_line = author_block_lines[0]
+            name_match = re.search(
+                r"[A-Z][^\W\d_][\w.\-'’.]*(?: [A-Z]\.)? [^\W\d_][\w\-'’.]+[,.]?(?: (?:Jr|Sr|II|III)\.?)? \(",
+                first_line,
+            )
+            if name_match and name_match.start() > 0:
+                head, tail = first_line[: name_match.start()], first_line[name_match.start():]
+                # 名可能是 2–4 段（José María Núñez）：把紧邻的、带小写的姓名段一起切给作者块
+                head_tokens = head.rstrip().split(" ")
+                moved: list[str] = []
+                while head_tokens and len(moved) < 3:
+                    token = head_tokens[-1]
+                    if not re.fullmatch(r"[A-Z][^\W\d_][\w.\-'’.]*", token):
+                        break
+                    moved.insert(0, head_tokens.pop())
+                if moved:
+                    head = " ".join(head_tokens)
+                    tail = " ".join(moved) + " " + tail
+                if head.strip():
+                    title_lines = title_lines + [head.rstrip()]
+                    author_block_lines = [tail.lstrip()] + author_block_lines[1:]
+        title = aanem_title_case(collapse_lines(title_lines))
+        author_block = collapse_lines(author_block_lines)
+        authors, affiliations = split_aanem_authors(author_block)
+        abstract = collapse_lines(body_lines)
+        abstract = re.split(r"\bDISCLOSURES?:", abstract, flags=re.I)[0].strip()
+        if not title:
+            continue
+        dedupe_key = re.sub(r"[^a-z0-9]", "", title.lower())
+        if dedupe_key in seen_titles:
+            continue
+        seen_titles.add(dedupe_key)
+        parsed.append(
+            make_abstract_item(
+                source=source,
+                local_id=f"{source.get('idPrefix', 'poster')}-{entry['number']}",
+                title=title,
+                authors=authors,
+                abstract=abstract,
+                page=entry["page"],
+                presentation_type=source["presentationType"],
+                affiliations=affiliations,
+            )
+        )
+        parsed[-1]["track"] = source.get("track", source["presentationType"])
+
+    mg_items = [item for item in parsed if is_mg_text(item["title"], item["abstract"])]
+    SOURCE_COVERAGE_AUDITS[source["id"]] = {
+        "sourceId": source["id"],
+        "meeting": source["shortTitle"],
+        "query": "myasthenia / MG（全文规则筛选）",
+        "rawSearchResults": len(parsed),
+        "recordsParsed": len(parsed),
+        "curatedMgIncluded": len(mg_items),
+        "excludedByRule": max(len(parsed) - len(mg_items), 0),
+        "exclusionPrinciple": source.get(
+            "exclusionPrinciple",
+            "AANEM 摘要集全量入库后按 MG 规则筛选：保留 MG 全称、gMG/MG-ADL 等缩写、MuSK/AChR/LRP4 分型与 ICI 相关 myasthenia；剔除 CMS/LEMS 等非 MG 神经肌接头疾病。",
+        ),
+        "externalBenchmark": None,
+    }
+    return parsed
+
+
+def clean_aanem_awards(awards: list[dict]) -> list[dict]:
+    """获奖条目收敛：只保留可对齐 poster 编号的条目，并清理叙述性前缀。"""
+    cleaned: list[dict] = []
+    for award in awards:
+        title = clean_line(award.get("title", ""))
+        if not title or not award.get("posterNumber"):
+            continue
+        recipient = clean_line(
+            re.sub(
+                r"^(?:Best Abstract|Golseth Young Investigator Award)\s+Runner[- ]?Up\s*[-–]?\s*",
+                "",
+                str(award.get("recipient", "")),
+            )
+        )
+        recipient = re.sub(r"\s*,\s*", ", ", recipient)
+        cleaned.append(
+            {
+                "category": award["category"],
+                "recipient": recipient,
+                "title": title,
+                "posterNumber": award.get("posterNumber"),
+            }
+        )
+    deduped: list[dict] = []
+    seen: set[tuple[str, int]] = set()
+    for award in cleaned:
+        key = (award["category"], award["posterNumber"])
+        if key in seen:
+            continue
+        seen.add(key)
+        deduped.append(award)
+    return deduped
+
+
+def parse_aanem_awards(path: Path, source: dict) -> list[dict]:
+    """抽取 AANEM 前置奖项页（Golseth / Best Abstract / Pediatric / 住院医师与学生奖等）。"""
+    doc = fitz.open(str(path))
+    lines: list[str] = []
+    for page_index in range(source.get("awardStartPage", 2), source.get("awardEndPage", 21)):
+        for raw in doc[page_index].get_text("text").splitlines():
+            line = clean_line(raw)
+            if line:
+                lines.append(line)
+
+    awards: list[dict] = []
+    category = ""
+    pending: dict | None = None
+    for line in lines:
+        header = AANEM_AWARD_HEADER_RE.search(line)
+        inline = AANEM_AWARD_INLINE_RE.match(line)
+        if inline:
+            if pending:
+                awards.append(pending)
+            category = clean_line(inline.group("cat"))
+            pending = {"category": category, "recipient": clean_line(inline.group("who")), "title": "", "posterNumber": None}
+            continue
+        if header and len(line) < 120 and not AANEM_POSTER_REF_RE.search(line):
+            if pending:
+                awards.append(pending)
+                pending = None
+            category = clean_line(header.group(1))
+            continue
+        person = AANEM_PERSON_RE.match(line)
+        if person and category:
+            if pending:
+                awards.append(pending)
+            pending = {"category": category, "recipient": clean_line(line), "title": "", "posterNumber": None}
+            continue
+        if pending is not None:
+            poster = AANEM_POSTER_REF_RE.search(line)
+            if poster:
+                pending["title"] = aanem_title_case(clean_line(AANEM_POSTER_REF_RE.sub("", f"{pending['title']} {line}")))
+                pending["posterNumber"] = int(poster.group(1))
+                awards.append(pending)
+                pending = None
+                continue
+            if re.match(r"^Poster Session", line, re.I):
+                continue
+            if not pending["title"]:
+                pending["title"] = line
+            else:
+                pending["title"] = f"{pending['title']} {line}"
+    if pending:
+        awards.append(pending)
+
+    return clean_aanem_awards(awards)
+
+
 def dedupe_items(items: list[dict]) -> list[dict]:
     seen = set()
     output = []
@@ -683,11 +1181,31 @@ def is_mg_text(title: str, abstract: str = "") -> bool:
 
 
 def infer_countries(text: str) -> list[str]:
-    lower = text.lower()
+    """规则判定国家。先剔除 "(City, US-State)" 段，避免 Cambridge MA / Birmingham AL 等
+    美国同名城市被误判为英国等国家；US/加拿大再由州/省缩写单独补判。"""
+    postal = "|".join(sorted(US_STATE_CODES | CA_PROVINCE_CODES))
+    cleaned = re.sub(r"[A-Z][A-Za-z .\-']{1,30},\s*(?:" + postal + r")\b", "", text)
+    lower = cleaned.lower()
     countries = []
     for country, terms in COUNTRY_RULES:
-        if any(term in lower for term in terms):
+        hit = False
+        for term in terms:
+            if len(term) <= 4:
+                if re.search(r"\b" + re.escape(term) + r"\b", lower):
+                    hit = True
+                    break
+            elif term in lower:
+                hit = True
+                break
+        if hit:
             countries.append(country)
+    # AANEM 摘要作者以 (City, ST) 标注；兼容带括号与 "City, ST; City, ST" 两种写法
+    for match in re.finditer(r"(?:[(;]\s*)([A-Z][A-Za-z .\-']{1,30}),\s*([A-Z]{2})\b", f"({text}"):
+        code = match.group(2)
+        if code in US_STATE_CODES and "美国" not in countries:
+            countries.append("美国")
+        elif code in CA_PROVINCE_CODES and "加拿大" not in countries:
+            countries.append("加拿大")
     return countries or ["未识别"]
 
 
@@ -931,7 +1449,13 @@ def make_abstract_item(
 ) -> dict:
     title = title.strip() or "(Untitled)"
     text = f"{title} {authors} {affiliations} {abstract}"
-    countries = infer_countries(text)
+    # AANEM/MGFA 作者单位字段已含 (City, State/Country)，以机构字段判定国家更准确
+    if source.get("countriesFromAffiliations") and affiliations:
+        countries = infer_countries(f"{affiliations} {authors}")
+        if countries == ["未识别"]:
+            countries = infer_countries(text)
+    else:
+        countries = infer_countries(text)
     topics = infer_topics(text)
     drugs = infer_drugs(text)
     research_type = infer_research_type(text)
@@ -1117,6 +1641,26 @@ def build_meeting_narratives(abstracts: list[dict]) -> dict:
     return narratives
 
 
+def _load_previous_payload() -> dict | None:
+    """读取上一版已发布数据，用于单个来源失败时沿用 last-good 条目。"""
+    if JSON_PATH.exists():
+        try:
+            return json.loads(JSON_PATH.read_text(encoding="utf-8"))
+        except Exception:
+            return None
+    if JS_PATH.exists():
+        try:
+            text = JS_PATH.read_text(encoding="utf-8")
+            prefix = "window.MG_CONFERENCE_DATA = "
+            body = text[len(prefix):].strip() if text.startswith(prefix) else ""
+            if body.endswith(";"):
+                body = body[:-1]
+            return json.loads(body) if body else None
+        except Exception:
+            return None
+    return None
+
+
 def load_existing_zh_enrichment() -> dict[str, dict]:
     """Preserve optional LLM-generated Chinese fields across deterministic rebuilds."""
     payload = None
@@ -1204,15 +1748,17 @@ def build_payload(refresh: bool = False) -> dict:
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     zh_enrichments = load_existing_zh_enrichment()
     narrative_enrichments = load_existing_meeting_narrative_enrichment()
+    previous_payload = _load_previous_payload()
     abstracts: list[dict] = []
     source_stats = []
+    award_winners: dict[str, list[dict]] = {}
     for source in SOURCES:
         try:
             cache_name = cache_path_for_url(source["url"]).name
             if source["parser"] == "aan-mirasmart":
                 items = parse_aan_mirasmart(source, refresh=refresh)
             else:
-                path = download(source["url"], refresh=refresh)
+                path = download(source["url"], refresh=refresh, local_file=source.get("localFile"))
                 cache_name = path.name
             if source["parser"] == "numbered-poster":
                 items = parse_numbered_poster(path, source)
@@ -1220,6 +1766,11 @@ def build_payload(refresh: bool = False) -> dict:
                 items = parse_simple_numbered(path, source)
             elif source["parser"] == "ean-book":
                 items = parse_ean_book(path, source)
+            elif source["parser"] == "aanem-guide":
+                items = parse_aanem_guide(path, source)
+                awards = parse_aanem_awards(path, source)
+                if awards:
+                    award_winners[source["shortTitle"]] = awards
             else:
                 items = items if source["parser"] == "aan-mirasmart" else []
             raw_count = len(items)
@@ -1235,7 +1786,24 @@ def build_payload(refresh: bool = False) -> dict:
             })
         except Exception as exc:  # pragma: no cover - 网络状态不稳定时保留其他源
             print(f"⚠ {source['id']} failed: {exc}", file=sys.stderr)
-            source_stats.append({"id": source["id"], "title": source["shortTitle"], "status": "failed", "error": str(exc)})
+            # cloud-safe last-good：源不可用时沿用上一版已发布条目，避免会议模块被清空
+            reused = [
+                item
+                for item in (previous_payload or {}).get("abstracts", [])
+                if item.get("sourceId") == source["id"]
+            ]
+            if reused:
+                abstracts.extend(reused)
+                source_stats.append({
+                    "id": source["id"],
+                    "title": source["shortTitle"],
+                    "status": "last-good",
+                    "items": len(reused),
+                    "rawItems": len(reused),
+                    "error": str(exc),
+                })
+            else:
+                source_stats.append({"id": source["id"], "title": source["shortTitle"], "status": "failed", "error": str(exc)})
 
     abstracts = dedupe_items(abstracts)
     abstracts.sort(key=lambda item: (-item["year"], -item["priorityScore"], item["conference"], item["title"]))
@@ -1255,11 +1823,13 @@ def build_payload(refresh: bool = False) -> dict:
                 "date": source["date"],
                 "location": source["location"],
                 "url": source["pageUrl"],
+                "theme": source.get("theme", ""),
             }
             for source in SOURCES
         ],
         "abstracts": abstracts,
         "meetingNarratives": meeting_narratives,
+        "awardWinners": award_winners,
         "coverageAudits": SOURCE_COVERAGE_AUDITS,
         "sourceStats": source_stats,
         "sourceMonitor": SOURCE_MONITOR,
