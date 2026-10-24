@@ -1,7 +1,7 @@
 window.MG_CLINICAL_TRIALS_DATA = {
   "meta": {
     "generated_at": "2026-10-18",
-    "total_count": 457,
+    "total_count": 484,
     "sources_order": [
       "ClinicalTrials.gov",
       "ChiCTR",
@@ -11,17 +11,17 @@ window.MG_CLINICAL_TRIALS_DATA = {
   "decision_signals": [
     {
       "title": "招募中试验",
-      "detail": "当前共有 131 项招募中或邀请入组试验。",
+      "detail": "当前共有 132 项招募中或邀请入组试验。",
       "tag": "招募"
     },
     {
       "title": "药物机制热点",
-      "detail": "FcRn 拮抗剂在可识别机制中最多，共 73 项。",
+      "detail": "FcRn 拮抗剂在可识别机制中最多，共 72 项。",
       "tag": "药物分类"
     },
     {
       "title": "近 6 个月新登记",
-      "detail": "截至 2026-10-18，近 6 个月登记 24 项试验。",
+      "detail": "截至 2026-10-18，近 6 个月登记 47 项试验。",
       "tag": "近期登记"
     }
   ],
@@ -31,29 +31,29 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "name": "Efgartigimod (艾加莫德)",
       "highest_phase_label": "Phase 4",
       "stage_number": 4,
-      "study_count": 43,
-      "status_summary": "招募 20 · 进行 5 · 完成 11",
+      "study_count": 44,
+      "status_summary": "招募 20 · 进行 5 · 完成 12",
       "sponsors": [
         "Affiliated Hospital of Zunyi Medical University",
         "BioSensics",
         "Centre Hospitalier Universitaire de Nice"
       ],
       "sources": {
-        "ChiCTR": 11,
+        "ChiCTR": 12,
         "ChinaDrugTrials": 5,
         "ClinicalTrials.gov": 27
       },
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2200066880",
-        "title": "Efgartigimod Alfa Injection临床特许应用及前瞻性观察性研究",
+        "title": "Clinical licensing application and a prospective, observational study of Efgartigimod Alfa Injection",
         "url": "https://www.chictr.org.cn/showproj.html?proj=183410"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2200066880",
-          "title": "Efgartigimod Alfa Injection临床特许应用及前瞻性观察性研究",
+          "title": "Clinical licensing application and a prospective, observational study of Efgartigimod Alfa Injection",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "Phase 4",
@@ -66,7 +66,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2400084937",
-          "title": "研究者撤销            艾加莫德续贯奥法妥木单抗治疗全身型重症肌无力",
+          "title": "Sequential Efgartigimod and Ofatumumab Therapy for Generalized Myasthenia Gravis",
           "status_label": "已完成",
           "status_class": "completed",
           "phase_label": "Phase 2",
@@ -79,7 +79,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2400087638",
-          "title": "艾加莫德在MG患者胸腺切除术围手术期中应用的有效性和安全性",
+          "title": "The effectiveness and safety of using Vyvgart in the perioperative period of MG thymectomy patients",
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "Phase 4",
@@ -92,7 +92,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2500095459",
-          "title": "艾加莫德序贯泰它西普治疗全身型重症肌无力（gMG）的疗效、安全性及PKPD研究：一项开放标签、随机对照研究",
+          "title": "Efficacy, Safety, and PKPD Study of Sequentially Efgartigimod with Telitacicept Combination in Generalized Myasthenia Gravis (gMG): An Open-Label, Randomized Controlled Trial",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -105,7 +105,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2500100194",
-          "title": "艾加莫德联合泰它西普治疗MG的疗效观察",
+          "title": "Observation of the efficacy of agamod combined with tetatercept in the treatment of MG",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -118,7 +118,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2500100909",
-          "title": "艾加莫德续贯泰它西普治疗成人重症肌无力的多中心、前瞻性、观察性研究",
+          "title": "A multicenter, prospective, observational study of agamod continuation of tetanercept in the treatment of myasthenia gravis in adults",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -131,7 +131,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2500101971",
-          "title": "艾加莫德治疗成人全身型重症肌无力疗效影响因素的多中心回顾性研究",
+          "title": "A Multicenter Retrospective Study on Factors Influencing the Efficacy of Efgartigimod in the Treatment of Adult Generalized Myasthenia Gravis",
           "status_label": "已完成",
           "status_class": "completed",
           "phase_label": "未标注",
@@ -144,7 +144,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2500104662",
-          "title": "血浆置换联合艾加莫得治疗全身型重症肌无力的有效性与安全性：一项多中心、三臂、开放标签的临床研究",
+          "title": "Efgartigimod Following Plasma Exchange in the Treatment of Subjects With generalized Myasthenia Gravis: Study Protocol for a Multicenter, Three-arm, Open-Label study",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -157,7 +157,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2500111678",
-          "title": "艾加莫德α对比丙种球蛋白治疗全身型重症肌无力急性加重患者的临床疗效及安全性观察----一项前瞻性、多中心、随机对照研究",
+          "title": "Evaluating Efficacy and Safety of Efgartigimod versus IVIG in Myasthenia Gravis Exacerbation for Rapid Clinical Response",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -170,7 +170,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2600120351",
-          "title": "艾加莫德与丙种球蛋白在挽救重症肌无力危象前状态的疗效及安全性分析",
+          "title": "Efficacy and Safety Analysis of Ajamod versus Immunoglobulin G in Rescuing Patients from Myasthenia Gravis Crisis",
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "未标注",
@@ -183,7 +183,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2600123395",
-          "title": "艾加莫德在重症肌无力围术期的疗效研究：一项真实世界观察性研究",
+          "title": "Efgartigimod for myasthenia gravis in perioperative period: a real-world observational study",
           "status_label": "已完成",
           "status_class": "completed",
           "phase_label": "Phase 4",
@@ -194,16 +194,29 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=232490"
         },
         {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR2600133923",
+          "title": "A single-center, parallel-group, non-randomized controlled prospective study of efgartigimod administered at different cycles in patients with new-onset generalized myasthenia gravis (gMG)",
+          "status_label": "已完成",
+          "status_class": "completed",
+          "phase_label": "Phase 4",
+          "start_date": "2025-02-16",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "The First Hospital of China Medical University",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=327224"
+        },
+        {
           "registry": "ChinaDrugTrials",
           "registry_id": "CTR20211805",
           "title": "Efgartigimod与rHuPH20在健康受试者中混合皮下给药的I期研究",
           "status_label": "已完成",
           "status_class": "completed",
-          "phase_label": "未标注",
+          "phase_label": "Phase 1",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "argenx BV/ 再鼎医药（上海）有限公司/ Patheon Italia S.p.A.",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20211805"
         },
         {
@@ -212,11 +225,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "title": "Efgartigimod在健康受试者中静脉输注的I期研究",
           "status_label": "已完成",
           "status_class": "completed",
-          "phase_label": "未标注",
+          "phase_label": "Phase 1",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "argenx BV/ 再鼎医药（上海）有限公司/ Vetter Pharma-Fertigung GmbH & Co. KG",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20211952"
         },
         {
@@ -225,11 +238,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "title": "艾加莫德α注射液在中国成人全身型重症肌无力患者中的上市后4 期研究",
           "status_label": "进行中",
           "status_class": "active",
-          "phase_label": "未标注",
+          "phase_label": "Phase 4",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "argenx BV/ 再鼎医药（上海）有限公司/ Vetter Pharma-Fertigung GmbH & Co. KG/ 初级包装厂：Vetter Pharma-Fertigung GmbH & Co. KG；次级包装厂：Vetter Pharma-Fertigung GmbH & Co. KG",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20240846"
         },
         {
@@ -238,11 +251,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "title": "一项在乙酰胆碱受体抗体血清阴性的全身型重症肌无力成人受试者中评价 Efgartigimod IV 的有效性和安全性的随机、双盲、安慰剂对照、III 期、平行组设计研究",
           "status_label": "进行中",
           "status_class": "active",
-          "phase_label": "未标注",
+          "phase_label": "Phase 3",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "argenx BV/ 再鼎医药（上海）有限公司/ Vetter Pharma-Fertigung GmbH & Co. KG",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20243878"
         },
         {
@@ -251,11 +264,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "title": "评价Efgartigimod PH20 SC给药治疗眼肌型重症肌无力成人受试者的有效性和安全性",
           "status_label": "进行中",
           "status_class": "active",
-          "phase_label": "未标注",
+          "phase_label": "Phase 3",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "argenx BV/ 再鼎医药（上海）有限公司/ Vetter Pharma-Fertigung GmbH & Co. KG",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20244895"
         },
         {
@@ -616,7 +629,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         "completion": "2029-01-29"
       },
       "first_registered": "2016-11-17",
-      "latest_registered": "2026-05-19",
+      "latest_registered": "2026-10-09",
       "linked_registries": []
     },
     {
@@ -624,21 +637,22 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "name": "Rozanolixizumab (罗泽利昔珠单抗)",
       "highest_phase_label": "Phase 4",
       "stage_number": 4,
-      "study_count": 12,
-      "status_summary": "招募 6 · 进行 1 · 完成 5",
+      "study_count": 13,
+      "status_summary": "招募 7 · 进行 1 · 完成 5",
       "sponsors": [
         "Centre Hospitalier Universitaire de Nice",
-        "UCB Biopharma SRL"
+        "UCB Biopharma SRL",
+        "UCB Pharma S.A./ 优时比贸易（上海）有限公司/ Vetter Pharma-Fertigung GmbH & Co. KG/ UCB Pharma SA"
       ],
       "sources": {
-        "ChinaDrugTrials": 2,
+        "ChinaDrugTrials": 3,
         "ClinicalTrials.gov": 10
       },
       "key_trial": {
-        "registry": "ClinicalTrials.gov",
-        "registry_id": "NCT07246564",
-        "title": "Phase 4 Study Evaluating Efficacy and Safety of Rozanolixizumab in Adult Chinese Participants With Generalized Myasthenia Gravis",
-        "url": "https://clinicaltrials.gov/study/NCT07246564"
+        "registry": "ChinaDrugTrials",
+        "registry_id": "CTR20254130",
+        "title": "在中国全身型重症肌无力成人受试者中评价罗泽利昔珠单抗有效性和安全性的IV期研究",
+        "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20254130"
       },
       "trials": [
         {
@@ -647,25 +661,38 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "title": "在中国全身型重症肌无力成人受试者中评价罗泽利昔珠单抗有效性和安全性的IV期研究",
           "status_label": "招募中",
           "status_class": "recruiting",
-          "phase_label": "未标注",
+          "phase_label": "Phase 4",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "UCB, Inc./ 优时比贸易（上海）有限公司/ Vetter Pharma-Fertigung GmbH & Co. KG/ UCB Pharma SA",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20254130"
         },
         {
           "registry": "ChinaDrugTrials",
           "registry_id": "CTR20262520",
           "title": "一项在oMG研究参与者中评价罗泽利昔珠单抗有效性和安全性的III期研究",
-          "status_label": "尚未招募",
+          "status_label": "招募中",
           "status_class": "recruiting",
-          "phase_label": "未标注",
+          "phase_label": "Phase 3",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "UCB Pharma S.A./ 优时比贸易（上海）有限公司/ Vetter Pharma-Fertigung GmbH & Co. KG/ UCB Pharma SA",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20262520"
+        },
+        {
+          "registry": "ChinaDrugTrials",
+          "registry_id": "CTR20262521",
+          "title": "一项在oMG研究参与者中评价罗泽利昔珠单抗的长期安全性和有效性的开放标签、扩展研究",
+          "status_label": "尚未招募",
+          "status_class": "recruiting",
+          "phase_label": "Phase 3",
+          "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "UCB Pharma S.A./ 优时比贸易（上海）有限公司/ Vetter Pharma-Fertigung GmbH & Co. KG/ UCB Pharma SA",
+          "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20262521"
         },
         {
           "registry": "ClinicalTrials.gov",
@@ -804,50 +831,50 @@ window.MG_CLINICAL_TRIALS_DATA = {
         "completion": "2031-01-23"
       },
       "first_registered": "2019-06-03",
-      "latest_registered": "2026-05-06",
+      "latest_registered": "2026-08-21",
       "linked_registries": []
     },
     {
       "drug_class": "FcRn 拮抗剂",
-      "name": "Methylprednisolone (甲泼尼龙)",
+      "name": "5 treatment cycles.",
       "highest_phase_label": "Phase 4",
       "stage_number": 4,
       "study_count": 1,
-      "status_summary": "招募 1 · 进行 0 · 完成 0",
+      "status_summary": "招募 0 · 进行 0 · 完成 1",
       "sponsors": [
-        "Shijiazhuang People’s Hospita"
+        "The First Hospital of China Medical University"
       ],
       "sources": {
         "ChiCTR": 1
       },
       "key_trial": {
         "registry": "ChiCTR",
-        "registry_id": "ChiCTR2400080921",
-        "title": "艾加莫德在成人MG患者中应用的有效性和安全性",
-        "url": "https://www.chictr.org.cn/showproj.html?proj=215289"
+        "registry_id": "ChiCTR2600133923",
+        "title": "A single-center, parallel-group, non-randomized controlled prospective study of efgartigimod administered at different cycles in patients with new-onset generalized myasthenia gravis (gMG)",
+        "url": "https://www.chictr.org.cn/showproj.html?proj=327224"
       },
       "trials": [
         {
           "registry": "ChiCTR",
-          "registry_id": "ChiCTR2400080921",
-          "title": "艾加莫德在成人MG患者中应用的有效性和安全性",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "registry_id": "ChiCTR2600133923",
+          "title": "A single-center, parallel-group, non-randomized controlled prospective study of efgartigimod administered at different cycles in patients with new-onset generalized myasthenia gravis (gMG)",
+          "status_label": "已完成",
+          "status_class": "completed",
           "phase_label": "Phase 4",
-          "start_date": "2023-11-21",
+          "start_date": "2025-02-16",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "Shijiazhuang People’s Hospita",
-          "url": "https://www.chictr.org.cn/showproj.html?proj=215289"
+          "sponsor": "The First Hospital of China Medical University",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=327224"
         }
       ],
       "timeline": {
-        "start": "2023-11-21",
+        "start": "2025-02-16",
         "readout": "",
         "completion": ""
       },
-      "first_registered": "2024-02-18",
-      "latest_registered": "2024-02-18",
+      "first_registered": "2026-10-09",
+      "latest_registered": "2026-10-09",
       "linked_registries": []
     },
     {
@@ -855,29 +882,29 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "name": "Batoclimab (巴托利单抗)",
       "highest_phase_label": "Phase 3",
       "stage_number": 3,
-      "study_count": 11,
-      "status_summary": "招募 0 · 进行 0 · 完成 6 · 终止 2",
+      "study_count": 12,
+      "status_summary": "招募 0 · 进行 0 · 完成 7 · 终止 2",
       "sponsors": [
         "Harbour BioMed (Guangzhou) Co. Ltd.",
-        "Huashan Hospital Affiliated to Fudan University",
-        "Immunovant Sciences GmbH"
+        "Harbour BioMed Therapeutics Limited/ 和铂医药（苏州）有限公司/ Samsung Biologics Co., Ltd.",
+        "Huashan Hospital Affiliated to Fudan University"
       ],
       "sources": {
         "ChiCTR": 3,
-        "ChinaDrugTrials": 2,
+        "ChinaDrugTrials": 3,
         "ClinicalTrials.gov": 6
       },
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2100050903",
-        "title": "HBM9161皮下注射治疗全身型重症肌无力患者的有效性、安全性的多中心、随机、双盲、安慰剂对照、2/3 期运营无缝、成组序贯设计研究",
+        "title": "Multicenter, randomized, double-blind, placebo-controlled, phase 2/3 operational seamless, group sequential design study of the efficacy and safety of HBM9161 subcutaneous injection in patients with generalized myasthenia gravis",
         "url": "https://www.chictr.org.cn/showproj.html?proj=132173"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2000033560",
-          "title": "一项评价HBM9161 （HL161）皮下注射治疗全身型重症肌无力患者的有效性、安全性、药效学和药物代谢动力学的多中心、随机、双盲、安慰剂对照、平行研究",
+          "title": "A Multicenter, Randomized, Double-Blind, Placebo-Controlled Study to Evaluate the Efficacy, Safety and Pharmacodynamic and Pharmacokinetic of HBM9161 (HL161) Subcutaneous Injection in Patients With Generalized Myasthenia Gravis",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "Phase 2",
@@ -890,7 +917,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2100050903",
-          "title": "HBM9161皮下注射治疗全身型重症肌无力患者的有效性、安全性的多中心、随机、双盲、安慰剂对照、2/3 期运营无缝、成组序贯设计研究",
+          "title": "Multicenter, randomized, double-blind, placebo-controlled, phase 2/3 operational seamless, group sequential design study of the efficacy and safety of HBM9161 subcutaneous injection in patients with generalized myasthenia gravis",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "Phase 3",
@@ -903,7 +930,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2200059452",
-          "title": "一项评价经HBM9161 (HL161)皮下注射治疗全身型重症肌无力患者的治疗期间安全性的开放标签长期扩展研究",
+          "title": "A long-term open-label extension study to evaluate the safety of HBM9161 (HL161) subcutaneous injection in patients with generalized myasthenia gravis",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "Phase 3",
@@ -919,12 +946,25 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "title": "HBM9161注射液对全身型重症肌无力患者的研究",
           "status_label": "已完成",
           "status_class": "completed",
-          "phase_label": "未标注",
+          "phase_label": "Phase 2",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "和铂医药(广州)有限公司",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20201048"
+        },
+        {
+          "registry": "ChinaDrugTrials",
+          "registry_id": "CTR20212099",
+          "title": "HBM9161皮下注射治疗全身型重症肌无力患者的有效性、安全性的多中心、随机、双盲、安慰剂对照、2/3 期运营无缝、成组序贯设计研究",
+          "status_label": "已完成",
+          "status_class": "completed",
+          "phase_label": "Phase 3",
+          "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "和铂医药(广州)有限公司",
+          "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20212099"
         },
         {
           "registry": "ChinaDrugTrials",
@@ -932,11 +972,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "title": "经HBM9161 (HL161)皮下注射治疗全身型重症肌无力患者的治疗期间安全性的开放标签长期扩展研究",
           "status_label": "已完成",
           "status_class": "completed",
-          "phase_label": "未标注",
+          "phase_label": "Phase 3",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "Harbour BioMed Therapeutics Limited/ 和铂医药（苏州）有限公司/ Samsung Biologics Co., Ltd.",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20220701"
         },
         {
@@ -1025,13 +1065,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
       },
       "first_registered": "2018-12-11",
       "latest_registered": "2022-06-03",
-      "linked_registries": [
-        {
-          "registry": "ChinaDrugTrials",
-          "registry_id": "CTR20212099",
-          "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20212099"
-        }
-      ]
+      "linked_registries": []
     },
     {
       "drug_class": "FcRn 拮抗剂",
@@ -1041,17 +1075,19 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "study_count": 5,
       "status_summary": "招募 3 · 进行 1 · 完成 1",
       "sponsors": [
-        "Janssen Research & Development, LLC"
+        "Janssen Research & Development, LLC",
+        "Janssen Research & Development, LLC/ 强生（中国）投资有限公司/ Vetter Pharma-Fertigung GmbH & Co. KG/ Janssen R&D, a Division of Janssen Pharmaceutica, NV；Catalent CTS, LLC；Catalent Pharma Solutions, LLC；Catalent Germany Schorndorf GmbH；Fisher Clinical Services UK；Fisher Clinical Services；Fisher Clinical Services (Allentown)",
+        "Janssen Research & Development, LLC/ 强生（中国）投资有限公司/ Vetter Pharma-Fertigung GmbH & Co. KG/ Janssen R&D, a Division of Janssen Pharmaceutica, NV；Catalent CTS, LLC；Catalent Pharma Solutions, LLC；Catalent Germany Schorndorf GmbH；Fisher Clinical Services UK；Fisher Clinical Services；Fisher Clinical Services (Allentown)/ Janssen Pharmaceutica NV, Division of Janssen Research and Development；Fisher Clinical Services, Inc.；Fisher Clinical Services UK Limited；Fisher Clinical Services GmbH"
       ],
       "sources": {
         "ChinaDrugTrials": 2,
         "ClinicalTrials.gov": 3
       },
       "key_trial": {
-        "registry": "ClinicalTrials.gov",
-        "registry_id": "NCT04951622",
-        "title": "A Study of Nipocalimab Administered to Adults With Generalized Myasthenia Gravis",
-        "url": "https://clinicaltrials.gov/study/NCT04951622"
+        "registry": "ChinaDrugTrials",
+        "registry_id": "CTR20212693",
+        "title": "Nipocalimab IV 输注给药治疗全身型重症肌无力成人受试者的疗效和安全性研究",
+        "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20212693"
       },
       "trials": [
         {
@@ -1060,11 +1096,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "title": "Nipocalimab IV 输注给药治疗全身型重症肌无力成人受试者的疗效和安全性研究",
           "status_label": "进行中",
           "status_class": "active",
-          "phase_label": "未标注",
+          "phase_label": "Phase 3",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "Janssen Research & Development, LLC/ 强生（中国）投资有限公司/ Vetter Pharma-Fertigung GmbH & Co. KG/ Janssen R&D, a Division of Janssen Pharmaceutica, NV；Catalent CTS, LLC；Catalent Pharma Solutions, LLC；Catalent Germany Schorndorf GmbH；Fisher Clinical Services UK；Fisher Clinical Services；Fisher Clinical Services (Allentown)/ Janssen Pharmaceutica NV, Division of Janssen Research and Development；Fisher Clinical Services, Inc.；Fisher Clinical Services UK Limited；Fisher Clinical Services GmbH",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20212693"
         },
         {
@@ -1073,11 +1109,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "title": "评价JNJ-80202135在中国健康成人中的药代动力学、安全性和耐受性研究",
           "status_label": "已完成",
           "status_class": "completed",
-          "phase_label": "未标注",
+          "phase_label": "Phase 1",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "Janssen Research & Development, LLC/ 强生（中国）投资有限公司/ Vetter Pharma-Fertigung GmbH & Co. KG/ Janssen R&D, a Division of Janssen Pharmaceutica, NV；Catalent CTS, LLC；Catalent Pharma Solutions, LLC；Catalent Germany Schorndorf GmbH；Fisher Clinical Services UK；Fisher Clinical Services；Fisher Clinical Services (Allentown)",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20213446"
         },
         {
@@ -1279,9 +1315,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "study_count": 11,
       "status_summary": "招募 7 · 进行 3 · 完成 1",
       "sponsors": [
+        "Alexion Europe SAS/ 阿斯利康全球研发（中国）有限公司/ Alexion Pharma International Operations Limited, Alexion Athlone Manufacturing Facility (AAMF)",
         "Alexion Pharmaceuticals, Inc.",
-        "AstraZeneca",
-        "Centre Hospitalier Universitaire de Nice"
+        "AstraZeneca"
       ],
       "sources": {
         "ChinaDrugTrials": 2,
@@ -1300,24 +1336,24 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "title": "ALXN1720治疗全身型重症肌无力成人患者",
           "status_label": "进行中",
           "status_class": "active",
-          "phase_label": "未标注",
+          "phase_label": "Phase 3",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "不适用/ 阿斯利康全球研发（中国）有限公司",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20232711"
         },
         {
           "registry": "ChinaDrugTrials",
           "registry_id": "CTR20262539",
           "title": "瑞利珠单抗在中国成人全身型重症肌无力患者中的有效性和安全性研究",
-          "status_label": "尚未招募",
+          "status_label": "招募中",
           "status_class": "recruiting",
-          "phase_label": "未标注",
+          "phase_label": "Phase 3",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "Alexion Europe SAS/ 阿斯利康全球研发（中国）有限公司/ Alexion Pharma International Operations Limited, Alexion Athlone Manufacturing Facility (AAMF)",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20262539"
         },
         {
@@ -1444,145 +1480,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         "completion": "2029-12-31"
       },
       "first_registered": "2019-04-18",
-      "latest_registered": "2026-05-19",
-      "linked_registries": []
-    },
-    {
-      "drug_class": "补体抑制剂",
-      "name": "Eculizumab (依库珠单抗)",
-      "highest_phase_label": "Phase 4",
-      "stage_number": 4,
-      "study_count": 8,
-      "status_summary": "招募 1 · 进行 0 · 完成 5 · 终止 1",
-      "sponsors": [
-        "Alexion Pharmaceuticals, Inc.",
-        "Shijiazhuang People’s Hospital",
-        "The Affiliated Hospital of Xuzhou Medical University"
-      ],
-      "sources": {
-        "ChiCTR": 2,
-        "ChinaDrugTrials": 1,
-        "ClinicalTrials.gov": 5
-      },
-      "key_trial": {
-        "registry": "ChiCTR",
-        "registry_id": "ChiCTR2600128850",
-        "title": "依库珠单抗治疗重症肌无力的真实世界研究",
-        "url": "https://www.chictr.org.cn/showproj.html?proj=334069"
-      },
-      "trials": [
-        {
-          "registry": "ChiCTR",
-          "registry_id": "ChiCTR2500098555",
-          "title": "依库珠单抗治疗成人难治性重症肌无力不同亚组的安全性及有效性研究",
-          "status_label": "招募中",
-          "status_class": "recruiting",
-          "phase_label": "未标注",
-          "start_date": "2024-08-01",
-          "readout_date": "",
-          "completion_date": "",
-          "sponsor": "Shijiazhuang People’s Hospital",
-          "url": "https://www.chictr.org.cn/showproj.html?proj=239613"
-        },
-        {
-          "registry": "ChiCTR",
-          "registry_id": "ChiCTR2600128850",
-          "title": "依库珠单抗治疗重症肌无力的真实世界研究",
-          "status_label": "Pending",
-          "status_class": "other",
-          "phase_label": "Phase 4",
-          "start_date": "2026-07-31",
-          "readout_date": "",
-          "completion_date": "",
-          "sponsor": "The Affiliated Hospital of Xuzhou Medical University",
-          "url": "https://www.chictr.org.cn/showproj.html?proj=334069"
-        },
-        {
-          "registry": "ChinaDrugTrials",
-          "registry_id": "CTR20244003",
-          "title": "依库珠单抗治疗中国难治性全身型重症肌无力（gMG）受试者的研究",
-          "status_label": "已完成",
-          "status_class": "completed",
-          "phase_label": "未标注",
-          "start_date": "",
-          "readout_date": "",
-          "completion_date": "",
-          "sponsor": "",
-          "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20244003"
-        },
-        {
-          "registry": "ClinicalTrials.gov",
-          "registry_id": "NCT00727194",
-          "title": "Safety and Efficacy Study of Eculizumab in Patients With Refractory Generalized Myasthenia Gravis",
-          "status_label": "已终止",
-          "status_class": "terminated",
-          "phase_label": "Phase 2",
-          "start_date": "",
-          "readout_date": "",
-          "completion_date": "",
-          "sponsor": "Alexion Pharmaceuticals, Inc.",
-          "url": "https://clinicaltrials.gov/study/NCT00727194"
-        },
-        {
-          "registry": "ClinicalTrials.gov",
-          "registry_id": "NCT01997229",
-          "title": "Safety and Efficacy of Eculizumab in Refractory Generalized Myasthenia Gravis (REGAIN Study)",
-          "status_label": "已完成",
-          "status_class": "completed",
-          "phase_label": "Phase 3",
-          "start_date": "",
-          "readout_date": "",
-          "completion_date": "",
-          "sponsor": "Alexion Pharmaceuticals, Inc.",
-          "url": "https://clinicaltrials.gov/study/NCT01997229"
-        },
-        {
-          "registry": "ClinicalTrials.gov",
-          "registry_id": "NCT02301624",
-          "title": "Extension Study of ECU-MG-301 to Evaluate Safety and Efficacy of Eculizumab in Refractory Generalized Myasthenia Gravis",
-          "status_label": "已完成",
-          "status_class": "completed",
-          "phase_label": "Phase 3",
-          "start_date": "2014-11-12",
-          "readout_date": "2019-01-15",
-          "completion_date": "2019-01-15",
-          "sponsor": "Alexion Pharmaceuticals, Inc.",
-          "url": "https://clinicaltrials.gov/study/NCT02301624"
-        },
-        {
-          "registry": "ClinicalTrials.gov",
-          "registry_id": "NCT03759366",
-          "title": "A Phase 3 Open-Label Study of Eculizumab in Pediatric Participants With Refractory Generalized Myasthenia Gravis (gMG)",
-          "status_label": "已完成",
-          "status_class": "completed",
-          "phase_label": "Phase 3",
-          "start_date": "2018-12-28",
-          "readout_date": "2022-01-06",
-          "completion_date": "2023-11-06",
-          "sponsor": "Alexion Pharmaceuticals, Inc.",
-          "url": "https://clinicaltrials.gov/study/NCT03759366"
-        },
-        {
-          "registry": "ClinicalTrials.gov",
-          "registry_id": "NCT06764160",
-          "title": "Efficacy, Safety, Pharmacokinetics, Pharmacodynamics, and Immunogenicity of Eculizumab in Chinese Adults With gMG",
-          "status_label": "已完成",
-          "status_class": "completed",
-          "phase_label": "Phase 3",
-          "start_date": "2025-01-06",
-          "readout_date": "2025-12-29",
-          "completion_date": "2025-12-29",
-          "sponsor": "Alexion Pharmaceuticals, Inc.",
-          "url": "https://clinicaltrials.gov/study/NCT06764160"
-        }
-      ],
-      "timeline": {
-        "start": "2014-11-12",
-        "readout": "2025-12-29",
-        "completion": "2025-12-29"
-      },
-      "first_registered": "2008-08-01",
-      "latest_registered": "2026-07-27",
+      "latest_registered": "2026-07-07",
       "linked_registries": []
     },
     {
@@ -1779,23 +1677,162 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "drug_class": "补体抑制剂",
+      "name": "Eculizumab (依库珠单抗)",
+      "highest_phase_label": "Phase 3",
+      "stage_number": 3,
+      "study_count": 8,
+      "status_summary": "招募 1 · 进行 0 · 完成 6 · 终止 1",
+      "sponsors": [
+        "Alexion Europe SAS/ 阿斯利康投资（中国）有限公司/ Alexion Athlone Manufacturing Facility (AAMF)/ Alexion Pharma International Operation Unlimited Company (APIOUC)/ Alexion Pharma International Operations Unlimited Company (APIOUC)",
+        "Alexion Pharmaceuticals, Inc.",
+        "Shijiazhuang People’s Hospital"
+      ],
+      "sources": {
+        "ChiCTR": 2,
+        "ChinaDrugTrials": 1,
+        "ClinicalTrials.gov": 5
+      },
+      "key_trial": {
+        "registry": "ChinaDrugTrials",
+        "registry_id": "CTR20244003",
+        "title": "依库珠单抗治疗中国难治性全身型重症肌无力（gMG）受试者的研究",
+        "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20244003"
+      },
+      "trials": [
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR2500098555",
+          "title": "Study on the Safety and Efficacy of Eculizumab in Different Subgroups of Adults with Refractory Myasthenia Gravis",
+          "status_label": "招募中",
+          "status_class": "recruiting",
+          "phase_label": "未标注",
+          "start_date": "2024-08-01",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "Shijiazhuang People’s Hospital",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=239613"
+        },
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR2600134352",
+          "title": "One‑Year versus Three‑Month Eculizumab Therapy in Refractory Myasthenia Gravis: Effectiveness Comparison and Association with proteomics Profiles",
+          "status_label": "已完成",
+          "status_class": "completed",
+          "phase_label": "未标注",
+          "start_date": "2026-06-06",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "The First Hospital of China Medical University",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=342153"
+        },
+        {
+          "registry": "ChinaDrugTrials",
+          "registry_id": "CTR20244003",
+          "title": "依库珠单抗治疗中国难治性全身型重症肌无力（gMG）受试者的研究",
+          "status_label": "已完成",
+          "status_class": "completed",
+          "phase_label": "Phase 3",
+          "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "Alexion Europe SAS/ 阿斯利康投资（中国）有限公司/ Alexion Athlone Manufacturing Facility (AAMF)/ Alexion Pharma International Operation Unlimited Company (APIOUC)/ Alexion Pharma International Operations Unlimited Company (APIOUC)",
+          "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20244003"
+        },
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT00727194",
+          "title": "Safety and Efficacy Study of Eculizumab in Patients With Refractory Generalized Myasthenia Gravis",
+          "status_label": "已终止",
+          "status_class": "terminated",
+          "phase_label": "Phase 2",
+          "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "Alexion Pharmaceuticals, Inc.",
+          "url": "https://clinicaltrials.gov/study/NCT00727194"
+        },
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT01997229",
+          "title": "Safety and Efficacy of Eculizumab in Refractory Generalized Myasthenia Gravis (REGAIN Study)",
+          "status_label": "已完成",
+          "status_class": "completed",
+          "phase_label": "Phase 3",
+          "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "Alexion Pharmaceuticals, Inc.",
+          "url": "https://clinicaltrials.gov/study/NCT01997229"
+        },
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT02301624",
+          "title": "Extension Study of ECU-MG-301 to Evaluate Safety and Efficacy of Eculizumab in Refractory Generalized Myasthenia Gravis",
+          "status_label": "已完成",
+          "status_class": "completed",
+          "phase_label": "Phase 3",
+          "start_date": "2014-11-12",
+          "readout_date": "2019-01-15",
+          "completion_date": "2019-01-15",
+          "sponsor": "Alexion Pharmaceuticals, Inc.",
+          "url": "https://clinicaltrials.gov/study/NCT02301624"
+        },
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT03759366",
+          "title": "A Phase 3 Open-Label Study of Eculizumab in Pediatric Participants With Refractory Generalized Myasthenia Gravis (gMG)",
+          "status_label": "已完成",
+          "status_class": "completed",
+          "phase_label": "Phase 3",
+          "start_date": "2018-12-28",
+          "readout_date": "2022-01-06",
+          "completion_date": "2023-11-06",
+          "sponsor": "Alexion Pharmaceuticals, Inc.",
+          "url": "https://clinicaltrials.gov/study/NCT03759366"
+        },
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT06764160",
+          "title": "Efficacy, Safety, Pharmacokinetics, Pharmacodynamics, and Immunogenicity of Eculizumab in Chinese Adults With gMG",
+          "status_label": "已完成",
+          "status_class": "completed",
+          "phase_label": "Phase 3",
+          "start_date": "2025-01-06",
+          "readout_date": "2025-12-29",
+          "completion_date": "2025-12-29",
+          "sponsor": "Alexion Pharmaceuticals, Inc.",
+          "url": "https://clinicaltrials.gov/study/NCT06764160"
+        }
+      ],
+      "timeline": {
+        "start": "2014-11-12",
+        "readout": "2025-12-29",
+        "completion": "2025-12-29"
+      },
+      "first_registered": "2008-08-01",
+      "latest_registered": "2026-10-14",
+      "linked_registries": []
+    },
+    {
+      "drug_class": "补体抑制剂",
       "name": "Cemdisiran",
       "highest_phase_label": "Phase 3",
       "stage_number": 3,
       "study_count": 2,
       "status_summary": "招募 0 · 进行 2 · 完成 0",
       "sponsors": [
-        "Regeneron Pharmaceuticals"
+        "Regeneron Pharmaceuticals",
+        "Regeneron Pharmaceuticals, Inc./ 再鼎医药（上海）有限公司/ Curia (Scotland) Limited"
       ],
       "sources": {
         "ChinaDrugTrials": 1,
         "ClinicalTrials.gov": 1
       },
       "key_trial": {
-        "registry": "ClinicalTrials.gov",
-        "registry_id": "NCT05070858",
-        "title": "A Study to Test How Safe Pozelimab and Cemdisiran Combination Therapy and Cemdisiran Alone Are and How Well They Work in Adult Patients With Generalized Myasthenia Gravis",
-        "url": "https://clinicaltrials.gov/study/NCT05070858"
+        "registry": "ChinaDrugTrials",
+        "registry_id": "CTR20241295",
+        "title": "一项旨在全身型重症肌无力患者中评价Pozelimab和Cemdisiran联合治疗以及Cemdisiran单药治疗的安全性和有效性的研究。",
+        "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20241295"
       },
       "trials": [
         {
@@ -1804,11 +1841,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "title": "一项旨在全身型重症肌无力患者中评价Pozelimab和Cemdisiran联合治疗以及Cemdisiran单药治疗的安全性和有效性的研究。",
           "status_label": "进行中",
           "status_class": "active",
-          "phase_label": "未标注",
+          "phase_label": "Phase 3",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "Regeneron Pharmaceuticals, Inc./ 再鼎医药（上海）有限公司/ Curia (Scotland) Limited",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20241295"
         },
         {
@@ -1831,7 +1868,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         "completion": "2028-11-11"
       },
       "first_registered": "2021-10-07",
-      "latest_registered": "2021-10-07",
+      "latest_registered": "2024-04-23",
       "linked_registries": [
         {
           "registry": "ChinaDrugTrials",
@@ -1888,7 +1925,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "name": "Telitacicept (泰它西普)",
       "highest_phase_label": "Phase 4",
       "stage_number": 4,
-      "study_count": 14,
+      "study_count": 15,
       "status_summary": "招募 6 · 进行 1 · 完成 2",
       "sponsors": [
         "First Affiliated Hospital of Wenzhou Medical University",
@@ -1896,21 +1933,21 @@ window.MG_CLINICAL_TRIALS_DATA = {
         "RemeGen Co., Ltd."
       ],
       "sources": {
-        "ChiCTR": 5,
+        "ChiCTR": 6,
         "ChinaDrugTrials": 3,
         "ClinicalTrials.gov": 6
       },
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2500109279",
-        "title": "注射用泰它西普治疗抗乙酰胆碱受体抗体阳性的全身型重症肌无力的疗效和安全性研究",
+        "title": "A Study on the Efficacy and Safety of Telitacicept for Injection in the Treatment of Generalized Myasthenia Gravis with Positive Anti-Acetylcholine Receptor Antibodies",
         "url": "https://www.chictr.org.cn/showproj.html?proj=288015"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2300075401",
-          "title": "探索泰它西普治疗全身型重症肌无力的疗效观察及生物标志物的真实世界研究",
+          "title": "Exploring the efficacy and biomarkers in the treatment of myasthenia gravis with Telitacicept",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -1923,7 +1960,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2500095459",
-          "title": "艾加莫德序贯泰它西普治疗全身型重症肌无力（gMG）的疗效、安全性及PKPD研究：一项开放标签、随机对照研究",
+          "title": "Efficacy, Safety, and PKPD Study of Sequentially Efgartigimod with Telitacicept Combination in Generalized Myasthenia Gravis (gMG): An Open-Label, Randomized Controlled Trial",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -1936,7 +1973,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2500109279",
-          "title": "注射用泰它西普治疗抗乙酰胆碱受体抗体阳性的全身型重症肌无力的疗效和安全性研究",
+          "title": "A Study on the Efficacy and Safety of Telitacicept for Injection in the Treatment of Generalized Myasthenia Gravis with Positive Anti-Acetylcholine Receptor Antibodies",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "Phase 4",
@@ -1949,7 +1986,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2600124099",
-          "title": "评价泰它西普治疗儿童重症肌无力有效性与安全性的多中心、非随机对照研究",
+          "title": "A Multicenter, Non-randomized Controlled Study to Evaluate the Efficacy and Safety of Telitacicept in the Treatment of Juvenile Myasthenia Gravis",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -1962,7 +1999,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2600127659",
-          "title": "泰它西普治疗新发全身型重症肌无力的有效性和安全性:一项多中心、随机、双盲、安慰剂对照的临床试验",
+          "title": "Efficacy and Safety of Telitacicept in New-Onset Generalized Myasthenia Gravis: A Multicenter, Randomized, Double-Blind, Placebo-Controlled Clinical Trial",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -1973,16 +2010,29 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=329703"
         },
         {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR2600132234",
+          "title": "The efficacy of telitacicept in the treatment of generalized myasthenia gravis and its immune-serological response characteristics: A prospective, multicenter real-world study",
+          "status_label": "Pending",
+          "status_class": "other",
+          "phase_label": "未标注",
+          "start_date": "2026-09-15",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "The Affiliated Hospital of Xuzhou Medical University",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=339095"
+        },
+        {
           "registry": "ChinaDrugTrials",
           "registry_id": "CTR20230297",
           "title": "泰爱治疗全身型重症肌无力患者的Ⅲ期临床试验",
           "status_label": "已完成",
           "status_class": "completed",
-          "phase_label": "未标注",
+          "phase_label": "Phase 3",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "荣昌生物制药（烟台）有限公司",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20230297"
         },
         {
@@ -1991,11 +2041,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "title": "泰它西普治疗眼肌型重症肌无力患者的Ⅲ期临床试验",
           "status_label": "招募中",
           "status_class": "recruiting",
-          "phase_label": "未标注",
+          "phase_label": "Phase 3",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "荣昌生物制药（烟台）有限公司",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20255007"
         },
         {
@@ -2004,11 +2054,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "title": "一项在全身型重症肌无力患者中评价泰它西普疗效和安全性的III期、随机、双盲、安慰剂对照研究（含开放标签扩展期）",
           "status_label": "招募中",
           "status_class": "recruiting",
-          "phase_label": "未标注",
+          "phase_label": "Phase 3",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "Vor Biopharma Inc./ 荣昌生物制药（烟台）股份有限公司/ Patheon Italia S.p.A./ Fisher Clinical Services GmbH",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20262341"
         },
         {
@@ -2095,8 +2145,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
         "readout": "2026-12-31",
         "completion": "2027-02-28"
       },
-      "first_registered": "2023-02-21",
-      "latest_registered": "2026-07-04",
+      "first_registered": "2023-02-20",
+      "latest_registered": "2026-09-10",
       "linked_registries": [
         {
           "registry": "ChinaDrugTrials",
@@ -2131,7 +2181,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2200058984",
-          "title": "基于群体药动/药效模型的重症肌无力患者利妥昔单抗的量效关系及不同剂量的治疗差异研究",
+          "title": "Study on the dose-effect relationship of rituximab in patients with myasthenia gravis and the treatment differences of different doses based on population pharmacokinetic/pharmacodynamic model",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -2144,7 +2194,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2400084422",
-          "title": "研究者撤销        奥法妥木单抗与利妥昔单抗治疗难治性重症肌无力的疗效和安全性研究",
+          "title": "A Study on the Efficacy and Safety of Ocrelizumab and Rituximab in the Treatment of Refractory Myasthenia Gravis",
           "status_label": "已完成",
           "status_class": "completed",
           "phase_label": "Phase 2",
@@ -2276,17 +2326,18 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "study_count": 3,
       "status_summary": "招募 1 · 进行 2 · 完成 0",
       "sponsors": [
-        "Amgen"
+        "Amgen",
+        "Viela Bio, Inc./ MedImmune Pharma, BV/ 杭州泰格医药科技股份有限公司"
       ],
       "sources": {
         "ChinaDrugTrials": 1,
         "ClinicalTrials.gov": 2
       },
       "key_trial": {
-        "registry": "ClinicalTrials.gov",
-        "registry_id": "NCT04524273",
-        "title": "Myasthenia Gravis Inebilizumab Trial",
-        "url": "https://clinicaltrials.gov/study/NCT04524273"
+        "registry": "ChinaDrugTrials",
+        "registry_id": "CTR20210474",
+        "title": "一项在成年重症肌无力患者中评价INEBILIZUMAB疗效和安全性的随机、双盲、多中心、安慰剂对照、Ⅲ期研究（含一个开放标签期）",
+        "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20210474"
       },
       "trials": [
         {
@@ -2295,11 +2346,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "title": "一项在成年重症肌无力患者中评价INEBILIZUMAB疗效和安全性的随机、双盲、多中心、安慰剂对照、Ⅲ期研究（含一个开放标签期）",
           "status_label": "进行中",
           "status_class": "active",
-          "phase_label": "未标注",
+          "phase_label": "Phase 3",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "Viela Bio, Inc./ MedImmune Pharma, BV/ 杭州泰格医药科技股份有限公司",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20210474"
         },
         {
@@ -2347,7 +2398,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "status_summary": "招募 2 · 进行 0 · 完成 0",
       "sponsors": [
         "Candid Therapeutics",
-        "Huashan Hospital, Fudan University"
+        "Huashan Hospital, Fudan University",
+        "上海坦蒂生物医药科技有限公司"
       ],
       "sources": {
         "ChiCTR": 1,
@@ -2357,14 +2409,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2500106725",
-        "title": "评价Cizutamig在全身型重症肌无力（gMG）患者的安全性、耐受性、药代动力学、药效学、免疫原性和初步临床疗效的多中心、开放标签的1b 期临床研究",
+        "title": "A Phase 1b, Open-Label, Multicenter Study Evaluating the Safety, Tolerability, Pharmacokinetics, Pharmacodynamics, Immunogenicity, and Preliminary Clinical Activity of Cizutamig in Patients with Generalized Myasthenia Gravis (gMG)",
         "url": "https://www.chictr.org.cn/showproj.html?proj=281385"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2500106725",
-          "title": "评价Cizutamig在全身型重症肌无力（gMG）患者的安全性、耐受性、药代动力学、药效学、免疫原性和初步临床疗效的多中心、开放标签的1b 期临床研究",
+          "title": "A Phase 1b, Open-Label, Multicenter Study Evaluating the Safety, Tolerability, Pharmacokinetics, Pharmacodynamics, Immunogenicity, and Preliminary Clinical Activity of Cizutamig in Patients with Generalized Myasthenia Gravis (gMG)",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "Phase 1",
@@ -2380,11 +2432,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "title": "Cizutamig在全身型重症肌无力（gMG）疾病的临床研究",
           "status_label": "招募中",
           "status_class": "recruiting",
-          "phase_label": "未标注",
+          "phase_label": "Phase 1",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "上海坦蒂生物医药科技有限公司",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20252892"
         },
         {
@@ -2627,6 +2679,92 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "drug_class": "B细胞/抗CD19/CD20",
+      "name": "SENL103 (CAR-T)",
+      "highest_phase_label": "Phase 1",
+      "stage_number": 1,
+      "study_count": 1,
+      "status_summary": "招募 1 · 进行 0 · 完成 0",
+      "sponsors": [
+        "河北森朗生物科技有限公司"
+      ],
+      "sources": {
+        "ChinaDrugTrials": 1
+      },
+      "key_trial": {
+        "registry": "ChinaDrugTrials",
+        "registry_id": "CTR20253934",
+        "title": "S103治疗难治性全身型重症肌无力的I期临床研究",
+        "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20253934"
+      },
+      "trials": [
+        {
+          "registry": "ChinaDrugTrials",
+          "registry_id": "CTR20253934",
+          "title": "S103治疗难治性全身型重症肌无力的I期临床研究",
+          "status_label": "尚未招募",
+          "status_class": "recruiting",
+          "phase_label": "Phase 1",
+          "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "河北森朗生物科技有限公司",
+          "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20253934"
+        }
+      ],
+      "timeline": {
+        "start": "2025-10-16",
+        "readout": "",
+        "completion": ""
+      },
+      "first_registered": "2025-10-16",
+      "latest_registered": "2025-10-16",
+      "linked_registries": []
+    },
+    {
+      "drug_class": "B细胞/抗CD19/CD20",
+      "name": "SYS6020 (BCMA CAR-T)",
+      "highest_phase_label": "Phase 1",
+      "stage_number": 1,
+      "study_count": 1,
+      "status_summary": "招募 1 · 进行 0 · 完成 0",
+      "sponsors": [
+        "石药集团中奇制药技术（石家庄）有限公司"
+      ],
+      "sources": {
+        "ChinaDrugTrials": 1
+      },
+      "key_trial": {
+        "registry": "ChinaDrugTrials",
+        "registry_id": "CTR20244175",
+        "title": "SYS6020注射液（一种针对表达BCMA抗原的B细胞和浆细胞的细胞治疗）在难治性全身型重症肌无力患者中的临床I期研究",
+        "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20244175"
+      },
+      "trials": [
+        {
+          "registry": "ChinaDrugTrials",
+          "registry_id": "CTR20244175",
+          "title": "SYS6020注射液（一种针对表达BCMA抗原的B细胞和浆细胞的细胞治疗）在难治性全身型重症肌无力患者中的临床I期研究",
+          "status_label": "招募中",
+          "status_class": "recruiting",
+          "phase_label": "Phase 1",
+          "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "石药集团中奇制药技术（石家庄）有限公司",
+          "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20244175"
+        }
+      ],
+      "timeline": {
+        "start": "2024-11-14",
+        "readout": "",
+        "completion": ""
+      },
+      "first_registered": "2024-11-14",
+      "latest_registered": "2024-11-14",
+      "linked_registries": []
+    },
+    {
+      "drug_class": "B细胞/抗CD19/CD20",
       "name": "SYS6020 injection",
       "highest_phase_label": "Phase 1",
       "stage_number": 1,
@@ -2684,14 +2822,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2500112137",
-        "title": "SENL103 自体 T 细胞注射液（S103）治疗难治性全身型重症肌无力的开放、 单臂的 I 期临床研究",
+        "title": "An open-label, single-arm Phase I clinical study of SENL103 autologous T-cell injection (S103) for the treatment of refractory generalized myasthenia gravis",
         "url": "https://www.chictr.org.cn/showproj.html?proj=293807"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2500112137",
-          "title": "SENL103 自体 T 细胞注射液（S103）治疗难治性全身型重症肌无力的开放、 单臂的 I 期临床研究",
+          "title": "An open-label, single-arm Phase I clinical study of SENL103 autologous T-cell injection (S103) for the treatment of refractory generalized myasthenia gravis",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "Phase 1",
@@ -2899,14 +3037,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2600120587",
-        "title": "CAR-T治疗难治性重症肌无力临床研究",
+        "title": "Chimeric Antigen Receptor T-Cell Immunotherapy for Refractory Myasthenia Gravis",
         "url": "https://www.chictr.org.cn/showproj.html?proj=292341"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2600120587",
-          "title": "CAR-T治疗难治性重症肌无力临床研究",
+          "title": "Chimeric Antigen Receptor T-Cell Immunotherapy for Refractory Myasthenia Gravis",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -2971,88 +3109,6 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "drug_class": "B细胞/抗CD19/CD20",
-      "name": "SENL103 (CAR-T)",
-      "highest_phase_label": "未标注",
-      "stage_number": 0,
-      "study_count": 1,
-      "status_summary": "招募 1 · 进行 0 · 完成 0",
-      "sponsors": [],
-      "sources": {
-        "ChinaDrugTrials": 1
-      },
-      "key_trial": {
-        "registry": "ChinaDrugTrials",
-        "registry_id": "CTR20253934",
-        "title": "S103治疗难治性全身型重症肌无力的I期临床研究",
-        "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20253934"
-      },
-      "trials": [
-        {
-          "registry": "ChinaDrugTrials",
-          "registry_id": "CTR20253934",
-          "title": "S103治疗难治性全身型重症肌无力的I期临床研究",
-          "status_label": "尚未招募",
-          "status_class": "recruiting",
-          "phase_label": "未标注",
-          "start_date": "",
-          "readout_date": "",
-          "completion_date": "",
-          "sponsor": "",
-          "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20253934"
-        }
-      ],
-      "timeline": {
-        "start": "",
-        "readout": "",
-        "completion": ""
-      },
-      "first_registered": "",
-      "latest_registered": "",
-      "linked_registries": []
-    },
-    {
-      "drug_class": "B细胞/抗CD19/CD20",
-      "name": "SYS6020 (BCMA CAR-T)",
-      "highest_phase_label": "未标注",
-      "stage_number": 0,
-      "study_count": 1,
-      "status_summary": "招募 1 · 进行 0 · 完成 0",
-      "sponsors": [],
-      "sources": {
-        "ChinaDrugTrials": 1
-      },
-      "key_trial": {
-        "registry": "ChinaDrugTrials",
-        "registry_id": "CTR20244175",
-        "title": "SYS6020注射液（一种针对表达BCMA抗原的B细胞和浆细胞的细胞治疗）在难治性全身型重症肌无力患者中的临床I期研究",
-        "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20244175"
-      },
-      "trials": [
-        {
-          "registry": "ChinaDrugTrials",
-          "registry_id": "CTR20244175",
-          "title": "SYS6020注射液（一种针对表达BCMA抗原的B细胞和浆细胞的细胞治疗）在难治性全身型重症肌无力患者中的临床I期研究",
-          "status_label": "招募中",
-          "status_class": "recruiting",
-          "phase_label": "未标注",
-          "start_date": "",
-          "readout_date": "",
-          "completion_date": "",
-          "sponsor": "",
-          "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20244175"
-        }
-      ],
-      "timeline": {
-        "start": "",
-        "readout": "",
-        "completion": ""
-      },
-      "first_registered": "",
-      "latest_registered": "",
-      "linked_registries": []
-    },
-    {
-      "drug_class": "B细胞/抗CD19/CD20",
       "name": "Standard lymphodepletion regimen",
       "highest_phase_label": "未标注",
       "stage_number": 0,
@@ -3102,6 +3158,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "study_count": 2,
       "status_summary": "招募 0 · 进行 0 · 完成 0 · 终止 2",
       "sponsors": [
+        "F. Hoffmann-La Roche Ltd/ 罗氏（中国）投资有限公司/ Chugai Pharma Manufacturing Co., Ltd.",
         "Hoffmann-La Roche"
       ],
       "sources": {
@@ -3109,10 +3166,10 @@ window.MG_CLINICAL_TRIALS_DATA = {
         "ClinicalTrials.gov": 1
       },
       "key_trial": {
-        "registry": "ClinicalTrials.gov",
-        "registry_id": "NCT04963270",
-        "title": "A Study To Evaluate Efficacy, Safety, Pharmacokinetics, And Pharmacodynamics Of Satralizumab In Patients With Generalized Myasthenia Gravis",
-        "url": "https://clinicaltrials.gov/study/NCT04963270"
+        "registry": "ChinaDrugTrials",
+        "registry_id": "CTR20220092",
+        "title": "评价萨特利珠单抗对比安慰剂在全身型重症肌无力治疗的有效性、安全性、药代动力学和药效学的III 期、随机、双盲、 安慰剂对照、多中心研究",
+        "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20220092"
       },
       "trials": [
         {
@@ -3121,11 +3178,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "title": "评价萨特利珠单抗对比安慰剂在全身型重症肌无力治疗的有效性、安全性、药代动力学和药效学的III 期、随机、双盲、 安慰剂对照、多中心研究",
           "status_label": "已终止",
           "status_class": "terminated",
-          "phase_label": "未标注",
+          "phase_label": "Phase 3",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "F. Hoffmann-La Roche Ltd/ 罗氏（中国）投资有限公司/ Chugai Pharma Manufacturing Co., Ltd.",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20220092"
         },
         {
@@ -3148,7 +3205,50 @@ window.MG_CLINICAL_TRIALS_DATA = {
         "completion": "2024-09-02"
       },
       "first_registered": "2021-07-15",
-      "latest_registered": "2021-07-15",
+      "latest_registered": "2022-01-26",
+      "linked_registries": []
+    },
+    {
+      "drug_class": "IL-6 抑制剂",
+      "name": "SAR442168 (已终止)",
+      "highest_phase_label": "Phase 3",
+      "stage_number": 3,
+      "study_count": 1,
+      "status_summary": "招募 0 · 进行 0 · 完成 0 · 终止 1",
+      "sponsors": [
+        "Sanofi-Aventis Recherche & Développement/ 赛诺菲（中国）投资有限公司/ sanofi-aventis Recherche & Développement; Sanofi Winthrop Industrie/ sanofi-aventis Recherche & Développement; Sanofi Winthrop Industrie; Creapharm Clinical Supplies"
+      ],
+      "sources": {
+        "ChinaDrugTrials": 1
+      },
+      "key_trial": {
+        "registry": "ChinaDrugTrials",
+        "registry_id": "CTR20220329",
+        "title": "Tolebrutinib（SAR442168）片在成人全身型重症肌无力受试者中的有效性和安全性",
+        "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20220329"
+      },
+      "trials": [
+        {
+          "registry": "ChinaDrugTrials",
+          "registry_id": "CTR20220329",
+          "title": "Tolebrutinib（SAR442168）片在成人全身型重症肌无力受试者中的有效性和安全性",
+          "status_label": "已终止",
+          "status_class": "terminated",
+          "phase_label": "Phase 3",
+          "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "Sanofi-Aventis Recherche & Développement/ 赛诺菲（中国）投资有限公司/ sanofi-aventis Recherche & Développement; Sanofi Winthrop Industrie/ sanofi-aventis Recherche & Développement; Sanofi Winthrop Industrie; Creapharm Clinical Supplies",
+          "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20220329"
+        }
+      ],
+      "timeline": {
+        "start": "2022-02-23",
+        "readout": "",
+        "completion": ""
+      },
+      "first_registered": "2022-02-23",
+      "latest_registered": "2022-02-23",
       "linked_registries": []
     },
     {
@@ -3253,14 +3353,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2100043273",
-        "title": "托珠单抗治疗全身型重症肌无力的有效性和安全性：一项单中心、前瞻性队列研究",
+        "title": "Efficacy and safety of tocilizumab in the treatment of generalizaed myasthenia gravis: a single-center, prospective cohort study",
         "url": "https://www.chictr.org.cn/showproj.html?proj=121875"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2100043273",
-          "title": "托珠单抗治疗全身型重症肌无力的有效性和安全性：一项单中心、前瞻性队列研究",
+          "title": "Efficacy and safety of tocilizumab in the treatment of generalizaed myasthenia gravis: a single-center, prospective cohort study",
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "未标注",
@@ -3296,14 +3396,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2100043273",
-        "title": "托珠单抗治疗全身型重症肌无力的有效性和安全性：一项单中心、前瞻性队列研究",
+        "title": "Efficacy and safety of tocilizumab in the treatment of generalizaed myasthenia gravis: a single-center, prospective cohort study",
         "url": "https://www.chictr.org.cn/showproj.html?proj=121875"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2100043273",
-          "title": "托珠单抗治疗全身型重症肌无力的有效性和安全性：一项单中心、前瞻性队列研究",
+          "title": "Efficacy and safety of tocilizumab in the treatment of generalizaed myasthenia gravis: a single-center, prospective cohort study",
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "未标注",
@@ -3325,47 +3425,6 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "drug_class": "IL-6 抑制剂",
-      "name": "SAR442168 (已终止)",
-      "highest_phase_label": "未标注",
-      "stage_number": 0,
-      "study_count": 1,
-      "status_summary": "招募 0 · 进行 0 · 完成 0 · 终止 1",
-      "sponsors": [],
-      "sources": {
-        "ChinaDrugTrials": 1
-      },
-      "key_trial": {
-        "registry": "ChinaDrugTrials",
-        "registry_id": "CTR20220329",
-        "title": "Tolebrutinib（SAR442168）片在成人全身型重症肌无力受试者中的有效性和安全性",
-        "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20220329"
-      },
-      "trials": [
-        {
-          "registry": "ChinaDrugTrials",
-          "registry_id": "CTR20220329",
-          "title": "Tolebrutinib（SAR442168）片在成人全身型重症肌无力受试者中的有效性和安全性",
-          "status_label": "已终止",
-          "status_class": "terminated",
-          "phase_label": "未标注",
-          "start_date": "",
-          "readout_date": "",
-          "completion_date": "",
-          "sponsor": "",
-          "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20220329"
-        }
-      ],
-      "timeline": {
-        "start": "",
-        "readout": "",
-        "completion": ""
-      },
-      "first_registered": "",
-      "latest_registered": "",
-      "linked_registries": []
-    },
-    {
-      "drug_class": "IL-6 抑制剂",
       "name": "Tocilizumab",
       "highest_phase_label": "未标注",
       "stage_number": 0,
@@ -3380,14 +3439,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2100043273",
-        "title": "托珠单抗治疗全身型重症肌无力的有效性和安全性：一项单中心、前瞻性队列研究",
+        "title": "Efficacy and safety of tocilizumab in the treatment of generalizaed myasthenia gravis: a single-center, prospective cohort study",
         "url": "https://www.chictr.org.cn/showproj.html?proj=121875"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2100043273",
-          "title": "托珠单抗治疗全身型重症肌无力的有效性和安全性：一项单中心、前瞻性队列研究",
+          "title": "Efficacy and safety of tocilizumab in the treatment of generalizaed myasthenia gravis: a single-center, prospective cohort study",
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "未标注",
@@ -3470,14 +3529,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2200057193",
-        "title": "他克莫司治疗重症肌无力的优势人群研究",
+        "title": "Study on the dominant population of tacrolimus in the treatment of myasthenia gravis",
         "url": "https://www.chictr.org.cn/showproj.html?proj=153272"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2200057193",
-          "title": "他克莫司治疗重症肌无力的优势人群研究",
+          "title": "Study on the dominant population of tacrolimus in the treatment of myasthenia gravis",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "Phase 4",
@@ -3490,7 +3549,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2200061488",
-          "title": "他克莫司抑制B细胞分化、发育在重症肌无力治疗中的机制研究",
+          "title": "Study on the mechanism of tacrolimus inhibiting B cell differentiation and development in the treatment of myasthenia gravis",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "Phase 4",
@@ -3503,7 +3562,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2400084715",
-          "title": "研究者撤销  泰它西普治疗和他克莫司治疗新发AchR阳性全身型重症肌无力的疗效和安全性研究",
+          "title": "A Study on the Efficacy and Safety of Telitacicept Treatment versus Tacrolimus Treatment in Newly Diagnosed AchR-Positive Generalized Myasthenia Gravis",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "Phase 2",
@@ -3519,11 +3578,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "title": "评价他克莫司对激素耐受重症肌无力的III期研究",
           "status_label": "已完成",
           "status_class": "completed",
-          "phase_label": "未标注",
+          "phase_label": "Phase 3",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "安斯泰来制药（中国）有限公司/ Astellas Pharma Co. Limited/ Astellas Ireland Co., Ltd.",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20132669"
         },
         {
@@ -3602,7 +3661,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR1900024692",
-          "title": "硫唑嘌呤和环孢素在重症肌无力免疫修饰中的疗效对比",
+          "title": "Comparison of the efficacy of azathioprine and cyclosporine in myasthenia gravis immune modification",
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "未标注",
@@ -3622,7 +3681,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "浙江奥托康制药集团股份有限公司",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20190650"
         },
         {
@@ -3635,7 +3694,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "上海上药信谊药厂有限公司",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20221213"
         },
         {
@@ -3684,7 +3743,136 @@ window.MG_CLINICAL_TRIALS_DATA = {
         "completion": "2021-11-18"
       },
       "first_registered": "2009-09-30",
-      "latest_registered": "2019-07-22",
+      "latest_registered": "2022-06-14",
+      "linked_registries": []
+    },
+    {
+      "drug_class": "免疫抑制剂",
+      "name": "Prednisone (泼尼松)",
+      "highest_phase_label": "Phase 4",
+      "stage_number": 4,
+      "study_count": 1,
+      "status_summary": "招募 1 · 进行 0 · 完成 0",
+      "sponsors": [
+        "Xuan Wu Hospital, Capital Medical University"
+      ],
+      "sources": {
+        "ChiCTR": 1
+      },
+      "key_trial": {
+        "registry": "ChiCTR",
+        "registry_id": "ChiCTR-IPR-15006081",
+        "title": "A prospective study of combined use of prednisone and methotrexate for the treatment of myasthenia gravis",
+        "url": "https://www.chictr.org.cn/showproj.html?proj=10563"
+      },
+      "trials": [
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR-IPR-15006081",
+          "title": "A prospective study of combined use of prednisone and methotrexate for the treatment of myasthenia gravis",
+          "status_label": "招募中",
+          "status_class": "recruiting",
+          "phase_label": "Phase 4",
+          "start_date": "2014-07-18",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "Xuan Wu Hospital, Capital Medical University",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=10563"
+        }
+      ],
+      "timeline": {
+        "start": "2014-07-18",
+        "readout": "",
+        "completion": ""
+      },
+      "first_registered": "2015-03-14",
+      "latest_registered": "2015-03-14",
+      "linked_registries": []
+    },
+    {
+      "drug_class": "免疫抑制剂",
+      "name": "Rocbrutinib",
+      "highest_phase_label": "Phase 4",
+      "stage_number": 4,
+      "study_count": 1,
+      "status_summary": "招募 0 · 进行 0 · 完成 0",
+      "sponsors": [
+        "Beijing Tiantan Hospital, Capital Medical University"
+      ],
+      "sources": {
+        "ChiCTR": 1
+      },
+      "key_trial": {
+        "registry": "ChiCTR",
+        "registry_id": "ChiCTR2600134949",
+        "title": "An Exploratory Clinical Study to Evaluate the Safety and Efficacy of the Oral BTK Inhibitor Rocbrutinib Tablets for the Treatment of Generalized Myasthenia Gravis (gMG)",
+        "url": "https://www.chictr.org.cn/showproj.html?proj=344007"
+      },
+      "trials": [
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR2600134949",
+          "title": "An Exploratory Clinical Study to Evaluate the Safety and Efficacy of the Oral BTK Inhibitor Rocbrutinib Tablets for the Treatment of Generalized Myasthenia Gravis (gMG)",
+          "status_label": "Pending",
+          "status_class": "other",
+          "phase_label": "Phase 4",
+          "start_date": "2026-10-26",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "Beijing Tiantan Hospital, Capital Medical University",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=344007"
+        }
+      ],
+      "timeline": {
+        "start": "2026-10-26",
+        "readout": "",
+        "completion": ""
+      },
+      "first_registered": "2026-10-22",
+      "latest_registered": "2026-10-22",
+      "linked_registries": []
+    },
+    {
+      "drug_class": "免疫抑制剂",
+      "name": "methotrexate",
+      "highest_phase_label": "Phase 4",
+      "stage_number": 4,
+      "study_count": 1,
+      "status_summary": "招募 1 · 进行 0 · 完成 0",
+      "sponsors": [
+        "Xuan Wu Hospital, Capital Medical University"
+      ],
+      "sources": {
+        "ChiCTR": 1
+      },
+      "key_trial": {
+        "registry": "ChiCTR",
+        "registry_id": "ChiCTR-IPR-15006081",
+        "title": "A prospective study of combined use of prednisone and methotrexate for the treatment of myasthenia gravis",
+        "url": "https://www.chictr.org.cn/showproj.html?proj=10563"
+      },
+      "trials": [
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR-IPR-15006081",
+          "title": "A prospective study of combined use of prednisone and methotrexate for the treatment of myasthenia gravis",
+          "status_label": "招募中",
+          "status_class": "recruiting",
+          "phase_label": "Phase 4",
+          "start_date": "2014-07-18",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "Xuan Wu Hospital, Capital Medical University",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=10563"
+        }
+      ],
+      "timeline": {
+        "start": "2014-07-18",
+        "readout": "",
+        "completion": ""
+      },
+      "first_registered": "2015-03-14",
+      "latest_registered": "2015-03-14",
       "linked_registries": []
     },
     {
@@ -3792,17 +3980,18 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "study_count": 2,
       "status_summary": "招募 2 · 进行 0 · 完成 0",
       "sponsors": [
-        "Merck Healthcare KGaA, Darmstadt, Germany, an affiliate of Merck KGaA, Darmstadt, Germany"
+        "Merck Healthcare KGaA, Darmstadt, Germany, an affiliate of Merck KGaA, Darmstadt, Germany",
+        "Merck Healthcare KGaA/ 默克雪兰诺（北京）医药研发有限公司/ Almac Pharma Services Limited/ Fisher Clinical Services GmbH"
       ],
       "sources": {
         "ChinaDrugTrials": 1,
         "ClinicalTrials.gov": 1
       },
       "key_trial": {
-        "registry": "ClinicalTrials.gov",
-        "registry_id": "NCT06463587",
-        "title": "Efficacy and Safety of a New Formulation of Oral Cladribine Compared With Placebo in Participants With Generalized Myasthenia Gravis (MyClad)",
-        "url": "https://clinicaltrials.gov/study/NCT06463587"
+        "registry": "ChinaDrugTrials",
+        "registry_id": "CTR20243857",
+        "title": "新型克拉屈滨口服制剂与安慰剂相比治疗全身型重症肌无力试验参与者的有效性和安全性",
+        "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20243857"
       },
       "trials": [
         {
@@ -3811,11 +4000,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "title": "新型克拉屈滨口服制剂与安慰剂相比治疗全身型重症肌无力试验参与者的有效性和安全性",
           "status_label": "招募中",
           "status_class": "recruiting",
-          "phase_label": "未标注",
+          "phase_label": "Phase 3",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "Merck Healthcare KGaA/ 默克雪兰诺（北京）医药研发有限公司/ Almac Pharma Services Limited/ Fisher Clinical Services GmbH",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20243857"
         },
         {
@@ -3838,7 +4027,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         "completion": "2030-11-12"
       },
       "first_registered": "2024-06-18",
-      "latest_registered": "2024-06-18",
+      "latest_registered": "2024-10-29",
       "linked_registries": []
     },
     {
@@ -3847,32 +4036,33 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "highest_phase_label": "Phase 3",
       "stage_number": 3,
       "study_count": 2,
-      "status_summary": "招募 1 · 进行 1 · 完成 0",
+      "status_summary": "招募 0 · 进行 1 · 完成 0 · 终止 1",
       "sponsors": [
-        "Novartis Pharmaceuticals"
+        "Novartis Pharmaceuticals",
+        "不适用/ 诺华（中国）生物医学研究有限公司"
       ],
       "sources": {
         "ChinaDrugTrials": 1,
         "ClinicalTrials.gov": 1
       },
       "key_trial": {
-        "registry": "ClinicalTrials.gov",
-        "registry_id": "NCT06744920",
-        "title": "A Study to Investigate the Efficacy, Safety and Tolerability of Remibrutinib Versus Placebo in Adult Patients With Generalized Myasthenia Gravis",
-        "url": "https://clinicaltrials.gov/study/NCT06744920"
+        "registry": "ChinaDrugTrials",
+        "registry_id": "CTR20252589",
+        "title": "在全身型重症肌无力患者中评价LOU064的疗效、安全性和耐受性的随机、双盲、安慰剂对照III期研究",
+        "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20252589"
       },
       "trials": [
         {
           "registry": "ChinaDrugTrials",
           "registry_id": "CTR20252589",
           "title": "在全身型重症肌无力患者中评价LOU064的疗效、安全性和耐受性的随机、双盲、安慰剂对照III期研究",
-          "status_label": "招募中",
-          "status_class": "recruiting",
-          "phase_label": "未标注",
+          "status_label": "已终止",
+          "status_class": "terminated",
+          "phase_label": "Phase 3",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "不适用/ 诺华（中国）生物医学研究有限公司",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20252589"
         },
         {
@@ -3895,7 +4085,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         "completion": "2033-02-26"
       },
       "first_registered": "2024-12-20",
-      "latest_registered": "2024-12-20",
+      "latest_registered": "2025-07-07",
       "linked_registries": []
     },
     {
@@ -4086,14 +4276,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR1900024692",
-        "title": "硫唑嘌呤和环孢素在重症肌无力免疫修饰中的疗效对比",
+        "title": "Comparison of the efficacy of azathioprine and cyclosporine in myasthenia gravis immune modification",
         "url": "https://www.chictr.org.cn/showproj.html?proj=41074"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR1900024692",
-          "title": "硫唑嘌呤和环孢素在重症肌无力免疫修饰中的疗效对比",
+          "title": "Comparison of the efficacy of azathioprine and cyclosporine in myasthenia gravis immune modification",
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "未标注",
@@ -4129,14 +4319,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR1900024692",
-        "title": "硫唑嘌呤和环孢素在重症肌无力免疫修饰中的疗效对比",
+        "title": "Comparison of the efficacy of azathioprine and cyclosporine in myasthenia gravis immune modification",
         "url": "https://www.chictr.org.cn/showproj.html?proj=41074"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR1900024692",
-          "title": "硫唑嘌呤和环孢素在重症肌无力免疫修饰中的疗效对比",
+          "title": "Comparison of the efficacy of azathioprine and cyclosporine in myasthenia gravis immune modification",
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "未标注",
@@ -4161,15 +4351,15 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "name": "Pyridostigmine (溴吡斯的明)",
       "highest_phase_label": "Phase 4",
       "stage_number": 4,
-      "study_count": 13,
-      "status_summary": "招募 3 · 进行 1 · 完成 6",
+      "study_count": 15,
+      "status_summary": "招募 2 · 进行 0 · 完成 10",
       "sponsors": [
         "Affiliated Jiangmen Traditional Chinese Medicine Hospital of Ji’nan University",
-        "Da, Yuwei, M.D.",
-        "Leiden University Medical Center"
+        "Alvogen, Inc./ 北京罕友医药科技有限公司/ Norwich Pharmaceuticals Inc",
+        "Da, Yuwei, M.D."
       ],
       "sources": {
-        "ChiCTR": 1,
+        "ChiCTR": 3,
         "ChinaDrugTrials": 9,
         "ClinicalTrials.gov": 3
       },
@@ -4182,8 +4372,34 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "trials": [
         {
           "registry": "ChiCTR",
+          "registry_id": "ChiCTR-OCC-13003090",
+          "title": "Research on micrornas expression of Myasthenia gravis and the relationship with TH1, TH2 cells secrete cytokines",
+          "status_label": "已完成",
+          "status_class": "completed",
+          "phase_label": "未标注",
+          "start_date": "2012-12-20",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "The first affiliated hospital of Guangzhou university of Traditional Chinese medicine",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=6469"
+        },
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR-TRC-13004125",
+          "title": "The study on the pathogenesis of spleen-kidney deficiency type myasthenia gravis and the interference effect of Jianji Ning Granule on the patients",
+          "status_label": "已完成",
+          "status_class": "completed",
+          "phase_label": "Phase 1 / Phase 2",
+          "start_date": "2010-10-01",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "Longhua Hospital Affiliated to Shanghai University of traditional Chinese Medicine",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=5443"
+        },
+        {
+          "registry": "ChiCTR",
           "registry_id": "ChiCTR2100047506",
-          "title": "补中益气汤治疗脾肾虚弱型眼肌型重症肌无力（MG）患者的临床疗效观察：随机对照试验",
+          "title": "Efficacy of Buzhong Yiqi Decoction in the Treatment of Ocular Myopathy Myasthenia Gravis (MG) Patients with Spleen and Kidney Deficiency Type: a Randomized Controlled Trial",
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "未标注",
@@ -4203,7 +4419,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "上海上药中西制药有限公司",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20213266"
         },
         {
@@ -4216,7 +4432,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "Alvogen, Inc./ 北京罕友医药科技有限公司/ Norwich Pharmaceuticals Inc",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20230340"
         },
         {
@@ -4225,11 +4441,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "title": "溴吡斯的明缓释片的单/多次给药的PK和安全性研究",
           "status_label": "尚未招募",
           "status_class": "recruiting",
-          "phase_label": "未标注",
+          "phase_label": "Phase 1",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "上海上药中西制药有限公司",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20232530"
         },
         {
@@ -4242,7 +4458,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "吉林省博大伟业制药有限公司",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20240187"
         },
         {
@@ -4255,7 +4471,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "吉林省博大伟业制药有限公司",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20242481"
         },
         {
@@ -4268,7 +4484,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "四川科瑞德制药股份有限公司",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20252198"
         },
         {
@@ -4281,33 +4497,33 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "四川科瑞德制药股份有限公司",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20252199"
         },
         {
           "registry": "ChinaDrugTrials",
           "registry_id": "CTR20262306",
           "title": "溴吡斯的明片在中国健康试验参与者空腹状态下的单中心、随机、开放、两制剂、两周期、两序列、单次给药、交叉设计生物等效性研究",
-          "status_label": "尚未招募",
-          "status_class": "recruiting",
+          "status_label": "已完成",
+          "status_class": "completed",
           "phase_label": "未标注",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "成都明德至远医药科技有限公司",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20262306"
         },
         {
           "registry": "ChinaDrugTrials",
           "registry_id": "CTR20262309",
           "title": "溴吡斯的明片（60mg）在健康试验参与者中空腹给药条件下随机、开放、单剂量、两制剂、两序列、两周期、双交叉生物等效性预试验",
-          "status_label": "进行中",
-          "status_class": "active",
+          "status_label": "已完成",
+          "status_class": "completed",
           "phase_label": "未标注",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "上海上药中西制药有限公司",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20262309"
         },
         {
@@ -4351,12 +4567,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
         }
       ],
       "timeline": {
-        "start": "2018-04-09",
+        "start": "2010-10-01",
         "readout": "2024-09-22",
         "completion": "2024-10-31"
       },
-      "first_registered": "2018-04-27",
-      "latest_registered": "2023-06-26",
+      "first_registered": "2013-03-02",
+      "latest_registered": "2026-06-12",
       "linked_registries": []
     },
     {
@@ -4447,6 +4663,105 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "drug_class": "胆碱酯酶抑制剂",
+      "name": "Huperzine A (石杉碱甲)",
+      "highest_phase_label": "Phase 1",
+      "stage_number": 1,
+      "study_count": 2,
+      "status_summary": "招募 1 · 进行 0 · 完成 1",
+      "sponsors": [
+        "万邦德制药集团有限公司"
+      ],
+      "sources": {
+        "ChinaDrugTrials": 2
+      },
+      "key_trial": {
+        "registry": "ChinaDrugTrials",
+        "registry_id": "CTR20255231",
+        "title": "石杉碱甲口服溶液与石杉碱甲注射液药代动力学比较研究",
+        "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20255231"
+      },
+      "trials": [
+        {
+          "registry": "ChinaDrugTrials",
+          "registry_id": "CTR20255231",
+          "title": "石杉碱甲口服溶液与石杉碱甲注射液药代动力学比较研究",
+          "status_label": "已完成",
+          "status_class": "completed",
+          "phase_label": "Phase 1",
+          "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "万邦德制药集团有限公司",
+          "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20255231"
+        },
+        {
+          "registry": "ChinaDrugTrials",
+          "registry_id": "CTR20263154",
+          "title": "评估石杉碱甲口服溶液在健康试验参与者中的单中心、随机、双盲、多次给药、剂量递增的药代动力学研究",
+          "status_label": "尚未招募",
+          "status_class": "recruiting",
+          "phase_label": "Phase 1",
+          "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "万邦德制药集团有限公司",
+          "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20263154"
+        }
+      ],
+      "timeline": {
+        "start": "2025-12-30",
+        "readout": "",
+        "completion": ""
+      },
+      "first_registered": "2025-12-30",
+      "latest_registered": "2026-08-19",
+      "linked_registries": []
+    },
+    {
+      "drug_class": "胆碱酯酶抑制剂",
+      "name": "Edrophonium (依酚氯铵)",
+      "highest_phase_label": "Phase 1",
+      "stage_number": 1,
+      "study_count": 1,
+      "status_summary": "招募 1 · 进行 0 · 完成 0",
+      "sponsors": [
+        "济南博世医药科技有限公司"
+      ],
+      "sources": {
+        "ChinaDrugTrials": 1
+      },
+      "key_trial": {
+        "registry": "ChinaDrugTrials",
+        "registry_id": "CTR20182086",
+        "title": "依酚氯铵注射液人体药代动力学、安全性和有效性研究",
+        "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20182086"
+      },
+      "trials": [
+        {
+          "registry": "ChinaDrugTrials",
+          "registry_id": "CTR20182086",
+          "title": "依酚氯铵注射液人体药代动力学、安全性和有效性研究",
+          "status_label": "尚未招募",
+          "status_class": "recruiting",
+          "phase_label": "Phase 1",
+          "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "济南博世医药科技有限公司",
+          "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20182086"
+        }
+      ],
+      "timeline": {
+        "start": "2018-11-21",
+        "readout": "",
+        "completion": ""
+      },
+      "first_registered": "2018-11-21",
+      "latest_registered": "2018-11-21",
+      "linked_registries": []
+    },
+    {
+      "drug_class": "胆碱酯酶抑制剂",
       "name": "Immediate-Release Tablets",
       "highest_phase_label": "Phase 1",
       "stage_number": 1,
@@ -4533,84 +4848,45 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "drug_class": "胆碱酯酶抑制剂",
-      "name": "Edrophonium (依酚氯铵)",
-      "highest_phase_label": "未标注",
-      "stage_number": 0,
-      "study_count": 1,
-      "status_summary": "招募 1 · 进行 0 · 完成 0",
-      "sponsors": [],
-      "sources": {
-        "ChinaDrugTrials": 1
-      },
-      "key_trial": {
-        "registry": "ChinaDrugTrials",
-        "registry_id": "CTR20182086",
-        "title": "依酚氯铵注射液人体药代动力学、安全性和有效性研究",
-        "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20182086"
-      },
-      "trials": [
-        {
-          "registry": "ChinaDrugTrials",
-          "registry_id": "CTR20182086",
-          "title": "依酚氯铵注射液人体药代动力学、安全性和有效性研究",
-          "status_label": "尚未招募",
-          "status_class": "recruiting",
-          "phase_label": "未标注",
-          "start_date": "",
-          "readout_date": "",
-          "completion_date": "",
-          "sponsor": "",
-          "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20182086"
-        }
-      ],
-      "timeline": {
-        "start": "",
-        "readout": "",
-        "completion": ""
-      },
-      "first_registered": "",
-      "latest_registered": "",
-      "linked_registries": []
-    },
-    {
-      "drug_class": "胆碱酯酶抑制剂",
-      "name": "Huperzine A (石杉碱甲)",
+      "name": "nothing",
       "highest_phase_label": "未标注",
       "stage_number": 0,
       "study_count": 1,
       "status_summary": "招募 0 · 进行 0 · 完成 1",
-      "sponsors": [],
+      "sponsors": [
+        "The first affiliated hospital of Guangzhou university of Traditional Chinese medicine"
+      ],
       "sources": {
-        "ChinaDrugTrials": 1
+        "ChiCTR": 1
       },
       "key_trial": {
-        "registry": "ChinaDrugTrials",
-        "registry_id": "CTR20255231",
-        "title": "石杉碱甲口服溶液与石杉碱甲注射液药代动力学比较研究",
-        "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20255231"
+        "registry": "ChiCTR",
+        "registry_id": "ChiCTR-OCC-13003090",
+        "title": "Research on micrornas expression of Myasthenia gravis and the relationship with TH1, TH2 cells secrete cytokines",
+        "url": "https://www.chictr.org.cn/showproj.html?proj=6469"
       },
       "trials": [
         {
-          "registry": "ChinaDrugTrials",
-          "registry_id": "CTR20255231",
-          "title": "石杉碱甲口服溶液与石杉碱甲注射液药代动力学比较研究",
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR-OCC-13003090",
+          "title": "Research on micrornas expression of Myasthenia gravis and the relationship with TH1, TH2 cells secrete cytokines",
           "status_label": "已完成",
           "status_class": "completed",
           "phase_label": "未标注",
-          "start_date": "",
+          "start_date": "2012-12-20",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
-          "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20255231"
+          "sponsor": "The first affiliated hospital of Guangzhou university of Traditional Chinese medicine",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=6469"
         }
       ],
       "timeline": {
-        "start": "",
+        "start": "2012-12-20",
         "readout": "",
         "completion": ""
       },
-      "first_registered": "",
-      "latest_registered": "",
+      "first_registered": "2013-03-02",
+      "latest_registered": "2013-03-02",
       "linked_registries": []
     },
     {
@@ -4639,7 +4915,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2300073035",
-          "title": "中西医结合抑制重症肌无力危象“炎症风暴”评价研究",
+          "title": "Inhibition of inflammatory storm in myasthenic crisis by integrated traditional Chinese and western medicine",
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "未标注",
@@ -4652,7 +4928,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2500111678",
-          "title": "艾加莫德α对比丙种球蛋白治疗全身型重症肌无力急性加重患者的临床疗效及安全性观察----一项前瞻性、多中心、随机对照研究",
+          "title": "Evaluating Efficacy and Safety of Efgartigimod versus IVIG in Myasthenia Gravis Exacerbation for Rapid Clinical Response",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -4665,7 +4941,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2600120351",
-          "title": "艾加莫德与丙种球蛋白在挽救重症肌无力危象前状态的疗效及安全性分析",
+          "title": "Efficacy and Safety Analysis of Ajamod versus Immunoglobulin G in Rescuing Patients from Myasthenia Gravis Crisis",
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "未标注",
@@ -4868,14 +5144,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2500104662",
-        "title": "血浆置换联合艾加莫得治疗全身型重症肌无力的有效性与安全性：一项多中心、三臂、开放标签的临床研究",
+        "title": "Efgartigimod Following Plasma Exchange in the Treatment of Subjects With generalized Myasthenia Gravis: Study Protocol for a Multicenter, Three-arm, Open-Label study",
         "url": "https://www.chictr.org.cn/showproj.html?proj=270461"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2500104662",
-          "title": "血浆置换联合艾加莫得治疗全身型重症肌无力的有效性与安全性：一项多中心、三臂、开放标签的临床研究",
+          "title": "Efgartigimod Following Plasma Exchange in the Treatment of Subjects With generalized Myasthenia Gravis: Study Protocol for a Multicenter, Three-arm, Open-Label study",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -4937,14 +5213,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2300073035",
-        "title": "中西医结合抑制重症肌无力危象“炎症风暴”评价研究",
+        "title": "Inhibition of inflammatory storm in myasthenic crisis by integrated traditional Chinese and western medicine",
         "url": "https://www.chictr.org.cn/showproj.html?proj=200622"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2300073035",
-          "title": "中西医结合抑制重症肌无力危象“炎症风暴”评价研究",
+          "title": "Inhibition of inflammatory storm in myasthenic crisis by integrated traditional Chinese and western medicine",
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "未标注",
@@ -4980,14 +5256,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2300073035",
-        "title": "中西医结合抑制重症肌无力危象“炎症风暴”评价研究",
+        "title": "Inhibition of inflammatory storm in myasthenic crisis by integrated traditional Chinese and western medicine",
         "url": "https://www.chictr.org.cn/showproj.html?proj=200622"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2300073035",
-          "title": "中西医结合抑制重症肌无力危象“炎症风暴”评价研究",
+          "title": "Inhibition of inflammatory storm in myasthenic crisis by integrated traditional Chinese and western medicine",
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "未标注",
@@ -5052,6 +5328,207 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "drug_class": "其他",
+      "name": "Local",
+      "highest_phase_label": "Phase 4",
+      "stage_number": 4,
+      "study_count": 2,
+      "status_summary": "招募 1 · 进行 0 · 完成 1",
+      "sponsors": [
+        "Wuhan Aier Eye Hospital (Hanyang)",
+        "Wuhan Aier Eye Hospital (Hanyang), Hubei, China"
+      ],
+      "sources": {
+        "ChiCTR": 2
+      },
+      "key_trial": {
+        "registry": "ChiCTR",
+        "registry_id": "ChiCTR2000038863",
+        "title": "Local Use of Dexamethasone in the Treatment of Ocular Myasthenia Gravis",
+        "url": "https://www.chictr.org.cn/showproj.html?proj=62056"
+      },
+      "trials": [
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR1900024285",
+          "title": "Topical use of hormone injection in the treatment of ocular myasthenia gravis",
+          "status_label": "招募中",
+          "status_class": "recruiting",
+          "phase_label": "未标注",
+          "start_date": "2019-08-01",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "Wuhan Aier Eye Hospital (Hanyang)",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=40498"
+        },
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR2000038863",
+          "title": "Local Use of Dexamethasone in the Treatment of Ocular Myasthenia Gravis",
+          "status_label": "已完成",
+          "status_class": "completed",
+          "phase_label": "Phase 4",
+          "start_date": "2016-08-24",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "Wuhan Aier Eye Hospital (Hanyang), Hubei, China",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=62056"
+        }
+      ],
+      "timeline": {
+        "start": "2016-08-24",
+        "readout": "",
+        "completion": ""
+      },
+      "first_registered": "2019-07-05",
+      "latest_registered": "2020-10-07",
+      "linked_registries": []
+    },
+    {
+      "drug_class": "其他",
+      "name": "Methylprednisolone (甲泼尼龙)",
+      "highest_phase_label": "Phase 4",
+      "stage_number": 4,
+      "study_count": 2,
+      "status_summary": "招募 1 · 进行 0 · 完成 0 · 终止 1",
+      "sponsors": [
+        "Northwestern University",
+        "Shijiazhuang People’s Hospita"
+      ],
+      "sources": {
+        "ChiCTR": 1,
+        "ClinicalTrials.gov": 1
+      },
+      "key_trial": {
+        "registry": "ChiCTR",
+        "registry_id": "ChiCTR2400080921",
+        "title": "The effectiveness and safety of using Vyvgart in adult patients with myasthenia gravis",
+        "url": "https://www.chictr.org.cn/showproj.html?proj=215289"
+      },
+      "trials": [
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR2400080921",
+          "title": "The effectiveness and safety of using Vyvgart in adult patients with myasthenia gravis",
+          "status_label": "招募中",
+          "status_class": "recruiting",
+          "phase_label": "Phase 4",
+          "start_date": "2023-11-21",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "Shijiazhuang People’s Hospita",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=215289"
+        },
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT00424489",
+          "title": "Hematopoietic Stem Cell Therapy for Patients With Refractory Myasthenia Gravis",
+          "status_label": "已终止",
+          "status_class": "terminated",
+          "phase_label": "Phase 1",
+          "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "Northwestern University",
+          "url": "https://clinicaltrials.gov/study/NCT00424489"
+        }
+      ],
+      "timeline": {
+        "start": "2023-11-21",
+        "readout": "",
+        "completion": ""
+      },
+      "first_registered": "2007-01-19",
+      "latest_registered": "2024-02-18",
+      "linked_registries": []
+    },
+    {
+      "drug_class": "其他",
+      "name": "Flurbiprofen",
+      "highest_phase_label": "Phase 4",
+      "stage_number": 4,
+      "study_count": 1,
+      "status_summary": "招募 0 · 进行 0 · 完成 1",
+      "sponsors": [
+        "urgical intensive care unit, The First Affiliated Hospital of Sun Yat-sen University University"
+      ],
+      "sources": {
+        "ChiCTR": 1
+      },
+      "key_trial": {
+        "registry": "ChiCTR",
+        "registry_id": "ChiCTR-ORC-11001592",
+        "title": "A comparison of dexmedetomidine versus flurbiprofen for analgesic effect in thymusectomy patients",
+        "url": "https://www.chictr.org.cn/showproj.html?proj=7949"
+      },
+      "trials": [
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR-ORC-11001592",
+          "title": "A comparison of dexmedetomidine versus flurbiprofen for analgesic effect in thymusectomy patients",
+          "status_label": "已完成",
+          "status_class": "completed",
+          "phase_label": "Phase 4",
+          "start_date": "2011-04-01",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "urgical intensive care unit, The First Affiliated Hospital of Sun Yat-sen University University",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=7949"
+        }
+      ],
+      "timeline": {
+        "start": "2011-04-01",
+        "readout": "",
+        "completion": ""
+      },
+      "first_registered": "2011-08-06",
+      "latest_registered": "2011-08-06",
+      "linked_registries": []
+    },
+    {
+      "drug_class": "其他",
+      "name": "dexmedetomidine",
+      "highest_phase_label": "Phase 4",
+      "stage_number": 4,
+      "study_count": 1,
+      "status_summary": "招募 0 · 进行 0 · 完成 1",
+      "sponsors": [
+        "urgical intensive care unit, The First Affiliated Hospital of Sun Yat-sen University University"
+      ],
+      "sources": {
+        "ChiCTR": 1
+      },
+      "key_trial": {
+        "registry": "ChiCTR",
+        "registry_id": "ChiCTR-ORC-11001592",
+        "title": "A comparison of dexmedetomidine versus flurbiprofen for analgesic effect in thymusectomy patients",
+        "url": "https://www.chictr.org.cn/showproj.html?proj=7949"
+      },
+      "trials": [
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR-ORC-11001592",
+          "title": "A comparison of dexmedetomidine versus flurbiprofen for analgesic effect in thymusectomy patients",
+          "status_label": "已完成",
+          "status_class": "completed",
+          "phase_label": "Phase 4",
+          "start_date": "2011-04-01",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "urgical intensive care unit, The First Affiliated Hospital of Sun Yat-sen University University",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=7949"
+        }
+      ],
+      "timeline": {
+        "start": "2011-04-01",
+        "readout": "",
+        "completion": ""
+      },
+      "first_registered": "2011-08-06",
+      "latest_registered": "2011-08-06",
+      "linked_registries": []
+    },
+    {
+      "drug_class": "其他",
       "name": "statin",
       "highest_phase_label": "Phase 4",
       "stage_number": 4,
@@ -5066,14 +5543,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2000037904",
-        "title": "小剂量他汀联合常规用药对照常规用药治疗晚发型重症肌无力患者的疗效和安全性评价：一项前瞻性队列研究",
+        "title": "Efficacy and safety of low-dose statins combined with conventional versus conventional treatment in patients with late onset myasthenia gravis: a prospective cohort study",
         "url": "https://www.chictr.org.cn/showproj.html?proj=60932"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2000037904",
-          "title": "小剂量他汀联合常规用药对照常规用药治疗晚发型重症肌无力患者的疗效和安全性评价：一项前瞻性队列研究",
+          "title": "Efficacy and safety of low-dose statins combined with conventional versus conventional treatment in patients with late onset myasthenia gravis: a prospective cohort study",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "Phase 4",
@@ -5119,7 +5596,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR1800017564",
-          "title": "胸腺切除手术时机对非胸腺瘤重症肌无力患者预后影响的前瞻性随访研究",
+          "title": "Optimal Timing of Thymectomy in Nonthymomatous Myasthenia Gravis Patients In China: A Prospective Study",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -5132,7 +5609,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2400090651",
-          "title": "低剂量皮质类固醇方案治疗全身型重症肌无力的临床研究",
+          "title": "Clinical study of low dose corticosteroid regimen in the treatment of generalized myasthenia gravis",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -5474,23 +5951,67 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "drug_class": "其他",
+      "name": "NA",
+      "highest_phase_label": "Phase 3",
+      "stage_number": 3,
+      "study_count": 1,
+      "status_summary": "招募 1 · 进行 0 · 完成 0",
+      "sponsors": [
+        "Novartis Pharma AG/ 诺华（中国）生物医学研究有限公司/ Novartis Pharma Produktions GmbH"
+      ],
+      "sources": {
+        "ChinaDrugTrials": 1
+      },
+      "key_trial": {
+        "registry": "ChinaDrugTrials",
+        "registry_id": "CTR20243185",
+        "title": "一项在全身型重症肌无力参与者中比较伊普可泮与安慰剂的疗效、安全性和耐受性的研究。",
+        "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20243185"
+      },
+      "trials": [
+        {
+          "registry": "ChinaDrugTrials",
+          "registry_id": "CTR20243185",
+          "title": "一项在全身型重症肌无力参与者中比较伊普可泮与安慰剂的疗效、安全性和耐受性的研究。",
+          "status_label": "招募中",
+          "status_class": "recruiting",
+          "phase_label": "Phase 3",
+          "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "Novartis Pharma AG/ 诺华（中国）生物医学研究有限公司/ Novartis Pharma Produktions GmbH",
+          "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20243185"
+        }
+      ],
+      "timeline": {
+        "start": "2024-09-05",
+        "readout": "",
+        "completion": ""
+      },
+      "first_registered": "2024-09-05",
+      "latest_registered": "2024-09-05",
+      "linked_registries": []
+    },
+    {
+      "drug_class": "其他",
       "name": "Belimumab",
       "highest_phase_label": "Phase 2",
       "stage_number": 2,
       "study_count": 2,
       "status_summary": "招募 0 · 进行 0 · 完成 2",
       "sponsors": [
-        "GlaxoSmithKline"
+        "GlaxoSmithKline",
+        "荣昌生物制药（烟台）有限公司"
       ],
       "sources": {
         "ChinaDrugTrials": 1,
         "ClinicalTrials.gov": 1
       },
       "key_trial": {
-        "registry": "ClinicalTrials.gov",
-        "registry_id": "NCT01480596",
-        "title": "The Evaluation of Belimumab in Myasthenia Gravis (MG)",
-        "url": "https://clinicaltrials.gov/study/NCT01480596"
+        "registry": "ChinaDrugTrials",
+        "registry_id": "CTR20200317",
+        "title": "泰爱治疗全身型重症肌无力患者的临床试验",
+        "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20200317"
       },
       "trials": [
         {
@@ -5499,11 +6020,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "title": "泰爱治疗全身型重症肌无力患者的临床试验",
           "status_label": "已完成",
           "status_class": "completed",
-          "phase_label": "未标注",
+          "phase_label": "Phase 2",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "荣昌生物制药（烟台）有限公司",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20200317"
         },
         {
@@ -5526,7 +6047,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         "completion": ""
       },
       "first_registered": "2011-11-29",
-      "latest_registered": "2011-11-29",
+      "latest_registered": "2020-03-09",
       "linked_registries": []
     },
     {
@@ -5871,6 +6392,49 @@ window.MG_CLINICAL_TRIALS_DATA = {
       },
       "first_registered": "2015-10-01",
       "latest_registered": "2015-10-01",
+      "linked_registries": []
+    },
+    {
+      "drug_class": "其他",
+      "name": "CG001注射液",
+      "highest_phase_label": "Phase 2",
+      "stage_number": 2,
+      "study_count": 1,
+      "status_summary": "招募 1 · 进行 0 · 完成 0",
+      "sponsors": [
+        "上海康景生物医药科技有限公司"
+      ],
+      "sources": {
+        "ChinaDrugTrials": 1
+      },
+      "key_trial": {
+        "registry": "ChinaDrugTrials",
+        "registry_id": "CTR20263476",
+        "title": "CG001 注射液在全身型重症肌无力（gMG）患者中的安全性、耐受性、有效性和药代动力学/药效动力学特征",
+        "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20263476"
+      },
+      "trials": [
+        {
+          "registry": "ChinaDrugTrials",
+          "registry_id": "CTR20263476",
+          "title": "CG001 注射液在全身型重症肌无力（gMG）患者中的安全性、耐受性、有效性和药代动力学/药效动力学特征",
+          "status_label": "尚未招募",
+          "status_class": "recruiting",
+          "phase_label": "Phase 2",
+          "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "上海康景生物医药科技有限公司",
+          "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20263476"
+        }
+      ],
+      "timeline": {
+        "start": "2026-09-14",
+        "readout": "",
+        "completion": ""
+      },
+      "first_registered": "2026-09-14",
+      "latest_registered": "2026-09-14",
       "linked_registries": []
     },
     {
@@ -6301,6 +6865,49 @@ window.MG_CLINICAL_TRIALS_DATA = {
       },
       "first_registered": "2019-03-05",
       "latest_registered": "2019-03-05",
+      "linked_registries": []
+    },
+    {
+      "drug_class": "其他",
+      "name": "SHR-2173",
+      "highest_phase_label": "Phase 2",
+      "stage_number": 2,
+      "study_count": 1,
+      "status_summary": "招募 1 · 进行 0 · 完成 0",
+      "sponsors": [
+        "广东恒瑞医药有限公司"
+      ],
+      "sources": {
+        "ChinaDrugTrials": 1
+      },
+      "key_trial": {
+        "registry": "ChinaDrugTrials",
+        "registry_id": "CTR20262007",
+        "title": "SHR-2173注射液治疗重症肌无力的II期临床试验",
+        "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20262007"
+      },
+      "trials": [
+        {
+          "registry": "ChinaDrugTrials",
+          "registry_id": "CTR20262007",
+          "title": "SHR-2173注射液治疗重症肌无力的II期临床试验",
+          "status_label": "尚未招募",
+          "status_class": "recruiting",
+          "phase_label": "Phase 2",
+          "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "广东恒瑞医药有限公司",
+          "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20262007"
+        }
+      ],
+      "timeline": {
+        "start": "2026-05-21",
+        "readout": "",
+        "completion": ""
+      },
+      "first_registered": "2026-05-21",
+      "latest_registered": "2026-05-21",
       "linked_registries": []
     },
     {
@@ -6990,6 +7597,49 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "drug_class": "其他",
+      "name": "EA5注射液皮下制剂",
+      "highest_phase_label": "Phase 1",
+      "stage_number": 1,
+      "study_count": 1,
+      "status_summary": "招募 1 · 进行 0 · 完成 0",
+      "sponsors": [
+        "上海览屹医药科技有限公司"
+      ],
+      "sources": {
+        "ChinaDrugTrials": 1
+      },
+      "key_trial": {
+        "registry": "ChinaDrugTrials",
+        "registry_id": "CTR20263335",
+        "title": "一项评估EA5人源化单抗在成人抗AChR抗体阳性全身型重症肌无力患者中多次给药的安全性、耐受性、药代动力学、药效学和初步有效性的开放、剂量递增的 Ib 期临床试验",
+        "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20263335"
+      },
+      "trials": [
+        {
+          "registry": "ChinaDrugTrials",
+          "registry_id": "CTR20263335",
+          "title": "一项评估EA5人源化单抗在成人抗AChR抗体阳性全身型重症肌无力患者中多次给药的安全性、耐受性、药代动力学、药效学和初步有效性的开放、剂量递增的 Ib 期临床试验",
+          "status_label": "尚未招募",
+          "status_class": "recruiting",
+          "phase_label": "Phase 1",
+          "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "上海览屹医药科技有限公司",
+          "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20263335"
+        }
+      ],
+      "timeline": {
+        "start": "2026-09-02",
+        "readout": "",
+        "completion": ""
+      },
+      "first_registered": "2026-09-02",
+      "latest_registered": "2026-09-02",
+      "linked_registries": []
+    },
+    {
+      "drug_class": "其他",
       "name": "G-CSF",
       "highest_phase_label": "Phase 1",
       "stage_number": 1,
@@ -7077,49 +7727,6 @@ window.MG_CLINICAL_TRIALS_DATA = {
     {
       "drug_class": "其他",
       "name": "Mesna",
-      "highest_phase_label": "Phase 1",
-      "stage_number": 1,
-      "study_count": 1,
-      "status_summary": "招募 0 · 进行 0 · 完成 0 · 终止 1",
-      "sponsors": [
-        "Northwestern University"
-      ],
-      "sources": {
-        "ClinicalTrials.gov": 1
-      },
-      "key_trial": {
-        "registry": "ClinicalTrials.gov",
-        "registry_id": "NCT00424489",
-        "title": "Hematopoietic Stem Cell Therapy for Patients With Refractory Myasthenia Gravis",
-        "url": "https://clinicaltrials.gov/study/NCT00424489"
-      },
-      "trials": [
-        {
-          "registry": "ClinicalTrials.gov",
-          "registry_id": "NCT00424489",
-          "title": "Hematopoietic Stem Cell Therapy for Patients With Refractory Myasthenia Gravis",
-          "status_label": "已终止",
-          "status_class": "terminated",
-          "phase_label": "Phase 1",
-          "start_date": "",
-          "readout_date": "",
-          "completion_date": "",
-          "sponsor": "Northwestern University",
-          "url": "https://clinicaltrials.gov/study/NCT00424489"
-        }
-      ],
-      "timeline": {
-        "start": "2007-01-19",
-        "readout": "",
-        "completion": ""
-      },
-      "first_registered": "2007-01-19",
-      "latest_registered": "2007-01-19",
-      "linked_registries": []
-    },
-    {
-      "drug_class": "其他",
-      "name": "Methylprednisolone (甲泼尼龙)",
       "highest_phase_label": "Phase 1",
       "stage_number": 1,
       "study_count": 1,
@@ -7305,14 +7912,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2600120807",
-        "title": "基于mRNA-LNP递送三特异性抗体在自身免疫病中的探索性临床研究",
+        "title": "An Exploratory Clinical Study of mRNA-LNP Delivered Trispecific Antibodies in Autoimmune Diseases",
         "url": "https://www.chictr.org.cn/showproj.html?proj=314390"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2600120807",
-          "title": "基于mRNA-LNP递送三特异性抗体在自身免疫病中的探索性临床研究",
+          "title": "An Exploratory Clinical Study of mRNA-LNP Delivered Trispecific Antibodies in Autoimmune Diseases",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "Phase 1",
@@ -7693,14 +8300,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2000037676",
-        "title": "基于标准化诊疗体系的重症肌无力精准诊疗研究",
+        "title": "Precision Diagnosis and Prospective Cohort study for Myasthenia Gravis",
         "url": "https://www.chictr.org.cn/showproj.html?proj=60701"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2000037676",
-          "title": "基于标准化诊疗体系的重症肌无力精准诊疗研究",
+          "title": "Precision Diagnosis and Prospective Cohort study for Myasthenia Gravis",
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "未标注",
@@ -7713,7 +8320,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2100043284",
-          "title": "重症肌无力患者胸腺切除术后发生肌无力危象的风险预测模型的建立与验证：一项多中心、前瞻性队列研究",
+          "title": "Establishment and validation of a risk prediction model for myasthenia crisis after thymectomy in patients with myasthenia gravis: a multicenter, prospective cohort study",
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "未标注",
@@ -7726,7 +8333,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2100043291",
-          "title": "重症肌无力损害指数量表（MGII）的跨文化翻译及信度、效度检测：一项多中心、横断面研究",
+          "title": "Cross-cultural translation and reliability and validity testing of the Myasthenia Gravis Impairment Index (MGII): a multi-center, cross-sectional study",
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "未标注",
@@ -7752,9 +8359,10 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "highest_phase_label": "未标注",
       "stage_number": 0,
       "study_count": 2,
-      "status_summary": "招募 2 · 进行 0 · 完成 0",
+      "status_summary": "招募 1 · 进行 0 · 完成 1",
       "sponsors": [
-        "Shanghai Jiaolian Drug Research and Development Co., Ltd"
+        "Shanghai Jiaolian Drug Research and Development Co., Ltd",
+        "上海上药交联医药科技有限公司"
       ],
       "sources": {
         "ChinaDrugTrials": 1,
@@ -7771,13 +8379,13 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry": "ChinaDrugTrials",
           "registry_id": "CTR20240865",
           "title": "B007治疗全身型重症肌无力的II/III期临床研究",
-          "status_label": "招募中",
-          "status_class": "recruiting",
-          "phase_label": "未标注",
+          "status_label": "已完成",
+          "status_class": "completed",
+          "phase_label": "Phase 2 / Phase 3",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "",
+          "sponsor": "上海上药交联医药科技有限公司",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20240865"
         },
         {
@@ -7799,7 +8407,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         "readout": "2026-12-30",
         "completion": "2026-12-30"
       },
-      "first_registered": "2024-06-07",
+      "first_registered": "2024-03-15",
       "latest_registered": "2024-06-07",
       "linked_registries": []
     },
@@ -7934,14 +8542,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2300073727",
-        "title": "舒更葡糖钠在中国成年人重症肌无力患者胸腔镜胸腺切除术中应用的有效性和安全性：一项前瞻性随机对照研究",
+        "title": "Application of sugammadex in Chinese adults with myasthenia gravis undergoing thoracoscopy thymectomy",
         "url": "https://www.chictr.org.cn/showproj.html?proj=196505"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2300073727",
-          "title": "舒更葡糖钠在中国成年人重症肌无力患者胸腔镜胸腺切除术中应用的有效性和安全性：一项前瞻性随机对照研究",
+          "title": "Application of sugammadex in Chinese adults with myasthenia gravis undergoing thoracoscopy thymectomy",
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "未标注",
@@ -7992,14 +8600,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2300073727",
-        "title": "舒更葡糖钠在中国成年人重症肌无力患者胸腔镜胸腺切除术中应用的有效性和安全性：一项前瞻性随机对照研究",
+        "title": "Application of sugammadex in Chinese adults with myasthenia gravis undergoing thoracoscopy thymectomy",
         "url": "https://www.chictr.org.cn/showproj.html?proj=196505"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2300073727",
-          "title": "舒更葡糖钠在中国成年人重症肌无力患者胸腔镜胸腺切除术中应用的有效性和安全性：一项前瞻性随机对照研究",
+          "title": "Application of sugammadex in Chinese adults with myasthenia gravis undergoing thoracoscopy thymectomy",
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "未标注",
@@ -8050,14 +8658,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2600121843",
-        "title": "一项在难治性全身型重症肌无力患者中评价talquetamab疗效和安全性的小样本先导研究",
+        "title": "A Preliminary Case Study to Evaluate the Efficacy and Safety of Talquetamab in Patients with Refractory Generalized Myasthenia Gravis",
         "url": "https://www.chictr.org.cn/showproj.html?proj=314263"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2600121843",
-          "title": "一项在难治性全身型重症肌无力患者中评价talquetamab疗效和安全性的小样本先导研究",
+          "title": "A Preliminary Case Study to Evaluate the Efficacy and Safety of Talquetamab in Patients with Refractory Generalized Myasthenia Gravis",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -8107,14 +8715,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR1900023338",
-        "title": "胸腺瘤/胸腺增生相关重症肌无力与B19病毒感染相关性的临床研究",
+        "title": "Clinical study for the relationship between thymoma thymic hyperplasia-related myasthenia gravis and B19 virus infection",
         "url": "https://www.chictr.org.cn/showproj.html?proj=39337"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR1900023338",
-          "title": "胸腺瘤/胸腺增生相关重症肌无力与B19病毒感染相关性的临床研究",
+          "title": "Clinical study for the relationship between thymoma thymic hyperplasia-related myasthenia gravis and B19 virus infection",
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "未标注",
@@ -8127,7 +8735,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR1900025142",
-          "title": "神经系统免疫性疾病的临床及基因研究",
+          "title": "Clinical and genetic studies of neuroimmune disease",
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "未标注",
@@ -8163,14 +8771,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2500112366",
-        "title": "异体CD19-CAR-NK细胞治疗难治性重症肌无力的探索性临床研究",
+        "title": "Exploratory clinical study on the treatment of refractory myasthenia gravis with allogeneic CD19-CAR-NK cells",
         "url": "https://www.chictr.org.cn/showproj.html?proj=291981"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2500112366",
-          "title": "异体CD19-CAR-NK细胞治疗难治性重症肌无力的探索性临床研究",
+          "title": "Exploratory clinical study on the treatment of refractory myasthenia gravis with allogeneic CD19-CAR-NK cells",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -8292,14 +8900,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2300073207",
-        "title": "补中益气丸预防重症肌无力复发的有效性和安全性的多中心、随机、双盲、安慰剂对照临床试验",
+        "title": "Efficacy and safety of Buzhong Yiqi pills in preventing the relapse of myasthenia gravis: a multicenter, randomized, double-blind, placebo-controlled clinical trial",
         "url": "https://www.chictr.org.cn/showproj.html?proj=199555"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2300073207",
-          "title": "补中益气丸预防重症肌无力复发的有效性和安全性的多中心、随机、双盲、安慰剂对照临床试验",
+          "title": "Efficacy and safety of Buzhong Yiqi pills in preventing the relapse of myasthenia gravis: a multicenter, randomized, double-blind, placebo-controlled clinical trial",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -8378,14 +8986,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2100047506",
-        "title": "补中益气汤治疗脾肾虚弱型眼肌型重症肌无力（MG）患者的临床疗效观察：随机对照试验",
+        "title": "Efficacy of Buzhong Yiqi Decoction in the Treatment of Ocular Myopathy Myasthenia Gravis (MG) Patients with Spleen and Kidney Deficiency Type: a Randomized Controlled Trial",
         "url": "https://www.chictr.org.cn/showproj.html?proj=127794"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2100047506",
-          "title": "补中益气汤治疗脾肾虚弱型眼肌型重症肌无力（MG）患者的临床疗效观察：随机对照试验",
+          "title": "Efficacy of Buzhong Yiqi Decoction in the Treatment of Ocular Myopathy Myasthenia Gravis (MG) Patients with Spleen and Kidney Deficiency Type: a Randomized Controlled Trial",
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "未标注",
@@ -8421,14 +9029,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2300073207",
-        "title": "补中益气丸预防重症肌无力复发的有效性和安全性的多中心、随机、双盲、安慰剂对照临床试验",
+        "title": "Efficacy and safety of Buzhong Yiqi pills in preventing the relapse of myasthenia gravis: a multicenter, randomized, double-blind, placebo-controlled clinical trial",
         "url": "https://www.chictr.org.cn/showproj.html?proj=199555"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2300073207",
-          "title": "补中益气丸预防重症肌无力复发的有效性和安全性的多中心、随机、双盲、安慰剂对照临床试验",
+          "title": "Efficacy and safety of Buzhong Yiqi pills in preventing the relapse of myasthenia gravis: a multicenter, randomized, double-blind, placebo-controlled clinical trial",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -8593,14 +9201,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2200057566",
-        "title": "基于真实世界探讨益气温阳法治疗重症肌无力的病例注册登记研究",
+        "title": "Based on the real world study to discuss the case registration of Yiqiwenyang method in the treatment of myasthenia gravis",
         "url": "https://www.chictr.org.cn/showproj.html?proj=150770"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2200057566",
-          "title": "基于真实世界探讨益气温阳法治疗重症肌无力的病例注册登记研究",
+          "title": "Based on the real world study to discuss the case registration of Yiqiwenyang method in the treatment of myasthenia gravis",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -8636,14 +9244,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2100048150",
-        "title": "基于云数据库的建立观察中药对眼肌型重症肌无力治疗作用的队列研究",
+        "title": "A cohort study on the effect of traditional Chinese medicine on ocular myasthenia gravis based on cloud database",
         "url": "https://www.chictr.org.cn/showproj.html?proj=129456"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2100048150",
-          "title": "基于云数据库的建立观察中药对眼肌型重症肌无力治疗作用的队列研究",
+          "title": "A cohort study on the effect of traditional Chinese medicine on ocular myasthenia gravis based on cloud database",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -8708,6 +9316,49 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "drug_class": "其他",
+      "name": "Conventional sufentanil-based general anesthesia regimen",
+      "highest_phase_label": "未标注",
+      "stage_number": 0,
+      "study_count": 1,
+      "status_summary": "招募 0 · 进行 0 · 完成 0",
+      "sponsors": [
+        "Shijiazhuang People's Hospital"
+      ],
+      "sources": {
+        "ChiCTR": 1
+      },
+      "key_trial": {
+        "registry": "ChiCTR",
+        "registry_id": "ChiCTR2600134885",
+        "title": "Effects of an Opioid-Sparing Anesthesia Strategy in Surgical Patients with Myasthenia Gravis",
+        "url": "https://www.chictr.org.cn/showproj.html?proj=347023"
+      },
+      "trials": [
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR2600134885",
+          "title": "Effects of an Opioid-Sparing Anesthesia Strategy in Surgical Patients with Myasthenia Gravis",
+          "status_label": "Temporary halt",
+          "status_class": "other",
+          "phase_label": "未标注",
+          "start_date": "2026-10-23",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "Shijiazhuang People's Hospital",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=347023"
+        }
+      ],
+      "timeline": {
+        "start": "2026-10-23",
+        "readout": "",
+        "completion": ""
+      },
+      "first_registered": "2026-10-21",
+      "latest_registered": "2026-10-21",
+      "linked_registries": []
+    },
+    {
+      "drug_class": "其他",
       "name": "Early Versus Late Extubation in Myasthenia Gravis Patients",
       "highest_phase_label": "未标注",
       "stage_number": 0,
@@ -8765,14 +9416,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR1900024644",
-        "title": "中国儿童型重症肌无力临床异质性研究",
+        "title": "Investigation of mechanism of clinical heterogeneity of childhood onset myasthenia gravis and precision therapeutic strategies in China",
         "url": "https://www.chictr.org.cn/showproj.html?proj=32544"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR1900024644",
-          "title": "中国儿童型重症肌无力临床异质性研究",
+          "title": "Investigation of mechanism of clinical heterogeneity of childhood onset myasthenia gravis and precision therapeutic strategies in China",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -8808,14 +9459,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR1900024644",
-        "title": "中国儿童型重症肌无力临床异质性研究",
+        "title": "Investigation of mechanism of clinical heterogeneity of childhood onset myasthenia gravis and precision therapeutic strategies in China",
         "url": "https://www.chictr.org.cn/showproj.html?proj=32544"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR1900024644",
-          "title": "中国儿童型重症肌无力临床异质性研究",
+          "title": "Investigation of mechanism of clinical heterogeneity of childhood onset myasthenia gravis and precision therapeutic strategies in China",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -8851,14 +9502,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2100048785",
-        "title": "泛昔洛韦抗Epstein-Barr病毒治疗对重症肌无力合并胸腺增生患者手术治疗效果影响评估",
+        "title": "Evaluation of the effect of famciclovir anti-Epstein-Barr virus therapy on surgical treatment of patients with myasthenia gravis and thymic hyperplasia",
         "url": "https://www.chictr.org.cn/showproj.html?proj=130127"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2100048785",
-          "title": "泛昔洛韦抗Epstein-Barr病毒治疗对重症肌无力合并胸腺增生患者手术治疗效果影响评估",
+          "title": "Evaluation of the effect of famciclovir anti-Epstein-Barr virus therapy on surgical treatment of patients with myasthenia gravis and thymic hyperplasia",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -8894,14 +9545,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2200057039",
-        "title": "治疗重症肌无力的一种中药新药开发研究",
+        "title": "Research on the development of a new Chinese medicine for treating myasthenia gravis",
         "url": "https://www.chictr.org.cn/showproj.html?proj=155608"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2200057039",
-          "title": "治疗重症肌无力的一种中药新药开发研究",
+          "title": "Research on the development of a new Chinese medicine for treating myasthenia gravis",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "Retrospective study",
@@ -9052,49 +9703,6 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "drug_class": "其他",
-      "name": "Local",
-      "highest_phase_label": "未标注",
-      "stage_number": 0,
-      "study_count": 1,
-      "status_summary": "招募 1 · 进行 0 · 完成 0",
-      "sponsors": [
-        "Wuhan Aier Eye Hospital (Hanyang)"
-      ],
-      "sources": {
-        "ChiCTR": 1
-      },
-      "key_trial": {
-        "registry": "ChiCTR",
-        "registry_id": "ChiCTR1900024285",
-        "title": "局部使用激素球周注射治疗眼部重症肌无力",
-        "url": "https://www.chictr.org.cn/showproj.html?proj=40498"
-      },
-      "trials": [
-        {
-          "registry": "ChiCTR",
-          "registry_id": "ChiCTR1900024285",
-          "title": "局部使用激素球周注射治疗眼部重症肌无力",
-          "status_label": "招募中",
-          "status_class": "recruiting",
-          "phase_label": "未标注",
-          "start_date": "2019-08-01",
-          "readout_date": "",
-          "completion_date": "",
-          "sponsor": "Wuhan Aier Eye Hospital (Hanyang)",
-          "url": "https://www.chictr.org.cn/showproj.html?proj=40498"
-        }
-      ],
-      "timeline": {
-        "start": "2019-08-01",
-        "readout": "",
-        "completion": ""
-      },
-      "first_registered": "2019-07-05",
-      "latest_registered": "2019-07-05",
-      "linked_registries": []
-    },
-    {
-      "drug_class": "其他",
       "name": "Magnesium Sulfate",
       "highest_phase_label": "未标注",
       "stage_number": 0,
@@ -9109,14 +9717,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR1800017696",
-        "title": "硫酸镁对重症肌无力病人肌力影响的研究",
+        "title": "Effect of Magnesium Sulfate on Muscle Strength in Patients with Myasthenia Gravis",
         "url": "https://www.chictr.org.cn/showproj.html?proj=24904"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR1800017696",
-          "title": "硫酸镁对重症肌无力病人肌力影响的研究",
+          "title": "Effect of Magnesium Sulfate on Muscle Strength in Patients with Myasthenia Gravis",
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "New Treatment Measure Clinical Study",
@@ -9152,14 +9760,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2000040477",
-        "title": "加味补中益气汤治疗重症肌无力的疗效评价：系列单病例随机对照试验研究方案",
+        "title": "Innovative research on the pathogenesis of myasthenia gravis in traditional Chinese medicine (N-of-1)",
         "url": "https://www.chictr.org.cn/showproj.html?proj=64688"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2000040477",
-          "title": "加味补中益气汤治疗重症肌无力的疗效评价：系列单病例随机对照试验研究方案",
+          "title": "Innovative research on the pathogenesis of myasthenia gravis in traditional Chinese medicine (N-of-1)",
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "未标注",
@@ -9224,47 +9832,6 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "drug_class": "其他",
-      "name": "NA",
-      "highest_phase_label": "未标注",
-      "stage_number": 0,
-      "study_count": 1,
-      "status_summary": "招募 1 · 进行 0 · 完成 0",
-      "sponsors": [],
-      "sources": {
-        "ChinaDrugTrials": 1
-      },
-      "key_trial": {
-        "registry": "ChinaDrugTrials",
-        "registry_id": "CTR20243185",
-        "title": "一项在全身型重症肌无力参与者中比较伊普可泮与安慰剂的疗效、安全性和耐受性的研究。",
-        "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20243185"
-      },
-      "trials": [
-        {
-          "registry": "ChinaDrugTrials",
-          "registry_id": "CTR20243185",
-          "title": "一项在全身型重症肌无力参与者中比较伊普可泮与安慰剂的疗效、安全性和耐受性的研究。",
-          "status_label": "招募中",
-          "status_class": "recruiting",
-          "phase_label": "未标注",
-          "start_date": "",
-          "readout_date": "",
-          "completion_date": "",
-          "sponsor": "",
-          "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20243185"
-        }
-      ],
-      "timeline": {
-        "start": "",
-        "readout": "",
-        "completion": ""
-      },
-      "first_registered": "",
-      "latest_registered": "",
-      "linked_registries": []
-    },
-    {
-      "drug_class": "其他",
       "name": "Non-intubation anesthesia",
       "highest_phase_label": "未标注",
       "stage_number": 0,
@@ -9279,14 +9846,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2100043843",
-        "title": "非瘤重症肌无力非插管麻醉对比气管插管麻醉胸腔镜胸腺扩大切除术的随机对照研究",
+        "title": "spontaneous-ventilation versus tracheal intubation in VATS extended thymectomy for nonneoplastic myasthenia gravis",
         "url": "https://www.chictr.org.cn/showproj.html?proj=122689"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2100043843",
-          "title": "非瘤重症肌无力非插管麻醉对比气管插管麻醉胸腔镜胸腺扩大切除术的随机对照研究",
+          "title": "spontaneous-ventilation versus tracheal intubation in VATS extended thymectomy for nonneoplastic myasthenia gravis",
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "未标注",
@@ -9322,14 +9889,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2500099093",
-        "title": "IMPACT评分系统在重症肌无力中的预测作用评估：基于机器学习与多模型融合研究",
+        "title": "Prognostic Role of the IMPACT Scoring System in Myasthenia Gravis: A Study Based on Machine Learning and Multimodal Model Fusion",
         "url": "https://www.chictr.org.cn/showproj.html?proj=264882"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2500099093",
-          "title": "IMPACT评分系统在重症肌无力中的预测作用评估：基于机器学习与多模型融合研究",
+          "title": "Prognostic Role of the IMPACT Scoring System in Myasthenia Gravis: A Study Based on Machine Learning and Multimodal Model Fusion",
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "未标注",
@@ -9390,6 +9957,49 @@ window.MG_CLINICAL_TRIALS_DATA = {
       },
       "first_registered": "2017-02-10",
       "latest_registered": "2017-02-10",
+      "linked_registries": []
+    },
+    {
+      "drug_class": "其他",
+      "name": "Opioid-sparing multimodal anesthesia strategy",
+      "highest_phase_label": "未标注",
+      "stage_number": 0,
+      "study_count": 1,
+      "status_summary": "招募 0 · 进行 0 · 完成 0",
+      "sponsors": [
+        "Shijiazhuang People's Hospital"
+      ],
+      "sources": {
+        "ChiCTR": 1
+      },
+      "key_trial": {
+        "registry": "ChiCTR",
+        "registry_id": "ChiCTR2600134885",
+        "title": "Effects of an Opioid-Sparing Anesthesia Strategy in Surgical Patients with Myasthenia Gravis",
+        "url": "https://www.chictr.org.cn/showproj.html?proj=347023"
+      },
+      "trials": [
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR2600134885",
+          "title": "Effects of an Opioid-Sparing Anesthesia Strategy in Surgical Patients with Myasthenia Gravis",
+          "status_label": "Temporary halt",
+          "status_class": "other",
+          "phase_label": "未标注",
+          "start_date": "2026-10-23",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "Shijiazhuang People's Hospital",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=347023"
+        }
+      ],
+      "timeline": {
+        "start": "2026-10-23",
+        "readout": "",
+        "completion": ""
+      },
+      "first_registered": "2026-10-21",
+      "latest_registered": "2026-10-21",
       "linked_registries": []
     },
     {
@@ -9494,14 +10104,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2000033516",
-        "title": "强肌健力胶囊治疗重症肌无力的疗效及免疫调节作用:一系列随机对照n-of-1试验的研究方案",
+        "title": "To investigate the immunomodulation effect of invigorating spleen and invigorating Qi on myasthenia gravis based on N-of-1 randomized controlled trial",
         "url": "https://www.chictr.org.cn/showproj.html?proj=54618"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2000033516",
-          "title": "强肌健力胶囊治疗重症肌无力的疗效及免疫调节作用:一系列随机对照n-of-1试验的研究方案",
+          "title": "To investigate the immunomodulation effect of invigorating spleen and invigorating Qi on myasthenia gravis based on N-of-1 randomized controlled trial",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -9537,14 +10147,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR1900024644",
-        "title": "中国儿童型重症肌无力临床异质性研究",
+        "title": "Investigation of mechanism of clinical heterogeneity of childhood onset myasthenia gravis and precision therapeutic strategies in China",
         "url": "https://www.chictr.org.cn/showproj.html?proj=32544"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR1900024644",
-          "title": "中国儿童型重症肌无力临床异质性研究",
+          "title": "Investigation of mechanism of clinical heterogeneity of childhood onset myasthenia gravis and precision therapeutic strategies in China",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -9580,14 +10190,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR1900024644",
-        "title": "中国儿童型重症肌无力临床异质性研究",
+        "title": "Investigation of mechanism of clinical heterogeneity of childhood onset myasthenia gravis and precision therapeutic strategies in China",
         "url": "https://www.chictr.org.cn/showproj.html?proj=32544"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR1900024644",
-          "title": "中国儿童型重症肌无力临床异质性研究",
+          "title": "Investigation of mechanism of clinical heterogeneity of childhood onset myasthenia gravis and precision therapeutic strategies in China",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -9623,14 +10233,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2000040271",
-        "title": "基于微信平台的延续护理对重症肌无力患者服药依从性的影响—一项单中心、随机对照研究",
+        "title": "The impact of WeChat platform-based continued care on the compliance of patients with myasthenia gravis—a single center, randomized controlled study",
         "url": "https://www.chictr.org.cn/showproj.html?proj=64752"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2000040271",
-          "title": "基于微信平台的延续护理对重症肌无力患者服药依从性的影响—一项单中心、随机对照研究",
+          "title": "The impact of WeChat platform-based continued care on the compliance of patients with myasthenia gravis—a single center, randomized controlled study",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -9648,47 +10258,6 @@ window.MG_CLINICAL_TRIALS_DATA = {
       },
       "first_registered": "2020-11-26",
       "latest_registered": "2020-11-26",
-      "linked_registries": []
-    },
-    {
-      "drug_class": "其他",
-      "name": "SHR-2173",
-      "highest_phase_label": "未标注",
-      "stage_number": 0,
-      "study_count": 1,
-      "status_summary": "招募 1 · 进行 0 · 完成 0",
-      "sponsors": [],
-      "sources": {
-        "ChinaDrugTrials": 1
-      },
-      "key_trial": {
-        "registry": "ChinaDrugTrials",
-        "registry_id": "CTR20262007",
-        "title": "SHR-2173注射液治疗重症肌无力的II期临床试验",
-        "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20262007"
-      },
-      "trials": [
-        {
-          "registry": "ChinaDrugTrials",
-          "registry_id": "CTR20262007",
-          "title": "SHR-2173注射液治疗重症肌无力的II期临床试验",
-          "status_label": "尚未招募",
-          "status_class": "recruiting",
-          "phase_label": "未标注",
-          "start_date": "",
-          "readout_date": "",
-          "completion_date": "",
-          "sponsor": "",
-          "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20262007"
-        }
-      ],
-      "timeline": {
-        "start": "",
-        "readout": "",
-        "completion": ""
-      },
-      "first_registered": "",
-      "latest_registered": "",
       "linked_registries": []
     },
     {
@@ -9922,14 +10491,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR1900024369",
-        "title": "基于真实世界的中西医结合治疗重症肌无力的疗效评价及随访研究",
+        "title": "Therapeutic evaluation and follow-up study of myasthenia gravis treated by integrated traditional chinese and western medicine based on the real world study",
         "url": "https://www.chictr.org.cn/showproj.html?proj=38842"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR1900024369",
-          "title": "基于真实世界的中西医结合治疗重症肌无力的疗效评价及随访研究",
+          "title": "Therapeutic evaluation and follow-up study of myasthenia gravis treated by integrated traditional chinese and western medicine based on the real world study",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -9965,14 +10534,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2100048709",
-        "title": "请于伦理委员会批准后才开始征募参试者，并与我们联系上传伦理批件。                                                                   中药复方协同激素分期治疗全身型重症肌无力的前瞻性、随机、对照、双盲临床研究",
+        "title": "Prospective, randomized, controlled, double-blind clinical study of traditional Chinese medicine combined with glucocorticoid in the treatment of generalized myasthenia gravis",
         "url": "https://www.chictr.org.cn/showproj.html?proj=130187"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2100048709",
-          "title": "请于伦理委员会批准后才开始征募参试者，并与我们联系上传伦理批件。                                                                   中药复方协同激素分期治疗全身型重症肌无力的前瞻性、随机、对照、双盲临床研究",
+          "title": "Prospective, randomized, controlled, double-blind clinical study of traditional Chinese medicine combined with glucocorticoid in the treatment of generalized myasthenia gravis",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -10008,14 +10577,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2000040271",
-        "title": "基于微信平台的延续护理对重症肌无力患者服药依从性的影响—一项单中心、随机对照研究",
+        "title": "The impact of WeChat platform-based continued care on the compliance of patients with myasthenia gravis—a single center, randomized controlled study",
         "url": "https://www.chictr.org.cn/showproj.html?proj=64752"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2000040271",
-          "title": "基于微信平台的延续护理对重症肌无力患者服药依从性的影响—一项单中心、随机对照研究",
+          "title": "The impact of WeChat platform-based continued care on the compliance of patients with myasthenia gravis—a single center, randomized controlled study",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -10051,14 +10620,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2200057566",
-        "title": "基于真实世界探讨益气温阳法治疗重症肌无力的病例注册登记研究",
+        "title": "Based on the real world study to discuss the case registration of Yiqiwenyang method in the treatment of myasthenia gravis",
         "url": "https://www.chictr.org.cn/showproj.html?proj=150770"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2200057566",
-          "title": "基于真实世界探讨益气温阳法治疗重症肌无力的病例注册登记研究",
+          "title": "Based on the real world study to discuss the case registration of Yiqiwenyang method in the treatment of myasthenia gravis",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -10080,6 +10649,49 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "drug_class": "其他",
+      "name": "Western medicine and Chinese medicines granules",
+      "highest_phase_label": "未标注",
+      "stage_number": 0,
+      "study_count": 1,
+      "status_summary": "招募 0 · 进行 0 · 完成 1",
+      "sponsors": [
+        "Guangzhou University of TCM"
+      ],
+      "sources": {
+        "ChiCTR": 1
+      },
+      "key_trial": {
+        "registry": "ChiCTR",
+        "registry_id": "ChiCTR-TRC-12003062",
+        "title": "Clinical Evaluation of Chinese medicine to treat myasthenia gravis patients",
+        "url": "https://www.chictr.org.cn/showproj.html?proj=6495"
+      },
+      "trials": [
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR-TRC-12003062",
+          "title": "Clinical Evaluation of Chinese medicine to treat myasthenia gravis patients",
+          "status_label": "已完成",
+          "status_class": "completed",
+          "phase_label": "未标注",
+          "start_date": "2008-07-01",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "Guangzhou University of TCM",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=6495"
+        }
+      ],
+      "timeline": {
+        "start": "2008-07-01",
+        "readout": "",
+        "completion": ""
+      },
+      "first_registered": "2012-04-19",
+      "latest_registered": "2012-04-19",
+      "linked_registries": []
+    },
+    {
+      "drug_class": "其他",
       "name": "basic treatment plan",
       "highest_phase_label": "未标注",
       "stage_number": 0,
@@ -10094,14 +10706,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2300073207",
-        "title": "补中益气丸预防重症肌无力复发的有效性和安全性的多中心、随机、双盲、安慰剂对照临床试验",
+        "title": "Efficacy and safety of Buzhong Yiqi pills in preventing the relapse of myasthenia gravis: a multicenter, randomized, double-blind, placebo-controlled clinical trial",
         "url": "https://www.chictr.org.cn/showproj.html?proj=199555"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2300073207",
-          "title": "补中益气丸预防重症肌无力复发的有效性和安全性的多中心、随机、双盲、安慰剂对照临床试验",
+          "title": "Efficacy and safety of Buzhong Yiqi pills in preventing the relapse of myasthenia gravis: a multicenter, randomized, double-blind, placebo-controlled clinical trial",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -10137,14 +10749,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2100048709",
-        "title": "请于伦理委员会批准后才开始征募参试者，并与我们联系上传伦理批件。                                                                   中药复方协同激素分期治疗全身型重症肌无力的前瞻性、随机、对照、双盲临床研究",
+        "title": "Prospective, randomized, controlled, double-blind clinical study of traditional Chinese medicine combined with glucocorticoid in the treatment of generalized myasthenia gravis",
         "url": "https://www.chictr.org.cn/showproj.html?proj=130187"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2100048709",
-          "title": "请于伦理委员会批准后才开始征募参试者，并与我们联系上传伦理批件。                                                                   中药复方协同激素分期治疗全身型重症肌无力的前瞻性、随机、对照、双盲临床研究",
+          "title": "Prospective, randomized, controlled, double-blind clinical study of traditional Chinese medicine combined with glucocorticoid in the treatment of generalized myasthenia gravis",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -10180,14 +10792,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2600117375",
-        "title": "重症肌无力患者糖皮质激素治疗负担的临床研究",
+        "title": "Clinical study of glucocorticoid treatment burden in patients with myasthenia gravis",
         "url": "https://www.chictr.org.cn/showproj.html?proj=261626"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2600117375",
-          "title": "重症肌无力患者糖皮质激素治疗负担的临床研究",
+          "title": "Clinical study of glucocorticoid treatment burden in patients with myasthenia gravis",
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "未标注",
@@ -10209,6 +10821,49 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "drug_class": "其他",
+      "name": "muscle relaxant monitor",
+      "highest_phase_label": "未标注",
+      "stage_number": 0,
+      "study_count": 1,
+      "status_summary": "招募 0 · 进行 0 · 完成 1",
+      "sponsors": [
+        "Yijishan Hospital, Wannan Medical College, Wuhu 241001, China"
+      ],
+      "sources": {
+        "ChiCTR": 1
+      },
+      "key_trial": {
+        "registry": "ChiCTR",
+        "registry_id": "ChiCTR-OCC-14004533",
+        "title": "The superior anesthetic management scheme during perioperative period for myasthenia gravis patients",
+        "url": "https://www.chictr.org.cn/showproj.html?proj=5039"
+      },
+      "trials": [
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR-OCC-14004533",
+          "title": "The superior anesthetic management scheme during perioperative period for myasthenia gravis patients",
+          "status_label": "已完成",
+          "status_class": "completed",
+          "phase_label": "未标注",
+          "start_date": "2014-04-30",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "Yijishan Hospital, Wannan Medical College, Wuhu 241001, China",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=5039"
+        }
+      ],
+      "timeline": {
+        "start": "2014-04-30",
+        "readout": "",
+        "completion": ""
+      },
+      "first_registered": "2014-04-16",
+      "latest_registered": "2014-04-16",
+      "linked_registries": []
+    },
+    {
+      "drug_class": "其他",
       "name": "no Intervention",
       "highest_phase_label": "未标注",
       "stage_number": 0,
@@ -10223,14 +10878,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR1900023338",
-        "title": "胸腺瘤/胸腺增生相关重症肌无力与B19病毒感染相关性的临床研究",
+        "title": "Clinical study for the relationship between thymoma thymic hyperplasia-related myasthenia gravis and B19 virus infection",
         "url": "https://www.chictr.org.cn/showproj.html?proj=39337"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR1900023338",
-          "title": "胸腺瘤/胸腺增生相关重症肌无力与B19病毒感染相关性的临床研究",
+          "title": "Clinical study for the relationship between thymoma thymic hyperplasia-related myasthenia gravis and B19 virus infection",
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "未标注",
@@ -10266,14 +10921,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2100044733",
-        "title": "放疗对于合并胸腺瘤的重症肌无力患者症状的影响",
+        "title": "The impact of radiation therapy on outcome for myasthenia gravis patients with thymoma",
         "url": "https://www.chictr.org.cn/showproj.html?proj=124097"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2100044733",
-          "title": "放疗对于合并胸腺瘤的重症肌无力患者症状的影响",
+          "title": "The impact of radiation therapy on outcome for myasthenia gravis patients with thymoma",
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "未标注",
@@ -10352,14 +11007,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR1900024644",
-        "title": "中国儿童型重症肌无力临床异质性研究",
+        "title": "Investigation of mechanism of clinical heterogeneity of childhood onset myasthenia gravis and precision therapeutic strategies in China",
         "url": "https://www.chictr.org.cn/showproj.html?proj=32544"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR1900024644",
-          "title": "中国儿童型重症肌无力临床异质性研究",
+          "title": "Investigation of mechanism of clinical heterogeneity of childhood onset myasthenia gravis and precision therapeutic strategies in China",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -10395,14 +11050,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR1900024644",
-        "title": "中国儿童型重症肌无力临床异质性研究",
+        "title": "Investigation of mechanism of clinical heterogeneity of childhood onset myasthenia gravis and precision therapeutic strategies in China",
         "url": "https://www.chictr.org.cn/showproj.html?proj=32544"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR1900024644",
-          "title": "中国儿童型重症肌无力临床异质性研究",
+          "title": "Investigation of mechanism of clinical heterogeneity of childhood onset myasthenia gravis and precision therapeutic strategies in China",
           "status_label": "Pending",
           "status_class": "other",
           "phase_label": "未标注",
@@ -10438,14 +11093,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ChiCTR",
         "registry_id": "ChiCTR2100043843",
-        "title": "非瘤重症肌无力非插管麻醉对比气管插管麻醉胸腔镜胸腺扩大切除术的随机对照研究",
+        "title": "spontaneous-ventilation versus tracheal intubation in VATS extended thymectomy for nonneoplastic myasthenia gravis",
         "url": "https://www.chictr.org.cn/showproj.html?proj=122689"
       },
       "trials": [
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2100043843",
-          "title": "非瘤重症肌无力非插管麻醉对比气管插管麻醉胸腔镜胸腺扩大切除术的随机对照研究",
+          "title": "spontaneous-ventilation versus tracheal intubation in VATS extended thymectomy for nonneoplastic myasthenia gravis",
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "未标注",
@@ -15142,7 +15797,13 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "readout_date": "2025-12-31",
           "completion_date": "2026-06-30",
           "registered_date": "2024-11-27",
-          "linked_registries": []
+          "linked_registries": [
+            {
+              "registry": "ChiCTR",
+              "registry_id": "ChiCTR2500104395",
+              "url": "https://www.chictr.org.cn/showproj.html?proj=256067"
+            }
+          ]
         },
         {
           "registry": "ClinicalTrials.gov",
@@ -17213,16 +17874,171 @@ window.MG_CLINICAL_TRIALS_DATA = {
     {
       "source": "ChiCTR",
       "meta": {
-        "generated_at": "2026-07-27",
-        "mode": "cache",
+        "generated_at": "2026-10-24",
+        "mode": "live",
         "warning": "",
-        "revision": "semantic-v1:dad6676eb2c9afecefd2f8bcab384ac73c01c4ebf18a969f73db64265b048cdb"
+        "revision": "semantic-v1:d47f7621614b950a7233f98c08ff140b7aeefe4971ec36a84c35b7e6d4df9598"
       },
       "records": [
         {
           "registry": "ChiCTR",
+          "registry_id": "ChiCTR-IOR-16008429",
+          "title": "Comparison between the lateral side and subxiphoid approach for video-assisted thoracoscopic extended thymectomy in treating myasthenia gravis: a prospective randomized controlled study",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=13644",
+          "status": "Pending",
+          "status_label": "Pending",
+          "status_class": "other",
+          "drug_class": "其他",
+          "drug_name": "video-assisted thoracoscopic extended thymectomy via the subxiphoid approach",
+          "drug_names": [],
+          "indication": "重症肌无力",
+          "phase_label": "未标注",
+          "sponsor": "West China Hospital, Sichuan University",
+          "start_date": "2016-06-01",
+          "readout_date": "",
+          "completion_date": "",
+          "registered_date": "2016-05-07",
+          "linked_registries": []
+        },
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR-IPR-15006081",
+          "title": "A prospective study of combined use of prednisone and methotrexate for the treatment of myasthenia gravis",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=10563",
+          "status": "Recruiting",
+          "status_label": "招募中",
+          "status_class": "recruiting",
+          "drug_class": "免疫抑制剂",
+          "drug_name": "prednisone",
+          "drug_names": [
+            "Prednisone (泼尼松)",
+            "methotrexate"
+          ],
+          "indication": "重症肌无力",
+          "phase_label": "Phase 4",
+          "sponsor": "Xuan Wu Hospital, Capital Medical University",
+          "start_date": "2014-07-18",
+          "readout_date": "",
+          "completion_date": "",
+          "registered_date": "2015-03-14",
+          "linked_registries": []
+        },
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR-OCC-13003090",
+          "title": "Research on micrornas expression of Myasthenia gravis and the relationship with TH1, TH2 cells secrete cytokines",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=6469",
+          "status": "Completed",
+          "status_label": "已完成",
+          "status_class": "completed",
+          "drug_class": "胆碱酯酶抑制剂",
+          "drug_name": "Pyridostigmine Bromide",
+          "drug_names": [
+            "Pyridostigmine (溴吡斯的明)",
+            "nothing"
+          ],
+          "indication": "重症肌无力",
+          "phase_label": "未标注",
+          "sponsor": "The first affiliated hospital of Guangzhou university of Traditional Chinese medicine",
+          "start_date": "2012-12-20",
+          "readout_date": "",
+          "completion_date": "",
+          "registered_date": "2013-03-02",
+          "linked_registries": []
+        },
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR-OCC-14004533",
+          "title": "The superior anesthetic management scheme during perioperative period for myasthenia gravis patients",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=5039",
+          "status": "Completed",
+          "status_label": "已完成",
+          "status_class": "completed",
+          "drug_class": "其他",
+          "drug_name": "muscle relaxant monitor",
+          "drug_names": [
+            "muscle relaxant monitor"
+          ],
+          "indication": "重症肌无力",
+          "phase_label": "未标注",
+          "sponsor": "Yijishan Hospital, Wannan Medical College, Wuhu 241001, China",
+          "start_date": "2014-04-30",
+          "readout_date": "",
+          "completion_date": "",
+          "registered_date": "2014-04-16",
+          "linked_registries": []
+        },
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR-ORC-11001592",
+          "title": "A comparison of dexmedetomidine versus flurbiprofen for analgesic effect in thymusectomy patients",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=7949",
+          "status": "Completed",
+          "status_label": "已完成",
+          "status_class": "completed",
+          "drug_class": "其他",
+          "drug_name": "dexmedetomidine",
+          "drug_names": [
+            "dexmedetomidine",
+            "Flurbiprofen"
+          ],
+          "indication": "重症肌无力",
+          "phase_label": "Phase 4",
+          "sponsor": "urgical intensive care unit, The First Affiliated Hospital of Sun Yat-sen University University",
+          "start_date": "2011-04-01",
+          "readout_date": "",
+          "completion_date": "",
+          "registered_date": "2011-08-06",
+          "linked_registries": []
+        },
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR-TRC-12003062",
+          "title": "Clinical Evaluation of Chinese medicine to treat myasthenia gravis patients",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=6495",
+          "status": "Completed",
+          "status_label": "已完成",
+          "status_class": "completed",
+          "drug_class": "其他",
+          "drug_name": "Western medicine and Chinese medicines granules",
+          "drug_names": [
+            "Western medicine and Chinese medicines granules"
+          ],
+          "indication": "重症肌无力",
+          "phase_label": "未标注",
+          "sponsor": "Guangzhou University of TCM",
+          "start_date": "2008-07-01",
+          "readout_date": "",
+          "completion_date": "",
+          "registered_date": "2012-04-19",
+          "linked_registries": []
+        },
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR-TRC-13004125",
+          "title": "The study on the pathogenesis of spleen-kidney deficiency type myasthenia gravis and the interference effect of Jianji Ning Granule on the patients",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=5443",
+          "status": "Completed",
+          "status_label": "已完成",
+          "status_class": "completed",
+          "drug_class": "胆碱酯酶抑制剂",
+          "drug_name": "Jianji Ning Granule combined with olfactory pyridostigmine",
+          "drug_names": [
+            "Pyridostigmine (溴吡斯的明)"
+          ],
+          "indication": "重症肌无力",
+          "phase_label": "Phase 1 / Phase 2",
+          "sponsor": "Longhua Hospital Affiliated to Shanghai University of traditional Chinese Medicine",
+          "start_date": "2010-10-01",
+          "readout_date": "",
+          "completion_date": "",
+          "registered_date": "2013-06-08",
+          "linked_registries": []
+        },
+        {
+          "registry": "ChiCTR",
           "registry_id": "ChiCTR1800017564",
-          "title": "胸腺切除手术时机对非胸腺瘤重症肌无力患者预后影响的前瞻性随访研究",
+          "title": "Optimal Timing of Thymectomy in Nonthymomatous Myasthenia Gravis Patients In China: A Prospective Study",
           "url": "https://www.chictr.org.cn/showproj.html?proj=29432",
           "status": "Pending",
           "status_label": "Pending",
@@ -17244,7 +18060,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR1800017696",
-          "title": "硫酸镁对重症肌无力病人肌力影响的研究",
+          "title": "Effect of Magnesium Sulfate on Muscle Strength in Patients with Myasthenia Gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=24904",
           "status": "Recruiting",
           "status_label": "招募中",
@@ -17266,7 +18082,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR1800017903",
-          "title": "重症肌无力患者外周血细胞生物合成及线粒体融合分裂的变化和临床意义",
+          "title": "Study for the characteristics of peripheral blood cell biosynthesis and mitochondrial fusion and division of patient with myasthenia gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=30263",
           "status": "Recruiting",
           "status_label": "招募中",
@@ -17286,7 +18102,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR1800018623",
-          "title": "不同剂量甲泼尼龙治疗重症肌无力疗效评价",
+          "title": "Different doses of methylprednisolone in the treatment of myasthenia gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=31014",
           "status": "Recruiting",
           "status_label": "招募中",
@@ -17306,7 +18122,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR1900023338",
-          "title": "胸腺瘤/胸腺增生相关重症肌无力与B19病毒感染相关性的临床研究",
+          "title": "Clinical study for the relationship between thymoma thymic hyperplasia-related myasthenia gravis and B19 virus infection",
           "url": "https://www.chictr.org.cn/showproj.html?proj=39337",
           "status": "Recruiting",
           "status_label": "招募中",
@@ -17329,7 +18145,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR1900024285",
-          "title": "局部使用激素球周注射治疗眼部重症肌无力",
+          "title": "Topical use of hormone injection in the treatment of ocular myasthenia gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=40498",
           "status": "Recruiting",
           "status_label": "招募中",
@@ -17351,7 +18167,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR1900024369",
-          "title": "基于真实世界的中西医结合治疗重症肌无力的疗效评价及随访研究",
+          "title": "Therapeutic evaluation and follow-up study of myasthenia gravis treated by integrated traditional chinese and western medicine based on the real world study",
           "url": "https://www.chictr.org.cn/showproj.html?proj=38842",
           "status": "Pending",
           "status_label": "Pending",
@@ -17373,7 +18189,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR1900024510",
-          "title": "儿童重症肌无力的临床流行病学特征及长期随访研究",
+          "title": "Clinical epidemiological characteristics and long-term follow-up study of pediatric myasthenia gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=38846",
           "status": "Pending",
           "status_label": "Pending",
@@ -17393,7 +18209,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR1900024644",
-          "title": "中国儿童型重症肌无力临床异质性研究",
+          "title": "Investigation of mechanism of clinical heterogeneity of childhood onset myasthenia gravis and precision therapeutic strategies in China",
           "url": "https://www.chictr.org.cn/showproj.html?proj=32544",
           "status": "Pending",
           "status_label": "Pending",
@@ -17420,7 +18236,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR1900024692",
-          "title": "硫唑嘌呤和环孢素在重症肌无力免疫修饰中的疗效对比",
+          "title": "Comparison of the efficacy of azathioprine and cyclosporine in myasthenia gravis immune modification",
           "url": "https://www.chictr.org.cn/showproj.html?proj=41074",
           "status": "Recruiting",
           "status_label": "招募中",
@@ -17444,7 +18260,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR1900025142",
-          "title": "神经系统免疫性疾病的临床及基因研究",
+          "title": "Clinical and genetic studies of neuroimmune disease",
           "url": "https://www.chictr.org.cn/showproj.html?proj=27584",
           "status": "Recruiting",
           "status_label": "招募中",
@@ -17466,7 +18282,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR1900026128",
-          "title": "背俞穴埋线治疗脾胃虚损型Ⅰ、Ⅱ型重症肌无力疗效观察",
+          "title": "Therapeutic Effect of Back-shu Point Catgut Embedding in Spleen-stomach Deficiency Type I and II Myasthenia Gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=43617",
           "status": "Pending",
           "status_label": "Pending",
@@ -17486,7 +18302,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2000032085",
-          "title": "中医药治疗重症肌无力的病因病机创新研究",
+          "title": "Innovative research on the pathogenesis of myasthenia gravis in traditional Chinese medicine",
           "url": "https://www.chictr.org.cn/showproj.html?proj=52251",
           "status": "Pending",
           "status_label": "Pending",
@@ -17506,7 +18322,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2000033516",
-          "title": "强肌健力胶囊治疗重症肌无力的疗效及免疫调节作用:一系列随机对照n-of-1试验的研究方案",
+          "title": "To investigate the immunomodulation effect of invigorating spleen and invigorating Qi on myasthenia gravis based on N-of-1 randomized controlled trial",
           "url": "https://www.chictr.org.cn/showproj.html?proj=54618",
           "status": "Pending",
           "status_label": "Pending",
@@ -17528,13 +18344,13 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2000033560",
-          "title": "一项评价HBM9161 （HL161）皮下注射治疗全身型重症肌无力患者的有效性、安全性、药效学和药物代谢动力学的多中心、随机、双盲、安慰剂对照、平行研究",
+          "title": "A Multicenter, Randomized, Double-Blind, Placebo-Controlled Study to Evaluate the Efficacy, Safety and Pharmacodynamic and Pharmacokinetic of HBM9161 (HL161) Subcutaneous Injection in Patients With Generalized Myasthenia Gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=54367",
           "status": "Pending",
           "status_label": "Pending",
           "status_class": "other",
           "drug_class": "FcRn 拮抗剂",
-          "drug_name": "HBM9161  dose 1",
+          "drug_name": "HBM9161 dose 1",
           "drug_names": [
             "Batoclimab (巴托利单抗)"
           ],
@@ -17550,7 +18366,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2000033881",
-          "title": "机器人和胸腔镜剑突下胸腺扩大切除术治疗重症肌无力的随机对照研究",
+          "title": "Robotic versus video-assisted thoracoscopic subxiphoid extended thymectomy for myasthenia gravis: a randomised controlled trail",
           "url": "https://www.chictr.org.cn/showproj.html?proj=54906",
           "status": "Recruiting",
           "status_label": "招募中",
@@ -17570,7 +18386,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2000037676",
-          "title": "基于标准化诊疗体系的重症肌无力精准诊疗研究",
+          "title": "Precision Diagnosis and Prospective Cohort study for Myasthenia Gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=60701",
           "status": "Recruiting",
           "status_label": "招募中",
@@ -17592,7 +18408,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2000037904",
-          "title": "小剂量他汀联合常规用药对照常规用药治疗晚发型重症肌无力患者的疗效和安全性评价：一项前瞻性队列研究",
+          "title": "Efficacy and safety of low-dose statins combined with conventional versus conventional treatment in patients with late onset myasthenia gravis: a prospective cohort study",
           "url": "https://www.chictr.org.cn/showproj.html?proj=60932",
           "status": "Pending",
           "status_label": "Pending",
@@ -17614,27 +18430,29 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2000038863",
-          "title": "局部使用激素治疗眼肌型重症肌无力",
+          "title": "Local Use of Dexamethasone in the Treatment of Ocular Myasthenia Gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=62056",
-          "status": "Unknown",
-          "status_label": "未知",
-          "status_class": "other",
+          "status": "Completed",
+          "status_label": "已完成",
+          "status_class": "completed",
           "drug_class": "其他",
-          "drug_name": "",
-          "drug_names": [],
+          "drug_name": "Local",
+          "drug_names": [
+            "Local"
+          ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
-          "start_date": "",
+          "phase_label": "Phase 4",
+          "sponsor": "Wuhan Aier Eye Hospital (Hanyang), Hubei, China",
+          "start_date": "2016-08-24",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2020-10-07",
           "linked_registries": []
         },
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2000038874",
-          "title": "重症肌无力专病数据库及生物样本库建立",
+          "title": "Establishment of database and biological sample library for myasthenia gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=56769",
           "status": "Recruiting",
           "status_label": "招募中",
@@ -17654,7 +18472,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2000040271",
-          "title": "基于微信平台的延续护理对重症肌无力患者服药依从性的影响—一项单中心、随机对照研究",
+          "title": "The impact of WeChat platform-based continued care on the compliance of patients with myasthenia gravis—a single center, randomized controlled study",
           "url": "https://www.chictr.org.cn/showproj.html?proj=64752",
           "status": "Pending",
           "status_label": "Pending",
@@ -17677,7 +18495,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2000040477",
-          "title": "加味补中益气汤治疗重症肌无力的疗效评价：系列单病例随机对照试验研究方案",
+          "title": "Innovative research on the pathogenesis of myasthenia gravis in traditional Chinese medicine (N-of-1)",
           "url": "https://www.chictr.org.cn/showproj.html?proj=64688",
           "status": "Recruiting",
           "status_label": "招募中",
@@ -17699,7 +18517,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2100043273",
-          "title": "托珠单抗治疗全身型重症肌无力的有效性和安全性：一项单中心、前瞻性队列研究",
+          "title": "Efficacy and safety of tocilizumab in the treatment of generalizaed myasthenia gravis: a single-center, prospective cohort study",
           "url": "https://www.chictr.org.cn/showproj.html?proj=121875",
           "status": "Recruiting",
           "status_label": "招募中",
@@ -17723,7 +18541,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2100043284",
-          "title": "重症肌无力患者胸腺切除术后发生肌无力危象的风险预测模型的建立与验证：一项多中心、前瞻性队列研究",
+          "title": "Establishment and validation of a risk prediction model for myasthenia crisis after thymectomy in patients with myasthenia gravis: a multicenter, prospective cohort study",
           "url": "https://www.chictr.org.cn/showproj.html?proj=121835",
           "status": "Recruiting",
           "status_label": "招募中",
@@ -17745,7 +18563,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2100043291",
-          "title": "重症肌无力损害指数量表（MGII）的跨文化翻译及信度、效度检测：一项多中心、横断面研究",
+          "title": "Cross-cultural translation and reliability and validity testing of the Myasthenia Gravis Impairment Index (MGII): a multi-center, cross-sectional study",
           "url": "https://www.chictr.org.cn/showproj.html?proj=121805",
           "status": "Recruiting",
           "status_label": "招募中",
@@ -17767,7 +18585,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2100043843",
-          "title": "非瘤重症肌无力非插管麻醉对比气管插管麻醉胸腔镜胸腺扩大切除术的随机对照研究",
+          "title": "spontaneous-ventilation versus tracheal intubation in VATS extended thymectomy for nonneoplastic myasthenia gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=122689",
           "status": "Recruiting",
           "status_label": "招募中",
@@ -17790,7 +18608,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2100044733",
-          "title": "放疗对于合并胸腺瘤的重症肌无力患者症状的影响",
+          "title": "The impact of radiation therapy on outcome for myasthenia gravis patients with thymoma",
           "url": "https://www.chictr.org.cn/showproj.html?proj=124097",
           "status": "Recruiting",
           "status_label": "招募中",
@@ -17812,7 +18630,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2100045847",
-          "title": "重症肌无力登记队列研究",
+          "title": "A Registered Study on Myasthenia gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=125748",
           "status": "Recruiting",
           "status_label": "招募中",
@@ -17832,7 +18650,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2100047506",
-          "title": "补中益气汤治疗脾肾虚弱型眼肌型重症肌无力（MG）患者的临床疗效观察：随机对照试验",
+          "title": "Efficacy of Buzhong Yiqi Decoction in the Treatment of Ocular Myopathy Myasthenia Gravis (MG) Patients with Spleen and Kidney Deficiency Type: a Randomized Controlled Trial",
           "url": "https://www.chictr.org.cn/showproj.html?proj=127794",
           "status": "Recruiting",
           "status_label": "招募中",
@@ -17855,7 +18673,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2100048150",
-          "title": "基于云数据库的建立观察中药对眼肌型重症肌无力治疗作用的队列研究",
+          "title": "A cohort study on the effect of traditional Chinese medicine on ocular myasthenia gravis based on cloud database",
           "url": "https://www.chictr.org.cn/showproj.html?proj=129456",
           "status": "Pending",
           "status_label": "Pending",
@@ -17877,7 +18695,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2100048367",
-          "title": "中医药指南治疗重症肌无力的临床疗效评价研究",
+          "title": "A Study Evaluating the Clinical Efficacy of Treatment based on Chinese Medicine Guideline in Patients With Myasthenia Gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=128702",
           "status": "Pending",
           "status_label": "Pending",
@@ -17897,7 +18715,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2100048709",
-          "title": "请于伦理委员会批准后才开始征募参试者，并与我们联系上传伦理批件。                                                                   中药复方协同激素分期治疗全身型重症肌无力的前瞻性、随机、对照、双盲临床研究",
+          "title": "Prospective, randomized, controlled, double-blind clinical study of traditional Chinese medicine combined with glucocorticoid in the treatment of generalized myasthenia gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=130187",
           "status": "Pending",
           "status_label": "Pending",
@@ -17920,7 +18738,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2100048785",
-          "title": "泛昔洛韦抗Epstein-Barr病毒治疗对重症肌无力合并胸腺增生患者手术治疗效果影响评估",
+          "title": "Evaluation of the effect of famciclovir anti-Epstein-Barr virus therapy on surgical treatment of patients with myasthenia gravis and thymic hyperplasia",
           "url": "https://www.chictr.org.cn/showproj.html?proj=130127",
           "status": "Pending",
           "status_label": "Pending",
@@ -17942,7 +18760,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2100050279",
-          "title": "重症肌无力患者登记：河南重症肌无力研究协作组数据库",
+          "title": "He'nan Myasthenia Gravis Study Collaboration Group Database: the Clinical Characteristics, Response to Treatments and Prognosis of Myasthenia Gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=132462",
           "status": "Pending",
           "status_label": "Pending",
@@ -17962,7 +18780,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2100050890",
-          "title": "胸腺切除术治疗重症肌无力的精准免疫分子评价模型建立与验证——一项巢式病例对照研究",
+          "title": "Establishment and verification of a precise immune molecular evaluation model for thymectomy for the treatment of myasthenia gravis: a nested case-control study",
           "url": "https://www.chictr.org.cn/showproj.html?proj=129461",
           "status": "Recruiting",
           "status_label": "招募中",
@@ -17982,7 +18800,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2100050903",
-          "title": "HBM9161皮下注射治疗全身型重症肌无力患者的有效性、安全性的多中心、随机、双盲、安慰剂对照、2/3 期运营无缝、成组序贯设计研究",
+          "title": "Multicenter, randomized, double-blind, placebo-controlled, phase 2/3 operational seamless, group sequential design study of the efficacy and safety of HBM9161 subcutaneous injection in patients with generalized myasthenia gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=132173",
           "status": "Pending",
           "status_label": "Pending",
@@ -17999,18 +18817,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "readout_date": "",
           "completion_date": "",
           "registered_date": "2021-09-07",
-          "linked_registries": [
-            {
-              "registry": "ChinaDrugTrials",
-              "registry_id": "CTR20212099",
-              "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20212099"
-            }
-          ]
+          "linked_registries": []
         },
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2100052861",
-          "title": "经剑突下机器人模块化胸腺扩大切除手术：一项回顾性研究",
+          "title": "Modularized procedure for trans-subxiphoid robotic extended thymectomy: a retrospective study",
           "url": "https://www.chictr.org.cn/showproj.html?proj=135161",
           "status": "Pending",
           "status_label": "Pending",
@@ -18030,7 +18842,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2200057039",
-          "title": "治疗重症肌无力的一种中药新药开发研究",
+          "title": "Research on the development of a new Chinese medicine for treating myasthenia gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=155608",
           "status": "Pending",
           "status_label": "Pending",
@@ -18052,7 +18864,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2200057193",
-          "title": "他克莫司治疗重症肌无力的优势人群研究",
+          "title": "Study on the dominant population of tacrolimus in the treatment of myasthenia gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=153272",
           "status": "Pending",
           "status_label": "Pending",
@@ -18074,7 +18886,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2200057566",
-          "title": "基于真实世界探讨益气温阳法治疗重症肌无力的病例注册登记研究",
+          "title": "Based on the real world study to discuss the case registration of Yiqiwenyang method in the treatment of myasthenia gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=150770",
           "status": "Pending",
           "status_label": "Pending",
@@ -18097,7 +18909,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2200058984",
-          "title": "基于群体药动/药效模型的重症肌无力患者利妥昔单抗的量效关系及不同剂量的治疗差异研究",
+          "title": "Study on the dose-effect relationship of rituximab in patients with myasthenia gravis and the treatment differences of different doses based on population pharmacokinetic/pharmacodynamic model",
           "url": "https://www.chictr.org.cn/showproj.html?proj=166743",
           "status": "Pending",
           "status_label": "Pending",
@@ -18119,7 +18931,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2200059452",
-          "title": "一项评价经HBM9161 (HL161)皮下注射治疗全身型重症肌无力患者的治疗期间安全性的开放标签长期扩展研究",
+          "title": "A long-term open-label extension study to evaluate the safety of HBM9161 (HL161) subcutaneous injection in patients with generalized myasthenia gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=165992",
           "status": "Pending",
           "status_label": "Pending",
@@ -18141,7 +18953,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2200061488",
-          "title": "他克莫司抑制B细胞分化、发育在重症肌无力治疗中的机制研究",
+          "title": "Study on the mechanism of tacrolimus inhibiting B cell differentiation and development in the treatment of myasthenia gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=171351",
           "status": "Pending",
           "status_label": "Pending",
@@ -18163,7 +18975,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2200066880",
-          "title": "Efgartigimod Alfa Injection临床特许应用及前瞻性观察性研究",
+          "title": "Clinical licensing application and a prospective, observational study of Efgartigimod Alfa Injection",
           "url": "https://www.chictr.org.cn/showproj.html?proj=183410",
           "status": "Pending",
           "status_label": "Pending",
@@ -18185,7 +18997,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2300069486",
-          "title": "基于多模态磁共振探究重症肌无力患者眼肌结构及脑功能改变的研究",
+          "title": "The study of oculomus structure and brain function changes in patients with myasthenia gravis based on multimodal magnetic resonance",
           "url": "https://www.chictr.org.cn/showproj.html?proj=175943",
           "status": "Temporary halt",
           "status_label": "Temporary halt",
@@ -18205,7 +19017,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2300070892",
-          "title": "重症肌无力伴畏光症状相关因素分析",
+          "title": "Analysis of related factors of myasthenia gravis with photophobia",
           "url": "https://www.chictr.org.cn/showproj.html?proj=192663",
           "status": "Pending",
           "status_label": "Pending",
@@ -18225,7 +19037,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2300073035",
-          "title": "中西医结合抑制重症肌无力危象“炎症风暴”评价研究",
+          "title": "Inhibition of inflammatory storm in myasthenic crisis by integrated traditional Chinese and western medicine",
           "url": "https://www.chictr.org.cn/showproj.html?proj=200622",
           "status": "Recruiting",
           "status_label": "招募中",
@@ -18249,7 +19061,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2300073207",
-          "title": "补中益气丸预防重症肌无力复发的有效性和安全性的多中心、随机、双盲、安慰剂对照临床试验",
+          "title": "Efficacy and safety of Buzhong Yiqi pills in preventing the relapse of myasthenia gravis: a multicenter, randomized, double-blind, placebo-controlled clinical trial",
           "url": "https://www.chictr.org.cn/showproj.html?proj=199555",
           "status": "Pending",
           "status_label": "Pending",
@@ -18273,7 +19085,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2300073727",
-          "title": "舒更葡糖钠在中国成年人重症肌无力患者胸腔镜胸腺切除术中应用的有效性和安全性：一项前瞻性随机对照研究",
+          "title": "Application of sugammadex in Chinese adults with myasthenia gravis undergoing thoracoscopy thymectomy",
           "url": "https://www.chictr.org.cn/showproj.html?proj=196505",
           "status": "Recruiting",
           "status_label": "招募中",
@@ -18296,7 +19108,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2300075401",
-          "title": "探索泰它西普治疗全身型重症肌无力的疗效观察及生物标志物的真实世界研究",
+          "title": "Exploring the efficacy and biomarkers in the treatment of myasthenia gravis with Telitacicept",
           "url": "https://www.chictr.org.cn/showproj.html?proj=203778",
           "status": "Pending",
           "status_label": "Pending",
@@ -18318,7 +19130,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2300077188",
-          "title": "新型生物制剂在重症肌无力中的疗效和安全性评价：一项前瞻性队列研究",
+          "title": "Efficacy and Safety of Novel Biologics in Myasthenia Gravis: A prospective cohort study",
           "url": "https://www.chictr.org.cn/showproj.html?proj=209196",
           "status": "Recruiting",
           "status_label": "招募中",
@@ -18338,7 +19150,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2300077300",
-          "title": "重症肌无力智能病情评估诊断系统的建立临床应用",
+          "title": "Clinical application of myasthenia gravis intelligent condition assessment and diagnosis system",
           "url": "https://www.chictr.org.cn/showproj.html?proj=207062",
           "status": "Recruiting",
           "status_label": "招募中",
@@ -18358,12 +19170,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2400080921",
-          "title": "艾加莫德在成人MG患者中应用的有效性和安全性",
+          "title": "The effectiveness and safety of using Vyvgart in adult patients with myasthenia gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=215289",
           "status": "Recruiting",
           "status_label": "招募中",
           "status_class": "recruiting",
-          "drug_class": "FcRn 拮抗剂",
+          "drug_class": "其他",
           "drug_name": "High dose methylprednisolone shock therapy combined with immunosuppressants(methylprednisolone1000mg d1-2,",
           "drug_names": [
             "Methylprednisolone (甲泼尼龙)"
@@ -18380,7 +19192,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2400082337",
-          "title": "重症肌无力的前瞻性队列研究",
+          "title": "A prospective registry study on myasthenia gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=193106",
           "status": "Pending",
           "status_label": "Pending",
@@ -18400,7 +19212,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2400083807",
-          "title": "研究者撤销  奥法妥木单抗治疗AchR抗体阳性全身型重症肌无力患者的疗效和安全性研究",
+          "title": "A Study on the Efficacy and Safety of Ocrelizumab in the Treatment of AchR Antibody Positive Generalized Myasthenia Gravis Patients",
           "url": "https://www.chictr.org.cn/showproj.html?proj=229365",
           "status": "Completed",
           "status_label": "已完成",
@@ -18420,7 +19232,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2400084422",
-          "title": "研究者撤销        奥法妥木单抗与利妥昔单抗治疗难治性重症肌无力的疗效和安全性研究",
+          "title": "A Study on the Efficacy and Safety of Ocrelizumab and Rituximab in the Treatment of Refractory Myasthenia Gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=229359",
           "status": "Completed",
           "status_label": "已完成",
@@ -18442,7 +19254,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2400084715",
-          "title": "研究者撤销  泰它西普治疗和他克莫司治疗新发AchR阳性全身型重症肌无力的疗效和安全性研究",
+          "title": "A Study on the Efficacy and Safety of Telitacicept Treatment versus Tacrolimus Treatment in Newly Diagnosed AchR-Positive Generalized Myasthenia Gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=229366",
           "status": "Pending",
           "status_label": "Pending",
@@ -18464,7 +19276,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2400084781",
-          "title": "研究者撤销  艾加莫德序贯泰它西普治疗全身型重症肌无力的疗效和安全性研究",
+          "title": "Sequential Efgartigimod and Telitacicept Therapy in the Treatment of Generalized Myasthenia Gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=230185",
           "status": "Pending",
           "status_label": "Pending",
@@ -18484,7 +19296,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2400084937",
-          "title": "研究者撤销            艾加莫德续贯奥法妥木单抗治疗全身型重症肌无力",
+          "title": "Sequential Efgartigimod and Ofatumumab Therapy for Generalized Myasthenia Gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=230180",
           "status": "Completed",
           "status_label": "已完成",
@@ -18506,7 +19318,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2400087058",
-          "title": "针刺改善重症肌无力症状临床疗效评价",
+          "title": "Evaluation of clinical efficacy and mechanism of action of acupuncture and moxibustion for potentially advantageous diseases—Acupuncture for improving symptoms in myasthenia gravis: clinical efficacy evaluation",
           "url": "https://www.chictr.org.cn/showproj.html?proj=233117",
           "status": "Pending",
           "status_label": "Pending",
@@ -18526,12 +19338,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2400087638",
-          "title": "艾加莫德在MG患者胸腺切除术围手术期中应用的有效性和安全性",
+          "title": "The effectiveness and safety of using Vyvgart in the perioperative period of MG thymectomy patients",
           "url": "https://www.chictr.org.cn/showproj.html?proj=221367",
           "status": "Recruiting",
           "status_label": "招募中",
           "status_class": "recruiting",
-          "drug_class": "FcRn 拮抗剂",
+          "drug_class": "其他",
           "drug_name": "Vyvgart is administered at a dose of",
           "drug_names": [
             "Efgartigimod (艾加莫德)"
@@ -18548,7 +19360,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2400087937",
-          "title": "长新冠对重症肌无力加重的影响-一项前瞻性队列研究",
+          "title": "To explore the factors associated with myasthenia gravis relapseand prevention measures in the context of COVID-19 pandemic",
           "url": "https://www.chictr.org.cn/showproj.html?proj=222770",
           "status": "Completed",
           "status_label": "已完成",
@@ -18568,7 +19380,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2400089483",
-          "title": "神经系统疾病住院患者营养与健康研究",
+          "title": "Nutritional Risk and Health Research for Hospitalized Patients with Neurology Disorders in China",
           "url": "https://www.chictr.org.cn/showproj.html?proj=243122",
           "status": "Pending",
           "status_label": "Pending",
@@ -18578,7 +19390,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "drug_names": [],
           "indication": "重症肌无力",
           "phase_label": "未标注",
-          "sponsor": "Xuanwu Hospital  Capital Medical University",
+          "sponsor": "Xuanwu Hospital Capital Medical University",
           "start_date": "2024-09-10",
           "readout_date": "",
           "completion_date": "",
@@ -18588,7 +19400,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2400090651",
-          "title": "低剂量皮质类固醇方案治疗全身型重症肌无力的临床研究",
+          "title": "Clinical study of low dose corticosteroid regimen in the treatment of generalized myasthenia gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=243673",
           "status": "Pending",
           "status_label": "Pending",
@@ -18610,7 +19422,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2400091638",
-          "title": "胸腺瘤对重症肌无力影响的临床和基础研究",
+          "title": "Clinical and basic studies of the effects of thymoma on myasthenia gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=234265",
           "status": "Recruiting",
           "status_label": "招募中",
@@ -18630,7 +19442,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2400093064",
-          "title": "贝林妥欧单抗治疗难治性重症肌无力的疗效评价研究",
+          "title": "Safety and Efficacy of Blinatumomab in Refractory Myasthenia Gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=250531",
           "status": "Pending",
           "status_label": "Pending",
@@ -18650,7 +19462,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2500095459",
-          "title": "艾加莫德序贯泰它西普治疗全身型重症肌无力（gMG）的疗效、安全性及PKPD研究：一项开放标签、随机对照研究",
+          "title": "Efficacy, Safety, and PKPD Study of Sequentially Efgartigimod with Telitacicept Combination in Generalized Myasthenia Gravis (gMG): An Open-Label, Randomized Controlled Trial",
           "url": "https://www.chictr.org.cn/showproj.html?proj=256603",
           "status": "Pending",
           "status_label": "Pending",
@@ -18673,7 +19485,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2500098270",
-          "title": "探究中国西南地区重症肌无力患者的疾病负担及其影响因素：社会经济负担、焦虑抑郁程度、生活质量及照顾者负担",
+          "title": "Exploring the Disease Burden and Its Influencing Factors in Patients with Myasthenia Gravis in Southwestern China: Socioeconomic Burden, Anxiety and Depression, Quality of Life, and Burden of Caregivers",
           "url": "https://www.chictr.org.cn/showproj.html?proj=239996",
           "status": "Recruiting",
           "status_label": "招募中",
@@ -18693,7 +19505,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2500098555",
-          "title": "依库珠单抗治疗成人难治性重症肌无力不同亚组的安全性及有效性研究",
+          "title": "Study on the Safety and Efficacy of Eculizumab in Different Subgroups of Adults with Refractory Myasthenia Gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=239613",
           "status": "Recruiting",
           "status_label": "招募中",
@@ -18713,7 +19525,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2500098725",
-          "title": "一项基于离散选择实验的中国全身型重症肌无力患者治疗偏好调查",
+          "title": "Patient preferences for treatment of generalized myasthenia gravis in China based on a discrete choice experiment",
           "url": "https://www.chictr.org.cn/showproj.html?proj=265388",
           "status": "Pending",
           "status_label": "Pending",
@@ -18733,7 +19545,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2500099093",
-          "title": "IMPACT评分系统在重症肌无力中的预测作用评估：基于机器学习与多模型融合研究",
+          "title": "Prognostic Role of the IMPACT Scoring System in Myasthenia Gravis: A Study Based on Machine Learning and Multimodal Model Fusion",
           "url": "https://www.chictr.org.cn/showproj.html?proj=264882",
           "status": "Recruiting",
           "status_label": "招募中",
@@ -18755,12 +19567,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2500100194",
-          "title": "艾加莫德联合泰它西普治疗MG的疗效观察",
+          "title": "Observation of the efficacy of agamod combined with tetatercept in the treatment of MG",
           "url": "https://www.chictr.org.cn/showproj.html?proj=244743",
           "status": "Pending",
           "status_label": "Pending",
           "status_class": "other",
-          "drug_class": "FcRn 拮抗剂",
+          "drug_class": "其他",
           "drug_name": "",
           "drug_names": [],
           "indication": "重症肌无力",
@@ -18775,12 +19587,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2500100909",
-          "title": "艾加莫德续贯泰它西普治疗成人重症肌无力的多中心、前瞻性、观察性研究",
+          "title": "A multicenter, prospective, observational study of agamod continuation of tetanercept in the treatment of myasthenia gravis in adults",
           "url": "https://www.chictr.org.cn/showproj.html?proj=269768",
           "status": "Pending",
           "status_label": "Pending",
           "status_class": "other",
-          "drug_class": "FcRn 拮抗剂",
+          "drug_class": "其他",
           "drug_name": "In the first stage, the dose of agamod was",
           "drug_names": [
             "Efgartigimod (艾加莫德)"
@@ -18797,7 +19609,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2500101971",
-          "title": "艾加莫德治疗成人全身型重症肌无力疗效影响因素的多中心回顾性研究",
+          "title": "A Multicenter Retrospective Study on Factors Influencing the Efficacy of Efgartigimod in the Treatment of Adult Generalized Myasthenia Gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=266727",
           "status": "Completed",
           "status_label": "已完成",
@@ -18817,7 +19629,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2500103782",
-          "title": "免疫抑制剂安全性检测在重症肌无力精准治疗的研究",
+          "title": "A study of immunosuppressant safety testing in the precision treatment of myasthenia gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=266698",
           "status": "Recruiting",
           "status_label": "招募中",
@@ -18836,28 +19648,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
         },
         {
           "registry": "ChiCTR",
-          "registry_id": "ChiCTR2500104395",
-          "title": "探究重症肌无力患者溴吡斯的明药物反应性降低预测因素",
-          "url": "https://www.chictr.org.cn/showproj.html?proj=256067",
-          "status": "Recruiting",
-          "status_label": "招募中",
-          "status_class": "recruiting",
-          "drug_class": "胆碱酯酶抑制剂",
-          "drug_name": "",
-          "drug_names": [],
-          "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "The First Affiliated Hospital of Chongqing Medical University",
-          "start_date": "2024-07-01",
-          "readout_date": "",
-          "completion_date": "",
-          "registered_date": "2025-06-17",
-          "linked_registries": []
-        },
-        {
-          "registry": "ChiCTR",
           "registry_id": "ChiCTR2500104662",
-          "title": "血浆置换联合艾加莫得治疗全身型重症肌无力的有效性与安全性：一项多中心、三臂、开放标签的临床研究",
+          "title": "Efgartigimod Following Plasma Exchange in the Treatment of Subjects With generalized Myasthenia Gravis: Study Protocol for a Multicenter, Three-arm, Open-Label study",
           "url": "https://www.chictr.org.cn/showproj.html?proj=270461",
           "status": "Pending",
           "status_label": "Pending",
@@ -18880,7 +19672,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2500106725",
-          "title": "评价Cizutamig在全身型重症肌无力（gMG）患者的安全性、耐受性、药代动力学、药效学、免疫原性和初步临床疗效的多中心、开放标签的1b 期临床研究",
+          "title": "A Phase 1b, Open-Label, Multicenter Study Evaluating the Safety, Tolerability, Pharmacokinetics, Pharmacodynamics, Immunogenicity, and Preliminary Clinical Activity of Cizutamig in Patients with Generalized Myasthenia Gravis (gMG)",
           "url": "https://www.chictr.org.cn/showproj.html?proj=281385",
           "status": "Pending",
           "status_label": "Pending",
@@ -18902,7 +19694,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2500109279",
-          "title": "注射用泰它西普治疗抗乙酰胆碱受体抗体阳性的全身型重症肌无力的疗效和安全性研究",
+          "title": "A Study on the Efficacy and Safety of Telitacicept for Injection in the Treatment of Generalized Myasthenia Gravis with Positive Anti-Acetylcholine Receptor Antibodies",
           "url": "https://www.chictr.org.cn/showproj.html?proj=288015",
           "status": "Pending",
           "status_label": "Pending",
@@ -18922,7 +19714,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2500110425",
-          "title": "靶向CD19/BCMA的脂质纳米注射液治疗自身抗体介导的自身免疫性疾病患者的安全性、有效性及药代动力学的临床研究",
+          "title": "Clinical Study on the Safety, Efficacy, and Pharmacokinetics of Lipid Nanopartical Based CD19/BCMA Injection in Patients with Autoimmune Diseases",
           "url": "https://www.chictr.org.cn/showproj.html?proj=285570",
           "status": "Temporary halt",
           "status_label": "Temporary halt",
@@ -18942,7 +19734,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2500110600",
-          "title": "AChR-Ab阳性重症肌无力胸腺切除术患者与保守治疗患者的长期预后比较：一项中国多中心回顾性研究",
+          "title": "Long-term Prognosis of Thymectomy Versus Conservative Treatment in AChR-Ab–Positive Myasthenia Gravis: A Multicenter Retrospective Study in China",
           "url": "https://www.chictr.org.cn/showproj.html?proj=278634",
           "status": "Recruiting",
           "status_label": "招募中",
@@ -18962,7 +19754,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2500111678",
-          "title": "艾加莫德α对比丙种球蛋白治疗全身型重症肌无力急性加重患者的临床疗效及安全性观察----一项前瞻性、多中心、随机对照研究",
+          "title": "Evaluating Efficacy and Safety of Efgartigimod versus IVIG in Myasthenia Gravis Exacerbation for Rapid Clinical Response",
           "url": "https://www.chictr.org.cn/showproj.html?proj=293253",
           "status": "Pending",
           "status_label": "Pending",
@@ -18985,7 +19777,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2500112137",
-          "title": "SENL103 自体 T 细胞注射液（S103）治疗难治性全身型重症肌无力的开放、 单臂的 I 期临床研究",
+          "title": "An open-label, single-arm Phase I clinical study of SENL103 autologous T-cell injection (S103) for the treatment of refractory generalized myasthenia gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=293807",
           "status": "Pending",
           "status_label": "Pending",
@@ -19007,7 +19799,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2500112366",
-          "title": "异体CD19-CAR-NK细胞治疗难治性重症肌无力的探索性临床研究",
+          "title": "Exploratory clinical study on the treatment of refractory myasthenia gravis with allogeneic CD19-CAR-NK cells",
           "url": "https://www.chictr.org.cn/showproj.html?proj=291981",
           "status": "Pending",
           "status_label": "Pending",
@@ -19029,7 +19821,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2500113243",
-          "title": "首发症状为口咽肌受累的重症肌无力临床研究",
+          "title": "Clinical study of myasthenia gravis with initial symptoms of oropharyngeal muscle involvement",
           "url": "https://www.chictr.org.cn/showproj.html?proj=295152",
           "status": "Pending",
           "status_label": "Pending",
@@ -19049,7 +19841,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2600117375",
-          "title": "重症肌无力患者糖皮质激素治疗负担的临床研究",
+          "title": "Clinical study of glucocorticoid treatment burden in patients with myasthenia gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=261626",
           "status": "Recruiting",
           "status_label": "招募中",
@@ -19071,7 +19863,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2600117827",
-          "title": "瑞帕妥单抗治疗全身型重症肌无力的疗效评价研究",
+          "title": "Safety and Efficacy of Ripertamab in Generalized Myasthenia Gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=307709",
           "status": "Pending",
           "status_label": "Pending",
@@ -19091,7 +19883,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2600118087",
-          "title": "口腔菌群失调与重症肌无力分型转化的相关性研究",
+          "title": "A Study on the Correlation between Oral Microbiota Dysbiosis and the Transformation of Myasthenia Gravis Subtypes",
           "url": "https://www.chictr.org.cn/showproj.html?proj=298750",
           "status": "Completed",
           "status_label": "已完成",
@@ -19111,7 +19903,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2600120351",
-          "title": "艾加莫德与丙种球蛋白在挽救重症肌无力危象前状态的疗效及安全性分析",
+          "title": "Efficacy and Safety Analysis of Ajamod versus Immunoglobulin G in Rescuing Patients from Myasthenia Gravis Crisis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=250342",
           "status": "Recruiting",
           "status_label": "招募中",
@@ -19134,7 +19926,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2600120587",
-          "title": "CAR-T治疗难治性重症肌无力临床研究",
+          "title": "Chimeric Antigen Receptor T-Cell Immunotherapy for Refractory Myasthenia Gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=292341",
           "status": "Pending",
           "status_label": "Pending",
@@ -19156,7 +19948,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2600120807",
-          "title": "基于mRNA-LNP递送三特异性抗体在自身免疫病中的探索性临床研究",
+          "title": "An Exploratory Clinical Study of mRNA-LNP Delivered Trispecific Antibodies in Autoimmune Diseases",
           "url": "https://www.chictr.org.cn/showproj.html?proj=314390",
           "status": "Pending",
           "status_label": "Pending",
@@ -19178,7 +19970,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2600121843",
-          "title": "一项在难治性全身型重症肌无力患者中评价talquetamab疗效和安全性的小样本先导研究",
+          "title": "A Preliminary Case Study to Evaluate the Efficacy and Safety of Talquetamab in Patients with Refractory Generalized Myasthenia Gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=314263",
           "status": "Pending",
           "status_label": "Pending",
@@ -19200,7 +19992,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2600123395",
-          "title": "艾加莫德在重症肌无力围术期的疗效研究：一项真实世界观察性研究",
+          "title": "Efgartigimod for myasthenia gravis in perioperative period: a real-world observational study",
           "url": "https://www.chictr.org.cn/showproj.html?proj=232490",
           "status": "Completed",
           "status_label": "已完成",
@@ -19220,7 +20012,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2600124099",
-          "title": "评价泰它西普治疗儿童重症肌无力有效性与安全性的多中心、非随机对照研究",
+          "title": "A Multicenter, Non-randomized Controlled Study to Evaluate the Efficacy and Safety of Telitacicept in the Treatment of Juvenile Myasthenia Gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=318236",
           "status": "Pending",
           "status_label": "Pending",
@@ -19241,8 +20033,28 @@ window.MG_CLINICAL_TRIALS_DATA = {
         },
         {
           "registry": "ChiCTR",
+          "registry_id": "ChiCTR2600126087",
+          "title": "Construction and application of exercise rehabilitation program for chronic heart failure with myasthenia gravis based on self-regulated common sense model",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=296538",
+          "status": "Pending",
+          "status_label": "Pending",
+          "status_class": "other",
+          "drug_class": "其他",
+          "drug_name": "A movement intervention plan based on the Self-Regulation Common Sense Model",
+          "drug_names": [],
+          "indication": "重症肌无力",
+          "phase_label": "未标注",
+          "sponsor": "Guizhou Provincial People's Hospital",
+          "start_date": "2026-07-01",
+          "readout_date": "",
+          "completion_date": "",
+          "registered_date": "2026-06-03",
+          "linked_registries": []
+        },
+        {
+          "registry": "ChiCTR",
           "registry_id": "ChiCTR2600127659",
-          "title": "泰它西普治疗新发全身型重症肌无力的有效性和安全性:一项多中心、随机、双盲、安慰剂对照的临床试验",
+          "title": "Efficacy and Safety of Telitacicept in New-Onset Generalized Myasthenia Gravis: A Multicenter, Randomized, Double-Blind, Placebo-Controlled Clinical Trial",
           "url": "https://www.chictr.org.cn/showproj.html?proj=329703",
           "status": "Pending",
           "status_label": "Pending",
@@ -19264,7 +20076,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2600128127",
-          "title": "儿童重症肌无力的预后及复发风险分析",
+          "title": "Prognosis and Recurrence Risk Analysis of Pediatric Myasthenia Gravis",
           "url": "https://www.chictr.org.cn/showproj.html?proj=331797",
           "status": "Pending",
           "status_label": "Pending",
@@ -19274,7 +20086,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "drug_names": [],
           "indication": "重症肌无力",
           "phase_label": "未标注",
-          "sponsor": "Qilu Hospital  of Shandong University",
+          "sponsor": "Qilu Hospital of Shandong University",
           "start_date": "2026-07-15",
           "readout_date": "",
           "completion_date": "",
@@ -19284,12 +20096,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ChiCTR",
           "registry_id": "ChiCTR2600128850",
-          "title": "依库珠单抗治疗重症肌无力的真实世界研究",
+          "title": "The efficacy and safety of ecucizumab in the treatment of acute exacerbation of refractory myasthenia gravis: A multicenter, single-arm, open-label real-world study",
           "url": "https://www.chictr.org.cn/showproj.html?proj=334069",
           "status": "Pending",
           "status_label": "Pending",
           "status_class": "other",
-          "drug_class": "补体抑制剂",
+          "drug_class": "其他",
           "drug_name": "",
           "drug_names": [],
           "indication": "重症肌无力",
@@ -19300,16 +20112,324 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "completion_date": "",
           "registered_date": "2026-07-27",
           "linked_registries": []
+        },
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR2600129097",
+          "title": "Exploratory Study on Unknown Antibodies in Neuroimmune Diseases",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=335506",
+          "status": "Pending",
+          "status_label": "Pending",
+          "status_class": "other",
+          "drug_class": "其他",
+          "drug_name": "",
+          "drug_names": [],
+          "indication": "重症肌无力",
+          "phase_label": "未标注",
+          "sponsor": "Punan Hospital,Pudong New District, Shanghai",
+          "start_date": "2026-07-30",
+          "readout_date": "",
+          "completion_date": "",
+          "registered_date": "2026-07-30",
+          "linked_registries": []
+        },
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR2600129156",
+          "title": "Research on the mechanism of squalene monooxygenase (SQLE) involved in the pathogenesis of myasthenia gravis",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=332395",
+          "status": "Pending",
+          "status_label": "Pending",
+          "status_class": "other",
+          "drug_class": "其他",
+          "drug_name": "",
+          "drug_names": [],
+          "indication": "重症肌无力",
+          "phase_label": "未标注",
+          "sponsor": "The Affiliated Hospital of Xuzhou Medical University",
+          "start_date": "2026-07-31",
+          "readout_date": "",
+          "completion_date": "",
+          "registered_date": "2026-07-31",
+          "linked_registries": []
+        },
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR2600130172",
+          "title": "ALDH1B1 participates in the research on the pathogenesis of myasthenia gravis by regulating Th17 differentiation through mitochondrial metabolic reprogramming",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=336539",
+          "status": "Pending",
+          "status_label": "Pending",
+          "status_class": "other",
+          "drug_class": "其他",
+          "drug_name": "",
+          "drug_names": [],
+          "indication": "重症肌无力",
+          "phase_label": "未标注",
+          "sponsor": "The Affiliated Hospital of Xuzhou Medical University",
+          "start_date": "2026-09-01",
+          "readout_date": "",
+          "completion_date": "",
+          "registered_date": "2026-08-17",
+          "linked_registries": []
+        },
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR2600130173",
+          "title": "A single-center retrospective study on the efficacy and predictive factors of igammod in the treatment of generalized myasthenia gravis",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=336560",
+          "status": "Pending",
+          "status_label": "Pending",
+          "status_class": "other",
+          "drug_class": "其他",
+          "drug_name": "",
+          "drug_names": [],
+          "indication": "重症肌无力",
+          "phase_label": "未标注",
+          "sponsor": "The Affiliated Hospital of Xuzhou Medical University",
+          "start_date": "2026-09-15",
+          "readout_date": "",
+          "completion_date": "",
+          "registered_date": "2026-08-17",
+          "linked_registries": []
+        },
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR2600131444",
+          "title": "Prospective cohort study of myasthenia gravis: Clinical features, immunotherapy response and prognosis follow-up",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=338396",
+          "status": "Pending",
+          "status_label": "Pending",
+          "status_class": "other",
+          "drug_class": "其他",
+          "drug_name": "",
+          "drug_names": [],
+          "indication": "重症肌无力",
+          "phase_label": "未标注",
+          "sponsor": "The Affiliated Hospital of Xuzhou Medical University",
+          "start_date": "2026-09-15",
+          "readout_date": "",
+          "completion_date": "",
+          "registered_date": "2026-09-02",
+          "linked_registries": []
+        },
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR2600132234",
+          "title": "The efficacy of telitacicept in the treatment of generalized myasthenia gravis and its immune-serological response characteristics: A prospective, multicenter real-world study",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=339095",
+          "status": "Pending",
+          "status_label": "Pending",
+          "status_class": "other",
+          "drug_class": "B细胞/抗CD19/CD20",
+          "drug_name": "",
+          "drug_names": [],
+          "indication": "重症肌无力",
+          "phase_label": "未标注",
+          "sponsor": "The Affiliated Hospital of Xuzhou Medical University",
+          "start_date": "2026-09-15",
+          "readout_date": "",
+          "completion_date": "",
+          "registered_date": "2026-09-10",
+          "linked_registries": []
+        },
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR2600132271",
+          "title": "Comparison of clinical characteristics, immunological indicators and prognosis differences between early-onset and late-onset myasthenia gravis patients: A single-center retrospective study",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=336562",
+          "status": "Pending",
+          "status_label": "Pending",
+          "status_class": "other",
+          "drug_class": "其他",
+          "drug_name": "",
+          "drug_names": [],
+          "indication": "重症肌无力",
+          "phase_label": "未标注",
+          "sponsor": "The Affiliated Hospital of Xuzhou Medical University",
+          "start_date": "2026-09-15",
+          "readout_date": "",
+          "completion_date": "",
+          "registered_date": "2026-09-11",
+          "linked_registries": []
+        },
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR2600132585",
+          "title": "Prospective Registry Study on Prognostic Biomarkers and the Impact of Treatment Strategies on Outcomes in Neuroimmunological Diseases",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=293788",
+          "status": "Recruiting",
+          "status_label": "招募中",
+          "status_class": "recruiting",
+          "drug_class": "其他",
+          "drug_name": "",
+          "drug_names": [],
+          "indication": "重症肌无力",
+          "phase_label": "未标注",
+          "sponsor": "NanJing First Hospital",
+          "start_date": "2025-11-06",
+          "readout_date": "",
+          "completion_date": "",
+          "registered_date": "2026-09-16",
+          "linked_registries": []
+        },
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR2600133694",
+          "title": "A Prospective Study on Predicting Short-Term Prognosis of Generalized Myasthenia Gravis Patients Using High-Density Surface Electromyography Combined with Motor Function Assessment",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=345145",
+          "status": "Pending",
+          "status_label": "Pending",
+          "status_class": "other",
+          "drug_class": "其他",
+          "drug_name": "",
+          "drug_names": [],
+          "indication": "重症肌无力",
+          "phase_label": "未标注",
+          "sponsor": "The First Affiliated Hospital of Chongqing Medical University",
+          "start_date": "2026-09-30",
+          "readout_date": "",
+          "completion_date": "",
+          "registered_date": "2026-09-30",
+          "linked_registries": []
+        },
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR2600133923",
+          "title": "A single-center, parallel-group, non-randomized controlled prospective study of efgartigimod administered at different cycles in patients with new-onset generalized myasthenia gravis (gMG)",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=327224",
+          "status": "Completed",
+          "status_label": "已完成",
+          "status_class": "completed",
+          "drug_class": "FcRn 拮抗剂",
+          "drug_name": "Efgartigimod IV, once a week, 4 times in a row, with 4-week intervals, on for 4 weeks and off for 4 weeks, for a total of 3 cycles",
+          "drug_names": [
+            "Efgartigimod (艾加莫德)",
+            "5 treatment cycles."
+          ],
+          "indication": "重症肌无力",
+          "phase_label": "Phase 4",
+          "sponsor": "The First Hospital of China Medical University",
+          "start_date": "2025-02-16",
+          "readout_date": "",
+          "completion_date": "",
+          "registered_date": "2026-10-09",
+          "linked_registries": []
+        },
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR2600134163",
+          "title": "Efficacy and safety of targeted biological agents in the treatment of myasthenia gravis: A single-center retrospective study",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=293895",
+          "status": "Completed",
+          "status_label": "已完成",
+          "status_class": "completed",
+          "drug_class": "其他",
+          "drug_name": "",
+          "drug_names": [],
+          "indication": "重症肌无力",
+          "phase_label": "Retrospective study",
+          "sponsor": "The Affiliated Hospital of Xuzhou Medical University",
+          "start_date": "2025-08-31",
+          "readout_date": "",
+          "completion_date": "",
+          "registered_date": "2026-10-11",
+          "linked_registries": []
+        },
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR2600134352",
+          "title": "One‑Year versus Three‑Month Eculizumab Therapy in Refractory Myasthenia Gravis: Effectiveness Comparison and Association with proteomics Profiles",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=342153",
+          "status": "Completed",
+          "status_label": "已完成",
+          "status_class": "completed",
+          "drug_class": "补体抑制剂",
+          "drug_name": "",
+          "drug_names": [],
+          "indication": "重症肌无力",
+          "phase_label": "未标注",
+          "sponsor": "The First Hospital of China Medical University",
+          "start_date": "2026-06-06",
+          "readout_date": "",
+          "completion_date": "",
+          "registered_date": "2026-10-14",
+          "linked_registries": []
+        },
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR2600134733",
+          "title": "Establishment of a Database for Neuroimmune Diseases",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=347101",
+          "status": "Pending",
+          "status_label": "Pending",
+          "status_class": "other",
+          "drug_class": "其他",
+          "drug_name": "",
+          "drug_names": [],
+          "indication": "重症肌无力",
+          "phase_label": "未标注",
+          "sponsor": "The First Affiliated Hospital of Kunming Medical University.",
+          "start_date": "2026-11-01",
+          "readout_date": "",
+          "completion_date": "",
+          "registered_date": "2026-10-20",
+          "linked_registries": []
+        },
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR2600134885",
+          "title": "Effects of an Opioid-Sparing Anesthesia Strategy in Surgical Patients with Myasthenia Gravis",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=347023",
+          "status": "Temporary halt",
+          "status_label": "Temporary halt",
+          "status_class": "other",
+          "drug_class": "其他",
+          "drug_name": "Opioid-sparing multimodal anesthesia strategy",
+          "drug_names": [
+            "Opioid-sparing multimodal anesthesia strategy",
+            "Conventional sufentanil-based general anesthesia regimen"
+          ],
+          "indication": "重症肌无力",
+          "phase_label": "未标注",
+          "sponsor": "Shijiazhuang People's Hospital",
+          "start_date": "2026-10-23",
+          "readout_date": "",
+          "completion_date": "",
+          "registered_date": "2026-10-21",
+          "linked_registries": []
+        },
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR2600134949",
+          "title": "An Exploratory Clinical Study to Evaluate the Safety and Efficacy of the Oral BTK Inhibitor Rocbrutinib Tablets for the Treatment of Generalized Myasthenia Gravis (gMG)",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=344007",
+          "status": "Pending",
+          "status_label": "Pending",
+          "status_class": "other",
+          "drug_class": "免疫抑制剂",
+          "drug_name": "Rocbrutinib",
+          "drug_names": [
+            "Rocbrutinib"
+          ],
+          "indication": "重症肌无力",
+          "phase_label": "Phase 4",
+          "sponsor": "Beijing Tiantan Hospital, Capital Medical University",
+          "start_date": "2026-10-26",
+          "readout_date": "",
+          "completion_date": "",
+          "registered_date": "2026-10-22",
+          "linked_registries": []
         }
       ]
     },
     {
       "source": "ChinaDrugTrials",
       "meta": {
-        "generated_at": "2026-07-27",
-        "mode": "cache",
+        "generated_at": "2026-10-24",
+        "mode": "live_crawl",
         "warning": "",
-        "revision": "semantic-v1:abe903f88f1382f84ac7c9d15dbed8ce5780408848ef48373b78cfb5000dbcad"
+        "revision": "semantic-v1:91a5cd94fb23958bb597d57807a35b6a78496e9a3dc5543b941706eea89ceaf4"
       },
       "records": [
         {
@@ -19326,12 +20446,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
             "Tacrolimus (他克莫司)"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 3",
+          "sponsor": "安斯泰来制药（中国）有限公司/ Astellas Pharma Co. Limited/ Astellas Ireland Co., Ltd.",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2014-03-31",
           "linked_registries": []
         },
         {
@@ -19348,12 +20468,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
             "Edrophonium (依酚氯铵)"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 1",
+          "sponsor": "济南博世医药科技有限公司",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2018-11-21",
           "linked_registries": []
         },
         {
@@ -19371,11 +20491,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           ],
           "indication": "重症肌无力",
           "phase_label": "未标注",
-          "sponsor": "",
+          "sponsor": "浙江奥托康制药集团股份有限公司",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2019-04-08",
           "linked_registries": []
         },
         {
@@ -19392,12 +20512,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
             "Belimumab"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 2",
+          "sponsor": "荣昌生物制药（烟台）有限公司",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2020-03-09",
           "linked_registries": []
         },
         {
@@ -19414,12 +20534,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
             "Batoclimab (巴托利单抗)"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 2",
+          "sponsor": "和铂医药(广州)有限公司",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2020-06-15",
           "linked_registries": []
         },
         {
@@ -19436,12 +20556,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
             "Inebilizumab"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 3",
+          "sponsor": "Viela Bio, Inc./ MedImmune Pharma, BV/ 杭州泰格医药科技股份有限公司",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2021-05-24",
           "linked_registries": []
         },
         {
@@ -19458,12 +20578,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
             "Efgartigimod (艾加莫德)"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 1",
+          "sponsor": "argenx BV/ 再鼎医药（上海）有限公司/ Patheon Italia S.p.A.",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2021-08-05",
           "linked_registries": []
         },
         {
@@ -19480,12 +20600,34 @@ window.MG_CLINICAL_TRIALS_DATA = {
             "Efgartigimod (艾加莫德)"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 1",
+          "sponsor": "argenx BV/ 再鼎医药（上海）有限公司/ Vetter Pharma-Fertigung GmbH & Co. KG",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2021-08-13",
+          "linked_registries": []
+        },
+        {
+          "registry": "ChinaDrugTrials",
+          "registry_id": "CTR20212099",
+          "title": "HBM9161皮下注射治疗全身型重症肌无力患者的有效性、安全性的多中心、随机、双盲、安慰剂对照、2/3 期运营无缝、成组序贯设计研究",
+          "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20212099",
+          "status": "COMPLETED",
+          "status_label": "已完成",
+          "status_class": "completed",
+          "drug_class": "FcRn 拮抗剂",
+          "drug_name": "HBM9161(HL161BKN)注射液",
+          "drug_names": [
+            "Batoclimab (巴托利单抗)"
+          ],
+          "indication": "重症肌无力",
+          "phase_label": "Phase 3",
+          "sponsor": "和铂医药(广州)有限公司",
+          "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
+          "registered_date": "2021-09-07",
           "linked_registries": []
         },
         {
@@ -19502,12 +20644,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
             "Nipocalimab (尼卡利单抗)"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 3",
+          "sponsor": "Janssen Research & Development, LLC/ 强生（中国）投资有限公司/ Vetter Pharma-Fertigung GmbH & Co. KG/ Janssen R&D, a Division of Janssen Pharmaceutica, NV；Catalent CTS, LLC；Catalent Pharma Solutions, LLC；Catalent Germany Schorndorf GmbH；Fisher Clinical Services UK；Fisher Clinical Services；Fisher Clinical Services (Allentown)/ Janssen Pharmaceutica NV, Division of Janssen Research and Development；Fisher Clinical Services, Inc.；Fisher Clinical Services UK Limited；Fisher Clinical Services GmbH",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2021-11-02",
           "linked_registries": []
         },
         {
@@ -19525,11 +20667,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           ],
           "indication": "重症肌无力",
           "phase_label": "未标注",
-          "sponsor": "",
+          "sponsor": "上海上药中西制药有限公司",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2021-12-24",
           "linked_registries": []
         },
         {
@@ -19546,12 +20688,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
             "Nipocalimab (尼卡利单抗)"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 1",
+          "sponsor": "Janssen Research & Development, LLC/ 强生（中国）投资有限公司/ Vetter Pharma-Fertigung GmbH & Co. KG/ Janssen R&D, a Division of Janssen Pharmaceutica, NV；Catalent CTS, LLC；Catalent Pharma Solutions, LLC；Catalent Germany Schorndorf GmbH；Fisher Clinical Services UK；Fisher Clinical Services；Fisher Clinical Services (Allentown)",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2022-01-24",
           "linked_registries": []
         },
         {
@@ -19568,12 +20710,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
             "Satralizumab (萨特利珠单抗)"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 3",
+          "sponsor": "F. Hoffmann-La Roche Ltd/ 罗氏（中国）投资有限公司/ Chugai Pharma Manufacturing Co., Ltd.",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2022-01-26",
           "linked_registries": []
         },
         {
@@ -19590,12 +20732,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
             "SAR442168 (已终止)"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 3",
+          "sponsor": "Sanofi-Aventis Recherche & Développement/ 赛诺菲（中国）投资有限公司/ sanofi-aventis Recherche & Développement; Sanofi Winthrop Industrie/ sanofi-aventis Recherche & Développement; Sanofi Winthrop Industrie; Creapharm Clinical Supplies",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2022-02-23",
           "linked_registries": []
         },
         {
@@ -19612,12 +20754,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
             "Batoclimab (巴托利单抗)"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 3",
+          "sponsor": "Harbour BioMed Therapeutics Limited/ 和铂医药（苏州）有限公司/ Samsung Biologics Co., Ltd.",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2022-03-30",
           "linked_registries": []
         },
         {
@@ -19635,11 +20777,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           ],
           "indication": "重症肌无力",
           "phase_label": "未标注",
-          "sponsor": "",
+          "sponsor": "上海上药信谊药厂有限公司",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2022-06-14",
           "linked_registries": []
         },
         {
@@ -19656,12 +20798,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
             "Telitacicept (泰它西普)"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 3",
+          "sponsor": "荣昌生物制药（烟台）有限公司",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2023-02-20",
           "linked_registries": []
         },
         {
@@ -19679,11 +20821,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           ],
           "indication": "重症肌无力",
           "phase_label": "未标注",
-          "sponsor": "",
+          "sponsor": "Alvogen, Inc./ 北京罕友医药科技有限公司/ Norwich Pharmaceuticals Inc",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2023-02-07",
           "linked_registries": []
         },
         {
@@ -19700,12 +20842,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
             "Pyridostigmine (溴吡斯的明)"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 1",
+          "sponsor": "上海上药中西制药有限公司",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2023-08-28",
           "linked_registries": []
         },
         {
@@ -19722,12 +20864,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
             "Ravulizumab (瑞利珠单抗)"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 3",
+          "sponsor": "不适用/ 阿斯利康全球研发（中国）有限公司",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2023-08-30",
           "linked_registries": []
         },
         {
@@ -19745,11 +20887,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           ],
           "indication": "重症肌无力",
           "phase_label": "未标注",
-          "sponsor": "",
+          "sponsor": "吉林省博大伟业制药有限公司",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2024-01-22",
           "linked_registries": []
         },
         {
@@ -19766,12 +20908,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
             "Efgartigimod (艾加莫德)"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 4",
+          "sponsor": "argenx BV/ 再鼎医药（上海）有限公司/ Vetter Pharma-Fertigung GmbH & Co. KG/ 初级包装厂：Vetter Pharma-Fertigung GmbH & Co. KG；次级包装厂：Vetter Pharma-Fertigung GmbH & Co. KG",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2024-03-13",
           "linked_registries": []
         },
         {
@@ -19779,21 +20921,21 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "CTR20240865",
           "title": "B007治疗全身型重症肌无力的II/III期临床研究",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20240865",
-          "status": "RECRUITING",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status": "COMPLETED",
+          "status_label": "已完成",
+          "status_class": "completed",
           "drug_class": "其他",
           "drug_name": "B007注射液",
           "drug_names": [
             "B007"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 2 / Phase 3",
+          "sponsor": "上海上药交联医药科技有限公司",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2024-03-15",
           "linked_registries": []
         },
         {
@@ -19810,12 +20952,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
             "Cemdisiran"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 3",
+          "sponsor": "Regeneron Pharmaceuticals, Inc./ 再鼎医药（上海）有限公司/ Curia (Scotland) Limited",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2024-04-23",
           "linked_registries": [
             {
               "registry": "ChinaDrugTrials",
@@ -19839,11 +20981,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           ],
           "indication": "重症肌无力",
           "phase_label": "未标注",
-          "sponsor": "",
+          "sponsor": "吉林省博大伟业制药有限公司",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2024-07-11",
           "linked_registries": []
         },
         {
@@ -19860,12 +21002,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
             "NA"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 3",
+          "sponsor": "Novartis Pharma AG/ 诺华（中国）生物医学研究有限公司/ Novartis Pharma Produktions GmbH",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2024-09-05",
           "linked_registries": []
         },
         {
@@ -19882,12 +21024,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
             "Cladribine (克拉屈滨)"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 3",
+          "sponsor": "Merck Healthcare KGaA/ 默克雪兰诺（北京）医药研发有限公司/ Almac Pharma Services Limited/ Fisher Clinical Services GmbH",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2024-10-29",
           "linked_registries": []
         },
         {
@@ -19904,12 +21046,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
             "Efgartigimod (艾加莫德)"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 3",
+          "sponsor": "argenx BV/ 再鼎医药（上海）有限公司/ Vetter Pharma-Fertigung GmbH & Co. KG",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2024-10-18",
           "linked_registries": []
         },
         {
@@ -19926,12 +21068,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
             "Eculizumab (依库珠单抗)"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 3",
+          "sponsor": "Alexion Europe SAS/ 阿斯利康投资（中国）有限公司/ Alexion Athlone Manufacturing Facility (AAMF)/ Alexion Pharma International Operation Unlimited Company (APIOUC)/ Alexion Pharma International Operations Unlimited Company (APIOUC)",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2024-11-01",
           "linked_registries": []
         },
         {
@@ -19948,12 +21090,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
             "SYS6020 (BCMA CAR-T)"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 1",
+          "sponsor": "石药集团中奇制药技术（石家庄）有限公司",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2024-11-14",
           "linked_registries": []
         },
         {
@@ -19970,12 +21112,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
             "Efgartigimod (艾加莫德)"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 3",
+          "sponsor": "argenx BV/ 再鼎医药（上海）有限公司/ Vetter Pharma-Fertigung GmbH & Co. KG",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2024-12-26",
           "linked_registries": []
         },
         {
@@ -19993,11 +21135,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           ],
           "indication": "重症肌无力",
           "phase_label": "未标注",
-          "sponsor": "",
+          "sponsor": "四川科瑞德制药股份有限公司",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2025-06-04",
           "linked_registries": []
         },
         {
@@ -20015,11 +21157,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           ],
           "indication": "重症肌无力",
           "phase_label": "未标注",
-          "sponsor": "",
+          "sponsor": "四川科瑞德制药股份有限公司",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2025-06-05",
           "linked_registries": []
         },
         {
@@ -20027,21 +21169,21 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "CTR20252589",
           "title": "在全身型重症肌无力患者中评价LOU064的疗效、安全性和耐受性的随机、双盲、安慰剂对照III期研究",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20252589",
-          "status": "RECRUITING",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status": "TERMINATED",
+          "status_label": "已终止",
+          "status_class": "terminated",
           "drug_class": "免疫抑制剂",
           "drug_name": "Remibrutinib (LOU064)",
           "drug_names": [
             "Remibrutinib (LOU064)"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 3",
+          "sponsor": "不适用/ 诺华（中国）生物医学研究有限公司",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2025-07-07",
           "linked_registries": []
         },
         {
@@ -20058,12 +21200,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
             "Cizutamig"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 1",
+          "sponsor": "上海坦蒂生物医药科技有限公司",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2025-07-30",
           "linked_registries": []
         },
         {
@@ -20080,12 +21222,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
             "SENL103 (CAR-T)"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 1",
+          "sponsor": "河北森朗生物科技有限公司",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2025-10-16",
           "linked_registries": []
         },
         {
@@ -20102,12 +21244,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
             "Rozanolixizumab (罗泽利昔珠单抗)"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 4",
+          "sponsor": "UCB, Inc./ 优时比贸易（上海）有限公司/ Vetter Pharma-Fertigung GmbH & Co. KG/ UCB Pharma SA",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2025-10-16",
           "linked_registries": []
         },
         {
@@ -20124,12 +21266,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
             "Telitacicept (泰它西普)"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 3",
+          "sponsor": "荣昌生物制药（烟台）有限公司",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2025-12-30",
           "linked_registries": []
         },
         {
@@ -20146,12 +21288,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
             "Huperzine A (石杉碱甲)"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 1",
+          "sponsor": "万邦德制药集团有限公司",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2025-12-30",
           "linked_registries": []
         },
         {
@@ -20168,12 +21310,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
             "SHR-2173"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 2",
+          "sponsor": "广东恒瑞医药有限公司",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2026-05-21",
           "linked_registries": []
         },
         {
@@ -20181,9 +21323,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "CTR20262306",
           "title": "溴吡斯的明片在中国健康试验参与者空腹状态下的单中心、随机、开放、两制剂、两周期、两序列、单次给药、交叉设计生物等效性研究",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20262306",
-          "status": "NOT_YET_RECRUITING",
-          "status_label": "尚未招募",
-          "status_class": "recruiting",
+          "status": "COMPLETED",
+          "status_label": "已完成",
+          "status_class": "completed",
           "drug_class": "胆碱酯酶抑制剂",
           "drug_name": "溴吡斯的明片",
           "drug_names": [
@@ -20191,11 +21333,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           ],
           "indication": "重症肌无力",
           "phase_label": "未标注",
-          "sponsor": "",
+          "sponsor": "成都明德至远医药科技有限公司",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2026-06-12",
           "linked_registries": []
         },
         {
@@ -20203,9 +21345,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "CTR20262309",
           "title": "溴吡斯的明片（60mg）在健康试验参与者中空腹给药条件下随机、开放、单剂量、两制剂、两序列、两周期、双交叉生物等效性预试验",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20262309",
-          "status": "ACTIVE_NOT_RECRUITING",
-          "status_label": "进行中",
-          "status_class": "active",
+          "status": "COMPLETED",
+          "status_label": "已完成",
+          "status_class": "completed",
           "drug_class": "胆碱酯酶抑制剂",
           "drug_name": "溴吡斯的明片",
           "drug_names": [
@@ -20213,11 +21355,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           ],
           "indication": "重症肌无力",
           "phase_label": "未标注",
-          "sponsor": "",
+          "sponsor": "上海上药中西制药有限公司",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2026-06-12",
           "linked_registries": []
         },
         {
@@ -20234,12 +21376,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
             "Telitacicept (泰它西普)"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 3",
+          "sponsor": "Vor Biopharma Inc./ 荣昌生物制药（烟台）股份有限公司/ Patheon Italia S.p.A./ Fisher Clinical Services GmbH",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2026-06-17",
           "linked_registries": [
             {
               "registry": "ChinaDrugTrials",
@@ -20253,6 +21395,28 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "CTR20262520",
           "title": "一项在oMG研究参与者中评价罗泽利昔珠单抗有效性和安全性的III期研究",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20262520",
+          "status": "RECRUITING",
+          "status_label": "招募中",
+          "status_class": "recruiting",
+          "drug_class": "FcRn 拮抗剂",
+          "drug_name": "罗泽利昔珠单抗注射液",
+          "drug_names": [
+            "Rozanolixizumab (罗泽利昔珠单抗)"
+          ],
+          "indication": "重症肌无力",
+          "phase_label": "Phase 3",
+          "sponsor": "UCB Pharma S.A./ 优时比贸易（上海）有限公司/ Vetter Pharma-Fertigung GmbH & Co. KG/ UCB Pharma SA",
+          "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
+          "registered_date": "2026-07-06",
+          "linked_registries": []
+        },
+        {
+          "registry": "ChinaDrugTrials",
+          "registry_id": "CTR20262521",
+          "title": "一项在oMG研究参与者中评价罗泽利昔珠单抗的长期安全性和有效性的开放标签、扩展研究",
+          "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20262521",
           "status": "NOT_YET_RECRUITING",
           "status_label": "尚未招募",
           "status_class": "recruiting",
@@ -20262,12 +21426,12 @@ window.MG_CLINICAL_TRIALS_DATA = {
             "Rozanolixizumab (罗泽利昔珠单抗)"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 3",
+          "sponsor": "UCB Pharma S.A./ 优时比贸易（上海）有限公司/ Vetter Pharma-Fertigung GmbH & Co. KG/ UCB Pharma SA",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2026-08-21",
           "linked_registries": []
         },
         {
@@ -20275,8 +21439,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "CTR20262539",
           "title": "瑞利珠单抗在中国成人全身型重症肌无力患者中的有效性和安全性研究",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20262539",
-          "status": "NOT_YET_RECRUITING",
-          "status_label": "尚未招募",
+          "status": "RECRUITING",
+          "status_label": "招募中",
           "status_class": "recruiting",
           "drug_class": "补体抑制剂",
           "drug_name": "瑞利珠单抗注射液",
@@ -20284,12 +21448,78 @@ window.MG_CLINICAL_TRIALS_DATA = {
             "Ravulizumab (瑞利珠单抗)"
           ],
           "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "",
+          "phase_label": "Phase 3",
+          "sponsor": "Alexion Europe SAS/ 阿斯利康全球研发（中国）有限公司/ Alexion Pharma International Operations Limited, Alexion Athlone Manufacturing Facility (AAMF)",
           "start_date": "",
           "readout_date": "",
           "completion_date": "",
-          "registered_date": "",
+          "registered_date": "2026-07-07",
+          "linked_registries": []
+        },
+        {
+          "registry": "ChinaDrugTrials",
+          "registry_id": "CTR20263154",
+          "title": "评估石杉碱甲口服溶液在健康试验参与者中的单中心、随机、双盲、多次给药、剂量递增的药代动力学研究",
+          "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20263154",
+          "status": "NOT_YET_RECRUITING",
+          "status_label": "尚未招募",
+          "status_class": "recruiting",
+          "drug_class": "胆碱酯酶抑制剂",
+          "drug_name": "石杉碱甲口服溶液",
+          "drug_names": [
+            "Huperzine A (石杉碱甲)"
+          ],
+          "indication": "重症肌无力",
+          "phase_label": "Phase 1",
+          "sponsor": "万邦德制药集团有限公司",
+          "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
+          "registered_date": "2026-08-19",
+          "linked_registries": []
+        },
+        {
+          "registry": "ChinaDrugTrials",
+          "registry_id": "CTR20263335",
+          "title": "一项评估EA5人源化单抗在成人抗AChR抗体阳性全身型重症肌无力患者中多次给药的安全性、耐受性、药代动力学、药效学和初步有效性的开放、剂量递增的 Ib 期临床试验",
+          "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20263335",
+          "status": "NOT_YET_RECRUITING",
+          "status_label": "尚未招募",
+          "status_class": "recruiting",
+          "drug_class": "其他",
+          "drug_name": "EA5注射液皮下制剂",
+          "drug_names": [
+            "EA5注射液皮下制剂"
+          ],
+          "indication": "重症肌无力",
+          "phase_label": "Phase 1",
+          "sponsor": "上海览屹医药科技有限公司",
+          "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
+          "registered_date": "2026-09-02",
+          "linked_registries": []
+        },
+        {
+          "registry": "ChinaDrugTrials",
+          "registry_id": "CTR20263476",
+          "title": "CG001 注射液在全身型重症肌无力（gMG）患者中的安全性、耐受性、有效性和药代动力学/药效动力学特征",
+          "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20263476",
+          "status": "NOT_YET_RECRUITING",
+          "status_label": "尚未招募",
+          "status_class": "recruiting",
+          "drug_class": "其他",
+          "drug_name": "CG001注射液",
+          "drug_names": [
+            "CG001注射液"
+          ],
+          "indication": "重症肌无力",
+          "phase_label": "Phase 2",
+          "sponsor": "上海康景生物医药科技有限公司",
+          "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
+          "registered_date": "2026-09-14",
           "linked_registries": []
         }
       ]

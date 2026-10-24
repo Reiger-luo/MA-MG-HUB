@@ -1,19 +1,19 @@
 window.MG_CLINICAL_TRIALS_SUMMARY = {
   "meta": {
     "generated_at": "2026-10-18",
-    "total_count": 457,
+    "total_count": 484,
     "sources_order": [
       "ClinicalTrials.gov",
       "ChiCTR",
       "ChinaDrugTrials"
     ]
   },
-  "pipeline_matrix_count": 185,
-  "recruiting_count": 131,
-  "recent_registration_count": 24,
+  "pipeline_matrix_count": 197,
+  "recruiting_count": 132,
+  "recent_registration_count": 47,
   "leading_mechanism": {
     "label": "FcRn 拮抗剂",
-    "count": 73
+    "count": 72
   },
   "source_counts": [
     {
@@ -23,13 +23,13 @@ window.MG_CLINICAL_TRIALS_SUMMARY = {
     },
     {
       "source": "ChiCTR",
-      "count": 97,
-      "mode": "cache"
+      "count": 119,
+      "mode": "live"
     },
     {
       "source": "ChinaDrugTrials",
-      "count": 44,
-      "mode": "cache"
+      "count": 49,
+      "mode": "live_crawl"
     }
   ],
   "source_updates": {
@@ -39,30 +39,30 @@ window.MG_CLINICAL_TRIALS_SUMMARY = {
       "mode": "cache"
     },
     "ChiCTR": {
-      "updated_at": "2026-07-27",
-      "revision": "semantic-v1:dad6676eb2c9afecefd2f8bcab384ac73c01c4ebf18a969f73db64265b048cdb",
-      "mode": "cache"
+      "updated_at": "2026-10-24",
+      "revision": "semantic-v1:d47f7621614b950a7233f98c08ff140b7aeefe4971ec36a84c35b7e6d4df9598",
+      "mode": "live"
     },
     "ChinaDrugTrials": {
-      "updated_at": "2026-07-27",
-      "revision": "semantic-v1:abe903f88f1382f84ac7c9d15dbed8ce5780408848ef48373b78cfb5000dbcad",
-      "mode": "cache"
+      "updated_at": "2026-10-24",
+      "revision": "semantic-v1:91a5cd94fb23958bb597d57807a35b6a78496e9a3dc5543b941706eea89ceaf4",
+      "mode": "live_crawl"
     }
   },
   "decision_signals": [
     {
       "title": "招募中试验",
-      "detail": "当前共有 131 项招募中或邀请入组试验。",
+      "detail": "当前共有 132 项招募中或邀请入组试验。",
       "tag": "招募"
     },
     {
       "title": "药物机制热点",
-      "detail": "FcRn 拮抗剂在可识别机制中最多，共 73 项。",
+      "detail": "FcRn 拮抗剂在可识别机制中最多，共 72 项。",
       "tag": "药物分类"
     },
     {
       "title": "近 6 个月新登记",
-      "detail": "截至 2026-10-18，近 6 个月登记 24 项试验。",
+      "detail": "截至 2026-10-18，近 6 个月登记 47 项试验。",
       "tag": "近期登记"
     }
   ],
@@ -293,65 +293,65 @@ window.MG_CLINICAL_TRIALS_SUMMARY = {
     "phase_concentration": [
       {
         "label": "未标注",
-        "count": 259
+        "count": 240
       },
       {
         "label": "Phase 3",
-        "count": 71
+        "count": 92
       },
       {
         "label": "Phase 2",
-        "count": 43
+        "count": 47
       },
       {
         "label": "Phase 1",
-        "count": 26
+        "count": 37
       },
       {
         "label": "Phase 4",
-        "count": 20
+        "count": 27
       },
       {
         "label": "Phase 2 / Phase 3",
-        "count": 14
+        "count": 15
+      },
+      {
+        "label": "Phase 1 / Phase 2",
+        "count": 10
       },
       {
         "label": "Early Phase 1",
         "count": 10
-      },
-      {
-        "label": "Phase 1 / Phase 2",
-        "count": 9
       }
     ],
     "recent_registrations": {
-      "count": 24,
+      "count": 47,
       "top_drugs": [
         {
           "label": "FcRn 拮抗剂",
           "count": 3
         },
         {
-          "label": "HN2301 injection",
-          "count": 1
+          "label": "溴吡斯的明片",
+          "count": 2
         },
         {
-          "label": "Ravulizumab",
-          "count": 1
+          "label": "罗泽利昔珠单抗注射液",
+          "count": 2
         }
       ],
       "top_phases": [
         {
           "label": "未标注",
-          "count": 13
+          "count": 26
+        },
+        {
+          "label": "Phase 3",
+          "count": 6
         },
         {
           "label": "Phase 1",
-          "count": 3
-        },
-        {
-          "label": "Phase 2",
-          "count": 3
+          "count": 5
         }
       ]
     }
