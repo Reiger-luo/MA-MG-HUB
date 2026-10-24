@@ -54,21 +54,24 @@ python3 scripts/enrich-clinical-trial-signals.py --replay-current-window
 
 首页统一“信号板”只展示通过门控的试验信号，以及三源原始变化计数、比较窗口和更新时间；完整原始变化继续在情报中心临床试验页核查。`source-signals.js` 的 `trialRegistry.items` 保留原始登记列表，`trialRegistry.weekly_signals` 则只接收门控后的试验信号。周更 Markdown 同样按文献/试验分节，不复用旧的文献 Top 3 代替试验判断。文献与试验即使属于同一项目也不跨组聚合。
 
-## ChiCTR 月更
+## ChiCTR 周更
 
 默认周更命令会调用：
 
 ```bash
-python3 scripts/refresh-chictr-cache.py
+python3 scripts/refresh-chictr-cache.py --interval-days 7 --detail-budget 60
 ```
 
-脚本读取 `data/chictr-trials-cache.json` 的 `last_verified`。距离上次成功核对不足 28 天时跳过；达到 28 天时运行官方中英文疾病检索并逐条下载 XML。
+脚本读取 `data/chictr-trials-cache.json` 的 `last_verified`：距上次**整库核对完成**不足 7 天时跳过。ChiCTR 与 CT.gov 同频（每周），靠两点把成本压下来：
+
+1. **XML 直连**：官方 `DownloadXml` 的加密路径可跨会话复用，首次拿到后写进缓存的 `xml_url`。此后每条只需 1 次请求取约 14 KB 的 XML，不再取约 130 KB 的详情页，请求量从 2N 降到 N（121 条约 240s → 约 50s）。
+2. **分批迁移**：老缓存没有 `xml_url`，`--detail-budget 60` 限定每轮最多回退详情页 60 条，未迁移项保留旧记录并计入 `records_deferred`，且**不推进 `last_verified`**，下一周自动续做，不会把未核对当成已核对。
 
 站点由阿里云 WAF 保护，刷新链路按以下顺序取 Cookie：
 
 1. 运行环境提供 `CHICTR_COOKIE` 时直接使用（最高优先级，适合临时人工会话）；
 2. 否则用 `curl_cffi` 的浏览器指纹发起请求；
-3. 遇到 `acw_sc__v2` 挑战时，用本机 Playwright（优先系统 Chrome，回退内置 Chromium）执行官网挑战脚本取出 Cookie，再用同一会话继续检索。
+3. 遇到 `acw_sc__v2` 挑战时，用本机 Playwright（优先系统 Chrome，回退内置 Chromium）执行官网挑战脚本取出 Cookie，再用同一会话继续检索。挑战页按**目标 URL 路径**拦截，`searchproj` / `showproj` / `historyversionpub` 各自可解，单个客户端最多求解 3 次。
 
 ```bash
 # 自动求解（推荐）
@@ -79,9 +82,20 @@ export CHICTR_COOKIE='当前浏览器会话中的 Cookie 字符串'
 python3 scripts/refresh-chictr-cache.py --force-live
 ```
 
-Cookie 只存在于运行环境，禁止写入仓库。无 Playwright 或被拦截时，命令返回非零状态但不改写缓存；在周更管线中该步骤是 optional，因此会记录 warning 并继续发布最后良好数据。
+### fail-closed 契约
 
-可用 `--interval-days` 调整间隔。
+ChiCTR 是三个来源里唯一没有公开 API 的，因此把「抓取失败」与「抓取不全」都当作失败，宁可保留 last-good：
+
+| 情形 | 行为 |
+|---|---|
+| 站点级拦截（405 / WAF / 挑战页面） | 立即中止整轮，不回退旧数据凑数，缓存不变 |
+| 单条记录失败 | 退避 1.5s 重试一次，仍失败才回退；回退条数上限为发现数的 10%（至少 3 条） |
+| 结果条数 | 同时受「发现项目数 75%」与「上一版缓存 90%」双重下限约束 |
+| 分批迁移未完成 | 写回缓存但标记 `mode=live_partial`，`last_verified` 不前移 |
+
+早期实现只按「发现项目数的 75%」判断，且逐条异常被静默回退，实测出现过「97/121 条沿用旧数据却报告 updated」；上述四条是针对性修补，`tests/test_chictr_weekly.py` 覆盖。
+
+Cookie 只存在于运行环境，禁止写入仓库。在周更管线中该步骤是 optional，失败会记录 warning 并继续发布最后良好数据。
 
 如取得 ChiCTR 官方 JSON/CSV 导出，也可直接导入：
 
@@ -105,6 +119,23 @@ python3 scripts/refresh-cde-live-cache.py --no-build --interval-days 6
 4. 分期统一归一化为 `1`、`2`、`3`、`4`、`1/2`、`2/3`，`其它 其他说明:生物等效性试验` 这类非分期说明归为未标注；终止/暂停细分状态统一映射到 `TERMINATED` / `SUSPENDED`；
 5. 与旧缓存逐字段比较，输出新增、更新、移除，并把「旧缓存为空、本期补全」的字段单独计入 `enriched_count`，不伪装成真实更新；
 6. 原子更新 `data/china-drug-trials-cache.json` 与 `data/china-drug-trials-changes.json`，再抓一次 RSS 早报。
+
+### 与 CT.gov 对齐的差分字段
+
+CT.gov 能用 `last_update_date` / `results_posted` 判断「发生了什么更新」，CDE 没有等价字段。为此详情页额外抓取并参与差分：
+
+| 字段 | 含义 | 归类 |
+|---|---|---|
+| `protocol_version` / `protocol_version_date` | 方案最新版本号与版本日期 | 高实质：登记内容被实质修订 |
+| `first_consent_date` / `first_enrollment_date` | 首例知情、首例入组日期 | 中等：真实执行里程碑 |
+| `completion_date` | 试验完成日期 | 中等 |
+| `enrollment_actual` | 已入组人数 | 中等 |
+
+没有这些字段时，方案修订只能表现为「无变化」；有了它们，CDE 的周更差分才与 CT.gov 同级。实测 51 条中 48 条有版本日期。
+
+::: warning 同一周内重复全量抓取会推进窗口
+`changes.generated_at` 是 CDE 的比较窗口标识。同一周内再次全量抓取会生成「0 变化」的新窗口，把该周已发布的 CDE 候选挤掉。需要在一周内重跑构建时，先 `git checkout HEAD -- data/china-drug-trials-changes.json` 恢复本周真实差分集，再 `--force-rebuild` 重算信号。
+:::
 
 RSS（`https://www.chinadrugtrials.org.cn/clinicaltrials.search.rss.dhtml?keywords=重症肌无力`）**支持按主题过滤**，带 `keywords` 参数时返回该主题最近 20 条登记，可作为本主题的「新登记早报」：结果写入 `.hermes-audit/cde-rss-snapshot.json`，打印较上次快照新增的登记号，并核对 RSS 已知的 MG 登记是否都已进入缓存（缺失即提示分页或门控异常）。
 
@@ -133,6 +164,21 @@ python3 scripts/refresh-china-drug-trials-cache.py --input /absolute/path/export
 
 注意：平台列表页固定每页 20 条，「下载 Excel」只导出当前页。人工交接前必须逐页导出并全部传入，否则会被 60% 数量检查拦下。
 
+## 三源周更对比（为什么现在可以同频）
+
+| 维度 | ClinicalTrials.gov | ChiCTR | ChinaDrugTrials |
+|---|---|---|---|
+| 官方接口 | API v2（JSON，分页 token） | 无 API，HTML 检索页 + 加密 XML 下载 | 无 API，HTML 检索页 + 详情页 |
+| 抓取成本 | 4 次请求 / 354 项 | 121 次请求 / 121 项（XML 直连后） | 3 + 51 次请求 / 51 项 |
+| 单次耗时 | 约 10–20s | 约 50s（迁移期约 240s） | 约 35s |
+| 访问限制 | 无 | 阿里云 WAF（`acw_sc__v2` 挑战 + 频率拦截） | 无 WAF，仅需首页 Cookie |
+| 更新判定字段 | `last_update_date` / `results_posted` | XML 全字段（状态、分期、样本量、入排） | 方案版本日期、首例入组、完成日期 |
+| 失败策略 | 保留 last-good | 站点拦截即中止，回退超 10% 即放弃写回 | 保留 last-good，数量骤降拒绝覆盖 |
+| 节奏 | 每周 | 每周（原 28 天） | 每周（原人工月度） |
+| 触发点 | 周一 05:00 `build-frontend` | 周一 05:00 步骤 6 | 周一 05:00 步骤 7 |
+
+ChiCTR 与 CDE 早期被设成低频，是因为抓取成本高且缺可比较字段，不是因为数据不需要周更。今天的两处改造消掉了这两个前提：ChiCTR 靠 XML 直连把请求量减半、并把不完整抓取改为 fail-closed；CDE 补上方案版本与入组里程碑字段，使「发生了什么更新」可以判定。三个来源因此具备同等周更能力，统一进一次周一任务。
+
 ## 周更调度
 
 三个注册源统一由**周一 05:00** 的 Hermes cron 一次性刷新，不再有独立的注册源任务：
@@ -146,13 +192,13 @@ python3 scripts/refresh-china-drug-trials-cache.py --input /absolute/path/export
 
 | 顺序 | 步骤 | 源 | 抓取节奏 |
 |---|---|---|---|
-| 6 | `refresh-chictr-cache` | ChiCTR | 每 28 天到期才抓，未到期跳过 |
-| 7 | `refresh-china-drug-trials-cache` | ChinaDrugTrials | 每次周更都抓（`--interval-days 1`，同日重跑自动跳过） |
+| 6 | `refresh-chictr-cache` | ChiCTR | 每周（`--interval-days 7`），XML 直连 + 分批迁移（`--detail-budget 60`） |
+| 7 | `refresh-china-drug-trials-cache` | ChinaDrugTrials | 每周（`--interval-days 1`，同日重跑自动跳过） |
 | 8 | `build-frontend`（内部调用 CT.gov API v2） | ClinicalTrials.gov | 每次周更都抓 |
 
 步骤 18 `build-clinical-trials` 之后才统一生成临床试验页、试验信号、来源频道与周报，因此三源不会出现「一次发布混用新旧缓存」。
 
-ChiCTR 保持 28 天节奏是出于对 WAF 站点的访问克制（单次约 121 个项目、约 3.5 分钟），不是数据需求；如需改为每周，把 `refresh-chictr-cache` 步骤的 `--interval-days` 调整为 7。
+三源现在同为每周节奏。ChiCTR 的访问克制由「XML 直连把请求量减半」和「分批迁移（每轮最多 60 个详情页）」实现，而不是靠拉长间隔；`--interval-days` 已改为 7。
 
 `--mode trials-only` 保留为**手工工具**，用于周中临时补抓注册源（只跑三源与试验相关产物，不动文献/专家/社区/图谱），已不再由 cron 调度。
 

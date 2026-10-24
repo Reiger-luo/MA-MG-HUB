@@ -21,10 +21,19 @@ def main() -> int:
     parser.add_argument(
         "--interval-days",
         type=int,
-        default=28,
-        help="无 --input 时，距离上次成功刷新达到该天数才运行官方抓取（默认 28）",
+        default=7,
+        help="无 --input 时，距离上次成功刷新达到该天数才运行官方抓取（默认 7，与 CT.gov 同频）",
     )
     parser.add_argument("--force-live", action="store_true", help="忽略间隔并立即运行官方抓取")
+    parser.add_argument(
+        "--detail-budget",
+        type=int,
+        default=0,
+        help=(
+            "本轮允许回退详情页的项目数（用于把缓存分批迁移到 XML 直连，0 表示不限）。"
+            "未迁移的项目保留旧记录并计入 records_deferred，不推进 last_verified"
+        ),
+    )
     args = parser.parse_args()
 
     if args.interval_days < 0:
@@ -38,6 +47,7 @@ def main() -> int:
             args.cache,
             interval_days=args.interval_days,
             force=args.force_live,
+            detail_budget=args.detail_budget or None,
         )
         refresh_status = payload.get("refresh_status")
 
@@ -51,7 +61,16 @@ def main() -> int:
             f"上次核对 {payload.get('last_verified') or payload.get('scraped_at') or '未知'}"
         )
     else:
-        print(f"✅ ChiCTR mode={payload.get('mode')}，刷新并缓存 {count} 条")
+        reused = payload.get("records_xml_reused")
+        detail = payload.get("records_detail_fetched")
+        deferred = payload.get("records_deferred")
+        deferred_note = f"，分批迁移待办 {deferred} 条" if deferred else ""
+        extra = (
+            f"（复用 XML 链接 {reused} 条，回退详情页 {detail} 条{deferred_note}）"
+            if reused is not None
+            else ""
+        )
+        print(f"✅ ChiCTR mode={payload.get('mode')}，刷新并缓存 {count} 条{extra}")
     return 0
 
 

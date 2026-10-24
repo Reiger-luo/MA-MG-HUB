@@ -425,6 +425,14 @@ def normalize_china_drug_trials_record(source: dict[str, Any]) -> dict[str, Any]
         "sponsor": str(values["sponsor"]).strip(),
         "registered_date": str(values["registered_date"]).strip(),
         "official_url": str(values["official_url"]).strip(),
+        # 详情页可比字段：供周更差分判断登记内容是否发生修订或入组推进
+        "protocol_version": str(source.get("protocol_version") or "").strip(),
+        "protocol_version_date": str(source.get("protocol_version_date") or "").strip(),
+        "first_consent_date": str(source.get("first_consent_date") or "").strip(),
+        "first_enrollment_date": str(source.get("first_enrollment_date") or "").strip(),
+        "completion_date": str(source.get("completion_date") or "").strip(),
+        "enrollment_target": str(source.get("enrollment_target") or "").strip(),
+        "enrollment_actual": str(source.get("enrollment_actual") or "").strip(),
     }
 
 

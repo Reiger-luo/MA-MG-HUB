@@ -59,11 +59,15 @@ HIGH_FIELDS = {
     "phase", "phase_label", "intervention", "interventions", "drug_name", "drug_names",
     "primary_outcome", "primary_outcomes", "condition", "conditions", "population",
     "eligibility", "inclusion_criteria", "study_type",
+    # CDE 的「方案修订」等价于主要设计变更：版本号/版本日期变动说明登记内容被实质修订
+    "protocol_version", "protocol_version_date",
 }
 MEDIUM_FIELDS = {
     "status", "recruitment_status", "enrollment", "enrollment_count", "target_size",
     "primary_completion_date", "completion_date", "readout_date", "countries",
     "locations_count", "date_enrolment",
+    # 首例知情/首例入组是真实的执行里程碑
+    "first_consent_date", "first_enrollment_date", "enrollment_actual",
 }
 
 SYSTEM = """你是重症肌无力（MG）临床研究与医学事务专家。你只分析试验注册变化，不把注册状态写成疗效证据。

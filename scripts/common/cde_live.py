@@ -83,11 +83,14 @@ def parse_list_rows(html: str) -> list[dict[str, str]]:
 
 
 def parse_detail(html: str) -> dict[str, str]:
-    """把详情页的「标题-值」表格摊平为字典，取首次出现的值。"""
+    """把详情页的「标题-值」表格摊平为字典，取首次出现的值。
+
+    平台部分表头带尾随冒号（如「版本日期:」），统一去掉以便用稳定键名取值。
+    """
     soup = BeautifulSoup(html, "html.parser")
     values: dict[str, str] = {}
     for th in soup.find_all("th"):
-        key = _clean(th.get_text(" "))
+        key = _clean(th.get_text(" ")).rstrip(":：").strip()
         cell = th.find_next_sibling("td")
         if key and cell is not None and key not in values:
             values[key] = _clean(cell.get_text(" "))
@@ -218,6 +221,13 @@ def collect_mg_trials(
                     "design": detail.get("设计类型", ""),
                     "enrollment_target": detail.get("目标入组人数", ""),
                     "enrollment_actual": detail.get("已入组人数", ""),
+                    # 周更差分的可比字段：CT.gov 靠 last_update_date / results_posted 判断更新，
+                    # CDE 没有这两项，改用方案版本号与版本日期作为「登记内容发生修订」的信号。
+                    "protocol_version": detail.get("方案最新版本号", ""),
+                    "protocol_version_date": detail.get("版本日期", ""),
+                    "first_consent_date": detail.get("第一例受试者签署知情同意书日期", ""),
+                    "first_enrollment_date": detail.get("第一例受试者入组日期", ""),
+                    "completion_date": detail.get("试验完成日期", ""),
                 }
             )
         records.append(record)

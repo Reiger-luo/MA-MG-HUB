@@ -130,7 +130,11 @@ def pipeline_steps(args, full_available: bool | None = None) -> list[PipelineSte
     steps.extend([
         PipelineStep(
             "refresh-chictr-cache",
-            py("refresh-chictr-cache.py"),
+            # detail-budget 让缓存分批迁移到 XML 直连：每轮最多重取 60 个详情页，
+            # 未迁移项计入 records_deferred 且不推进 last_verified，下周自动续做。
+            py("refresh-chictr-cache.py") + [
+                "--interval-days", "7", "--detail-budget", "60",
+            ],
             outputs=[DATA / "chictr-trials-cache.json"],
             optional=True,
         ),

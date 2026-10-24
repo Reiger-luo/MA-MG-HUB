@@ -17,7 +17,7 @@ from collections import defaultdict
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlsplit
 
 from bs4 import BeautifulSoup
 
@@ -39,6 +39,22 @@ BLOCK_MARKERS = (
 )
 CHALLENGE_MARKER = "acw_sc__v2"
 CHALLENGE_COOKIE = "acw_sc__v2"
+# 这些异常表示站点级拦截，不能按「单条记录坏掉」处理并回退旧数据，
+# 否则整轮刷新会在大量 stale 记录上伪装成成功。
+SITE_BLOCK_SIGNALS = (
+    "405",
+    "waf",
+    "挑战",
+    "阻断",
+    "blocked",
+    "too many requests",
+    "429",
+)
+
+
+def _is_site_block(exc: BaseException) -> bool:
+    text = f"{type(exc).__name__} {exc}".lower()
+    return any(signal in text for signal in SITE_BLOCK_SIGNALS)
 
 
 class ChiCTRLiveError(RuntimeError):
@@ -51,11 +67,18 @@ def solve_waf_challenge(challenge_html: str, url: str, *, acw_tc: str = "") -> s
     挑战脚本依赖真实 DOM 与 history 行为，纯 Python 复刻其混淆逻辑极易失效；
     这里让浏览器执行官网脚本，只把挑战响应注入首次请求，第二次请求被拦截，
     因此不会真正打到站点，只用于取出浏览器算出的 Cookie。
+
+    拦截必须按**目标 URL 的路径**匹配：平台对 searchproj / showproj /
+    historyversionpub 分别下发挑战，写死某个路径会让其余页面回退到真实请求，
+    而真实请求在无挑战状态下直接 405，浏览器拿不到 Cookie。
     """
     try:
         from playwright.sync_api import sync_playwright
     except Exception as exc:  # Playwright 未安装时不阻断整个周更
         raise ChiCTRLiveError(f"未安装 Playwright，无法自动求解 ChiCTR WAF 挑战: {exc}") from exc
+
+    target_path = urlsplit(url).path or "/"
+    route_pattern = re.compile(re.escape(target_path) + r"(?:[?#].*)?$")
 
     last_error = ""
     for engine in ("chrome", "chromium"):
@@ -87,13 +110,13 @@ def solve_waf_challenge(challenge_html: str, url: str, *, acw_tc: str = "") -> s
                         else:
                             route.abort()
 
-                    page.route("**/searchproj.html*", _handler)
+                    page.route(route_pattern, _handler)
                     page.goto(url, wait_until="domcontentloaded", timeout=60000)
                     page.wait_for_timeout(4000)
                     for cookie in context.cookies():
                         if cookie.get("name") == CHALLENGE_COOKIE and cookie.get("value"):
                             return str(cookie["value"])
-                    last_error = "浏览器未生成 acw_sc__v2"
+                    last_error = f"浏览器未生成 acw_sc__v2（拦截 {state['count']} 次，路径 {target_path}）"
                 finally:
                     browser.close()
         except Exception as exc:
@@ -200,7 +223,7 @@ def _first(values: dict[str, list[str]], aliases: tuple[str, ...]) -> str:
     return ""
 
 
-def parse_xml_record(xml_text: str, *, proj_id: str = "") -> dict[str, Any]:
+def parse_xml_record(xml_text: str, *, proj_id: str = "", xml_url: str = "") -> dict[str, Any]:
     """把 ChiCTR 官方 XML 转成缓存使用的公开字段。"""
     try:
         root = ET.fromstring(xml_text)
@@ -216,6 +239,9 @@ def parse_xml_record(xml_text: str, *, proj_id: str = "") -> dict[str, Any]:
     return {
         "registry_id": registry_id,
         "proj_id": str(proj_id),
+        # 官方 DownloadXml 的加密路径可跨会话复用，缓存后每周只需 1 次请求
+        # 即可拿到 XML，无需再取 130 KB 的详情页。
+        "xml_url": xml_url or "",
         "title": title,
         "study_type": record.get("study_type") or "Unknown",
         "registered_date": record.get("date_registration"),
@@ -261,12 +287,14 @@ class ChiCTRClient:
         timeout: float = 45,
         delay_seconds: float = 0.25,
         solve_challenge: bool = True,
+        max_challenge_solves: int = 3,
     ):
         self.session, self.impersonated = _build_session(requests_module)
         self.timeout = timeout
         self.delay_seconds = max(0, delay_seconds)
         self.solve_challenge = solve_challenge
-        self._challenge_solved = False
+        self.max_challenge_solves = max_challenge_solves if solve_challenge else 0
+        self._solves_used = 0
         self.session.headers.update({
             "User-Agent": DEFAULT_USER_AGENT,
             "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
@@ -302,7 +330,7 @@ class ChiCTRClient:
             pass
 
     def _try_solve_challenge(self, url: str, challenge_html: str) -> bool:
-        if self._challenge_solved or not self.solve_challenge:
+        if self._solves_used >= self.max_challenge_solves:
             return False
         try:
             token = solve_waf_challenge(
@@ -313,38 +341,46 @@ class ChiCTRClient:
         except ChiCTRLiveError:
             return False
         self._set_cookie(CHALLENGE_COOKIE, token)
-        self._challenge_solved = True
+        self._solves_used += 1
         return True
 
     def get_text(self, url: str, *, params: dict[str, Any] | None = None) -> str:
-        if not self._challenge_solved and not self._session_cookies().get("acw_tc"):
+        """取页面文本。遇到 WAF 挑战时求解后重试，仍被挑战则显式失败。
+
+        绝不允许把挑战页当作正文返回：挑战页也能通过 ``text.strip()`` 检查，
+        静默返回会让上层把 17KB 的 JS 混淆代码当成检索结果。
+        """
+        if not self._solves_used and not self._session_cookies().get("acw_tc"):
             self._warm_up(url)
         response = self.session.get(url, params=params, timeout=self.timeout)
         response.raise_for_status()
         text = response.text
-        low = text.lower()
-        challenged = CHALLENGE_MARKER in text and "arg1" in text
-        blocked = any(marker in low for marker in BLOCK_MARKERS)
-        if challenged or blocked:
-            # 挑战页需要用同一 URL 求解后重试；拦截页则重试一次即可
-            if not challenged and any(marker in low for marker in BLOCK_MARKERS):
-                self._warm_up(url)
-                response = self.session.get(url, params=params, timeout=self.timeout)
-                response.raise_for_status()
-                text, low = response.text, response.text.lower()
-                challenged = CHALLENGE_MARKER in text and "arg1" in text
-                blocked = any(marker in low for marker in BLOCK_MARKERS)
+
+        for attempt in range(2):
+            low = text.lower()
+            challenged = CHALLENGE_MARKER in text and "arg1" in text
+            blocked = any(marker in low for marker in BLOCK_MARKERS)
+            if not challenged and not blocked:
+                break
+            if attempt:
+                break
             if challenged:
-                target = response.url if hasattr(response, "url") else url
-                if self._try_solve_challenge(str(target), text):
-                    response = self.session.get(url, params=params, timeout=self.timeout)
-                    response.raise_for_status()
-                    text, low = response.text, response.text.lower()
-                    blocked = any(marker in low for marker in BLOCK_MARKERS)
-                else:
-                    raise ChiCTRLiveError("ChiCTR WAF 挑战无法自动求解，请提供 CHICTR_COOKIE")
-            if blocked:
-                raise ChiCTRLiveError("ChiCTR WAF 阻断了本次请求")
+                target = str(getattr(response, "url", url) or url)
+                if not self._try_solve_challenge(target, text):
+                    raise ChiCTRLiveError(
+                        f"ChiCTR WAF 挑战无法自动求解（已求解 {self._solves_used} 次）: {target}"
+                    )
+            else:
+                self._warm_up(url)
+            response = self.session.get(url, params=params, timeout=self.timeout)
+            response.raise_for_status()
+            text = response.text
+
+        low = text.lower()
+        if CHALLENGE_MARKER in text and "arg1" in text:
+            raise ChiCTRLiveError("ChiCTR 仍返回 WAF 挑战页，拒绝当作正文使用")
+        if any(marker in low for marker in BLOCK_MARKERS):
+            raise ChiCTRLiveError("ChiCTR WAF 阻断了本次请求")
         if not text.strip():
             raise ChiCTRLiveError("ChiCTR 返回空响应")
         if self.delay_seconds:
@@ -386,61 +422,145 @@ def scrape_chictr_records(
     client: ChiCTRClient,
     *,
     old_records: list[dict[str, Any]] | None = None,
+    detail_budget: int | None = None,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
-    """检索详情并下载 XML；少量失败时保留对应的最后良好记录。"""
+    """检索详情并下载 XML，并把「真的刷新了多少」如实回报。
+
+    有缓存 ``xml_url`` 时直接取 XML（1 次请求，约 14 KB）；缺失或失效才回退
+    到详情页再找 XML 链接（2 次请求，约 145 KB）。据此把每周全量核对的请求
+    量从 2N 降到 N。
+
+    三条 fail-closed 规则（此前缺失导致过「97/121 条用旧数据仍报成功」）：
+
+    1. 站点级拦截（405/WAF/挑战）立即中止整轮，不回退旧数据；
+    2. 单条记录失败按退避重试一次，仍失败才回退，且回退数量受限；
+    3. 结果条数同时受「已发现项目数」和「上一版缓存条数」双重下限约束。
+    """
     project_ids = discover_project_ids(client)
     previous_by_project = {
         str(record.get("proj_id") or ""): record
         for record in old_records or []
         if record.get("proj_id")
     }
+    previous_count = len(previous_by_project)
     records: list[dict[str, Any]] = []
     failures: list[str] = []
+    deferred: list[str] = []
+    fallback_ids: list[str] = []
     with_xml = 0
-    for proj_id in project_ids:
+    xml_reused = 0
+    detail_fetched = 0
+    budget = detail_budget if detail_budget is not None else len(project_ids)
+
+    def _fetch_with_retry(url: str) -> str:
+        """单条重试一次；站点级拦截直接上抛，交给外层中止整轮。"""
         try:
-            detail_url = urljoin(BASE_URL, f"showproj.html?proj={proj_id}")
-            detail_html = client.get_text(detail_url)
-            xml_url = extract_xml_url(detail_html)
-            if not xml_url:
-                raise ChiCTRLiveError("详情页没有 XML 链接")
-            record = parse_xml_record(client.get_text(xml_url), proj_id=proj_id)
-            records.append(record)
-            with_xml += 1
-        except Exception:
-            fallback = previous_by_project.get(proj_id)
-            if fallback:
-                records.append(fallback)
-            else:
-                failures.append(proj_id)
+            return client.get_text(url)
+        except Exception as exc:
+            if _is_site_block(exc):
+                raise ChiCTRLiveError(f"ChiCTR 站点拦截，已中止整轮：{exc}") from exc
+            time.sleep(1.5)
+            try:
+                return client.get_text(url)
+            except Exception as retry_exc:
+                if _is_site_block(retry_exc):
+                    raise ChiCTRLiveError(f"ChiCTR 站点拦截，已中止整轮：{retry_exc}") from retry_exc
+                raise
+
+    for proj_id in project_ids:
+        cached = previous_by_project.get(proj_id) or {}
+        cached_xml_url = str(cached.get("xml_url") or "")
+        record: dict[str, Any] | None = None
+        if cached_xml_url:
+            try:
+                record = parse_xml_record(
+                    _fetch_with_retry(cached_xml_url), proj_id=proj_id, xml_url=cached_xml_url
+                )
+                xml_reused += 1
+            except ChiCTRLiveError:
+                raise
+            except Exception:
+                record = None  # 链接过期或内容异常，回退详情页
+        if record is None:
+            if budget <= 0:
+                # 分批迁移：本轮预算用尽，保留旧记录并按「未核对」计数，
+                # 下次周更继续迁移，绝不把它算成已核对。
+                if cached:
+                    records.append(cached)
+                    deferred.append(proj_id)
+                else:
+                    failures.append(proj_id)
+                continue
+            budget -= 1
+            try:
+                detail_url = urljoin(BASE_URL, f"showproj.html?proj={proj_id}")
+                detail_html = _fetch_with_retry(detail_url)
+                detail_fetched += 1
+                xml_url = extract_xml_url(detail_html)
+                if not xml_url:
+                    raise ChiCTRLiveError("详情页没有 XML 链接")
+                record = parse_xml_record(
+                    _fetch_with_retry(xml_url), proj_id=proj_id, xml_url=xml_url
+                )
+            except ChiCTRLiveError:
+                raise
+            except Exception:
+                if cached:
+                    records.append(cached)
+                    fallback_ids.append(proj_id)
+                else:
+                    failures.append(proj_id)
+                continue
+        records.append(record)
+        with_xml += 1
 
     by_id = {
         str(record.get("registry_id") or ""): record
         for record in records
         if record.get("registry_id")
     }
-    minimum = max(1, int(len(project_ids) * 0.75))
+    # 双重下限：既不能少于已发现项目数的 75%，也不能比上一版缓存少 10%
+    minimum = max(1, int(len(project_ids) * 0.75), int(previous_count * 0.9))
     if len(by_id) < minimum:
         raise ChiCTRLiveError(
-            f"ChiCTR 仅获得 {len(by_id)}/{len(project_ids)} 条有效记录，未达到安全阈值"
+            f"ChiCTR 仅获得 {len(by_id)} 条有效记录（下限 {minimum}："
+            f"发现 {len(project_ids)}、上版 {previous_count}），未达到安全阈值"
+        )
+    # 回退旧数据的比例过高说明本轮并未真正核对，按失败处理而不是伪装成功
+    stale_allowed = max(3, int(len(project_ids) * 0.1))
+    if len(fallback_ids) > stale_allowed:
+        raise ChiCTRLiveError(
+            f"ChiCTR 有 {len(fallback_ids)} 条记录只能沿用旧数据（上限 {stale_allowed}），"
+            "本轮核对不完整，已放弃写回"
         )
     return sorted(by_id.values(), key=lambda item: item["registry_id"], reverse=True), {
         "total_found": len(project_ids),
         "records_scraped": len(by_id),
         "records_with_xml": with_xml,
+        "records_xml_reused": xml_reused,
+        "records_detail_fetched": detail_fetched,
+        "records_deferred": len(deferred),
+        "records_stale_fallback": len(fallback_ids),
         "failed_project_ids": failures,
+        "previous_count": previous_count,
     }
 
 
 def refresh_chictr_live(
     cache_path: Path,
     *,
-    interval_days: int = 28,
+    interval_days: int = 7,
     force: bool = False,
     now: datetime | None = None,
     client: ChiCTRClient | None = None,
+    detail_budget: int | None = None,
 ) -> dict[str, Any]:
-    """到期时运行官方检索；失败不改写最后良好缓存。"""
+    """到期时运行官方检索；失败不改写最后良好缓存。
+
+    分批迁移（``detail_budget`` 限制每轮回退详情页的条数）期间，
+    ``last_verified`` 只在整库核对完成时推进，避免部分核对被当成完成而
+    让下一次周更再等一个周期。
+    """
     cached = {}
     if cache_path.exists():
         import json
@@ -454,17 +574,20 @@ def refresh_chictr_live(
         records, meta = scrape_chictr_records(
             active_client,
             old_records=cached.get("records") or [],
+            detail_budget=detail_budget,
         )
         refreshed_at = (now or datetime.now(timezone.utc)).astimezone(timezone.utc).isoformat()
+        complete = int(meta.get("records_deferred") or 0) == 0
         payload = {
             "schema_version": "1.0",
             "source": "ChiCTR official registry",
             "source_url": BASE_URL,
-            "mode": "live",
+            "mode": "live" if complete else "live_partial",
             "query": "重症肌无力 (Myasthenia Gravis)",
             **meta,
             "scraped_at": refreshed_at,
-            "last_verified": refreshed_at,
+            # 只有整库核对完成才推进到期闸门；分批迁移期间保持上次完成时间
+            "last_verified": refreshed_at if complete else cached.get("last_verified", ""),
             "records": records,
         }
         atomic_write_json(cache_path, payload)

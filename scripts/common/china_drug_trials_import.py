@@ -29,10 +29,27 @@ CHANGE_FIELDS = (
     "sponsor",
     "registered_date",
     "official_url",
+    # 周更差分：对应 CT.gov 的 last_update_date / results_posted 能力
+    "protocol_version",
+    "protocol_version_date",
+    "first_consent_date",
+    "first_enrollment_date",
+    "completion_date",
+    "enrollment_actual",
 )
 
 # 首次接入详情字段时，旧缓存这些字段为空/Unknown；属于基线补全而非真实变更
-FILLABLE_FIELDS = frozenset({"phase", "sponsor", "registered_date"})
+FILLABLE_FIELDS = frozenset({
+    "phase",
+    "sponsor",
+    "registered_date",
+    "protocol_version",
+    "protocol_version_date",
+    "first_consent_date",
+    "first_enrollment_date",
+    "completion_date",
+    "enrollment_actual",
+})
 FILL_PLACEHOLDERS = frozenset({"", "unknown", "未标注", "n/a", "na", "none", "-", "0"})
 SS_NS = "urn:schemas-microsoft-com:office:spreadsheet"
 
