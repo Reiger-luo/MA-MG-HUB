@@ -24,6 +24,22 @@ DEFAULT_CACHE = PROJECT / "data" / "china-drug-trials-cache.json"
 DEFAULT_CHANGES = PROJECT / "data" / "china-drug-trials-changes.json"
 # RSS 早报属于运行状态，不进入公开数据目录，避免未跟踪文件阻塞周更自动提交
 DEFAULT_RSS = PROJECT / ".hermes-audit" / "cde-rss-snapshot.json"
+# 本次运行是「全量抓取」还是「间隔未到跳过」，供周更汇报准确引用
+DEFAULT_STATUS = PROJECT / ".hermes-audit" / "cde-refresh-status.json"
+
+
+def record_status(path: Path, action: str, **extra) -> None:
+    """把本次运行的实际动作写入审计文件，方便周更汇报区分是否真的抓取。"""
+    payload = {
+        "checked_at": datetime.now(timezone.utc).isoformat(),
+        "action": action,
+        **extra,
+    }
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        atomic_write_json(path, payload)
+    except OSError:
+        pass
 
 
 def display_path(path: Path) -> str:
@@ -105,6 +121,7 @@ def main() -> int:
     parser.add_argument("--cache", type=Path, default=DEFAULT_CACHE)
     parser.add_argument("--changes", type=Path, default=DEFAULT_CHANGES)
     parser.add_argument("--rss-snapshot", type=Path, default=DEFAULT_RSS)
+    parser.add_argument("--status-file", type=Path, default=DEFAULT_STATUS)
     parser.add_argument("--keyword", default="重症肌无力")
     parser.add_argument(
         "--interval-days",
@@ -149,6 +166,7 @@ def main() -> int:
             keyword=args.keyword,
             cache_ids=cached_ids(),
         )
+        record_status(args.status_file, "rss_only")
         return 0
 
     due, last_seen = is_due(args.cache, args.interval_days)
@@ -160,15 +178,18 @@ def main() -> int:
             keyword=args.keyword,
             cache_ids=cached_ids(),
         )
+        record_status(args.status_file, "skipped_interval", last_crawl=last_seen)
         return 0
 
     try:
         records, meta = collect_mg_trials(client, keyword=args.keyword)
     except CdeLiveError as exc:
         print(f"⚠️ CDE 抓取不可用，保留最后良好缓存: {exc}", file=sys.stderr)
+        record_status(args.status_file, "failed", error=str(exc))
         return 1
     except Exception as exc:  # 网络异常同样不能改写缓存
         print(f"⚠️ CDE 抓取失败，保留最后良好缓存: {exc}", file=sys.stderr)
+        record_status(args.status_file, "failed", error=str(exc))
         return 1
 
     print(
@@ -201,8 +222,20 @@ def main() -> int:
     )
     if args.dry_run:
         print("ℹ️ dry-run：未写缓存，未重建网站")
+        record_status(args.status_file, "dry_run", mg_rows=meta["mg_rows"], scanned=meta["scanned_rows"])
         return 0
 
+    record_status(
+        args.status_file,
+        "crawled",
+        mg_rows=meta["mg_rows"],
+        scanned=meta["scanned_rows"],
+        cached=payload["total"],
+        added=changes["added_count"],
+        updated=changes["updated_count"],
+        removed=changes["removed_count"],
+        enriched=changes.get("enriched_count", 0),
+    )
     print(f"✅ 已更新 {display_path(args.cache)}（{payload['total']} 条）")
     print(f"✅ 已写入差异报告 {display_path(args.changes)}")
     run_rss_watch(
