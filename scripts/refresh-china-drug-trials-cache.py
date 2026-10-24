@@ -62,7 +62,7 @@ def main() -> int:
         "ChinaDrugTrials 对比完成 · "
         f"旧 {changes['old_count']} → 新 {changes['new_count']} · "
         f"新增 {changes['added_count']} · 更新 {changes['updated_count']} · "
-        f"移除 {changes['removed_count']}"
+        f"移除 {changes['removed_count']} · 基线补全 {changes.get('enriched_count', 0)}"
     )
     if args.dry_run:
         print("ℹ️ dry-run：未写缓存，未重建网站")

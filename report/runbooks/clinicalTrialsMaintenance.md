@@ -7,8 +7,8 @@
 | 数据源 | 节奏 | 更新方式 | 失败策略 |
 |---|---|---|---|
 | ClinicalTrials.gov | 每周 | 官方 API v2 自动抓取 | 保留最后良好缓存 |
-| ChiCTR | 每 28 天检查一次 | 官方检索页 → 详情页 → `DownloadXml` | WAF 或 XML 失败时保留最后良好缓存，下周继续尝试 |
-| ChinaDrugTrials | 每月人工提供文件 | 官方 JSON/CSV/XLS/XLSX 导入 | 文件异常、非完整导出或数量骤降时拒绝覆盖 |
+| ChiCTR | 每 28 天检查一次 | 官方检索页 → 详情页 → `DownloadXml`；WAF 挑战由无头浏览器自动求解 | WAF 或 XML 失败时保留最后良好缓存，下周继续尝试 |
+| ChinaDrugTrials | 每周 | 官方检索页全量翻页 + 详情页自动抓取；RSS（`keywords` 主题过滤）作新登记早报 | 抓取失败或数量骤降时保留最后良好缓存 |
 
 周更先运行 ChiCTR 刷新，再生成诊治格局、临床试验数据和来源频道，避免同一次发布混用新旧缓存。`scripts/build-clinical-trials-data.py` 会统一阶段标签（包括把 `0`、`N/A` 和空值归为“未标注”），并通过原子写入更新公开产物，因此三源缓存变化会同步进入：
 
@@ -64,14 +64,24 @@ python3 scripts/refresh-chictr-cache.py
 
 脚本读取 `data/chictr-trials-cache.json` 的 `last_verified`。距离上次成功核对不足 28 天时跳过；达到 28 天时运行官方中英文疾病检索并逐条下载 XML。
 
-阿里云 WAF Cookie 通过运行环境提供，禁止写入仓库：
+站点由阿里云 WAF 保护，刷新链路按以下顺序取 Cookie：
+
+1. 运行环境提供 `CHICTR_COOKIE` 时直接使用（最高优先级，适合临时人工会话）；
+2. 否则用 `curl_cffi` 的浏览器指纹发起请求；
+3. 遇到 `acw_sc__v2` 挑战时，用本机 Playwright（优先系统 Chrome，回退内置 Chromium）执行官网挑战脚本取出 Cookie，再用同一会话继续检索。
 
 ```bash
+# 自动求解（推荐）
+python3 scripts/refresh-chictr-cache.py --force-live
+
+# 自动求解不可用时，人工提供短期 Cookie
 export CHICTR_COOKIE='当前浏览器会话中的 Cookie 字符串'
 python3 scripts/refresh-chictr-cache.py --force-live
 ```
 
-可用 `--interval-days` 调整间隔。实时刷新失败时命令返回非零状态，但不会改写缓存；在周更管线中该步骤是 optional，因此会记录 warning 并继续发布最后良好数据。
+Cookie 只存在于运行环境，禁止写入仓库。无 Playwright 或被拦截时，命令返回非零状态但不改写缓存；在周更管线中该步骤是 optional，因此会记录 warning 并继续发布最后良好数据。
+
+可用 `--interval-days` 调整间隔。
 
 如取得 ChiCTR 官方 JSON/CSV 导出，也可直接导入：
 
@@ -79,49 +89,55 @@ python3 scripts/refresh-chictr-cache.py --force-live
 python3 scripts/refresh-chictr-cache.py --input /absolute/path/chictr-export.csv
 ```
 
-## ChinaDrugTrials 月度人工交接
+## ChinaDrugTrials 周更自动抓取
 
-运营人员每月只需提供从药物临床试验登记与信息公示平台下载的完整 MG 查询结果。支持：
-
-- `.json`
-- `.csv` / `.tsv`
-- `.xlsx`
-- 二进制 `.xls`
-- 以 `.xls` 命名的 HTML 表格导出
-
-如平台把结果拆成多个文件，可重复传入 `--input`。建议先做只读比较：
+周更管线中的 `refresh-china-drug-trials-cache` 步骤调用：
 
 ```bash
-python3 scripts/refresh-china-drug-trials-cache.py \
-  --input /absolute/path/export-1.xls \
-  --input /absolute/path/export-2.xls \
-  --dry-run
+python3 scripts/refresh-cde-live-cache.py --no-build --interval-days 6
 ```
 
-确认后执行正式更新：
+脚本行为：
+
+1. 读取缓存 `generated_at`，距上次成功抓取不足 `--interval-days` 天时跳过（同日重复运行不会重复打站点）；
+2. 以 `重症肌无力` 检索官方列表页，按「共 N 页」逐页抓取，再按题名/适应症做 MG 二次门控；
+3. 逐条抓取详情页，补全 `试验分期`、`申请人名称`、`首次公示信息日期`、`试验专业题目`、`目标/已入组人数` 等列表页没有的字段；
+4. 分期统一归一化为 `1`、`2`、`3`、`4`、`1/2`、`2/3`，`其它 其他说明:生物等效性试验` 这类非分期说明归为未标注；终止/暂停细分状态统一映射到 `TERMINATED` / `SUSPENDED`；
+5. 与旧缓存逐字段比较，输出新增、更新、移除，并把「旧缓存为空、本期补全」的字段单独计入 `enriched_count`，不伪装成真实更新；
+6. 原子更新 `data/china-drug-trials-cache.json` 与 `data/china-drug-trials-changes.json`，再抓一次 RSS 早报。
+
+RSS（`https://www.chinadrugtrials.org.cn/clinicaltrials.search.rss.dhtml?keywords=重症肌无力`）**支持按主题过滤**，带 `keywords` 参数时返回该主题最近 20 条登记，可作为本主题的「新登记早报」：结果写入 `.hermes-audit/cde-rss-snapshot.json`，打印较上次快照新增的登记号，并核对 RSS 已知的 MG 登记是否都已进入缓存（缺失即提示分页或门控异常）。
+
+但 RSS 条目只有题名、链接、登记号和公示日期，**不含状态与分期，也不反映既有试验的状态变化**——而三源实际变化里多数是状态推进（本月 10 项变化中 6 项是状态变更）。因此 RSS 不能替代全量检索，只做早报与覆盖度核对。
+
+参数名必须是复数 `keywords`：写成 `keyword` 时平台忽略该参数并返回全站最近 20 条无关登记（本项目早期探测即因此误判 RSS 不可用于 MG）。
+
+手工全量刷新或排查时：
 
 ```bash
-python3 scripts/refresh-china-drug-trials-cache.py \
-  --input /absolute/path/export-1.xls \
-  --input /absolute/path/export-2.xls
+python3 scripts/refresh-cde-live-cache.py --force-live --interval-days 0   # 立即抓取并重建
+python3 scripts/refresh-cde-live-cache.py --force-live --dry-run           # 只比较不写入
+python3 scripts/refresh-cde-live-cache.py --rss-only                       # 只看 RSS 早报
 ```
 
-正式命令会依次完成：
+若数量低于旧缓存的 60%，命令停止，防止误把分页抓取结果当成完整数据覆盖；确认平台确实大幅删减后才使用 `--allow-large-drop`。
 
-1. 识别官方表头并只保留重症肌无力记录；
-2. 按 CTR 登记号合并去重；
-3. 把中文招募状态归一化为网站统一状态；
-4. 与上次缓存逐字段比较；
-5. 输出 `data/china-drug-trials-changes.json`，记录新增、更新和移除；
-6. 原子更新 `data/china-drug-trials-cache.json`；
-7. 自动重建临床试验页、首页摘要和数据状态页。
+### 人工交接文件仍受支持
 
-若新文件数量低于旧缓存的 60%，命令会停止，防止误把分页文件或增量文件当成完整数据覆盖。只有人工确认平台本月确实大幅删减后，才使用 `--allow-large-drop`。
+运营人员提供的官方导出仍可直接导入，支持 `.json`、`.csv`/`.tsv`、`.xlsx`、二进制 `.xls`、以 `.xls` 命名的 HTML 表格，以及平台「下载 Excel」默认的 Excel 2003 XML（SpreadsheetML，含 `&nbsp;` 等未声明实体的导出也能解析）：
+
+```bash
+python3 scripts/refresh-china-drug-trials-cache.py --input /absolute/path/export.xls --dry-run
+python3 scripts/refresh-china-drug-trials-cache.py --input /absolute/path/export.xls
+```
+
+注意：平台列表页固定每页 20 条，「下载 Excel」只导出当前页。人工交接前必须逐页导出并全部传入，否则会被 60% 数量检查拦下。
 
 ## 更新后验证
 
 ```bash
 python3 -m pytest -q \
+  tests/test_cde_live.py \
   tests/test_chictr_adapter.py \
   tests/test_china_drug_trials_import.py \
   tests/test_clinical_trials_fix.py \
@@ -129,11 +145,18 @@ python3 -m pytest -q \
   tests/test_trial_signal_analysis.py \
   tests/test_v5_wiring_and_docs.py
 
+python3 scripts/refresh-cde-live-cache.py --force-live --dry-run
 python3 scripts/build-clinical-trials-data.py
 python3 scripts/enrich-clinical-trial-signals.py
 python3 scripts/build-source-signals.py
 python3 scripts/generate-weekly-summary.py
 python3 scripts/validatePublicRelease.py
+```
+
+裁决规则（例如 MG-core 判定、分期归一化、重要性分级）修正后，缓存窗口本身没有推进，正常运行会打印 “No source window advanced” 并保留旧产物。此时用以下命令在同一窗口内重算，不会伪造新窗口：
+
+```bash
+python3 scripts/enrich-clinical-trial-signals.py --force-rebuild
 ```
 
 核对要点：

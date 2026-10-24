@@ -60,6 +60,46 @@ def pipeline_steps(args, full_available: bool | None = None) -> list[PipelineSte
             py("validatePublicRelease.py") + ["--source-only", "--require-release"],
         )]
 
+    steps: list[PipelineStep] = []
+    if mode == "trials-only":
+        # 只刷新注册源及其直接派生产物，不重跑文献、专家画像、社区与图谱，
+        # 因此周中单独更新注册数据时不会产生大量无关产物漂移。
+        steps.append(PipelineStep(
+            "refresh-chictr-cache",
+            py("refresh-chictr-cache.py"),
+            outputs=[DATA / "chictr-trials-cache.json"],
+            optional=True,
+        ))
+        steps.extend([
+            PipelineStep(
+                "refresh-china-drug-trials-cache",
+                py("refresh-cde-live-cache.py") + ["--no-build", "--interval-days", "6"],
+                outputs=[DATA / "china-drug-trials-cache.json"],
+                optional=True,
+            ),
+            PipelineStep(
+                "build-clinical-trials",
+                py("build-clinical-trials-data.py"),
+                outputs=[
+                    DATA / "clinical-trials-data.js",
+                    DATA / "clinicalTrialsSummary.js",
+                    DATA / "clinicaltrials-weekly-changes-snapshot.json",
+                ],
+            ),
+            *([] if args.skip_llm else [PipelineStep(
+                "enrich-clinical-trial-signals",
+                py("enrich-clinical-trial-signals.py"),
+                outputs=[DATA / "trial-signals-weekly.js"],
+            )]),
+            PipelineStep("build-source-signals", py("build-source-signals.py"), outputs=[DATA / "source-signals.js"]),
+            PipelineStep("generate-weekly-summary", py("generate-weekly-summary.py"), outputs=[DATA / "weekly-summary.md"]),
+            PipelineStep("update-release-token", py("updateFrontendReleaseToken.py"), outputs=ACTIVE_HTML),
+            PipelineStep("validate-public-contracts", py("validatePublicRelease.py")),
+        ])
+        if not args.skip_status:
+            steps.append(PipelineStep("generate-pipeline-status", py("generate-pipeline-status.py"), outputs=[DATA / "pipeline-status.js"]))
+        return steps
+
     steps = []
     if mode == "authoritative-full" and not args.skip_fetch:
         steps.extend([
@@ -67,7 +107,8 @@ def pipeline_steps(args, full_available: bool | None = None) -> list[PipelineSte
             PipelineStep("enrich-weekly", py("enrich-weekly-literature.py"), outputs=[DATA / "literature-weekly.json", DATA / "guideline-consensus-cache.json"]),
             PipelineStep("merge-weekly", py("merge-weekly-literature.py"), outputs=[DATA / "literature-recent.js", DATA / "literature-ingest-latest.json"]),
         ])
-    if full_available:
+    # trials-only 只刷新注册源与其派生产物，不重跑文献全库过滤与重分类
+    if full_available and mode != "trials-only":
         steps.extend([
             PipelineStep(
                 "filter-mg-core-full",
@@ -120,6 +161,12 @@ def pipeline_steps(args, full_available: bool | None = None) -> list[PipelineSte
     steps.extend([
         PipelineStep("build-landscape-insights", py("buildLandscapeInsights.py"), outputs=[DATA / "landscapeInsights.js"]),
         PipelineStep("build-backend-options", py("buildBackendOptions.py"), outputs=[DATA / "backendOptions.js"]),
+        PipelineStep(
+            "refresh-china-drug-trials-cache",
+            py("refresh-cde-live-cache.py") + ["--no-build", "--interval-days", "6"],
+            outputs=[DATA / "china-drug-trials-cache.json"],
+            optional=True,
+        ),
         PipelineStep(
             "build-clinical-trials",
             py("build-clinical-trials-data.py"),
@@ -176,8 +223,11 @@ def main() -> int:
     parser.add_argument("--skip-downstream", action="store_true", help="只执行抓取/富集/存储同步")
     parser.add_argument(
         "--mode",
-        choices=("authoritative-full", "rebuild-full", "validate-only"),
-        help="运行模式：完整周更、复用本周 ingest 的 full 重建或只读发布校验",
+        choices=("authoritative-full", "rebuild-full", "trials-only", "validate-only"),
+        help=(
+            "运行模式：完整周更、复用本周 ingest 的 full 重建、"
+            "仅刷新注册源（ChiCTR/ChinaDrugTrials）及其派生产物，或只读发布校验"
+        ),
     )
     parser.add_argument("--local-full", action="store_true", help="兼容别名：等同 --mode authoritative-full")
     parser.add_argument("--reuse-ingest", action="store_true", help="显式允许复用当前自然周 ingest manifest")
@@ -210,7 +260,7 @@ def main() -> int:
     except PipelineFailure as exc:
         print(f"❌ required step {exc.step_id}: {exc}", file=sys.stderr)
         return exc.return_code
-    publishEligible = mode in {"authoritative-full", "rebuild-full"} and not args.skip_downstream
+    publishEligible = mode in {"authoritative-full", "rebuild-full", "trials-only"} and not args.skip_downstream
     if publishEligible and result["status"] in {"success", "success_with_warnings"}:
         # 第一次清单供状态生成器核对；状态刷新后再生成最终清单，避免状态文件自引用哈希漂移。
         generate_release_manifest(result, public_artifacts(), DATA / "release-manifest.js", project=PROJECT)

@@ -808,6 +808,11 @@ def analyze_candidates(candidates: list[dict[str, Any]], complete_fn=complete) -
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--replay-current-window", action="store_true", help="重放已发布试验候选，不推进三源窗口")
+    parser.add_argument(
+        "--force-rebuild",
+        action="store_true",
+        help="窗口已发布但裁决规则修正后重算当前窗口，不推进窗口",
+    )
     args = parser.parse_args()
     previous = load_js_global(OUTPUT_PATH, "MG_TRIAL_SIGNALS_DATA") if OUTPUT_PATH.exists() else {}
     if args.replay_current_window:
@@ -830,7 +835,7 @@ def main() -> int:
         }
     else:
         candidates, windows = build_candidates(previous)
-        if previous and all(
+        if previous and not args.force_rebuild and all(
             all(
                 normalize_text((windows.get(source) or {}).get(key)) ==
                 normalize_text(((previous.get("source_windows") or {}).get(source) or {}).get(key))

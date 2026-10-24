@@ -9,10 +9,15 @@ from typing import Any
 
 EXPLICIT_MG = re.compile(
     r"\b(myasthenia\s+gravis|generalized\s+myasthenia|generalised\s+myasthenia|"
-    r"ocular\s+myasthenia|myasthenic\s+crisis|immune[- ]checkpoint[- ]inhibitor[- ]associated\s+myasthenia|myasthenia)\b",
+    r"ocular\s+myasthenia|myasthenic\s+crisis|immune[- ]checkpoint[- ]inhibitor[- ]associated\s+myasthenia|myasthenia)\b"
+    # 中文注册库（CDE/ChiCTR）题名与适应症使用中文病名，必须同等识别
+    r"|重症肌无力|肌无力危象",
     re.I,
 )
-MG_ABBREVIATION = re.compile(r"\b(?:gMG|MG)\b")
+MG_ABBREVIATION = re.compile(r"\b(?:gMG|oMG|MG)\b")
+# 中文题名常写成「oMG研究参与者」「在gMG患者中」，CJK 与拉丁字母之间没有 \b 边界
+MG_LATIN_ABBREVIATION = re.compile(r"(?<![A-Za-z])(?:gMG|oMG)(?![A-Za-z])")
+MG_CHINESE = re.compile(r"重症肌无力|肌无力危象")
 SECONDARY_DISEASE_TITLE = re.compile(
     r"(?:\b(gastrointestinal|gastric|colorectal|pancreatic|hepatocellular|lung|breast)\b.*\b(cancer|carcinoma|malignan|neoplasm)|"
     r"\b(chronic inflammatory demyelinating polyneuropathy|cidp|multiple sclerosis|stiff[- ]person syndrome|lambert[- ]eaton)\b)",
@@ -44,18 +49,29 @@ def assess_mg_core(article: dict[str, Any]) -> MgCoreAssessment:
     """识别研究主体，排除比较项、背景句和非 MG 疾病题名。"""
     title = str(article.get("title") or "")
     abstract = str(article.get("abstract") or "")
-    title_explicit = bool(EXPLICIT_MG.search(title) or MG_ABBREVIATION.search(title))
+    title_explicit = bool(
+        EXPLICIT_MG.search(title)
+        or MG_ABBREVIATION.search(title)
+        or MG_LATIN_ABBREVIATION.search(title)
+    )
     if title_explicit:
         return MgCoreAssessment(True, "explicit_mg_title", 1)
     if SECONDARY_DISEASE_TITLE.search(title):
         return MgCoreAssessment(False, "secondary_non_mg_disease_title", 0)
 
     metadata = _metadata_terms(article)
-    if any(EXPLICIT_MG.fullmatch(term.strip()) for term in metadata):
+    if any(
+        EXPLICIT_MG.fullmatch(term.strip()) or MG_CHINESE.search(term)
+        for term in metadata
+    ):
         return MgCoreAssessment(True, "reliable_mg_metadata", 1)
 
     combined = f"{title}\n{abstract}"
-    mentions = len(EXPLICIT_MG.findall(combined)) + len(MG_ABBREVIATION.findall(combined))
+    mentions = (
+        len(EXPLICIT_MG.findall(combined))
+        + len(MG_ABBREVIATION.findall(combined))
+        + len(MG_LATIN_ABBREVIATION.findall(combined))
+    )
     if mentions >= 2:
         return MgCoreAssessment(True, "repeated_mg_core_mentions", mentions)
     if mentions == 1:

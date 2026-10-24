@@ -372,7 +372,38 @@ CDT_STATUS_MAP = {
     "主动暂停": "SUSPENDED",
     "暂停": "SUSPENDED",
     "已撤回": "WITHDRAWN",
+    # 平台公示的终止/暂停细分状态，必须落到统一状态枚举，避免中文原值进入前端筛选
+    "主动终止": "TERMINATED",
+    "IEC/IRB暂停": "SUSPENDED",
+    "IEC/IRB终止": "TERMINATED",
+    "责令暂停": "SUSPENDED",
+    "责令终止": "TERMINATED",
 }
+
+# 平台按中文分期文本公示；缓存统一存数字，保证与 CT.gov/ChiCTR 阶段统计可合并
+CDT_PHASE_PATTERN = re.compile(r"(IV|III|II|I)\s*(?:/\s*(IV|III|II|I))?\s*期", re.IGNORECASE)
+ROMAN_TO_DIGIT = {"I": "1", "II": "2", "III": "3", "IV": "4"}
+
+
+def normalize_cdt_phase(value: Any) -> str:
+    """把中文分期文本归一化为缓存使用的数字分期。
+
+    平台会把分期写成「III期」，也会在生物等效性/PK 试验或复合分期上写成
+    「其它 其他说明:II/III期」「其它 其他说明:生物等效性试验」。带说明时
+    只采信冒号后的文本，说明不是分期则按未标注处理。
+    """
+    text = re.sub(r"\s+", "", str(value or ""))
+    if not text:
+        return "Unknown"
+    explained = re.split(r"其他说明[:：]|其它说明[:：]", text, maxsplit=1)
+    if len(explained) == 2:
+        text = explained[1]
+    match = CDT_PHASE_PATTERN.search(text)
+    if not match:
+        return "Unknown"
+    first = ROMAN_TO_DIGIT[match.group(1).upper()]
+    second = ROMAN_TO_DIGIT[match.group(2).upper()] if match.group(2) else ""
+    return f"{first}/{second}" if second and second != first else first
 
 
 def normalize_china_drug_trials_record(source: dict[str, Any]) -> dict[str, Any]:
@@ -390,7 +421,7 @@ def normalize_china_drug_trials_record(source: dict[str, Any]) -> dict[str, Any]
         "indication": str(values["indication"]).strip() or "Unknown",
         "status": status,
         "status_raw": raw_status,
-        "phase": str(values["phase"]).strip() or "Unknown",
+        "phase": normalize_cdt_phase(values["phase"]),
         "sponsor": str(values["sponsor"]).strip(),
         "registered_date": str(values["registered_date"]).strip(),
         "official_url": str(values["official_url"]).strip(),

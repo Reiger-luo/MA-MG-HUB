@@ -4,11 +4,14 @@ from __future__ import annotations
 
 import csv
 import hashlib
+import html
+import html.entities
 import json
 import re
 from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
+from xml.etree import ElementTree as ET
 
 from bs4 import BeautifulSoup
 
@@ -28,6 +31,11 @@ CHANGE_FIELDS = (
     "official_url",
 )
 
+# 首次接入详情字段时，旧缓存这些字段为空/Unknown；属于基线补全而非真实变更
+FILLABLE_FIELDS = frozenset({"phase", "sponsor", "registered_date"})
+FILL_PLACEHOLDERS = frozenset({"", "unknown", "未标注", "n/a", "na", "none", "-", "0"})
+SS_NS = "urn:schemas-microsoft-com:office:spreadsheet"
+
 HEADER_ALIASES = {
     "registry_id": (
         "registry_id", "registration_number", "ctr_number",
@@ -35,6 +43,7 @@ HEADER_ALIASES = {
     ),
     "title": (
         "title", "study_title", "试验题目", "临床试验题目", "试验名称",
+        "试验通俗题目", "通俗题目", "public_title",
     ),
     "drug_name": (
         "drug_name", "drug", "intervention_name",
@@ -145,6 +154,33 @@ def _read_html_table(path: Path) -> list[dict[str, str]]:
     return records
 
 
+def _read_spreadsheetml(path: Path) -> list[dict[str, str]]:
+    """读取 Excel 2003 XML 电子表格（平台“下载 Excel”的默认格式）。
+
+    平台导出含未声明的 HTML 实体（如 ``&nbsp;``），严格 XML 解析会失败，
+    这里先把命名实体换成数字引用再解析。
+    """
+    raw = path.read_bytes()
+    text = _escape_undeclared_entities(raw.decode("utf-8", errors="replace"))
+    root = ET.fromstring(text)
+    records: list[dict[str, str]] = []
+    for worksheet in root.iter(f"{{{SS_NS}}}Worksheet"):
+        rows: list[list[str]] = []
+        for row in worksheet.iter(f"{{{SS_NS}}}Row"):
+            values: list[str] = []
+            for cell in row.findall(f"{{{SS_NS}}}Cell"):
+                data = cell.find(f"{{{SS_NS}}}Data")
+                values.append(_stringify(data.text if data is not None else ""))
+            rows.append(values)
+        try:
+            records.extend(_rows_to_records(rows))
+        except ValueError:
+            continue
+    if not records:
+        raise ValueError("Excel 2003 XML 导出中没有可识别的试验表格")
+    return records
+
+
 def _read_xlsx(path: Path) -> list[dict[str, str]]:
     try:
         from openpyxl import load_workbook
@@ -193,6 +229,9 @@ def load_export_records(path: Path) -> list[dict[str, Any]]:
     if prefix.startswith(b"PK\x03\x04") or suffix == ".xlsx":
         return _read_xlsx(path)
     if prefix.startswith((b"<", b"\xef\xbb\xbf<")):
+        head = path.read_bytes()[:4096].decode("utf-8", errors="ignore")
+        if "urn:schemas-microsoft-com:office:spreadsheet" in head:
+            return _read_spreadsheetml(path)
         return _read_html_table(path)
     if prefix.startswith(b"\xd0\xcf\x11\xe0") or suffix == ".xls":
         return _read_xls(path)
@@ -226,26 +265,61 @@ def normalize_export_records(raw_records: Iterable[dict[str, Any]]) -> list[dict
     return sorted(by_id.values(), key=lambda item: item["registry_id"], reverse=True)
 
 
+def _is_placeholder(value: str) -> bool:
+    return str(value or "").strip().lower() in FILL_PLACEHOLDERS
+
+
+def _escape_undeclared_entities(text: str) -> str:
+    """把 Excel 2003 XML 里未声明的命名实体还原成实际字符。
+
+    平台的单元格值包在 CDATA 中，实体在 CDATA 内不会被解析，因此这里
+    直接替换为对应字符而不是数字引用。
+    """
+    def _replace(match: re.Match[str]) -> str:
+        name = match.group(1)
+        if name in {"amp", "lt", "gt", "quot", "apos"}:
+            return match.group(0)
+        codepoint = html.entities.name2codepoint.get(name)
+        return chr(codepoint) if codepoint else match.group(0)
+
+    return re.sub(r"&([A-Za-z][A-Za-z0-9]*);", _replace, text)
+
+
 def compare_records(
     old_records: Iterable[dict[str, Any]],
     new_records: Iterable[dict[str, Any]],
 ) -> dict[str, Any]:
-    """按登记号比较新增、更新、移除和未变化记录。"""
+    """按登记号比较新增、更新、移除和未变化记录。
+
+    旧缓存为空/Unknown 的可补全字段（分期、申办者、首次公示日期）只计入
+    ``enriched``，不算作更新，避免首次接入详情字段时把整批记录误报为变更。
+    """
     old_by_id = {str(item.get("registry_id") or ""): item for item in old_records if item.get("registry_id")}
     new_by_id = {str(item.get("registry_id") or ""): item for item in new_records if item.get("registry_id")}
     added_ids = sorted(set(new_by_id) - set(old_by_id), reverse=True)
     removed_ids = sorted(set(old_by_id) - set(new_by_id), reverse=True)
     updated = []
+    enriched = []
     unchanged_count = 0
     for registry_id in sorted(set(old_by_id) & set(new_by_id), reverse=True):
         changes = {}
+        filled = {}
         for field in CHANGE_FIELDS:
             before = _stringify(old_by_id[registry_id].get(field))
             after = _stringify(new_by_id[registry_id].get(field))
-            if before != after:
+            if before == after:
+                continue
+            if field in FILLABLE_FIELDS and _is_placeholder(before) and not _is_placeholder(after):
+                filled[field] = {"before": before, "after": after}
+            else:
                 changes[field] = {"before": before, "after": after}
         if changes:
-            updated.append({"registry_id": registry_id, "changes": changes})
+            entry = {"registry_id": registry_id, "changes": changes}
+            if filled:
+                entry["filled"] = filled
+            updated.append(entry)
+        elif filled:
+            enriched.append({"registry_id": registry_id, "filled": filled})
         else:
             unchanged_count += 1
     return {
@@ -254,27 +328,34 @@ def compare_records(
         "added_count": len(added_ids),
         "updated_count": len(updated),
         "removed_count": len(removed_ids),
+        "enriched_count": len(enriched),
         "unchanged_count": unchanged_count,
         "added": [new_by_id[registry_id] for registry_id in added_ids],
         "updated": updated,
         "removed": [old_by_id[registry_id] for registry_id in removed_ids],
+        "enriched": enriched,
     }
 
 
 def import_china_drug_trials_exports(
     cache_path: Path,
-    input_paths: list[Path],
+    input_paths: list[Path] | None = None,
     *,
+    records: Iterable[dict[str, Any]] | None = None,
     changes_path: Path | None = None,
     allow_large_drop: bool = False,
     dry_run: bool = False,
     now: datetime | None = None,
+    mode: str = "manual",
+    query: str = "重症肌无力",
+    inputs: list[dict[str, str]] | None = None,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
-    """合并官方导出、生成差异并在安全检查通过后原子更新缓存。"""
-    if not input_paths:
-        raise ValueError("至少需要一个 ChinaDrugTrials 导出文件")
+    """合并官方导出或实时抓取结果、生成差异并在安全检查通过后原子更新缓存。"""
+    input_paths = list(input_paths or [])
+    if not input_paths and records is None:
+        raise ValueError("至少需要一个 ChinaDrugTrials 导出文件或抓取记录")
     cached = load_china_drug_trials_cache(cache_path)
-    raw_records = []
+    raw_records = list(records or [])
     for path in input_paths:
         raw_records.extend(load_export_records(path))
     records = normalize_export_records(raw_records)
@@ -287,7 +368,7 @@ def import_china_drug_trials_exports(
         )
 
     generated_at = (now or datetime.now(timezone.utc)).astimezone(timezone.utc).isoformat()
-    input_meta = [
+    input_meta = list(inputs or []) + [
         {
             "name": path.name,
             "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
@@ -298,9 +379,9 @@ def import_china_drug_trials_exports(
         "schema_version": "1.0",
         "source": "ChinaDrugTrials.org.cn",
         "source_url": "https://www.chinadrugtrials.org.cn/",
-        "mode": "manual",
+        "mode": mode,
         "generated_at": generated_at,
-        "query": "重症肌无力",
+        "query": query,
         "total": len(records),
         "inputs": input_meta,
         "records": records,
