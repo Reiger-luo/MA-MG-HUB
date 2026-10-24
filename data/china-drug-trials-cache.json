@@ -3,7 +3,7 @@
   "source": "ChinaDrugTrials.org.cn",
   "source_url": "https://www.chinadrugtrials.org.cn/",
   "mode": "live_crawl",
-  "generated_at": "2026-10-24T11:00:55.069740+00:00",
+  "generated_at": "2026-10-24T13:58:45.757442+00:00",
   "query": "重症肌无力",
   "total": 51,
   "inputs": [
@@ -24,7 +24,14 @@
       "phase": "2",
       "sponsor": "上海康景生物医药科技有限公司",
       "registered_date": "2026-09-14",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20263476"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20263476",
+      "protocol_version": "3.0",
+      "protocol_version_date": "2026-07-03",
+      "first_consent_date": "国内：登记人暂未填写该信息；",
+      "first_enrollment_date": "国内：登记人暂未填写该信息；",
+      "completion_date": "国内：登记人暂未填写该信息；",
+      "enrollment_target": "国内: 48 ；",
+      "enrollment_actual": "国内: 登记人暂未填写该信息；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -37,7 +44,14 @@
       "phase": "1",
       "sponsor": "上海览屹医药科技有限公司",
       "registered_date": "2026-09-02",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20263335"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20263335",
+      "protocol_version": "1.0",
+      "protocol_version_date": "2026-07-21",
+      "first_consent_date": "国内：登记人暂未填写该信息；",
+      "first_enrollment_date": "国内：登记人暂未填写该信息；",
+      "completion_date": "国内：登记人暂未填写该信息；",
+      "enrollment_target": "国内: 18 ；",
+      "enrollment_actual": "国内: 登记人暂未填写该信息；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -50,7 +64,14 @@
       "phase": "1",
       "sponsor": "万邦德制药集团有限公司",
       "registered_date": "2026-08-19",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20263154"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20263154",
+      "protocol_version": "V3.0",
+      "protocol_version_date": "2026-04-27",
+      "first_consent_date": "国内：登记人暂未填写该信息；",
+      "first_enrollment_date": "国内：登记人暂未填写该信息；",
+      "completion_date": "国内：登记人暂未填写该信息；",
+      "enrollment_target": "国内: 40 ；",
+      "enrollment_actual": "国内: 登记人暂未填写该信息；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -63,7 +84,14 @@
       "phase": "3",
       "sponsor": "Alexion Europe SAS/ 阿斯利康全球研发（中国）有限公司/ Alexion Pharma International Operations Limited, Alexion Athlone Manufacturing Facility (AAMF)",
       "registered_date": "2026-07-07",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20262539"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20262539",
+      "protocol_version": "方案修订案1.0",
+      "protocol_version_date": "2026-08-05",
+      "first_consent_date": "国内：2026-07-20；",
+      "first_enrollment_date": "国内：2026-09-01；",
+      "completion_date": "国内：登记人暂未填写该信息；",
+      "enrollment_target": "国内: 20 ；",
+      "enrollment_actual": "国内: 4 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -76,7 +104,14 @@
       "phase": "3",
       "sponsor": "UCB Pharma S.A./ 优时比贸易（上海）有限公司/ Vetter Pharma-Fertigung GmbH & Co. KG/ UCB Pharma SA",
       "registered_date": "2026-08-21",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20262521"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20262521",
+      "protocol_version": "修订案1",
+      "protocol_version_date": "2026-02-13",
+      "first_consent_date": "国内：登记人暂未填写该信息； 国际：2026-09-16；",
+      "first_enrollment_date": "国内：登记人暂未填写该信息； 国际：2026-09-16；",
+      "completion_date": "国内：登记人暂未填写该信息； 国际：登记人暂未填写该信息；",
+      "enrollment_target": "国内: 16 ； 国际: 100 ；",
+      "enrollment_actual": "国内: 登记人暂未填写该信息； 国际: 1 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -89,7 +124,14 @@
       "phase": "3",
       "sponsor": "UCB Pharma S.A./ 优时比贸易（上海）有限公司/ Vetter Pharma-Fertigung GmbH & Co. KG/ UCB Pharma SA",
       "registered_date": "2026-07-06",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20262520"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20262520",
+      "protocol_version": "修订案1",
+      "protocol_version_date": "2026-03-25",
+      "first_consent_date": "国内：2026-08-18； 国际：2026-05-27；",
+      "first_enrollment_date": "国内：2026-09-15； 国际：2026-07-07；",
+      "completion_date": "国内：登记人暂未填写该信息； 国际：登记人暂未填写该信息；",
+      "enrollment_target": "国内: 18 ； 国际: 120 ；",
+      "enrollment_actual": "国内: 1 ； 国际: 2 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -102,7 +144,14 @@
       "phase": "3",
       "sponsor": "Vor Biopharma Inc./ 荣昌生物制药（烟台）股份有限公司/ Patheon Italia S.p.A./ Fisher Clinical Services GmbH",
       "registered_date": "2026-06-17",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20262341"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20262341",
+      "protocol_version": "V5.1（CN）",
+      "protocol_version_date": "2026-03-16",
+      "first_consent_date": "国内：2026-03-04； 国际：登记人暂未填写该信息；",
+      "first_enrollment_date": "国内：2026-04-07； 国际：登记人暂未填写该信息；",
+      "completion_date": "国内：登记人暂未填写该信息； 国际：登记人暂未填写该信息；",
+      "enrollment_target": "国内: 18 ； 国际: 180 ；",
+      "enrollment_actual": "国内: 11 ； 国际: 登记人暂未填写该信息；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -115,7 +164,14 @@
       "phase": "Unknown",
       "sponsor": "上海上药中西制药有限公司",
       "registered_date": "2026-06-12",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20262309"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20262309",
+      "protocol_version": "1.0",
+      "protocol_version_date": "2026-05-11",
+      "first_consent_date": "国内：2026-06-29；",
+      "first_enrollment_date": "国内：2026-07-01；",
+      "completion_date": "国内：2026-07-06；",
+      "enrollment_target": "国内: 12 ；",
+      "enrollment_actual": "国内: 12 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -128,7 +184,14 @@
       "phase": "Unknown",
       "sponsor": "成都明德至远医药科技有限公司",
       "registered_date": "2026-06-12",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20262306"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20262306",
+      "protocol_version": "V2.0",
+      "protocol_version_date": "2026-05-21",
+      "first_consent_date": "国内：2026-06-16；",
+      "first_enrollment_date": "国内：2026-06-16；",
+      "completion_date": "国内：2026-09-16；",
+      "enrollment_target": "国内: 24 ；",
+      "enrollment_actual": "国内: 24 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -141,7 +204,14 @@
       "phase": "2",
       "sponsor": "广东恒瑞医药有限公司",
       "registered_date": "2026-05-21",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20262007"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20262007",
+      "protocol_version": "1.0",
+      "protocol_version_date": "2026-02-28",
+      "first_consent_date": "国内：登记人暂未填写该信息；",
+      "first_enrollment_date": "国内：登记人暂未填写该信息；",
+      "completion_date": "国内：登记人暂未填写该信息；",
+      "enrollment_target": "国内: 60 ；",
+      "enrollment_actual": "国内: 登记人暂未填写该信息；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -154,7 +224,14 @@
       "phase": "1",
       "sponsor": "万邦德制药集团有限公司",
       "registered_date": "2025-12-30",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20255231"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20255231",
+      "protocol_version": "V1.1",
+      "protocol_version_date": "2026-01-12",
+      "first_consent_date": "国内：2026-01-12；",
+      "first_enrollment_date": "国内：2026-01-16；",
+      "completion_date": "国内：2026-03-02；",
+      "enrollment_target": "国内: 20 ；",
+      "enrollment_actual": "国内: 20 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -167,7 +244,14 @@
       "phase": "3",
       "sponsor": "荣昌生物制药（烟台）有限公司",
       "registered_date": "2025-12-30",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20255007"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20255007",
+      "protocol_version": "2.0",
+      "protocol_version_date": "2026-05-09",
+      "first_consent_date": "国内：2025-12-31；",
+      "first_enrollment_date": "国内：2026-01-13；",
+      "completion_date": "国内：登记人暂未填写该信息；",
+      "enrollment_target": "国内: 120 ；",
+      "enrollment_actual": "国内: 2 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -180,7 +264,14 @@
       "phase": "4",
       "sponsor": "UCB, Inc./ 优时比贸易（上海）有限公司/ Vetter Pharma-Fertigung GmbH & Co. KG/ UCB Pharma SA",
       "registered_date": "2025-10-16",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20254130"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20254130",
+      "protocol_version": "修正案1",
+      "protocol_version_date": "2025-10-13",
+      "first_consent_date": "国内：2025-12-01；",
+      "first_enrollment_date": "国内：2025-12-12；",
+      "completion_date": "国内：登记人暂未填写该信息；",
+      "enrollment_target": "国内: 40 ；",
+      "enrollment_actual": "国内: 2 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -193,7 +284,14 @@
       "phase": "1",
       "sponsor": "河北森朗生物科技有限公司",
       "registered_date": "2025-10-16",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20253934"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20253934",
+      "protocol_version": "V2.0",
+      "protocol_version_date": "2025-08-20",
+      "first_consent_date": "国内：登记人暂未填写该信息；",
+      "first_enrollment_date": "国内：登记人暂未填写该信息；",
+      "completion_date": "国内：登记人暂未填写该信息；",
+      "enrollment_target": "国内: 15 ；",
+      "enrollment_actual": "国内: 登记人暂未填写该信息；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -206,7 +304,14 @@
       "phase": "3",
       "sponsor": "荣昌生物制药（烟台）股份有限公司",
       "registered_date": "2025-08-27",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20253415"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20253415",
+      "protocol_version": "V3.1（CN）",
+      "protocol_version_date": "2025-04-18",
+      "first_consent_date": "国内：2026-03-04； 国际：登记人暂未填写该信息；",
+      "first_enrollment_date": "国内：2026-04-07； 国际：登记人暂未填写该信息；",
+      "completion_date": "国内：登记人暂未填写该信息； 国际：登记人暂未填写该信息；",
+      "enrollment_target": "国内: 18 ； 国际: 180 ；",
+      "enrollment_actual": "国内: 5 ； 国际: 登记人暂未填写该信息；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -219,7 +324,14 @@
       "phase": "1",
       "sponsor": "上海坦蒂生物医药科技有限公司",
       "registered_date": "2025-07-30",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20252892"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20252892",
+      "protocol_version": "3.0",
+      "protocol_version_date": "2025-10-30",
+      "first_consent_date": "国内：2025-08-25；",
+      "first_enrollment_date": "国内：登记人暂未填写该信息；",
+      "completion_date": "国内：登记人暂未填写该信息；",
+      "enrollment_target": "国内: 44 ；",
+      "enrollment_actual": "国内: 登记人暂未填写该信息；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -232,7 +344,14 @@
       "phase": "3",
       "sponsor": "不适用/ 诺华（中国）生物医学研究有限公司",
       "registered_date": "2025-07-07",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20252589"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20252589",
+      "protocol_version": "v02（誊清版）",
+      "protocol_version_date": "2025-11-11",
+      "first_consent_date": "国内：2025-08-18； 国际：2025-02-07；",
+      "first_enrollment_date": "国内：2025-09-29； 国际：2025-04-22；",
+      "completion_date": "",
+      "enrollment_target": "国内: 17 ； 国际: 180 ；",
+      "enrollment_actual": "国内: 12 ； 国际: 197 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -245,7 +364,14 @@
       "phase": "Unknown",
       "sponsor": "四川科瑞德制药股份有限公司",
       "registered_date": "2025-06-05",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20252199"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20252199",
+      "protocol_version": "V1.1",
+      "protocol_version_date": "2025-04-18",
+      "first_consent_date": "国内：2025-08-12；",
+      "first_enrollment_date": "国内：2025-08-16；",
+      "completion_date": "国内：2025-09-29；",
+      "enrollment_target": "国内: 36 ；",
+      "enrollment_actual": "国内: 36 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -258,7 +384,14 @@
       "phase": "Unknown",
       "sponsor": "四川科瑞德制药股份有限公司",
       "registered_date": "2025-06-04",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20252198"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20252198",
+      "protocol_version": "V1.1",
+      "protocol_version_date": "2025-04-18",
+      "first_consent_date": "国内：2025-06-23；",
+      "first_enrollment_date": "国内：2025-06-26；",
+      "completion_date": "国内：2025-11-10；",
+      "enrollment_target": "国内: 36 ；",
+      "enrollment_actual": "国内: 36 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -271,7 +404,14 @@
       "phase": "3",
       "sponsor": "argenx BV/ 再鼎医药（上海）有限公司/ Vetter Pharma-Fertigung GmbH & Co. KG",
       "registered_date": "2024-12-26",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20244895"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20244895",
+      "protocol_version": "V2.0",
+      "protocol_version_date": "2025-03-24",
+      "first_consent_date": "国内：2025-01-21； 国际：2024-11-12；",
+      "first_enrollment_date": "国内：2025-02-15； 国际：2024-12-16；",
+      "completion_date": "国内：登记人暂未填写该信息； 国际：登记人暂未填写该信息；",
+      "enrollment_target": "国内: 24 ； 国际: 124 ；",
+      "enrollment_actual": "国内: 1 ； 国际: 1 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -284,7 +424,14 @@
       "phase": "1",
       "sponsor": "石药集团中奇制药技术（石家庄）有限公司",
       "registered_date": "2024-11-14",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20244175"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20244175",
+      "protocol_version": "V6.0",
+      "protocol_version_date": "2026-05-15",
+      "first_consent_date": "国内：2025-02-21；",
+      "first_enrollment_date": "国内：2025-03-04；",
+      "completion_date": "国内：登记人暂未填写该信息；",
+      "enrollment_target": "国内: 50 ；",
+      "enrollment_actual": "国内: 9 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -297,7 +444,14 @@
       "phase": "3",
       "sponsor": "Alexion Europe SAS/ 阿斯利康投资（中国）有限公司/ Alexion Athlone Manufacturing Facility (AAMF)/ Alexion Pharma International Operation Unlimited Company (APIOUC)/ Alexion Pharma International Operations Unlimited Company (APIOUC)",
       "registered_date": "2024-11-01",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20244003"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20244003",
+      "protocol_version": "方案修订案1",
+      "protocol_version_date": "2024-06-21",
+      "first_consent_date": "国内：2025-01-06；",
+      "first_enrollment_date": "国内：2025-01-20；",
+      "completion_date": "国内：2025-12-29；",
+      "enrollment_target": "国内: 15 ；",
+      "enrollment_actual": "国内: 15 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -310,7 +464,14 @@
       "phase": "3",
       "sponsor": "argenx BV/ 再鼎医药（上海）有限公司/ Vetter Pharma-Fertigung GmbH & Co. KG",
       "registered_date": "2024-10-18",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20243878"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20243878",
+      "protocol_version": "V4.0",
+      "protocol_version_date": "2026-05-28",
+      "first_consent_date": "国内：2024-10-25； 国际：2024-04-18；",
+      "first_enrollment_date": "国内：2024-11-22； 国际：2024-06-26；",
+      "completion_date": "国内：登记人暂未填写该信息； 国际：登记人暂未填写该信息；",
+      "enrollment_target": "国内: 22 ； 国际: 110 ；",
+      "enrollment_actual": "国内: 16 ； 国际: 119 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -323,7 +484,14 @@
       "phase": "3",
       "sponsor": "Merck Healthcare KGaA/ 默克雪兰诺（北京）医药研发有限公司/ Almac Pharma Services Limited/ Fisher Clinical Services GmbH",
       "registered_date": "2024-10-29",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20243857"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20243857",
+      "protocol_version": "第5.0版",
+      "protocol_version_date": "2026-03-17",
+      "first_consent_date": "国内：2025-10-14； 国际：2024-07-29；",
+      "first_enrollment_date": "国内：2025-11-24； 国际：2024-08-28；",
+      "completion_date": "国内：登记人暂未填写该信息； 国际：登记人暂未填写该信息；",
+      "enrollment_target": "国内: 18 ； 国际: 264 ；",
+      "enrollment_actual": "国内: 7 ； 国际: 43 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -336,7 +504,14 @@
       "phase": "3",
       "sponsor": "Novartis Pharma AG/ 诺华（中国）生物医学研究有限公司/ Novartis Pharma Produktions GmbH",
       "registered_date": "2024-09-05",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20243185"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20243185",
+      "protocol_version": "V03",
+      "protocol_version_date": "2025-07-07",
+      "first_consent_date": "国内：2024-11-21； 国际：2024-07-31；",
+      "first_enrollment_date": "国内：2024-12-17； 国际：2024-10-23；",
+      "completion_date": "国内：登记人暂未填写该信息； 国际：登记人暂未填写该信息；",
+      "enrollment_target": "国内: 22 ； 国际: 146 ；",
+      "enrollment_actual": "国内: 25 ； 国际: 89 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -349,7 +524,14 @@
       "phase": "Unknown",
       "sponsor": "吉林省博大伟业制药有限公司",
       "registered_date": "2024-07-11",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20242481"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20242481",
+      "protocol_version": "V1.0",
+      "protocol_version_date": "2024-06-18",
+      "first_consent_date": "国内：2024-08-22；",
+      "first_enrollment_date": "国内：2024-08-26；",
+      "completion_date": "国内：2024-10-11；",
+      "enrollment_target": "国内: 36 ；",
+      "enrollment_actual": "国内: 36 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -362,7 +544,14 @@
       "phase": "3",
       "sponsor": "Regeneron Pharmaceuticals, Inc./ 再鼎医药（上海）有限公司/ Curia (Scotland) Limited",
       "registered_date": "2024-04-23",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20241295"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20241295",
+      "protocol_version": "R3918-MG-2018修正案5",
+      "protocol_version_date": "2026-01-22",
+      "first_consent_date": "国内：2024-07-19； 国际：2021-12-14；",
+      "first_enrollment_date": "国内：2024-08-13； 国际：2022-01-20；",
+      "completion_date": "国内：登记人暂未填写该信息； 国际：登记人暂未填写该信息；",
+      "enrollment_target": "国内: 20 ； 国际: 335 ；",
+      "enrollment_actual": "国内: 30 ； 国际: 288 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -375,7 +564,14 @@
       "phase": "3",
       "sponsor": "Regeneron Pharmaceuticals, Inc./ 再鼎医药（上海）有限公司/ Catalent Indiana, LLC",
       "registered_date": "2024-04-25",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20241294"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20241294",
+      "protocol_version": "R3918-MG-2018修正案5",
+      "protocol_version_date": "2026-01-22",
+      "first_consent_date": "国内：2024-07-19； 国际：2021-12-14；",
+      "first_enrollment_date": "国内：2024-08-13； 国际：2022-01-20；",
+      "completion_date": "国内：登记人暂未填写该信息； 国际：登记人暂未填写该信息；",
+      "enrollment_target": "国内: 20 ； 国际: 335 ；",
+      "enrollment_actual": "国内: 30 ； 国际: 288 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -388,7 +584,14 @@
       "phase": "2/3",
       "sponsor": "上海上药交联医药科技有限公司",
       "registered_date": "2024-03-15",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20240865"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20240865",
+      "protocol_version": "3.3",
+      "protocol_version_date": "2025-01-23",
+      "first_consent_date": "国内：2024-05-30；",
+      "first_enrollment_date": "国内：2024-07-01；",
+      "completion_date": "国内：2026-04-13；",
+      "enrollment_target": "国内: 104 ；",
+      "enrollment_actual": "国内: 47 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -401,7 +604,14 @@
       "phase": "4",
       "sponsor": "argenx BV/ 再鼎医药（上海）有限公司/ Vetter Pharma-Fertigung GmbH & Co. KG/ 初级包装厂：Vetter Pharma-Fertigung GmbH & Co. KG；次级包装厂：Vetter Pharma-Fertigung GmbH & Co. KG",
       "registered_date": "2024-03-13",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20240846"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20240846",
+      "protocol_version": "1.0",
+      "protocol_version_date": "2023-12-12",
+      "first_consent_date": "国内：2024-04-12；",
+      "first_enrollment_date": "国内：2024-04-29；",
+      "completion_date": "国内：登记人暂未填写该信息；",
+      "enrollment_target": "国内: 50 ；",
+      "enrollment_actual": "国内: 50 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -414,7 +624,14 @@
       "phase": "Unknown",
       "sponsor": "吉林省博大伟业制药有限公司",
       "registered_date": "2024-01-22",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20240187"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20240187",
+      "protocol_version": "V1.0",
+      "protocol_version_date": "2023-12-01",
+      "first_consent_date": "国内：2024-03-14；",
+      "first_enrollment_date": "国内：2024-03-18；",
+      "completion_date": "国内：2024-04-18；",
+      "enrollment_target": "国内: 68 ；",
+      "enrollment_actual": "国内: 68 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -427,7 +644,14 @@
       "phase": "3",
       "sponsor": "不适用/ 阿斯利康全球研发（中国）有限公司",
       "registered_date": "2023-08-30",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20232711"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20232711",
+      "protocol_version": "6.0",
+      "protocol_version_date": "2026-03-05",
+      "first_consent_date": "国内：2023-10-18； 国际：2022-11-21；",
+      "first_enrollment_date": "国内：2023-11-17； 国际：2022-12-22；",
+      "completion_date": "国内：登记人暂未填写该信息； 国际：登记人暂未填写该信息；",
+      "enrollment_target": "国内: 20 ； 国际: 254 ；",
+      "enrollment_actual": "国内: 31 ； 国际: 260 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -440,7 +664,14 @@
       "phase": "1",
       "sponsor": "上海上药中西制药有限公司",
       "registered_date": "2023-08-28",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20232530"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20232530",
+      "protocol_version": "V2.0",
+      "protocol_version_date": "2023-05-23",
+      "first_consent_date": "国内：登记人暂未填写该信息；",
+      "first_enrollment_date": "国内：登记人暂未填写该信息；",
+      "completion_date": "国内：登记人暂未填写该信息；",
+      "enrollment_target": "国内: 8 ；",
+      "enrollment_actual": "国内: 登记人暂未填写该信息；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -453,7 +684,14 @@
       "phase": "Unknown",
       "sponsor": "Alvogen, Inc./ 北京罕友医药科技有限公司/ Norwich Pharmaceuticals Inc",
       "registered_date": "2023-02-07",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20230340"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20230340",
+      "protocol_version": "V1.1",
+      "protocol_version_date": "2022-10-13",
+      "first_consent_date": "国内：2023-03-10；",
+      "first_enrollment_date": "国内：2023-03-18；",
+      "completion_date": "国内：2023-04-18；",
+      "enrollment_target": "国内: 24 ；",
+      "enrollment_actual": "国内: 24 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -466,7 +704,14 @@
       "phase": "3",
       "sponsor": "荣昌生物制药（烟台）有限公司",
       "registered_date": "2023-02-20",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20230297"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20230297",
+      "protocol_version": "2.0",
+      "protocol_version_date": "2024-03-08",
+      "first_consent_date": "国内：2023-03-28；",
+      "first_enrollment_date": "国内：2023-04-10；",
+      "completion_date": "国内：2024-12-12；",
+      "enrollment_target": "国内: 100 ；",
+      "enrollment_actual": "国内: 114 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -479,7 +724,14 @@
       "phase": "Unknown",
       "sponsor": "上海上药信谊药厂有限公司",
       "registered_date": "2022-06-14",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20221213"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20221213",
+      "protocol_version": "V1.0",
+      "protocol_version_date": "2022-04-18",
+      "first_consent_date": "国内：登记人暂未填写该信息；",
+      "first_enrollment_date": "国内：登记人暂未填写该信息；",
+      "completion_date": "国内：登记人暂未填写该信息；",
+      "enrollment_target": "国内: 12 ；",
+      "enrollment_actual": "国内: 登记人暂未填写该信息；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -492,7 +744,14 @@
       "phase": "3",
       "sponsor": "Harbour BioMed Therapeutics Limited/ 和铂医药（苏州）有限公司/ Samsung Biologics Co., Ltd.",
       "registered_date": "2022-03-30",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20220701"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20220701",
+      "protocol_version": "4.0",
+      "protocol_version_date": "2023-05-16",
+      "first_consent_date": "国内：2022-06-30；",
+      "first_enrollment_date": "国内：2022-07-09；",
+      "completion_date": "国内：2024-04-26；",
+      "enrollment_target": "国内: 144 ；",
+      "enrollment_actual": "国内: 112 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -505,7 +764,14 @@
       "phase": "3",
       "sponsor": "Sanofi-Aventis Recherche & Développement/ 赛诺菲（中国）投资有限公司/ sanofi-aventis Recherche & Développement; Sanofi Winthrop Industrie/ sanofi-aventis Recherche & Développement; Sanofi Winthrop Industrie; Creapharm Clinical Supplies",
       "registered_date": "2022-02-23",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20220329"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20220329",
+      "protocol_version": "修订版临床试验方案02",
+      "protocol_version_date": "2021-11-03",
+      "first_consent_date": "国内：2022-06-01； 国际：2021-12-03；",
+      "first_enrollment_date": "国内：2022-06-22； 国际：2021-12-20；",
+      "completion_date": "",
+      "enrollment_target": "国内: 14 ； 国际: 154 ；",
+      "enrollment_actual": "国内: 2 ； 国际: 6 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -518,7 +784,14 @@
       "phase": "3",
       "sponsor": "F. Hoffmann-La Roche Ltd/ 罗氏（中国）投资有限公司/ Chugai Pharma Manufacturing Co., Ltd.",
       "registered_date": "2022-01-26",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20220092"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20220092",
+      "protocol_version": "V3",
+      "protocol_version_date": "2021-12-08",
+      "first_consent_date": "国内：2022-03-07； 国际：登记人暂未填写该信息；",
+      "first_enrollment_date": "国内：2022-07-25； 国际：登记人暂未填写该信息；",
+      "completion_date": "",
+      "enrollment_target": "国内: 30 ； 国际: 登记人暂未填写该信息；",
+      "enrollment_actual": "国内: 28 ； 国际: 登记人暂未填写该信息；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -531,7 +804,14 @@
       "phase": "1",
       "sponsor": "Janssen Research & Development, LLC/ 强生（中国）投资有限公司/ Vetter Pharma-Fertigung GmbH & Co. KG/ Janssen R&D, a Division of Janssen Pharmaceutica, NV；Catalent CTS, LLC；Catalent Pharma Solutions, LLC；Catalent Germany Schorndorf GmbH；Fisher Clinical Services UK；Fisher Clinical Services；Fisher Clinical Services (Allentown)",
       "registered_date": "2022-01-24",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20213446"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20213446",
+      "protocol_version": "修正案1",
+      "protocol_version_date": "2022-02-18",
+      "first_consent_date": "国内：2022-05-30；",
+      "first_enrollment_date": "国内：2022-06-17；",
+      "completion_date": "国内：2022-09-09；",
+      "enrollment_target": "国内: 30 ；",
+      "enrollment_actual": "国内: 30 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -544,7 +824,14 @@
       "phase": "Unknown",
       "sponsor": "上海上药中西制药有限公司",
       "registered_date": "2021-12-24",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20213266"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20213266",
+      "protocol_version": "1.0",
+      "protocol_version_date": "2021-10-18",
+      "first_consent_date": "国内：2022-01-10；",
+      "first_enrollment_date": "国内：2022-01-17；",
+      "completion_date": "国内：2022-06-01；",
+      "enrollment_target": "国内: 64 ；",
+      "enrollment_actual": "国内: 64 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -557,7 +844,14 @@
       "phase": "3",
       "sponsor": "Janssen Research & Development, LLC/ 强生（中国）投资有限公司/ Vetter Pharma-Fertigung GmbH & Co. KG/ Janssen R&D, a Division of Janssen Pharmaceutica, NV；Catalent CTS, LLC；Catalent Pharma Solutions, LLC；Catalent Germany Schorndorf GmbH；Fisher Clinical Services UK；Fisher Clinical Services；Fisher Clinical Services (Allentown)/ Janssen Pharmaceutica NV, Division of Janssen Research and Development；Fisher Clinical Services, Inc.；Fisher Clinical Services UK Limited；Fisher Clinical Services GmbH",
       "registered_date": "2021-11-02",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20212693"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20212693",
+      "protocol_version": "修正案5",
+      "protocol_version_date": "2025-11-07",
+      "first_consent_date": "国内：2022-06-16； 国际：2021-07-15；",
+      "first_enrollment_date": "国内：2022-06-30； 国际：2021-08-11；",
+      "completion_date": "国内：登记人暂未填写该信息； 国际：登记人暂未填写该信息；",
+      "enrollment_target": "国内: 50 ； 国际: 298 ；",
+      "enrollment_actual": "国内: 28 ； 国际: 218 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -570,7 +864,14 @@
       "phase": "3",
       "sponsor": "和铂医药(广州)有限公司",
       "registered_date": "2021-09-07",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20212099"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20212099",
+      "protocol_version": "V11.0",
+      "protocol_version_date": "2022-01-21",
+      "first_consent_date": "国内：2021-09-15；",
+      "first_enrollment_date": "国内：2021-09-25；",
+      "completion_date": "国内：2023-01-14；",
+      "enrollment_target": "国内: 144 ；",
+      "enrollment_actual": "国内: 132 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -583,7 +884,14 @@
       "phase": "1",
       "sponsor": "argenx BV/ 再鼎医药（上海）有限公司/ Vetter Pharma-Fertigung GmbH & Co. KG",
       "registered_date": "2021-08-13",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20211952"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20211952",
+      "protocol_version": "2.0",
+      "protocol_version_date": "2021-05-19",
+      "first_consent_date": "国内：2021-09-22；",
+      "first_enrollment_date": "国内：2021-09-25；",
+      "completion_date": "国内：2021-12-25；",
+      "enrollment_target": "国内: 16 ；",
+      "enrollment_actual": "国内: 16 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -596,7 +904,14 @@
       "phase": "1",
       "sponsor": "argenx BV/ 再鼎医药（上海）有限公司/ Patheon Italia S.p.A.",
       "registered_date": "2021-08-05",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20211805"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20211805",
+      "protocol_version": "1.0",
+      "protocol_version_date": "2021-03-17",
+      "first_consent_date": "国内：2021-09-15；",
+      "first_enrollment_date": "国内：2021-09-23；",
+      "completion_date": "国内：2021-12-09；",
+      "enrollment_target": "国内: 16 ；",
+      "enrollment_actual": "国内: 16 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -609,7 +924,14 @@
       "phase": "3",
       "sponsor": "Viela Bio, Inc./ MedImmune Pharma, BV/ 杭州泰格医药科技股份有限公司",
       "registered_date": "2021-05-24",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20210474"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20210474",
+      "protocol_version": "7",
+      "protocol_version_date": "2023-09-13",
+      "first_consent_date": "国内：2021-07-28； 国际：2020-09-02；",
+      "first_enrollment_date": "国内：2021-09-23； 国际：2020-10-15；",
+      "completion_date": "国内：登记人暂未填写该信息； 国际：登记人暂未填写该信息；",
+      "enrollment_target": "国内: 30 ； 国际: 270 ；",
+      "enrollment_actual": "国内: 28 ； 国际: 238 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -622,7 +944,14 @@
       "phase": "2",
       "sponsor": "和铂医药(广州)有限公司",
       "registered_date": "2020-06-15",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20201048"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20201048",
+      "protocol_version": "V3.0",
+      "protocol_version_date": "2020-09-14",
+      "first_consent_date": "国内：2020-07-23；",
+      "first_enrollment_date": "国内：2020-08-08；",
+      "completion_date": "国内：2021-08-24；",
+      "enrollment_target": "国内: 30 ；",
+      "enrollment_actual": "国内: 30 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -635,7 +964,14 @@
       "phase": "2",
       "sponsor": "荣昌生物制药（烟台）有限公司",
       "registered_date": "2020-03-09",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20200317"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20200317",
+      "protocol_version": "2.0",
+      "protocol_version_date": "2020-08-27",
+      "first_consent_date": "国内：2020-07-07；",
+      "first_enrollment_date": "国内：2020-07-23；",
+      "completion_date": "国内：2022-02-11；",
+      "enrollment_target": "国内: 20 ；",
+      "enrollment_actual": "国内: 29 ；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -648,7 +984,14 @@
       "phase": "Unknown",
       "sponsor": "浙江奥托康制药集团股份有限公司",
       "registered_date": "2019-04-08",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20190650"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20190650",
+      "protocol_version": "",
+      "protocol_version_date": "",
+      "first_consent_date": "国内：2019-04-03；",
+      "first_enrollment_date": "国内：登记人暂未填写该信息；",
+      "completion_date": "国内：2019-08-08；",
+      "enrollment_target": "国内: 34 ；",
+      "enrollment_actual": "国内: 登记人暂未填写该信息；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -661,7 +1004,14 @@
       "phase": "1",
       "sponsor": "济南博世医药科技有限公司",
       "registered_date": "2018-11-21",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20182086"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20182086",
+      "protocol_version": "",
+      "protocol_version_date": "",
+      "first_consent_date": "国内：登记人暂未填写该信息；",
+      "first_enrollment_date": "国内：登记人暂未填写该信息；",
+      "completion_date": "国内：登记人暂未填写该信息；",
+      "enrollment_target": "国内: 12 ；",
+      "enrollment_actual": "国内: 登记人暂未填写该信息；"
     },
     {
       "registry": "ChinaDrugTrials",
@@ -674,7 +1024,14 @@
       "phase": "3",
       "sponsor": "安斯泰来制药（中国）有限公司/ Astellas Pharma Co. Limited/ Astellas Ireland Co., Ltd.",
       "registered_date": "2014-03-31",
-      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20132669"
+      "official_url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20132669",
+      "protocol_version": "",
+      "protocol_version_date": "",
+      "first_consent_date": "国内：2011-03-30；",
+      "first_enrollment_date": "国内：登记人暂未填写该信息；",
+      "completion_date": "国内：2014-02-28；",
+      "enrollment_target": "国内: 80 ；",
+      "enrollment_actual": "国内: 登记人暂未填写该信息；"
     }
   ]
 }

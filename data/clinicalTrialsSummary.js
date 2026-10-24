@@ -45,7 +45,7 @@ window.MG_CLINICAL_TRIALS_SUMMARY = {
     },
     "ChinaDrugTrials": {
       "updated_at": "2026-10-24",
-      "revision": "semantic-v1:91a5cd94fb23958bb597d57807a35b6a78496e9a3dc5543b941706eea89ceaf4",
+      "revision": "semantic-v1:cda8d63b8cf8ef51ecfd2c6ef650916ff9e8b0c1c7c99997ed0650d005340553",
       "mode": "live_crawl"
     }
   },
