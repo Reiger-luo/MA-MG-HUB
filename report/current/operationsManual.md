@@ -177,7 +177,7 @@ MSL 工作台是 China-only：
 
 ClinicalTrials.gov、ChiCTR 和 ChinaDrugTrials 采用不同更新方式，但统一进入 `clinical-trials-data.js` 和 `source-signals.js` 的试验注册频道。三个来源在同一次周一 05:00 周更内连续抓取，再统一构建，且同为每周节奏；`trial-signals-weekly.js` 为每个来源保留自己的最新比较窗口，因此未到更新节奏或来源暂时失败时不会清空 last-good。来源频道同时保留原始 `items` 与门控后的 `weekly_signals`，两者不可互相替代。详细流程见 [clinicalTrialsMaintenance.md](../runbooks/clinicalTrialsMaintenance.md)。
 
-ChinaDrugTrials 从官方检索页全量翻页抓取，并逐条读取详情页补全分期、申办者、首次公示日期和入组信息；平台 RSS 支持 `keywords` 主题过滤，只返回该主题最近 20 条登记，因此作为新登记早报与缓存覆盖度核对写入审计目录，不驱动缓存更新——它不含状态和分期，无法反映既有试验的状态推进。ChiCTR 的阿里云 WAF 挑战由无头浏览器自动求解，`CHICTR_COOKIE` 保留为人工兜底。人工提供的官方导出仍可作为备用导入路径。
+ChinaDrugTrials 从官方检索页全量翻页抓取，并逐条读取详情页补全分期、申办者、首次公示日期和入组信息；平台 RSS 支持 `keywords` 主题过滤，只返回该主题最近 20 条登记，因此有两条独立通道：周更时作为新登记早报与覆盖度核对（结果进飞书报告与数据状态页），以及每天 07:00 的静默订阅（有新 MG 登记才发飞书，无则不发）。RSS 不含状态和分期，因此不驱动缓存更新。ChiCTR 的阿里云 WAF 挑战由无头浏览器自动求解，`CHICTR_COOKIE` 保留为人工兜底。人工提供的官方导出仍可作为备用导入路径。
 
 ClinicalTrials.gov 每次构建对比上一期快照（`clinicaltrials-weekly-changes-snapshot.json`），把近 7 天新登记、状态变化、结果发布、字段更新和移除提炼为 `clinicalTrialsSummary.js` 的 `weekly_changes`。全部变化作为试验信号候选，不受首页展示条数截断影响。首次运行只建立基线；相同快照重复构建保持零变化。阶段字段统一归一化，公开 JS 和对比快照均使用原子写入。
 

@@ -73,7 +73,15 @@ def is_due(cache_path: Path, interval_days: int, now: datetime | None = None) ->
     return True, last.isoformat()
 
 
-def run_rss_watch(snapshot_path: Path, *, client: CdeClient, keyword: str, cache_ids: set[str]) -> dict:
+def run_rss_watch(
+    snapshot_path: Path,
+    *,
+    client: CdeClient,
+    keyword: str,
+    cache_ids: set[str],
+    flag_missing: bool = True,
+    quiet: bool = False,
+) -> dict:
     """抓 RSS 主题早报并对比上次快照；失败不影响主流程。
 
     同时核对 RSS 已知的最近登记是否都已在缓存中——若 RSS 出现缓存里没有的
@@ -102,13 +110,16 @@ def run_rss_watch(snapshot_path: Path, *, client: CdeClient, keyword: str, cache
         if item["registry_id"] not in cache_ids and is_mg_trial(item["title"])
     )
     atomic_write_json(snapshot_path, current)
+    # 静默模式：没有新登记、也没有抓取缺口时不输出，供 no-agent cron 使用
+    if quiet and not new_items and not (flag_missing and current["missing_from_cache"]):
+        return current
     print(
         f"📡 CDE RSS 早报（{keyword}）：最近 {len(current['items'])} 条登记，"
         f"较上次快照新增 {len(new_items)} 条"
     )
     for item in new_items[:5]:
         print(f"   · {item['registry_id']} {item['published_date']} {item['title'][:56]}")
-    if current["missing_from_cache"]:
+    if flag_missing and current["missing_from_cache"]:
         print(
             "⚠️ RSS 中出现缓存未收录的登记号（请检查分页/门控）："
             + ", ".join(current["missing_from_cache"][:10])
@@ -131,6 +142,11 @@ def main() -> int:
     )
     parser.add_argument("--force-live", action="store_true", help="忽略间隔立即抓取")
     parser.add_argument("--rss-only", action="store_true", help="只抓 RSS 早报，不更新缓存")
+    parser.add_argument(
+        "--quiet",
+        action="store_true",
+        help="配合 --rss-only：没有新登记时完全不输出（供 no-agent cron 静默订阅）",
+    )
     parser.add_argument("--dry-run", action="store_true", help="抓取并比较，但不写缓存、不重建网站")
     parser.add_argument(
         "--allow-large-drop",
@@ -165,6 +181,9 @@ def main() -> int:
             client=client,
             keyword=args.keyword,
             cache_ids=cached_ids(),
+            # 订阅模式：缓存只在周更刷新，周中「RSS 有、缓存无」属于待收录而非故障
+            flag_missing=False,
+            quiet=args.quiet,
         )
         record_status(args.status_file, "rss_only")
         return 0

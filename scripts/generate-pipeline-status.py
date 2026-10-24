@@ -590,6 +590,9 @@ def buildStatus():
     chictrPath = DATA_DIR / "chictr-trials-cache.json"
     chinaDrugTrialsPath = DATA_DIR / "china-drug-trials-cache.json"
     chinaDrugTrialsChangesPath = DATA_DIR / "china-drug-trials-changes.json"
+    # CDE 官方 RSS 订阅快照属于运行审计产物（.hermes-audit 不入库），
+    # 此处只读取时间与计数，把「订阅通道是否正常」暴露到数据状态页。
+    cdeRssPath = DATA_DIR.parent / ".hermes-audit" / "cde-rss-snapshot.json"
     localFullCount = None
     weeklyCount = None
     regulatoryPayload = {}
@@ -597,6 +600,7 @@ def buildStatus():
     chictrPayload = {}
     chinaDrugTrialsPayload = {}
     chinaDrugTrialsChanges = {}
+    cdeRssPayload = {}
     if fullPath.exists():
         localFullCount = len(loadJson(fullPath))
     if weeklyPath.exists():
@@ -611,6 +615,8 @@ def buildStatus():
         chinaDrugTrialsPayload = loadJson(chinaDrugTrialsPath)
     if chinaDrugTrialsChangesPath.exists():
         chinaDrugTrialsChanges = loadJson(chinaDrugTrialsChangesPath)
+    if cdeRssPath.exists():
+        cdeRssPayload = loadJson(cdeRssPath)
 
     recentCount = len(literature)
     declaredRollingCount = readWindowNumber(DATA_DIR / "literature-recent.js", "MG_PUBLIC_ROLLING_COUNT")
@@ -650,6 +656,7 @@ def buildStatus():
         chinaDrugTrialsPayload.get("generated_at") or chinaDrugTrialsPayload.get("last_verified"),
         35,
     )
+    rssStatus, rssStatusLabel, rssAge = freshnessStatus(cdeRssPayload.get("checked_at"), 8)
     regulatoryStatus, regulatoryStatusLabel, regulatoryAge = freshnessStatus(regulatoryPayload.get("generated_at"), 90)
 
     driftCount = sum(len(releaseCheck[key]) for key in ("mismatched", "missing", "unlisted"))
@@ -713,7 +720,7 @@ def buildStatus():
         },
         {
             "id": "chinaDrugTrials",
-            "name": "ChinaDrugTrials 人工月更",
+            "name": "ChinaDrugTrials 官方抓取",
             "meta": (
                 f"MG 登记记录 {len(chinaDrugTrialsPayload.get('records') or [])} 项 · "
                 f"mode={chinaDrugTrialsPayload.get('mode', 'cache')} · "
@@ -726,6 +733,20 @@ def buildStatus():
             ),
             "status": chinaTrialsStatus if chinaDrugTrialsPayload else "manual",
             "status_label": chinaTrialsStatusLabel if chinaDrugTrialsPayload else "待提交",
+        },
+        {
+            "id": "cdeRss",
+            "name": "CDE 官方 RSS 订阅",
+            "meta": (
+                f"最近 {len(cdeRssPayload.get('items') or [])} 条 MG 登记 · "
+                f"较上次新增 {cdeRssPayload.get('new_count', 0)} 条 · "
+                f"缓存缺漏 {len(cdeRssPayload.get('missing_from_cache') or [])} 条 · "
+                f"核对 {cdeRssPayload.get('checked_at') or '待核对'}"
+                if cdeRssPayload
+                else "等待 CDE RSS 快照（周更时自动生成）"
+            ),
+            "status": rssStatus if cdeRssPayload else "manual",
+            "status_label": rssStatusLabel if cdeRssPayload else "待接入",
         },
         {
             "id": "regulatory",

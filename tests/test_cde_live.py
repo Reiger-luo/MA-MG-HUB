@@ -211,3 +211,103 @@ def test_refresh_script_due_gate_uses_generated_at(tmp_path, monkeypatch):
     missing = tmp_path / "missing.json"
     assert module.is_due(missing, 7)[0] is True
     assert module.is_due(cache, 0)[0] is True
+
+def _load_refresh_module():
+    """加载 refresh-cde-live-cache.py，用于测试其 RSS 订阅输出策略。"""
+    import importlib.util
+
+    script = Path(__file__).resolve().parent.parent / "scripts" / "refresh-cde-live-cache.py"
+    spec = importlib.util.spec_from_file_location("refresh_cde_live_cache_rss", script)
+    module = importlib.util.module_from_spec(spec)
+    assert spec and spec.loader
+    spec.loader.exec_module(module)
+    return module
+
+
+class _RssClient:
+    def __init__(self, xml):
+        self._xml = xml
+
+    def rss(self, keyword=None):
+        return self._xml
+
+
+def test_rss_subscription_is_silent_when_nothing_new(tmp_path, capsys):
+    """静默订阅：无新登记且无缺口时零输出，no-agent cron 因此不投递消息。"""
+    module = _load_refresh_module()
+    snapshot = tmp_path / "rss.json"
+    # 上次快照已包含 RSS 当前全部条目 → 本次没有新登记
+    snapshot.write_text(json.dumps({
+        "items": [
+            {"registry_id": "CTR20269999", "title": "MG 研究"},
+            {"registry_id": "CTR20264035", "title": "生物等效性试验"},
+        ],
+    }), encoding="utf-8")
+
+    module.run_rss_watch(
+        snapshot,
+        client=_RssClient(RSS_XML),
+        keyword="重症肌无力",
+        cache_ids={"CTR20269999", "CTR20264035"},
+        flag_missing=False,
+        quiet=True,
+    )
+
+    assert capsys.readouterr().out == ""
+
+
+def test_rss_subscription_speaks_when_new_registration_appears(tmp_path, capsys):
+    module = _load_refresh_module()
+    snapshot = tmp_path / "rss.json"
+    snapshot.write_text(json.dumps({"items": []}), encoding="utf-8")
+
+    module.run_rss_watch(
+        snapshot,
+        client=_RssClient(RSS_XML),
+        keyword="重症肌无力",
+        cache_ids={"CTR20269999", "CTR20264035"},
+        flag_missing=False,
+        quiet=True,
+    )
+
+    out = capsys.readouterr().out
+    assert "新增 2 条" in out
+    assert "CTR20269999" in out
+
+
+def test_midweek_missing_from_cache_is_not_an_alarm(tmp_path, capsys):
+    """周中订阅模式下「RSS 有、缓存尚未收录」是待周更收录，不应报警。"""
+    module = _load_refresh_module()
+    snapshot = tmp_path / "rss.json"
+    snapshot.write_text(json.dumps({"items": []}), encoding="utf-8")
+
+    result = module.run_rss_watch(
+        snapshot,
+        client=_RssClient(RSS_XML),
+        keyword="重症肌无力",
+        cache_ids=set(),
+        flag_missing=False,
+        quiet=False,
+    )
+
+    assert "⚠️" not in capsys.readouterr().out
+    # 仍然记录进快照，供数据状态页展示「待收录」数量
+    assert result["missing_from_cache"]
+
+
+def test_post_crawl_missing_from_cache_does_raise_alarm(tmp_path, capsys):
+    """刚抓完仍缺漏才算分页/门控异常，必须显式告警。"""
+    module = _load_refresh_module()
+    snapshot = tmp_path / "rss.json"
+    snapshot.write_text(json.dumps({"items": []}), encoding="utf-8")
+
+    module.run_rss_watch(
+        snapshot,
+        client=_RssClient(RSS_XML),
+        keyword="重症肌无力",
+        cache_ids=set(),
+        flag_missing=True,
+        quiet=False,
+    )
+
+    assert "⚠️" in capsys.readouterr().out

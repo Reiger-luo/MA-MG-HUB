@@ -143,6 +143,19 @@ RSS（`https://www.chinadrugtrials.org.cn/clinicaltrials.search.rss.dhtml?keywor
 
 参数名必须是复数 `keywords`：写成 `keyword` 时平台忽略该参数并返回全站最近 20 条无关登记（本项目早期探测即因此误判 RSS 不可用于 MG）。
 
+### RSS 的两条使用通道
+
+| 通道 | 时机 | 命令 | 可见性 |
+|---|---|---|---|
+| 周更早报 | 每周一全量抓取后 | 抓取脚本内自动执行 | 飞书报告「CDE 官方 RSS 订阅」行 + 数据状态页 |
+| 每日订阅 | 每天 07:00（cron `c151003558df`） | `refresh-cde-live-cache.py --rss-only --quiet` | 仅在有新登记时发飞书，否则静默 |
+
+每日订阅靠 `--quiet` 实现静默：没有新登记且无抓取缺口时零输出，`no-agent` cron 因此**不投递任何消息**（`delivery_outcome: suppressed`）。有新登记时逐条列出登记号、公示日期与题名，并明确提示「状态与分期以周一全量周更为准」。
+
+订阅模式下 `flag_missing=False`：RSS 有、缓存暂时没有属于「待周一收录」，不算故障；只有**刚抓取完**仍缺漏才判为分页或门控异常并告警。
+
+数据状态页新增「CDE 官方 RSS 订阅」来源行，展示最近登记数、较上次新增、待收录数与核对时间，新鲜度阈值 8 天。
+
 手工全量刷新或排查时：
 
 ```bash
@@ -186,7 +199,8 @@ ChiCTR 与 CDE 早期被设成低频，是因为抓取成本高且缺可比较�
 | 任务 | 时间 | 入口 | 作用 |
 |---|---|---|---|
 | MG-HUB Local Weekly Sync (周一) | 周一 05:00 | `~/.hermes/scripts/mg-hub-local-weekly-sync.sh` → `run-weekly-pipeline.py --mode authoritative-full` | 文献周更 + 三源注册数据 + 全量发布 |
-| （已删除）MG-HUB 注册源周更 | 原周日 05:00 | — | 已合并进上方周一任务，避免三源分两次更新 |
+| CDE MG 新登记订阅 (官方 RSS) | 每天 07:00 | `~/.hermes/scripts/mg-hub-cde-rss-watch.sh` → `refresh-cde-live-cache.py --rss-only --quiet` | RSS 订阅：有新登记才发飞书，无则静默；不写缓存、不触发重建 |
+| （已删除）MG-HUB 注册源周更 | 原周日 05:00 | — | 已合并进周一任务，避免三源分两次更新 |
 
 三源在管线里是连续的三步，构建阶段因此读到同一批新缓存：
 
