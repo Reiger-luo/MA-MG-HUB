@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 from pathlib import Path
 
 from common.chictr_live import refresh_chictr_live
@@ -43,10 +44,26 @@ def main() -> int:
         payload = refresh_chictr_cache(args.cache, input_path=args.input)
         refresh_status = "updated" if not payload.get("warning") else "failed"
     else:
+        force = args.force_live
+        if args.detail_budget and not force:
+            # 迁移未完成时不受 7 天闸门限制：否则「今天刚核对过」会让第一次
+            # 迁移白白跳过一周，把一次性迁移拖成好几周。
+            pending = 0
+            if args.cache.exists():
+                try:
+                    cached = json.loads(args.cache.read_text(encoding="utf-8"))
+                    pending = sum(
+                        1 for record in cached.get("records") or [] if not record.get("xml_url")
+                    )
+                except (OSError, json.JSONDecodeError):
+                    pending = 0
+            if pending:
+                force = True
+                print(f"ℹ️ 有 {pending} 条记录尚未迁移到 XML 直连，本轮忽略间隔继续迁移")
         payload = refresh_chictr_live(
             args.cache,
             interval_days=args.interval_days,
-            force=args.force_live,
+            force=force,
             detail_budget=args.detail_budget or None,
         )
         refresh_status = payload.get("refresh_status")
