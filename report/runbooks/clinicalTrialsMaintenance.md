@@ -135,23 +135,35 @@ python3 scripts/refresh-china-drug-trials-cache.py --input /absolute/path/export
 
 ## 周更调度
 
-注册源由两条 Hermes cron 承担，均以 `no-agent` 模式直接投递飞书：
+三个注册源统一由**周一 05:00** 的 Hermes cron 一次性刷新，不再有独立的注册源任务：
 
 | 任务 | 时间 | 入口 | 作用 |
 |---|---|---|---|
-| MG-HUB 注册源周更 (CDE RSS + ChiCTR) | 周日 05:00 | `~/.hermes/scripts/mg-hub-cde-weekly.sh` → `run-weekly-pipeline.py --mode trials-only` | 刷新 ChiCTR/CDE 缓存并只重建试验相关产物，自动提交推送 `data/`、`pages/`、`index.html` |
-| MG-HUB Local Weekly Sync | 周一 05:00 | `~/.hermes/scripts/mg-hub-local-weekly-sync.sh` → `run-weekly-pipeline.py --mode authoritative-full` | 文献周更与全量发布 |
+| MG-HUB Local Weekly Sync (周一) | 周一 05:00 | `~/.hermes/scripts/mg-hub-local-weekly-sync.sh` → `run-weekly-pipeline.py --mode authoritative-full` | 文献周更 + 三源注册数据 + 全量发布 |
+| （已删除）MG-HUB 注册源周更 | 原周日 05:00 | — | 已合并进上方周一任务，避免三源分两次更新 |
 
-`--mode trials-only` 只跑注册源及其直接派生步骤（临床试验页、试验信号、来源频道、周报、发布清单），不重跑文献过滤、专家画像、社区与知识图谱，避免周中单独更新注册数据时产生大量无关产物漂移。周日的提交让工作树在周一全量周更前保持干净，否则周一会因为未提交改动而 fail closed。
+三源在管线里是连续的三步，构建阶段因此读到同一批新缓存：
 
-两个脚本共同的约束：
+| 顺序 | 步骤 | 源 | 抓取节奏 |
+|---|---|---|---|
+| 6 | `refresh-chictr-cache` | ChiCTR | 每 28 天到期才抓，未到期跳过 |
+| 7 | `refresh-china-drug-trials-cache` | ChinaDrugTrials | 每次周更都抓（`--interval-days 1`，同日重跑自动跳过） |
+| 8 | `build-frontend`（内部调用 CT.gov API v2） | ClinicalTrials.gov | 每次周更都抓 |
+
+步骤 18 `build-clinical-trials` 之后才统一生成临床试验页、试验信号、来源频道与周报，因此三源不会出现「一次发布混用新旧缓存」。
+
+ChiCTR 保持 28 天节奏是出于对 WAF 站点的访问克制（单次约 121 个项目、约 3.5 分钟），不是数据需求；如需改为每周，把 `refresh-chictr-cache` 步骤的 `--interval-days` 调整为 7。
+
+`--mode trials-only` 保留为**手工工具**，用于周中临时补抓注册源（只跑三源与试验相关产物，不动文献/专家/社区/图谱），已不再由 cron 调度。
+
+约束：
 
 - 工作树必须干净，否则直接退出（避免把人工未提交改动混进自动提交）；
 - 只允许在 `main` 分支执行；
 - 仅自动提交 `data/**`、`pages/**`、`index.html`，出现其他路径变更立即 fail closed；
 - 纯数据/HTML 更新的 push 记录 `CRG_REFRESH_SKIPPED`，不额外提交或再次 push。
 
-CDE 刷新脚本会把本次动作写入 `.hermes-audit/cde-refresh-status.json`（`crawled` / `skipped_interval` / `failed` / `rss_only`），飞书汇报据此区分「本次确实全量抓取」与「间隔未到、仅更新 RSS 早报」，不会把上一次的差异当成本期变化重复播报。
+CDE 刷新脚本会把本次动作写入 `.hermes-audit/cde-refresh-status.json`（`crawled` / `skipped_interval` / `failed` / `rss_only`），周一的飞书汇报据此区分「本次确实全量抓取」与「间隔未到、沿用 last-good」，不会把上一次的差异当成本期变化重复播报。
 
 ## 更新后验证
 

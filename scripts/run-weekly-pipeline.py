@@ -125,12 +125,22 @@ def pipeline_steps(args, full_available: bool | None = None) -> list[PipelineSte
         ])
     if args.skip_downstream:
         return steps
-    steps.append(PipelineStep(
-        "refresh-chictr-cache",
-        py("refresh-chictr-cache.py"),
-        outputs=[DATA / "chictr-trials-cache.json"],
-        optional=True,
-    ))
+    # 三个注册源在同一次周更内连续抓取，构建阶段才能读到同一批新缓存：
+    # ChiCTR（28 天节奏）→ ChinaDrugTrials（每周）→ ClinicalTrials.gov（build-frontend 内实时抓取）
+    steps.extend([
+        PipelineStep(
+            "refresh-chictr-cache",
+            py("refresh-chictr-cache.py"),
+            outputs=[DATA / "chictr-trials-cache.json"],
+            optional=True,
+        ),
+        PipelineStep(
+            "refresh-china-drug-trials-cache",
+            py("refresh-cde-live-cache.py") + ["--no-build", "--interval-days", "1"],
+            outputs=[DATA / "china-drug-trials-cache.json"],
+            optional=True,
+        ),
+    ])
     buildFrontendCommand = py("build-frontend-data.py")
     if full_available:
         buildFrontendCommand.append("--rebuild-experts-from-full")
@@ -161,12 +171,6 @@ def pipeline_steps(args, full_available: bool | None = None) -> list[PipelineSte
     steps.extend([
         PipelineStep("build-landscape-insights", py("buildLandscapeInsights.py"), outputs=[DATA / "landscapeInsights.js"]),
         PipelineStep("build-backend-options", py("buildBackendOptions.py"), outputs=[DATA / "backendOptions.js"]),
-        PipelineStep(
-            "refresh-china-drug-trials-cache",
-            py("refresh-cde-live-cache.py") + ["--no-build", "--interval-days", "6"],
-            outputs=[DATA / "china-drug-trials-cache.json"],
-            optional=True,
-        ),
         PipelineStep(
             "build-clinical-trials",
             py("build-clinical-trials-data.py"),
