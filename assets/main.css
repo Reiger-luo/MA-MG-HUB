@@ -3581,6 +3581,71 @@ body.pmid-modal-open { overflow: hidden; }
   width: 7px; height: 7px; border-radius: 50%; background: var(--yellow);
 }
 .dashboard-release-state.ok i { background: var(--green); }
+/* 视图切换条：4 个视图常驻，页面内的标签是视图内部切面 */
+.view-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  max-width: 1400px;
+  margin: 0 auto 1rem;
+  padding: 0 1.5rem;
+}
+.view-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+.view-chip em { font-style: normal; font-size: 0.72rem; opacity: 0.75; }
+.view-chip:hover { border-color: rgba(15, 118, 110, 0.35); color: var(--fg); }
+.view-chip.active {
+  border-color: rgba(15, 118, 110, 0.45);
+  background: rgba(15, 118, 110, 0.08);
+  color: #0f766e;
+  font-weight: 600;
+}
+
+/* 首页三个工作视图入口 */
+.dashboard-view-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 0 0 1rem;
+}
+.dashboard-view-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: linear-gradient(180deg, #fff, #fbfcfd);
+  text-decoration: none;
+  color: var(--fg);
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.dashboard-view-card:hover { border-color: rgba(15, 118, 110, 0.4); transform: translateY(-1px); }
+.dashboard-view-kicker { font-size: 0.7rem; letter-spacing: 0.08em; color: #0f766e; text-transform: uppercase; }
+.dashboard-view-card strong { font-size: 1rem; }
+.dashboard-view-card em { font-style: normal; font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
+.dashboard-view-card-compact { background: #fafbfc; }
+
+@media (max-width: 900px) {
+  .dashboard-view-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .dashboard-view-grid { grid-template-columns: 1fr; }
+  .view-bar { padding: 0 1rem; }
+  .view-chip { font-size: 0.78rem; padding: 0.35rem 0.7rem; }
+}
+
 .dashboard-release-chip strong,
 .dashboard-release-chip time { color: var(--fg); font-variant-numeric: tabular-nums; }
 .dashboard-source-chip em {

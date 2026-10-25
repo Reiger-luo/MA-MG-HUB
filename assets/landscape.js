@@ -62,9 +62,13 @@
     return '待确认';
   }
 
+  // 视图路由与标签的映射：视图 view 决定落到哪个标签
+  var VIEW_TAB_MAP = { overview: 'overview', matrix: 'matrix', guide: 'guide', answers: 'answers' };
+
   function bindTabs() {
     var initialTab = getQueryParam('tab');
-    var initialKey = (initialTab === 'answers' || getQueryParam('topic') || getQueryParam('community')) ? 'answers' : '';
+    var initialKey = VIEW_TAB_MAP[initialTab] || '';
+    if (!initialKey && (getQueryParam('topic') || getQueryParam('community'))) initialKey = 'answers';
     if (hub.initTabs) {
       tabController = hub.initTabs({
         tabAttr: 'data-landscape-tab',
@@ -94,6 +98,138 @@
     }
     var tab = document.querySelector('[data-landscape-tab="' + key + '"]');
     if (tab) tab.click();
+  }
+
+  // ---------------------------------------------------------------------------
+  // 导出：竞品卡与指南差异对照表（Markdown，可直接粘进顾问会材料/培训包）
+  // ---------------------------------------------------------------------------
+  function cell(value) {
+    var text = String(value == null ? '' : value).replace(/\r?\n/g, ' ').replace(/\|/g, '\\|').trim();
+    return text || '—';
+  }
+
+  function buildMatrixBrief() {
+    var rows = (data.approved_competitive_matrix || data.competitive_matrix || []);
+    var lines = [];
+    lines.push('# MA-MG-HUB 竞争定位（中国已获批）');
+    lines.push('');
+    lines.push('> 证据厚度按近一年 PubMed 滚动窗口统计；口径与站内竞争矩阵一致。窗口外的注册研究不计入。');
+    lines.push('');
+    for (var i = 0; i < rows.length; i++) {
+      var item = rows[i];
+      var reg = item.china_regulatory || {};
+      var ev = item.evidence_summary || {};
+      lines.push('## ' + (item.name || '') + (item.owner ? '（' + item.owner + '）' : ''));
+      lines.push('');
+      lines.push('| 项目 | 内容 |');
+      lines.push('| --- | --- |');
+      lines.push('| 靶点 / 给药 | ' + cell((item.mechanism || item.target || '') + ' · ' + (item.convenience || item.route || '')) + ' |');
+      lines.push('| 中国状态 | ' + cell((reg.status_label || item.status || '') + (reg.status_date ? ' · ' + reg.status_date : '')) + ' |');
+      lines.push('| 中国适应症 | ' + cell(reg.china_indication || '—') + ' |');
+      lines.push('| 用药方案 | ' + cell(reg.dosing || reg.china_dosing || '—') + ' |');
+      lines.push('| 起效 / 定位 | ' + cell((item.speed || '') + ' · ' + (item.positioning || '')) + ' |');
+      lines.push('| 安全性要点 | ' + cell(item.safety || '') + ' |');
+      lines.push('| 竞争关系 | ' + cell(item.competition || '') + ' |');
+      lines.push('| 证据厚度 | ' + cell('总体 ' + (ev.overall_depth || item.evidence_maturity || '') + ' · 中国 ' + (ev.china_depth || '') +
+        ' · 近一年 ' + (ev.abstract_count == null ? '—' : ev.abstract_count + ' 篇') + '（中国相关 ' + (ev.china_count == null ? '—' : ev.china_count + ' 篇') + '）') + ' |');
+      lines.push('| 最高证据等级 | ' + cell(item.best_evidence_level || '—') + ' |');
+      lines.push('');
+    }
+    return { title: 'MA-MG-HUB 竞争定位', md: lines.join('\n') };
+  }
+
+  function buildGuidelineBrief() {
+    var guide = (data.china_landscape || {}).guideline_divergence || {};
+    var items = guide.divergences || [];
+    var lines = [];
+    lines.push('# MA-MG-HUB 中外指南共识差异对照表');
+    lines.push('');
+    if (guide.corpus_count) {
+      lines.push('> 语料 ' + (guide.corpus_count.total || 0) + ' 份（中国 ' + (guide.corpus_count.china || 0) +
+        ' / 国际 ' + (guide.corpus_count.international || 0) + ' / 中国台湾 ' + (guide.corpus_count.taiwan || 0) + '）；' +
+        (guide.quote_check && guide.quote_check.rate != null ? '引文回验率 ' + guide.quote_check.rate + '%。' : ''));
+      lines.push('');
+    }
+    lines.push('| 维度 | 中国立场 | 国际立场 | 对医学部的含义 |');
+    lines.push('| --- | --- | --- | --- |');
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
+      lines.push('| ' + cell(item.dimension || item.title) + ' | ' + cell(item.china) + ' | ' +
+        cell(item.international) + ' | ' + cell(item.clinical_impact) + ' |');
+    }
+    lines.push('');
+    lines.push('## 逐条引文与建议动作');
+    lines.push('');
+    for (var j = 0; j < items.length; j++) {
+      var it = items[j];
+      lines.push('### ' + (it.dimension || '') + ' — ' + (it.title || ''));
+      lines.push('');
+      lines.push('- 医学部动作：' + cell(it.msl_action));
+      var evs = it.evidence || [];
+      for (var k = 0; k < evs.length; k++) {
+        var ev = evs[k];
+        lines.push('- ' + cell(ev.short_name || ev.name) + '：「' + cell(ev.quote) + '」' +
+          (ev.quote_match === 'exact' ? '（逐字命中）' : ev.quote_match === 'partial' ? '（部分命中）' : '（待核对）'));
+      }
+      lines.push('');
+    }
+    return { title: 'MA-MG-HUB 指南差异对照表', md: lines.join('\n') };
+  }
+
+  function briefModal(brief) {
+    var d = document.createElement('div');
+    d.className = 'modal-overlay open';
+    var preId = 'landscape_brief_' + Date.now();
+    d.innerHTML =
+      '<div class="modal literature-brief-modal" role="dialog" aria-modal="true" aria-label="' + escapeHtml(brief.title) + '">' +
+        '<button class="modal-close" type="button" data-brief-close="1">✕</button>' +
+        '<h2>⬇ ' + escapeHtml(brief.title) + '</h2>' +
+        '<div class="literature-brief-layout">' +
+          '<div class="literature-brief-preview">' +
+            '<div class="literature-brief-label">预览（Markdown）</div>' +
+            '<pre id="' + preId + '" class="literature-brief-pre">' + escapeHtml(brief.md) + '</pre>' +
+          '</div>' +
+          '<div class="literature-brief-actions">' +
+            '<div class="literature-brief-label">操作</div>' +
+            '<button class="btn literature-brief-copy" type="button" data-brief-copy="' + preId + '">📋 复制</button>' +
+            '<button class="btn" type="button" data-brief-download="' + preId + '">⬇ 下载 .md</button>' +
+            '<p>复制后可粘进飞书 / 顾问会材料 / 培训包</p>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(d);
+    function close() { if (d.parentNode) d.parentNode.removeChild(d); }
+    d.addEventListener('click', function(ev) {
+      if (ev.target === d || ev.target.getAttribute('data-brief-close')) close();
+    });
+    document.addEventListener('keydown', function onKey(ev) {
+      if (ev.key === 'Escape') { close(); document.removeEventListener('keydown', onKey); }
+    });
+    var copyBtn = d.querySelector('[data-brief-copy]');
+    if (copyBtn) copyBtn.addEventListener('click', function() {
+      var text = (document.getElementById(preId) || {}).textContent || '';
+      if (navigator.clipboard) navigator.clipboard.writeText(text);
+      copyBtn.textContent = '✓ 已复制';
+    });
+    var dlBtn = d.querySelector('[data-brief-download]');
+    if (dlBtn) dlBtn.addEventListener('click', function() {
+      var text = (document.getElementById(preId) || {}).textContent || '';
+      var blob = new Blob([text], { type: 'text/markdown;charset=utf-8' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = brief.title.replace(/[\s/]+/g, '_') + '.md';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function() { URL.revokeObjectURL(a.href); }, 1000);
+    });
+  }
+
+  function bindExports() {
+    var matrixBtn = $('btnExportMatrix');
+    if (matrixBtn) matrixBtn.addEventListener('click', function() { briefModal(buildMatrixBrief()); });
+    var guideBtn = $('btnExportGuideline');
+    if (guideBtn) guideBtn.addEventListener('click', function() { briefModal(buildGuidelineBrief()); });
   }
 
   function renderBadge() {
@@ -969,6 +1105,7 @@
     renderThemeDivergence();
     renderGuidelineDivergence();
     bindPmidModal();
+    bindExports();
     populateAnswerFilters();
     populateTopicFilters();
     bindAnswerFilters();

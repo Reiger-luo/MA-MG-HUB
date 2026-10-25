@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>工作台 · MA-MG-HUB</title>
 <link rel="icon" href="data:,">
-<link rel="stylesheet" href="assets/main.css?v=20261025T022834Z">
+<link rel="stylesheet" href="assets/main.css?v=20261025T051821Z">
 </head>
 <body>
 
@@ -23,6 +23,8 @@
     </div>
   </div>
 </nav>
+
+<div class="view-bar" id="viewBar" role="navigation" aria-label="视图切换"></div>
 
 <main class="main dashboard-main" id="mainContent">
   <div class="page-header dashboard-page-header">
@@ -46,6 +48,30 @@
     <div class="dashboard-stats" id="dashboardStats"></div>
   </section>
 
+  <!-- 三个工作视图：模块是同一条判断簇的切面，不按数据源切目录 -->
+  <nav class="dashboard-view-grid" aria-label="工作视图">
+    <a class="dashboard-view-card" href="pages/landscape.html?view=evidence&tab=overview">
+      <span class="dashboard-view-kicker">定位与判断</span>
+      <strong>证据与格局</strong>
+      <em>竞争定位 · 指南差异 · 本月动态 · Living Answers</em>
+    </a>
+    <a class="dashboard-view-card" href="pages/knowledge.html?view=experts&tab=graph">
+      <span class="dashboard-view-kicker">人</span>
+      <strong>专家与合作</strong>
+      <em>主题图谱 · 中国作者联络图</em>
+    </a>
+    <a class="dashboard-view-card" href="pages/msl.html?view=answers&tab=experts">
+      <span class="dashboard-view-kicker">可交付</span>
+      <strong>应答与准备</strong>
+      <em>专家画像 · 拜访准备 · Claim–Evidence</em>
+    </a>
+    <a class="dashboard-view-card dashboard-view-card-compact" href="pages/literature.html?view=toolbox&tab=trials">
+      <span class="dashboard-view-kicker">工具箱</span>
+      <strong>文献 · 试验 · 会议</strong>
+      <em>审阅与管线明细</em>
+    </a>
+  </nav>
+
   <div class="dashboard-priority-grid">
     <section class="workspace-panel dashboard-signals" id="dashboardSignals" aria-labelledby="dashboardSignalsTitle">
       <div class="panel-head">
@@ -55,7 +81,7 @@
         </div>
         <div class="panel-head-actions">
           <button class="btn" id="btnExportSignalBrief" type="button">📋 导出简报</button>
-          <a class="text-link" href="pages/literature.html?tab=literature">进入情报中心</a>
+          <a class="text-link" href="pages/literature.html?view=answers&tab=literature">查看文献速览</a>
         </div>
       </div>
       <section class="signal-board-group literature-group" aria-labelledby="literatureSignalGroupTitle">
@@ -86,14 +112,15 @@
   </div>
 </main>
 
-<script src="data/release-manifest.js?v=20261025T022834Z" defer></script>
-<script src="assets/common.js?v=20261025T022834Z" defer></script>
-<script src="data/dashboard-data.js?v=20261025T022834Z" defer></script>
-<script src="data/clinicalTrialsSummary.js?v=20261025T022834Z" defer></script>
-<script src="data/pipeline-status.js?v=20261025T022834Z" defer></script>
-<script src="data/signals-weekly.js?v=20261025T022834Z" defer></script>
-<script src="data/trial-signals-weekly.js?v=20261025T022834Z" defer></script>
-<script src="data/literature-recent.js?v=20261025T022834Z" defer></script>
-<script src="assets/dashboard.js?v=20261025T022834Z" defer></script>
+<script src="data/release-manifest.js?v=20261025T051821Z" defer></script>
+<script src="assets/common.js?v=20261025T051821Z" defer></script>
+<script src="assets/view.js?v=20261025T051821Z" defer></script>
+<script src="data/dashboard-data.js?v=20261025T051821Z" defer></script>
+<script src="data/clinicalTrialsSummary.js?v=20261025T051821Z" defer></script>
+<script src="data/pipeline-status.js?v=20261025T051821Z" defer></script>
+<script src="data/signals-weekly.js?v=20261025T051821Z" defer></script>
+<script src="data/trial-signals-weekly.js?v=20261025T051821Z" defer></script>
+<script src="data/literature-recent.js?v=20261025T051821Z" defer></script>
+<script src="assets/dashboard.js?v=20261025T051821Z" defer></script>
 </body>
 </html>

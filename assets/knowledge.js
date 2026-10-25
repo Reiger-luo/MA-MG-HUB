@@ -1458,10 +1458,8 @@
   }
 
   function openCommunity(communityId) {
-    activateTab('communities');
-    if (elCommunitySearch) elCommunitySearch.value = '';
-    if (elCommunitySignal) elCommunitySignal.value = 'all';
-    renderCommunities(communityId);
+    // 社区已降级为图谱分组视角：点击社区就回到图谱并按该社区着色
+    openCommunityGraph(communityId);
   }
 
   function openCommunityGraph(communityId) {
@@ -1487,6 +1485,11 @@
   }
 
   function activateTab(key) {
+    if (key === 'communities') {
+      // 兼容旧链接：社区不再是并列视图，落到图谱的社区着色模式
+      openCommunityGraph(elGraphCommunityFilter ? elGraphCommunityFilter.value : '');
+      return;
+    }
     if (tabController) {
       tabController.activate(key, false);
       return;
@@ -1685,7 +1688,7 @@
     } else if (initialTab === 'topics') {
       window.location.href = pageUrl('pages/landscape.html?tab=answers');
     } else if (['graph', 'communities', 'matrix', 'search'].indexOf(initialTab) !== -1) {
-      activateTab(initialTab);
+      activateTab(initialTab === 'communities' ? 'graph' : initialTab);
     }
   }
 
