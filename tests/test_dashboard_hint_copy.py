@@ -38,8 +38,10 @@ def test_dashboard_uses_reader_facing_wording_instead_of_pipeline_jargon():
 def test_trial_source_window_collapses_degenerate_ranges():
     js = DASHBOARD_JS.read_text(encoding="utf-8")
     assert "startTs < endTs" in js
-    # 起止相同或倒挂时只能显示单点，避免出现"14:53 — 14:53"
-    assert "本轮快照 " in js
+    # 起止相同或倒挂时不渲染区间，只留更新时间，避免出现"14:53 — 14:53"
+    assert "hasRange" in js
+    assert "本轮快照" not in js
+    assert "本轮比较" not in js
 
 
 def test_dashboard_artifact_marks_the_two_divergence_cadences():

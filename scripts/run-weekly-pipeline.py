@@ -124,8 +124,8 @@ def pipeline_steps(args, full_available: bool | None = None) -> list[PipelineSte
         ])
     if args.skip_downstream:
         return steps
-    # 三个注册源在同一次周更内连续抓取，构建阶段才能读到同一批新缓存：
-    # ChiCTR（28 天节奏）→ ChinaDrugTrials（每周）→ ClinicalTrials.gov（build-frontend 内实时抓取）
+    # 三个注册源都在同一次周更内连续抓取，构建阶段才能读到同一批新缓存：
+    # ChiCTR → ChinaDrugTrials → ClinicalTrials.gov（build-frontend 内实时抓取）
     steps.extend([
         PipelineStep(
             "refresh-chictr-cache",

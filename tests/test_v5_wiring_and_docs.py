@@ -134,13 +134,14 @@ def test_pipeline_and_ci_wire_new_artifacts_and_local_full_gate():
     assert "release-manifest.js" in status
 
 
-def test_clinical_trial_maintenance_runbook_defines_monthly_workflows():
+def test_clinical_trial_maintenance_runbook_defines_weekly_registry_workflows():
     runbook = (ROOT / "report" / "runbooks" / "clinicalTrialsMaintenance.md").read_text(encoding="utf-8")
     china_importer = (ROOT / "scripts" / "refresh-china-drug-trials-cache.py").read_text(encoding="utf-8")
     chictr_refresh = (ROOT / "scripts" / "refresh-chictr-cache.py").read_text(encoding="utf-8")
 
+    # 三个注册源已统一为每周刷新，runbook 不得再描述低频节奏
     for phrase in (
-        "每 28 天",
+        "每周",
         "CHICTR_COOKIE",
         "DownloadXml",
         "ChinaDrugTrials",

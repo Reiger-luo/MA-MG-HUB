@@ -654,21 +654,18 @@
   }
 
   function trialWindowLabel(source, windowData) {
-    var cadence = ({ weekly: '每周', '28_days': '28 天', monthly_manual: '月度人工' })[windowData.cadence] || '按来源节奏';
-    // 起止相同或倒挂时区间无意义（部分来源只有单次快照），只显示一个时间点
+    // 三个注册源都在同一次周一任务内刷新；旧产物里的 28_days / monthly_manual 只作历史兜底
+    var cadence = ({ weekly: '每周', '28_days': '每周', monthly_manual: '每周' })[windowData.cadence] || '每周';
+    // 基线没有严格早于当前快照时（单次快照 / 缓存未推进），只显示更新时间，不编造区间
     var startTs = Date.parse(String(windowData.window_start || ''));
     var endTs = Date.parse(String(windowData.window_end || ''));
-    var windowLabel = '本轮比较';
-    if (Number.isFinite(startTs) && Number.isFinite(endTs) && startTs < endTs) {
-      windowLabel = formatDateTime(windowData.window_start) + ' — ' + formatDateTime(windowData.window_end);
-    } else if (Number.isFinite(endTs)) {
-      windowLabel = '本轮快照 ' + formatDateTime(windowData.window_end);
-    } else if (Number.isFinite(startTs)) {
-      windowLabel = '本轮快照 ' + formatDateTime(windowData.window_start);
-    }
+    var hasRange = Number.isFinite(startTs) && Number.isFinite(endTs) && startTs < endTs;
+    var detail = [];
+    if (hasRange) detail.push(formatDateTime(windowData.window_start) + ' — ' + formatDateTime(windowData.window_end));
+    detail.push('更新 ' + formatDateTime(windowData.updated_at));
     return '<span class="trial-source-window"><strong>' + escapeHtml(source) + '</strong>' +
       '<em>变化 ' + escapeHtml(formatNumber(windowData.raw_change_count || 0)) + ' · ' + escapeHtml(cadence) + '</em>' +
-      '<small>' + escapeHtml(windowLabel) + ' · 更新 ' + escapeHtml(formatDateTime(windowData.updated_at)) + '</small></span>';
+      '<small>' + escapeHtml(detail.join(' · ')) + '</small></span>';
   }
 
   function renderTrialSignalWindow() {

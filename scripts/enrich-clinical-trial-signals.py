@@ -8,7 +8,7 @@ import json
 import re
 import subprocess
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -570,6 +570,42 @@ def build_candidates(previous_payload: dict[str, Any] | None = None) -> tuple[li
     ct_window_id = normalize_text(weekly.get("generated_at"))
     chictr_window_id = normalize_text(chictr_payload.get("last_verified") or chictr_payload.get("scraped_at"))
     cdt_window_id = normalize_text(cdt_changes.get("generated_at") or cdt_payload.get("generated_at"))
+    def snapshot_epoch(value: str) -> float | None:
+        """把来源侧各种时间串归一成可比较的秒数；解析不出来返回 None。"""
+        text = normalize_text(value)
+        if not text:
+            return None
+        candidate = text.replace(" ", "T", 1) if len(text) > 10 else text
+        for parse in (
+            lambda v: datetime.fromisoformat(v),
+            lambda v: datetime.strptime(v[:10], "%Y-%m-%d"),
+        ):
+            try:
+                stamp = parse(candidate)
+            except (ValueError, TypeError):
+                continue
+            if stamp.tzinfo is None:
+                stamp = stamp.replace(tzinfo=timezone.utc)
+            return stamp.timestamp()
+        return None
+
+    def ordered_window_start(baseline_id: str, current_id: str) -> str:
+        """只有基线严格早于当前快照时才给出区间起点。
+
+        基线来自 git HEAD 缓存、当前值来自工作区产物；当本轮刷新没有推进缓存，
+        或工作区缓存回退到更早版本时，两点会相等甚至倒挂，此时区间没有意义，
+        直接返回空串，由界面按"本轮快照"呈现。
+        """
+        baseline = normalize_text(baseline_id)
+        current = normalize_text(current_id)
+        if not baseline or not current or baseline == current:
+            return ""
+        baseline_epoch = snapshot_epoch(baseline)
+        current_epoch = snapshot_epoch(current)
+        if baseline_epoch is None or current_epoch is None:
+            return baseline
+        return baseline if baseline_epoch < current_epoch else ""
+
     chictr_baseline_payload = git_head_json(CHICTR_CACHE_PATH)
     chictr_baseline_id = normalize_text(chictr_baseline_payload.get("last_verified") or chictr_baseline_payload.get("scraped_at"))
     cdt_baseline_payload = git_head_json(CDT_CACHE_PATH)
@@ -655,8 +691,10 @@ def build_candidates(previous_payload: dict[str, Any] | None = None) -> tuple[li
         },
         "ChiCTR": {
             **(previous_windows.get("ChiCTR") or {}),
-            "cadence": "28_days", "updated_at": chictr_window_id or (previous_windows.get("ChiCTR") or {}).get("updated_at", ""),
-            "window_start": chictr_baseline_id or (previous_windows.get("ChiCTR") or {}).get("window_start", ""),
+            # 三个注册源统一在周一任务内刷新，节奏一律 weekly；
+            # ChiCTR 的详情页是分批增量迁移（detail-budget），属于抓取方式而非更新频率。
+            "cadence": "weekly", "updated_at": chictr_window_id or (previous_windows.get("ChiCTR") or {}).get("updated_at", ""),
+            "window_start": ordered_window_start(chictr_baseline_id, chictr_window_id),
             "window_end": chictr_window_id or (previous_windows.get("ChiCTR") or {}).get("window_end", ""),
             "comparison_available": bool(chictr_baseline_payload) if chictr_window_id else (previous_windows.get("ChiCTR") or {}).get("comparison_available", False),
             "raw_change_count": source_new_counts["ChiCTR"] if "ChiCTR" in advanced_sources else (previous_windows.get("ChiCTR") or {}).get("raw_change_count", 0),
@@ -664,8 +702,8 @@ def build_candidates(previous_payload: dict[str, Any] | None = None) -> tuple[li
         },
         "ChinaDrugTrials": {
             **(previous_windows.get("ChinaDrugTrials") or {}),
-            "cadence": "monthly_manual", "updated_at": cdt_window_id or (previous_windows.get("ChinaDrugTrials") or {}).get("updated_at", ""),
-            "window_start": cdt_baseline_id or (previous_windows.get("ChinaDrugTrials") or {}).get("window_start", ""),
+            "cadence": "weekly", "updated_at": cdt_window_id or (previous_windows.get("ChinaDrugTrials") or {}).get("updated_at", ""),
+            "window_start": ordered_window_start(cdt_baseline_id, cdt_window_id),
             "window_end": cdt_window_id or (previous_windows.get("ChinaDrugTrials") or {}).get("window_end", ""),
             "comparison_available": "old_count" in cdt_changes if cdt_window_id else (previous_windows.get("ChinaDrugTrials") or {}).get("comparison_available", False),
             "raw_change_count": source_new_counts["ChinaDrugTrials"] if "ChinaDrugTrials" in advanced_sources else (previous_windows.get("ChinaDrugTrials") or {}).get("raw_change_count", 0),
