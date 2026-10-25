@@ -31,7 +31,6 @@ MA-MG-HUB 重点回答：
 | 诊治格局 | [pages/landscape.html](pages/landscape.html) | 格局洞察、竞争矩阵、临床管线和 Living Answers |
 | 知识库 | [pages/knowledge.html](pages/knowledge.html) | 知识图谱、医学事务社区、证据矩阵、专题和中国作者网络 |
 | MSL 工作台 | [pages/msl.html](pages/msl.html) | China-only 专家画像、内容模块、拜访话题建议和 PMID 清单 |
-| 数据状态 | [pages/data-ops.html](pages/data-ops.html) | 数据源、公开产物、community audit、graph health 和后端选项 |
 
 历史页面 `pages/materials.html`、`pages/outputs.html`、`pages/progress.html` 和 `pages/competitive.html` 仅保留重定向入口。
 
@@ -46,7 +45,7 @@ MA-MG-HUB 重点回答：
 
 当前数量、生成时间和一致性状态不写入本文档，统一查看：
 
-- 网站“数据状态”页；
+- 首页发布状态条（数据源与更新时间）；
 - `data/pipeline-status.js`；
 - `data/release-manifest.js`；
 - `data/weekly-summary.md`。
@@ -62,7 +61,7 @@ MG-core gate + 证据等级 I–V gate + 独立来源频道
   ↓
 公开滚动层 / 社区语义层 / 知识图谱 / 策展专题 / 中国作者网络
   ↓
-工作台 / 情报中心 / 诊治格局 / 知识库 / MSL 工作台 / 数据状态
+工作台 / 情报中心 / 诊治格局 / 知识库 / MSL 工作台
 ```
 
 公开网站只部署必要的 HTML、CSS、JavaScript 和 JSON。full 文献、weekly 临时输入、LLM 缓存、成本日志和详细审计保留在本地。
@@ -118,7 +117,7 @@ python3 scripts/run-weekly-pipeline.py --mode authoritative-full --run-id weekly
 
 只读验证使用 `python3 scripts/run-weekly-pipeline.py --mode validate-only`；仅在明确复用当前自然周 `literature-ingest-latest.json` 时，才可使用 `--mode rebuild-full --reuse-ingest`。审计检查点写入 `.hermes-audit/pipeline-runs/`。只有完整公开产物契约全部生成、跨产物口径校验通过后才更新 `data/release-manifest.js`；同一 run id 同时写入活动页面资源 URL，降低 HTML、脚本和数据的缓存混版风险。
 
-ChinaDrugTrials 的人工导入流程见 [临床试验数据维护](report/runbooks/clinicalTrialsMaintenance.md)。手工修改 `data/*.js` 后出现发布漂移时，按 [Release Manifest 漂移修复](report/runbooks/releaseManifestRepair.md) 重建清单。
+ChinaDrugTrials 的人工导入流程见 [临床试验数据维护](report/runbooks/clinicalTrialsMaintenance.md)。诊治格局的两块中外差异（近一月文献主题差异、指南共识差异 Top 10）由离线脚本生成，重跑与验收见 [中外证据与指南差异月度分析](report/runbooks/monthlyDivergenceAnalysis.md)。手工修改 `data/*.js` 后出现发布漂移时，按 [Release Manifest 漂移修复](report/runbooks/releaseManifestRepair.md) 重建清单。
 
 ## 代码审查
 

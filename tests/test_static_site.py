@@ -15,7 +15,6 @@ ACTIVE_PAGES = [
     PROJECT / "pages" / "landscape.html",
     PROJECT / "pages" / "knowledge.html",
     PROJECT / "pages" / "msl.html",
-    PROJECT / "pages" / "data-ops.html",
 ]
 
 

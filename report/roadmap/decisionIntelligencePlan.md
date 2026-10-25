@@ -4,7 +4,7 @@
 >
 > 当前阶段：R1 设计决定已确认，按 Release 串行实施
 >
-> 维护规则：Release 状态由实现任务同步更新；动态数量和发布时间只进入数据状态产物，不写入本计划
+> 维护规则：Release 状态由实现任务同步更新；动态数量和发布时间只进入发布状态产物，不写入本计划
 >
 > 已上线基线：首页工作台以统一“信号板”分别呈现文献信号与临床试验信号，两组拥有独立强度口径、筛选和简报章节，不跨来源比较；试验注册频道与来源内信号均覆盖 ClinicalTrials.gov、ChiCTR、ChinaDrugTrials，并以来源 revision 门禁防止新缓存搭配旧分析。情报中心可按当前标签与筛选条件生成文献、中国、会议和临床试验 Markdown 简报。公开 rolling 与社区 recent 已统一 PMID 窗口，文献周信号只读取 ingest 真实新增；完整发布使用显式产物契约、统一缓存 run id 和清单 hash，GitHub Actions 发布验证只读，代码 PR 另有不阻断合并的 advisory 图谱审查，获批源码 push 后执行本地与 `main` 云端两次完整重建。该功能是来源层的浏览器内摘要，不是本计划中的 Decision Brief。
 
@@ -805,7 +805,7 @@ NMPA/CDE/NHSA、政务、支付、市场准入和 HEOR 不进入本模块。监�
 - 指南/监管/注册/会议不能获得 Oxford evidence level。
 - 任何 affirmative claim 无 source → quality gate 失败。
 
-**验收终止条件：** 用户无需理解算法，也能看到建议为何可信、哪里不确定、哪里需要全文核查；数据状态页可审计所有异常。
+**验收终止条件：** 用户无需理解算法，也能看到建议为何可信、哪里不确定、哪里需要全文核查；发布状态条与 `data/pipeline-status.js` 可审计所有异常。
 
 ## 6. UI、性能与无状态导出
 
@@ -820,7 +820,7 @@ NMPA/CDE/NHSA、政务、支付、市场准入和 HEOR 不进入本模块。监�
 | 诊治格局 | 医学策略问题 + Decision Brief + Claim–Evidence；回答“当前怎么判断” |
 | 知识库 | 图谱、社区、专题和 Claim 深挖；回答“判断如何连接” |
 | MSL 工作台 | China-only 专家 + question-driven 无状态访前 Brief；回答“和谁讨论什么” |
-| 数据状态 | intelligence QA、来源新鲜度、release coherence；回答“是否可审查” |
+| 发布状态 | intelligence QA、来源新鲜度、release coherence；回答“是否可审查” |
 
 页面布局方案只指现有 `pages/landscape.html`。R1 改造该页的 Living Answers 区域，不重构另外五个页面，也不改变六大页面或顶级导航。工作台只链接高影响 Delta，知识库只展开 Claim 关系，MSL 工作台只读取同一 Brief 生成访前准备。
 
@@ -955,7 +955,7 @@ Question IDs unique
 3. 诊治格局：战略问题、Claims、中国证据与临床实践、标签和来源可展开。
 4. 知识库：Claim 可回到图谱/专题/PMID。
 5. MSL：China-only、按问题生成 Brief、无记录功能。
-6. 数据状态：新增 intelligence QA 可审查。
+6. 发布状态：新增 intelligence QA 可审查。
 7. 导出：Markdown/打印包含来源与限制，刷新后无历史。
 8. GitHub Pages：线上数据文件 SHA 与 commit 一致，无 JS error。
 

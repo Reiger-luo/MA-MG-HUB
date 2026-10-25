@@ -1,6 +1,6 @@
 # MA-MG-HUB 文档入口
 
-`report/` 只保存需要长期阅读和维护的文档。网站运行数量、生成时间和发布状态不在这里重复维护，统一以网站“数据状态”页、`data/pipeline-status.js` 和 `data/release-manifest.js` 为准。
+`report/` 只保存需要长期阅读和维护的文档。网站运行数量、生成时间和发布状态不在这里重复维护，统一以首页发布状态条、`data/pipeline-status.js` 和 `data/release-manifest.js` 为准。
 
 ## 当前权威文档
 
@@ -11,6 +11,7 @@
 | [医学事务决策情报升级计划](roadmap/decisionIntelligencePlan.md) | 当前 R1–R6 实施路线 | Release 状态或范围变化 |
 | [Code Review Graph 审查流程](runbooks/codeReviewGraph.md) | 代码图准备、review 顺序、结论格式和故障降级 | 代码审查工具或规则变化 |
 | [临床试验数据维护](runbooks/clinicalTrialsMaintenance.md) | ClinicalTrials.gov、ChiCTR、ChinaDrugTrials 维护流程 | 数据源或导入流程变化 |
+| [中外证据与指南差异月度分析](runbooks/monthlyDivergenceAnalysis.md) | 近一月中外文献主题差异、中外指南共识差异的生成、回验与验收 | 分析口径、语料或引文回验规则变化 |
 | [Oxford CEBM 证据等级参考](reference/evidenceGrading.md) | 证据等级的方法学和脚本映射 | 分类规则或正式依据变化 |
 
 ## 架构决定

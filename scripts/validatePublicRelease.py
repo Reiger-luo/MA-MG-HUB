@@ -50,6 +50,30 @@ def pmidSet(items) -> set[str]:
     }
 
 
+# 注册类试验信号不得把"招募中/状态变化"说成疗效结论
+EFFICACY_CLAIM_PATTERN = re.compile(
+    r"(?:证实|证明|显示|表明|提示).{0,24}(?:疗效|有效|改善|降低|优于|阳性|达到主要终点)", re.I
+)
+NEGATION_CUES = ("不代表", "不意味着", "不等同", "不等于", "不能", "不得", "并非", "尚未", "未能", "非", "无法")
+
+
+def claimsEfficacyFromRegistry(narrative: str) -> bool:
+    """逐句判断是否把注册状态写成疗效结论。
+
+    按句切分而不是拼接整段：evidenceBoundary 常以"招募状态不代表疗效"收尾，
+    整段拼接会让上一句的"提示…"跨句命中下一句的"疗效"，产生假阳性。
+    命中片段内出现否定线索（不代表/不能/尚未…）时视为合规表述，不计为夸大。
+    """
+    for sentence in re.split(r"[。；;\n]", str(narrative or "")):
+        for match in EFFICACY_CLAIM_PATTERN.finditer(sentence):
+            # 否定线索可能出现在动词前（"不能证明有效"），因此回看前 8 个字符
+            window = sentence[max(0, match.start() - 8):match.end()]
+            if any(cue in window for cue in NEGATION_CUES):
+                continue
+            return True
+    return False
+
+
 def isPredominantlyChinese(value) -> bool:
     text = str(value or "").strip()
     if not text:
@@ -230,8 +254,8 @@ def validateRecentContracts() -> list[str]:
         if actualRefs != allowedRefs:
             errors.append(f"试验信号 {signalId} 的官方登记引用与确定性候选不一致")
         if signal.get("eventType") in {"results_posted", "status_change"}:
-            narrative = " ".join(str(signal.get(key) or "") for key in ("takeaway", "whySignal", "evidenceBoundary"))
-            if re.search(r"(?:证实|证明|显示|表明|提示).{0,24}(?:疗效|有效|改善|降低|优于|阳性|达到主要终点)", narrative, re.I):
+            fields = (signal.get("takeaway"), signal.get("whySignal"), signal.get("evidenceBoundary"))
+            if any(claimsEfficacyFromRegistry(field) for field in fields):
                 errors.append(f"试验信号 {signalId} 把注册状态夸大为疗效结论")
     summary = trialSignals.get("signal_summary") or {}
     expectedStrengthCounts = {

@@ -18,7 +18,6 @@ activePages = (
     projectPath / "pages" / "landscape.html",
     projectPath / "pages" / "knowledge.html",
     projectPath / "pages" / "msl.html",
-    projectPath / "pages" / "data-ops.html",
 )
 
 

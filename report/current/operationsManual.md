@@ -30,12 +30,11 @@ MG Intelligence Hub 是面向 MG 医学事务团队的静态情报工作站。�
 
 | 页面 | 文件 | 核心任务 |
 | --- | --- | --- |
-| 工作台 | `index.html` | 全宽分组扫描本周文献信号、临床试验信号和数据状态 |
+| 工作台 | `index.html` | 全宽分组扫描本周文献信号与临床试验信号，并在发布状态条查看数据源与更新时间 |
 | 情报中心 | `pages/literature.html` | 浏览公开文献、中国情报、会议和临床试验，并按当前标签与筛选条件生成简报 |
-| 诊治格局 | `pages/landscape.html` | 解释格局变化、竞争证据和 Living Answers |
+| 诊治格局 | `pages/landscape.html` | 解释竞争定位、两个独立差异模块（近一月文献主题差异 / 指南共识差异）和 Living Answers |
 | 知识库 | `pages/knowledge.html` | 使用图谱、社区、证据矩阵、专题和中国作者网络 |
 | MSL 工作台 | `pages/msl.html` | China-only 专家检索与拜访前准备 |
-| 数据状态 | `pages/data-ops.html` | 审查来源、产物、质量和发布一致性 |
 
 历史 URL 由重定向页兼容，不进入主导航。
 
@@ -52,7 +51,7 @@ MG Intelligence Hub 是面向 MG 医学事务团队的静态情报工作站。�
 
 当前数量、时间和一致性状态只从以下位置读取：
 
-- 网站“数据状态”页；
+- 首页发布状态条（完整发布状态、数据源与更新时间）；
 - `data/pipeline-status.js`；
 - `data/release-manifest.js`；
 - 对应 `data/*.js` 的 `generated_at` 或摘要字段。
@@ -132,7 +131,7 @@ PubMed 主文献流必须先通过 MG-core，再通过证据等级 I–V 门控�
 - 图谱关系属于 abstract-level 线索，不代表全文级因果。
 - 药物标签属于文本相关线索，不代表治疗或疗效判断。
 
-社区分类数量、图谱节点和关系状态由数据状态页显示。中国作者网络的医院数和合作边在知识库页面显示；机构解析率读取 `data/china-author-network.js` 的 `summary.graph_author_hospital_parse_rate`。数据状态页目前不重复展示该解析率。
+社区分类数量、图谱节点和关系状态由 `data/communityAudit.js` 与 `data/graphHealth.js` 提供，在知识库页面显示。中国作者网络的医院数和合作边在知识库页面显示；机构解析率读取 `data/china-author-network.js` 的 `summary.graph_author_hospital_parse_rate`。首页发布状态条不重复展示该解析率。
 
 ## 7. 情报中心与会议
 
@@ -177,7 +176,7 @@ MSL 工作台是 China-only：
 
 ClinicalTrials.gov、ChiCTR 和 ChinaDrugTrials 采用不同更新方式，但统一进入 `clinical-trials-data.js` 和 `source-signals.js` 的试验注册频道。三个来源在同一次周一 05:00 周更内连续抓取，再统一构建，且同为每周节奏；`trial-signals-weekly.js` 为每个来源保留自己的最新比较窗口，因此未到更新节奏或来源暂时失败时不会清空 last-good。来源频道同时保留原始 `items` 与门控后的 `weekly_signals`，两者不可互相替代。详细流程见 [clinicalTrialsMaintenance.md](../runbooks/clinicalTrialsMaintenance.md)。
 
-ChinaDrugTrials 从官方检索页全量翻页抓取，并逐条读取详情页补全分期、申办者、首次公示日期和入组信息；平台 RSS 支持 `keywords` 主题过滤，只返回该主题最近 20 条登记，因此周更时作为「新登记早报 + 覆盖度核对」，结果写入飞书周报与数据状态页，差分口径为周对周。RSS 不含状态和分期，因此不驱动缓存更新，也不做每日推送。ChiCTR 的阿里云 WAF 挑战由无头浏览器自动求解，`CHICTR_COOKIE` 保留为人工兜底。人工提供的官方导出仍可作为备用导入路径。
+ChinaDrugTrials 从官方检索页全量翻页抓取，并逐条读取详情页补全分期、申办者、首次公示日期和入组信息；平台 RSS 支持 `keywords` 主题过滤，只返回该主题最近 20 条登记，因此周更时作为「新登记早报 + 覆盖度核对」，结果写入飞书周报与 `data/pipeline-status.js`，差分口径为周对周。RSS 不含状态和分期，因此不驱动缓存更新，也不做每日推送。ChiCTR 的阿里云 WAF 挑战由无头浏览器自动求解，`CHICTR_COOKIE` 保留为人工兜底。人工提供的官方导出仍可作为备用导入路径。
 
 ClinicalTrials.gov 每次构建对比上一期快照（`clinicaltrials-weekly-changes-snapshot.json`），把近 7 天新登记、状态变化、结果发布、字段更新和移除提炼为 `clinicalTrialsSummary.js` 的 `weekly_changes`。全部变化作为试验信号候选，不受首页展示条数截断影响。首次运行只建立基线；相同快照重复构建保持零变化。阶段字段统一归一化，公开 JS 和对比快照均使用原子写入。
 
@@ -216,7 +215,7 @@ python3 scripts/run-weekly-pipeline.py --mode authoritative-full --run-id weekly
 
 发布验证 workflow 仍仅手动 `workflow_dispatch`，运行测试、`validate-only` 和静态构建；权限为只读，不替代本地 full 驱动周更，也不会提交局部生成结果。PR 代码图 workflow 由同仓代码 PR 触发，只对 `scripts/**`、`assets/*.js`、`worker/**` 和 `tests/**` 输出 advisory 评论。Post-push Graph workflow 在这些源码或 Graph 配置进入 `main` 后完整重建一次并把证据写入 summary；两个 workflow 都不读取 full、不生成 `data/**`、不更新 release manifest，也不以风险分数阻断合并。
 
-数据状态中的“更新时间”优先读取产物自身 `generated_at`、`last_verified` 或 `snapshot_date`，不以文件 mtime 伪装数据新鲜度。公开 rolling 权威源固定为 `literature-recent.js`；社区 recent 只用于覆盖核对。过期来源显示黄色 warning，缺失或错误显示红色。
+发布状态条中的“更新时间”优先读取产物自身 `generated_at`、`last_verified` 或 `snapshot_date`，不以文件 mtime 伪装数据新鲜度。公开 rolling 权威源固定为 `literature-recent.js`；社区 recent 只用于覆盖核对。过期来源显示黄色 warning，缺失或错误显示红色。
 
 ## 11. 文档与自动报告
 
@@ -258,3 +257,35 @@ git diff --check
 2. 持续提高来源覆盖、引用回验和发布一致性。
 3. 保持公开静态架构，只有明确触发条件出现时才评估窄职责后端。
 4. 持续抽样审计 MG-core、证据分级、社区边界和机构归一化。
+
+## 15. 中外差异两块模块（更新节奏不同）
+
+诊治格局有两个**互相独立**的差异模块，不要合并成一块，因为更新节奏根本不同：
+
+| 模块 | 回答的问题 | 更新节奏 | 数据源 | 失败影响 |
+| --- | --- | --- | --- | --- |
+| 近一月中外文献主题差异 | 中外**正在研究什么** | 随文献周更自动重算，窗口滚动前移 | `data/china-foreign-themes.json` | 页面保留上一窗口并标黄「窗口已 N 天未更新」 |
+| 中外指南共识差异 | 中外**规定该怎么做** | 新增/替换指南全文后手动重跑 | `data/guideline-divergence.json` | 页面继续显示上一版语料与生成时间 |
+
+页面用两个独立面板呈现：滚动模块带青绿顶条与 `⟳ 周更滚动` 标签，指南模块带靛蓝顶条与 `◈ 新指南入库后更新` 标签；每个面板头部有自己的状态条和元信息行（窗口/语料/生成时间/更新方式），互不引用对方的数字。
+
+**近一月中外文献主题差异**（`scripts/analyze-china-foreign-themes.py`）：
+
+- 窗口按 PubMed `entry_date` 取近 30 天新增文献，按 `china_related` 分中外两组；两侧标签统一为**「中国」与「国际」**，不使用「非中国」；
+- `deepseek-chat` 按 18 项受控主题表逐篇打标，**篇数只由代码聚合**；模型在叙述里自报的篇数会在落盘前被删除（`tone_guard.model_count_claims_removed` 记录删除处数）；
+- **这是窗口趋势观察，不是长期结构判断**：一个月只有几十篇，某侧 0 篇只说明本月未见发表。代码强制把「空白/缺位/代差/落后/长期不足/结构性缺失」改写为「本月未见新增/本窗口未见」等窗口限定表述，一侧 0 篇时置信度不得为 high；页面固定展示 `scope_note` 说明这一口径；
+- 归纳 5 条差异（本月关注点、方法学取向、人群覆盖、终点取向、可及性视角、证据成熟度），每条给出两侧本月在发什么、对工作节奏意味着什么、可执行动作；
+- 卡片顶部的中外比例条按两侧篇数实时计算；
+- 篇数按钮点开为悬浮弹窗，列出该侧本窗口内全部 PMID（标题、期刊、研究角度、PubMed 链接）；
+- 周更管线在 `build-frontend` 之前以 `--days 30 --skip-if-current` 调用：窗口未推进时直接跳过，不重复计费；该步为 `optional`，LLM 失败不阻塞发布，但会留下过期标记。
+
+**中外指南共识差异 Top 10**（`scripts/guideline-stance-extract.py` + `scripts/analyze-guideline-divergence.py`）：
+
+- 逐份指南按 16 个维度提取立场卡，每张卡必须带原文逐字引文；
+- **面向读者的文本一律用可读短名**（如「中国 2025 MG 指南」「英国 2025 MG 指南」），短名由 `scripts/common/guidelineLabels.py` 按文件名规则生成；`g01`–`gNN` 只是语料内部代号，仅保留在 `evidence[].doc` 与 `corpus[].key` 用于溯源，不得出现在标题、立场、影响、动作或语料清单里。命名规则调整后用 `--relabel-only` 就地修正，不必重跑 LLM；
+- 维度级中外比对后合并排序为 Top 10，每条给出中国/国际立场、为什么重要、医学部动作和可展开的原文引文；
+- 引文按 NFKC 规范化回验原文，结果标记「逐字命中 / 部分命中 / 待核对」，面板元信息行显示整体回验率；
+- 语料清单在折叠区展示，含中国/国际/中国台湾分组、年份和更新触发条件；
+- **不随文献周更改动**：只有新增或替换指南/共识全文时才重跑，避免每周重算 34 份 PDF。
+
+两块内容都来自公开全文或摘要，只作为医学信息与证据生成的线索；对外表述前必须核对原文，abstract 级差异不能直接当成诊疗结论。完整流程见 [monthlyDivergenceAnalysis.md](../runbooks/monthlyDivergenceAnalysis.md)。

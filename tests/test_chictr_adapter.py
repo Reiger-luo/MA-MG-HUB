@@ -26,7 +26,8 @@ def test_tracked_chictr_seed_contains_only_verified_public_fields():
     by_id = {item["registry_id"]: item for item in payload["records"]}
 
     assert payload["source"] == "ChiCTR official registry"
-    assert payload.get("mode", "cache") in {"cache", "manual", "live"}
+    # live_partial：XML 直连分批迁移未完成时的合法模式（见 report/runbooks/clinicalTrialsMaintenance.md）
+    assert payload.get("mode", "cache") in {"cache", "manual", "live", "live_partial"}
     # Full scrape: 97 MG-related trials (was 4 seed records)
     assert len(by_id) >= 90, f"Expected >=90 ChiCTR records, got {len(by_id)}"
     # Original seed records must still be present

@@ -32,7 +32,6 @@ ACTIVE_HTML = [
     PROJECT / "pages" / "landscape.html",
     PROJECT / "pages" / "knowledge.html",
     PROJECT / "pages" / "msl.html",
-    PROJECT / "pages" / "data-ops.html",
 ]
 
 
@@ -145,6 +144,15 @@ def pipeline_steps(args, full_available: bool | None = None) -> list[PipelineSte
             optional=True,
         ),
     ])
+    # 近一月中外文献主题差异随文献周更滚动重算：必须在 build-frontend 之前，
+    # 否则 landscape-data.js 会读到上一周的窗口。窗口未推进时脚本自跳过，不重复计费。
+    if not args.skip_llm:
+        steps.append(PipelineStep(
+            "analyze-china-foreign-themes",
+            py("analyze-china-foreign-themes.py") + ["--days", "30", "--skip-if-current"],
+            outputs=[DATA / "china-foreign-themes.json"],
+            optional=True,
+        ))
     buildFrontendCommand = py("build-frontend-data.py")
     if full_available:
         buildFrontendCommand.append("--rebuild-experts-from-full")

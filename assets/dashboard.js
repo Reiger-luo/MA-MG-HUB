@@ -114,6 +114,20 @@
     var fullCount = storage.semantic_full_count != null ?
       storage.semantic_full_count : (data.stats || {}).total_articles;
 
+    // 数据源更新状态：暴露来源健康度，替代已下线的「数据状态」页
+    var skipSources = { releaseConsistency: 1, fullStorage: 1 };
+    var sourceItems = (pipelineData.sources || []).filter(function(item) {
+      return !skipSources[item.id];
+    });
+    var sourceOk = sourceItems.filter(function(item) { return item.status === 'ok'; }).length;
+    var sourceLabel = sourceItems.length ? sourceOk + '/' + sourceItems.length + ' 源正常' : '待核对';
+    var sourceTitle = sourceItems.length
+      ? sourceItems.map(function(item) {
+          return (item.name || item.id) + ' · ' + (item.status_label || item.status || '') +
+            (item.meta ? ' · ' + item.meta : '');
+        }).join('\n')
+      : 'PubMed · ClinicalTrials.gov · ChiCTR · CDE';
+
     target.innerHTML =
       '<span class="dashboard-release-state ' + releaseClass + '">' +
         '<i aria-hidden="true"></i>' + escapeHtml(releaseLabel) +
@@ -122,7 +136,9 @@
       '<span class="dashboard-release-chip">语义底座 <strong>' + escapeHtml(formatNumber(fullCount)) + '</strong></span>' +
       '<span class="dashboard-release-chip">完整发布 <time datetime="' + escapeHtml(releasedAt) + '">' +
         escapeHtml(formatDateTime(releasedAt)) +
-      '</time></span>';
+      '</time></span>' +
+      '<span class="dashboard-release-chip dashboard-source-chip" title="' +
+        escapeHtml(sourceTitle) + '">数据源 <strong>' + escapeHtml(sourceLabel) + '</strong></span>';
   }
 
   function renderStats() {

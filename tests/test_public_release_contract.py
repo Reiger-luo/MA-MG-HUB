@@ -15,7 +15,6 @@ ACTIVE_PAGES = (
     PROJECT / "pages" / "landscape.html",
     PROJECT / "pages" / "knowledge.html",
     PROJECT / "pages" / "msl.html",
-    PROJECT / "pages" / "data-ops.html",
 )
 
 
@@ -95,6 +94,32 @@ def test_all_local_lazy_loaders_inherit_the_release_token():
     assert "hub.withReleaseVersion(src)" in knowledge
     assert "hub.loadScript(src, callback)" in literature
     assert "var loader = hub.loadScript" in chinaNetwork
+
+
+def test_registry_status_narratives_are_judged_per_sentence():
+    """注册状态类试验信号的疗效夸大判定必须逐句，且识别否定表述。
+
+    历史缺陷：takeaway/whySignal/evidenceBoundary 拼接成整段后做正则，
+    上一句的"提示…推进"会跨句命中下一句的"招募状态不代表疗效"，误判为夸大。
+    """
+    from scripts.validatePublicRelease import claimsEfficacyFromRegistry
+
+    compliant = [
+        "招募状态不代表疗效或安全性结果。",
+        "Phase 2关键试验进入招募阶段，提示该品种gMG中期开发推进。",
+        "试验尚未达到主要终点。",
+        "该结果不能证明有效。",
+    ]
+    for text in compliant:
+        assert claimsEfficacyFromRegistry(text) is False, text
+
+    overclaim = [
+        "Phase 2 试验显示疗效显著改善。",
+        "研究结果表明达到主要终点。",
+        "数据显示 MG-ADL 显著改善。",
+    ]
+    for text in overclaim:
+        assert claimsEfficacyFromRegistry(text) is True, text
 
 
 def test_committed_release_passes_read_only_validation():

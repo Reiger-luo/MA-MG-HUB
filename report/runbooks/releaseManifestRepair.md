@@ -8,7 +8,7 @@
 python3 scripts/validatePublicRelease.py --source-only --require-release
 ```
 
-输出 `release manifest 哈希不符：<文件名>` 即为漂移。首页"数据状态"与发布状态条也会显示漂移。
+输出 `release manifest 哈希不符：<文件名>` 即为漂移。首页发布状态条会显示漂移。
 
 ## 修复（三步）
 

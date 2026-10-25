@@ -12,6 +12,9 @@ data/literature-recent.json
 data/literature-ingest-latest.json
 data/pubmed-author-institution-index.json
 data/pubmed-entity-normalization-index.json
+# 月度 LLM 分析中间产物（公开前端只发布其派生 .js）
+data/china-foreign-themes.json
+data/guideline-divergence.json
 data/archive/
 
 # LLM 引擎层（阶段 0）— 密钥、缓存、成本日志不入仓库

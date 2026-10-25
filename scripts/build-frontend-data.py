@@ -41,6 +41,10 @@ ENTITY_NORMALIZATION_INDEX_PATH = DATA_DIR / "pubmed-entity-normalization-index.
 CHINA_REGULATORY_PATH = DATA_DIR / "china-regulatory-status.json"
 CLINICALTRIALS_CACHE_PATH = DATA_DIR / "clinicaltrials-pipeline-cache.json"
 CHICTR_CACHE_PATH = DATA_DIR / "chictr-trials-cache.json"
+# LLM 分析产物（由 scripts/analyze-*.py 生成，前端数据构建时读入）
+THEME_DIVERGENCE_PATH = DATA_DIR / "china-foreign-themes.json"
+GUIDELINE_DIVERGENCE_PATH = DATA_DIR / "guideline-divergence.json"
+# 关键注册研究清单：滚动窗口（近一年）之外的 pivotal 全文，单列以免低估已上市药物
 INGEST_MANIFEST_PATH = DATA_DIR / "literature-ingest-latest.json"
 FRONTEND_QUICK_EXPERT_LIMIT = 20
 SIGNAL_WINDOW_DAYS = 7
@@ -226,7 +230,7 @@ DRUG_KEYWORDS = {
     "Zilucoplan": ["zilucoplan"],
     "Gefurulimab": ["gefurulimab"],
     "Nipocalimab": ["nipocalimab"],
-    "Batoclimab": ["batoclimab"],
+    "Batoclimab": ["batoclimab", "hbm9161", "恩力达"],
     "Telitacicept": ["telitacicept", "rc18", "rc-18"],
     "Rituximab": ["rituximab"],
 }
@@ -458,7 +462,7 @@ PIPELINE = [
     {"name": "Efgartigimod", "target": "FcRn", "route": "IV/SC", "status": "已上市", "owner": "argenx"},
     {"name": "Rozanolixizumab", "target": "FcRn", "route": "SC", "status": "已上市", "owner": "UCB"},
     {"name": "Nipocalimab", "target": "FcRn", "route": "IV", "status": "临床后期", "owner": "Johnson & Johnson"},
-    {"name": "Batoclimab", "target": "FcRn", "route": "SC", "status": "临床开发", "owner": "Immunovant / Harbour"},
+    {"name": "Batoclimab", "target": "FcRn", "route": "SC", "status": "已上市", "owner": "CSPC / Harbour BioMed（原研 HanAll）"},
     {"name": "Zilucoplan", "target": "C5", "route": "SC", "status": "已上市", "owner": "UCB"},
     {"name": "Ravulizumab", "target": "C5", "route": "IV", "status": "已上市", "owner": "Alexion"},
     {"name": "Eculizumab", "target": "C5", "route": "IV", "status": "已上市", "owner": "Alexion"},
@@ -520,51 +524,6 @@ LANDSCAPE_CHANGE_SPECS = [
     },
 ]
 
-CHINA_EVIDENCE_DIRECTION_SPECS = [
-    {
-        "id": "fcrnTargeted",
-        "dimension": "FcRn 靶向治疗",
-        "keywords": ["fcrn", "efgartigimod", "rozanolixizumab", "nipocalimab", "batoclimab"],
-        "analysis_angle": "看中国证据是否更多集中在真实世界、起效和复治周期，而非重复 RCT 结论。",
-    },
-    {
-        "id": "complementTargeted",
-        "dimension": "补体抑制",
-        "keywords": ["complement", "zilucoplan", "ravulizumab", "eculizumab", "c5 inhibitor"],
-        "analysis_angle": "看 AChR+ 人群、感染预防和长期维持证据在中外文献中的侧重点。",
-    },
-    {
-        "id": "bCellBaffApril",
-        "dimension": "B 细胞 / BAFF-APRIL",
-        "keywords": ["b cell", "b-cell", "rituximab", "inebilizumab", "telitacicept", "blys", "april"],
-        "analysis_angle": "看中国证据是否沉淀出本土已获批药物、难治亚型或机制探索方向。",
-    },
-    {
-        "id": "realWorldPath",
-        "dimension": "真实世界路径",
-        "keywords": ["real-world", "registry", "observational", "retrospective", "cohort"],
-        "analysis_angle": "看用药路径、联合治疗、减激素和随访终点是否具备本土实践差异信号。",
-    },
-    {
-        "id": "safetyMonitoring",
-        "dimension": "安全性与监测",
-        "keywords": ["safety", "adverse", "infection", "tolerability", "pharmacovigilance", "faers"],
-        "analysis_angle": "看中外证据是否在 AE 采集、感染风险、长期监测和停药原因上形成不同问题清单。",
-    },
-    {
-        "id": "specialPopulation",
-        "dimension": "特殊人群 / 亚型",
-        "keywords": ["juvenile", "elderly", "pregnancy", "seronegative", "musk", "crisis", "new-onset"],
-        "analysis_angle": "看中国证据是否更多补充儿童、老年、MuSK、血清阴性或危象管理场景。",
-    },
-    {
-        "id": "biomarkerMechanism",
-        "dimension": "机制与生物标志物",
-        "keywords": ["biomarker", "autoantibody", "mechanism", "pathogenesis", "cytokine", "proteomic"],
-        "analysis_angle": "看机制研究是否能转化为专家深访问题，而不是直接推导治疗路径差异。",
-    },
-]
-
 DRUG_POSITIONING = {
     "Efgartigimod": {
         "mechanism": "FcRn",
@@ -595,12 +554,18 @@ DRUG_POSITIONING = {
     },
     "Batoclimab": {
         "mechanism": "FcRn",
-        "population": "gMG 及自身抗体疾病开发人群",
-        "positioning": "SC FcRn 开发方案，关注疗效、白蛋白/脂质相关安全性和中国开发线索。",
-        "speed": "待观察",
-        "convenience": "SC",
-        "safety": "白蛋白、脂质和 IgG 下降相关监测",
-        "competition": "与已上市 FcRn 方案比较时需先区分证据阶段。",
+        "population": "AChR+ 成人 gMG（与常规治疗联用）",
+        "positioning": (
+            "2026-10 中国获批的 SC FcRn 方案，首款在中国完成 gMG 全程临床开发的抗 FcRn 疗法；"
+            "680 mg 每周一次 ×6 次后观察 4 周为 9 周周期，适合围绕本土 III 期数据、固定周期给药和皮下便利性展开。"
+        ),
+        "speed": "快（第 2 周即可观察到改善）",
+        "convenience": "SC（680 mg 每周一次，9 周周期）",
+        "safety": "外周水肿（38.8% vs 4.6%）、白蛋白下降（停药可恢复）、IgG 与胆固醇相关监测",
+        "competition": (
+            "与 efgartigimod / rozanolixizumab / nipocalimab 同属 FcRn 赛道；"
+            "差异化看点是纯中国 III 期证据、固定 9 周周期与石药商业化渠道，而非机制差异。"
+        ),
     },
     "Zilucoplan": {
         "mechanism": "C5",
@@ -2397,55 +2362,53 @@ def refs_with_recent_window(refs, days=30):
     return [ref for ref in refs if (parse_date(ref.get("entry_date")) or datetime.min) >= cutoff]
 
 
-def build_china_evidence_direction_comparison(recent):
-    latest = latest_entry_date(recent)
-    cutoff = latest - timedelta(days=365)
-    directions = []
-    for spec in CHINA_EVIDENCE_DIRECTION_SPECS:
-        china_scored = []
-        non_china_scored = []
-        for article in recent:
-            dt = parse_date(article.get("entry_date")) or datetime.min
-            if dt < cutoff:
-                continue
-            text = text_of(article)
-            hits = sum(1 for word in spec["keywords"] if word in text)
-            if hits < 1:
-                continue
-            if_val = float(article.get("journal_if") or 0)
-            age_bonus = max(0, 365 - (latest - dt).days) / 120 if dt != datetime.min else 0
-            score = hits * 5 + evidence_score(article.get("evidence_level")) + if_val / 3 + age_bonus
-            bucket = china_scored if article.get("china_related") else non_china_scored
-            bucket.append((score, dt, article))
-        china_scored.sort(key=lambda item: (-item[0], -item[1].timestamp()))
-        non_china_scored.sort(key=lambda item: (-item[0], -item[1].timestamp()))
-        china_count = len(china_scored)
-        non_china_count = len(non_china_scored)
-        total = china_count + non_china_count
-        china_share = round(china_count / total * 100, 1) if total else 0
-        if china_count and china_share >= 30:
-            signal = "中国相关证据占比偏高，值得阅读全文判断是否有本土路径沉淀。"
-        elif china_count:
-            signal = "已有中国相关线索，但更适合作为情报入口而非差异结论。"
-        else:
-            signal = "近一年未见明确中国相关 abstract，暂不形成中外比较判断。"
-        directions.append({
-            "id": spec["id"],
-            "dimension": spec["dimension"],
-            "analysis_angle": spec["analysis_angle"],
-            "china_count": china_count,
-            "non_china_count": non_china_count,
-            "china_share": china_share,
-            "signal": signal,
-            "china_refs": [compact_article(item[2]) for item in china_scored[:4]],
-            "non_china_refs": [compact_article(item[2]) for item in non_china_scored[:4]],
-        })
-    return {
-        "window_start": cutoff.strftime("%Y-%m-%d"),
-        "window_end": latest.strftime("%Y-%m-%d"),
-        "source": "近一年 PubMed abstract 与元数据",
-        "directions": directions,
-    }
+def load_llm_analysis(path):
+    """读取 LLM 分析产物（data/*.json）。缺失或损坏时返回 None，前端走空态。"""
+    if not path.exists():
+        return None
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+
+
+def build_theme_divergence():
+    """近一月中外文献主题差异：LLM 受控主题标注 + 代码聚合计数与 PMID 回验。"""
+    payload = load_llm_analysis(THEME_DIVERGENCE_PATH)
+    if not payload:
+        return {
+            "status": "pending_analysis",
+            "status_label": "等待分析",
+            "note": "尚未生成中外主题差异；运行 scripts/analyze-china-foreign-themes.py 后重建前端数据。",
+            "divergences": [],
+            "topic_counts": {},
+        }
+    payload["status"] = "ready"
+    payload["status_label"] = (
+        f"{payload.get('window_start', '-')} 至 {payload.get('window_end', '-')}"
+        f" · {payload.get('total_count', 0)} 篇"
+    )
+    return payload
+
+
+def build_guideline_divergence():
+    """中外指南/共识差异 Top10：LLM 全文立场提取 + 维度比对，引文逐字回验原文。"""
+    payload = load_llm_analysis(GUIDELINE_DIVERGENCE_PATH)
+    if not payload:
+        return {
+            "status": "pending_analysis",
+            "status_label": "等待分析",
+            "note": "尚未生成指南差异；运行 scripts/analyze-guideline-divergence.py 后重建前端数据。",
+            "divergences": [],
+            "corpus": [],
+        }
+    payload["status"] = "ready"
+    counts = payload.get("corpus_count") or {}
+    payload["status_label"] = (
+        f"中国 {counts.get('china', 0)} 份 / 国际 {counts.get('international', 0)} 份"
+        f"（含台湾 {counts.get('taiwan', 0)} 份）"
+    )
+    return payload
 
 
 def build_landscape(recent):
@@ -2579,10 +2542,15 @@ def build_landscape(recent):
             "abstract_limitation": "本答案基于标题、摘要和元数据生成，只适合作为 MSL 准备提纲；疗效数值、亚组、安全性发生率和正式医学表述需阅读全文后确认。",
         })
 
+    theme_divergence = build_theme_divergence()
+    guideline_divergence = build_guideline_divergence()
+
     return {
         "generated_at": generated_at,
         "overview": {
             "month_change_count": len(monthly_changes),
+            "theme_divergence_count": len(theme_divergence.get("divergences") or []),
+            "guideline_divergence_count": len(guideline_divergence.get("divergences") or []),
             "competitive_count": len(approved_competitive_matrix),
             "clinical_pipeline_count": len(clinical_pipeline.get("items") or []),
             "living_answer_count": len(living_answers),
@@ -2605,20 +2573,13 @@ def build_landscape(recent):
         "china_regulatory_status": regulatory_meta,
         "living_answers": living_answers,
         "china_landscape": {
-            "principle": "中外证据方向可由近一年 PubMed abstract 自动提示；真正的诊治差异必须等待指南/共识全文、说明书、准入和原文核对后沉淀。",
-            "guideline_consensus_slot": {
-                "title": "指南/共识与路径差异",
-                "status": "waiting_for_source",
-                "status_label": "等待接口",
-                "note": "等待全球核心指南/共识处理完成后接入；这里将沉淀推荐强度、治疗顺序、适用人群和路径差异，不由 abstract 自动下结论。",
-                "expected_inputs": [
-                    "中国指南/专家共识全文结构化数据",
-                    "国际核心指南/共识全文结构化数据",
-                    "NMPA 说明书、医保/准入和适应证范围",
-                    "MSL 阅读全文后的关键差异摘录",
-                ],
-            },
-            "evidence_direction_comparison": build_china_evidence_direction_comparison(recent),
+            "principle": (
+                "主题差异来自近一个月中外新增文献摘要的 LLM 受控标注，计数与 PMID 由代码回验；"
+                "指南差异来自中外指南/共识全文的结构化立场提取与逐字引文回验。两者都只作为医学信息线索，"
+                "正式对外表述前需核对原文。"
+            ),
+            "theme_divergence": theme_divergence,
+            "guideline_divergence": guideline_divergence,
         },
         "evidence_questions": matrices,
         "china_difference": [
@@ -2796,7 +2757,7 @@ def build_dashboard(recent, signals, experts, china, landscape, modules, total_c
         "label": "周更管线",
         "value": "每周日 23:00",
         "note": "PubMed 周更、证据分级、IF/新锐分区、前端数据同步",
-        "href": "pages/data-ops.html",
+        "href": "#dashboardReleaseStatus",
     }
     section_cards = [
         {
@@ -2818,9 +2779,9 @@ def build_dashboard(recent, signals, experts, china, landscape, modules, total_c
             "metric": f"{landscape_overview.get('living_answer_count', len(landscape.get('living_answers', [])))} 个判断",
             "summary": landscape_overview.get("positioning", "将近期证据转译成治疗格局、竞争定位和中国实践差异。"),
             "facts": [
-                f"格局变化 {landscape_overview.get('month_change_count', len(landscape.get('monthly_changes', [])))} 条",
+                f"指南差异 {landscape_overview.get('guideline_divergence_count', 0)} 条",
+                f"中外主题差异 {landscape_overview.get('theme_divergence_count', 0)} 条",
                 f"临床管线 {landscape_overview.get('clinical_pipeline_count', len(landscape.get('clinical_pipeline_matrix', [])))} 项",
-                f"证据问题 {len(landscape.get('evidence_questions', []))} 个",
             ],
         },
         {
@@ -2845,18 +2806,6 @@ def build_dashboard(recent, signals, experts, china, landscape, modules, total_c
                 f"中国 {expert_summary.get('indexed_china_experts', 0)} 位",
                 f"国外 {expert_summary.get('indexed_international_experts', 0)} 位",
                 f"内容模块 {len(modules.get('modules', []))} 个",
-            ],
-        },
-        {
-            "id": "data",
-            "title": "数据状态",
-            "href": "pages/data-ops.html",
-            "metric": "周更可追踪",
-            "summary": "数据源、构建产物、运行日志和前端数据文件状态。",
-            "facts": [
-                "GitHub Pages 数据产物",
-                "PubMed + ClinicalTrials",
-                "公开数据不含拜访记录",
             ],
         },
     ]

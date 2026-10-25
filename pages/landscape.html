@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>诊治格局 · MA-MG-HUB</title>
-<link rel="stylesheet" href="../assets/main.css?v=cde-rss-224515">
+<link rel="stylesheet" href="../assets/main.css?v=20261025T022834Z">
 </head>
 <body>
 
@@ -17,7 +17,6 @@
       <a href="landscape.html" class="nav-link active">诊治格局</a>
       <a href="knowledge.html" class="nav-link">知识库</a>
       <a href="msl.html" class="nav-link">MSL工作台</a>
-      <a href="data-ops.html" class="nav-link">数据状态</a>
     </div>
   </div>
 </nav>
@@ -45,17 +44,6 @@
       <div class="landscape-stat-grid" id="landscapeStats"></div>
     </section>
 
-    <section class="workspace-panel">
-      <div class="panel-head">
-        <div>
-          <h2>动态月度洞察</h2>
-          <p class="panel-caption">由社区周更、知识图谱和新增 PMID 离线生成；每条洞察都保留选择理由、证据锚点和 MSL action。</p>
-        </div>
-        <span class="update-badge" id="landscapeInsightMeta">Loading...</span>
-      </div>
-      <div class="landscape-change-grid" id="monthlyChangeList"></div>
-    </section>
-
     <div class="workspace-panel">
       <div class="panel-head">
         <div>
@@ -66,27 +54,33 @@
       <div class="pipeline-table landscape-matrix-table" id="competitiveMatrix"></div>
     </div>
 
-    <div class="workspace-panel">
+    <div class="workspace-panel landscape-divergence-panel rolling-panel">
       <div class="panel-head">
         <div>
-          <h2>中外证据与诊治差异</h2>
-          <p class="panel-caption">情报中心追踪新增中国证据；诊治格局只沉淀能改变诊疗路径理解的结构性差异。</p>
+          <h2>近一月中外文献主题差异<span class="update-mode-chip rolling">周更滚动</span></h2>
+          <p class="panel-caption">每次文献周更后自动重算近 30 天入库文献，按受控主题表分中外两组，归纳 5 条结构性差异；窗口随周更前移。</p>
         </div>
+        <span class="update-badge" id="themeDivergenceMeta">Loading...</span>
       </div>
-      <div class="china-landscape-note" id="chinaLandscapePrinciple"></div>
-      <div class="china-landscape-grid">
-        <section>
-          <h3>指南/共识与路径差异</h3>
-          <div id="guidelineConsensusSlot"></div>
-        </section>
-        <section>
-          <div class="china-section-head">
-            <h3>证据方向</h3>
-            <span id="chinaEvidenceMeta"></span>
-          </div>
-          <div class="china-direction-list" id="chinaEvidenceDirections"></div>
-        </section>
+      <div class="divergence-meta-row" id="themeDivergenceMetaRow"></div>
+      <div class="theme-divergence-list" id="themeDivergenceList"></div>
+      <p class="divergence-source-note" id="themeDivergenceNote"></p>
+    </div>
+
+    <div class="workspace-panel landscape-divergence-panel stable-panel">
+      <div class="panel-head">
+        <div>
+          <h2>中外指南共识差异<span class="update-mode-chip event">新指南入库后更新</span></h2>
+          <p class="panel-caption">只在新增指南/共识全文后重算：逐份提取 16 个维度立场卡，交叉比对后归纳 Top 10，每条引文回验原文。</p>
+        </div>
+        <span class="update-badge" id="guidelineDivergenceMeta">Loading...</span>
       </div>
+      <div class="divergence-meta-row" id="guidelineDivergenceMetaRow"></div>
+      <div class="guideline-divergence-list" id="guidelineDivergenceList"></div>
+      <details class="guideline-corpus">
+        <summary>分析语料与引文回验口径</summary>
+        <div id="guidelineCorpusList"></div>
+      </details>
     </div>
   </section>
 
@@ -150,13 +144,26 @@
   </section>
 </main>
 
-<script src="../data/release-manifest.js?v=cde-rss-224515"></script>
-<script src="../assets/common.js?v=cde-rss-224515"></script>
-<script src="../data/landscape-data.js?v=cde-rss-224515"></script>
-<script src="../data/source-signals.js?v=cde-rss-224515"></script>
-<script src="../data/landscapeInsights.js?v=cde-rss-224515"></script>
-<script src="../data/curated-topics.js?v=cde-rss-224515"></script>
-<script src="../data/wikiTopicCoverage.js?v=cde-rss-224515"></script>
-<script src="../assets/landscape.js?v=cde-rss-224515"></script>
+<div class="pmid-modal" id="pmidModal" role="dialog" aria-modal="true" aria-labelledby="pmidModalTitle" hidden>
+  <div class="pmid-modal-backdrop" data-pmid-modal-close></div>
+  <div class="pmid-modal-card" role="document">
+    <div class="pmid-modal-head">
+      <div>
+        <strong id="pmidModalTitle">证据 PMID</strong>
+        <span id="pmidModalMeta"></span>
+      </div>
+      <button type="button" class="pmid-modal-close" data-pmid-modal-close aria-label="关闭">×</button>
+    </div>
+    <div class="pmid-modal-body" id="pmidModalBody"></div>
+  </div>
+</div>
+
+<script src="../data/release-manifest.js?v=20261025T022834Z"></script>
+<script src="../assets/common.js?v=20261025T022834Z"></script>
+<script src="../data/landscape-data.js?v=20261025T022834Z"></script>
+<script src="../data/source-signals.js?v=20261025T022834Z"></script>
+<script src="../data/curated-topics.js?v=20261025T022834Z"></script>
+<script src="../data/wikiTopicCoverage.js?v=20261025T022834Z"></script>
+<script src="../assets/landscape.js?v=20261025T022834Z"></script>
 </body>
 </html>
