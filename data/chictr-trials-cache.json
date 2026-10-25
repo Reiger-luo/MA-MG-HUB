@@ -6,14 +6,14 @@
   "query": "重症肌无力 (Myasthenia Gravis)",
   "total_found": 121,
   "records_scraped": 121,
-  "records_with_xml": 60,
-  "records_xml_reused": 0,
+  "records_with_xml": 120,
+  "records_xml_reused": 60,
   "records_detail_fetched": 60,
-  "records_deferred": 61,
+  "records_deferred": 1,
   "records_stale_fallback": 0,
   "failed_project_ids": [],
-  "previous_count": 120,
-  "scraped_at": "2026-10-24T16:40:56.454442+00:00",
+  "previous_count": 121,
+  "scraped_at": "2026-10-25T21:03:25.154532+00:00",
   "last_verified": "2026-10-24T06:53:48.242109+00:00",
   "records": [
     {
@@ -2153,6 +2153,7 @@
     {
       "registry_id": "ChiCTR2400080921",
       "proj_id": "215289",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=iNTFPfaixXIt/bkgggDsjI0JSYk/Qqlj+kXKu+O62jKmyICtMKcCqWVzFq7NwwcxLF9SiDX8//9AXROIcpJOCLUtBZChS2WJtQ8Me0jQq8zCwJKx6zfPkACsDqQcLh0515yH3ogKnSR3NzE9K8XhZ0Dv5lotdlRLerLt6C/HCaw=",
       "title": "The effectiveness and safety of using Vyvgart in adult patients with myasthenia gravis",
       "study_type": "Interventional study",
       "registered_date": "2024-02-18",
@@ -2187,6 +2188,7 @@
     {
       "registry_id": "ChiCTR2300077300",
       "proj_id": "207062",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=YJF8inSp5SNiVlwG5os7SwyfVPmcdI9dx+5TVlKk2VCMBcaVj9RgrRNhDJbw6gwhRAAGFDAz0nlmy7l8CHFyu3HhRereNPAsHQCWfZEPHjjDU0IZfqb+rbLltNwuvIszVM0FV14mpYRuaBLQ8UEOy1MVBW9kR7KKL9i3vuUoQgc=",
       "title": "Clinical application of myasthenia gravis intelligent condition assessment and diagnosis system",
       "study_type": "Observational study",
       "registered_date": "2023-11-03",
@@ -2221,6 +2223,7 @@
     {
       "registry_id": "ChiCTR2300077188",
       "proj_id": "209196",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=R75/RXGDLfSn+YL1FgS3w9wUyaX294WO29iXavUOJAUlevmOM/hbE39NS16GUmBndndtxgNrCFlow4gdBL5AI6vr9Tut3pjcPVMzVPcjEs70rzYlsauxnCBhQFkAp2tbyEQq1BzSl+ZWRyJgT4n8LIuMkKBORUmffd+UPiAWZcI=",
       "title": "Efficacy and Safety of Novel Biologics in Myasthenia Gravis: A prospective cohort study",
       "study_type": "Observational study",
       "registered_date": "2023-11-01",
@@ -2255,6 +2258,7 @@
     {
       "registry_id": "ChiCTR2300075401",
       "proj_id": "203778",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=NLvZaSQeam10j3SSSPrtc6nAzYJQAOPUXyo+MVxIK/TpLa/wcbCAipoBx67B7LuyAd4cIyEE4wZqX1QpvrRfOVgcYEY393jISiZeZd5IFY5eHbZjJQcoita/iEKatLEMAOGZGMOFes6YxWggungu00daUfXeFky/RzfmGaGSLTw=",
       "title": "Exploring the efficacy and biomarkers in the treatment of myasthenia gravis with Telitacicept",
       "study_type": "Interventional study",
       "registered_date": "2023-09-04",
@@ -2289,6 +2293,7 @@
     {
       "registry_id": "ChiCTR2300073727",
       "proj_id": "196505",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=K3a374HRo/xwT7lKm9PpjLsSfHLnN4P9zkUkqDdjDVhCDJGRSejvWNCgZL/5iKBp34MvG+56+mQ0C6nqtDrxcNLJ+q0mEBta6g6yxFCtnePRnm4qSbLBtTU3KkuXgi4sTu2p6JU6Dvz3QkGhXN/mpFs8oEC8LIqDxK7RWhtgG7s=",
       "title": "Application of sugammadex in Chinese adults with myasthenia gravis undergoing thoracoscopy thymectomy",
       "study_type": "Interventional study",
       "registered_date": "2023-07-19",
@@ -2323,6 +2328,7 @@
     {
       "registry_id": "ChiCTR2300073207",
       "proj_id": "199555",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=R1IV6j6MMSBo5NnMCdNRmPY7py/kRyrR8IEIVHDwXYb9Bvu0YTe0E1yCHMn38yvAgz7nfsw8Zf1RYx6QBYYmoYFNZ+lJCCfIwTiwahVliIKzQbBWHYvxRRQQdVYZXZ00/901e+WC5OxniMPx3YalCDByq5fGRjwsU/xP/hDoXVo=",
       "title": "Efficacy and safety of Buzhong Yiqi pills in preventing the relapse of myasthenia gravis: a multicenter, randomized, double-blind, placebo-controlled clinical trial",
       "study_type": "Interventional study",
       "registered_date": "2023-07-04",
@@ -2357,6 +2363,7 @@
     {
       "registry_id": "ChiCTR2300073035",
       "proj_id": "200622",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=GjZhV3zKE4+uf/9NX44nbhafLQwYyZePcNhzcyu6gx0zqqM2bLSGnpHMF+/EHoSwfQ6st2vCVI4myutEWle94NJgMRXe97TOFVPOv0RzUCj3qHuyGTlVCVkk+dupWg/jGjtaAmQtAHlrO/8IZCIS0+9RHE8WgdylMhHDZpXic/k=",
       "title": "Inhibition of inflammatory storm in myasthenic crisis by integrated traditional Chinese and western medicine",
       "study_type": "Interventional study",
       "registered_date": "2023-06-30",
@@ -2391,6 +2398,7 @@
     {
       "registry_id": "ChiCTR2300070892",
       "proj_id": "192663",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=ZGe9mO5jWkC5WB+/K6c5IBcquE04hpwnH2NY15pEDjZ8EnLq52IMKBudF1kNvaT3bRf20QzaHfNIPGo2y/42xsptn7b10cfV8wKnTS649VVxOE7sQTbmZl+lJazjWLBcYN1WMhhAqsU/PNWYfY1sHdiQXf7bP0EkQ41OPxGijoM=",
       "title": "Analysis of related factors of myasthenia gravis with photophobia",
       "study_type": "Observational study",
       "registered_date": "2023-04-25",
@@ -2425,6 +2433,7 @@
     {
       "registry_id": "ChiCTR2300069486",
       "proj_id": "175943",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=GzwlS+TBYki+7IwC9lS9rFTvX8KuupUTGueZYlsoUl65xpXVrOMqzouBKCf97Vv0UaslXIBU4bQ0yYZOeygotpoI1YAqIoeiFSU3fKp5S2DEtP33sGphZP5YiNYto9Ai0KzNffWsUzA/L2MJynrKwAdexRFt7/m7/XmdZtthbiE=",
       "title": "The study of oculomus structure and brain function changes in patients with myasthenia gravis based on multimodal magnetic resonance",
       "study_type": "Observational study",
       "registered_date": "2023-03-18",
@@ -2459,6 +2468,7 @@
     {
       "registry_id": "ChiCTR2200066880",
       "proj_id": "183410",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=hovp7+rxxyxYtV2yLDm/8mpfmusF0Ff60nST6tsr/Dnfj/78bB3HCRfTQrAhNtTetWxHgDILA4Al9et5FNtx/a1bAF/JrD0m+kEt3PpN5k298XAdfMZA4R+TwDgzLH/bhoLLA1bnXnN15kDPx/odktz63Nw4il7ZM5MMnsylTJk=",
       "title": "Clinical licensing application and a prospective, observational study of Efgartigimod Alfa Injection",
       "study_type": "Interventional study",
       "registered_date": "2022-12-20",
@@ -2493,6 +2503,7 @@
     {
       "registry_id": "ChiCTR2200061488",
       "proj_id": "171351",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=UEyrR8rChvoVtggUUJpYKWdFNCda3RyEzaPidXegujDeQ2shiLxS12daXH6Xlvr/mif6iv6Mh3lUI8HwqzJXkFvwbLNN4A5acYiDbqgbX6/5MUeDPYxuPd8H5DSnkBowsvKeG87mLXDmjGPsZYJAbzXN8VlphqSrC+GCTHe3wfo=",
       "title": "Study on the mechanism of tacrolimus inhibiting B cell differentiation and development in the treatment of myasthenia gravis",
       "study_type": "Interventional study",
       "registered_date": "2022-06-27",
@@ -2527,6 +2538,7 @@
     {
       "registry_id": "ChiCTR2200059452",
       "proj_id": "165992",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=cXcT9W4cxw6BdMmITzB4NOCGXvtMA/5CGLWyl/0fdXHEBSLjSvJJRwErWpesc9i59N3W4dheEkJbYL7Q/ydyUPb6DE+YOos5vwpHDlZeN77fpKJcmd6nlueTl5o+edZYhLBgG6J20OGCEILBM4HFu9YOSAufBYS5kuS6JMahZn8=",
       "title": "A long-term open-label extension study to evaluate the safety of HBM9161 (HL161) subcutaneous injection in patients with generalized myasthenia gravis",
       "study_type": "Interventional study",
       "registered_date": "2022-04-29",
@@ -2561,6 +2573,7 @@
     {
       "registry_id": "ChiCTR2200058984",
       "proj_id": "166743",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=PgK2M6or2rTT7Ukvlm5exYMjwEfZQlTg0z3UpMS5hX3eSlHYQ9VUeu6qvxmuUf1z+W0mrLUY00Jc61gfJaFWM2LUHDvh2g0kjuePsIUawM0tEAuFvnzI+ZmwGkylFITNEBJzRC4iXph51Mw2WigWzdi2w/C1TD3i3LXA0Ce/nGw=",
       "title": "Study on the dose-effect relationship of rituximab in patients with myasthenia gravis and the treatment differences of different doses based on population pharmacokinetic/pharmacodynamic model",
       "study_type": "Treatment study",
       "registered_date": "2022-04-21",
@@ -2595,6 +2608,7 @@
     {
       "registry_id": "ChiCTR2200057566",
       "proj_id": "150770",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=GK0oingd8IFsTfUChw8O/2QHuUfEA2paRLKrMPurGASUn7/VzvdpczXsGPf4TAXH+NmdNSEqktPClLx4tW4Dnj1xlEzXRxXcKUeWcyDx5vyjDwZszFAruz4GM/XEK9LibuMsycdh8CGJGe1kccQNuIQmXnYJIvTkaAsSnHUWSLk=",
       "title": "Based on the real world study to discuss the case registration of Yiqiwenyang method in the treatment of myasthenia gravis",
       "study_type": "Interventional study",
       "registered_date": "2022-03-15",
@@ -2629,6 +2643,7 @@
     {
       "registry_id": "ChiCTR2200057193",
       "proj_id": "153272",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=hX/Ecr5X4sO5hpgwQZxLkwd07FrYtJCho2kKakI6JCZ+wwyEwq3JmpgHOp8bKkmpXUgoHr+oGO08J6r2izYJvI+y2hvghx7LNd+NKHj6M8L8PklKAulgPVRamakLxyOh7TDDEsnJjzEA/jd3gKEz3Afpyp5YLGXDLOUebxr94DM=",
       "title": "Study on the dominant population of tacrolimus in the treatment of myasthenia gravis",
       "study_type": "Interventional study",
       "registered_date": "2022-03-02",
@@ -2663,6 +2678,7 @@
     {
       "registry_id": "ChiCTR2200057039",
       "proj_id": "155608",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=hFio7+WqeviMJ4A0jXfeuw/W+zN3G/YsRVmlUOSzjWFQXGi5kX1KFeV+N1IxeMmshZCjZYT+F//544GQ4/s1nYjG4yUy5gQGPHARUDdm8BnuafwJiaO7X0LvKNy6nHQ+RmnW+Ifdkn8FnDMTJ43sAN0qPljBxNmcAw4G8+Vo+Nc=",
       "title": "Research on the development of a new Chinese medicine for treating myasthenia gravis",
       "study_type": "Interventional study",
       "registered_date": "2022-02-26",
@@ -2697,6 +2713,7 @@
     {
       "registry_id": "ChiCTR2100052861",
       "proj_id": "135161",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=Q+HvaoqgeAS6i6K9x+Q63I+U/xpCE6NzVq5Olo35AuhtLW4whaZfu4aDLv6znBj2AMgS3kJhfmbaY7OkdnkoMyuHY/ILdZpAFGbnXRkN7k34OlX2jO/7gO1uu0m8nyjg5R+xaMK4Kk3QoBK5pN+pWGyNDGNI9JLHjCfJqeCPIE4=",
       "title": "Modularized procedure for trans-subxiphoid robotic extended thymectomy: a retrospective study",
       "study_type": "Observational study",
       "registered_date": "2021-11-06",
@@ -2731,6 +2748,7 @@
     {
       "registry_id": "ChiCTR2100050903",
       "proj_id": "132173",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=EkbsAvNENAoEenO0XgRVm2JyvSYAXN0cVRRFolJ4INaveBfcZc84Om/DsRbOmD0pHz0/z/UtQnC1BQO5FrsKcRj4fqOaE7+nC6bKRPc1cBOL+3BJ0AtLucxXPs+AyIvxkoRIaKMi+chEQUOFzRzHTWujKq+HPvaxUBgkFxYq4m8=",
       "title": "Multicenter, randomized, double-blind, placebo-controlled, phase 2/3 operational seamless, group sequential design study of the efficacy and safety of HBM9161 subcutaneous injection in patients with generalized myasthenia gravis",
       "study_type": "Interventional study",
       "registered_date": "2021-09-07",
@@ -2765,6 +2783,7 @@
     {
       "registry_id": "ChiCTR2100050890",
       "proj_id": "129461",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=E0Qf1mN2FwiF4fdR6Tuf83l6AaTt3wwF85MGQd5sEpxaxy0EVqbS2gHzecbwqweMRl06CyBxAEm7l9fvxUvDzAa/Sc+2MIAexvOGVJAPUzuleBR3f2kCkI/K7Es1mysOC+Z2sae01cZ4hFSEHgwhrPAUYGnj3y1+KJqvH5We43M=",
       "title": "Establishment and verification of a precise immune molecular evaluation model for thymectomy for the treatment of myasthenia gravis: a nested case-control study",
       "study_type": "Observational study",
       "registered_date": "2021-09-07",
@@ -2799,6 +2818,7 @@
     {
       "registry_id": "ChiCTR2100050279",
       "proj_id": "132462",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=LEq/4j7fNogGRtpfInxDo83WhNkEljPD86Qkrh/ihojiJqn6YOGx/jf6/VOJHzIFOZ807C9xQqmwCqJJCA7vwx8tEvxdwNKvSjCT7EdT9MtEzAUxE/W6epaRlsk5dj32OlJKWnaj2Dj6V4QeRGU4Y4C6wYWYIf+FwRXu81h8FCg=",
       "title": "He'nan Myasthenia Gravis Study Collaboration Group Database: the Clinical Characteristics, Response to Treatments and Prognosis of Myasthenia Gravis",
       "study_type": "Observational study",
       "registered_date": "2021-08-25",
@@ -2833,6 +2853,7 @@
     {
       "registry_id": "ChiCTR2100048785",
       "proj_id": "130127",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=JUUekKKjsPiXqjYGKfisTyr3lrb1YpV2Cqbl4jUhLdhId5hblbDyNilIyCdag0ynxL3FYJ+P0x3M+N9KkQVTAE16ar2r3fzr8FB3tFCtMN2Pt4OxHQJXXdB1demdJuijnkqLTp4UaPhZzyOQ/HamzSHuF1iNvFg3i9J/sVsCA0Y=",
       "title": "Evaluation of the effect of famciclovir anti-Epstein-Barr virus therapy on surgical treatment of patients with myasthenia gravis and thymic hyperplasia",
       "study_type": "Interventional study",
       "registered_date": "2021-07-16",
@@ -2867,6 +2888,7 @@
     {
       "registry_id": "ChiCTR2100048709",
       "proj_id": "130187",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=R/FoGlrZ/GgmhUbLiV4sogZNOXO6PMl/bTB8UVreDm3jyEEmn0GK/XA6mLSxQR9ucBje8yB3Z9gAWD0ucaIjCapiiSs/Mv/M7iNXUf6DseAD+3xl+NWdzjrsQSfYUatKIqak7SN4zd3LPRecJ7ymZASaHRniWArPUBWjYNqdrqA=",
       "title": "Prospective, randomized, controlled, double-blind clinical study of traditional Chinese medicine combined with glucocorticoid in the treatment of generalized myasthenia gravis",
       "study_type": "Interventional study",
       "registered_date": "2021-07-13",
@@ -2901,6 +2923,7 @@
     {
       "registry_id": "ChiCTR2100048367",
       "proj_id": "128702",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=OoRAWD/dIQD3fe/Bo3YK1OwaYTJxpGtTMEtd9wwdem5m6Ge8CT9UFSfHKzTZf1W7hGh8Zp/frQDAm5kfPKkP70tnl8qgYt6LF5VQWmyk+Fs+70W5Ytcvh1Vgr65Pb8q/x04qKqvG69nwvOwebbMY2h13p8PIaRUQid0p8rLNe00=",
       "title": "A Study Evaluating the Clinical Efficacy of Treatment based on Chinese Medicine Guideline in Patients With Myasthenia Gravis",
       "study_type": "Observational study",
       "registered_date": "2021-07-06",
@@ -2935,6 +2958,7 @@
     {
       "registry_id": "ChiCTR2100048150",
       "proj_id": "129456",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=QQWmd1vvLr5ocN6YcPRkeTk8TMOnPFOAE07xeTxPEyHP8L3OjWogKOBpt6MJ9uGZEnqfdNIL7XrmKLuTFAuD7pnfaO3nMu4EPSAnvujf+U0VIkq8taPoyI9Ov9bE5gJ4y93oRCZXGUnd3COi47Odil3ejgVEAh7nCbfpxtob0Ro=",
       "title": "A cohort study on the effect of traditional Chinese medicine on ocular myasthenia gravis based on cloud database",
       "study_type": "Interventional study",
       "registered_date": "2021-07-04",
@@ -2969,6 +2993,7 @@
     {
       "registry_id": "ChiCTR2100047506",
       "proj_id": "127794",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=VsEWIgrhT6XHMBBohR5WKd4vgp+u+JdkhHSLZXQPUzDCwScb4W4TYiKxKENObDwye81Qew7mQw1ckiE6gO1jVB61SekA8KuX+PlGCzPgZgiG1+YiIaHNp/IddjaBDHUekjvnYwJglADQnzec9QnotJpoR5hKzhP5bwHPTNe+EHY=",
       "title": "Efficacy of Buzhong Yiqi Decoction in the Treatment of Ocular Myopathy Myasthenia Gravis (MG) Patients with Spleen and Kidney Deficiency Type: a Randomized Controlled Trial",
       "study_type": "Interventional study",
       "registered_date": "2021-06-20",
@@ -3003,6 +3028,7 @@
     {
       "registry_id": "ChiCTR2100045847",
       "proj_id": "125748",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=PDLponEf36PmaH0sAa7kznQkNH4X50t7kvRjVrIJgmaXy6QLeB5LYWveyqnJegm1m2OcbEScfYKeKQTuSx47rrG8hTEZsUoYTPxGMNRxsojbjMs7SBPBRKD1Q2dyahb6gLQ4IEjQFP0qOd/8uz1Kq01MdMsQbjd2R78QVXhIm7U=",
       "title": "A Registered Study on Myasthenia gravis",
       "study_type": "Observational study",
       "registered_date": "2021-04-25",
@@ -3037,6 +3063,7 @@
     {
       "registry_id": "ChiCTR2100044733",
       "proj_id": "124097",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=NrR0GwD+5cS0TimsNM38apfDHa0U+Tq6pgEak8II4z2+L2oVcFgaayWzzq8s5sOZJG2gEUA+F28F6JWA1tgyFPeRdeoFXMfm83q2JC38PFV6l3tixOI3y3PR9n5pCLuhBKx5OEj1Ot741dsf4keoyY3xeX57FNRR+WhBHFoOYnw=",
       "title": "The impact of radiation therapy on outcome for myasthenia gravis patients with thymoma",
       "study_type": "Observational study",
       "registered_date": "2021-03-26",
@@ -3071,6 +3098,7 @@
     {
       "registry_id": "ChiCTR2100043843",
       "proj_id": "122689",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=AQzDTFL4aflLt19nNGOUSlzWuJ1Lv5OHb0LUWlH+dW3RKa+BjfonOY041tMv4GuzlSp/u+x3CNbNz0grNl0+LL+qM37dPjM4ncuxBcroTJv5PczojlYT+EAuAhdm6zkI0+IdVHn4tudJWAFCR3yt5nuvwdwNqR0KgmrNMnr/DVo=",
       "title": "spontaneous-ventilation versus tracheal intubation in VATS extended thymectomy for nonneoplastic myasthenia gravis",
       "study_type": "Interventional study",
       "registered_date": "2021-03-04",
@@ -3105,6 +3133,7 @@
     {
       "registry_id": "ChiCTR2100043291",
       "proj_id": "121805",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=WQ5NIQw7aiSzgIZGEF4fraF+pTdRNiR0AI9tK8Cls2v0kc9rOXZjGTG1zayATxcC09gPs7LecSOW2TbsbkiyAADqaGYDOmYE9kJThYXwupCgT2eJqVAWffguhdrHKCtTxPxhaLnn1GTF+qevIp99sw+olFKnBWpaA7TLxDLTU2o=",
       "title": "Cross-cultural translation and reliability and validity testing of the Myasthenia Gravis Impairment Index (MGII): a multi-center, cross-sectional study",
       "study_type": "Observational study",
       "registered_date": "2021-02-09",
@@ -3139,6 +3168,7 @@
     {
       "registry_id": "ChiCTR2100043284",
       "proj_id": "121835",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=ghRz+23/WAxhvSLy0TApkbUHigQvC4VAVXm4LfLtsdt2uz9OjVHUt7D673rprLwougOvWcN0lyL206exhvJhFnlrtUfyRm9U2eTWqGbsuHXILR8V99lXdvunIbMdXAkGw70A8WnJ0Naz4kO7YyxJc7wDsgxa3vFIfFiPhqkSWbw=",
       "title": "Establishment and validation of a risk prediction model for myasthenia crisis after thymectomy in patients with myasthenia gravis: a multicenter, prospective cohort study",
       "study_type": "Observational study",
       "registered_date": "2021-02-09",
@@ -3173,6 +3203,7 @@
     {
       "registry_id": "ChiCTR2100043273",
       "proj_id": "121875",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=Q/wPediiWKZyXtWO6Z2WSwFz9eLM+E5kJCQm5IppWBbPyKDYVFrfY6NaRr0PbWKb0F/U+bZbEYhRTSCi+1Sd7zXryhohglwLlNfDwybU1/7RT+vCmq0G7EdGIAydBEJmlXWMkKx4tdux2vujldmTr+lLhwTE13RPD+w8pnJcdxQ=",
       "title": "Efficacy and safety of tocilizumab in the treatment of generalizaed myasthenia gravis: a single-center, prospective cohort study",
       "study_type": "Observational study",
       "registered_date": "2021-02-09",
@@ -3207,6 +3238,7 @@
     {
       "registry_id": "ChiCTR2000040477",
       "proj_id": "64688",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=GGK4y4wkIVzk5CjQlUvgX1hzhUz3oa91hlRZUvNa737UmPpa6D80rfVY3wd0wiFlpiO/UoYr/o+dzaj4AEuuC4MHNuBWVkM0Xpwmz31wuB09eADg4Jgi0Zwn4UcbnhoyJRYV6GiLUfO0zRu+IMs0u9jlGX1HWwfomjdoV0mAxHM=",
       "title": "Innovative research on the pathogenesis of myasthenia gravis in traditional Chinese medicine (N-of-1)",
       "study_type": "Interventional study",
       "registered_date": "2020-11-29",
@@ -3241,6 +3273,7 @@
     {
       "registry_id": "ChiCTR2000040271",
       "proj_id": "64752",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=h7r02U3d6iXvJ6NSAXceUuJstxDHNsjOnPM5a8/PI2etz3e8FnH0lLeEUzHiYQy+RJS0kfcbg6byojlAswmPGn9hzF79EcRiSHd0PXSb76HkLrb34Hn2epG0nc2BVP+9VveIoRsyB9uvpFPryl0x21RL1BJx6KfmHfIbWfRHOBQ=",
       "title": "The impact of WeChat platform-based continued care on the compliance of patients with myasthenia gravis—a single center, randomized controlled study",
       "study_type": "Interventional study",
       "registered_date": "2020-11-26",
@@ -3275,6 +3308,7 @@
     {
       "registry_id": "ChiCTR2000038874",
       "proj_id": "56769",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=d3YoB9dpSn0bg8lMBm63+538MhCyojYFDvBrq02OO/S0Aa/kSx2ea0WnC6ve2uIyB1NAae02FRqnDr4PGLcyAGBXUS5QTpVsM18oSJNjVX0PHzTsfuXtXL+2jksMuD6QYWfL2gFcdvVg90ROlQhKEuak6ejxaELXiNEwcRYqCTc=",
       "title": "Establishment of database and biological sample library for myasthenia gravis",
       "study_type": "Observational study",
       "registered_date": "2020-10-08",
@@ -3309,6 +3343,7 @@
     {
       "registry_id": "ChiCTR2000038863",
       "proj_id": "62056",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=eMX47w0PTFCU5d3o3wBq5z2GxJIxztdL9MQkhD4r/81POzTg8w17pJVm3NtVC8R5vcZc3riJmwa8CT40PY4wb/aPaIPpaoQcT+vlrSrfC8pKcZZ+NlqdQQsYjOgQQcSogrHc0L9H0I9VfCtbMKT9PN8deaFzUvkViYgkgKSUy9o=",
       "title": "Local Use of Dexamethasone in the Treatment of Ocular Myasthenia Gravis",
       "study_type": "Observational study",
       "registered_date": "2020-10-07",
@@ -3343,6 +3378,7 @@
     {
       "registry_id": "ChiCTR2000037904",
       "proj_id": "60932",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=hgekSOgMBJtu7v3cGIG1v13FGnNEqrsraZBUTTHd5CDr0t8NK1ygwdXVo9Xd+XvFjuZAnWcZsO8smcZ/WBEdSQUjuX1kjWzO3lvWtjaDAX7X03u25aqwZpVES0M3srmcnXwp4syO2lnmUc5t+R/V2o3IPdNliavy/C06rdqH0NM=",
       "title": "Efficacy and safety of low-dose statins combined with conventional versus conventional treatment in patients with late onset myasthenia gravis: a prospective cohort study",
       "study_type": "Observational study",
       "registered_date": "2020-09-04",
@@ -3377,6 +3413,7 @@
     {
       "registry_id": "ChiCTR2000037676",
       "proj_id": "60701",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=e19MxN/sfpsd2VZt7KN6jQqD175Wl7juOrYZynMWyzREuZOVnHVk6LSH+wN6Qb5fStKvFGnLuFLWe9zTkoOUjhbdfT/2Iyu9na/LNCql8Fm2PbHCpYAtNFi/QVtDTkkLeD0D70gbGBkOOnQaPyNzz9GG0xij3RRzd8Au9bYErF4=",
       "title": "Precision Diagnosis and Prospective Cohort study for Myasthenia Gravis",
       "study_type": "Observational study",
       "registered_date": "2020-08-30",
@@ -3411,6 +3448,7 @@
     {
       "registry_id": "ChiCTR2000033881",
       "proj_id": "54906",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=XAytYAD4qQGwnicJUjwDG4K2gxkZCfsr2hVWKFFx/TxpK17cGsGPbK2WXDaEaoeh72RqoX5pTaHHc8umuHFAqVPlU88FabM/R2jVzVZfjjlrnmS0IVJsCj2RL9nX/LyDGr9g6ovgQlWVugc+nzCVHXityMCNHQFhGKRl3uSbLAM=",
       "title": "Robotic versus video-assisted thoracoscopic subxiphoid extended thymectomy for myasthenia gravis: a randomised controlled trail",
       "study_type": "Interventional study",
       "registered_date": "2020-06-15",
@@ -3445,6 +3483,7 @@
     {
       "registry_id": "ChiCTR2000033560",
       "proj_id": "54367",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=hJnveHkY2E2sC/OLoCWUxBUU+9PM37Eva32IVNkT+17UyWrMX+vC05zFnlVIjCoacNnIC6kzOthMrOB7iz1H9tyQ0Nj3J0OuBnlkqub1lnnwsLKAV3XcXWLHLdBarkfh3JIva7097kCr51DFUMAtUbfrWmuF3sSH4lldQ5r8YpA=",
       "title": "A Multicenter, Randomized, Double-Blind, Placebo-Controlled Study to Evaluate the Efficacy, Safety and Pharmacodynamic and Pharmacokinetic of HBM9161 (HL161) Subcutaneous Injection in Patients With Generalized Myasthenia Gravis",
       "study_type": "Interventional study",
       "registered_date": "2020-06-05",
@@ -3479,6 +3518,7 @@
     {
       "registry_id": "ChiCTR2000033516",
       "proj_id": "54618",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=g7UrUzJpuUa+s+l1sYTvUHbc3C9T1obhYs44cOfpdu+gReik5vYHW0Zv9k8kQBHFYEKtINHwOLEP8nc3a01GtsLGDxjDYJ+Mk4Ac1nTGanlR3OZacltp0MCbf4wO5eTMrpU4UcCtI7H8hufC0+biGASGOWy24Opz4sWAOdDmeLw=",
       "title": "To investigate the immunomodulation effect of invigorating spleen and invigorating Qi on myasthenia gravis based on N-of-1 randomized controlled trial",
       "study_type": "Interventional study",
       "registered_date": "2020-06-03",
@@ -3513,6 +3553,7 @@
     {
       "registry_id": "ChiCTR2000032085",
       "proj_id": "52251",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=dSDJ/29fqSSIQjnTrxUImw0aEwEiYI5G14up6ORNC2cn8Yh/t/naDOrlCv8FX29CqbkG27+asVI/cdTI+j5GU+iV1Yl4fMNqfL1g9JscnQ87ylzc4XR0YWpVAM/KyROcewl8TAjLNszI/PREWRljfAoo3uDnaX7LnIxhlT+nZfw=",
       "title": "Innovative research on the pathogenesis of myasthenia gravis in traditional Chinese medicine",
       "study_type": "Interventional study",
       "registered_date": "2020-04-19",
@@ -3547,6 +3588,7 @@
     {
       "registry_id": "ChiCTR1900026128",
       "proj_id": "43617",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=Wj4D/a09kktv4/0a5rKDpX9hrhhNueVKCs6B13t4ZAuJcJZ6uZ/NInF/vbKNzHIay8AZmmuRW8btJYxdVKk/0TlDf26yni3xlUEWJXJ70Y8PRBoEt7hPMhXMaRhN1z+RiZffIBKCmtZojD8ufnRh/4Q166l6l1AomH8CiXt49YU=",
       "title": "Therapeutic Effect of Back-shu Point Catgut Embedding in Spleen-stomach Deficiency Type I and II Myasthenia Gravis",
       "study_type": "Interventional study",
       "registered_date": "2019-09-22",
@@ -3581,6 +3623,7 @@
     {
       "registry_id": "ChiCTR1900025142",
       "proj_id": "27584",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=PxLWdWJwdKZuIe+BN1NHLbfR3Mj6VEXvK06T+0k7DrZQb4p0Bt6aDnZeixhKFHQxMmQv47c/GeFoMbxes7KziItzGhb/EcGgI06XmmkSjCf2Eg5uF5Ll+s25a3dotzvpDHUAo8gDyDWWJpAjuXJQPgMQiPodqd7Zbf7lrz4bT4M=",
       "title": "Clinical and genetic studies of neuroimmune disease",
       "study_type": "Basic Science",
       "registered_date": "2019-08-14",
@@ -3615,6 +3658,7 @@
     {
       "registry_id": "ChiCTR1900024692",
       "proj_id": "41074",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=S7uu+caxYMNbE6LHoNjT0DuVA4fLpLWcjVCxoafenSo5ZgJ86oWlA3SwV9fgbh6T6ifuqJiq+zY4sDeebYt6089sOUxC8ocd14lmaIqkmgecMRL0ncb5MSN+1mzOnEZciRXBow12mOu8yNLIcMh2hYFAI/8ne1fLEpoQwpvqesM=",
       "title": "Comparison of the efficacy of azathioprine and cyclosporine in myasthenia gravis immune modification",
       "study_type": "Interventional study",
       "registered_date": "2019-07-22",
@@ -3649,6 +3693,7 @@
     {
       "registry_id": "ChiCTR1900024644",
       "proj_id": "32544",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=DcDxgC0JYrVeSe6jS6xy/DNeHq75MpPnZsFJMw8UQR/ZxJtALNIErqKK5ELAEVKe302cHmkDf4KfZXWs0wKZERcSITIpbI3MfgU7/1ZxQsBuTK4kiBJYVljoH0RR97/YeFe00ySYz5A/jJwAWaiTqdYNPmyvcuRja6+0J8gZx6E=",
       "title": "Investigation of mechanism of clinical heterogeneity of childhood onset myasthenia gravis and precision therapeutic strategies in China",
       "study_type": "Observational study",
       "registered_date": "2019-07-19",
@@ -3683,6 +3728,7 @@
     {
       "registry_id": "ChiCTR1900024510",
       "proj_id": "38846",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=PGWGVnfjXQFDDNnNLmuOTLdkyImVZhTzZLnhH1jHevKHl/e1vYZKGtQ4iWcX/RrgzoRXKJqxeTOBHc/RMg39DbSN6rS95QKT1oX6axkty63I7arnI1pn8V29+f4g9+Sqy78dOoBSUfYLBgAx1SVZB3Jffk4TVDtlK7gLlP3wbmA=",
       "title": "Clinical epidemiological characteristics and long-term follow-up study of pediatric myasthenia gravis",
       "study_type": "Basic Science",
       "registered_date": "2019-07-13",
@@ -3717,6 +3763,7 @@
     {
       "registry_id": "ChiCTR1900024369",
       "proj_id": "38842",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=dYra7pF1xq2L77TJkwmPDvRHsVY7hqHAaxZ3V3vfMXKJHUUzO8kLfNPa/GmfDc5xilYxKteiqPrJY/wFiPSdxhGFYybYoXl+Y8oz4JFsW2+A4l/DuJEsg1+xZjXW+ejWvprukDvfz8jwDvG5F6ufDpNykocWP7YNmiLtpR2wCgw=",
       "title": "Therapeutic evaluation and follow-up study of myasthenia gravis treated by integrated traditional chinese and western medicine based on the real world study",
       "study_type": "Observational study",
       "registered_date": "2019-07-07",
@@ -3751,6 +3798,7 @@
     {
       "registry_id": "ChiCTR1900024285",
       "proj_id": "40498",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=DtPJeDRZHX8T8iV7SyknF/sf86LqbkRhpUJkKXXYvxtEFriKdTDnjwb9I2QpYJDT/OwieHEFvJX0fIEseIkFRwFG604Ifp49jkkXGeor6nzezzDXsMSLse0Fd9e54GCsqkPr9zBWt5xNw+6cPGLoI+DR4W4sSOPzQ3PDwmFdWh4=",
       "title": "Topical use of hormone injection in the treatment of ocular myasthenia gravis",
       "study_type": "Observational study",
       "registered_date": "2019-07-05",
@@ -3785,6 +3833,7 @@
     {
       "registry_id": "ChiCTR1900023338",
       "proj_id": "39337",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=OL5T9K82BChp6NATnN6dcVAeJs9b3b0+XF7GfLCyfyj1w180GktyJDRW0WZ8b7rHf8bdpkjUkl54FbSf0OklNuxxy2KtAu8JpfcOl0+eqO/m68zLU+6eIWa0K8HzWQW/a7qnDuha9s7V2TE4w5gljPjg4cWortnnUF9QAawEqZA=",
       "title": "Clinical study for the relationship between thymoma thymic hyperplasia-related myasthenia gravis and B19 virus infection",
       "study_type": "Basic Science",
       "registered_date": "2019-05-23",
@@ -3819,6 +3868,7 @@
     {
       "registry_id": "ChiCTR1800018623",
       "proj_id": "31014",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=OqP+poMCHkrVTACUOruVi8Wr6Jcc5tSL0YWNVIFrSdrZsgOc3Eo26uV257XUItKMqN+vEzVAOXqb0mL5wRL+hqJRcCuksWH4Wsw6RNhWE41BDD2coj9PVkoETbNxZtkRm5AM05ye0j2CqiuXhS7TzzcWhx6GQ+j9OLN1pY/4xl0=",
       "title": "Different doses of methylprednisolone in the treatment of myasthenia gravis",
       "study_type": "Interventional study",
       "registered_date": "2018-09-30",
@@ -3853,6 +3903,7 @@
     {
       "registry_id": "ChiCTR1800017903",
       "proj_id": "30263",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=gW4VWi1XJBIqD3VFK6xrPVee+8dy2pEqAmTWwwrQnxkRpK1cN8kuxGCbMsLOZZWF6FT5wbTNuiH+u0kL2Uu+fh7PaRKrK0ZDq0jC1U+Zjg7ip98ll5x4XGuzFD6MgbEDW7VRPDaHTvJ7SG0+3fqjNkemui8nsm6MhlV5qZrooJo=",
       "title": "Study for the characteristics of peripheral blood cell biosynthesis and mitochondrial fusion and division of patient with myasthenia gravis",
       "study_type": "Cause/Relative factors study",
       "registered_date": "2018-08-20",
@@ -3887,6 +3938,7 @@
     {
       "registry_id": "ChiCTR1800017696",
       "proj_id": "24904",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=L9tXWzNdKknf7dhArSbq00BRw88U1tJOPnRAn2uV7d0iAF278cdwczQy+685itwURcQ4Pslr5u4Wmg5p8lFrc/o8Z6nXbQ9Z76Ehx1fUGiLhd1RfYi8i13yUtSUNgDWYYHtyr5y0XBYl2zIs5Hpmb6Q5r5dBH4g3zTw5XbUHrIo=",
       "title": "Effect of Magnesium Sulfate on Muscle Strength in Patients with Myasthenia Gravis",
       "study_type": "Interventional study",
       "registered_date": "2018-08-10",
@@ -3921,6 +3973,7 @@
     {
       "registry_id": "ChiCTR1800017564",
       "proj_id": "29432",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=RHtuCgsJcGsEIFJYMXlgGZh7uzYkPd98hH3znqZBCwpwIa1LYXhH8C6ul1GEAZlQTDGDL1H+QTF3BU/8xd7vyZnNYRdAvfAqB6LXqG7O9Sr+c+L37QaM47RbAewC+3t3N4L+m0fKruK2QI8cKYDFz8NdBy6iQxxXLQCW3HLmh08=",
       "title": "Optimal Timing of Thymectomy in Nonthymomatous Myasthenia Gravis Patients In China: A Prospective Study",
       "study_type": "Prognosis study",
       "registered_date": "2018-08-04",
@@ -3955,6 +4008,7 @@
     {
       "registry_id": "ChiCTR-TRC-13004125",
       "proj_id": "5443",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=Uw8BpQa7vcQz0xJbn3zJx6MyaA1ZVbiJWU7hf9OlKPy0kYFmAoxn/watcPhoFtai1iIlrzvhzM6e5wBkBiuhagsXfyTS/LndXkleU6d7clxGLQTkM1wkjPzIN0ZktfuiTOwZaZu6GBpOFSFiNPSQxUCd1SOfiekTx/lOcKnQPMI=",
       "title": "The study on the pathogenesis of spleen-kidney deficiency type myasthenia gravis and the interference effect of Jianji Ning Granule on the patients",
       "study_type": "Interventional study",
       "registered_date": "2013-06-08",
@@ -3989,6 +4043,7 @@
     {
       "registry_id": "ChiCTR-TRC-12003062",
       "proj_id": "6495",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=bIasMaS1TCBnwrRDMH8OdgDLWXR1Z+JY1XJ/CxUboIT4LZZ/i3CxwXQ6s+OVKsV0QY9WT7ryTF2j46FFwiy2aHFKSdBqp6PP15QNPLt88QHQEqWO765BXnSIwWiNIStxkibITpT5lEZZmLQbaJlW79cD2sTycGmPBaQ0JV0P/lU=",
       "title": "Clinical Evaluation of Chinese medicine to treat myasthenia gravis patients",
       "study_type": "Interventional study",
       "registered_date": "2012-04-19",
@@ -4023,6 +4078,7 @@
     {
       "registry_id": "ChiCTR-ORC-11001592",
       "proj_id": "7949",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=EfgGYIFxwaFKBW4BajzJIa1JccsLOmOHccujVGq4GV4aiPDkt2+No6qU32qlQLoYwkw5suto9T5I+0/WclviNp6PfM8LhgwRxS0uX+b5AtJX6vtLMAHmk5lMOu7hvuQTKd4yfyjT0VF/IWMUjHAZxae8rrGBVlG7qE4srMi9dIE=",
       "title": "A comparison of dexmedetomidine versus flurbiprofen for analgesic effect in thymusectomy patients",
       "study_type": "Interventional study",
       "registered_date": "2011-08-06",
@@ -4057,6 +4113,7 @@
     {
       "registry_id": "ChiCTR-OCC-14004533",
       "proj_id": "5039",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=OxT9Q2BQy/Xm2NNmOA3py+ly9aqzfu6h6bqVqk2t12dvoNpBzzcS5A4tcSlawVOT8GWhRd0cYCZeK4wm4hgNkcIwof0Q2fc04+G5Q6YyvnTrHvBHZDoF94qyv1krf236aFxw95ug3Cgjox3FeaQhoMwtxpd06JONfjSloQ7dxKY=",
       "title": "The superior anesthetic management scheme during perioperative period for myasthenia gravis patients",
       "study_type": "Observational study",
       "registered_date": "2014-04-16",
@@ -4091,6 +4148,7 @@
     {
       "registry_id": "ChiCTR-OCC-13003090",
       "proj_id": "6469",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=D3bGE8EMh1J52EZ1WqN52Ycmx0t9rVrf8Co9yOdiEEnFyvLbZB0ghiwOrtwiLUdNC6sVrSiGzKDd3BZuJeQ6Gv/92Ef8zK12CiuijO4VCMWEJW5rByAAPNKKdlu8U4UHzxkoagXDrL3BuRWzU3kTzpGQUEFJKuab9pXaCky+N68=",
       "title": "Research on micrornas expression of Myasthenia gravis and the relationship with TH1, TH2 cells secrete cytokines",
       "study_type": "Observational study",
       "registered_date": "2013-03-02",
@@ -4125,6 +4183,7 @@
     {
       "registry_id": "ChiCTR-IPR-15006081",
       "proj_id": "10563",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=XD7LJEF6VR70SmJ+WbzJXxB7CFdOUX9yP/nt1krEA8S8syXiobu+NDp4MYl9CeYp6OdZbPZDCrafoX3o5ouHUHmzlxzrKOnqU07+rWX5WheSHvhVV1r2qZDkw8AEUgryEsiARJtvOXqQfBShLOLqPrqpK88vfe/e1H2ia70byio=",
       "title": "A prospective study of combined use of prednisone and methotrexate for the treatment of myasthenia gravis",
       "study_type": "Interventional study",
       "registered_date": "2015-03-14",
@@ -4159,6 +4218,7 @@
     {
       "registry_id": "ChiCTR-IOR-16008429",
       "proj_id": "13644",
+      "xml_url": "https://www.chictr.org.cn/bin/chictr/DownloadXml?path=MfcySn0oBjs8J3JgZwYHJwncjE7A4AGi9OE5Po9j1C7Tfx+KXU7+j5S8S5IDi21YoncZOx9wf7GyoWPQhDyLeghNNEJp2Xcx1zrHZLGEOhjh9ECQzc4be/+ree4xzCBPgAxh6VWSF8h1OYn7Bwef1S9oDwaMMRN7ou9pdTFCxew=",
       "title": "Comparison between the lateral side and subxiphoid approach for video-assisted thoracoscopic extended thymectomy in treating myasthenia gravis: a prospective randomized controlled study",
       "study_type": "Interventional study",
       "registered_date": "2016-05-07",

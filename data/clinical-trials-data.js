@@ -17861,7 +17861,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         "generated_at": "2026-10-24",
         "mode": "live_partial",
         "warning": "",
-        "revision": "semantic-v1:972e5aa9fa4db786570a43b1cf34aee754ffef541fa19c8ce7aaea35643b85f7"
+        "revision": "semantic-v1:16a5c3fa638bcd759ed4df85518acf4159771ad4ab9d8133a913fbce92c381f3"
       },
       "records": [
         {
@@ -20430,7 +20430,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
     {
       "source": "ChinaDrugTrials",
       "meta": {
-        "generated_at": "2026-10-24",
+        "generated_at": "2026-10-25",
         "mode": "live_crawl",
         "warning": "",
         "revision": "semantic-v1:cda8d63b8cf8ef51ecfd2c6ef650916ff9e8b0c1c7c99997ed0650d005340553"
