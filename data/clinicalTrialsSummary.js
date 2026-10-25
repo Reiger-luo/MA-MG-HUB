@@ -1,16 +1,16 @@
 window.MG_CLINICAL_TRIALS_SUMMARY = {
   "meta": {
-    "generated_at": "2026-10-18",
-    "total_count": 484,
+    "generated_at": "2026-10-24",
+    "total_count": 485,
     "sources_order": [
       "ClinicalTrials.gov",
       "ChiCTR",
       "ChinaDrugTrials"
     ]
   },
-  "pipeline_matrix_count": 197,
-  "recruiting_count": 132,
-  "recent_registration_count": 47,
+  "pipeline_matrix_count": 196,
+  "recruiting_count": 133,
+  "recent_registration_count": 51,
   "leading_mechanism": {
     "label": "FcRn 拮抗剂",
     "count": 72
@@ -23,8 +23,8 @@ window.MG_CLINICAL_TRIALS_SUMMARY = {
     },
     {
       "source": "ChiCTR",
-      "count": 119,
-      "mode": "live"
+      "count": 120,
+      "mode": "live_partial"
     },
     {
       "source": "ChinaDrugTrials",
@@ -34,14 +34,14 @@ window.MG_CLINICAL_TRIALS_SUMMARY = {
   ],
   "source_updates": {
     "ClinicalTrials.gov": {
-      "updated_at": "2026-10-18",
-      "revision": "semantic-v1:2752f63588cb57bc8043febf6d3e5cc43e880a0cca5ee83c4739ebce094b6fbc",
+      "updated_at": "2026-10-24",
+      "revision": "semantic-v1:cbde06b17b0ce49f1067752ad080f85ab27fef9b306bac245834095a91f01151",
       "mode": "cache"
     },
     "ChiCTR": {
       "updated_at": "2026-10-24",
-      "revision": "semantic-v1:d47f7621614b950a7233f98c08ff140b7aeefe4971ec36a84c35b7e6d4df9598",
-      "mode": "live"
+      "revision": "semantic-v1:972e5aa9fa4db786570a43b1cf34aee754ffef541fa19c8ce7aaea35643b85f7",
+      "mode": "live_partial"
     },
     "ChinaDrugTrials": {
       "updated_at": "2026-10-24",
@@ -52,7 +52,7 @@ window.MG_CLINICAL_TRIALS_SUMMARY = {
   "decision_signals": [
     {
       "title": "招募中试验",
-      "detail": "当前共有 132 项招募中或邀请入组试验。",
+      "detail": "当前共有 133 项招募中或邀请入组试验。",
       "tag": "招募"
     },
     {
@@ -62,216 +62,172 @@ window.MG_CLINICAL_TRIALS_SUMMARY = {
     },
     {
       "title": "近 6 个月新登记",
-      "detail": "截至 2026-10-18，近 6 个月登记 47 项试验。",
+      "detail": "截至 2026-10-24，近 6 个月登记 51 项试验。",
       "tag": "近期登记"
     }
   ],
   "weekly_changes": {
     "schema_version": "1.0",
     "source": "ClinicalTrials.gov",
-    "generated_at": "2026-10-18",
-    "previous_snapshot_at": "2026-10-11",
+    "generated_at": "2026-10-24",
+    "previous_snapshot_at": "2026-10-18",
     "comparison_available": true,
     "window_days": 7,
-    "window_start": "2026-10-11",
+    "window_start": "2026-10-17",
     "added_count": 0,
-    "status_change_count": 3,
+    "status_change_count": 1,
     "results_posted_count": 0,
-    "updated_count": 6,
+    "updated_count": 7,
     "removed_count": 0,
     "added": [],
     "status_changes": [
       {
-        "registry_id": "NCT06540144",
-        "title": "An Open-label Extension Study to Evaluate Rozanolixizumab in Pediatric Study Participants With Generalized Myasthenia Gravis",
-        "from_status": "ENROLLING_BY_INVITATION",
-        "to_status": "ACTIVE_NOT_RECRUITING",
-        "from_label": "招募中",
-        "to_label": "进行中",
-        "updated_date": "2026-10-16",
-        "url": "https://clinicaltrials.gov/study/NCT06540144",
-        "change_summary": "状态：招募中 → 进行中",
-        "drug_name": "Rozanolixizumab (罗泽利昔珠单抗)",
-        "phase_label": "Phase 3"
-      },
-      {
-        "registry_id": "NCT06149559",
-        "title": "An Open-label, Single-arm Study Evaluating the Activity, Safety, and Pharmacokinetics of Rozanolixizumab in Pediatric Study Participants With Moderate to Severe Generalized Myasthenia Gravis",
-        "from_status": "ACTIVE_NOT_RECRUITING",
-        "to_status": "COMPLETED",
-        "from_label": "进行中",
-        "to_label": "已完成",
-        "updated_date": "2026-10-16",
-        "url": "https://clinicaltrials.gov/study/NCT06149559",
-        "change_summary": "状态：进行中 → 已完成",
-        "drug_name": "Rozanolixizumab (罗泽利昔珠单抗)",
-        "phase_label": "Phase 2 / Phase 3"
-      },
-      {
-        "registry_id": "NCT06456580",
-        "title": "A Phase 3, Randomized, Double-Blind, Placebo-Controlled Study With an Open-label Extension Period to Evaluate the Efficacy and Safety of Telitacicept in Patients With Generalized Myasthenia Gravis",
-        "from_status": "RECRUITING",
-        "to_status": "ACTIVE_NOT_RECRUITING",
-        "from_label": "招募中",
-        "to_label": "进行中",
-        "updated_date": "2026-10-15",
-        "url": "https://clinicaltrials.gov/study/NCT06456580",
-        "change_summary": "状态：招募中 → 进行中",
-        "drug_name": "Telitacicept (泰它西普)",
-        "phase_label": "Phase 3"
+        "registry_id": "NCT07622342",
+        "title": "A Phase II, Randomized, Double-Blind, Placebo-Controlled Clinical Trial to Evaluate the Efficacy and Safety of SHR-2173 in Patients With Generalized Myasthenia Gravis",
+        "from_status": "NOT_YET_RECRUITING",
+        "to_status": "RECRUITING",
+        "from_label": "尚未招募",
+        "to_label": "招募中",
+        "updated_date": "2026-10-22",
+        "url": "https://clinicaltrials.gov/study/NCT07622342",
+        "change_summary": "状态：尚未招募 → 招募中",
+        "drug_name": "SHR-2173 injection",
+        "phase_label": "Phase 2"
       }
     ],
     "results_posted": [],
     "updated": [
       {
-        "registry_id": "NCT07673627",
-        "title": "ISA2 to Master Protocol ARGX-999-2-MG-2000 - an Exploratory, Phase 2a, Randomized, Double-Blinded, Placebo-Controlled Study to Evaluate the Safety, Tolerability, and Efficacy of Empasiprubart IV Monotherapy in Participants With AChR-Ab Seropositive Generalized Myasthenia Gravis",
-        "updated_date": "2026-10-16",
-        "url": "https://clinicaltrials.gov/study/NCT07673627",
+        "registry_id": "NCT06987539",
+        "title": "A Phase 2 Open-label Multicenter Study to Evaluate the Pharmacokinetics, Pharmacodynamics, Safety and Tolerability of Inebilizumab in Children From 2 Years to Less Than 18 Years of Age With Generalized Myasthenia Gravis (gMG)",
+        "updated_date": "2026-10-23",
+        "url": "https://clinicaltrials.gov/study/NCT06987539",
         "change_summary": "其他字段更新",
-        "drug_name": "Empasiprubart",
+        "drug_name": "Inebilizumab",
         "phase_label": "Phase 2"
       },
       {
-        "registry_id": "NCT07294170",
-        "title": "A Master Protocol for an Exploratory, Phase 2a, Proof-of-Concept Platform Study to Evaluate the Safety, Tolerability, and Efficacy of Multiple Regimens in Participants With Myasthenia Gravis",
-        "updated_date": "2026-10-16",
-        "url": "https://clinicaltrials.gov/study/NCT07294170",
+        "registry_id": "NCT06765161",
+        "title": "Efgartigimod in IVIG Dependent Myasthenia Gravis Patients",
+        "updated_date": "2026-10-22",
+        "url": "https://clinicaltrials.gov/study/NCT06765161",
         "change_summary": "其他字段更新",
         "drug_name": "Efgartigimod (艾加莫德)",
-        "phase_label": "未标注"
-      },
-      {
-        "registry_id": "NCT07022197",
-        "title": "Safety and Efficacy of BAFF-R CART for Refractory Neuroimmune Diseases",
-        "updated_date": "2026-10-16",
-        "url": "https://clinicaltrials.gov/study/NCT07022197",
-        "change_summary": "其他字段更新",
-        "drug_name": "BAFF-R CART",
-        "phase_label": "Phase 1 / Phase 2"
-      },
-      {
-        "registry_id": "NCT04225871",
-        "title": "A Phase 3, Multicenter, Open-Label Extension Study of Zilucoplan in Subjects With Generalized Myasthenia Gravis",
-        "updated_date": "2026-10-16",
-        "url": "https://clinicaltrials.gov/study/NCT04225871",
-        "change_summary": "其他字段更新",
-        "drug_name": "Zilucoplan (泽卢克布仑钠)",
         "phase_label": "Phase 3"
       },
       {
-        "registry_id": "NCT07247279",
-        "title": "A Multicenter Non Interventional Single Arm Retrospective-prospective Observational Study in Therapeutic Approaches in AChR-Antibody Positive Generalized Myasthenia Gravis (gMG) in Real Clinical Practice in Russia",
-        "updated_date": "2026-10-14",
-        "url": "https://clinicaltrials.gov/study/NCT07247279",
+        "registry_id": "NCT06626919",
+        "title": "A Phase 1 Study of Anitocabtagene Autoleucel for the Treatment of Subjects With Non-Oncology Plasma Cell-Related Diseases",
+        "updated_date": "2026-10-22",
+        "url": "https://clinicaltrials.gov/study/NCT06626919",
+        "change_summary": "新增干预：Cyclophosphamide、Fludarabine；移除干预：Standard Lymphodepletion regimen",
+        "drug_name": "anito-cel",
+        "phase_label": "Phase 1"
+      },
+      {
+        "registry_id": "NCT07596784",
+        "title": "An Open-label, Single-arm, Multi-center, Interventional Study to Evaluate the Efficacy, Safety, Pharmacokinetics, Pharmacodynamics, and Immunogenicity of Ravulizumab in Chinese Adult Patients With Generalized Myasthenia Gravis (gMG)",
+        "updated_date": "2026-10-21",
+        "url": "https://clinicaltrials.gov/study/NCT07596784",
+        "change_summary": "主要完成日期：2027-08-17 → 2027-08-24",
+        "drug_name": "Ravulizumab (瑞利珠单抗)",
+        "phase_label": "Phase 3"
+      },
+      {
+        "registry_id": "NCT06463587",
+        "title": "A Phase 3, Randomized, Double-Blind, Placebo-Controlled, 3-Arm, 3-Period Study to Assess the Efficacy and Safety of a New Formulation of Oral Cladribine Compared With Placebo in Participants With Generalized Myasthenia Gravis (MyClad)",
+        "updated_date": "2026-10-21",
+        "url": "https://clinicaltrials.gov/study/NCT06463587",
         "change_summary": "其他字段更新",
-        "drug_name": "",
-        "phase_label": "未标注"
+        "drug_name": "Cladribine (克拉屈滨)",
+        "phase_label": "Phase 3"
       }
     ],
     "removed": [],
     "candidate_changes": [
       {
         "event_type": "status_change",
-        "registry_id": "NCT06540144",
-        "title": "An Open-label Extension Study to Evaluate Rozanolixizumab in Pediatric Study Participants With Generalized Myasthenia Gravis",
-        "from_status": "ENROLLING_BY_INVITATION",
-        "to_status": "ACTIVE_NOT_RECRUITING",
-        "from_label": "招募中",
-        "to_label": "进行中",
-        "updated_date": "2026-10-16",
-        "url": "https://clinicaltrials.gov/study/NCT06540144",
-        "change_summary": "状态：招募中 → 进行中",
-        "drug_name": "Rozanolixizumab (罗泽利昔珠单抗)",
-        "phase_label": "Phase 3"
-      },
-      {
-        "event_type": "status_change",
-        "registry_id": "NCT06149559",
-        "title": "An Open-label, Single-arm Study Evaluating the Activity, Safety, and Pharmacokinetics of Rozanolixizumab in Pediatric Study Participants With Moderate to Severe Generalized Myasthenia Gravis",
-        "from_status": "ACTIVE_NOT_RECRUITING",
-        "to_status": "COMPLETED",
-        "from_label": "进行中",
-        "to_label": "已完成",
-        "updated_date": "2026-10-16",
-        "url": "https://clinicaltrials.gov/study/NCT06149559",
-        "change_summary": "状态：进行中 → 已完成",
-        "drug_name": "Rozanolixizumab (罗泽利昔珠单抗)",
-        "phase_label": "Phase 2 / Phase 3"
-      },
-      {
-        "event_type": "status_change",
-        "registry_id": "NCT06456580",
-        "title": "A Phase 3, Randomized, Double-Blind, Placebo-Controlled Study With an Open-label Extension Period to Evaluate the Efficacy and Safety of Telitacicept in Patients With Generalized Myasthenia Gravis",
-        "from_status": "RECRUITING",
-        "to_status": "ACTIVE_NOT_RECRUITING",
-        "from_label": "招募中",
-        "to_label": "进行中",
-        "updated_date": "2026-10-15",
-        "url": "https://clinicaltrials.gov/study/NCT06456580",
-        "change_summary": "状态：招募中 → 进行中",
-        "drug_name": "Telitacicept (泰它西普)",
-        "phase_label": "Phase 3"
-      },
-      {
-        "event_type": "updated",
-        "registry_id": "NCT07673627",
-        "title": "ISA2 to Master Protocol ARGX-999-2-MG-2000 - an Exploratory, Phase 2a, Randomized, Double-Blinded, Placebo-Controlled Study to Evaluate the Safety, Tolerability, and Efficacy of Empasiprubart IV Monotherapy in Participants With AChR-Ab Seropositive Generalized Myasthenia Gravis",
-        "updated_date": "2026-10-16",
-        "url": "https://clinicaltrials.gov/study/NCT07673627",
-        "change_summary": "其他字段更新",
-        "drug_name": "Empasiprubart",
+        "registry_id": "NCT07622342",
+        "title": "A Phase II, Randomized, Double-Blind, Placebo-Controlled Clinical Trial to Evaluate the Efficacy and Safety of SHR-2173 in Patients With Generalized Myasthenia Gravis",
+        "from_status": "NOT_YET_RECRUITING",
+        "to_status": "RECRUITING",
+        "from_label": "尚未招募",
+        "to_label": "招募中",
+        "updated_date": "2026-10-22",
+        "url": "https://clinicaltrials.gov/study/NCT07622342",
+        "change_summary": "状态：尚未招募 → 招募中",
+        "drug_name": "SHR-2173 injection",
         "phase_label": "Phase 2"
       },
       {
         "event_type": "updated",
-        "registry_id": "NCT07294170",
-        "title": "A Master Protocol for an Exploratory, Phase 2a, Proof-of-Concept Platform Study to Evaluate the Safety, Tolerability, and Efficacy of Multiple Regimens in Participants With Myasthenia Gravis",
-        "updated_date": "2026-10-16",
-        "url": "https://clinicaltrials.gov/study/NCT07294170",
+        "registry_id": "NCT06987539",
+        "title": "A Phase 2 Open-label Multicenter Study to Evaluate the Pharmacokinetics, Pharmacodynamics, Safety and Tolerability of Inebilizumab in Children From 2 Years to Less Than 18 Years of Age With Generalized Myasthenia Gravis (gMG)",
+        "updated_date": "2026-10-23",
+        "url": "https://clinicaltrials.gov/study/NCT06987539",
+        "change_summary": "其他字段更新",
+        "drug_name": "Inebilizumab",
+        "phase_label": "Phase 2"
+      },
+      {
+        "event_type": "updated",
+        "registry_id": "NCT06765161",
+        "title": "Efgartigimod in IVIG Dependent Myasthenia Gravis Patients",
+        "updated_date": "2026-10-22",
+        "url": "https://clinicaltrials.gov/study/NCT06765161",
         "change_summary": "其他字段更新",
         "drug_name": "Efgartigimod (艾加莫德)",
-        "phase_label": "未标注"
-      },
-      {
-        "event_type": "updated",
-        "registry_id": "NCT07022197",
-        "title": "Safety and Efficacy of BAFF-R CART for Refractory Neuroimmune Diseases",
-        "updated_date": "2026-10-16",
-        "url": "https://clinicaltrials.gov/study/NCT07022197",
-        "change_summary": "其他字段更新",
-        "drug_name": "BAFF-R CART",
-        "phase_label": "Phase 1 / Phase 2"
-      },
-      {
-        "event_type": "updated",
-        "registry_id": "NCT04225871",
-        "title": "A Phase 3, Multicenter, Open-Label Extension Study of Zilucoplan in Subjects With Generalized Myasthenia Gravis",
-        "updated_date": "2026-10-16",
-        "url": "https://clinicaltrials.gov/study/NCT04225871",
-        "change_summary": "其他字段更新",
-        "drug_name": "Zilucoplan (泽卢克布仑钠)",
         "phase_label": "Phase 3"
       },
       {
         "event_type": "updated",
-        "registry_id": "NCT07247279",
-        "title": "A Multicenter Non Interventional Single Arm Retrospective-prospective Observational Study in Therapeutic Approaches in AChR-Antibody Positive Generalized Myasthenia Gravis (gMG) in Real Clinical Practice in Russia",
-        "updated_date": "2026-10-14",
-        "url": "https://clinicaltrials.gov/study/NCT07247279",
-        "change_summary": "其他字段更新",
-        "drug_name": "",
-        "phase_label": "未标注"
+        "registry_id": "NCT06626919",
+        "title": "A Phase 1 Study of Anitocabtagene Autoleucel for the Treatment of Subjects With Non-Oncology Plasma Cell-Related Diseases",
+        "updated_date": "2026-10-22",
+        "url": "https://clinicaltrials.gov/study/NCT06626919",
+        "change_summary": "新增干预：Cyclophosphamide、Fludarabine；移除干预：Standard Lymphodepletion regimen",
+        "drug_name": "anito-cel",
+        "phase_label": "Phase 1"
       },
       {
         "event_type": "updated",
-        "registry_id": "NCT07226830",
-        "title": "Quantification of Change in MG Disease Activity in Individuals With Generalized Myasthenia Gravis (gMG) After Administration of VYVGART® or VYVGART Hytrulo® Using BioDigit MG",
-        "updated_date": "2026-10-13",
-        "url": "https://clinicaltrials.gov/study/NCT07226830",
+        "registry_id": "NCT07596784",
+        "title": "An Open-label, Single-arm, Multi-center, Interventional Study to Evaluate the Efficacy, Safety, Pharmacokinetics, Pharmacodynamics, and Immunogenicity of Ravulizumab in Chinese Adult Patients With Generalized Myasthenia Gravis (gMG)",
+        "updated_date": "2026-10-21",
+        "url": "https://clinicaltrials.gov/study/NCT07596784",
+        "change_summary": "主要完成日期：2027-08-17 → 2027-08-24",
+        "drug_name": "Ravulizumab (瑞利珠单抗)",
+        "phase_label": "Phase 3"
+      },
+      {
+        "event_type": "updated",
+        "registry_id": "NCT06463587",
+        "title": "A Phase 3, Randomized, Double-Blind, Placebo-Controlled, 3-Arm, 3-Period Study to Assess the Efficacy and Safety of a New Formulation of Oral Cladribine Compared With Placebo in Participants With Generalized Myasthenia Gravis (MyClad)",
+        "updated_date": "2026-10-21",
+        "url": "https://clinicaltrials.gov/study/NCT06463587",
         "change_summary": "其他字段更新",
-        "drug_name": "",
-        "phase_label": "未标注"
+        "drug_name": "Cladribine (克拉屈滨)",
+        "phase_label": "Phase 3"
+      },
+      {
+        "event_type": "updated",
+        "registry_id": "NCT07304154",
+        "title": "A Phase 1, Open-label, Multiregional, Multicenter, Basket Study Evaluating the Safety and Efficacy of KITE-363, an Autologous Anti-CD19/CD20 CAR T-cell Therapy in Participants With Relapsed/Refractory Autoimmune Neurologic Diseases",
+        "updated_date": "2026-10-19",
+        "url": "https://clinicaltrials.gov/study/NCT07304154",
+        "change_summary": "样本量：52 → 57（预估）",
+        "drug_name": "KITE-363",
+        "phase_label": "Phase 1"
+      },
+      {
+        "event_type": "updated",
+        "registry_id": "NCT06359041",
+        "title": "RESET-MG: A Phase 1/2, Open-Label Study to Evaluate the Safety and Efficacy of Autologous CD19-specific Chimeric Antigen Receptor T Cells (CABA-201) in Participants With Generalized Myasthenia Gravis",
+        "updated_date": "2026-10-19",
+        "url": "https://clinicaltrials.gov/study/NCT06359041",
+        "change_summary": "其他字段更新",
+        "drug_name": "CABA-201",
+        "phase_label": "Phase 1 / Phase 2"
       }
     ]
   },
@@ -293,7 +249,7 @@ window.MG_CLINICAL_TRIALS_SUMMARY = {
     "phase_concentration": [
       {
         "label": "未标注",
-        "count": 240
+        "count": 241
       },
       {
         "label": "Phase 3",
@@ -325,7 +281,7 @@ window.MG_CLINICAL_TRIALS_SUMMARY = {
       }
     ],
     "recent_registrations": {
-      "count": 47,
+      "count": 51,
       "top_drugs": [
         {
           "label": "FcRn 拮抗剂",
@@ -343,7 +299,7 @@ window.MG_CLINICAL_TRIALS_SUMMARY = {
       "top_phases": [
         {
           "label": "未标注",
-          "count": 26
+          "count": 29
         },
         {
           "label": "Phase 3",

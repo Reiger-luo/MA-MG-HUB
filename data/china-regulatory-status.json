@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-25",
+  "generated_at": "2026-10-25",
   "source_note": "China regulatory status seed for MG competitive matrix. Maintained from NMPA/CDE/NHSA/company primary or near-primary public sources; Hermes can replace this file with scraped NMPA/CDE results later.",
   "drugs": [
     {
@@ -40,15 +40,16 @@
     },
     {
       "name": "Batoclimab",
-      "china_status": "BLA under review",
-      "status_label": "审评中",
-      "status_date": "2024-06 resubmission; 2024-07 accepted",
-      "china_indication": "巴托利单抗治疗 gMG 的 BLA 已向 NMPA 重新递交并获受理；截至本次核对未记录 NMPA gMG 获批。",
-      "cde_status": "BLA resubmitted / accepted",
-      "source_type": "company / NMPA acceptance report",
-      "source_url": "https://www.harbourbiomed.com/news/222.html",
-      "secondary_url": "https://www.phirda.com/artilce_35789.html?cId=1&module=trackingCodeGenerator",
-      "last_verified": "2026-06-25"
+      "brand_name": "恩力达®",
+      "china_status": "NMPA approved",
+      "status_label": "已获批",
+      "status_date": "2026-10-23",
+      "china_indication": "与常规治疗药物联用，用于抗 AChR 抗体阳性的成人 gMG 患者；皮下注射 170 mg (1 mL)/瓶，推荐 680 mg 每周一次、连续 6 次后观察 4 周（每周期 9 周）。",
+      "cde_status": "Approved (170 mg SC vial); Greater China commercialisation by CSPC",
+      "source_type": "company announcement (NMPA approval)",
+      "source_url": "https://www.harbourbiomed.cn/news/1335.html",
+      "secondary_url": "https://finance.sina.com.cn/stock/hkstock/ggscyd/2026-10-23/doc-iniweiyu8030618.shtml",
+      "last_verified": "2026-10-25"
     },
     {
       "name": "Zilucoplan",

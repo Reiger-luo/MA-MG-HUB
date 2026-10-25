@@ -1,7 +1,7 @@
 window.MG_CLINICAL_TRIALS_DATA = {
   "meta": {
-    "generated_at": "2026-10-18",
-    "total_count": 484,
+    "generated_at": "2026-10-25",
+    "total_count": 485,
     "sources_order": [
       "ClinicalTrials.gov",
       "ChiCTR",
@@ -11,7 +11,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
   "decision_signals": [
     {
       "title": "招募中试验",
-      "detail": "当前共有 132 项招募中或邀请入组试验。",
+      "detail": "当前共有 133 项招募中或邀请入组试验。",
       "tag": "招募"
     },
     {
@@ -21,7 +21,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "title": "近 6 个月新登记",
-      "detail": "截至 2026-10-18，近 6 个月登记 47 项试验。",
+      "detail": "截至 2026-10-25，近 6 个月登记 51 项试验。",
       "tag": "近期登记"
     }
   ],
@@ -1467,9 +1467,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "Phase 3",
-          "start_date": "2026-07-20",
-          "readout_date": "2027-08-17",
-          "completion_date": "2027-08-17",
+          "start_date": "2026-07-27",
+          "readout_date": "2027-08-24",
+          "completion_date": "2027-08-24",
           "sponsor": "Alexion Pharmaceuticals, Inc.",
           "url": "https://clinicaltrials.gov/study/NCT07596784"
         }
@@ -6934,10 +6934,10 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry": "ClinicalTrials.gov",
           "registry_id": "NCT07622342",
           "title": "A Phase II Study of SHR-2173 Injection in Patients With Myasthenia Gravis",
-          "status_label": "尚未招募",
+          "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "Phase 2",
-          "start_date": "",
+          "start_date": "2026-08-28",
           "readout_date": "",
           "completion_date": "",
           "sponsor": "Guangdong Hengrui Pharmaceutical Co., Ltd",
@@ -6945,7 +6945,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         }
       ],
       "timeline": {
-        "start": "2026-06-03",
+        "start": "2026-08-28",
         "readout": "",
         "completion": ""
       },
@@ -7044,15 +7044,15 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "name": "Cyclophosphamide",
       "highest_phase_label": "Phase 1",
       "stage_number": 1,
-      "study_count": 3,
-      "status_summary": "招募 1 · 进行 1 · 完成 0 · 终止 1",
+      "study_count": 4,
+      "status_summary": "招募 2 · 进行 1 · 完成 0 · 终止 1",
       "sponsors": [
         "Juno Therapeutics, Inc., a Bristol-Myers Squibb Company",
         "Kite, A Gilead Company",
         "Northwestern University"
       ],
       "sources": {
-        "ClinicalTrials.gov": 3
+        "ClinicalTrials.gov": 4
       },
       "key_trial": {
         "registry": "ClinicalTrials.gov",
@@ -7089,8 +7089,21 @@ window.MG_CLINICAL_TRIALS_DATA = {
         },
         {
           "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT06626919",
+          "title": "Study of Anitocabtagene Autoleucel in Participants With Non-Oncology Plasma Cell-Related Diseases",
+          "status_label": "招募中",
+          "status_class": "recruiting",
+          "phase_label": "Phase 1",
+          "start_date": "2025-04-30",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "Kite, A Gilead Company",
+          "url": "https://clinicaltrials.gov/study/NCT06626919"
+        },
+        {
+          "registry": "ClinicalTrials.gov",
           "registry_id": "NCT07304154",
-          "title": "A Study Evaluating the Safety and Efficacy of KITE-363 in Relapsed/Refractory Autoimmune Neurologic Diseases",
+          "title": "Study of KITE-363 in Participants With Autoimmune Neurologic Diseases That Did Not Respond to Usual Treatment",
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "Phase 1",
@@ -7107,6 +7120,76 @@ window.MG_CLINICAL_TRIALS_DATA = {
         "completion": "2027-07-15"
       },
       "first_registered": "2007-01-19",
+      "latest_registered": "2025-12-26",
+      "linked_registries": []
+    },
+    {
+      "drug_class": "其他",
+      "name": "Fludarabine",
+      "highest_phase_label": "Phase 1",
+      "stage_number": 1,
+      "study_count": 3,
+      "status_summary": "招募 2 · 进行 1 · 完成 0",
+      "sponsors": [
+        "Juno Therapeutics, Inc., a Bristol-Myers Squibb Company",
+        "Kite, A Gilead Company"
+      ],
+      "sources": {
+        "ClinicalTrials.gov": 3
+      },
+      "key_trial": {
+        "registry": "ClinicalTrials.gov",
+        "registry_id": "NCT06220201",
+        "title": "A Study to Evaluate the Safety, Tolerability, Efficacy, and Drug Levels of CC-97540 in Participants With Relapsing Forms of Multiple Sclerosis, Progressive Forms of Multiple Sclerosis or Refractory Myasthenia Gravis (MG) (Breakfree-2)",
+        "url": "https://clinicaltrials.gov/study/NCT06220201"
+      },
+      "trials": [
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT06220201",
+          "title": "A Study to Evaluate the Safety, Tolerability, Efficacy, and Drug Levels of CC-97540 in Participants With Relapsing Forms of Multiple Sclerosis, Progressive Forms of Multiple Sclerosis or Refractory Myasthenia Gravis (MG) (Breakfree-2)",
+          "status_label": "进行中",
+          "status_class": "active",
+          "phase_label": "Phase 1",
+          "start_date": "2024-03-28",
+          "readout_date": "2027-07-15",
+          "completion_date": "2027-07-15",
+          "sponsor": "Juno Therapeutics, Inc., a Bristol-Myers Squibb Company",
+          "url": "https://clinicaltrials.gov/study/NCT06220201"
+        },
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT06626919",
+          "title": "Study of Anitocabtagene Autoleucel in Participants With Non-Oncology Plasma Cell-Related Diseases",
+          "status_label": "招募中",
+          "status_class": "recruiting",
+          "phase_label": "Phase 1",
+          "start_date": "2025-04-30",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "Kite, A Gilead Company",
+          "url": "https://clinicaltrials.gov/study/NCT06626919"
+        },
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT07304154",
+          "title": "Study of KITE-363 in Participants With Autoimmune Neurologic Diseases That Did Not Respond to Usual Treatment",
+          "status_label": "招募中",
+          "status_class": "recruiting",
+          "phase_label": "Phase 1",
+          "start_date": "2026-04-10",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "Kite, A Gilead Company",
+          "url": "https://clinicaltrials.gov/study/NCT07304154"
+        }
+      ],
+      "timeline": {
+        "start": "2024-03-28",
+        "readout": "2027-07-15",
+        "completion": "2027-07-15"
+      },
+      "first_registered": "2024-01-23",
       "latest_registered": "2025-12-26",
       "linked_registries": []
     },
@@ -7179,63 +7262,6 @@ window.MG_CLINICAL_TRIALS_DATA = {
       },
       "first_registered": "2024-05-17",
       "latest_registered": "2025-07-10",
-      "linked_registries": []
-    },
-    {
-      "drug_class": "其他",
-      "name": "Fludarabine",
-      "highest_phase_label": "Phase 1",
-      "stage_number": 1,
-      "study_count": 2,
-      "status_summary": "招募 1 · 进行 1 · 完成 0",
-      "sponsors": [
-        "Juno Therapeutics, Inc., a Bristol-Myers Squibb Company",
-        "Kite, A Gilead Company"
-      ],
-      "sources": {
-        "ClinicalTrials.gov": 2
-      },
-      "key_trial": {
-        "registry": "ClinicalTrials.gov",
-        "registry_id": "NCT06220201",
-        "title": "A Study to Evaluate the Safety, Tolerability, Efficacy, and Drug Levels of CC-97540 in Participants With Relapsing Forms of Multiple Sclerosis, Progressive Forms of Multiple Sclerosis or Refractory Myasthenia Gravis (MG) (Breakfree-2)",
-        "url": "https://clinicaltrials.gov/study/NCT06220201"
-      },
-      "trials": [
-        {
-          "registry": "ClinicalTrials.gov",
-          "registry_id": "NCT06220201",
-          "title": "A Study to Evaluate the Safety, Tolerability, Efficacy, and Drug Levels of CC-97540 in Participants With Relapsing Forms of Multiple Sclerosis, Progressive Forms of Multiple Sclerosis or Refractory Myasthenia Gravis (MG) (Breakfree-2)",
-          "status_label": "进行中",
-          "status_class": "active",
-          "phase_label": "Phase 1",
-          "start_date": "2024-03-28",
-          "readout_date": "2027-07-15",
-          "completion_date": "2027-07-15",
-          "sponsor": "Juno Therapeutics, Inc., a Bristol-Myers Squibb Company",
-          "url": "https://clinicaltrials.gov/study/NCT06220201"
-        },
-        {
-          "registry": "ClinicalTrials.gov",
-          "registry_id": "NCT07304154",
-          "title": "A Study Evaluating the Safety and Efficacy of KITE-363 in Relapsed/Refractory Autoimmune Neurologic Diseases",
-          "status_label": "招募中",
-          "status_class": "recruiting",
-          "phase_label": "Phase 1",
-          "start_date": "2026-04-10",
-          "readout_date": "",
-          "completion_date": "",
-          "sponsor": "Kite, A Gilead Company",
-          "url": "https://clinicaltrials.gov/study/NCT07304154"
-        }
-      ],
-      "timeline": {
-        "start": "2024-03-28",
-        "readout": "2027-07-15",
-        "completion": "2027-07-15"
-      },
-      "first_registered": "2024-01-23",
-      "latest_registered": "2025-12-26",
       "linked_registries": []
     },
     {
@@ -7697,14 +7723,14 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ClinicalTrials.gov",
         "registry_id": "NCT07304154",
-        "title": "A Study Evaluating the Safety and Efficacy of KITE-363 in Relapsed/Refractory Autoimmune Neurologic Diseases",
+        "title": "Study of KITE-363 in Participants With Autoimmune Neurologic Diseases That Did Not Respond to Usual Treatment",
         "url": "https://clinicaltrials.gov/study/NCT07304154"
       },
       "trials": [
         {
           "registry": "ClinicalTrials.gov",
           "registry_id": "NCT07304154",
-          "title": "A Study Evaluating the Safety and Efficacy of KITE-363 in Relapsed/Refractory Autoimmune Neurologic Diseases",
+          "title": "Study of KITE-363 in Participants With Autoimmune Neurologic Diseases That Did Not Respond to Usual Treatment",
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "Phase 1",
@@ -7855,49 +7881,6 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "drug_class": "其他",
-      "name": "Standard Lymphodepletion regimen",
-      "highest_phase_label": "Phase 1",
-      "stage_number": 1,
-      "study_count": 1,
-      "status_summary": "招募 1 · 进行 0 · 完成 0",
-      "sponsors": [
-        "Arcellx, Inc."
-      ],
-      "sources": {
-        "ClinicalTrials.gov": 1
-      },
-      "key_trial": {
-        "registry": "ClinicalTrials.gov",
-        "registry_id": "NCT06626919",
-        "title": "A Phase 1 Study of Anitocabtagene Autoleucel for the Treatment of Subjects With Non-oncology Plasma Cell-related Diseases",
-        "url": "https://clinicaltrials.gov/study/NCT06626919"
-      },
-      "trials": [
-        {
-          "registry": "ClinicalTrials.gov",
-          "registry_id": "NCT06626919",
-          "title": "A Phase 1 Study of Anitocabtagene Autoleucel for the Treatment of Subjects With Non-oncology Plasma Cell-related Diseases",
-          "status_label": "招募中",
-          "status_class": "recruiting",
-          "phase_label": "Phase 1",
-          "start_date": "2025-04-30",
-          "readout_date": "",
-          "completion_date": "",
-          "sponsor": "Arcellx, Inc.",
-          "url": "https://clinicaltrials.gov/study/NCT06626919"
-        }
-      ],
-      "timeline": {
-        "start": "2025-04-30",
-        "readout": "",
-        "completion": ""
-      },
-      "first_registered": "2024-10-04",
-      "latest_registered": "2024-10-04",
-      "linked_registries": []
-    },
-    {
-      "drug_class": "其他",
       "name": "The mRNA-LNP-delivered trispecific antibody will be administered as multiple",
       "highest_phase_label": "Phase 1",
       "stage_number": 1,
@@ -7990,7 +7973,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "study_count": 1,
       "status_summary": "招募 1 · 进行 0 · 完成 0",
       "sponsors": [
-        "Arcellx, Inc."
+        "Kite, A Gilead Company"
       ],
       "sources": {
         "ClinicalTrials.gov": 1
@@ -7998,21 +7981,21 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "key_trial": {
         "registry": "ClinicalTrials.gov",
         "registry_id": "NCT06626919",
-        "title": "A Phase 1 Study of Anitocabtagene Autoleucel for the Treatment of Subjects With Non-oncology Plasma Cell-related Diseases",
+        "title": "Study of Anitocabtagene Autoleucel in Participants With Non-Oncology Plasma Cell-Related Diseases",
         "url": "https://clinicaltrials.gov/study/NCT06626919"
       },
       "trials": [
         {
           "registry": "ClinicalTrials.gov",
           "registry_id": "NCT06626919",
-          "title": "A Phase 1 Study of Anitocabtagene Autoleucel for the Treatment of Subjects With Non-oncology Plasma Cell-related Diseases",
+          "title": "Study of Anitocabtagene Autoleucel in Participants With Non-Oncology Plasma Cell-Related Diseases",
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "Phase 1",
           "start_date": "2025-04-30",
           "readout_date": "",
           "completion_date": "",
-          "sponsor": "Arcellx, Inc.",
+          "sponsor": "Kite, A Gilead Company",
           "url": "https://clinicaltrials.gov/study/NCT06626919"
         }
       ],
@@ -11125,9 +11108,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
     {
       "source": "ClinicalTrials.gov",
       "meta": {
-        "generated_at": "2026-10-18",
+        "generated_at": "2026-10-25",
         "mode": "cache",
-        "revision": "semantic-v1:2752f63588cb57bc8043febf6d3e5cc43e880a0cca5ee83c4739ebce094b6fbc"
+        "revision": "semantic-v1:cbde06b17b0ce49f1067752ad080f85ab27fef9b306bac245834095a91f01151"
       },
       "records": [
         {
@@ -15633,7 +15616,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ClinicalTrials.gov",
           "registry_id": "NCT06626919",
-          "title": "A Phase 1 Study of Anitocabtagene Autoleucel for the Treatment of Subjects With Non-oncology Plasma Cell-related Diseases",
+          "title": "Study of Anitocabtagene Autoleucel in Participants With Non-Oncology Plasma Cell-Related Diseases",
           "url": "https://clinicaltrials.gov/study/NCT06626919",
           "status": "RECRUITING",
           "status_label": "招募中",
@@ -15642,14 +15625,15 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "drug_name": "anito-cel",
           "drug_names": [
             "anito-cel",
-            "Standard Lymphodepletion regimen"
+            "Cyclophosphamide",
+            "Fludarabine"
           ],
           "indication": "重症肌无力",
           "phase_label": "Phase 1",
-          "sponsor": "Arcellx, Inc.",
+          "sponsor": "Kite, A Gilead Company",
           "start_date": "2025-04-30",
-          "readout_date": "2027-03",
-          "completion_date": "2028-04",
+          "readout_date": "2028-10",
+          "completion_date": "2028-10",
           "registered_date": "2024-10-04",
           "linked_registries": []
         },
@@ -17114,7 +17098,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         {
           "registry": "ClinicalTrials.gov",
           "registry_id": "NCT07304154",
-          "title": "A Study Evaluating the Safety and Efficacy of KITE-363 in Relapsed/Refractory Autoimmune Neurologic Diseases",
+          "title": "Study of KITE-363 in Participants With Autoimmune Neurologic Diseases That Did Not Respond to Usual Treatment",
           "url": "https://clinicaltrials.gov/study/NCT07304154",
           "status": "RECRUITING",
           "status_label": "招募中",
@@ -17569,9 +17553,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "Phase 3",
           "sponsor": "Alexion Pharmaceuticals, Inc.",
-          "start_date": "2026-07-20",
-          "readout_date": "2027-08-17",
-          "completion_date": "2027-08-17",
+          "start_date": "2026-07-27",
+          "readout_date": "2027-08-24",
+          "completion_date": "2027-08-24",
           "registered_date": "2026-05-19",
           "linked_registries": []
         },
@@ -17602,8 +17586,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "NCT07622342",
           "title": "A Phase II Study of SHR-2173 Injection in Patients With Myasthenia Gravis",
           "url": "https://clinicaltrials.gov/study/NCT07622342",
-          "status": "NOT_YET_RECRUITING",
-          "status_label": "尚未招募",
+          "status": "RECRUITING",
+          "status_label": "招募中",
           "status_class": "recruiting",
           "drug_class": "其他",
           "drug_name": "SHR-2173 injection",
@@ -17613,7 +17597,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "Phase 2",
           "sponsor": "Guangdong Hengrui Pharmaceutical Co., Ltd",
-          "start_date": "2026-06",
+          "start_date": "2026-08-28",
           "readout_date": "2027-09",
           "completion_date": "2027-12",
           "registered_date": "2026-06-03",
@@ -17875,9 +17859,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "source": "ChiCTR",
       "meta": {
         "generated_at": "2026-10-24",
-        "mode": "live",
+        "mode": "live_partial",
         "warning": "",
-        "revision": "semantic-v1:d47f7621614b950a7233f98c08ff140b7aeefe4971ec36a84c35b7e6d4df9598"
+        "revision": "semantic-v1:972e5aa9fa4db786570a43b1cf34aee754ffef541fa19c8ce7aaea35643b85f7"
       },
       "records": [
         {
@@ -20271,6 +20255,26 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "readout_date": "",
           "completion_date": "",
           "registered_date": "2026-09-16",
+          "linked_registries": []
+        },
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR2600132883",
+          "title": "A bidirectional cohort study comparing the efficacy of traditional immunotherapy and novel biologic agents in treating neuroimmunological disorders",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=343703",
+          "status": "Pending",
+          "status_label": "Pending",
+          "status_class": "other",
+          "drug_class": "其他",
+          "drug_name": "",
+          "drug_names": [],
+          "indication": "重症肌无力",
+          "phase_label": "未标注",
+          "sponsor": "Punan Hospital,Pudong New District, Shanghai",
+          "start_date": "2026-09-30",
+          "readout_date": "",
+          "completion_date": "",
+          "registered_date": "2026-09-19",
           "linked_registries": []
         },
         {
