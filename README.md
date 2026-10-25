@@ -24,13 +24,13 @@ MA-MG-HUB 重点回答：
 
 ## 页面
 
-| 视图 | 页面与标签 | 主要能力 |
+| 模块 | 页面 | 主要能力 |
 | --- | --- | --- |
-| 工作台 | [index.html](index.html) | 本周信号板、四个视图入口、数据源与发布状态 |
-| 证据与格局 | [pages/landscape.html](pages/landscape.html) | 竞争定位（可导出竞品卡）、指南差异（可导出对照表）、本月主题动态、Living Answers |
-| 专家与合作 | [pages/knowledge.html](pages/knowledge.html) | 主题图谱（社区作分组着色）、中国作者联络图、Claim–Evidence 台账、跨库检索 |
-| 应答与准备 | [pages/msl.html](pages/msl.html) | China-only 专家画像、拜访助手；文献速览见情报中心 |
-| 工具箱 | [pages/literature.html](pages/literature.html) | 临床试验、中国情报、会议摘要与当前上下文简报 |
+| 工作台 | [index.html](index.html) | 近期信号、社区动态、工作流状态和数据健康 |
+| 情报中心 | [pages/literature.html](pages/literature.html) | 公开文献、信号板、中国情报、会议摘要、临床试验和当前上下文简报 |
+| 诊治格局 | [pages/landscape.html](pages/landscape.html) | 格局洞察、竞争矩阵、临床管线和 Living Answers |
+| 知识库 | [pages/knowledge.html](pages/knowledge.html) | 知识图谱、医学事务社区、证据矩阵、专题和中国作者网络 |
+| MSL 工作台 | [pages/msl.html](pages/msl.html) | China-only 专家画像、内容模块、拜访话题建议和 PMID 清单 |
 
 历史页面 `pages/materials.html`、`pages/outputs.html`、`pages/progress.html` 和 `pages/competitive.html` 仅保留重定向入口。
 
@@ -61,7 +61,7 @@ MG-core gate + 证据等级 I–V gate + 独立来源频道
   ↓
 公开滚动层 / 社区语义层 / 知识图谱 / 策展专题 / 中国作者网络
   ↓
-工作台 / 证据与格局 / 专家与合作 / 应答与准备 / 工具箱
+工作台 / 情报中心 / 诊治格局 / 知识库 / MSL 工作台
 ```
 
 公开网站只部署必要的 HTML、CSS、JavaScript 和 JSON。full 文献、weekly 临时输入、LLM 缓存、成本日志和详细审计保留在本地。

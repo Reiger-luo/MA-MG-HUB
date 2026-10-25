@@ -26,22 +26,17 @@ MG Intelligence Hub 是面向 MG 医学事务团队的静态情报工作站。�
 | GitHub Actions（代码图） | 对同仓代码 PR 输出 advisory 评论；graph-covered 源码进入 `main` 后完整重建 Graph 并在 summary 留证；不读取 full、不生成数据、不阻断合并 |
 | AI coding agent | 实现、测试和维护；不替代医学审核 |
 
-## 3. 视图与导航
+## 3. 页面与导航
 
-站点按**工作视图**组织，不按数据源切目录。模块只是同一条判断簇的切面：一个视图承载若干标签，标签之间共享同一批判断。
+| 页面 | 文件 | 核心任务 |
+| --- | --- | --- |
+| 工作台 | `index.html` | 全宽分组扫描本周文献信号与临床试验信号，并在发布状态条查看数据源与更新时间 |
+| 情报中心 | `pages/literature.html` | 浏览公开文献、中国情报、会议和临床试验，并按当前标签与筛选条件生成简报 |
+| 诊治格局 | `pages/landscape.html` | 解释竞争定位、两个独立差异模块（近一月文献主题差异 / 指南共识差异）和 Living Answers |
+| 知识库 | `pages/knowledge.html` | 使用图谱、社区、证据矩阵、专题和中国作者网络 |
+| MSL 工作台 | `pages/msl.html` | China-only 专家检索与拜访前准备 |
 
-| 视图 | 落地页面与标签 | 服务的实际工作 | 产出物 |
-| --- | --- | --- | --- |
-| 证据与格局 | `pages/landscape.html`：总览 / 竞争定位 / 指南差异 / Living Answers | 定位、竞品、指南差异、本月动态 | 竞品卡、指南对照表（均可导出 Markdown） |
-| 专家与合作 | `pages/knowledge.html`：主题图谱 / 中国作者联络图 / Claim–Evidence / 跨库检索 | 该找谁、证据归属、关系判断 | 专家名单、证据归属台账 |
-| 应答与准备 | `pages/msl.html`：专家画像 / 拜访助手；`pages/literature.html`：文献速览 | MI 应答、培训、拜访前准备 | 一页准备单、文献简报 |
-| 工具箱 | `pages/literature.html`：临床试验 / 中国情报 / 会议资讯 | 审阅与管线明细 | 试验简报、会议简报 |
-
-- 视图切换条由 `assets/view.js` 渲染，四个视图常驻，用 `?view=&tab=` 定位，可直接分享；
-- 工作台 `index.html` 首屏给出四个视图入口卡，下方是本周信号板与发布状态条；
-- **医学事务社区不再作为并列视图**：11 个社区降级为主题图谱的分组着色视角，面板保留但隐藏，旧 `?tab=communities` 链接会落到图谱的社区着色模式；
-- 知识库里原「证据矩阵」标签正名为 **Claim–Evidence**，语义从"摘要级关系行"升级为"可对外表述 → 支持 PMID → 等级 → 中国数据 → 不可外推边界"；
-- 历史 URL 由重定向页兼容，不进入主导航。
+历史 URL 由重定向页兼容，不进入主导航。
 
 ## 4. 数据架构
 
@@ -216,7 +211,7 @@ python3 scripts/run-weekly-pipeline.py --mode authoritative-full --run-id weekly
 
 三个模式的边界固定如下：`authoritative-full` 抓取、合并、完整重建并发布；`rebuild-full --reuse-ingest` 只在人工确认复用当前自然周 ingest 时重建；`validate-only` 只读核对当前公开产物和 release manifest。检查点写入 `.hermes-audit/pipeline-runs/`。`merge-weekly` 原子写入本地 `literature-ingest-latest.json`，记录本周累计真实新增与本次更新 PMID；同一自然周重跑累积新增，跨周自动清空。
 
-完整发布使用集中维护的公开产物白名单，检查声明的全局变量、社区分片、文献/社区 recent PMID 集合、信号 ingest 口径、工作台计数和 release hash。required 步骤全部成功后才更新 `release-manifest.js`；状态生成与清单采用两遍收口，使 `pipeline-status.js` 的一致性结论也进入最终哈希。活动页面的 CSS、脚本和数据 URL 同步使用该 run id 作为缓存版本。当前公开 JS 与清单出现哈希不符、缺失或未入清单时，首页发布状态条显示发布漂移，不再沿用历史“完整发布成功”。optional 步骤失败只记录 warning 并按其定义使用 fallback。
+完整发布使用集中维护的公开产物白名单，检查声明的全局变量、社区分片、文献/社区 recent PMID 集合、信号 ingest 口径、工作台计数和 release hash。required 步骤全部成功后才更新 `release-manifest.js`；状态生成与清单采用两遍收口，使 `pipeline-status.js` 的一致性结论也进入最终哈希。活动页面的 CSS、脚本和数据 URL 同步使用该 run id 作为缓存版本。当前公开 JS 与清单出现哈希不符、缺失或未入清单时，首页和数据状态显示发布漂移，不再沿用历史“完整发布成功”。optional 步骤失败只记录 warning 并按其定义使用 fallback。
 
 发布验证 workflow 仍仅手动 `workflow_dispatch`，运行测试、`validate-only` 和静态构建；权限为只读，不替代本地 full 驱动周更，也不会提交局部生成结果。PR 代码图 workflow 由同仓代码 PR 触发，只对 `scripts/**`、`assets/*.js`、`worker/**` 和 `tests/**` 输出 advisory 评论。Post-push Graph workflow 在这些源码或 Graph 配置进入 `main` 后完整重建一次并把证据写入 summary；两个 workflow 都不读取 full、不生成 `data/**`、不更新 release manifest，也不以风险分数阻断合并。
 
@@ -230,7 +225,7 @@ python3 scripts/run-weekly-pipeline.py --mode authoritative-full --run-id weekly
 - 当前说明、路线图、runbook、参考和架构决定分目录保存；
 - 自动报告写入 `.hermes-audit/reports/`；
 - 默认覆盖 `*Latest.md`，不按日期无限生成；
-- 当前数量只进入发布状态产物，不进入人工文档；
+- 当前数量只进入数据状态产物，不进入人工文档；
 - 历史方案由 Git 历史保存。
 
 ## 12. 开发约定
