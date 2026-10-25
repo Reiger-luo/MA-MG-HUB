@@ -2756,7 +2756,7 @@ def build_dashboard(recent, signals, experts, china, landscape, modules, total_c
     pipeline_policy = {
         "label": "周更管线",
         "value": "每周日 23:00",
-        "note": "PubMed 周更、证据分级、IF/新锐分区、前端数据同步",
+        "note": "PubMed 周更、证据分级、IF/新锐分区、近一月中外主题差异分析、前端数据同步",
         "href": "#dashboardReleaseStatus",
     }
     section_cards = [
@@ -2779,8 +2779,9 @@ def build_dashboard(recent, signals, experts, china, landscape, modules, total_c
             "metric": f"{landscape_overview.get('living_answer_count', len(landscape.get('living_answers', [])))} 个判断",
             "summary": landscape_overview.get("positioning", "将近期证据转译成治疗格局、竞争定位和中国实践差异。"),
             "facts": [
-                f"指南差异 {landscape_overview.get('guideline_divergence_count', 0)} 条",
-                f"中外主题差异 {landscape_overview.get('theme_divergence_count', 0)} 条",
+                # 两块差异更新节奏不同，卡片上必须标出来，避免读者以为都会周更
+                f"指南差异 {landscape_overview.get('guideline_divergence_count', 0)} 条（新指南入库后）",
+                f"本月主题差异 {landscape_overview.get('theme_divergence_count', 0)} 条（周更滚动）",
                 f"临床管线 {landscape_overview.get('clinical_pipeline_count', len(landscape.get('clinical_pipeline_matrix', [])))} 项",
             ],
         },
@@ -2789,7 +2790,7 @@ def build_dashboard(recent, signals, experts, china, landscape, modules, total_c
             "title": "知识库",
             "href": "pages/knowledge.html",
             "metric": f"{knowledge_stats.get('nodes', 0)} 个节点",
-            "summary": "基于 PubMed abstract 的知识图谱、证据矩阵和专题层。",
+            "summary": "基于 PubMed abstract 的知识图谱、社区、证据矩阵和专题层。",
             "facts": [
                 f"命中文献 {knowledge_stats.get('matched_articles', 0)} 篇",
                 f"关系 {knowledge_stats.get('edges', 0)} 条",
@@ -2822,7 +2823,7 @@ def build_dashboard(recent, signals, experts, china, landscape, modules, total_c
             "knowledge_nodes": knowledge_stats.get("nodes", 0),
         },
         "stat_cards": [
-            {"label": "近一年文献", "value": len(recent), "note": f"full {total_count} 篇"},
+            {"label": "近一年文献", "value": len(recent), "note": f"全库 {total_count} 篇"},
             {"label": "本周信号", "value": len(signals["signals"]), "note": "规则评分候选"},
             {"label": "中国证据", "value": china["summary"]["recent_year_articles"], "note": f"高等级 {china['summary'].get('high_evidence', 0)} 篇"},
             {"label": "作者画像", "value": expert_count, "note": f"中国 {expert_summary.get('indexed_china_experts', 0)} / 国外 {expert_summary.get('indexed_international_experts', 0)}"},

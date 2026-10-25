@@ -114,7 +114,7 @@
     var fullCount = storage.semantic_full_count != null ?
       storage.semantic_full_count : (data.stats || {}).total_articles;
 
-    // 数据源更新状态：暴露来源健康度，替代已下线的「数据状态」页
+    // 数据源更新状态：暴露来源健康度，取代原先独立的运维页面
     var skipSources = { releaseConsistency: 1, fullStorage: 1 };
     var sourceItems = (pipelineData.sources || []).filter(function(item) {
       return !skipSources[item.id];
@@ -132,8 +132,8 @@
       '<span class="dashboard-release-state ' + releaseClass + '">' +
         '<i aria-hidden="true"></i>' + escapeHtml(releaseLabel) +
       '</span>' +
-      '<span class="dashboard-release-chip">公开滚动 <strong>' + escapeHtml(formatNumber(publicCount)) + '</strong></span>' +
-      '<span class="dashboard-release-chip">语义底座 <strong>' + escapeHtml(formatNumber(fullCount)) + '</strong></span>' +
+      '<span class="dashboard-release-chip" title="公开站点提供的近一年文献">近一年文献 <strong>' + escapeHtml(formatNumber(publicCount)) + '</strong></span>' +
+      '<span class="dashboard-release-chip" title="本地全库文献，供图谱与社区溯源">全库文献 <strong>' + escapeHtml(formatNumber(fullCount)) + '</strong></span>' +
       '<span class="dashboard-release-chip">完整发布 <time datetime="' + escapeHtml(releasedAt) + '">' +
         escapeHtml(formatDateTime(releasedAt)) +
       '</time></span>' +
@@ -162,7 +162,7 @@
       {
         label: '近一年中国证据',
         value: stats.china_articles || 0,
-        note: chinaStat.note || 'MG-core 公开滚动层',
+        note: chinaStat.note || '近一年 MG-core 公开文献',
         href: 'pages/literature.html?tab=china',
         tone: 'china'
       },
@@ -655,8 +655,17 @@
 
   function trialWindowLabel(source, windowData) {
     var cadence = ({ weekly: '每周', '28_days': '28 天', monthly_manual: '月度人工' })[windowData.cadence] || '按来源节奏';
-    var windowLabel = windowData.window_start || windowData.window_end ?
-      formatDateTime(windowData.window_start) + ' — ' + formatDateTime(windowData.window_end) : '本轮比较';
+    // 起止相同或倒挂时区间无意义（部分来源只有单次快照），只显示一个时间点
+    var startTs = Date.parse(String(windowData.window_start || ''));
+    var endTs = Date.parse(String(windowData.window_end || ''));
+    var windowLabel = '本轮比较';
+    if (Number.isFinite(startTs) && Number.isFinite(endTs) && startTs < endTs) {
+      windowLabel = formatDateTime(windowData.window_start) + ' — ' + formatDateTime(windowData.window_end);
+    } else if (Number.isFinite(endTs)) {
+      windowLabel = '本轮快照 ' + formatDateTime(windowData.window_end);
+    } else if (Number.isFinite(startTs)) {
+      windowLabel = '本轮快照 ' + formatDateTime(windowData.window_start);
+    }
     return '<span class="trial-source-window"><strong>' + escapeHtml(source) + '</strong>' +
       '<em>变化 ' + escapeHtml(formatNumber(windowData.raw_change_count || 0)) + ' · ' + escapeHtml(cadence) + '</em>' +
       '<small>' + escapeHtml(windowLabel) + ' · 更新 ' + escapeHtml(formatDateTime(windowData.updated_at)) + '</small></span>';
@@ -921,7 +930,7 @@
     });
     signals = signals.slice(0, 3);
     if (!signals.length) {
-      target.innerHTML = '<div class="empty-state small"><h3>暂无近期信号</h3><p>请前往数据状态检查最新构建。</p></div>';
+      target.innerHTML = '<div class="empty-state small"><h3>暂无近期信号</h3><p>本周信号将在下一次周更后生成。</p></div>';
       return;
     }
 
@@ -1139,7 +1148,8 @@
     var badge = document.getElementById('dashboardBadge');
     var releasedAt = releaseData.released_at || data.generated_at || '';
     if (badge) {
-      badge.textContent = '完整发布 ' + formatDateTime(releasedAt);
+      // 发布条已显示完整发布时间，这里改为体现数据截止时间，避免重复
+      badge.textContent = '数据截至 ' + formatDateTime(data.generated_at || releasedAt);
       badge.title = String(releasedAt || '');
     }
   }
