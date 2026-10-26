@@ -1535,6 +1535,55 @@
     });
   }
 
+  // 问询支持：记录最近一次跨库检索的文献命中，供引文清单导出。
+  var lastCitationMatches = [];
+
+  function citationYear(value) {
+    var match = String(value || '').match(/(\d{4})/);
+    return match ? match[1] : '';
+  }
+
+  function citationLine(article, index) {
+    var author = (article.first_authors || article.authors || [])[0] || '';
+    var authorText = author ? author + (String(article.first_authors || article.authors || []).length > 1 || author ? ' et al. ' : ' ') : '';
+    var year = citationYear(article.pub_date || article.entry_date);
+    var parts = [];
+    parts.push((index + 1) + '. ' + authorText + (authorText ? '' : '') + (article.title || '无标题') + '.');
+    if (article.journal) parts.push(article.journal + '.');
+    if (year) parts.push(year + '.');
+    if (article.pmid) parts.push('PMID ' + article.pmid + '.');
+    if (article.doi) parts.push('doi:' + article.doi + '.');
+    var levelText = article.evidence_level ? '证据等级 ' + article.evidence_level : '证据等级未分类';
+    parts.push('[' + levelText + ']');
+    return parts.join(' ');
+  }
+
+  function buildCitationListMarkdown(matches, keyword) {
+    if (!matches.length) return '';
+    var lines = [];
+    lines.push('# 引文清单 · 检索词「' + (keyword || '') + '」');
+    lines.push('');
+    lines.push('共 ' + matches.length + ' 条（最多导出 50 条；来源：全库文献轻索引）。');
+    lines.push('');
+    matches.forEach(function (article, index) {
+      lines.push(citationLine(article, index));
+    });
+    lines.push('');
+    lines.push('说明：证据等级为自动分类（Oxford CEBM 2011），仅用于筛选与排序；摘要级元数据不能替代全文医学审核。');
+    lines.push('');
+    if (hub.briefFooter) lines.push(hub.briefFooter());
+    return lines.join('\n');
+  }
+
+  function bindCitationExport(keyword) {
+    var button = document.getElementById('kgExportCitations');
+    if (!button) return;
+    button.addEventListener('click', function () {
+      var markdown = buildCitationListMarkdown(lastCitationMatches, keyword);
+      if (markdown && hub.openBriefModal) hub.openBriefModal('引文清单 · ' + keyword, markdown);
+    });
+  }
+
   function attachSearch() {
     if (!elSearch || !elSearchResults) return;
     elSearch.addEventListener('input', function () {
@@ -1604,7 +1653,14 @@
     });
     var communityHits = communityMatches.slice(0, 6);
 
+    lastCitationMatches = articleMatches.slice(0, 50);
     var html = '';
+    if (articleMatches.length) {
+      var exportCount = articleMatches.length > 50 ? 50 : articleMatches.length;
+      html += '<div class="kg-detail-section kg-citation-export"><h4>问询取证</h4>' +
+        '<div class="citation-export-row"><span>本次检索命中文献 ' + escapeHtml(articleMatches.length) + ' 条，可导出规范引文清单（' + exportCount + ' 条，含证据等级）。</span>' +
+        '<button type="button" class="btn" id="kgExportCitations">📋 导出引文清单</button></div></div>';
+    }
     html += renderSearchGroup('知识节点', nodeHits, function (node) {
       return '<li><button class="matrix-node-link" type="button" data-node="' + escapeHtml(node.id) + '">' +
         escapeHtml(node.title) + '</button><br><span class="kg-ref-meta">' + escapeHtml(typeLabel[node.type]) +
@@ -1636,6 +1692,7 @@
     }, expertMatches.length);
 
     elSearchResults.innerHTML = html || '<div class="kg-empty-hint">无匹配结果。</div>';
+    bindCitationExport((elSearch.value || '').trim());
     Array.prototype.forEach.call(elSearchResults.querySelectorAll('[data-node]'), function (button) {
       button.addEventListener('click', function () {
         activateTab('graph');

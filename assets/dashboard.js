@@ -31,6 +31,8 @@
   var trialSignalSummaryFilterBound = false;
   var articleSignalStrengthByPmid = {};
   var signalDeepLinkHandled = false;
+  var signalTransferExportBound = false;
+  var trialTransferExportBound = false;
 
   function escapeHtml(value) {
     if (hub.escapeText) return hub.escapeText(value);
@@ -558,12 +560,16 @@
     var gapHtml = renderSignalGap(item);
     var kolHtml = renderSignalToKol(item);
     var takeaway = stripPmidMentions(item.takeaway || '');
+    var exportKey = escapeHtml(signalId || stripPmidMentions(item.title || item.summary || ''));
     return '' +
       '<article id="' + escapeHtml(signalAnchor) + '" data-signal-id="' + escapeHtml(signalId) +
         '" class="' + signalClass + ' signal-' + escapeHtml(item.strength) + '" tabindex="-1">' +
         '<div class="' + signalHeadClass + '">' +
-          '<span class="signal-strength">' + escapeHtml(item.strength) + '信号</span>' +
-          '<span class="signal-type">' + escapeHtml(item.type) + '</span>' +
+          '<div>' +
+            '<span class="signal-strength">' + escapeHtml(item.strength) + '信号</span>' +
+            '<span class="signal-type">' + escapeHtml(item.type) + '</span>' +
+          '</div>' +
+          '<button type="button" class="btn signal-export-btn" data-export-transfer="literature" data-export-key="' + exportKey + '">📋 传递卡</button>' +
         '</div>' +
         '<h3 class="' + signalTitleClass + '">' + escapeHtml(signalTitle) + '</h3>' +
         (takeaway ? '<p class="signal-takeaway">' + escapeHtml(takeaway) + '</p>' : '') +
@@ -571,6 +577,137 @@
         evidenceHtml +
         kolHtml +
       '</article>';
+  }
+
+  // ── 单卡传递卡导出（文献信号 + 试验信号） ──
+  function findLiteratureSignalByKey(key) {
+    var raw = String(key || '');
+    for (var i = 0; i < signalItems.length; i++) {
+      if (String(signalItems[i].id || '') === raw) return signalItems[i];
+    }
+    for (var j = 0; j < signalItems.length; j++) {
+      if (stripPmidMentions(signalItems[j].title || signalItems[j].summary || '') === raw) return signalItems[j];
+    }
+    return null;
+  }
+
+  function findTrialSignalByKey(key) {
+    var raw = String(key || '');
+    for (var i = 0; i < trialSignalItems.length; i++) {
+      if (String(trialSignalItems[i].id || '') === raw || String(trialSignalItems[i].title || '') === raw) return trialSignalItems[i];
+    }
+    return null;
+  }
+
+  function signalReferenceLines(item) {
+    var tp = (item.talkingPoints || item.kolFocus || [])[0] || {};
+    var refs = (tp.refs || []).length ? tp.refs : (item.refs || []);
+    if (!refs.length && (item.evidenceItems || []).length) {
+      return (item.evidenceItems || []).map(function(entry) {
+        return entry && entry.pmid ? 'PMID ' + entry.pmid + '：' + (entry.finding || '') : (entry && entry.finding ? entry.finding : '');
+      }).filter(Boolean);
+    }
+    return refs.map(function(ref) {
+      if (!ref || !ref.pmid) return '';
+      return 'PMID ' + ref.pmid + '：' + (ref.title || '') + (ref.journal ? '（' + ref.journal + '）' : '');
+    }).filter(Boolean);
+  }
+
+  function buildSignalTransferMarkdown(item) {
+    if (!item) return '';
+    var tp = (item.talkingPoints || item.kolFocus || [])[0] || {};
+    var keyMessages = (tp.keyMessages || []).filter(Boolean);
+    var title = stripPmidMentions(item.title || item.summary || '(无标题)');
+    var lines = [];
+    lines.push('# 信号传递卡 · [' + (item.strength || '弱') + '信号] ' + title);
+    lines.push('');
+    lines.push('## 核心传递');
+    if (keyMessages.length) {
+      keyMessages.forEach(function(message) { lines.push('- ' + message); });
+    } else if (item.takeaway) {
+      lines.push('- ' + stripPmidMentions(item.takeaway));
+    } else {
+      lines.push('-（见原文）');
+    }
+    var why = tp.whyKol || item.whySignal;
+    if (why) {
+      lines.push('');
+      lines.push('## 为什么值得关注');
+      lines.push(why);
+    }
+    if (item.evidenceBoundary) {
+      lines.push('');
+      lines.push('## 证据边界');
+      lines.push(item.evidenceBoundary);
+    }
+    var leads = (item.kol_leads || []).slice(0, 3);
+    if (leads.length) {
+      lines.push('');
+      lines.push('## KOL 线索');
+      leads.forEach(function(lead) {
+        lines.push('- ' + (lead.name || '') + (lead.institution ? '（' + lead.institution + '）' : ''));
+      });
+    }
+    var refLines = signalReferenceLines(item);
+    if (refLines.length) {
+      lines.push('');
+      lines.push('## 引文');
+      refLines.forEach(function(line) { lines.push('- ' + line); });
+    }
+    lines.push('');
+    if (hub.briefFooter) lines.push(hub.briefFooter());
+    return lines.join('\n');
+  }
+
+  function buildTrialTransferMarkdown(item) {
+    if (!item) return '';
+    var statusChange = [item.fromStatus, item.toStatus].filter(Boolean).join(' → ');
+    var lines = [];
+    lines.push('# 试验传递卡 · [' + (item.strength || '弱') + '信号] ' + (item.title || '(无标题)'));
+    lines.push('');
+    lines.push('- 阶段：' + (item.phase || '未标注') + '；试验定位：' + (item.trialImportance || '未标注') + '试验');
+    if (statusChange) lines.push('- 状态变化：' + statusChange);
+    if ((item.interventions || []).length) lines.push('- 干预：' + item.interventions.slice(0, 4).join(' / '));
+    lines.push('- 本轮更新（' + (item.updateMateriality || '-') + '实质性）：' + (item.changeSummary || item.materialityRationale || '见官方登记页'));
+    if (item.whySignal || item.strengthRationale) {
+      lines.push('');
+      lines.push('## 为何值得关注');
+      lines.push(item.whySignal || item.strengthRationale);
+    }
+    lines.push('');
+    lines.push('## 证据边界');
+    lines.push(item.evidenceBoundary || '注册/开发信号，不代表疗效证据。');
+    var refs = item.registryRefs || [];
+    if (refs.length) {
+      lines.push('');
+      lines.push('## 官方登记');
+      refs.forEach(function(ref) {
+        var label = [ref.registry, ref.registryId].filter(Boolean).join(' · ');
+        if (label) lines.push('- ' + label + (ref.url ? '：' + ref.url : ''));
+      });
+    }
+    lines.push('');
+    lines.push('注册/开发信号，不代表疗效证据；结果上传或研究完成不等于达到主要终点。');
+    lines.push('');
+    if (hub.briefFooter) lines.push(hub.briefFooter());
+    return lines.join('\n');
+  }
+
+  function handleTransferExportClick(event) {
+    var button = event.target && event.target.closest ? event.target.closest('[data-export-transfer]') : null;
+    if (!button) return;
+    var kind = button.getAttribute('data-export-transfer');
+    var key = button.getAttribute('data-export-key') || '';
+    var markdown = '';
+    var title = '';
+    if (kind === 'trial') {
+      markdown = buildTrialTransferMarkdown(findTrialSignalByKey(key));
+      title = '试验传递卡';
+    } else {
+      markdown = buildSignalTransferMarkdown(findLiteratureSignalByKey(key));
+      title = '信号传递卡';
+    }
+    if (markdown && hub.openBriefModal) hub.openBriefModal(title, markdown);
   }
 
   function renderSignals() {
@@ -600,6 +737,10 @@
     target.innerHTML = filtered.map(function(item) {
       return renderSignalCard(item);
     }).join('');
+    if (!signalTransferExportBound) {
+      target.addEventListener('click', handleTransferExportClick);
+      signalTransferExportBound = true;
+    }
     focusDeepLinkedSignal();
   }
 
@@ -693,11 +834,14 @@
     var statusChange = [item.fromStatus, item.toStatus].filter(Boolean).join(' → ');
     var changeText = item.changeSummary || item.materialityRationale || '本轮注册变化请打开官方登记页核查。';
     var interventionText = (item.interventions || []).slice(0, 4).join(' / ');
-    return '<article class="signal-card trial-signal-card signal-' + escapeHtml(item.strength) + '">' +
+    var exportKey = escapeHtml(item.id || item.title || '');
+    return '<article class="signal-card trial-signal-card signal-' + escapeHtml(item.strength) + '" data-trial-signal-key="' + exportKey + '">' +
       '<div class="signal-card-head"><div>' +
         '<span class="signal-strength">' + escapeHtml(item.strength) + '信号</span>' +
         '<span class="signal-type">' + escapeHtml(item.type) + '</span>' +
-      '</div><span class="trial-importance-badge ' + (item.trialImportance === '关键' ? 'key' : '') + '">' +
+      '</div>' +
+      '<button type="button" class="btn signal-export-btn" data-export-transfer="trial" data-export-key="' + exportKey + '">📋 传递卡</button>' +
+      '<span class="trial-importance-badge ' + (item.trialImportance === '关键' ? 'key' : '') + '">' +
         escapeHtml(item.trialImportance) + '试验</span></div>' +
       '<h3 class="signal-title">' + escapeHtml(item.title || '(无标题)') + '</h3>' +
       '<div class="trial-signal-meta"><span>' + escapeHtml(item.phase) + '</span>' +
@@ -723,6 +867,10 @@
       return;
     }
     target.innerHTML = filtered.map(renderTrialSignalCard).join('');
+    if (!trialTransferExportBound) {
+      target.addEventListener('click', handleTransferExportClick);
+      trialTransferExportBound = true;
+    }
   }
 
   function renderSignalBoard() {

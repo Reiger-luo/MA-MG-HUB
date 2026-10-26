@@ -4567,3 +4567,35 @@ body.pmid-modal-open { overflow: hidden; }
   .col-time { display: none; }
   .pipeline-filters { flex-direction: column; }
 }
+
+/* 单卡传递卡导出按钮（信号板卡片头右侧） */
+.signal-export-btn {
+  margin-left: auto;
+  font-size: 0.74rem;
+  padding: 0.18rem 0.55rem;
+  flex-shrink: 0;
+}
+
+/* 知识库问询取证：引文清单导出行 */
+.kg-citation-export .citation-export-row {
+  display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap;
+  font-size: 0.82rem; color: var(--fg2, var(--fg));
+}
+.kg-citation-export .citation-export-row .btn { flex-shrink: 0; }
+
+/* 诊治格局：领域重大事件时间线 */
+.major-events-list { display: flex; flex-direction: column; gap: 0.45rem; }
+.major-event-item {
+  display: flex; gap: 0.6rem; align-items: baseline; flex-wrap: wrap;
+  padding: 0.45rem 0.6rem; border: 1px solid var(--bg3);
+  border-radius: 8px; background: var(--bg);
+}
+.major-event-type {
+  font-size: 0.72rem; font-weight: 600; flex-shrink: 0;
+  padding: 0.1rem 0.4rem; border-radius: 4px;
+  background: var(--bg2); border: 1px solid var(--bg3);
+}
+.major-event-date { font-size: 0.74rem; color: var(--fg3); flex-shrink: 0; }
+.major-event-title { font-size: 0.85rem; font-weight: 500; }
+.major-event-title a { color: var(--accent); }
+.major-event-source { font-size: 0.72rem; color: var(--fg3); margin-left: auto; }

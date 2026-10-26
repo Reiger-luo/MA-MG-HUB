@@ -52,9 +52,8 @@ def signal_to_kol_line(signal: dict, index: int) -> str:
     pmids = signal.get("related_pmids") or []
     pmid = pmids[0] if pmids else article.get("pmid", "-")
     medical = signal.get("medical_affairs") or {}
-    implication = medical.get("implication") or signal.get("medical_affairs_implication") or "医学事务含义待补充"
     action = medical.get("msl_action") or "MSL 后续行动待补充"
-    return f"{index}. PMID {pmid}｜{implication}｜{kol_lead_text(signal)}｜{action}"
+    return f"{index}. PMID {pmid}｜{kol_lead_text(signal)}｜{action}"
 
 
 def trial_signal_line(signal: dict, index: int) -> str:

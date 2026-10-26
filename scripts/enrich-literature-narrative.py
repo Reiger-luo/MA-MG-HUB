@@ -1121,12 +1121,10 @@ def normalize_signal(raw: dict, signal_index: int, by_pmid: dict[str, dict], bas
         "talkingPoints": points,
         "kolFocus": points,
         "medical_affairs": {
-            "implication": f"{len(articles)} 篇 MG-core 文献聚合为“{title}”，可用于结构化 KOL 交流和后续证据追踪。",
             "suggested_kol_question": kol_question,
             "msl_action": msl_action,
             "evidence_context": f"{level_text}；文献日期 {min(dates)}–{max(dates)}；摘要级聚合。",
         },
-        "medical_affairs_implication": f"{len(articles)} 篇 MG-core 文献聚合为“{title}”，可用于结构化 KOL 交流和后续证据追踪。",
         "kol_leads": builder.aggregate_kol_leads(articles),
         "institution_leads": builder.aggregate_institution_leads(articles, builder.aggregate_kol_leads(articles)),
         "signal_to_kol": {

@@ -7,6 +7,7 @@
   var chinaLandscape = data.china_landscape || {};
   var themeDivergence = chinaLandscape.theme_divergence || {};
   var guidelineDivergence = chinaLandscape.guideline_divergence || {};
+  var sourceSignals = window.MG_SOURCE_SIGNALS || { channels: [] };
   var curatedTopicPayload = window.MG_CURATED_TOPICS || { topics: [] };
   var curatedTopics = curatedTopicPayload.topics || [];
   var topicCoveragePayload = window.MG_WIKI_TOPIC_COVERAGE || { stats: {}, topic_coverage: [], community_coverage: [] };
@@ -961,11 +962,77 @@
     renderTopics();
   }
 
+  // ── 领域重大事件时间线：新III期启动 / 获批与监管 / 新指南共识 ──
+  function shortenDate(value) {
+    // 指南频道日期为 "2025/01/14 01:04" 斜杠格式，统一归一为 ISO 前缀后再比较与展示
+    return String(value || '').replace(/\//g, '-').slice(0, 10);
+  }
+
+  function collectMajorEvents() {
+    var events = [];
+    var typeByChannel = { chinaRegulatory: '获批/监管', guidelineConsensus: '指南/共识' };
+    (sourceSignals.channels || []).forEach(function (channel) {
+      var type = typeByChannel[channel.id];
+      if (!type) return;
+      (channel.items || []).forEach(function (item) {
+        events.push({
+          type: type,
+          date: shortenDate(item.date),
+          title: item.title || '',
+          url: item.url || '',
+          source: item.source || channel.label || ''
+        });
+      });
+    });
+    // 新启动的 III 期：标题含 Phase III/3 且启动日期在近 12 个月内
+    var nowMs = Date.now();
+    (data.trial_registry_signals || []).forEach(function (trial) {
+      var title = String(trial.title || '');
+      if (!/phase\s*(iii|3)\b/i.test(title)) return;
+      var start = String(trial.start_date || '');
+      var ts = Date.parse(start);
+      if (!Number.isFinite(ts) || nowMs - ts > 365 * 86400000) return;
+      events.push({
+        type: 'III期',
+        date: shortenDate(start),
+        title: title,
+        url: trial.url || '',
+        source: trial.registry || trial.source || ''
+      });
+    });
+    events.sort(function (a, b) { return String(b.date).localeCompare(String(a.date)); });
+    return events.slice(0, 12);
+  }
+
+  function renderMajorEvents() {
+    var target = $('majorEventsList');
+    if (!target) return;
+    var events = collectMajorEvents();
+    var meta = $('majorEventsMeta');
+    if (meta) meta.textContent = events.length ? '最近 ' + events.length + ' 条' : '暂无记录';
+    if (!events.length) {
+      target.innerHTML = '<div class="empty-state small"><h3>近期暂无重大事件记录</h3><p>新获批、新指南与新 III 期启动将随周更自动进入时间线。</p></div>';
+      return;
+    }
+    target.innerHTML = events.map(function (event) {
+      var titleHtml = event.url
+        ? '<a href="' + escapeHref(event.url) + '" target="_blank" rel="noopener">' + escapeHtml(event.title) + '</a>'
+        : escapeHtml(event.title);
+      return '<article class="major-event-item major-event-' + escapeHtml(hub.safeClassToken ? hub.safeClassToken(event.type, 'event') : 'event') + '">' +
+        '<span class="major-event-type">' + escapeHtml(event.type) + '</span>' +
+        '<span class="major-event-date">' + escapeHtml(event.date || '日期待核') + '</span>' +
+        '<strong class="major-event-title">' + titleHtml + '</strong>' +
+        (event.source ? '<span class="major-event-source">' + escapeHtml(event.source) + '</span>' : '') +
+      '</article>';
+    }).join('');
+  }
+
   function init() {
     bindTabs();
     renderBadge();
     renderStats();
     renderCompetitiveMatrix();
+    renderMajorEvents();
     renderThemeDivergence();
     renderGuidelineDivergence();
     bindPmidModal();
