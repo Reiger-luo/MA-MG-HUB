@@ -145,6 +145,10 @@ def test_intelligence_brief_export_follows_active_tab_and_filters():
     assert "article.signal_strength" in literature_js
     assert "按近一年文献级信号标签筛选" in html
     assert "efgar 未命中强标准时以中信号兜底" in html
+    assert 'id="filterEfgarOnly"' in html
+    assert "isEfgarRelated" in literature_js
+    assert "if (efgarOnly && !isEfgarRelated(a)) continue;" in literature_js
+    assert "仅 efgar 相关" in literature_js
     assert "getFilteredSignalItems" in literature_js
     assert "buildCurrentBrief" in literature_js
     assert "activeIntelTab === 'signals'" in literature_js

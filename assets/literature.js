@@ -115,6 +115,8 @@
     filterQuartileList: $('filterQuartileList'),
     filterEvidenceList: $('filterEvidenceList'),
     filterSignalStrengthList: $('filterSignalStrengthList'),
+    filterDrugToggleList: $('filterDrugToggleList'),
+    filterEfgarOnly: $('filterEfgarOnly'),
     filterCommunityList: $('filterCommunityList'),
     communityFilterSummary: $('communityFilterSummary'),
     communityFilterStatus: $('communityFilterStatus'),
@@ -512,6 +514,7 @@
     var quartileState = getCheckedValues(el.filterQuartileList);
     var evState = getCheckedValues(el.filterEvidenceList);
     var signalStrengthState = getCheckedValues(el.filterSignalStrengthList);
+    var efgarOnly = !!(el.filterEfgarOnly && el.filterEfgarOnly.checked);
 
     var allSelected = false;
     for (var s = 0; s < selectedMonths.length; s++) {
@@ -584,6 +587,9 @@
         var articleStrength = articleSignalStrengthByPmid[normalizePmid(a.pmid)] || '';
         if (signalStrengthState.values.indexOf(articleStrength) === -1) continue;
       }
+
+      // efgar 主题药物开关（默认关闭 = 不筛选）
+      if (efgarOnly && !isEfgarRelated(a)) continue;
 
       filteredResults.push(a);
     }
@@ -867,6 +873,15 @@
       if (hasAny(text, DRUG_NAMES[i].words)) drugs.push(DRUG_NAMES[i].name);
     }
     return drugs.sort();
+  }
+
+  // efgar 主题药物筛选：标题/摘要/药物别名命中即算相关
+  function isEfgarRelated(article) {
+    if (!article) return false;
+    var drugList = Array.isArray(article.drugs) ? article.drugs : [];
+    if (drugList.indexOf('efgartigimod') !== -1) return true;
+    var text = ((article.title || '') + ' ' + (article.abstract || '')).toLowerCase();
+    return hasAny(text, DRUG_NAMES[0].words);
   }
 
   function inferSignal(article, latestDate) {
@@ -1634,6 +1649,7 @@
       wireCheckboxAll('filterQuartileList');
       wireCheckboxAll('filterEvidenceList');
       wireCheckboxAll('filterSignalStrengthList');
+      if (el.filterEfgarOnly) el.filterEfgarOnly.addEventListener('change', applyFilters);
 
       // 统计
       document.getElementById('statYear').textContent = allArticles.length;
@@ -1707,6 +1723,7 @@
     if (!evidenceState.isAll && evidenceState.values.length) parts.push('证据等级：' + evidenceState.values.join('、'));
     var signalState = getCheckedValues(el.filterSignalStrengthList);
     if (!signalState.isAll && signalState.values.length) parts.push('关联信号：' + signalState.values.join('、'));
+    if (el.filterEfgarOnly && el.filterEfgarOnly.checked) parts.push('仅 efgar 相关');
     return parts.length ? parts.join('；') : '近一年全部文献';
   }
 
