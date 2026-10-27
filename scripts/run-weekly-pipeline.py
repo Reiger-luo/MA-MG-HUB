@@ -144,15 +144,13 @@ def pipeline_steps(args, full_available: bool | None = None) -> list[PipelineSte
             optional=True,
         ),
     ])
-    # 近一月中外文献主题差异随文献周更滚动重算：必须在 build-frontend 之前，
-    # 否则 landscape-data.js 会读到上一周的窗口。窗口未推进时脚本自跳过，不重复计费。
-    if not args.skip_llm:
-        steps.append(PipelineStep(
-            "analyze-china-foreign-themes",
-            py("analyze-china-foreign-themes.py") + ["--days", "30", "--skip-if-current"],
-            outputs=[DATA / "china-foreign-themes.json"],
-            optional=True,
-        ))
+    # 近一年中外文献主题差异随文献周更滚动重算：必须在 build-frontend 之前，
+    # 否则 landscape-data.js 会读到上一周的窗口。确定性规则聚合，无 LLM 成本。
+    steps.append(PipelineStep(
+        "analyze-china-foreign-themes-yearly",
+        py("analyze-china-foreign-themes-yearly.py"),
+        outputs=[DATA / "china-foreign-themes.json"],
+    ))
     buildFrontendCommand = py("build-frontend-data.py")
     if full_available:
         buildFrontendCommand.append("--rebuild-experts-from-full")

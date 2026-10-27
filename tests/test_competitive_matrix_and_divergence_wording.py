@@ -75,19 +75,18 @@ def test_theme_divergence_is_window_scoped_and_never_self_reports_counts():
     landscape = loadLandscape()
     theme = landscape["china_landscape"]["theme_divergence"]
     assert theme["scope_note"], "必须声明这是窗口趋势观察"
-    assert theme["window_days"] == 30
+    assert theme["window_days"] == 365
 
     for item in theme["divergences"]:
-        fields = {
-            "china_focus": item["china_focus"],
-            "global_focus": item["global_focus"],
+        # 近一年口径：叙事中的篇数由脚本注入，必须与代码聚合值一致
+        for field, expect in (("china_focus", item["china_count"]), ("global_focus", item["non_china_count"])):
+            mentioned = sum(int(n) for n in re.findall(r"(\d+)\s*篇", item[field]))
+            assert mentioned == expect, f"{item['id']}.{field} 叙事篇数 {mentioned} 与聚合值 {expect} 不一致"
+        for name, text in {
             "why_it_matters": item["why_it_matters"],
             "msl_action": item["msl_action"],
             "theme": item["theme"],
-        }
-        for name, text in fields.items():
-            # 模型自报篇数会与代码聚合值冲突，必须被剥离
-            assert not re.search(r"\d+\s*篇", text), f"{item['id']}.{name} 仍含自报篇数: {text}"
+        }.items():
             if name != "why_it_matters":
                 for bad in LONG_TERM_TERMS:
                     assert bad not in text, f"{item['id']}.{name} 含长期判断词「{bad}」: {text}"
