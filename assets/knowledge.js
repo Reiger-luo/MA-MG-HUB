@@ -236,7 +236,7 @@
 
   function topicHref(topicId, communityId) {
     var communityQuery = communityId ? '&community=' + encodeURIComponent(communityId) : '';
-    return pageUrl('pages/landscape.html?tab=answers&topic=' + encodeURIComponent(topicId || '') + communityQuery);
+    return pageUrl('pages/knowledge.html?topic=' + encodeURIComponent(topicId || '') + communityQuery);
   }
 
   function safeClassToken(value, fallback) {
@@ -1483,7 +1483,7 @@
   }
 
   function openCommunityTopics(communityId) {
-    window.location.href = pageUrl('pages/landscape.html?tab=answers&community=' + encodeURIComponent(communityId || ''));
+    window.location.href = pageUrl('pages/knowledge.html?community=' + encodeURIComponent(communityId || ''));
   }
 
   function activateTab(key) {
@@ -1739,8 +1739,6 @@
       openTopic(initialTopicId);
     } else if (initialCommunityId) {
       openCommunity(initialCommunityId);
-    } else if (initialTab === 'topics') {
-      window.location.href = pageUrl('pages/landscape.html?tab=answers');
     } else if (['graph', 'communities', 'matrix', 'search'].indexOf(initialTab) !== -1) {
       activateTab(initialTab);
     }

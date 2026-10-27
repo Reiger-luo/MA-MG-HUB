@@ -4599,3 +4599,40 @@ body.pmid-modal-open { overflow: hidden; }
 .major-event-title { font-size: 0.85rem; font-weight: 500; }
 .major-event-title a { color: var(--accent); }
 .major-event-source { font-size: 0.72rem; color: var(--fg3); margin-left: auto; }
+
+/* 诊疗现状章节与临床问题库 */
+.chapter-layout { display: grid; grid-template-columns: 240px 1fr; gap: 1rem; }
+.chapter-nav { display: flex; flex-direction: column; gap: 0.35rem; }
+.chapter-nav-item {
+  text-align: left; padding: 0.55rem 0.7rem; border: 1px solid var(--bg3);
+  border-radius: 8px; background: var(--bg); color: var(--fg2, var(--fg));
+  font-size: 0.85rem; cursor: pointer;
+}
+.chapter-nav-item.active { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+.chapter-summary { color: var(--fg3); font-size: 0.85rem; margin-bottom: 0.8rem; }
+.evidence-statement { font-size: 0.92rem; line-height: 1.85; margin: 0.55rem 0; }
+.cite-mark { color: var(--accent); font-size: 0.72em; margin-left: 0.15rem; letter-spacing: 0.02em; }
+.chapter-branch { margin: 0.9rem 0; padding: 0.7rem 0.8rem; border: 1px solid var(--bg3); border-radius: 8px; background: var(--bg); }
+.chapter-branch h4 { margin: 0 0 0.45rem; font-size: 0.88rem; }
+.branch-side { border-top: 1px dashed var(--bg3); padding-top: 0.35rem; margin-top: 0.35rem; }
+.branch-side strong { font-size: 0.8rem; color: var(--fg3); }
+.refs-title { margin: 1rem 0 0.4rem; font-size: 0.85rem; color: var(--fg3); }
+.chapter-refs { font-size: 0.78rem; color: var(--fg3); line-height: 1.7; padding-left: 1.4rem; }
+.chapter-refs li { margin-bottom: 0.25rem; }
+.chapter-refs a { color: var(--accent); }
+.question-group { margin-bottom: 1.4rem; }
+.question-group > h3 { font-size: 1rem; margin: 0.8rem 0 0.6rem; }
+.question-card { border: 1px solid var(--bg3); border-radius: 10px; background: var(--bg); padding: 0.85rem 1rem; margin-bottom: 0.8rem; }
+.question-card-head { display: flex; gap: 0.6rem; align-items: flex-start; justify-content: space-between; }
+.question-card-head h4 { font-size: 0.95rem; margin: 0 0 0.4rem; }
+.stance-badge { flex-shrink: 0; font-size: 0.72rem; padding: 0.12rem 0.45rem; border-radius: 4px; border: 1px solid var(--bg3); }
+.stance-cautious { color: var(--accent); }
+.stance-insufficient { color: var(--fg3); }
+.question-open { font-size: 0.8rem; color: var(--fg3); margin: 0.2rem 0 0.5rem; }
+@media (max-width: 900px) { .chapter-layout { grid-template-columns: 1fr; } }
+
+/* 周更候选新证据（待确认，不混入正文） */
+.pending-candidates { margin: 0.8rem 0; padding: 0.6rem 0.8rem; border: 1px dashed var(--accent); border-radius: 8px; }
+.pending-candidates h5 { font-size: 0.8rem; margin: 0 0 0.35rem; color: var(--accent); }
+.pending-candidates p { font-size: 0.82rem; margin: 0.25rem 0; }
+.pending-note { color: var(--fg3); font-size: 0.75rem; }

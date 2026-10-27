@@ -31,7 +31,8 @@
 
   <div class="intel-tabs" role="tablist" aria-label="诊治格局视图">
     <button class="intel-tab active" type="button" data-landscape-tab="overview">总览</button>
-    <button class="intel-tab" type="button" data-landscape-tab="answers">Living Answers</button>
+    <button class="intel-tab" type="button" data-landscape-tab="chapters">诊疗现状</button>
+    <button class="intel-tab" type="button" data-landscape-tab="questions">临床问题</button>
   </div>
 
   <section class="intel-tab-panel active" id="landscape-overview">
@@ -97,62 +98,32 @@
     </div>
   </section>
 
-  <section class="intel-tab-panel" id="landscape-answers">
-    <div class="landscape-answer-layout">
-      <div class="workspace-panel living-answer-panel">
-        <div class="panel-head">
-          <div>
-            <h2>Living Evidence Answers</h2>
-            <p class="panel-caption">基于 PubMed abstract 的基础提纲和要点，详细结论仍需阅读全文后整合；右侧专题负责承接 claim、PMID 和全库锚点。</p>
-          </div>
-          <span class="update-badge" id="answerCount">0 个问题</span>
+  <section class="intel-tab-panel" id="landscape-chapters">
+    <div class="workspace-panel">
+      <div class="panel-head">
+        <div>
+          <h2>诊疗现状</h2>
+          <p class="panel-caption">中外指南与共识的综合梳理，分歧处以分支呈现；句后角标对应本章末参考文献，英文 PMID 文献可点击回 PubMed。</p>
         </div>
-        <div class="kg-filter-bar">
-          <div class="knowledge-search compact">
-            <input id="answerSearch" placeholder="筛选问题、要点、PMID 或机制">
-          </div>
-          <select class="filter-input compact-select" id="answerCategory">
-            <option value="all">全部场景</option>
-          </select>
-          <select class="filter-input compact-select" id="answerStance">
-            <option value="all">全部回答姿态</option>
-            <option value="可积极回答">可积极回答</option>
-            <option value="可谨慎回答">可谨慎回答</option>
-            <option value="证据不足">证据不足</option>
-            <option value="仅供提纲">仅供提纲</option>
-          </select>
-        </div>
-        <div class="living-answer-grid" id="answerList"></div>
+        <span class="update-badge" id="chaptersMeta"></span>
       </div>
+      <div class="chapter-layout">
+        <nav class="chapter-nav" id="chapterNav" aria-label="诊疗现状章节"></nav>
+        <div class="chapter-content" id="chapterContent"></div>
+      </div>
+    </div>
+  </section>
 
-      <aside class="workspace-panel landscape-topic-panel">
-        <div class="panel-head">
-          <div>
-            <h2>专题证据包</h2>
-            <p class="panel-caption">专题从知识库独立页迁入 answer 工作流，用来解释一个回答背后的 claim、PMID、MSL 使用场景和本周影响提示。</p>
-          </div>
-          <span class="update-badge" id="answerTopicCount">0 个专题</span>
+  <section class="intel-tab-panel" id="landscape-questions">
+    <div class="workspace-panel">
+      <div class="panel-head">
+        <div>
+          <h2>临床问题</h2>
+          <p class="panel-caption">仍未解决的临床问题，以及当前证据能回答到哪一步；问题与证据均滚动更新，角标对应各问题末参考文献。</p>
         </div>
-        <div class="kg-filter-bar">
-          <div class="knowledge-search compact">
-            <input id="answerTopicSearch" placeholder="筛选专题，例如 steroid / safety / China RWE">
-          </div>
-          <select class="filter-input compact-select" id="answerTopicImpact">
-            <option value="all">全部专题</option>
-            <option value="updatedEvidence">本周有新证据</option>
-            <option value="quiet">本周无明显变化</option>
-          </select>
-          <select class="filter-input compact-select" id="answerTopicCommunity">
-            <option value="all">全部覆盖社区</option>
-          </select>
-        </div>
-        <div class="landscape-topic-layout">
-          <div class="curated-topic-list landscape-topic-list" id="answerTopicList"></div>
-          <aside class="curated-topic-detail landscape-topic-detail" id="answerTopicDetail">
-            <div class="kg-empty-hint">选择一个专题查看 claim、PMID 和全库锚点。</div>
-          </aside>
-        </div>
-      </aside>
+        <span class="update-badge" id="questionsMeta"></span>
+      </div>
+      <div id="questionGroups"></div>
     </div>
   </section>
 </main>
@@ -174,6 +145,9 @@
 <script src="../data/release-manifest.js?v=local-20261026-050004"></script>
 <script src="../assets/common.js?v=local-20261026-050004"></script>
 <script src="../data/landscape-data.js?v=local-20261026-050004"></script>
+<script src="../data/treatmentChapters.js?v=local-20261026-050004"></script>
+<script src="../data/clinicalQuestions.js?v=local-20261026-050004"></script>
+<script src="../data/landscapeKnowledgeReview.js?v=local-20261026-050004"></script>
 <script src="../data/source-signals.js?v=local-20261026-050004"></script>
 <script src="../data/curated-topics.js?v=local-20261026-050004"></script>
 <script src="../data/wikiTopicCoverage.js?v=local-20261026-050004"></script>

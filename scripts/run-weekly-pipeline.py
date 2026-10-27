@@ -195,6 +195,17 @@ def pipeline_steps(args, full_available: bool | None = None) -> list[PipelineSte
         )]),
         PipelineStep("build-source-signals", py("build-source-signals.py"), outputs=[DATA / "source-signals.js"]),
         PipelineStep("generate-weekly-summary", py("generate-weekly-summary.py"), outputs=[DATA / "weekly-summary.md"]),
+        PipelineStep(
+            "build-landscape-knowledge",
+            py("build-landscape-knowledge.py"),
+            outputs=[DATA / "treatmentChapters.js", DATA / "clinicalQuestions.js"],
+        ),
+        PipelineStep(
+            "review-landscape-knowledge",
+            py("review-landscape-knowledge.py"),
+            outputs=[DATA / "landscapeKnowledgeReview.js"],
+            optional=True,
+        ),
         PipelineStep("update-release-token", py("updateFrontendReleaseToken.py"), outputs=ACTIVE_HTML),
         PipelineStep("validate-public-contracts", py("validatePublicRelease.py")),
     ])

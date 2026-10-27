@@ -40,34 +40,56 @@ def test_msl_expert_profiles_require_a_search_keyword_before_rendering_results()
     assert "在左侧搜索框输入关键词后查看专家画像。" in js
 
 
-def test_living_answers_remove_nested_height_caps_only_inside_answer_layout():
-    css = (PROJECT / "assets" / "main.css").read_text(encoding="utf-8")
+def test_landscape_chapters_and_questions_replace_living_answers():
+    html = (PROJECT / "pages" / "landscape.html").read_text(encoding="utf-8")
+    assert 'data-landscape-tab="chapters"' in html
+    assert 'data-landscape-tab="questions"' in html
+    assert 'data-landscape-tab="answers"' not in html
+    assert "treatmentChapters.js" in html
+    assert "clinicalQuestions.js" in html
 
-    panel_rules = css_rule_bodies(
-        css, ".landscape-answer-layout .landscape-topic-panel"
-    )
-    assert any("position: static" in body for body in panel_rules)
 
-    for selector in (
-        ".landscape-answer-layout .landscape-topic-list",
-        ".landscape-answer-layout .landscape-topic-detail",
-        ".landscape-answer-layout .landscape-topic-detail .kg-study-list",
-    ):
-        bodies = css_rule_bodies(css, selector)
-        assert any("max-height: none" in body for body in bodies), selector
-        assert any("overflow-y: visible" in body for body in bodies), selector
+def _load_js_global(path: Path, name: str):
+    text = path.read_text(encoding="utf-8")
+    prefix = f"window.{name} = "
+    assert prefix in text, path
+    payload = text[text.index(prefix) + len(prefix):].strip().rstrip(";")
+    import json
 
-    # 全局知识库组件仍保留原有滚动行为。
-    assert re.search(
-        r"\.curated-topic-list\s*\{[^}]*max-height:\s*680px;[^}]*overflow-y:\s*auto",
-        css,
-        re.S,
-    )
-    assert re.search(
-        r"\.kg-study-list\s*\{[^}]*max-height:\s*200px;[^}]*overflow-y:\s*auto",
-        css,
-        re.S,
-    )
+    return json.loads(payload)
+
+
+def test_chapter_and_question_references_are_resolvable():
+    chapters_data = _load_js_global(PROJECT / "data" / "treatmentChapters.js", "MG_TREATMENT_CHAPTERS")
+    questions_data = _load_js_global(PROJECT / "data" / "clinicalQuestions.js", "MG_CLINICAL_QUESTIONS")
+
+    def check_item(item, statements_key):
+        ref_map = item["ref_map"]
+        refs = item["refs"]
+        assert refs, item.get("id")
+        numbers = {ref["n"] for ref in refs}
+        assert set(ref_map.values()) == numbers
+        for statement in item[statements_key]:
+            assert statement["text"].strip()
+            for ref in statement.get("refs", []):
+                key = ref.get("pmid") or ref.get("key")
+                assert key in ref_map, (item.get("id"), key)
+        for branch in item.get("branches", []):
+            for side in branch["sides"]:
+                for ref in side.get("refs", []):
+                    key = ref.get("pmid") or ref.get("key")
+                    assert key in ref_map, (item.get("id"), key)
+        for ref in refs:
+            if ref["kind"] == "article":
+                assert ref.get("pmid") and ref.get("url")
+            else:
+                assert ref.get("text")
+
+    for chapter in chapters_data["chapters"]:
+        check_item(chapter, "statements")
+    for group in questions_data["groups"]:
+        for question in group["questions"]:
+            check_item(question, "answer")
 
 
 def test_conference_rank_rows_are_native_buttons_with_active_state_and_bar_layout():

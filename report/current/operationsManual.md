@@ -32,7 +32,7 @@ MG Intelligence Hub 是面向 MG 医学事务团队的静态情报工作站。�
 | --- | --- | --- |
 | 首页（工作台） | `index.html` | 全宽分组扫描本周文献信号与临床试验信号；每张信号卡支持"传递卡"导出；发布状态条查看数据源与更新时间 |
 | 情报中心 | `pages/literature.html` | 浏览公开文献、中国情报、会议和临床试验，并按当前标签与筛选条件生成简报 |
-| 诊治格局 | `pages/landscape.html` | 解释竞争定位、领域重大事件时间线（新III期/获批/新指南）、两个独立差异模块（近一月文献主题差异 / 指南共识差异）和 Living Answers |
+| 诊治格局 | `pages/landscape.html` | 解释竞争定位、领域重大事件时间线（新III期/获批/新指南）、诊疗现状章节（中外指南综合框架+分歧分支）、临床问题库（未解决问题+证据回答）、两个独立差异模块（近一月文献主题差异 / 指南共识差异） |
 | 知识库 | `pages/knowledge.html` | 使用图谱、社区、证据矩阵、专题、中国作者网络和跨库检索；检索命中文献可导出规范引文清单（问询取证） |
 | MSL 工作台 | `pages/msl.html` | China-only 专家检索与拜访前准备 |
 
@@ -273,7 +273,17 @@ git diff --check
 3. 保持公开静态架构，只有明确触发条件出现时才评估窄职责后端。
 4. 持续抽样审计 MG-core、证据分级、社区边界和机构归一化。
 
-## 15. 中外差异两块模块（更新节奏不同）
+## 15. 诊疗现状与临床问题（知识产物与周更审查）
+
+两个栏目均位于诊治格局，取代原 Living Answers；专题证据包跳转统一改为知识库 `?topic=` 深链。
+
+- **诊疗现状**（`data/treatmentChapters.js`）：7 个章节（治疗目标/激素/靶向定位/抢救/胸腺/眼肌型/可及性），综合 34 份中外指南语料（`guideline-divergence.json` 已回验立场卡），分歧以「中国 / 国际」分支呈现。每条陈述带角标，章末列参考文献；英文 PMID 文献回链 PubMed，指南与中文文献不生成链接。
+- **临床问题**（`data/clinicalQuestions.js`）：4 个方向共 10 个未解决临床问题（FcRn 5 + 补体与抢救 2 + 特殊人群与长期管理 2 + 血清阴性 1），含未解决点、当前答案要点与 stance 分级（可谨慎回答/证据不足）。
+- **内容来源与生成**：`scripts/build-landscape-knowledge.py` 内置策展内容；文献标题/期刊一律按 PMID 从 `literature-full.json` 反查（查不到即 fail closed），不手写引文。每次重建确定性输出，管线步骤 `build-landscape-knowledge`。
+- **周更审查接口**：`scripts/review-landscape-knowledge.py`（管线 optional 步骤）读取 `literature-ingest-latest.json` 的真实新增 PMID，**仅 I/II 级证据**进入候选，按章节/问题关键词匹配，写入 `data/landscapeKnowledgeReview.js`（`MG_KNOWLEDGE_REVIEW`）。前端在对应章节/问题下显示"本周候选新证据（待确认）"。**候选不自动并入正文**；人工确认后编辑 `build-landscape-knowledge.py` 内容并重建。
+- **滚动口径**：正文（章节陈述、问题与答案要点）为人工策展、版本化；滚动更新通过候选队列提示，问题可新增/修订/退役。LLM 仅可做重要性评分建议（`--llm`），不得自动改写正文或生成医学结论。
+
+## 16. 中外差异两块模块（更新节奏不同）
 
 诊治格局有两个**互相独立**的差异模块，不要合并成一块，因为更新节奏根本不同：
 

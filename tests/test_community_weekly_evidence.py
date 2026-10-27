@@ -117,9 +117,11 @@ def test_frontend_distinguishes_new_evidence_from_long_term_topic_pmids():
 
     assert "本周新证据 · " in knowledge
     assert "data-topic-community" in knowledge
-    assert "topicImpactForCommunity" in landscape
-    assert "专题 PMID（长期知识底座）" in landscape
-    assert landscape.index("本周新入库证据") < landscape.index("专题 PMID（长期知识底座）")
+    assert "专题 PMID（长期知识底座）" in knowledge
+    assert knowledge.index("本周新入库证据") < knowledge.index("专题 PMID（长期知识底座）")
+    # 专题深链统一改为知识库，不再回跳旧 Living Answers 页
+    assert 'pages/knowledge.html?topic=' in landscape
+    assert 'tab=answers' not in landscape
 
 
 def test_capability_docs_define_the_true_weekly_community_baseline():
