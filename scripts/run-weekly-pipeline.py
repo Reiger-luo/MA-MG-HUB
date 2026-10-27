@@ -177,8 +177,6 @@ def pipeline_steps(args, full_available: bool | None = None) -> list[PipelineSte
             PipelineStep("build-community", py("buildCommunityData.py"), outputs=communityArtifactPaths(DATA)),
             PipelineStep("build-knowledge", py("build-knowledge-data.py"), outputs=[DATA / "knowledge-graph.js", DATA / "graphHealth.js"]),
             PipelineStep("build-china-author-network", py("buildChinaAuthorNetwork.py"), outputs=[DATA / "china-author-network.js"]),
-            PipelineStep("build-curated-topics", py("build-curated-topic-data.py"), outputs=[DATA / "curated-topics.js"]),
-            PipelineStep("build-wiki-coverage", py("buildWikiTopicCoverage.py"), outputs=[DATA / "wikiTopicCoverage.js"]),
         ])
     steps.extend([
         PipelineStep("build-landscape-insights", py("buildLandscapeInsights.py"), outputs=[DATA / "landscapeInsights.js"]),

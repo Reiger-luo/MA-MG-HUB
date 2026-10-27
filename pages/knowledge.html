@@ -38,8 +38,6 @@
 
   <div class="intel-tabs" role="tablist" aria-label="知识库视图">
     <button class="intel-tab active" type="button" data-knowledge-tab="graph">知识图谱</button>
-    <button class="intel-tab" type="button" data-knowledge-tab="communities">社区视图</button>
-    <button class="intel-tab" type="button" data-knowledge-tab="matrix">证据矩阵</button>
     <button class="intel-tab" type="button" data-knowledge-tab="china-network">中国作者联络图</button>
     <button class="intel-tab" type="button" data-knowledge-tab="search">跨库检索</button>
   </div>
@@ -97,72 +95,6 @@
       <aside class="kg-detail" id="knowledgeDetail">
         <div class="kg-empty-hint">点击图谱节点查看详情</div>
       </aside>
-    </div>
-  </section>
-
-  <section class="intel-tab-panel" id="knowledge-communities-panel">
-    <div class="workspace-panel">
-      <div class="panel-head">
-        <div>
-          <h2>医学事务社区</h2>
-          <p class="panel-caption">基于全 MG PubMed abstract 的规则基线社区层；efgar-wiki 只作为策展方法样板和覆盖校验。</p>
-        </div>
-        <span class="update-badge" id="communityCount">0 个社区</span>
-      </div>
-      <div class="kg-filter-bar">
-        <div class="knowledge-search compact">
-          <input id="communitySearch" placeholder="筛选社区，例如 FcRn / safety / China / guideline">
-        </div>
-        <select class="filter-input compact-select" id="communitySignalFilter">
-          <option value="all">全部活跃度</option>
-          <option value="active">活跃社区</option>
-          <option value="watch">观察社区</option>
-          <option value="quiet">平稳社区</option>
-        </select>
-      </div>
-      <div class="community-audit-strip" id="communityAuditStrip"></div>
-      <div class="curated-topic-layout community-layout">
-        <div class="curated-topic-list community-list" id="communityList"></div>
-        <aside class="curated-topic-detail community-detail" id="communityDetail">
-          <div class="kg-empty-hint">选择一个社区查看定义、边界、代表证据和本周动态。</div>
-        </aside>
-      </div>
-    </div>
-  </section>
-
-  <section class="intel-tab-panel" id="knowledge-matrix-panel">
-    <div class="workspace-panel">
-      <div class="panel-head">
-        <div>
-          <h2>证据矩阵</h2>
-          <p class="panel-caption">每一行代表一个摘要级关系，按 PMID 回链查看来源。矩阵用于定位证据，不直接给出全文级结论。</p>
-        </div>
-        <span class="update-badge" id="matrixCount">0 行</span>
-      </div>
-      <div class="kg-filter-bar">
-        <div class="knowledge-search compact">
-          <input id="knowledgeMatrixSearch" placeholder="筛选关系、药物、机制、人群或 PMID">
-        </div>
-        <select class="filter-input compact-select" id="knowledgeMatrixType">
-          <option value="all">全部关系类型</option>
-          <option value="drug">药物相关</option>
-          <option value="mechanism">机制相关</option>
-          <option value="population">人群相关</option>
-          <option value="outcome">结局相关</option>
-        </select>
-        <select class="filter-input compact-select" id="knowledgeMatrixLevel">
-          <option value="all">全部证据等级</option>
-          <option value="I">I</option>
-          <option value="II">II</option>
-          <option value="III">III</option>
-          <option value="IV">IV</option>
-          <option value="V">V</option>
-        </select>
-        <select class="filter-input compact-select" id="knowledgeMatrixCommunity">
-          <option value="all">全部医学社区</option>
-        </select>
-      </div>
-      <div class="knowledge-matrix-table" id="knowledgeMatrix"></div>
     </div>
   </section>
 
@@ -268,7 +200,7 @@
       <div class="panel-head">
         <div>
           <h2>跨库检索</h2>
-          <p class="panel-caption">同时检索图谱节点、全库轻索引、医学事务社区和专家公开画像。</p>
+          <p class="panel-caption">同时检索图谱节点、全库轻索引文献和专家公开画像；问询取证可导出规范引文清单。</p>
         </div>
       </div>
       <div class="knowledge-search">
@@ -284,11 +216,8 @@
 <script src="../data/knowledge-graph.js?v=local-20261027-1920"></script>
 <script src="../data/graphHealth.js?v=local-20261027-1920"></script>
 <script src="../data/curated-topics.js?v=local-20261027-1920"></script>
-<script src="../data/wikiTopicCoverage.js?v=local-20261027-1920"></script>
 <script src="../data/communityTaxonomy.js?v=local-20261027-1920"></script>
 <script src="../data/communityCards.js?v=local-20261027-1920"></script>
-<script src="../data/communityWeekly.js?v=local-20261027-1920"></script>
-<script src="../data/communityAudit.js?v=local-20261027-1920"></script>
 <script src="../assets/knowledge.js?v=local-20261027-1920"></script>
 <script src="../assets/china-provinces-map.js?v=local-20261027-1920"></script>
 <script src="../assets/chinaAuthorNetwork.js?v=local-20261027-1920"></script>

@@ -41,7 +41,6 @@ publicDataGlobals = {
     "source-signals.js": "MG_SOURCE_SIGNALS",
     "trial-signals-weekly.js": "MG_TRIAL_SIGNALS_DATA",
     "treatmentChapters.js": "MG_TREATMENT_CHAPTERS",
-    "wikiTopicCoverage.js": "MG_WIKI_TOPIC_COVERAGE",
 }
 
 
