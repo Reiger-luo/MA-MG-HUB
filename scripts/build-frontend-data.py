@@ -1383,7 +1383,6 @@ def build_cluster_signal(cluster_id, members, latest, signal_index):
         "talkingPoints": [talking_point],
         "kolFocus": [talking_point],
         "medical_affairs": medical_affairs,
-        "medical_affairs_implication": medical_affairs["implication"],
         "kol_leads": aggregate_kol_leads(articles),
         "institution_leads": aggregate_institution_leads(articles, aggregate_kol_leads(articles)),
         "signal_to_kol": {

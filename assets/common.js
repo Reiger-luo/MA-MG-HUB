@@ -206,6 +206,67 @@
     return { activate: setActive, activeKey: function () { return activeKey; } };
   }
 
+  function currentTimestamp() {
+    var now = new Date();
+    function pad(n) { return String(n).padStart(2, '0'); }
+    return now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate()) +
+      ' ' + pad(now.getHours()) + ':' + pad(now.getMinutes());
+  }
+
+  // 全站统一的简报导出模态：预览 + 复制，样式复用 main.css 的 literature-brief-modal。
+  function openBriefModal(title, markdownText) {
+    var safeTitle = escapeText(String(title || '简报'));
+    var preId = 'mghub_brief_' + Date.now();
+    var overlay = document.createElement('div');
+    overlay.className = 'modal-overlay open';
+    overlay.innerHTML =
+      '<div class="modal literature-brief-modal" role="dialog" aria-modal="true" aria-label="' + safeTitle + '">' +
+        '<button class="modal-close" type="button" data-mghub-brief-close="1">✕</button>' +
+        '<h2>📋 ' + safeTitle + '</h2>' +
+        '<div class="literature-brief-layout">' +
+          '<div class="literature-brief-preview">' +
+            '<div class="literature-brief-label">预览</div>' +
+            '<pre id="' + preId + '" class="literature-brief-pre">' + escapeText(markdownText || '') + '</pre>' +
+          '</div>' +
+          '<div class="literature-brief-actions">' +
+            '<div class="literature-brief-label">操作</div>' +
+            '<button class="btn literature-brief-copy" id="copy_' + preId + '">📋 复制</button>' +
+            '<p>复制后可粘贴到微信/飞书/邮件</p>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(overlay);
+
+    function closeBrief() {
+      document.removeEventListener('keydown', handleKeydown);
+      overlay.remove();
+    }
+    function handleKeydown(event) {
+      if (event.key === 'Escape') closeBrief();
+    }
+    overlay.addEventListener('click', function(event) {
+      if (event.target === overlay || event.target.getAttribute('data-mghub-brief-close') === '1') closeBrief();
+    });
+    document.addEventListener('keydown', handleKeydown);
+
+    var copyBtn = document.getElementById('copy_' + preId);
+    if (copyBtn) {
+      copyBtn.addEventListener('click', function() {
+        var text = document.getElementById(preId).textContent;
+        navigator.clipboard.writeText(text).then(function() {
+          copyBtn.textContent = '✅ 已复制';
+          setTimeout(function() { copyBtn.textContent = '📋 复制'; }, 1500);
+        });
+      });
+    }
+  }
+
+  // 导出文本通用尾部：数据版本 + 核对原文提示（不回登边界：导出即终点，无任何回传入口）。
+  function briefFooter() {
+    var runId = currentReleaseId();
+    return '——生成自 MA-MG-HUB · ' + currentTimestamp() + (runId ? ' · 数据版本 ' + runId : '') + '\n引用前请核对 PMID 原文；本站不记录任何互动信息。';
+  }
+
   window.MgHub = {
     basePath: basePath,
     escapeText: escapeText,
@@ -220,6 +281,9 @@
     releaseId: currentReleaseId,
     withReleaseVersion: withReleaseVersion,
     loadScript: loadScript,
-    initTabs: initTabs
+    initTabs: initTabs,
+    openBriefModal: openBriefModal,
+    briefFooter: briefFooter,
+    currentTimestamp: currentTimestamp
   };
 })();

@@ -14,6 +14,7 @@ publicDataGlobals = {
     "china-author-network.js": "MG_CHINA_AUTHOR_NETWORK",
     "china-intelligence.js": "MG_CHINA_DATA",
     "clinical-trials-data.js": "MG_CLINICAL_TRIALS_DATA",
+    "clinicalQuestions.js": "MG_CLINICAL_QUESTIONS",
     "clinicalTrialsSummary.js": "MG_CLINICAL_TRIALS_SUMMARY",
     "communityAssignmentIndex.js": "MG_COMMUNITY_ASSIGNMENT_INDEX",
     "communityAssignmentsRecent.js": "MG_COMMUNITY_RECENT_ASSIGNMENTS",
@@ -32,13 +33,14 @@ publicDataGlobals = {
     "knowledge-graph.js": "MG_KNOWLEDGE_GRAPH",
     "landscape-data.js": "MG_LANDSCAPE_DATA",
     "landscapeInsights.js": "MG_LANDSCAPE_INSIGHTS",
+    "landscapeKnowledgeReview.js": "MG_KNOWLEDGE_REVIEW",
     "literature-full-index.js": "MG_LITERATURE_FULL_INDEX",
     "literature-recent.js": "MG_LITERATURE_DATA",
     "pipeline-status.js": "MG_PIPELINE_STATUS",
     "signals-weekly.js": "MG_SIGNALS_DATA",
     "source-signals.js": "MG_SOURCE_SIGNALS",
     "trial-signals-weekly.js": "MG_TRIAL_SIGNALS_DATA",
-    "wikiTopicCoverage.js": "MG_WIKI_TOPIC_COVERAGE",
+    "treatmentChapters.js": "MG_TREATMENT_CHAPTERS",
 }
 
 

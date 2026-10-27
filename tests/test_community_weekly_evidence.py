@@ -113,13 +113,16 @@ def test_topic_weekly_impact_is_scoped_to_assigned_communities():
 
 def test_frontend_distinguishes_new_evidence_from_long_term_topic_pmids():
     knowledge = (ROOT / "assets" / "knowledge.js").read_text(encoding="utf-8")
-    landscape = (ROOT / "assets" / "landscape.js").read_text(encoding="utf-8")
+    contract = (ROOT / "scripts" / "common" / "publicDataContract.py").read_text(encoding="utf-8")
 
-    assert "本周新证据 · " in knowledge
-    assert "data-topic-community" in knowledge
-    assert "topicImpactForCommunity" in landscape
-    assert "专题 PMID（长期知识底座）" in landscape
-    assert landscape.index("本周新入库证据") < landscape.index("专题 PMID（长期知识底座）")
+    # 图谱节点详情的相关专题仍区分"本周新证据"与常驻专题
+    assert "本周新证据" in knowledge
+    assert "topicsById" in knowledge
+    # 社区视图/证据矩阵下线后，周更社区数据仍作为公开产物保留（诊疗现状滚动层数据源）
+    assert "communityWeekly.js" in contract
+    assert "communityAudit.js" in contract
+    # wiki 覆盖层已退役
+    assert "wikiTopicCoverage.js" not in contract
 
 
 def test_capability_docs_define_the_true_weekly_community_baseline():

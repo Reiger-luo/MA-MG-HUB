@@ -64,10 +64,12 @@ def test_pipeline_step_selection_keeps_full_dependent_builds_when_full_exists():
         "build-community",
         "build-knowledge",
         "build-china-author-network",
-        "build-curated-topics",
-        "build-wiki-coverage",
     ):
         assert step_id in ids
+
+    # wiki 覆盖与专题生成已随社区视图/证据矩阵下线而退役
+    for retired in ("build-curated-topics", "build-wiki-coverage"):
+        assert retired not in ids
 
 
 def test_literature_narrative_enrichment_is_a_required_publish_step():

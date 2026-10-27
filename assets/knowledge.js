@@ -18,22 +18,13 @@
   var curatedTopics = curatedData.topics || [];
   var topicsById = {};
   curatedTopics.forEach(function (topic) { topicsById[topic.id] = topic; });
-  var topicCoverageData = window.MG_WIKI_TOPIC_COVERAGE || { stats: {}, topic_coverage: [], community_coverage: [], community_topic_index: {} };
-  var topicCoverageById = {};
-  var communityCoverageById = {};
-  (topicCoverageData.topic_coverage || []).forEach(function (item) { topicCoverageById[item.topic_id] = item; });
-  (topicCoverageData.community_coverage || []).forEach(function (item) { communityCoverageById[item.community_id] = item; });
   var communityTaxonomy = window.MG_COMMUNITY_TAXONOMY || { communities: [] };
   var communityCardsData = window.MG_COMMUNITY_CARDS || { cards: [] };
-  var communityWeeklyData = window.MG_COMMUNITY_WEEKLY || { communities: [] };
-  var communityAuditData = window.MG_COMMUNITY_AUDIT || { summary: {}, health: {} };
   var communityCards = communityCardsData.cards || [];
   var communityRows = [];
   var communityCardsById = {};
   var taxonomyById = {};
-  var weeklyByCommunityId = {};
   (communityTaxonomy.communities || []).forEach(function (item) { taxonomyById[item.id] = item; });
-  (communityWeeklyData.communities || []).forEach(function (item) { weeklyByCommunityId[item.community_id] = item; });
   communityCards.forEach(function (card) { communityCardsById[card.id] = card; });
   communityCards.forEach(function (card) {
     communityRows.push(Object.assign({}, taxonomyById[card.id] || {}, card));
@@ -97,24 +88,6 @@
   var elGraphDensity = document.getElementById('knowledgeGraphDensity');
   var elGraphColorMode = document.getElementById('knowledgeGraphColorMode');
   var elGraphLegend = document.getElementById('knowledgeGraphLegend');
-  var elMatrix = document.getElementById('knowledgeMatrix');
-  var elMatrixCount = document.getElementById('matrixCount');
-  var elMatrixSearch = document.getElementById('knowledgeMatrixSearch');
-  var elMatrixType = document.getElementById('knowledgeMatrixType');
-  var elMatrixLevel = document.getElementById('knowledgeMatrixLevel');
-  var elMatrixCommunity = document.getElementById('knowledgeMatrixCommunity');
-  var elTopicCount = document.getElementById('topicCount');
-  var elTopicSearch = document.getElementById('curatedTopicSearch');
-  var elTopicImpact = document.getElementById('curatedTopicImpact');
-  var elTopicCommunity = document.getElementById('curatedTopicCommunity');
-  var elTopicList = document.getElementById('curatedTopicList');
-  var elTopicDetail = document.getElementById('curatedTopicDetail');
-  var elCommunityCount = document.getElementById('communityCount');
-  var elCommunitySearch = document.getElementById('communitySearch');
-  var elCommunitySignal = document.getElementById('communitySignalFilter');
-  var elCommunityAuditStrip = document.getElementById('communityAuditStrip');
-  var elCommunityList = document.getElementById('communityList');
-  var elCommunityDetail = document.getElementById('communityDetail');
   var elSearch = document.getElementById('knowledgeSearch');
   var elSearchResults = document.getElementById('knowledgeSearchResults');
 
@@ -126,8 +99,6 @@
   var activeNodeId = null;
   var activeCommunityId = null;
   var tabController = null;
-  var matrixInitialized = false;
-  var communityInitialized = false;
   var searchInitialized = false;
   var communityAssignmentCache = {};
   var communityAssignmentLoading = {};
@@ -236,7 +207,7 @@
 
   function topicHref(topicId, communityId) {
     var communityQuery = communityId ? '&community=' + encodeURIComponent(communityId) : '';
-    return pageUrl('pages/landscape.html?tab=answers&topic=' + encodeURIComponent(topicId || '') + communityQuery);
+    return pageUrl('pages/knowledge.html?topic=' + encodeURIComponent(topicId || '') + communityQuery);
   }
 
   function safeClassToken(value, fallback) {
@@ -294,8 +265,6 @@
 
   function initializeCommunityControls() {
     populateCommunitySelect(elGraphCommunityFilter, '全部医学社区');
-    populateCommunitySelect(elMatrixCommunity, '全部医学社区');
-    populateCommunitySelect(elTopicCommunity, '全部覆盖社区');
     graphColorMode = (elGraphColorMode && elGraphColorMode.value) || 'type';
     renderGraphLegend();
   }
@@ -336,10 +305,9 @@
       { label: '图谱节点', value: stats.total_nodes || 0, note: '疾病/药物/机制/结局' },
       { label: '图谱关系', value: (stats.all_edges || stats.edges || 0) + '/' + (stats.graph_edges || stats.edges || 0), note: '全量合格/默认主图' },
       { label: '社区映射', value: (stats.community_mapped_nodes || 0) + '/' + (stats.total_nodes || 0), note: '图谱 dominant community' },
-      { label: '证据矩阵', value: stats.evidence_matrix_rows || 0, note: '可回链 PMID 的关系' },
       { label: '医学社区', value: communityRows.length || 0, note: '全 MG 语义层' },
       { label: '专题', value: (curatedData.stats && curatedData.stats.topics) || 0, note: 'wiki 自动同步' },
-      { label: '专题覆盖', value: ((topicCoverageData.stats || {}).covered_community_count || 0) + '/' + communityRows.length, note: '社区连接层' }
+
     ];
     elStats.innerHTML = cards.map(function (card) {
       return '<article class="knowledge-stat-card">' +
@@ -774,267 +742,6 @@
     });
   }
 
-  function renderMatrixCommunityBadges(row) {
-    var profile = row.community_profile || [];
-    if (!profile.length) return '<span class="kg-ref-meta">未映射</span>';
-    return profile.slice(0, 2).map(function (community) {
-      return '<span class="kg-badge community-badge mini" style="--community-color:' + escapeHtml(communityColor(community.community_id)) + '">' +
-        escapeHtml(community.title || community.community_id) + '</span>';
-    }).join(' ');
-  }
-
-  function renderMatrix() {
-    if (!elMatrix) return;
-    var keyword = (elMatrixSearch && elMatrixSearch.value || '').trim().toLowerCase();
-    var type = (elMatrixType && elMatrixType.value) || 'all';
-    var level = (elMatrixLevel && elMatrixLevel.value) || 'all';
-    var communityId = (elMatrixCommunity && elMatrixCommunity.value) || 'all';
-    var rows = matrixRows.filter(function (row) {
-      var communityText = (row.community_profile || []).map(function (profile) {
-        return profile.title + ' ' + profile.community_id;
-      }).join(' ');
-      var text = [
-        row.source, row.target, row.relation, row.best_evidence_level,
-        row.dominant_community_title, communityText, (row.key_pmids || []).join(' ')
-      ].join(' ').toLowerCase();
-      var typeMatch = type === 'all' || row.source_type === type || row.target_type === type;
-      var levelMatch = level === 'all' || row.best_evidence_level === level;
-      var communityMatch = itemHasCommunity(row, communityId);
-      return (!keyword || text.indexOf(keyword) !== -1) && typeMatch && levelMatch && communityMatch;
-    });
-    if (elMatrixCount) elMatrixCount.textContent = rows.length + ' 行';
-
-    if (!rows.length) {
-      elMatrix.innerHTML = '<div class="kg-empty-hint">没有匹配的证据关系。</div>';
-      return;
-    }
-
-    var tableRows = rows.map(function (row) {
-      var pmids = (row.references || []).map(function (ref) {
-        return '<a class="kg-pmid-link" href="' + escapeHref(ref.url) + '" target="_blank" rel="noopener">' +
-          escapeHtml(ref.pmid) + '</a>';
-      }).join(' ');
-      return '<tr>' +
-        '<td><button class="matrix-node-link" type="button" data-node="' + escapeHtml(row.source_id) + '">' + escapeHtml(row.source) + '</button></td>' +
-        '<td>' + escapeHtml(row.relation) + '</td>' +
-        '<td><button class="matrix-node-link" type="button" data-node="' + escapeHtml(row.target_id) + '">' + escapeHtml(row.target) + '</button></td>' +
-        '<td><span class="kg-badge conf-' + escapeHtml(row.confidence || 'low') + '">' + escapeHtml(confidenceLabel[row.confidence] || row.confidence || '未知') + '</span></td>' +
-        '<td>' + renderMatrixCommunityBadges(row) + '</td>' +
-        '<td>' + escapeHtml(row.article_count || 0) + '</td>' +
-        '<td>' + escapeHtml(row.best_evidence_level || '未分级') + '</td>' +
-        '<td>' + pmids + '</td>' +
-      '</tr>';
-    }).join('');
-
-    elMatrix.innerHTML = '<table><thead><tr>' +
-      '<th>来源节点</th><th>关系</th><th>目标节点</th><th>覆盖</th><th>社区</th><th>文献量</th><th>最高等级</th><th>PMID</th>' +
-      '</tr></thead><tbody>' + tableRows + '</tbody></table>';
-
-    Array.prototype.forEach.call(elMatrix.querySelectorAll('[data-node]'), function (button) {
-      button.addEventListener('click', function () {
-        activateTab('graph');
-        selectNode(button.getAttribute('data-node'));
-      });
-    });
-  }
-
-  function attachMatrixFilters() {
-    [elMatrixSearch, elMatrixType, elMatrixLevel, elMatrixCommunity].forEach(function (el) {
-      if (el) el.addEventListener(el.tagName === 'SELECT' ? 'change' : 'input', renderMatrix);
-    });
-    renderMatrix();
-  }
-
-  function getTopicCoverage(topicId) {
-    return topicCoverageById[topicId] || { communities: [] };
-  }
-
-  function topicHasCommunity(topicId, communityId) {
-    if (!communityId || communityId === 'all') return true;
-    return (getTopicCoverage(topicId).communities || []).some(function (community) {
-      return community.community_id === communityId;
-    });
-  }
-
-  function renderTopicCommunityBadges(topicId, limit, asButtons) {
-    var communities = (getTopicCoverage(topicId).communities || []).slice(0, limit || 3);
-    if (!communities.length) return '<span class="kg-ref-meta">未连接社区</span>';
-    return communities.map(function (community) {
-      var style = '--community-color:' + escapeHtml(communityColor(community.community_id));
-      if (asButtons) {
-        return '<button class="mini-chip chip-button topic-community-chip" type="button" data-community="' + escapeHtml(community.community_id) + '">' +
-          escapeHtml(community.title || getCommunityTitle(community.community_id)) +
-          ' · ' + escapeHtml(community.confidence || 'low') + '</button>';
-      }
-      return '<span class="kg-badge community-badge mini" style="' + style + '">' +
-        escapeHtml(community.title || getCommunityTitle(community.community_id)) + '</span>';
-    }).join(' ');
-  }
-
-  function renderTopics(selectedId) {
-    if (!elTopicList || !elTopicDetail) return;
-    var keyword = (elTopicSearch && elTopicSearch.value || '').trim().toLowerCase();
-    var impactFilter = (elTopicImpact && elTopicImpact.value) || 'all';
-    var communityFilter = (elTopicCommunity && elTopicCommunity.value) || 'all';
-    var topics = curatedTopics.filter(function (topic) {
-      var coverage = getTopicCoverage(topic.id);
-      var communityText = (coverage.communities || []).map(function (community) {
-        return community.title + ' ' + community.community_id;
-      }).join(' ');
-      var text = [
-        topic.title,
-        topic.summary,
-        topic.source_type,
-        (topic.anchor_nodes || []).join(' '),
-        (topic.evidence_pmids || []).join(' '),
-        (topic.msl_use || []).join(' '),
-        communityText
-      ].join(' ').toLowerCase();
-      var impact = (topic.impact && topic.impact.status) || 'quiet';
-      return (!keyword || text.indexOf(keyword) !== -1) &&
-        (impactFilter === 'all' || impact === impactFilter) &&
-        topicHasCommunity(topic.id, communityFilter);
-    });
-    if (elTopicCount) elTopicCount.textContent = topics.length + ' 个专题';
-    if (!topics.length) {
-      elTopicList.innerHTML = '<div class="kg-empty-hint">没有匹配的专题。</div>';
-      elTopicDetail.innerHTML = '<div class="kg-empty-hint">调整筛选条件查看专题。</div>';
-      return;
-    }
-
-    var activeId = selectedId && topicsById[selectedId] ? selectedId : topics[0].id;
-    elTopicList.innerHTML = topics.map(function (topic) {
-      var impactCount = ((topic.impact && topic.impact.recent_articles) || []).length;
-      var communityBadges = renderTopicCommunityBadges(topic.id, 3, false);
-      return '<button class="curated-topic-card' + (topic.id === activeId ? ' active' : '') + '" type="button" data-topic="' + escapeHtml(topic.id) + '">' +
-        '<span>' + escapeHtml(sourceTypeLabelForTopic(topic.source_type)) + '</span>' +
-        '<strong>' + escapeHtml(topic.title) + '</strong>' +
-        '<div class="topic-community-row">' + communityBadges + '</div>' +
-        '<em>' + escapeHtml((topic.evidence_refs || []).length) + ' PMID · ' + escapeHtml((topic.anchor_nodes || []).length) + ' 锚点' +
-          (impactCount ? ' · 本周 ' + impactCount : '') + '</em>' +
-      '</button>';
-    }).join('');
-
-    Array.prototype.forEach.call(elTopicList.querySelectorAll('[data-topic]'), function (button) {
-      button.addEventListener('click', function () {
-        renderTopicDetail(button.getAttribute('data-topic'));
-        Array.prototype.forEach.call(elTopicList.querySelectorAll('.curated-topic-card'), function (item) {
-          item.classList.toggle('active', item === button);
-        });
-      });
-    });
-    renderTopicDetail(activeId);
-  }
-
-  function sourceTypeLabelForTopic(value) {
-    return {
-      concept: '概念专题',
-      entity: '实体专题',
-      dataPoint: '数据专题',
-      comparison: '对比专题'
-    }[value] || '专题';
-  }
-
-  function renderTopicCommunitySection(topicId) {
-    var coverage = getTopicCoverage(topicId);
-    var communities = coverage.communities || [];
-    if (!communities.length) {
-      return '<div class="kg-detail-section"><h4>覆盖社区</h4><div class="kg-empty-hint">该专题尚未稳定连接到医学事务社区。</div></div>';
-    }
-    return '<div class="kg-detail-section"><h4>覆盖社区</h4><div class="kg-tags">' +
-      renderTopicCommunityBadges(topicId, 5, true) +
-      '</div><div class="kg-ref-meta">依据专题锚点、PMID 归类和 taxonomy 关键词生成；不改变文献 primary community。</div></div>';
-  }
-
-  function renderTopicDetail(topicId) {
-    if (!elTopicDetail) return;
-    var topic = topicsById[topicId];
-    if (!topic) {
-      elTopicDetail.innerHTML = '<div class="kg-empty-hint">选择一个专题查看详情。</div>';
-      return;
-    }
-    var anchorHtml = (topic.anchor_nodes || []).map(function (nodeId) {
-      var node = nodesById[nodeId] || {};
-      return '<button class="mini-chip chip-button" type="button" data-node="' + escapeHtml(nodeId) + '">' +
-        escapeHtml(node.title || nodeId) + '</button>';
-    }).join('');
-    var useHtml = (topic.msl_use || []).map(function (item) {
-      return '<span class="mini-chip">' + escapeHtml(item) + '</span>';
-    }).join('');
-    var claimHtml = (topic.claims || []).slice(0, 5).map(function (claim) {
-      return '<article class="curated-claim">' +
-        '<span>' + escapeHtml(claim.claim_type || 'claim') + (claim.section ? ' · ' + escapeHtml(claim.section) : '') + '</span>' +
-        '<p>' + escapeHtml(claim.text || '') + '</p>' +
-      '</article>';
-    }).join('');
-    var refsHtml = (topic.evidence_refs || []).length ?
-      topic.evidence_refs.slice(0, 8).map(renderReferenceItem).join('') :
-      '<li>暂无可校验 PMID；可在 wiki 中补充 evidence_pmids。</li>';
-    var impactItems = ((topic.impact && topic.impact.recent_articles) || []).slice(0, 6);
-    var impactHtml = impactItems.length ? impactItems.map(renderReferenceItem).join('') : '<li>本周未发现明确影响该专题的新入库 abstract。</li>';
-    var communityHtml = renderTopicCommunitySection(topic.id);
-
-    elTopicDetail.innerHTML =
-      '<div class="kg-detail-type">' + escapeHtml(sourceTypeLabelForTopic(topic.source_type)) + '</div>' +
-      '<h2>' + escapeHtml(topic.title) + '</h2>' +
-      '<div class="kg-badges">' +
-        '<span class="kg-badge conf-' + escapeHtml(topic.confidence === 'high' ? 'high' : topic.confidence === 'medium' ? 'medium' : 'low') + '">' + escapeHtml(topic.confidence || 'unknown') + '</span>' +
-        '<span class="kg-badge">' + escapeHtml(topic.status || 'active') + '</span>' +
-        '<span class="kg-badge">更新 ' + escapeHtml(topic.updated || '-') + '</span>' +
-      '</div>' +
-      '<div class="kg-detail-summary">' + escapeHtml(topic.summary || '') + '</div>' +
-      communityHtml +
-      '<div class="kg-detail-section"><h4>全库锚点</h4><div class="kg-tags">' + anchorHtml + '</div></div>' +
-      '<div class="kg-detail-section"><h4>MSL 使用场景</h4><div class="kg-tags">' + useHtml + '</div></div>' +
-      '<div class="kg-detail-section"><h4>专题要点</h4>' + claimHtml + '</div>' +
-      '<div class="kg-detail-section"><h4>本周新入库证据</h4><ul class="kg-study-list">' + impactHtml + '</ul></div>' +
-      '<div class="kg-detail-section"><h4>专题 PMID（长期知识底座）</h4><ul class="kg-study-list">' + refsHtml + '</ul></div>' +
-      '<div class="kg-detail-actions"><a class="kg-obsidian-btn" href="' + escapeHref(topic.obsidian_url || '#') + '">在 Obsidian 中打开</a></div>';
-
-    Array.prototype.forEach.call(elTopicDetail.querySelectorAll('[data-node]'), function (button) {
-      button.addEventListener('click', function () {
-        activateTab('graph');
-        selectNode(button.getAttribute('data-node'));
-      });
-    });
-    Array.prototype.forEach.call(elTopicDetail.querySelectorAll('[data-community]'), function (button) {
-      button.addEventListener('click', function () {
-        openCommunity(button.getAttribute('data-community'));
-      });
-    });
-  }
-
-  function attachTopicFilters() {
-    if (elTopicSearch) elTopicSearch.addEventListener('input', function () { renderTopics(); });
-    if (elTopicImpact) elTopicImpact.addEventListener('change', function () { renderTopics(); });
-    if (elTopicCommunity) elTopicCommunity.addEventListener('change', function () { renderTopics(); });
-    renderTopics();
-  }
-
-  function communitySignalClass(value) {
-    if (value === 'active' || value === 'high') return 'high';
-    if (value === 'watch' || value === 'medium') return 'medium';
-    return 'low';
-  }
-
-  function communitySignalText(value) {
-    return communitySignalLabel[value] || value || '平稳';
-  }
-
-  function communityFilterSignal(value) {
-    if (value === 'high') return 'active';
-    if (value === 'medium') return 'watch';
-    if (value === 'low') return 'quiet';
-    return value || 'quiet';
-  }
-
-  function communityTermsText(terms) {
-    if (!terms) return '';
-    return ['strong', 'normal', 'weak'].map(function (key) {
-      return (terms[key] || []).join(' ');
-    }).join(' ');
-  }
-
   function loadScriptOnce(src, callback) {
     var finalSrc = hub.withReleaseVersion ? hub.withReleaseVersion(src) : src;
     var existing = document.querySelector('script[src="' + attrSelectorEscape(finalSrc) + '"]');
@@ -1186,17 +893,6 @@
     }
   }
 
-  function getInitialKnowledgeTopicId() {
-    try {
-      var params = new URLSearchParams(window.location.search || '');
-      var topicId = params.get('topic') || '';
-      if (topicId && topicsById[topicId]) return topicId;
-      return '';
-    } catch (err) {
-      return '';
-    }
-  }
-
   function getInitialKnowledgeNodeId() {
     try {
       var params = new URLSearchParams(window.location.search || '');
@@ -1208,260 +904,13 @@
     }
   }
 
-  function renderCommunityAuditStrip() {
-    if (!elCommunityAuditStrip) return;
-    var summary = communityAuditData.summary || {};
-    var total = Number(summary.total_articles || 0);
-    if (!total) {
-      elCommunityAuditStrip.innerHTML = '<div class="community-audit-item"><span>社区层</span><strong>未生成</strong><em>等待周更管线</em></div>';
-      return;
-    }
-    function rate(value) {
-      return (Number(value || 0) / total * 100).toFixed(1).replace(/\.0$/, '') + '%';
-    }
-    var items = [
-      { label: '全库文献', value: compactNumber(total), note: '社区归类基线' },
-      { label: '已归类', value: compactNumber(summary.assigned_articles), note: rate(summary.assigned_articles) },
-      { label: '未归类', value: compactNumber(summary.unassigned_articles), note: rate(summary.unassigned_articles) },
-      { label: '低置信度', value: compactNumber(summary.low_confidence_articles), note: rate(summary.low_confidence_articles) },
-      { label: '冲突归类', value: compactNumber(summary.conflict_articles), note: rate(summary.conflict_articles) }
-    ];
-    elCommunityAuditStrip.innerHTML = items.map(function (item) {
-      return '<div class="community-audit-item">' +
-        '<span>' + escapeHtml(item.label) + '</span>' +
-        '<strong>' + escapeHtml(item.value) + '</strong>' +
-        '<em>' + escapeHtml(item.note) + '</em>' +
-      '</div>';
-    }).join('');
-  }
-
-  function renderCommunities(selectedId) {
-    if (!elCommunityList || !elCommunityDetail) return;
-    var keyword = (elCommunitySearch && elCommunitySearch.value || '').trim().toLowerCase();
-    var signalFilter = (elCommunitySignal && elCommunitySignal.value) || 'all';
-    var rows = communityRows.filter(function (row) {
-      var taxonomy = taxonomyById[row.id] || {};
-      var text = [
-        row.title,
-        row.definition,
-        row.boundary,
-        row.summary,
-        (row.representative_nodes || taxonomy.representative_nodes || []).join(' '),
-        (row.msl_use_cases || taxonomy.msl_use_cases || []).join(' '),
-        (row.facets || taxonomy.facets || []).join(' '),
-        communityTermsText(taxonomy.terms || row.terms)
-      ].join(' ').toLowerCase();
-      var signal = communityFilterSignal(row.signal_level);
-      return (!keyword || text.indexOf(keyword) !== -1) &&
-        (signalFilter === 'all' || signal === signalFilter);
-    }).sort(function (a, b) {
-      return (b.weekly_new_count || 0) - (a.weekly_new_count || 0) ||
-        (b.article_count || 0) - (a.article_count || 0);
-    });
-
-    if (elCommunityCount) elCommunityCount.textContent = rows.length + ' / ' + communityRows.length + ' 个社区';
-    if (!rows.length) {
-      elCommunityList.innerHTML = '<div class="kg-empty-hint">没有匹配的社区。</div>';
-      elCommunityDetail.innerHTML = '<div class="kg-empty-hint">调整筛选条件查看社区。</div>';
-      return;
-    }
-
-    var wantedId = selectedId || activeCommunityId;
-    var activeRow = rows.find(function (row) { return row.id === wantedId; }) || rows[0];
-    activeCommunityId = activeRow.id;
-    elCommunityList.innerHTML = rows.map(function (row) {
-      var weekly = weeklyByCommunityId[row.id] || {};
-      var signal = row.signal_level || communityFilterSignal(weekly.signal_level);
-      var meta = compactNumber(row.article_count || 0) + ' 篇 · 本周新增 ' + compactNumber(row.weekly_new_count || weekly.recent_count || 0) +
-        ' · 高等级 ' + compactNumber(row.high_evidence_count || weekly.high_evidence_count || 0);
-      return '<button class="curated-topic-card community-card' + (row.id === activeCommunityId ? ' active' : '') + '" type="button" data-community="' + escapeHtml(row.id) + '">' +
-        '<span class="community-signal">' + escapeHtml(communitySignalText(signal)) + '</span>' +
-        '<strong>' + escapeHtml(row.title || row.id) + '</strong>' +
-        '<em>' + escapeHtml(meta) + '</em>' +
-      '</button>';
-    }).join('');
-
-    Array.prototype.forEach.call(elCommunityList.querySelectorAll('[data-community]'), function (button) {
-      button.addEventListener('click', function () {
-        renderCommunityDetail(button.getAttribute('data-community'));
-        Array.prototype.forEach.call(elCommunityList.querySelectorAll('.community-card'), function (item) {
-          item.classList.toggle('active', item === button);
-        });
-      });
-    });
-    renderCommunityDetail(activeCommunityId);
-  }
-
-  function renderCommunityProfileBox(title, rows) {
-    rows = Array.isArray(rows) ? rows.slice(0, 6) : [];
-    if (!rows.length) return '';
-    var max = rows.reduce(function (memo, row) { return Math.max(memo, Number(row[1] || 0)); }, 1);
-    return '<div class="community-profile-box"><h5>' + escapeHtml(title) + '</h5>' +
-      rows.map(function (row) {
-        var percent = Math.max(4, Math.round(Number(row[1] || 0) / max * 100));
-        return '<div class="community-profile-row">' +
-          '<span>' + escapeHtml(row[0]) + '</span><em>' + escapeHtml(row[1]) + '</em>' +
-          '<div class="community-meter" style="--meter-value:' + escapeHtml(percent) + '%"><i></i></div>' +
-        '</div>';
-      }).join('') + '</div>';
-  }
-
-  function renderCommunityTopicsBlock(communityId) {
-    var coverage = communityCoverageById[communityId] || {};
-    var topics = coverage.top_topics || [];
-    if (!topics.length) {
-      return '<div class="kg-detail-section"><h4>相关专题</h4><div class="kg-empty-hint">该社区目前缺少稳定 wiki 专题覆盖，后续可作为策展补齐点。</div></div>';
-    }
-    return '<div class="kg-detail-section"><h4>相关专题</h4><div class="kg-relation-list">' +
-      topics.slice(0, 6).map(function (topic) {
-        var recentCount = Number(topic.recent_article_count || 0);
-        var state = topic.impact_status === 'updatedEvidence' && recentCount ? '本周新证据 · ' + recentCount : '专题';
-        return '<button class="kg-relation-row" type="button" data-topic="' + escapeHtml(topic.topic_id) + '" data-topic-community="' + escapeHtml(communityId) + '">' +
-          '<span>' + escapeHtml(state) + '</span>' +
-          '<strong>' + escapeHtml(topic.title) + '</strong>' +
-          '<em>' + escapeHtml(topic.confidence || 'low') + ' · score ' + escapeHtml(topic.score || 0) + '</em>' +
-        '</button>';
-      }).join('') + '</div></div>';
-  }
-
-  function renderCommunityDetail(communityId) {
-    if (!elCommunityDetail) return;
-    var card = communityCardsById[communityId] || {};
-    var taxonomy = taxonomyById[communityId] || {};
-    var weekly = weeklyByCommunityId[communityId] || {};
-    var row = Object.assign({}, taxonomy, card);
-    if (!row.id) {
-      elCommunityDetail.innerHTML = '<div class="kg-empty-hint">选择一个社区查看详情。</div>';
-      return;
-    }
-    activeCommunityId = row.id;
-
-    var signal = row.signal_level || communityFilterSignal(weekly.signal_level);
-    var nodeIds = row.representative_nodes || taxonomy.representative_nodes || [];
-    var nodeHtml = nodeIds.map(function (nodeId) {
-      var node = nodesById[nodeId] || {};
-      return '<button class="mini-chip chip-button" type="button" data-node="' + escapeHtml(nodeId) + '">' +
-        escapeHtml(node.title || nodeId) + '</button>';
-    }).join('');
-    var useHtml = (row.msl_use_cases || taxonomy.msl_use_cases || []).map(function (item) {
-      return '<span class="mini-chip">' + escapeHtml(item) + '</span>';
-    }).join('');
-    var facetHtml = (row.facets || taxonomy.facets || []).map(function (item) {
-      return '<span class="mini-chip">' + escapeHtml(item) + '</span>';
-    }).join('');
-    var terms = taxonomy.terms || row.terms || {};
-    var termHtml = ['strong', 'normal', 'weak'].map(function (key) {
-      return (terms[key] || []).slice(0, 10).map(function (term) {
-        return '<span class="mini-chip">' + escapeHtml(term) + '</span>';
-      }).join('');
-    }).join('');
-    var refsHtml = (row.representative_refs || []).length ?
-      row.representative_refs.slice(0, 6).map(renderReferenceItem).join('') :
-      '<li>暂无代表 PMID；等待社区层下一轮重建。</li>';
-    var recentRefs = (weekly.top_refs && weekly.top_refs.length) ? weekly.top_refs : (row.weekly_refs || []);
-    var recentHtml = recentRefs.length ?
-      recentRefs.slice(0, 6).map(renderReferenceItem).join('') :
-      '<li>本周未发现明确进入该社区的新 abstract。</li>';
-    var profileHtml = renderCommunityProfileBox('证据等级', row.evidence_profile) +
-      renderCommunityProfileBox('研究类型', row.study_type_profile);
-    var communityTopicsHtml = renderCommunityTopicsBlock(row.id);
-
-    elCommunityDetail.innerHTML =
-      '<div class="kg-detail-type">医学事务社区 · ' + escapeHtml(communitySignalText(signal)) + '</div>' +
-      '<h2>' + escapeHtml(row.title || row.id) + '</h2>' +
-      '<div class="kg-badges">' +
-        '<span class="kg-badge conf-' + escapeHtml(communitySignalClass(signal)) + '">' + escapeHtml(communitySignalText(signal)) + '</span>' +
-        '<span class="kg-badge">' + escapeHtml(compactNumber(row.article_count || 0)) + ' 篇</span>' +
-        '<span class="kg-badge">本周新增 ' + escapeHtml(compactNumber(row.weekly_new_count || weekly.recent_count || 0)) + '</span>' +
-        '<span class="kg-badge">中国 ' + escapeHtml(compactNumber(row.china_count || weekly.china_count || 0)) + '</span>' +
-      '</div>' +
-      '<div class="kg-detail-summary">' + escapeHtml(row.summary || row.definition || '') + '</div>' +
-      (row.boundary ? '<div class="community-boundary">边界：' + escapeHtml(row.boundary) + '</div>' : '') +
-      '<div class="kg-detail-section"><h4>代表节点</h4><div class="kg-tags">' + nodeHtml + '</div></div>' +
-      communityTopicsHtml +
-      '<div class="kg-detail-section"><h4>MSL 使用场景</h4><div class="kg-tags">' + useHtml + '</div></div>' +
-      '<div class="kg-detail-section"><h4>Facet 与关键词</h4><div class="kg-tags">' + facetHtml + termHtml + '</div></div>' +
-      '<div class="kg-detail-section"><h4>证据结构</h4><div class="community-profile-grid">' + profileHtml + '</div></div>' +
-      '<div class="kg-detail-section"><h4>本周新入库证据</h4><ul class="kg-study-list">' + recentHtml + '</ul></div>' +
-      '<div class="kg-detail-section"><h4>代表 PMID（长期知识底座）</h4><ul class="kg-study-list">' + refsHtml + '</ul></div>' +
-      '<div class="kg-detail-section"><h4>全量归类文献</h4><div class="community-assignment-panel" id="communityAssignmentPanel" data-community="' + escapeHtml(row.id) + '">' +
-        '<button class="kg-obsidian-btn" type="button" data-load-community-assignments="' + escapeHtml(row.id) + '">加载全量 PMID</button>' +
-        '<span>按需加载该社区 assignment 分片；显示 primary community 的 PMID、置信度和质量标记。</span>' +
-      '</div></div>' +
-      '<div class="kg-detail-section"><h4>限制</h4><div class="kg-detail-summary">' + escapeHtml(row.limitations || '当前为 title/abstract/metadata 规则基线，后续需要 taxonomy review 和人工校准。') + '</div></div>' +
-      '<div class="kg-detail-actions">' +
-        '<a class="kg-obsidian-btn" href="' + escapeHref(pageUrl('pages/literature.html?community=' + encodeURIComponent(row.id))) + '">在情报中心查看近一年文献</a>' +
-        '<button class="kg-obsidian-btn" type="button" data-community-graph="' + escapeHtml(row.id) + '">查看相关图谱节点</button>' +
-        '<button class="kg-obsidian-btn" type="button" data-community-matrix="' + escapeHtml(row.id) + '">查看证据矩阵关系</button>' +
-        '<button class="kg-obsidian-btn" type="button" data-community-topics="' + escapeHtml(row.id) + '">查看相关专题</button>' +
-      '</div>';
-
-    Array.prototype.forEach.call(elCommunityDetail.querySelectorAll('[data-node]'), function (button) {
-      button.addEventListener('click', function () {
-        activateTab('graph');
-        selectNode(button.getAttribute('data-node'));
-      });
-    });
-    Array.prototype.forEach.call(elCommunityDetail.querySelectorAll('[data-community-graph]'), function (button) {
-      button.addEventListener('click', function () {
-        openCommunityGraph(button.getAttribute('data-community-graph'));
-      });
-    });
-    Array.prototype.forEach.call(elCommunityDetail.querySelectorAll('[data-community-matrix]'), function (button) {
-      button.addEventListener('click', function () {
-        openCommunityMatrix(button.getAttribute('data-community-matrix'));
-      });
-    });
-    Array.prototype.forEach.call(elCommunityDetail.querySelectorAll('[data-community-topics]'), function (button) {
-      button.addEventListener('click', function () {
-        openCommunityTopics(button.getAttribute('data-community-topics'));
-      });
-    });
-    Array.prototype.forEach.call(elCommunityDetail.querySelectorAll('[data-topic]'), function (button) {
-      button.addEventListener('click', function () {
-        openTopic(button.getAttribute('data-topic'), button.getAttribute('data-topic-community'));
-      });
-    });
-
-    if (communityAssignmentCache[row.id]) {
-      renderAssignmentList(row.id, communityAssignmentCache[row.id]);
-    } else {
-      var loadButton = elCommunityDetail.querySelector('[data-load-community-assignments]');
-      if (loadButton) {
-        loadButton.addEventListener('click', function () {
-          var communityId = loadButton.getAttribute('data-load-community-assignments');
-          var panel = document.getElementById('communityAssignmentPanel');
-          if (panel) panel.innerHTML = '<div class="kg-empty-hint">正在加载社区 assignment 分片...</div>';
-          loadCommunityAssignmentShard(communityId, function (ok, payload) {
-            var currentPanel = document.getElementById('communityAssignmentPanel');
-            if (!currentPanel || currentPanel.getAttribute('data-community') !== communityId) return;
-            if (!ok || !payload) {
-              currentPanel.innerHTML = '<div class="kg-empty-hint">该社区分片加载失败，请稍后重试。</div>';
-              return;
-            }
-            renderAssignmentList(communityId, payload);
-          });
-        });
-      }
-    }
-  }
-
-  function attachCommunityFilters() {
-    if (elCommunitySearch) elCommunitySearch.addEventListener('input', function () { renderCommunities(); });
-    if (elCommunitySignal) elCommunitySignal.addEventListener('change', function () { renderCommunities(); });
-    renderCommunityAuditStrip();
-    renderCommunities();
-  }
-
   function openTopic(topicId, communityId) {
-    window.location.href = topicHref(topicId, communityId);
+    // 专题详情视图已由诊治格局「诊疗现状」承接
+    window.location.href = pageUrl('pages/landscape.html?tab=chapters');
   }
 
   function openCommunity(communityId) {
-    activateTab('communities');
-    if (elCommunitySearch) elCommunitySearch.value = '';
-    if (elCommunitySignal) elCommunitySignal.value = 'all';
-    renderCommunities(communityId);
+    openCommunityGraph(communityId);
   }
 
   function openCommunityGraph(communityId) {
@@ -1474,16 +923,6 @@
     applyNodeFilters();
     var firstNode = nodes.find(function (node) { return itemHasCommunity(node, communityId); });
     if (firstNode) selectNode(firstNode.id);
-  }
-
-  function openCommunityMatrix(communityId) {
-    activateTab('matrix');
-    if (elMatrixCommunity) elMatrixCommunity.value = communityId;
-    renderMatrix();
-  }
-
-  function openCommunityTopics(communityId) {
-    window.location.href = pageUrl('pages/landscape.html?tab=answers&community=' + encodeURIComponent(communityId || ''));
   }
 
   function activateTab(key) {
@@ -1505,14 +944,6 @@
   }
 
   function ensureTabInitialized(key) {
-    if (key === 'matrix' && !matrixInitialized) {
-      matrixInitialized = true;
-      attachMatrixFilters();
-    }
-    if (key === 'communities' && !communityInitialized) {
-      communityInitialized = true;
-      attachCommunityFilters();
-    }
     if (key === 'search' && !searchInitialized) {
       searchInitialized = true;
       attachSearch();
@@ -1532,6 +963,55 @@
       tab.addEventListener('click', function () {
         activateTab(tab.getAttribute('data-knowledge-tab'));
       });
+    });
+  }
+
+  // 问询支持：记录最近一次跨库检索的文献命中，供引文清单导出。
+  var lastCitationMatches = [];
+
+  function citationYear(value) {
+    var match = String(value || '').match(/(\d{4})/);
+    return match ? match[1] : '';
+  }
+
+  function citationLine(article, index) {
+    var author = (article.first_authors || article.authors || [])[0] || '';
+    var authorText = author ? author + (String(article.first_authors || article.authors || []).length > 1 || author ? ' et al. ' : ' ') : '';
+    var year = citationYear(article.pub_date || article.entry_date);
+    var parts = [];
+    parts.push((index + 1) + '. ' + authorText + (authorText ? '' : '') + (article.title || '无标题') + '.');
+    if (article.journal) parts.push(article.journal + '.');
+    if (year) parts.push(year + '.');
+    if (article.pmid) parts.push('PMID ' + article.pmid + '.');
+    if (article.doi) parts.push('doi:' + article.doi + '.');
+    var levelText = article.evidence_level ? '证据等级 ' + article.evidence_level : '证据等级未分类';
+    parts.push('[' + levelText + ']');
+    return parts.join(' ');
+  }
+
+  function buildCitationListMarkdown(matches, keyword) {
+    if (!matches.length) return '';
+    var lines = [];
+    lines.push('# 引文清单 · 检索词「' + (keyword || '') + '」');
+    lines.push('');
+    lines.push('共 ' + matches.length + ' 条（最多导出 50 条；来源：全库文献轻索引）。');
+    lines.push('');
+    matches.forEach(function (article, index) {
+      lines.push(citationLine(article, index));
+    });
+    lines.push('');
+    lines.push('说明：证据等级为自动分类（Oxford CEBM 2011），仅用于筛选与排序；摘要级元数据不能替代全文医学审核。');
+    lines.push('');
+    if (hub.briefFooter) lines.push(hub.briefFooter());
+    return lines.join('\n');
+  }
+
+  function bindCitationExport(keyword) {
+    var button = document.getElementById('kgExportCitations');
+    if (!button) return;
+    button.addEventListener('click', function () {
+      var markdown = buildCitationListMarkdown(lastCitationMatches, keyword);
+      if (markdown && hub.openBriefModal) hub.openBriefModal('引文清单 · ' + keyword, markdown);
     });
   }
 
@@ -1580,50 +1060,22 @@
       return [expert.name_en, expert.name_zh, expert.affiliation, (expert.public_tags || []).join(' ')].join(' ').toLowerCase().indexOf(keyword) !== -1;
     });
     var expertHits = expertMatches.slice(0, 5);
-    var topicMatches = curatedTopics.filter(function (topic) {
-      return [
-        topic.title,
-        topic.summary,
-        (topic.anchor_nodes || []).join(' '),
-        (topic.evidence_pmids || []).join(' '),
-        (topic.msl_use || []).join(' ')
-      ].join(' ').toLowerCase().indexOf(keyword) !== -1;
-    });
     var topicHits = topicMatches.slice(0, 6);
-    var communityMatches = communityRows.filter(function (row) {
-      var taxonomy = taxonomyById[row.id] || {};
-      return [
-        row.title,
-        row.definition,
-        row.boundary,
-        row.summary,
-        (row.representative_nodes || taxonomy.representative_nodes || []).join(' '),
-        (row.msl_use_cases || taxonomy.msl_use_cases || []).join(' '),
-        communityTermsText(taxonomy.terms || row.terms)
-      ].join(' ').toLowerCase().indexOf(keyword) !== -1;
-    });
     var communityHits = communityMatches.slice(0, 6);
 
+    lastCitationMatches = articleMatches.slice(0, 50);
     var html = '';
+    if (articleMatches.length) {
+      var exportCount = articleMatches.length > 50 ? 50 : articleMatches.length;
+      html += '<div class="kg-detail-section kg-citation-export"><h4>问询取证</h4>' +
+        '<div class="citation-export-row"><span>本次检索命中文献 ' + escapeHtml(articleMatches.length) + ' 条，可导出规范引文清单（' + exportCount + ' 条，含证据等级）。</span>' +
+        '<button type="button" class="btn" id="kgExportCitations">📋 导出引文清单</button></div></div>';
+    }
     html += renderSearchGroup('知识节点', nodeHits, function (node) {
       return '<li><button class="matrix-node-link" type="button" data-node="' + escapeHtml(node.id) + '">' +
         escapeHtml(node.title) + '</button><br><span class="kg-ref-meta">' + escapeHtml(typeLabel[node.type]) +
         ' · ' + escapeHtml(node.article_count) + ' 篇 abstract</span></li>';
     }, nodeMatches.length);
-    html += renderSearchGroup('专题', topicHits, function (topic) {
-      var coverage = getTopicCoverage(topic.id);
-      var primaryCommunity = coverage.primary_community_title ? ' · ' + coverage.primary_community_title : '';
-      return '<li><button class="matrix-node-link" type="button" data-topic="' + escapeHtml(topic.id) + '">' +
-        escapeHtml(topic.title) + '</button><br><span class="kg-ref-meta">' +
-        escapeHtml(sourceTypeLabelForTopic(topic.source_type)) + ' · ' + escapeHtml((topic.evidence_refs || []).length) + ' PMID' + escapeHtml(primaryCommunity) + '</span></li>';
-    }, topicMatches.length);
-    html += renderSearchGroup('医学事务社区', communityHits, function (community) {
-      var coverage = communityCoverageById[community.id] || {};
-      return '<li><button class="matrix-node-link" type="button" data-community="' + escapeHtml(community.id) + '">' +
-        escapeHtml(community.title || community.id) + '</button><br><span class="kg-ref-meta">' +
-        escapeHtml(communitySignalText(community.signal_level)) + ' · ' + escapeHtml(compactNumber(community.article_count || 0)) +
-        ' 篇 · ' + escapeHtml(compactNumber(coverage.topic_count || 0)) + ' 专题</span></li>';
-    }, communityMatches.length);
     html += renderSearchGroup(searchArticleGroupTitle, articleHits, function (article) {
       return '<li><a class="text-link" href="' + escapeHref(article.url) + '" target="_blank" rel="noopener">' +
         escapeHtml(article.title) + '</a><br><span class="kg-ref-meta">' +
@@ -1636,20 +1088,11 @@
     }, expertMatches.length);
 
     elSearchResults.innerHTML = html || '<div class="kg-empty-hint">无匹配结果。</div>';
+    bindCitationExport((elSearch.value || '').trim());
     Array.prototype.forEach.call(elSearchResults.querySelectorAll('[data-node]'), function (button) {
       button.addEventListener('click', function () {
         activateTab('graph');
         selectNode(button.getAttribute('data-node'));
-      });
-    });
-    Array.prototype.forEach.call(elSearchResults.querySelectorAll('[data-topic]'), function (button) {
-      button.addEventListener('click', function () {
-        openTopic(button.getAttribute('data-topic'));
-      });
-    });
-    Array.prototype.forEach.call(elSearchResults.querySelectorAll('[data-community]'), function (button) {
-      button.addEventListener('click', function () {
-        openCommunity(button.getAttribute('data-community'));
       });
     });
   }
@@ -1672,19 +1115,14 @@
     attachTabs();
     selectNode(nodesById.fcrnInhibition ? 'fcrnInhibition' : (nodes[0] && nodes[0].id));
     var initialCommunityId = getInitialKnowledgeCommunityId();
-    var initialTopicId = getInitialKnowledgeTopicId();
     var initialNodeId = getInitialKnowledgeNodeId();
     var initialTab = getInitialKnowledgeTab();
     if (initialNodeId) {
       activateTab('graph');
       selectNode(initialNodeId);
-    } else if (initialTopicId) {
-      openTopic(initialTopicId);
     } else if (initialCommunityId) {
-      openCommunity(initialCommunityId);
-    } else if (initialTab === 'topics') {
-      window.location.href = pageUrl('pages/landscape.html?tab=answers');
-    } else if (['graph', 'communities', 'matrix', 'search'].indexOf(initialTab) !== -1) {
+      openCommunityGraph(initialCommunityId);
+    } else if (['graph', 'china-network', 'search'].indexOf(initialTab) !== -1) {
       activateTab(initialTab);
     }
   }
