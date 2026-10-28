@@ -43,11 +43,6 @@
     }
   }
 
-  function compactNumber(value) {
-    var num = Number(value || 0);
-    return num >= 1000 ? (num / 1000).toFixed(1).replace(/\.0$/, '') + 'k' : String(num);
-  }
-
   function confidenceLabel(value) {
     if (value === 'high') return '高置信';
     if (value === 'medium') return '中置信';
@@ -97,30 +92,6 @@
       badge.textContent = (overview.guideline_divergence_count || 0) + ' 条指南差异 · ' +
         (overview.theme_divergence_count || 0) + ' 条主题差异';
     }
-    var positioning = $('landscapePositioning');
-    if (positioning && overview.positioning) positioning.textContent = overview.positioning;
-  }
-
-  function renderStats() {
-    var overview = data.overview || {};
-    var guideCount = (guidelineDivergence.divergences || []).length || overview.guideline_divergence_count || 0;
-    var themeCount = (themeDivergence.divergences || []).length || overview.theme_divergence_count || 0;
-    var quoteCheck = guidelineDivergence.quote_check || {};
-    var stats = [
-      ['指南共识差异', guideCount, (guidelineDivergence.corpus_count ? '语料 ' + guidelineDivergence.corpus_count.total + ' 份' : '待分析')],
-      ['文献主题差异', themeCount, (themeDivergence.window_start ? themeDivergence.window_start + ' 起' : '待分析')],
-      ['已获批对象', overview.competitive_count || (data.approved_competitive_matrix || data.competitive_matrix || []).length, '中国监管 + 证据厚度'],
-      ['引文回验', (quoteCheck.rate == null ? '—' : quoteCheck.rate + '%'), '指南原文逐字核对']
-    ];
-    var box = $('landscapeStats');
-    if (!box) return;
-    box.innerHTML = stats.map(function(item) {
-      var label = /^</.test(item[2]) ? item[2] : escapeHtml(item[2]);
-      // 只有纯数值走紧凑格式；百分比/占位符原样输出，避免 Number('99.9%') 变成 NaN
-      var value = typeof item[1] === 'number' ? compactNumber(item[1]) : item[1];
-      return '<article class="landscape-stat-card"><span>' + escapeHtml(item[0]) + '</span><strong>' +
-        escapeHtml(value) + '</strong><em>' + label + '</em></article>';
-    }).join('');
   }
 
   function topicHref(topicId, communityId) {
@@ -715,7 +686,6 @@
   function init() {
     bindTabs();
     renderBadge();
-    renderStats();
     renderCompetitiveMatrix();
     renderMajorEvents();
     renderChapters();

@@ -41,7 +41,7 @@ MA-MG-HUB 重点回答：
 | 口径 | 权威产物 | 用途 |
 | --- | --- | --- |
 | 公开滚动层 | `literature-recent.js`、`signals-weekly.js`、`china-intelligence.js` | 工作台、情报中心、信号板和中国情报；社区 recent 与文献 recent 共用同一 PMID 集合 |
-| full / 语义底座 | 本地 full、`literature-full-index.js`、community、knowledge graph | 知识图谱、社区归类、专家画像和跨库检索 |
+| full / 语义底座 | 本地 full、`literature-full-index.js`、community、knowledge graph | 知识图谱、社区归类与专家画像 |
 
 当前数量、生成时间和一致性状态不写入本文档，统一查看：
 

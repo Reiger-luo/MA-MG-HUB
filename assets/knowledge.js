@@ -32,50 +32,6 @@
   (communityTaxonomy.communities || []).forEach(function (item) {
     if (!communityCardsById[item.id]) communityRows.push(item);
   });
-  var articles = window.MG_LITERATURE_DATA || [];
-  var fullIndexData = window.MG_LITERATURE_FULL_INDEX || { items: [] };
-  var fullIndexArticles = fullIndexData.items || [];
-  var searchArticles = fullIndexArticles.length ? fullIndexArticles : articles;
-  var searchArticleGroupTitle = fullIndexArticles.length ? '全库文献轻索引' : '近一年文献';
-  var experts = (window.MG_EXPERT_PROFILES && window.MG_EXPERT_PROFILES.experts) || [];
-  var searchDepsLoaded = !!((fullIndexArticles.length || articles.length) && experts.length);
-
-  function loadSearchDeps(callback) {
-    if (searchDepsLoaded) { callback(); return; }
-    var remaining = 2;
-    function done() {
-      if (--remaining === 0) {
-        refreshSearchSources();
-        searchDepsLoaded = true;
-        callback();
-      }
-    }
-    loadLiteratureSearchSource(done);
-    loadScriptOnce(assetUrl('data/expert-profiles.js'), done);
-  }
-
-  function loadLiteratureSearchSource(callback) {
-    if (window.MG_LITERATURE_FULL_INDEX || window.MG_LITERATURE_DATA) {
-      callback();
-      return;
-    }
-    loadScriptOnce(assetUrl('data/literature-full-index.js'), function (ok) {
-      if (ok && window.MG_LITERATURE_FULL_INDEX) {
-        callback();
-        return;
-      }
-      loadScriptOnce(assetUrl('data/literature-recent.js'), callback);
-    });
-  }
-
-  function refreshSearchSources() {
-    fullIndexData = window.MG_LITERATURE_FULL_INDEX || { items: [] };
-    fullIndexArticles = fullIndexData.items || [];
-    articles = window.MG_LITERATURE_DATA || articles || [];
-    experts = (window.MG_EXPERT_PROFILES && window.MG_EXPERT_PROFILES.experts) || [];
-    searchArticles = fullIndexArticles.length ? fullIndexArticles : articles;
-    searchArticleGroupTitle = fullIndexArticles.length ? '全库文献轻索引' : '近一年文献';
-  }
 
   var elBadge = document.getElementById('knowledgeBadge');
   var elStats = document.getElementById('knowledgeStats');
@@ -88,8 +44,6 @@
   var elGraphDensity = document.getElementById('knowledgeGraphDensity');
   var elGraphColorMode = document.getElementById('knowledgeGraphColorMode');
   var elGraphLegend = document.getElementById('knowledgeGraphLegend');
-  var elSearch = document.getElementById('knowledgeSearch');
-  var elSearchResults = document.getElementById('knowledgeSearchResults');
 
   var svgNamespace = 'http://www.w3.org/2000/svg';
   var viewBox = { x: 0, y: 0, w: 1100, h: 720 };
@@ -99,7 +53,6 @@
   var activeNodeId = null;
   var activeCommunityId = null;
   var tabController = null;
-  var searchInitialized = false;
   var communityAssignmentCache = {};
   var communityAssignmentLoading = {};
   var communityAssignmentErrors = {};
@@ -930,7 +883,6 @@
       tabController.activate(key, false);
       return;
     }
-    ensureTabInitialized(key);
     var tabs = document.querySelectorAll('[data-knowledge-tab]');
     var panels = document.querySelectorAll('.intel-tab-panel');
     Array.prototype.forEach.call(tabs, function (tab) {
@@ -943,19 +895,11 @@
     if (panel) panel.classList.add('active');
   }
 
-  function ensureTabInitialized(key) {
-    if (key === 'search' && !searchInitialized) {
-      searchInitialized = true;
-      attachSearch();
-    }
-  }
-
   function attachTabs() {
     if (hub.initTabs) {
       tabController = hub.initTabs({
         tabAttr: 'data-knowledge-tab',
-        panelFor: function(key) { return document.getElementById('knowledge-' + key + '-panel'); },
-        onChange: ensureTabInitialized
+        panelFor: function(key) { return document.getElementById('knowledge-' + key + '-panel'); }
       });
       return;
     }
@@ -964,144 +908,6 @@
         activateTab(tab.getAttribute('data-knowledge-tab'));
       });
     });
-  }
-
-  // 问询支持：记录最近一次跨库检索的文献命中，供引文清单导出。
-  var lastCitationMatches = [];
-
-  function citationYear(value) {
-    var match = String(value || '').match(/(\d{4})/);
-    return match ? match[1] : '';
-  }
-
-  function citationLine(article, index) {
-    var author = (article.first_authors || article.authors || [])[0] || '';
-    var authorText = author ? author + (String(article.first_authors || article.authors || []).length > 1 || author ? ' et al. ' : ' ') : '';
-    var year = citationYear(article.pub_date || article.entry_date);
-    var parts = [];
-    parts.push((index + 1) + '. ' + authorText + (authorText ? '' : '') + (article.title || '无标题') + '.');
-    if (article.journal) parts.push(article.journal + '.');
-    if (year) parts.push(year + '.');
-    if (article.pmid) parts.push('PMID ' + article.pmid + '.');
-    if (article.doi) parts.push('doi:' + article.doi + '.');
-    var levelText = article.evidence_level ? '证据等级 ' + article.evidence_level : '证据等级未分类';
-    parts.push('[' + levelText + ']');
-    return parts.join(' ');
-  }
-
-  function buildCitationListMarkdown(matches, keyword) {
-    if (!matches.length) return '';
-    var lines = [];
-    lines.push('# 引文清单 · 检索词「' + (keyword || '') + '」');
-    lines.push('');
-    lines.push('共 ' + matches.length + ' 条（最多导出 50 条；来源：全库文献轻索引）。');
-    lines.push('');
-    matches.forEach(function (article, index) {
-      lines.push(citationLine(article, index));
-    });
-    lines.push('');
-    lines.push('说明：证据等级为自动分类（Oxford CEBM 2011），仅用于筛选与排序；摘要级元数据不能替代全文医学审核。');
-    lines.push('');
-    if (hub.briefFooter) lines.push(hub.briefFooter());
-    return lines.join('\n');
-  }
-
-  function bindCitationExport(keyword) {
-    var button = document.getElementById('kgExportCitations');
-    if (!button) return;
-    button.addEventListener('click', function () {
-      var markdown = buildCitationListMarkdown(lastCitationMatches, keyword);
-      if (markdown && hub.openBriefModal) hub.openBriefModal('引文清单 · ' + keyword, markdown);
-    });
-  }
-
-  function attachSearch() {
-    if (!elSearch || !elSearchResults) return;
-    elSearch.addEventListener('input', function () {
-      if (!searchDepsLoaded) {
-        elSearchResults.innerHTML = '<div class="kg-empty-hint">正在加载跨库数据…</div>';
-        loadSearchDeps(function () {
-          articles = window.MG_LITERATURE_DATA || [];
-          experts = (window.MG_EXPERT_PROFILES && window.MG_EXPERT_PROFILES.experts) || [];
-          renderSearch();
-        });
-      } else {
-        renderSearch();
-      }
-    });
-    renderSearch();
-  }
-
-  function renderSearch() {
-    var keyword = (elSearch.value || '').trim().toLowerCase();
-    if (!keyword) {
-      elSearchResults.innerHTML = '<div class="kg-empty-hint">输入关键词检索知识图谱节点、全库文献轻索引、医学事务社区和专家公开画像。</div>';
-      return;
-    }
-
-    var nodeMatches = nodes.filter(function (node) {
-      return [node.title, node.summary, node.type, (node.top_study_types || []).join(' ')].join(' ').toLowerCase().indexOf(keyword) !== -1;
-    });
-    var nodeHits = nodeMatches.slice(0, 8);
-    var articleMatches = searchArticles.filter(function (article) {
-      return [
-        article.pmid,
-        article.title,
-        article.journal,
-        article.evidence_level,
-        (article.study_types || []).join(' '),
-        (article.pub_types || []).join(' '),
-        (article.first_authors || article.authors || []).join(' '),
-        (article.keywords || []).join(' ')
-      ].join(' ').toLowerCase().indexOf(keyword) !== -1;
-    });
-    var articleHits = articleMatches.slice(0, 8);
-    var expertMatches = experts.filter(function (expert) {
-      return [expert.name_en, expert.name_zh, expert.affiliation, (expert.public_tags || []).join(' ')].join(' ').toLowerCase().indexOf(keyword) !== -1;
-    });
-    var expertHits = expertMatches.slice(0, 5);
-    var topicHits = topicMatches.slice(0, 6);
-    var communityHits = communityMatches.slice(0, 6);
-
-    lastCitationMatches = articleMatches.slice(0, 50);
-    var html = '';
-    if (articleMatches.length) {
-      var exportCount = articleMatches.length > 50 ? 50 : articleMatches.length;
-      html += '<div class="kg-detail-section kg-citation-export"><h4>问询取证</h4>' +
-        '<div class="citation-export-row"><span>本次检索命中文献 ' + escapeHtml(articleMatches.length) + ' 条，可导出规范引文清单（' + exportCount + ' 条，含证据等级）。</span>' +
-        '<button type="button" class="btn" id="kgExportCitations">📋 导出引文清单</button></div></div>';
-    }
-    html += renderSearchGroup('知识节点', nodeHits, function (node) {
-      return '<li><button class="matrix-node-link" type="button" data-node="' + escapeHtml(node.id) + '">' +
-        escapeHtml(node.title) + '</button><br><span class="kg-ref-meta">' + escapeHtml(typeLabel[node.type]) +
-        ' · ' + escapeHtml(node.article_count) + ' 篇 abstract</span></li>';
-    }, nodeMatches.length);
-    html += renderSearchGroup(searchArticleGroupTitle, articleHits, function (article) {
-      return '<li><a class="text-link" href="' + escapeHref(article.url) + '" target="_blank" rel="noopener">' +
-        escapeHtml(article.title) + '</a><br><span class="kg-ref-meta">' +
-        escapeHtml(article.journal || '') + ' · PMID ' + escapeHtml(article.pmid || '-') +
-        (article.evidence_level ? ' · Level ' + escapeHtml(article.evidence_level) : '') + '</span></li>';
-    }, articleMatches.length);
-    html += renderSearchGroup('专家公开画像', expertHits, function (expert) {
-      return '<li><a class="text-link" href="' + escapeHref(pageUrl('pages/msl.html')) + '">' + escapeHtml(expert.name_en || expert.name_zh || '') +
-        '</a><br><span class="kg-ref-meta">' + escapeHtml(expert.affiliation || '') + '</span></li>';
-    }, expertMatches.length);
-
-    elSearchResults.innerHTML = html || '<div class="kg-empty-hint">无匹配结果。</div>';
-    bindCitationExport((elSearch.value || '').trim());
-    Array.prototype.forEach.call(elSearchResults.querySelectorAll('[data-node]'), function (button) {
-      button.addEventListener('click', function () {
-        activateTab('graph');
-        selectNode(button.getAttribute('data-node'));
-      });
-    });
-  }
-
-  function renderSearchGroup(title, items, renderer, totalCount) {
-    if (!items.length) return '';
-    var countLabel = totalCount && totalCount > items.length ? items.length + ' / ' + totalCount : items.length;
-    return '<div class="kg-detail-section"><h4>' + escapeHtml(title) + ' (' + escapeHtml(countLabel) + ')</h4>' +
-      '<ul class="kg-study-list">' + items.map(renderer).join('') + '</ul></div>';
   }
 
   function init() {
@@ -1122,7 +928,7 @@
       selectNode(initialNodeId);
     } else if (initialCommunityId) {
       openCommunityGraph(initialCommunityId);
-    } else if (['graph', 'china-network', 'search'].indexOf(initialTab) !== -1) {
+    } else if (['graph', 'china-network'].indexOf(initialTab) !== -1) {
       activateTab(initialTab);
     }
   }
