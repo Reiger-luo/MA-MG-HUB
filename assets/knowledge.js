@@ -241,10 +241,29 @@
     return el;
   }
 
+  // 图谱生成时间按 zh-CN 本地时区显示为「月/日 时:分」，与首页「数据截至」口径一致
+  function formatUpdatedAt(value) {
+    if (!value) return '时间待确认';
+    var rawValue = String(value).trim();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(rawValue)) return rawValue.slice(5).replace('-', '/');
+    var normalized = rawValue.indexOf('T') === -1 ? rawValue.replace(' ', 'T') : rawValue;
+    var parsed = new Date(normalized);
+    if (Number.isNaN(parsed.getTime())) return rawValue;
+    return new Intl.DateTimeFormat('zh-CN', {
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hourCycle: 'h23'
+    }).format(parsed);
+  }
+
   function renderBadge() {
     if (!elBadge) return;
-    var stats = graphData.stats || {};
-    elBadge.textContent = compactNumber(stats.matched_articles) + ' 篇 abstract';
+    // 徽标只回答「这份图谱什么时候更新的」，不再重复展示命中量（已由顶部统计卡承担）
+    var generatedAt = graphData.generated_at || (graphHealthData && graphHealthData.generated_at) || '';
+    elBadge.textContent = '更新于 ' + formatUpdatedAt(generatedAt);
+    elBadge.title = generatedAt ? '知识图谱生成时间 ' + generatedAt : '知识图谱生成时间待确认';
   }
 
   function renderStats() {
