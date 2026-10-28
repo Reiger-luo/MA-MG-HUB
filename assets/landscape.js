@@ -647,31 +647,57 @@
     renderChapterContent();
   }
 
-  function renderQuestions() {
-    var box = $('questionGroups');
+  // 临床问题与诊疗现状同构：左侧方向导航，右侧单方向展开（其余方向默认折叠）
+  var activeQuestionGroupId = clinicalQuestionGroups.length ? clinicalQuestionGroups[0].id : '';
+
+  function renderQuestionNav() {
+    var nav = $('questionNav');
+    if (!nav) return;
+    nav.innerHTML = clinicalQuestionGroups.map(function (group) {
+      return '<button type="button" class="chapter-nav-item' + (group.id === activeQuestionGroupId ? ' active' : '') +
+        '" data-question-group="' + escapeHtml(group.id) + '">' + escapeHtml(group.title) +
+        '<em class="chapter-nav-count">' + group.questions.length + ' 问</em></button>';
+    }).join('');
+    Array.prototype.forEach.call(nav.querySelectorAll('[data-question-group]'), function (button) {
+      button.addEventListener('click', function () {
+        activeQuestionGroupId = button.getAttribute('data-question-group');
+        renderQuestionNav();
+        renderQuestionContent();
+      });
+    });
+  }
+
+  function renderQuestionContent() {
+    var box = $('questionContent');
     if (!box) return;
+    var group = null;
+    clinicalQuestionGroups.forEach(function (item) { if (item.id === activeQuestionGroupId) group = item; });
+    if (!group) {
+      box.innerHTML = '<div class="kg-empty-hint">请选择左侧方向查看临床问题。</div>';
+      return;
+    }
+    box.innerHTML = '<h3>' + escapeHtml(group.title) + '</h3>' +
+      '<p class="chapter-summary">' + group.questions.length + ' 个未解决问题；未解决点与当前证据能回答到的程度并列呈现。</p>' +
+      group.questions.map(function (q) {
+        var stanceClass = q.stance === '证据不足' ? 'insufficient' : 'cautious';
+        return '<article class="question-card">' +
+          '<div class="question-card-head"><h4>' + escapeHtml(q.question) + '</h4>' +
+            '<span class="stance-badge stance-' + stanceClass + '">' + escapeHtml(q.stance || '待评估') + '</span></div>' +
+          (q.whyOpen ? '<p class="question-open">未解决点：' + escapeHtml(q.whyOpen) + '</p>' : '') +
+          (q.answer || []).map(function (item) { return renderStatement(item, q.ref_map); }).join('') +
+          renderPendingCandidates('question', q.id) +
+          '<h5 class="refs-title">参考文献</h5>' + renderEvidenceRefs(q.refs) +
+        '</article>';
+      }).join('');
+  }
+
+  function renderQuestions() {
     var total = 0;
     clinicalQuestionGroups.forEach(function (group) { total += group.questions.length; });
     var meta = $('questionsMeta');
     if (meta) meta.textContent = total ? total + ' 个问题 · ' + clinicalQuestionGroups.length + ' 个方向' : '待生成';
-    if (!clinicalQuestionGroups.length) {
-      box.innerHTML = '<div class="kg-empty-hint">临床问题库待生成。</div>';
-      return;
-    }
-    box.innerHTML = clinicalQuestionGroups.map(function (group) {
-      return '<section class="question-group"><h3>' + escapeHtml(group.title) + '</h3>' +
-        group.questions.map(function (q) {
-          var stanceClass = q.stance === '证据不足' ? 'insufficient' : 'cautious';
-          return '<article class="question-card">' +
-            '<div class="question-card-head"><h4>' + escapeHtml(q.question) + '</h4>' +
-              '<span class="stance-badge stance-' + stanceClass + '">' + escapeHtml(q.stance || '待评估') + '</span></div>' +
-            (q.whyOpen ? '<p class="question-open">未解决点：' + escapeHtml(q.whyOpen) + '</p>' : '') +
-            (q.answer || []).map(function (item) { return renderStatement(item, q.ref_map); }).join('') +
-            renderPendingCandidates('question', q.id) +
-            '<h5 class="refs-title">参考文献</h5>' + renderEvidenceRefs(q.refs) +
-          '</article>';
-        }).join('') + '</section>';
-    }).join('');
+    renderQuestionNav();
+    renderQuestionContent();
   }
 
   function applyInitialKnowledgeRoute() {
