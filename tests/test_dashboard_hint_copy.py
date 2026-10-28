@@ -50,7 +50,7 @@ def test_dashboard_artifact_marks_the_two_divergence_cadences():
     facts = " ".join(landscape["facts"])
     assert "新指南入库后" in facts
     assert "周更滚动" in facts
-    assert "本月主题差异" in facts
+    assert "近一年主题差异" in facts
 
 
 def test_dashboard_artifact_speaks_plain_number_units():
@@ -65,5 +65,5 @@ def test_builder_keeps_the_same_wording_so_weekly_rebuild_does_not_revert_it():
     source = BUILDER.read_text(encoding="utf-8")
     assert "条（新指南入库后）" in source
     assert "条（周更滚动）" in source
-    assert "近一月中外主题差异分析" in source
+    assert "近一年中外主题差异分析" in source
     assert 'f"全库 {total_count} 篇"' in source

@@ -55,19 +55,23 @@ def test_rolling_panel_exposes_staleness_warning():
 def test_weekly_pipeline_rolls_theme_analysis_before_frontend_build():
     pipeline = (ROOT / "scripts" / "run-weekly-pipeline.py").read_text(encoding="utf-8")
 
-    assert '"analyze-china-foreign-themes"' in pipeline
-    assert '"--skip-if-current"' in pipeline
+    assert '"analyze-china-foreign-themes-yearly"' in pipeline
+    assert '"--skip-if-current"' not in pipeline
     # 必须先于 build-frontend，否则前端读到上一周窗口
-    assert pipeline.index('"analyze-china-foreign-themes"') < pipeline.index('"build-frontend"')
-    # 受 --skip-llm 保护
-    guard = pipeline[:pipeline.index('"analyze-china-foreign-themes"')]
-    assert "if not args.skip_llm:" in guard.rsplit("\n    steps.append", 1)[-1]
+    assert pipeline.index('"analyze-china-foreign-themes-yearly"') < pipeline.index('"build-frontend"')
+    # 近一年分析为确定性步骤，required 且不受 --skip-llm 保护
+    step_block = pipeline[pipeline.index('"analyze-china-foreign-themes-yearly"'):]
+    step_block = step_block[:step_block.index("))")]
+    assert "optional=True" not in step_block
     # 指南差异属事件驱动，不得进入周更
     assert "analyze-guideline-divergence" not in pipeline
 
 
-def test_theme_analysis_supports_idempotent_weekly_run():
-    script = (ROOT / "scripts" / "analyze-china-foreign-themes.py").read_text(encoding="utf-8")
+def test_yearly_theme_analysis_is_deterministic_and_self_contained():
+    script = (ROOT / "scripts" / "analyze-china-foreign-themes-yearly.py").read_text(encoding="utf-8")
 
-    assert "--skip-if-current" in script
-    assert "窗口与语料未变化" in script
+    assert "literature-recent.js" in script
+    assert "TOPICS" in script
+    # 确定性聚合：不引入 LLM 客户端，也不依赖随机性
+    assert "llm_client" not in script
+    assert "atomic_write_json" in script

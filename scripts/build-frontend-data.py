@@ -2755,7 +2755,7 @@ def build_dashboard(recent, signals, experts, china, landscape, modules, total_c
     pipeline_policy = {
         "label": "周更管线",
         "value": "每周日 23:00",
-        "note": "PubMed 周更、证据分级、IF/新锐分区、近一月中外主题差异分析、前端数据同步",
+        "note": "PubMed 周更、证据分级、IF/新锐分区、近一年中外主题差异分析、前端数据同步",
         "href": "#dashboardReleaseStatus",
     }
     section_cards = [
@@ -2780,7 +2780,7 @@ def build_dashboard(recent, signals, experts, china, landscape, modules, total_c
             "facts": [
                 # 两块差异更新节奏不同，卡片上必须标出来，避免读者以为都会周更
                 f"指南差异 {landscape_overview.get('guideline_divergence_count', 0)} 条（新指南入库后）",
-                f"本月主题差异 {landscape_overview.get('theme_divergence_count', 0)} 条（周更滚动）",
+                f"近一年主题差异 {landscape_overview.get('theme_divergence_count', 0)} 条（周更滚动）",
                 f"临床管线 {landscape_overview.get('clinical_pipeline_count', len(landscape.get('clinical_pipeline_matrix', [])))} 项",
             ],
         },
