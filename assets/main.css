@@ -4636,3 +4636,10 @@ body.pmid-modal-open { overflow: hidden; }
 .pending-candidates h5 { font-size: 0.8rem; margin: 0 0 0.35rem; color: var(--accent); }
 .pending-candidates p { font-size: 0.82rem; margin: 0.25rem 0; }
 .pending-note { color: var(--fg3); font-size: 0.75rem; }
+
+/* 临床问题方向导航：问题计数小标 */
+.chapter-nav-count {
+  display: block; font-size: 0.72rem; font-style: normal;
+  color: var(--fg3); margin-top: 0.15rem;
+}
+.chapter-nav-item.active .chapter-nav-count { color: var(--accent); }
