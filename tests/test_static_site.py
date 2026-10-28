@@ -130,6 +130,18 @@ def test_dashboard_is_action_first_workbench():
     assert "signalDetailUrl" in dashboard_js
 
 
+def test_dashboard_does_not_statically_load_full_literature_payload():
+    # 性能契约：首页不得同步加载 >4MB 的 literature-recent.js，须首屏后异步补齐信号索引
+    html = (PROJECT / "index.html").read_text(encoding="utf-8")
+    dashboard_js = (PROJECT / "assets" / "dashboard.js").read_text(encoding="utf-8")
+
+    assert '<script src="data/literature-recent.js' not in html
+    assert "data/literature-recent.js" in html
+    assert "onLiteratureDataReady" in html
+    assert "onLiteratureDataReady" in dashboard_js
+    assert "rebuildArticleSignalStrengthIndex" in dashboard_js
+
+
 def test_intelligence_brief_export_follows_active_tab_and_filters():
     html = (PROJECT / "pages" / "literature.html").read_text(encoding="utf-8")
     literature_js = (PROJECT / "assets" / "literature.js").read_text(encoding="utf-8")

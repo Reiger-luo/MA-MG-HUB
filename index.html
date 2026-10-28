@@ -93,7 +93,20 @@
 <script src="data/pipeline-status.js?v=local-20261027-1920" defer></script>
 <script src="data/signals-weekly.js?v=local-20261027-1920" defer></script>
 <script src="data/trial-signals-weekly.js?v=local-20261027-1920" defer></script>
-<script src="data/literature-recent.js?v=local-20261027-1920" defer></script>
 <script src="assets/dashboard.js?v=local-20261027-1920" defer></script>
+<script>
+// 性能优化：literature-recent.js 体积大（>4MB），首页仅用它补齐文献信号强度索引。
+// 首屏渲染完成后再异步加载，避免阻塞首屏。
+window.addEventListener('load', function() {
+  var script = document.createElement('script');
+  script.src = 'data/literature-recent.js?v=local-20261027-1920';
+  script.onload = function() {
+    if (window.MgDashboard && typeof window.MgDashboard.onLiteratureDataReady === 'function') {
+      window.MgDashboard.onLiteratureDataReady();
+    }
+  };
+  document.head.appendChild(script);
+});
+</script>
 </body>
 </html>

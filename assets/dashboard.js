@@ -1300,4 +1300,13 @@
   }
 
   init();
+
+  // index.html 首屏渲染后异步加载 literature-recent.js，就绪后重建信号强度索引并重绘信号板
+  window.MgDashboard = {
+    onLiteratureDataReady: function() {
+      literatureArticles = window.MG_LITERATURE_DATA || [];
+      rebuildArticleSignalStrengthIndex();
+      renderSignalBoard();
+    }
+  };
 })();
