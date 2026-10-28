@@ -1895,6 +1895,11 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
   display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 0.6rem; margin-bottom: 0.9rem;
 }
+/* 知识库顶部只展示命中文献与证据等级两个读者向指标，避免拉伸留白 */
+.knowledge-stat-grid.compact {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: 560px;
+}
 .knowledge-stat-card {
   background: var(--bg2); border: 1px solid var(--bg3);
   border-radius: 8px; padding: 0.62rem 0.75rem;
@@ -4351,6 +4356,7 @@ body.pmid-modal-open { overflow: hidden; }
   .followup-card { grid-template-columns: 1fr; }
   .followup-meta span { text-align: left; }
   .knowledge-grid, .knowledge-stat-grid, .landscape-grid, .dashboard-grid { grid-template-columns: 1fr; }
+  .knowledge-stat-grid.compact { grid-template-columns: 1fr; max-width: none; }
   .living-answer-grid, .landscape-answer-layout { grid-template-columns: 1fr; }
   .landscape-topic-panel { position: static; }
   .landscape-topic-detail { min-height: 0; max-height: none; }
