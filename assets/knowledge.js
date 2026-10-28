@@ -241,7 +241,7 @@
     return el;
   }
 
-  // 图谱生成时间按 zh-CN 本地时区显示为「月/日 时:分」，与首页「数据截至」口径一致
+  // 更新时间按 zh-CN 本地时区显示为「月/日 时:分」，与首页「数据截至」口径一致
   function formatUpdatedAt(value) {
     if (!value) return '时间待确认';
     var rawValue = String(value).trim();
@@ -260,10 +260,18 @@
 
   function renderBadge() {
     if (!elBadge) return;
-    // 徽标只回答「这份图谱什么时候更新的」，不再重复展示命中量（已由顶部统计卡承担）
+    // 徽标回答「这份数据什么时候更新的」：优先跟随站点发布节奏（release-manifest），
+    // 图谱未随本次发布重算时也不至于把旧时间当成本次更新；发布清单缺失才回退图谱生成时间。
+    var release = window.MG_RELEASE_MANIFEST || {};
+    var releasedAt = release.released_at || '';
     var generatedAt = graphData.generated_at || (graphHealthData && graphHealthData.generated_at) || '';
-    elBadge.textContent = '更新于 ' + formatUpdatedAt(generatedAt);
-    elBadge.title = generatedAt ? '知识图谱生成时间 ' + generatedAt : '知识图谱生成时间待确认';
+    var updatedAt = releasedAt || generatedAt;
+    elBadge.textContent = '数据更新 ' + formatUpdatedAt(updatedAt);
+    if (releasedAt) {
+      elBadge.title = '数据发布时间 ' + releasedAt + (release.run_id ? '（发布编号 ' + release.run_id + '）' : '');
+    } else {
+      elBadge.title = generatedAt ? '知识图谱生成时间 ' + generatedAt : '数据更新时间待确认';
+    }
   }
 
   function renderStats() {
