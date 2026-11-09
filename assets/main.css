@@ -4557,7 +4557,7 @@ body.pmid-modal-open { overflow: hidden; }
 }
 .kg-citation-export .citation-export-row .btn { flex-shrink: 0; }
 
-/* 诊治格局：领域重大事件时间线 */
+/* 领域重大事件时间线（情报中心「领域重大事件」标签） */
 .major-events-list { display: flex; flex-direction: column; gap: 0.45rem; }
 .major-event-item {
   display: flex; gap: 0.6rem; align-items: baseline; flex-wrap: wrap;
@@ -4569,6 +4569,13 @@ body.pmid-modal-open { overflow: hidden; }
   padding: 0.1rem 0.4rem; border-radius: 4px;
   background: var(--bg2); border: 1px solid var(--bg3);
 }
+.major-event-strength {
+  font-size: 0.7rem; font-weight: 600; flex-shrink: 0;
+  padding: 0.1rem 0.38rem; border-radius: 999px;
+  border: 1px solid var(--bg3);
+}
+.major-event-strength-strong { background: rgba(220, 38, 38, 0.08); border-color: rgba(220, 38, 38, 0.25); color: #b91c1c; }
+.major-event-strength-medium { background: rgba(217, 119, 6, 0.08); border-color: rgba(217, 119, 6, 0.25); color: #b45309; }
 .major-event-date { font-size: 0.74rem; color: var(--fg3); flex-shrink: 0; }
 .major-event-title { font-size: 0.85rem; font-weight: 500; }
 .major-event-title a { color: var(--accent); }

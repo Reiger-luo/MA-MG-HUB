@@ -32,6 +32,7 @@
   var conferenceLoading = false;
   var conferenceStarted = false;
   var conferenceCallbacks = [];
+  var majorEventsStarted = false;
 
   function loadScript(src, callback) {
     if (hub.loadScript) {
@@ -756,6 +757,7 @@
         });
       }
       if (key === 'trials') { renderTrialsTab(); }
+      if (key === 'events') { loadMajorEventsModule(); }
       updateExportButton();
     }
     var params = new URLSearchParams(window.location.search || '');
@@ -1939,6 +1941,130 @@
     renderTrialsDecisionSignals();
     populatePipelineFilters();
     renderPipelineMatrix();
+  }
+
+  // ── 领域重大事件：获批监管 / 指南共识 / 新III期 / 周更强中试验信号 ──
+  // 数据源唯一为 source-signals.js（周更重建；trialRegistry 频道内嵌 weekly_signals）。
+  // 惰性加载：首次进入「领域重大事件」标签时才拉取，不增加情报中心首屏负担。
+  function shortenEventDate(value) {
+    // 兼容指南频道 "2025/01/14 01:04" 斜杠格式与 ISO 日期，统一取 YYYY-MM-DD 前缀
+    return String(value || '').replace(/\//g, '-').slice(0, 10);
+  }
+
+  function eventChannelById(channels, id) {
+    var found = null;
+    (channels || []).forEach(function (channel) {
+      if (channel && channel.id === id) found = channel;
+    });
+    return found;
+  }
+
+  function eventClassToken(type) {
+    if (hub.safeClassToken) return hub.safeClassToken(type, 'event');
+    return String(type || 'event').replace(/[^a-zA-Z0-9_-]+/g, '-');
+  }
+
+  function collectMajorEvents() {
+    var sourceSignals = window.MG_SOURCE_SIGNALS || { channels: [] };
+    var channels = sourceSignals.channels || [];
+    var events = [];
+    var typeByChannel = { chinaRegulatory: '获批/监管', guidelineConsensus: '指南/共识' };
+    channels.forEach(function (channel) {
+      var type = typeByChannel[channel.id];
+      if (!type) return;
+      (channel.items || []).forEach(function (item) {
+        events.push({
+          type: type,
+          date: shortenEventDate(item.date),
+          title: item.title || '',
+          url: item.url || '',
+          source: item.source || channel.label || ''
+        });
+      });
+    });
+    var trialChannel = eventChannelById(channels, 'trialRegistry');
+    // 周更试验信号：只收强/中，弱信号不进入重大事件时间线
+    ((trialChannel || {}).weekly_signals || []).forEach(function (signal) {
+      if (signal.strength !== '强' && signal.strength !== '中') return;
+      var ref = (signal.registry_refs || [])[0] || {};
+      events.push({
+        type: '试验信号',
+        strength: signal.strength,
+        date: shortenEventDate(signal.date),
+        title: signal.title || '',
+        url: ref.url || '',
+        source: ref.registry || ''
+      });
+    });
+    // 新启动的 III 期：标题含 Phase III/3 且启动日期在近 12 个月内
+    var nowMs = Date.now();
+    ((trialChannel || {}).items || []).forEach(function (trial) {
+      var title = String(trial.title || '');
+      if (!/phase\s*(iii|3)\b/i.test(title)) return;
+      var start = String(trial.start_date || '');
+      var ts = Date.parse(start);
+      if (!Number.isFinite(ts) || nowMs - ts > 365 * 86400000) return;
+      events.push({
+        type: 'III期',
+        date: shortenEventDate(start),
+        title: title,
+        url: trial.url || '',
+        source: trial.registry || trial.source || ''
+      });
+    });
+    events.sort(function (a, b) { return String(b.date).localeCompare(String(a.date)); });
+    return events.slice(0, 12);
+  }
+
+  function renderMajorEvents() {
+    var target = document.getElementById('majorEventsList');
+    if (!target) return;
+    var sourceSignals = window.MG_SOURCE_SIGNALS || {};
+    var events = collectMajorEvents();
+    var badge = document.getElementById('eventsBadge');
+    var meta = document.getElementById('majorEventsMeta');
+    if (badge) badge.textContent = (sourceSignals.generated_at || '—') + ' · ' + (events.length ? '最近 ' + events.length + ' 条' : '暂无记录');
+    if (meta) meta.textContent = events.length ? '最近 ' + events.length + ' 条' : '暂无记录';
+    if (!events.length) {
+      target.innerHTML = '<div class="empty-state small"><h3>近期暂无重大事件记录</h3><p>新获批、新指南、新 III 期启动与周更强/中试验信号将随周更自动进入时间线。</p></div>';
+      return;
+    }
+    target.innerHTML = events.map(function (event) {
+      var titleHtml = event.url
+        ? '<a href="' + escapeHref(event.url) + '" target="_blank" rel="noopener">' + escapeHtml(event.title) + '</a>'
+        : escapeHtml(event.title);
+      var strengthBadge = event.strength
+        ? '<span class="major-event-strength major-event-strength-' + (event.strength === '强' ? 'strong' : 'medium') + '">' + escapeHtml(event.strength) + '</span>'
+        : '';
+      return '<article class="major-event-item major-event-' + escapeHtml(eventClassToken(event.type)) + '">' +
+        '<span class="major-event-type">' + escapeHtml(event.type) + '</span>' +
+        strengthBadge +
+        '<span class="major-event-date">' + escapeHtml(event.date || '日期待核') + '</span>' +
+        '<strong class="major-event-title">' + titleHtml + '</strong>' +
+        (event.source ? '<span class="major-event-source">' + escapeHtml(event.source) + '</span>' : '') +
+      '</article>';
+    }).join('');
+  }
+
+  function loadMajorEventsModule() {
+    if (window.MG_SOURCE_SIGNALS) {
+      renderMajorEvents();
+      return;
+    }
+    if (majorEventsStarted) return;
+    majorEventsStarted = true;
+    var list = document.getElementById('majorEventsList');
+    if (list) list.innerHTML = '<div class="kg-empty-hint">领域重大事件数据加载中…</div>';
+    loadScript('data/source-signals.js', function (ok) {
+      var listEl = document.getElementById('majorEventsList');
+      if (!ok) {
+        var failBadge = document.getElementById('eventsBadge');
+        if (failBadge) failBadge.textContent = '事件数据加载失败';
+        if (listEl) listEl.innerHTML = '<div class="empty-state small"><h3>事件数据加载失败</h3><p>source-signals.js 未能加载，请刷新重试。</p></div>';
+        return;
+      }
+      renderMajorEvents();
+    });
   }
 
   function renderTrialsBadge() {

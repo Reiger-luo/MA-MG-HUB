@@ -1,6 +1,7 @@
 import importlib.util
 import json
 import os
+import re
 import sys
 import xml.etree.ElementTree as ET
 from datetime import datetime
@@ -747,16 +748,23 @@ def test_source_channel_keeps_curated_trial_signals_separate_from_raw_registry_i
 
 
 def test_source_signal_board_is_not_exposed_in_literature_frontend():
+    """旧「其他来源动向」信号板不得在情报中心复活。
+
+    领域重大事件标签迁移进情报中心后，MG_SOURCE_SIGNALS 成为事件时间线的
+    合法数据源，但必须保持惰性加载（不得出现静态 script 标签拖累首屏），
+    且旧信号板文案与渲染函数不得回归。
+    """
     html = (ROOT / "pages" / "literature.html").read_text(encoding="utf-8")
     js = (ROOT / "assets" / "literature.js").read_text(encoding="utf-8")
 
     assert "其他来源动向" not in html
     assert "先看本期判断，再逐篇核对研究结果与 PMID" not in html
     assert "滚动 14 天" not in html
-    assert '<script src="../data/source-signals.js"></script>' not in html
+    # source-signals.js 只允许 literature.js 惰性加载，不得静态引入
+    assert re.search(r'<script src="[^"]*source-signals\.js', html) is None
     assert "sourceSignalChannels" not in html
-    assert "window.MG_SOURCE_SIGNALS" not in js
     assert "renderSourceSignalChannels" not in js
+    assert "sourceSignalChannels" not in js
 
 
 def test_landscape_exposes_chictr_registry_signals_without_oxford_grading():

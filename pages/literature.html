@@ -38,6 +38,8 @@
     <button class="intel-tab intel-tab-conference" type="button" data-tab="conference">会议资讯</button>
     <span class="intel-tab-separator" aria-hidden="true"></span>
     <button class="intel-tab" type="button" data-tab="trials">临床试验</button>
+    <span class="intel-tab-separator" aria-hidden="true"></span>
+    <button class="intel-tab" type="button" data-tab="events">领域重大事件</button>
   </div>
 
   <section class="intel-tab-panel active" id="tab-literature">
@@ -343,6 +345,30 @@
 
     <!-- Pipeline matrix table -->
     <div id="pipelineMatrixContainer"></div>
+  </section>
+
+  <section class="intel-tab-panel" id="tab-events">
+    <div class="signal-topline">
+      <div>
+        <div class="section-kicker">获批监管 · 指南共识 · III期启动 · 强中试验信号</div>
+        <h2>领域重大事件</h2>
+        <p class="signal-page-intro">自动聚合官方注册与监管来源；周更后的强/中试验信号随信息流按时间降序自动进入时间线，点击回原文。</p>
+      </div>
+      <span class="update-badge" id="eventsBadge">—</span>
+    </div>
+
+    <div class="workspace-panel">
+      <div class="panel-head">
+        <div>
+          <h2>事件时间线</h2>
+          <p class="panel-caption">新关键 III 期启动、新药获批/监管动态、新指南共识发布、周更强/中试验信号；统一按事件时间降序。</p>
+        </div>
+        <div class="panel-head-actions">
+          <span class="update-badge" id="majorEventsMeta"></span>
+        </div>
+      </div>
+      <div class="major-events-list" id="majorEventsList"></div>
+    </div>
   </section>
 </main>
 
