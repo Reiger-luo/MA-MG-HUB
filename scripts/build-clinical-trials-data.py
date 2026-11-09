@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import subprocess
 import sys
@@ -21,7 +22,8 @@ from scripts.common.trial_source_version import source_revision
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-DATA_DIR = PROJECT_ROOT / "data"
+# MG_DATA_DIR 供测试把数据根指向临时目录：默认仍是仓库 data/，测试不得写已发布产物。
+DATA_DIR = Path(os.environ.get("MG_DATA_DIR") or PROJECT_ROOT / "data")
 CT_CACHE_PATH = DATA_DIR / "clinicaltrials-pipeline-cache.json"
 CHICTR_CACHE_PATH = DATA_DIR / "chictr-trials-cache.json"
 CHINA_DRUG_TRIALS_CACHE_PATH = DATA_DIR / "china-drug-trials-cache.json"
@@ -1271,6 +1273,14 @@ def preserve_same_window_weekly_changes(
     return computed
 
 
+def _display_path(path: Path) -> str:
+    """日志路径：仓库内用相对路径，隔离数据目录用绝对路径。"""
+    try:
+        return str(path.relative_to(PROJECT_ROOT))
+    except ValueError:
+        return str(path)
+
+
 def main() -> None:
     """生成可由浏览器直接加载的 JavaScript 数据文件。"""
     previousSummary = {}
@@ -1303,8 +1313,8 @@ def main() -> None:
         indent=2,
     ) + ";\n"
     atomic_write_text(summaryOutputPath, summaryOutput)
-    print(f"Wrote {payload['meta']['total_count']} records to {OUTPUT_PATH.relative_to(PROJECT_ROOT)}")
-    print(f"Wrote dashboard summary to {summaryOutputPath.relative_to(PROJECT_ROOT)}")
+    print(f"Wrote {payload['meta']['total_count']} records to {_display_path(OUTPUT_PATH)}")
+    print(f"Wrote dashboard summary to {_display_path(summaryOutputPath)}")
     print(
         "Weekly changes (ClinicalTrials.gov): "
         f"+{weeklyChanges['added_count']} new · "
