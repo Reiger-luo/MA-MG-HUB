@@ -32,6 +32,9 @@ summaryOutputPath = DATA_DIR / "clinicalTrialsSummary.js"
 # 周更对比基线：本地与 CI 均提交入仓库，保证下一次构建能还原上一期快照
 WEEKLY_CHANGES_SNAPSHOT_PATH = DATA_DIR / "clinicaltrials-weekly-changes-snapshot.json"
 WEEKLY_CHANGES_WINDOW_DAYS = 7
+# 周更停摆恢复时最多回补多少天：窗口会从运行日回拉到上一期基线日，
+# 但不能无限回拉，否则长期断更后会把整年的变化一次性灌进"本周"。
+WEEKLY_CHANGES_MAX_CATCHUP_DAYS = 28
 
 SOURCE_ORDER = ["ClinicalTrials.gov", "ChiCTR", "ChinaDrugTrials"]
 INDICATION = "重症肌无力"
@@ -930,6 +933,15 @@ def diff_ct_weekly_changes(
     """对比两期 CT.gov 快照，提炼近 WEEKLY_CHANGES_WINDOW_DAYS 天的变化要点。"""
     window_days = WEEKLY_CHANGES_WINDOW_DAYS
     window_start = reference_date - timedelta(days=window_days) if reference_date else None
+    previous_date = parse_iso_date(previous_snapshot_at)
+    if reference_date and window_start and previous_date and previous_date < window_start:
+        # 停摆恢复首轮：窗口若只锚在运行日前 7 天，停摆期内（基线日之后、
+        # 窗口起点之前）的变化会永远不被统计。把起点回拉到上一期基线日。
+        window_start = max(
+            previous_date,
+            reference_date - timedelta(days=WEEKLY_CHANGES_MAX_CATCHUP_DAYS),
+        )
+        window_days = (reference_date - window_start).days
     comparison_available = bool(baseline)
 
     def empty_changes() -> dict[str, Any]:

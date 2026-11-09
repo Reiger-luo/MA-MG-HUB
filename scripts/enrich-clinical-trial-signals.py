@@ -568,6 +568,9 @@ def build_candidates(previous_payload: dict[str, Any] | None = None) -> tuple[li
 
     weekly = summary.get("weekly_changes") or {}
     ct_window_id = normalize_text(weekly.get("generated_at"))
+    # 变化集合自身也是"分析输入"的一部分：断更回补会让同一 update 窗口塞进更多
+    # 候选（窗口从 7 天拉长到 15 天），只有窗口时间戳相同时不能据此跳过重算。
+    ct_change_signature = source_revision({"candidate_changes": weekly.get("candidate_changes") or []})
     chictr_window_id = normalize_text(chictr_payload.get("last_verified") or chictr_payload.get("scraped_at"))
     cdt_window_id = normalize_text(cdt_changes.get("generated_at") or cdt_payload.get("generated_at"))
     def snapshot_epoch(value: str) -> float | None:
@@ -627,6 +630,11 @@ def build_candidates(previous_payload: dict[str, Any] | None = None) -> tuple[li
             or (
                 current_source_revisions[source]
                 and current_source_revisions[source] != normalize_text((previous_windows.get(source) or {}).get("source_revision"))
+            )
+            or (
+                source == "ClinicalTrials.gov"
+                and ct_change_signature
+                != normalize_text((previous_windows.get(source) or {}).get("change_signature"))
             )
         )
     }
@@ -688,6 +696,7 @@ def build_candidates(previous_payload: dict[str, Any] | None = None) -> tuple[li
             "comparison_available": weekly.get("comparison_available") is True if ct_window_id else (previous_windows.get("ClinicalTrials.gov") or {}).get("comparison_available", False),
             "raw_change_count": source_new_counts["ClinicalTrials.gov"] if "ClinicalTrials.gov" in advanced_sources else (previous_windows.get("ClinicalTrials.gov") or {}).get("raw_change_count", 0),
             "source_revision": current_source_revisions["ClinicalTrials.gov"] or (previous_windows.get("ClinicalTrials.gov") or {}).get("source_revision", ""),
+            "change_signature": ct_change_signature or (previous_windows.get("ClinicalTrials.gov") or {}).get("change_signature", ""),
         },
         "ChiCTR": {
             **(previous_windows.get("ChiCTR") or {}),
@@ -881,7 +890,7 @@ def main() -> int:
             all(
                 normalize_text((windows.get(source) or {}).get(key)) ==
                 normalize_text(((previous.get("source_windows") or {}).get(source) or {}).get(key))
-                for key in ("updated_at", "source_revision")
+                for key in ("updated_at", "source_revision", "change_signature")
             )
             for source in ("ClinicalTrials.gov", "ChiCTR", "ChinaDrugTrials")
         ):

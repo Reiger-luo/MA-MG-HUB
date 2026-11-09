@@ -92,6 +92,44 @@ def test_snapshot_and_diff_detect_added_status_results_and_removal():
     }
 
 
+def test_catchup_window_recovers_changes_missed_while_weekly_sync_was_blocked():
+    """断更恢复首轮：窗口必须回拉到上一期基线日，否则停摆期内的变化永久丢失。"""
+    module = load_builder_module()
+    baseline_payload = {"studies": [
+        make_study("NCT100", first_post="2026-09-01", last_update="2026-10-20", title="Old"),
+    ]}
+    baseline = module.build_ct_snapshot(baseline_payload)
+    # 10-28 的更新落在「7 天窗口之外、基线之后」，停摆一周后恢复时必须被补回
+    current_payload = {"studies": [
+        make_study("NCT100", status="ACTIVE_NOT_RECRUITING", first_post="2026-09-01",
+                   last_update="2026-10-28", title="Old"),
+    ]}
+    current = module.build_ct_snapshot(current_payload)
+    titles = module.ct_titles_from_payload(current_payload)
+
+    recovered = module.diff_ct_weekly_changes(
+        current, baseline, date(2026, 11, 9), titles, previous_snapshot_at="2026-10-25",
+    )
+    assert recovered["window_start"] == "2026-10-25"
+    assert recovered["window_days"] == 15
+    assert recovered["status_change_count"] == 1
+    assert {item["registry_id"] for item in recovered["candidate_changes"]} == {"NCT100"}
+
+    # 正常周更（基线在窗口内）仍然只看 7 天，不放大统计口径
+    normal = module.diff_ct_weekly_changes(
+        current, baseline, date(2026, 11, 9), titles, previous_snapshot_at="2026-11-02",
+    )
+    assert normal["window_days"] == 7
+    assert normal["status_change_count"] == 0
+
+    # 长期失联时回补有上限，避免把整年的变化灌进「本周」
+    capped = module.diff_ct_weekly_changes(
+        current, baseline, date(2026, 11, 9), titles, previous_snapshot_at="2026-01-01",
+    )
+    assert capped["window_days"] == 28
+    assert capped["window_start"] == "2026-10-12"
+
+
 def test_baseline_loader_prefers_local_file_and_returns_empty_outside_repo(tmp_path):
     module = load_builder_module()
     snapshot_path = tmp_path / "snap.json"
