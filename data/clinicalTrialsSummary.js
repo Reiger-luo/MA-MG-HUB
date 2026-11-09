@@ -44,8 +44,8 @@ window.MG_CLINICAL_TRIALS_SUMMARY = {
       "mode": "live"
     },
     "ChinaDrugTrials": {
-      "updated_at": "2026-10-25",
-      "revision": "semantic-v1:cda8d63b8cf8ef51ecfd2c6ef650916ff9e8b0c1c7c99997ed0650d005340553",
+      "updated_at": "2026-11-09",
+      "revision": "semantic-v1:207cd107ca2e6251c48776a1f6feaa1f7121010d4bf76c2b1e739d90c22617ba",
       "mode": "live_crawl"
     }
   },
@@ -72,12 +72,12 @@ window.MG_CLINICAL_TRIALS_SUMMARY = {
     "generated_at": "2026-11-09",
     "previous_snapshot_at": "2026-10-25",
     "comparison_available": true,
-    "window_days": 7,
-    "window_start": "2026-11-02",
+    "window_days": 15,
+    "window_start": "2026-10-25",
     "added_count": 1,
-    "status_change_count": 2,
+    "status_change_count": 6,
     "results_posted_count": 0,
-    "updated_count": 9,
+    "updated_count": 16,
     "removed_count": 0,
     "added": [
       {
@@ -115,6 +115,58 @@ window.MG_CLINICAL_TRIALS_SUMMARY = {
         "change_summary": "状态：尚未招募 → 招募中",
         "drug_name": "",
         "phase_label": "未标注"
+      },
+      {
+        "registry_id": "NCT07501702",
+        "title": "A Phase 2, Multicenter, Randomized, Double-Blind, Placebo-Controlled Study With a Long-term Extension of Povetacicept in Adults With Generalized Myasthenia Gravis",
+        "from_status": "RECRUITING",
+        "to_status": "ACTIVE_NOT_RECRUITING",
+        "from_label": "招募中",
+        "to_label": "进行中",
+        "updated_date": "2026-10-29",
+        "url": "https://clinicaltrials.gov/study/NCT07501702",
+        "change_summary": "状态：招募中 → 进行中",
+        "drug_name": "Povetacicept",
+        "phase_label": "Phase 2"
+      },
+      {
+        "registry_id": "NCT07246564",
+        "title": "An Open-label, Prospective, Single-arm Study Assessing the Efficacy and Safety of Rozanolixizumab in Adult Chinese Participants With Generalized Myasthenia Gravis",
+        "from_status": "RECRUITING",
+        "to_status": "ACTIVE_NOT_RECRUITING",
+        "from_label": "招募中",
+        "to_label": "进行中",
+        "updated_date": "2026-10-29",
+        "url": "https://clinicaltrials.gov/study/NCT07246564",
+        "change_summary": "状态：招募中 → 进行中",
+        "drug_name": "Rozanolixizumab (罗泽利昔珠单抗)",
+        "phase_label": "Phase 4"
+      },
+      {
+        "registry_id": "NCT06707727",
+        "title": "Characteristics and Prognostic Outcomes of Diaphragmatic Ultrasound in Myasthenia Gravis",
+        "from_status": "ACTIVE_NOT_RECRUITING",
+        "to_status": "COMPLETED",
+        "from_label": "进行中",
+        "to_label": "已完成",
+        "updated_date": "2026-10-29",
+        "url": "https://clinicaltrials.gov/study/NCT06707727",
+        "change_summary": "状态：进行中 → 已完成",
+        "drug_name": "",
+        "phase_label": "未标注"
+      },
+      {
+        "registry_id": "NCT04833894",
+        "title": "Open-label Uncontrolled Trial to Evaluate Pharmacokinetics, Pharmacodynamics, Safety, and Activity of Efgartigimod in Children From 2 to Less Than 18 Years of Age With Generalized Myasthenia Gravis",
+        "from_status": "RECRUITING",
+        "to_status": "ACTIVE_NOT_RECRUITING",
+        "from_label": "招募中",
+        "to_label": "进行中",
+        "updated_date": "2026-10-29",
+        "url": "https://clinicaltrials.gov/study/NCT04833894",
+        "change_summary": "状态：招募中 → 进行中",
+        "drug_name": "Efgartigimod (艾加莫德)",
+        "phase_label": "Phase 2 / Phase 3"
       }
     ],
     "results_posted": [],
@@ -205,6 +257,62 @@ window.MG_CLINICAL_TRIALS_SUMMARY = {
         "phase_label": "未标注"
       },
       {
+        "event_type": "status_change",
+        "registry_id": "NCT07501702",
+        "title": "A Phase 2, Multicenter, Randomized, Double-Blind, Placebo-Controlled Study With a Long-term Extension of Povetacicept in Adults With Generalized Myasthenia Gravis",
+        "from_status": "RECRUITING",
+        "to_status": "ACTIVE_NOT_RECRUITING",
+        "from_label": "招募中",
+        "to_label": "进行中",
+        "updated_date": "2026-10-29",
+        "url": "https://clinicaltrials.gov/study/NCT07501702",
+        "change_summary": "状态：招募中 → 进行中",
+        "drug_name": "Povetacicept",
+        "phase_label": "Phase 2"
+      },
+      {
+        "event_type": "status_change",
+        "registry_id": "NCT07246564",
+        "title": "An Open-label, Prospective, Single-arm Study Assessing the Efficacy and Safety of Rozanolixizumab in Adult Chinese Participants With Generalized Myasthenia Gravis",
+        "from_status": "RECRUITING",
+        "to_status": "ACTIVE_NOT_RECRUITING",
+        "from_label": "招募中",
+        "to_label": "进行中",
+        "updated_date": "2026-10-29",
+        "url": "https://clinicaltrials.gov/study/NCT07246564",
+        "change_summary": "状态：招募中 → 进行中",
+        "drug_name": "Rozanolixizumab (罗泽利昔珠单抗)",
+        "phase_label": "Phase 4"
+      },
+      {
+        "event_type": "status_change",
+        "registry_id": "NCT06707727",
+        "title": "Characteristics and Prognostic Outcomes of Diaphragmatic Ultrasound in Myasthenia Gravis",
+        "from_status": "ACTIVE_NOT_RECRUITING",
+        "to_status": "COMPLETED",
+        "from_label": "进行中",
+        "to_label": "已完成",
+        "updated_date": "2026-10-29",
+        "url": "https://clinicaltrials.gov/study/NCT06707727",
+        "change_summary": "状态：进行中 → 已完成",
+        "drug_name": "",
+        "phase_label": "未标注"
+      },
+      {
+        "event_type": "status_change",
+        "registry_id": "NCT04833894",
+        "title": "Open-label Uncontrolled Trial to Evaluate Pharmacokinetics, Pharmacodynamics, Safety, and Activity of Efgartigimod in Children From 2 to Less Than 18 Years of Age With Generalized Myasthenia Gravis",
+        "from_status": "RECRUITING",
+        "to_status": "ACTIVE_NOT_RECRUITING",
+        "from_label": "招募中",
+        "to_label": "进行中",
+        "updated_date": "2026-10-29",
+        "url": "https://clinicaltrials.gov/study/NCT04833894",
+        "change_summary": "状态：招募中 → 进行中",
+        "drug_name": "Efgartigimod (艾加莫德)",
+        "phase_label": "Phase 2 / Phase 3"
+      },
+      {
         "event_type": "updated",
         "registry_id": "NCT07465289",
         "title": "A Phase 3, Open-Label, Extension Study to Evaluate The Long-Term Safety And Efficacy of Rozanolixizumab in Adult Participants With Ocular Myasthenia Gravis",
@@ -293,6 +401,76 @@ window.MG_CLINICAL_TRIALS_SUMMARY = {
         "change_summary": "其他字段更新",
         "drug_name": "Efgartigimod (艾加莫德)",
         "phase_label": "Phase 2 / Phase 3"
+      },
+      {
+        "event_type": "updated",
+        "registry_id": "NCT07647510",
+        "title": "A Phase 3 Global, Multicenter, Randomized, Double-blind, Placebo-controlled Study to Demonstrate the Efficacy, Safety, and Tolerability of Claseprubart (DNTH103) in Patients With Generalized Myasthenia Gravis (EMERGE)",
+        "updated_date": "2026-10-30",
+        "url": "https://clinicaltrials.gov/study/NCT07647510",
+        "change_summary": "其他字段更新",
+        "drug_name": "Claseprubart",
+        "phase_label": "Phase 3"
+      },
+      {
+        "event_type": "updated",
+        "registry_id": "NCT07673744",
+        "title": "A Phase 2, Randomized, Double-blind, Multicenter, Placebo-controlled Study to Evaluate the Efficacy and Safety of Maintenance Ublituximab Treatment Following Induction With Efgartigimod Administration in Adults With Myasthenia Gravis",
+        "updated_date": "2026-10-29",
+        "url": "https://clinicaltrials.gov/study/NCT07673744",
+        "change_summary": "其他字段更新",
+        "drug_name": "Ublituximab",
+        "phase_label": "Phase 2"
+      },
+      {
+        "event_type": "updated",
+        "registry_id": "NCT05070858",
+        "title": "Efficacy and Safety of Pozelimab and Cemdisiran Combination Therapy and Cemdisiran Monotherapy in Patients With Symptomatic Generalized Myasthenia Gravis",
+        "updated_date": "2026-10-28",
+        "url": "https://clinicaltrials.gov/study/NCT05070858",
+        "change_summary": "其他字段更新",
+        "drug_name": "Cemdisiran",
+        "phase_label": "Phase 3"
+      },
+      {
+        "event_type": "updated",
+        "registry_id": "NCT01793168",
+        "title": "Coordination of Rare Diseases at Sanford",
+        "updated_date": "2026-10-28",
+        "url": "https://clinicaltrials.gov/study/NCT01793168",
+        "change_summary": "其他字段更新",
+        "drug_name": "",
+        "phase_label": "未标注"
+      },
+      {
+        "event_type": "updated",
+        "registry_id": "NCT06680037",
+        "title": "A Phase 1, Open-label Study to Evaluate the Safety and Clinical Activity of Azercabtagene Zapreleucel in Participants With B-cell Mediated Autoimmune Disorders",
+        "updated_date": "2026-10-27",
+        "url": "https://clinicaltrials.gov/study/NCT06680037",
+        "change_summary": "其他字段更新",
+        "drug_name": "Azercabtagene zapreleucel (azer-cel)",
+        "phase_label": "Phase 1"
+      },
+      {
+        "event_type": "updated",
+        "registry_id": "NCT06149559",
+        "title": "An Open-label, Single-arm Study Evaluating the Activity, Safety, and Pharmacokinetics of Rozanolixizumab in Pediatric Study Participants With Moderate to Severe Generalized Myasthenia Gravis",
+        "updated_date": "2026-10-27",
+        "url": "https://clinicaltrials.gov/study/NCT06149559",
+        "change_summary": "其他字段更新",
+        "drug_name": "Rozanolixizumab (罗泽利昔珠单抗)",
+        "phase_label": "Phase 2 / Phase 3"
+      },
+      {
+        "event_type": "updated",
+        "registry_id": "NCT07294170",
+        "title": "A Master Protocol for an Exploratory, Phase 2a, Proof-of-Concept Platform Study to Evaluate the Safety, Tolerability, and Efficacy of Multiple Regimens in Participants With Myasthenia Gravis",
+        "updated_date": "2026-10-26",
+        "url": "https://clinicaltrials.gov/study/NCT07294170",
+        "change_summary": "其他字段更新",
+        "drug_name": "Efgartigimod (艾加莫德)",
+        "phase_label": "未标注"
       }
     ]
   },

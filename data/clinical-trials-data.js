@@ -651,7 +651,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "highest_phase_label": "Phase 4",
       "stage_number": 4,
       "study_count": 13,
-      "status_summary": "招募 6 · 进行 2 · 完成 5",
+      "status_summary": "招募 5 · 进行 3 · 完成 5",
       "sponsors": [
         "Centre Hospitalier Universitaire de Nice",
         "UCB Biopharma SRL",
@@ -672,8 +672,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry": "ChinaDrugTrials",
           "registry_id": "CTR20254130",
           "title": "在中国全身型重症肌无力成人受试者中评价罗泽利昔珠单抗有效性和安全性的IV期研究",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status_label": "进行中",
+          "status_class": "active",
           "phase_label": "Phase 4",
           "start_date": "",
           "readout_date": "",
@@ -6904,7 +6904,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry": "ChinaDrugTrials",
           "registry_id": "CTR20262007",
           "title": "SHR-2173注射液治疗重症肌无力的II期临床试验",
-          "status_label": "尚未招募",
+          "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "Phase 2",
           "start_date": "",
@@ -20508,10 +20508,10 @@ window.MG_CLINICAL_TRIALS_DATA = {
     {
       "source": "ChinaDrugTrials",
       "meta": {
-        "generated_at": "2026-10-25",
+        "generated_at": "2026-11-09",
         "mode": "live_crawl",
         "warning": "",
-        "revision": "semantic-v1:cda8d63b8cf8ef51ecfd2c6ef650916ff9e8b0c1c7c99997ed0650d005340553"
+        "revision": "semantic-v1:207cd107ca2e6251c48776a1f6feaa1f7121010d4bf76c2b1e739d90c22617ba"
       },
       "records": [
         {
@@ -21317,9 +21317,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "CTR20254130",
           "title": "在中国全身型重症肌无力成人受试者中评价罗泽利昔珠单抗有效性和安全性的IV期研究",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20254130",
-          "status": "RECRUITING",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status": "ACTIVE_NOT_RECRUITING",
+          "status_label": "进行中",
+          "status_class": "active",
           "drug_class": "FcRn 拮抗剂",
           "drug_name": "罗泽利昔珠单抗注射液",
           "drug_names": [
@@ -21383,8 +21383,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "CTR20262007",
           "title": "SHR-2173注射液治疗重症肌无力的II期临床试验",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20262007",
-          "status": "NOT_YET_RECRUITING",
-          "status_label": "尚未招募",
+          "status": "RECRUITING",
+          "status_label": "招募中",
           "status_class": "recruiting",
           "drug_class": "其他",
           "drug_name": "SHR-2173注射液",

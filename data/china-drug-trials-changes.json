@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "source": "ChinaDrugTrials.org.cn",
-  "generated_at": "2026-10-25T21:03:59.497830+00:00",
+  "generated_at": "2026-11-09T11:51:19.067563+00:00",
   "inputs": [
     {
       "name": "cde-live-crawl",
@@ -11,12 +11,77 @@
   "old_count": 51,
   "new_count": 51,
   "added_count": 0,
-  "updated_count": 0,
+  "updated_count": 4,
   "removed_count": 0,
   "enriched_count": 0,
-  "unchanged_count": 51,
+  "unchanged_count": 47,
   "added": [],
-  "updated": [],
+  "updated": [
+    {
+      "registry_id": "CTR20262539",
+      "changes": {
+        "enrollment_actual": {
+          "before": "国内: 4 ；",
+          "after": "国内: 6 ；"
+        }
+      }
+    },
+    {
+      "registry_id": "CTR20262007",
+      "changes": {
+        "status": {
+          "before": "NOT_YET_RECRUITING",
+          "after": "RECRUITING"
+        },
+        "status_raw": {
+          "before": "进行中 尚未招募",
+          "after": "进行中 招募中"
+        },
+        "first_consent_date": {
+          "before": "国内：登记人暂未填写该信息；",
+          "after": "国内：2026-07-22；"
+        },
+        "first_enrollment_date": {
+          "before": "国内：登记人暂未填写该信息；",
+          "after": "国内：2026-08-28；"
+        },
+        "enrollment_actual": {
+          "before": "国内: 登记人暂未填写该信息；",
+          "after": "国内: 5 ；"
+        }
+      }
+    },
+    {
+      "registry_id": "CTR20254130",
+      "changes": {
+        "status": {
+          "before": "RECRUITING",
+          "after": "ACTIVE_NOT_RECRUITING"
+        },
+        "status_raw": {
+          "before": "进行中 招募中",
+          "after": "进行中 招募完成"
+        },
+        "enrollment_actual": {
+          "before": "国内: 2 ；",
+          "after": "国内: 40 ；"
+        }
+      }
+    },
+    {
+      "registry_id": "CTR20252892",
+      "changes": {
+        "protocol_version": {
+          "before": "3.0",
+          "after": "4.0"
+        },
+        "protocol_version_date": {
+          "before": "2025-10-30",
+          "after": "2026-05-14"
+        }
+      }
+    }
+  ],
   "removed": [],
   "enriched": []
 }
