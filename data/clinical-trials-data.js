@@ -1,7 +1,7 @@
 window.MG_CLINICAL_TRIALS_DATA = {
   "meta": {
-    "generated_at": "2026-10-25",
-    "total_count": 485,
+    "generated_at": "2026-11-09",
+    "total_count": 486,
     "sources_order": [
       "ClinicalTrials.gov",
       "ChiCTR",
@@ -11,17 +11,17 @@ window.MG_CLINICAL_TRIALS_DATA = {
   "decision_signals": [
     {
       "title": "招募中试验",
-      "detail": "当前共有 133 项招募中或邀请入组试验。",
+      "detail": "当前共有 129 项招募中或邀请入组试验。",
       "tag": "招募"
     },
     {
       "title": "药物机制热点",
-      "detail": "FcRn 拮抗剂在可识别机制中最多，共 72 项。",
+      "detail": "FcRn 拮抗剂在可识别机制中最多，共 73 项。",
       "tag": "药物分类"
     },
     {
       "title": "近 6 个月新登记",
-      "detail": "截至 2026-10-25，近 6 个月登记 51 项试验。",
+      "detail": "截至 2026-11-09，近 6 个月登记 47 项试验。",
       "tag": "近期登记"
     }
   ],
@@ -31,15 +31,15 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "name": "Efgartigimod (艾加莫德)",
       "highest_phase_label": "Phase 4",
       "stage_number": 4,
-      "study_count": 44,
-      "status_summary": "招募 20 · 进行 5 · 完成 12",
+      "study_count": 45,
+      "status_summary": "招募 19 · 进行 6 · 完成 12",
       "sponsors": [
         "Affiliated Hospital of Zunyi Medical University",
         "BioSensics",
         "Centre Hospitalier Universitaire de Nice"
       ],
       "sources": {
-        "ChiCTR": 12,
+        "ChiCTR": 13,
         "ChinaDrugTrials": 5,
         "ClinicalTrials.gov": 27
       },
@@ -207,6 +207,19 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "url": "https://www.chictr.org.cn/showproj.html?proj=327224"
         },
         {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR2600135509",
+          "title": "Efgartigimod as an effective and safe option for perioperative treatment in thymoma-associated myasthenia gravis",
+          "status_label": "Pending",
+          "status_class": "other",
+          "phase_label": "未标注",
+          "start_date": "2026-11-01",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "The Second Qilu Hospital of Shandong University",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=348935"
+        },
+        {
           "registry": "ChinaDrugTrials",
           "registry_id": "CTR20211805",
           "title": "Efgartigimod与rHuPH20在健康受试者中混合皮下给药的I期研究",
@@ -340,8 +353,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry": "ClinicalTrials.gov",
           "registry_id": "NCT04833894",
           "title": "Evaluating the Pharmacokinetics, Pharmacodynamics, and Safety of Efgartigimod Administered Intravenously in Children With Generalized Myasthenia Gravis",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status_label": "进行中",
+          "status_class": "active",
           "phase_label": "Phase 2 / Phase 3",
           "start_date": "2021-10-26",
           "readout_date": "",
@@ -629,7 +642,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         "completion": "2029-01-29"
       },
       "first_registered": "2016-11-17",
-      "latest_registered": "2026-10-09",
+      "latest_registered": "2026-10-30",
       "linked_registries": []
     },
     {
@@ -638,7 +651,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "highest_phase_label": "Phase 4",
       "stage_number": 4,
       "study_count": 13,
-      "status_summary": "招募 7 · 进行 1 · 完成 5",
+      "status_summary": "招募 6 · 进行 2 · 完成 5",
       "sponsors": [
         "Centre Hospitalier Universitaire de Nice",
         "UCB Biopharma SRL",
@@ -776,8 +789,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry": "ClinicalTrials.gov",
           "registry_id": "NCT07246564",
           "title": "Phase 4 Study Evaluating Efficacy and Safety of Rozanolixizumab in Adult Chinese Participants With Generalized Myasthenia Gravis",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status_label": "进行中",
+          "status_class": "active",
           "phase_label": "Phase 4",
           "start_date": "2025-12-01",
           "readout_date": "2027-10-15",
@@ -806,8 +819,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "status_class": "recruiting",
           "phase_label": "Phase 3",
           "start_date": "2026-09-16",
-          "readout_date": "2031-01-23",
-          "completion_date": "2031-01-23",
+          "readout_date": "2031-03-17",
+          "completion_date": "2031-03-17",
           "sponsor": "UCB Biopharma SRL",
           "url": "https://clinicaltrials.gov/study/NCT07465289"
         },
@@ -827,8 +840,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
       ],
       "timeline": {
         "start": "2019-06-03",
-        "readout": "2031-01-23",
-        "completion": "2031-01-23"
+        "readout": "2031-03-17",
+        "completion": "2031-03-17"
       },
       "first_registered": "2019-06-03",
       "latest_registered": "2026-08-21",
@@ -1291,7 +1304,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "status_label": "招募中",
           "status_class": "recruiting",
           "phase_label": "Phase 2",
-          "start_date": "2026-10-01",
+          "start_date": "2026-11-01",
           "readout_date": "2028-07-01",
           "completion_date": "2030-01-01",
           "sponsor": "TG Therapeutics, Inc.",
@@ -1299,7 +1312,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
         }
       ],
       "timeline": {
-        "start": "2026-10-01",
+        "start": "2026-11-01",
         "readout": "2028-07-01",
         "completion": "2030-01-01"
       },
@@ -1608,8 +1621,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "status_class": "recruiting",
           "phase_label": "Phase 2 / Phase 3",
           "start_date": "2024-10-16",
-          "readout_date": "2026-11-16",
-          "completion_date": "2026-12-25",
+          "readout_date": "2027-05-12",
+          "completion_date": "2027-06-22",
           "sponsor": "UCB Biopharma SRL",
           "url": "https://clinicaltrials.gov/study/NCT06055959"
         },
@@ -6701,7 +6714,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "highest_phase_label": "Phase 2",
       "stage_number": 2,
       "study_count": 1,
-      "status_summary": "招募 1 · 进行 0 · 完成 0",
+      "status_summary": "招募 0 · 进行 1 · 完成 0",
       "sponsors": [
         "Vertex Pharmaceuticals Incorporated"
       ],
@@ -6719,8 +6732,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry": "ClinicalTrials.gov",
           "registry_id": "NCT07501702",
           "title": "A Phase 2 Study to Evaluate Povetacicept in Adults With Generalized Myasthenia Gravis",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status_label": "进行中",
+          "status_class": "active",
           "phase_label": "Phase 2",
           "start_date": "2026-05-13",
           "readout_date": "2029-03-02",
@@ -8221,6 +8234,49 @@ window.MG_CLINICAL_TRIALS_DATA = {
       },
       "first_registered": "2012-03-15",
       "latest_registered": "2012-03-15",
+      "linked_registries": []
+    },
+    {
+      "drug_class": "其他",
+      "name": "GT802 Injection",
+      "highest_phase_label": "Early Phase 1",
+      "stage_number": 0.5,
+      "study_count": 1,
+      "status_summary": "招募 1 · 进行 0 · 完成 0",
+      "sponsors": [
+        "Daishi Tian"
+      ],
+      "sources": {
+        "ClinicalTrials.gov": 1
+      },
+      "key_trial": {
+        "registry": "ClinicalTrials.gov",
+        "registry_id": "NCT07917923",
+        "title": "A Clinical Study to Evaluate the Safety and Efficacy of GT802 Injection in the Treatment of Refractory Generalized Myasthenia Gravis",
+        "url": "https://clinicaltrials.gov/study/NCT07917923"
+      },
+      "trials": [
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT07917923",
+          "title": "A Clinical Study to Evaluate the Safety and Efficacy of GT802 Injection in the Treatment of Refractory Generalized Myasthenia Gravis",
+          "status_label": "尚未招募",
+          "status_class": "recruiting",
+          "phase_label": "Early Phase 1",
+          "start_date": "",
+          "readout_date": "2031-12-30",
+          "completion_date": "2031-12-30",
+          "sponsor": "Daishi Tian",
+          "url": "https://clinicaltrials.gov/study/NCT07917923"
+        }
+      ],
+      "timeline": {
+        "start": "2026-11-05",
+        "readout": "2031-12-30",
+        "completion": "2031-12-30"
+      },
+      "first_registered": "2026-11-05",
+      "latest_registered": "2026-11-05",
       "linked_registries": []
     },
     {
@@ -11108,9 +11164,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
     {
       "source": "ClinicalTrials.gov",
       "meta": {
-        "generated_at": "2026-10-25",
+        "generated_at": "2026-11-09",
         "mode": "cache",
-        "revision": "semantic-v1:cbde06b17b0ce49f1067752ad080f85ab27fef9b306bac245834095a91f01151"
+        "revision": "semantic-v1:82224ddfba319fa2b1a137bb918300e04922d2a49026694d827337add59bcacb"
       },
       "records": [
         {
@@ -13519,9 +13575,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "NCT04833894",
           "title": "Evaluating the Pharmacokinetics, Pharmacodynamics, and Safety of Efgartigimod Administered Intravenously in Children With Generalized Myasthenia Gravis",
           "url": "https://clinicaltrials.gov/study/NCT04833894",
-          "status": "RECRUITING",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status": "ACTIVE_NOT_RECRUITING",
+          "status_label": "进行中",
+          "status_class": "active",
           "drug_class": "FcRn 拮抗剂",
           "drug_name": "Efgartigimod IV",
           "drug_names": [
@@ -14050,9 +14106,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "NCT05337891",
           "title": "Sensitivity of Repetitive Nerve Stimulation Performed in the Evening vs in the Morning in Myasthenia Gravis",
           "url": "https://clinicaltrials.gov/study/NCT05337891",
-          "status": "RECRUITING",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status": "UNKNOWN",
+          "status_label": "未知",
+          "status_class": "other",
           "drug_class": "其他",
           "drug_name": "",
           "drug_names": [],
@@ -14647,8 +14703,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 2 / Phase 3",
           "sponsor": "UCB Biopharma SRL",
           "start_date": "2024-10-16",
-          "readout_date": "2026-11-16",
-          "completion_date": "2026-12-25",
+          "readout_date": "2027-05-12",
+          "completion_date": "2027-06-22",
           "registered_date": "2023-09-28",
           "linked_registries": []
         },
@@ -15768,9 +15824,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "NCT06707727",
           "title": "Characteristics and Prognostic Outcomes of Diaphragmatic Ultrasound in Myasthenia Gravis",
           "url": "https://clinicaltrials.gov/study/NCT06707727",
-          "status": "ACTIVE_NOT_RECRUITING",
-          "status_label": "进行中",
-          "status_class": "active",
+          "status": "COMPLETED",
+          "status_label": "已完成",
+          "status_class": "completed",
           "drug_class": "其他",
           "drug_name": "",
           "drug_names": [],
@@ -15778,7 +15834,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "未标注",
           "sponsor": "First Affiliated Hospital of Chongqing Medical University",
           "start_date": "2024-07-01",
-          "readout_date": "2025-12-31",
+          "readout_date": "2026-01-31",
           "completion_date": "2026-06-30",
           "registered_date": "2024-11-27",
           "linked_registries": [
@@ -16925,9 +16981,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "NCT07246564",
           "title": "Phase 4 Study Evaluating Efficacy and Safety of Rozanolixizumab in Adult Chinese Participants With Generalized Myasthenia Gravis",
           "url": "https://clinicaltrials.gov/study/NCT07246564",
-          "status": "RECRUITING",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status": "ACTIVE_NOT_RECRUITING",
+          "status_label": "进行中",
+          "status_class": "active",
           "drug_class": "FcRn 拮抗剂",
           "drug_name": "Rozanolixizumab",
           "drug_names": [
@@ -17144,8 +17200,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "NCT07323316",
           "title": "Holistic Assessment and Remote Digital MONitoring of mYasthenia Gravis Via MyoSense 360",
           "url": "https://clinicaltrials.gov/study/NCT07323316",
-          "status": "NOT_YET_RECRUITING",
-          "status_label": "尚未招募",
+          "status": "RECRUITING",
+          "status_label": "招募中",
           "status_class": "recruiting",
           "drug_class": "其他",
           "drug_name": "",
@@ -17153,9 +17209,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "未标注",
           "sponsor": "Ad scientiam",
-          "start_date": "2026-04",
-          "readout_date": "2027-10",
-          "completion_date": "2027-10",
+          "start_date": "2026-10-06",
+          "readout_date": "2028-10",
+          "completion_date": "2028-10",
           "registered_date": "2026-01-07",
           "linked_registries": []
         },
@@ -17324,8 +17380,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "UCB Biopharma SRL",
           "start_date": "2026-09-16",
-          "readout_date": "2031-01-23",
-          "completion_date": "2031-01-23",
+          "readout_date": "2031-03-17",
+          "completion_date": "2031-03-17",
           "registered_date": "2026-03-11",
           "linked_registries": []
         },
@@ -17354,9 +17410,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "NCT07478172",
           "title": "Effects of Whole-body Electrical Muscle Stimulation Exercise on Adults With Neuromuscular Disease",
           "url": "https://clinicaltrials.gov/study/NCT07478172",
-          "status": "RECRUITING",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status": "ACTIVE_NOT_RECRUITING",
+          "status_label": "进行中",
+          "status_class": "active",
           "drug_class": "其他",
           "drug_name": "",
           "drug_names": [],
@@ -17396,9 +17452,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "NCT07501702",
           "title": "A Phase 2 Study to Evaluate Povetacicept in Adults With Generalized Myasthenia Gravis",
           "url": "https://clinicaltrials.gov/study/NCT07501702",
-          "status": "RECRUITING",
-          "status_label": "招募中",
-          "status_class": "recruiting",
+          "status": "ACTIVE_NOT_RECRUITING",
+          "status_label": "进行中",
+          "status_class": "active",
           "drug_class": "其他",
           "drug_name": "Povetacicept",
           "drug_names": [
@@ -17703,7 +17759,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "indication": "重症肌无力",
           "phase_label": "Phase 2",
           "sponsor": "TG Therapeutics, Inc.",
-          "start_date": "2026-10-01",
+          "start_date": "2026-11-01",
           "readout_date": "2028-07-01",
           "completion_date": "2030-01-01",
           "registered_date": "2026-06-29",
@@ -17852,16 +17908,38 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "completion_date": "2027-11",
           "registered_date": "2026-10-01",
           "linked_registries": []
+        },
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT07917923",
+          "title": "A Clinical Study to Evaluate the Safety and Efficacy of GT802 Injection in the Treatment of Refractory Generalized Myasthenia Gravis",
+          "url": "https://clinicaltrials.gov/study/NCT07917923",
+          "status": "NOT_YET_RECRUITING",
+          "status_label": "尚未招募",
+          "status_class": "recruiting",
+          "drug_class": "其他",
+          "drug_name": "GT802 Injection",
+          "drug_names": [
+            "GT802 Injection"
+          ],
+          "indication": "重症肌无力",
+          "phase_label": "Early Phase 1",
+          "sponsor": "Daishi Tian",
+          "start_date": "2026-12",
+          "readout_date": "2031-12-30",
+          "completion_date": "2031-12-30",
+          "registered_date": "2026-11-05",
+          "linked_registries": []
         }
       ]
     },
     {
       "source": "ChiCTR",
       "meta": {
-        "generated_at": "2026-10-24",
-        "mode": "live_partial",
+        "generated_at": "2026-11-09",
+        "mode": "live",
         "warning": "",
-        "revision": "semantic-v1:16a5c3fa638bcd759ed4df85518acf4159771ad4ab9d8133a913fbce92c381f3"
+        "revision": "semantic-v1:913a8648bdb5e5aa3c34b5486e6c9f2b644f8502f00e34df7d1f0ba0564ba0f0"
       },
       "records": [
         {
@@ -20017,26 +20095,6 @@ window.MG_CLINICAL_TRIALS_DATA = {
         },
         {
           "registry": "ChiCTR",
-          "registry_id": "ChiCTR2600126087",
-          "title": "Construction and application of exercise rehabilitation program for chronic heart failure with myasthenia gravis based on self-regulated common sense model",
-          "url": "https://www.chictr.org.cn/showproj.html?proj=296538",
-          "status": "Pending",
-          "status_label": "Pending",
-          "status_class": "other",
-          "drug_class": "其他",
-          "drug_name": "A movement intervention plan based on the Self-Regulation Common Sense Model",
-          "drug_names": [],
-          "indication": "重症肌无力",
-          "phase_label": "未标注",
-          "sponsor": "Guizhou Provincial People's Hospital",
-          "start_date": "2026-07-01",
-          "readout_date": "",
-          "completion_date": "",
-          "registered_date": "2026-06-03",
-          "linked_registries": []
-        },
-        {
-          "registry": "ChiCTR",
           "registry_id": "ChiCTR2600127659",
           "title": "Efficacy and Safety of Telitacicept in New-Onset Generalized Myasthenia Gravis: A Multicenter, Randomized, Double-Blind, Placebo-Controlled Clinical Trial",
           "url": "https://www.chictr.org.cn/showproj.html?proj=329703",
@@ -20423,6 +20481,26 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "readout_date": "",
           "completion_date": "",
           "registered_date": "2026-10-22",
+          "linked_registries": []
+        },
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR2600135509",
+          "title": "Efgartigimod as an effective and safe option for perioperative treatment in thymoma-associated myasthenia gravis",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=348935",
+          "status": "Pending",
+          "status_label": "Pending",
+          "status_class": "other",
+          "drug_class": "FcRn 拮抗剂",
+          "drug_name": "",
+          "drug_names": [],
+          "indication": "重症肌无力",
+          "phase_label": "未标注",
+          "sponsor": "The Second Qilu Hospital of Shandong University",
+          "start_date": "2026-11-01",
+          "readout_date": "",
+          "completion_date": "",
+          "registered_date": "2026-10-30",
           "linked_registries": []
         }
       ]
