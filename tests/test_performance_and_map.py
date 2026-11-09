@@ -24,7 +24,9 @@ def test_knowledge_graph_omits_unused_edge_references():
 
     assert '"edge_references"' not in graph
     assert "graphData.edge_references" not in frontend
-    assert "ensureTabInitialized" in frontend
+    # 知识库 tab 必须显式初始化：c1d8ada 起由 attachTabs 经 hub.initTabs 绑定
+    assert "function attachTabs()" in frontend
+    assert "hub.initTabs" in frontend
 
 
 def test_china_network_map_asset_and_render_hook_exist():
