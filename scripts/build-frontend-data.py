@@ -2416,7 +2416,6 @@ def build_guideline_divergence():
     counts = payload.get("corpus_count") or {}
     payload["status_label"] = (
         f"中国 {counts.get('china', 0)} 份 / 国际 {counts.get('international', 0)} 份"
-        f"（含台湾 {counts.get('taiwan', 0)} 份）"
     )
     return payload
 
@@ -2789,8 +2788,8 @@ def build_dashboard(recent, signals, experts, china, landscape, modules, total_c
             "metric": f"{landscape_overview.get('living_answer_count', len(landscape.get('living_answers', [])))} 个判断",
             "summary": landscape_overview.get("positioning", "将近期证据转译成治疗格局、竞争定位和中国实践差异。"),
             "facts": [
-                # 两块差异更新节奏不同，卡片上必须标出来，避免读者以为都会周更
-                f"指南差异 {landscape_overview.get('guideline_divergence_count', 0)} 条（新指南入库后）",
+                # 两块差异节奏不同：主题差异每周滚动，指南差异只在周更发现新指南时联动刷新
+                f"指南差异 {landscape_overview.get('guideline_divergence_count', 0)} 条（新指南周更联动）",
                 f"近一年主题差异 {landscape_overview.get('theme_divergence_count', 0)} 条（周更滚动）",
                 f"临床管线 {landscape_overview.get('clinical_pipeline_count', len(landscape.get('clinical_pipeline_matrix', [])))} 项",
             ],

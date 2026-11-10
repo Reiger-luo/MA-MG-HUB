@@ -25,7 +25,7 @@ def test_each_panel_declares_its_own_update_mode():
     html = (ROOT / "pages" / "landscape.html").read_text(encoding="utf-8")
 
     assert re.search(r'update-mode-chip rolling[^>]*>\s*周更滚动', html)
-    assert re.search(r'update-mode-chip event[^>]*>\s*新指南入库后更新', html)
+    assert re.search(r'update-mode-chip event[^>]*>\s*新指南周更联动', html)
 
 
 def test_landscape_js_renders_panels_separately():
@@ -63,7 +63,7 @@ def test_weekly_pipeline_rolls_theme_analysis_before_frontend_build():
     step_block = pipeline[pipeline.index('"analyze-china-foreign-themes-yearly"'):]
     step_block = step_block[:step_block.index("))")]
     assert "optional=True" not in step_block
-    # 指南差异属事件驱动，不得进入周更
+    # 全量 16 维立场重提取仍不进周更；周更只跑增量联动步骤
     assert "analyze-guideline-divergence" not in pipeline
 
 

@@ -96,6 +96,16 @@ def pipeline_steps(args, full_available: bool | None = None) -> list[PipelineSte
                 py("sync-guideline-consensus.py"),
                 outputs=[DATA / "guideline-consensus-cache.json"],
             ),
+            # 指南共识联动：一篇缓存同时刷新差异、诊疗现状与领域重大事件。
+            PipelineStep(
+                "refresh-guideline-views",
+                py("refresh-guideline-views.py"),
+                outputs=[
+                    DATA / "guideline-divergence.json", DATA / "landscape-data.js",
+                    DATA / "treatmentChapters.js", DATA / "clinicalQuestions.js",
+                    DATA / "source-signals.js", DATA / "guideline-view-state.json",
+                ],
+            ),
             PipelineStep("build-source-signals", py("build-source-signals.py"), outputs=[DATA / "source-signals.js"]),
             PipelineStep("generate-weekly-summary", py("generate-weekly-summary.py"), outputs=[DATA / "weekly-summary.md"]),
             PipelineStep("update-release-token", py("updateFrontendReleaseToken.py"), outputs=ACTIVE_HTML),
@@ -131,11 +141,21 @@ def pipeline_steps(args, full_available: bool | None = None) -> list[PipelineSte
     if args.skip_downstream:
         return steps
     # 指南/共识 link 必须在 build-frontend 与 build-source-signals 之前：
-    # 此时公开文献层已是本周版本，缓存更新后两个页面才能读到同一批新指南。
+    # 此时公开文献层已是本周版本，缓存更新后三个板块才能读到同一批新指南。
     steps.append(PipelineStep(
         "sync-guideline-consensus",
         py("sync-guideline-consensus.py"),
         outputs=[DATA / "guideline-consensus-cache.json"],
+    ))
+    # 指南/共识缓存更新后立即联动三个板块；无新增指南时该步骤自然 no-op。
+    steps.append(PipelineStep(
+        "refresh-guideline-views",
+        py("refresh-guideline-views.py"),
+        outputs=[
+            DATA / "guideline-divergence.json", DATA / "landscape-data.js",
+            DATA / "treatmentChapters.js", DATA / "clinicalQuestions.js",
+            DATA / "source-signals.js", DATA / "guideline-view-state.json",
+        ],
     ))
     # 三个注册源都在同一次周更内连续抓取，构建阶段才能读到同一批新缓存：
     # ChiCTR → ChinaDrugTrials → ClinicalTrials.gov（build-frontend 内实时抓取）

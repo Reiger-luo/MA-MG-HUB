@@ -12,6 +12,8 @@ import re
 
 # 顺序敏感：更具体的规则放前面
 RULES: list[tuple[str, str]] = [
+    # 德国 2026 德奥专家意见（周更增量纳入的 g35）
+    ("德国", "德国 2026 靶向治疗启动与转换共识"),
     ("MGFA标准", "MGFA 2000 分级标准"),
     ("Data Supplement", "MGFA 2016 国际共识（附录）"),
     ("Table e-1", "MGFA 2016 附表 e-1 药物管理"),

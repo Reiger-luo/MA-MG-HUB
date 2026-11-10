@@ -5,7 +5,7 @@
 | 模块 | 更新轨道 | 触发 | 脚本 | 产物 |
 | --- | --- | --- | --- | --- |
 | 近一月中外文献主题差异 | **周更自动** | 每次文献周更 | `analyze-china-foreign-themes.py` | `data/china-foreign-themes.json` |
-| 中外指南共识差异 Top 10 | **事件驱动** | 新增/替换指南全文 | `guideline-stance-extract.py` + `analyze-guideline-divergence.py` | `data/guideline-divergence.json` |
+| 中外指南共识差异 Top 10 | **周更联动 + 人工全量** | 周更发现新指南 / 修正提取规则 | `refresh-guideline-views.py`（增量）或 `guideline-stance-extract.py` + `analyze-guideline-divergence.py`（全量） | `data/guideline-divergence.json` |
 
 两个 JSON 都是本地源（在 `.gitignore` 内），公开前端只发布其派生 `data/landscape-data.js`。
 `build-frontend-data.py` 在 JSON 缺失时写 `status=pending_analysis`，页面显示等待分析空态，不报错。
@@ -62,14 +62,15 @@ python3 scripts/build-frontend-data.py                                # 重建 l
 
 ---
 
-## 轨道二：中外指南共识差异 Top 10（事件驱动）
+## 轨道二：中外指南共识差异 Top 10（周更联动 + 人工全量重提取）
 
 ### 何时运行
 
 - 拿到新的指南/共识全文（新增国家、新版、重大更新）时。
 - 修正提取规则需要重算时。
 - 只调整引文回验规则时用 `--reverify-only`，不重复调模型。
-- **不要在周更里跑**：几十份 PDF 全量重提取成本高，内容不变时结果也不会变。
+- **周更联动（自动，三板块）**：周更发现新指南/共识时由 `scripts/refresh-guideline-views.py` 增量刷新中外指南共识差异、诊疗现状与领域重大事件；仅有 PubMed 摘要时登记待补全文，不改结论。全文入库命令：`python3 scripts/refresh-guideline-views.py --pmid <PMID> --full-text <全文.txt>`，需配合 `data/guideline-stance-deltas.json` 中经人工/LLM 审阅的增量立场卡。
+- **全量重提取（人工，不进周更）**：几十份 PDF 的 16 维立场提取成本高，内容不变时结果也不会变，只在修正提取规则或大版本更新时执行。
 
 ### 1. 语料准备
 
@@ -79,7 +80,7 @@ python3 scripts/prepare-guideline-corpus.py --zip ~/Downloads/指南共识.zip
 python3 scripts/prepare-guideline-corpus.py --dir ~/Downloads/指南共识
 ```
 
-脚本会做 GBK 文件名回转、pymupdf/python-docx 抽取、地区判定（中国/国际/中国台湾），
+脚本会做 GBK 文件名回转、pymupdf/python-docx 抽取、地区判定（只分中国 / 国际，中国台湾语料并入中国侧），
 并对 >20 万字符的多病种合集只保留「重症肌无力」章节（`chapter_sliced: true`）。
 
 原始 PDF 保留在本地语料目录，不进仓库：
@@ -155,7 +156,7 @@ python3 scripts/validatePublicRelease.py --source-only --require-release
 
 ## 验收清单
 
-1. 两个面板彼此独立：滚动模块带 `⟳ 周更滚动`，指南模块带 `◈ 新指南入库后更新`；各自状态条只引用自己的数字。
+1. 两个面板彼此独立：滚动模块带 `⟳ 周更滚动`，指南模块带 `◈ 新指南周更联动`；各自状态条只引用自己的数字。新指南入库后三个板块（差异、诊疗现状、领域重大事件）的语料/时间线应同时可核对。
 2. 滚动模块元信息行的窗口末尾应接近本次周更日期；若出现琥珀色「窗口已 N 天未更新」，说明本周自动重算没跑成，需手动重跑轨道一。
 3. 主题差异每侧篇数按钮可点开，弹窗列出该侧全部 PMID，条数与按钮数字一致。
 4. 指南差异每条展开后引文回验为「逐字命中/部分命中」，没有大面积「待核对」；语料份数与归档的 wiki 文件对得上。

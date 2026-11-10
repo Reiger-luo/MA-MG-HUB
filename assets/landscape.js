@@ -373,12 +373,11 @@
       badge.textContent = ready ? items.length + ' 条 · 语料 ' + (counts.total || 0) + ' 份' : '等待分析';
     }
     renderMetaRow('guidelineDivergenceMetaRow', [
-      ['语料', ready ? '中国 ' + (counts.china || 0) + ' / 国际 ' + (counts.international || 0) +
-        (counts.taiwan ? ' / 台湾 ' + counts.taiwan : '') + ' 份' : ''],
+      ['语料', ready ? '中国 ' + (counts.china || 0) + ' / 国际 ' + (counts.international || 0) + ' 份' : ''],
       ['引文回验', quoteCheck.total ? (quoteCheck.verified || 0) + ' / ' + quoteCheck.total +
         '（' + (quoteCheck.rate == null ? '—' : quoteCheck.rate + '%') + '）' : ''],
       ['生成时间', guidelineDivergence.generated_at || ''],
-      ['更新方式', ready ? '新增指南/共识全文后手动重跑' : '']
+      ['更新方式', ready ? '周更发现新指南后联动刷新' : '']
     ]);
     var items = guidelineDivergence.divergences || [];
     if (box) {
@@ -426,12 +425,13 @@
     }
     if (corpusBox) {
       var corpus = guidelineDivergence.corpus || [];
-      var groups = { china: [], international: [], taiwan: [] };
+      // 只区分中国 / 国际两侧；历史 taiwan 分区兼容并入中国。
+      var groups = { china: [], international: [] };
       corpus.forEach(function(doc) {
-        var key = groups[doc.region] ? doc.region : 'international';
+        var key = (doc.region === 'china' || doc.region === 'taiwan') ? 'china' : 'international';
         groups[key].push(doc);
       });
-      var order = ['china', 'international', 'taiwan'];
+      var order = ['china', 'international'];
       var groupsHtml = order.filter(function(key) { return groups[key].length; }).map(function(key) {
         return '<div class="corpus-group">' +
           '<span>' + escapeHtml(regionLabel(key)) + ' · ' + groups[key].length + ' 份</span>' +
@@ -447,9 +447,10 @@
           ' 条在原文中命中（' + (quoteCheck.rate == null ? '—' : quoteCheck.rate + '%') + '）。' +
           '「部分命中」多为 PDF 跨页或上标引文序号导致的字符差异。</p>'
         : '';
-      var triggerHtml = '<p class="divergence-source-note">更新触发：新增或替换指南/共识全文后，' +
-        '按 <code>report/runbooks/monthlyDivergenceAnalysis.md</code> 重跑立场提取与差异归纳；' +
-        '文献周更不会改动本模块。</p>';
+      var triggerHtml = '<p class="divergence-source-note">更新触发：周更识别到新指南/共识后由 ' +
+        '<code>scripts/refresh-guideline-views.py</code> 联动刷新差异语料、诊疗现状与领域重大事件；' +
+        '结论改动须有全文与经审阅的增量立场卡，引文逐字回验。仅有摘要时登记待补全文，不改结论；' +
+        '全量 16 维立场重提取仍按 <code>report/runbooks/monthlyDivergenceAnalysis.md</code> 人工执行。</p>';
       corpusBox.innerHTML = (corpus.length ? groupsHtml : '<p class="muted-text">暂无语料清单。</p>') +
         checkHtml + triggerHtml;
     }
@@ -460,77 +461,6 @@
     if (value === '可谨慎回答') return 'cautious';
     if (value === '证据不足') return 'limited';
     return 'outline';
-  }
-
-  // ── 周更指南/共识同步 ──
-  // 与情报中心事件时间线共用 source-signals.js 的 guidelineConsensus 频道；
-  // 只做摘要级线索展示，不改写中外指南差异 Top10 的语料与结论。
-  var guidelineSyncStarted = false;
-
-  function renderGuidelineSync() {
-    var badge = $('guidelineSyncMeta');
-    var box = $('guidelineSyncList');
-    var note = $('guidelineSyncNote');
-    var payload = window.MG_SOURCE_SIGNALS || {};
-    var channel = null;
-    (payload.channels || []).forEach(function (item) {
-      if (item && item.id === 'guidelineConsensus') channel = item;
-    });
-    var items = (channel && channel.recent_items) || [];
-    var sync = (channel && channel.sync) || {};
-    if (badge) badge.textContent = items.length ? '最近 ' + items.length + ' 条' : '暂无记录';
-    if (note) {
-      var views = (sync.linked_views || []).map(function (view) { return view.view; }).join('、');
-      note.textContent = views
-        ? '同步源：' + (sync.hub || '') + '；' + (sync.rule || '') + '；同步视图：' + views + '。'
-        : '同步数据暂不可用，请检查周更来源频道。';
-    }
-    if (!box) return;
-    if (!items.length) {
-      box.innerHTML = '<div class="kg-empty-hint">周更暂未识别到新的指南/共识。</div>';
-      return;
-    }
-    box.innerHTML = items.map(function (item) {
-      var titleHtml = item.url
-        ? '<a href="' + escapeHref(item.url) + '" target="_blank" rel="noopener">' + escapeHtml(item.title) + '</a>'
-        : escapeHtml(item.title);
-      return '<article class="guideline-sync-item">' +
-        '<span class="guideline-sync-date">' + escapeHtml(String(item.date || '').slice(0, 10)) + '</span>' +
-        '<strong class="guideline-sync-title">' + titleHtml + '</strong>' +
-        '<span class="guideline-sync-journal">' + escapeHtml(item.journal || '') + '</span>' +
-        '<span class="guideline-sync-status">' + escapeHtml(item.status || '') + '</span>' +
-      '</article>';
-    }).join('');
-  }
-
-  function loadGuidelineSyncModule() {
-    if (window.MG_SOURCE_SIGNALS) {
-      renderGuidelineSync();
-      return;
-    }
-    if (guidelineSyncStarted) return;
-    guidelineSyncStarted = true;
-    var box = $('guidelineSyncList');
-    if (box) box.innerHTML = '<div class="kg-empty-hint">指南/共识同步数据加载中…</div>';
-    var done = function (ok) {
-      if (!ok) {
-        var badge = $('guidelineSyncMeta');
-        if (badge) badge.textContent = '同步数据加载失败';
-        var list = $('guidelineSyncList');
-        if (list) list.innerHTML = '<div class="kg-empty-hint">来源频道数据未能加载，请刷新重试。</div>';
-        return;
-      }
-      renderGuidelineSync();
-    };
-    if (hub.loadScript) {
-      hub.loadScript('data/source-signals.js', done);
-      return;
-    }
-    var script = document.createElement('script');
-    script.src = 'data/source-signals.js';
-    script.onload = function () { done(true); };
-    script.onerror = function () { done(false); };
-    document.head.appendChild(script);
   }
 
   // 领域重大事件时间线已迁移至情报中心「领域重大事件」标签（assets/literature.js），
@@ -565,6 +495,27 @@
 
   function renderStatement(item, refMap) {
     return '<p class="evidence-statement">' + escapeHtml(item.text) + citationMarks(item.refs, refMap) + '</p>';
+  }
+
+  // 诊疗现状章节可按 group 分层（总定位 → 分类 → 重点药物）；无 group 时保持原扁平渲染。
+  function renderGroupedStatements(statements, refMap) {
+    var items = statements || [];
+    var hasGroups = items.some(function (item) { return item && item.group; });
+    if (!hasGroups) {
+      return items.map(function (item) { return renderStatement(item, refMap); }).join('');
+    }
+    var order = [];
+    var byGroup = {};
+    items.forEach(function (item) {
+      var name = (item && item.group) || '其他';
+      if (!byGroup[name]) { byGroup[name] = []; order.push(name); }
+      byGroup[name].push(item);
+    });
+    return order.map(function (name) {
+      return '<div class="chapter-statement-group"><h4>' + escapeHtml(name) + '</h4>' +
+        byGroup[name].map(function (item) { return renderStatement(item, refMap); }).join('') +
+      '</div>';
+    }).join('');
   }
 
   function renderEvidenceRefs(refs) {
@@ -613,7 +564,7 @@
     box.innerHTML =
       '<h3>' + escapeHtml(chapter.title) + '</h3>' +
       '<p class="chapter-summary">' + escapeHtml(chapter.summary || '') + '</p>' +
-      (chapter.statements || []).map(function (item) { return renderStatement(item, chapter.ref_map); }).join('') +
+      renderGroupedStatements(chapter.statements, chapter.ref_map) +
       branchHtml +
       renderPendingCandidates('chapter', chapter.id) +
       '<h4 class="refs-title">参考文献</h4>' + renderEvidenceRefs(chapter.refs);
@@ -699,7 +650,6 @@
     renderQuestions();
     renderThemeDivergence();
     renderGuidelineDivergence();
-    loadGuidelineSyncModule();
     bindPmidModal();
     applyInitialKnowledgeRoute();
   }

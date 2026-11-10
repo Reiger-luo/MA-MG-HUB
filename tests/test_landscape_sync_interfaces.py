@@ -2,7 +2,7 @@
 
 1. 情报中心临床试验矩阵把戈鲁利单抗独立成行（ALXN1720 不再误并 Ravulizumab）。
 2. 重点药物 II/III 期文献进入「领域重大事件」信息流，且排除综述/评论/机制研究。
-3. 指南/共识周更 link：识别 German-Austrian 专家共识，并同步到两个页面。
+3. 指南/共识周更 link：识别 German-Austrian 专家共识，并联动刷新三个既有板块。
 """
 import json
 import re
@@ -158,32 +158,102 @@ def test_source_signals_exposes_both_new_channels(tmp_path):
     assert by_id["keyDrugTrialPublications"]["watchlist_count"] > 0
     sync = by_id["guidelineConsensus"]["sync"]
     assert sync["hub"] == "data/guideline-consensus-cache.json"
-    assert {view["path"] for view in sync["linked_views"]} == {
-        "pages/literature.html", "pages/landscape.html",
+    assert sync["refresh_step"] == "scripts/refresh-guideline-views.py"
+    assert {view["view"] for view in sync["linked_views"]} == {
+        "中外指南共识差异", "诊疗现状", "领域重大事件",
     }
-    assert by_id["guidelineConsensus"]["recent_items"][0]["id"] == "42717567"
+    # 独立展示面板已删除，不再输出面板专用字段
+    assert "recent_items" not in by_id["guidelineConsensus"]
 
 
 def test_weekly_pipeline_wires_guideline_sync_before_channel_builders():
     source = (PROJECT / "scripts" / "run-weekly-pipeline.py").read_text(encoding="utf-8")
     assert source.count('"sync-guideline-consensus"') == 2
-    assert source.index('"sync-guideline-consensus"') < source.index('"build-frontend"')
-    assert source.index('"sync-guideline-consensus"') < source.index('"build-source-signals"')
+    assert source.count('"refresh-guideline-views"') == 2
+    assert source.index('"sync-guideline-consensus"') < source.index('"refresh-guideline-views"')
+    assert source.index('"refresh-guideline-views"') < source.index('"build-frontend"')
     builder = (PROJECT / "scripts" / "build-source-signals.py").read_text(encoding="utf-8")
     assert "literature_recent_path" in builder and "landscape_data_path" in builder
 
 
-def test_both_pages_consume_the_shared_channel():
+def test_guideline_link_targets_three_existing_views():
     literature_html = (PROJECT / "pages" / "literature.html").read_text(encoding="utf-8")
     assert "II/III期重点药物文献" in literature_html
     literature_js = (PROJECT / "assets" / "literature.js").read_text(encoding="utf-8")
     assert "keyDrugTrialPublications: 'II/III期文献'" in literature_js
 
     landscape_html = (PROJECT / "pages" / "landscape.html").read_text(encoding="utf-8")
-    assert 'id="guidelineSyncList"' in landscape_html
+    # 独立「周更指南/共识同步」面板已删除，差异面板改为周更联动口径
+    assert "guidelineSyncList" not in landscape_html
+    assert "周更指南 / 共识同步" not in landscape_html
+    assert "新指南周更联动" in landscape_html
     assert "领域重大事件" not in landscape_html
     assert re.search(r'<script src="[^"]*source-signals\.js', landscape_html) is None
     landscape_js = (PROJECT / "assets" / "landscape.js").read_text(encoding="utf-8")
-    assert "renderGuidelineSync" in landscape_js
-    assert "loadGuidelineSyncModule" in landscape_js
-    assert "guidelineConsensus" in landscape_js
+    assert "renderGuidelineSync" not in landscape_js
+    assert "loadGuidelineSyncModule" not in landscape_js
+    assert "周更发现新指南后联动刷新" in landscape_js
+
+
+def parseJsGlobal(name):
+    text = (PROJECT / "data" / name).read_text(encoding="utf-8")
+    return json.loads(text[text.index("=") + 1:].strip().rstrip(";").strip())
+
+
+def test_german_consensus_refreshes_all_three_artifacts():
+    """本次德国共识全文应同时进入差异语料、诊疗现状与领域重大事件。"""
+    divergence = json.loads(
+        (PROJECT / "data" / "guideline-divergence.json").read_text(encoding="utf-8")
+    )
+    assert divergence["corpus_count"]["total"] >= 35
+    assert any(item["key"] == "g35" for item in divergence["corpus"])
+    check = divergence["quote_check"]
+    assert check["total"] == check["verified"]
+    gd01 = next(item for item in divergence["divergences"] if item["id"] == "gd01")
+    assert "德奥" in gd01["international"]
+    assert all(e["quote_verified"] for e in gd01["evidence"] if e["doc"] == "g35")
+
+    landscape = parseJsGlobal("landscape-data.js")
+    view = landscape["china_landscape"]["guideline_divergence"]
+    assert view["status"] == "ready" and len(view["corpus"]) >= 35
+    assert "德奥" in json.dumps(view, ensure_ascii=False)
+
+    chapters = parseJsGlobal("treatmentChapters.js")
+    targeted = next(item for item in chapters["chapters"] if item["id"] == "targeted")
+    assert "g35" in targeted["ref_map"]
+    assert len(targeted["statements"]) >= 7
+
+    signals = parseJsGlobal("source-signals.js")
+    channel = next(item for item in signals["channels"] if item["id"] == "guidelineConsensus")
+    assert any(item["id"] == "42717567" for item in channel["items"])
+
+
+def test_targeted_chapter_is_layered_and_regions_have_only_two_sides():
+    """诊疗现状按总论→分类→重点药物分层；中外差异语料只分中国 / 国际。"""
+    divergence = json.loads(
+        (PROJECT / "data" / "guideline-divergence.json").read_text(encoding="utf-8")
+    )
+    assert sorted({item["region"] for item in divergence["corpus"]}) == ["china", "international"]
+    counts = divergence["corpus_count"]
+    assert "taiwan" not in counts
+    assert counts["china"] + counts["international"] == counts["total"]
+
+    landscape = parseJsGlobal("landscape-data.js")
+    label = landscape["china_landscape"]["guideline_divergence"]["status_label"]
+    assert "台湾" not in label and "中国" in label and "国际" in label
+
+    chapters = parseJsGlobal("treatmentChapters.js")
+    targeted = next(item for item in chapters["chapters"] if item["id"] == "targeted")
+    groups = [item.get("group", "") for item in targeted["statements"]]
+    assert sum(1 for g in groups if g.startswith("一、")) == 3
+    assert sum(1 for g in groups if g.startswith("二、")) == 3
+    efg = [item for item in targeted["statements"] if item.get("group", "").startswith("三、")]
+    assert len(efg) >= 8
+    assert all(item["refs"] for item in efg), "每份指南定位都必须带语料角标"
+    texts = " ".join(item["text"] for item in targeted["statements"])
+    for name in ("telitacicept", "inebilizumab", "rituximab", "gefurulimab", "efgartigimod"):
+        assert name in texts
+
+    js = (PROJECT / "assets" / "landscape.js").read_text(encoding="utf-8")
+    assert "renderGroupedStatements" in js
+    assert "['china', 'international']" in js

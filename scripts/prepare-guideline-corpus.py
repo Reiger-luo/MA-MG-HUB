@@ -70,8 +70,9 @@ def slice_mg_chapter(text: str, budget: int = 60000) -> str:
 
 
 def detect_region(name: str, text: str) -> str:
+    # 中国台湾语料并入中国侧，中外差异只区分中国 / 国际。
     if '台湾' in name:
-        return 'taiwan'
+        return 'china'
     head = text[:4000]
     zh = len(re.findall(r'[\u4e00-\u9fff]', head))
     ratio = zh / max(1, len(head))

@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "source_note": "经人工/LLM 审阅的指南共识增量立场卡。周更识别到新指南时，refresh-guideline-views.py 只在拿到对应全文且引文逐字回验通过后才应用；无全文或无增量卡时只登记待补语料，不改写结论。",
+  "deltas": {
+    "42717567": {
+      "corpus": {
+        "key": "g35",
+        "name": "2026-德国-gMG靶向免疫治疗启动与转换的实践指导（德国专家共识）",
+        "year": "2026",
+        "region": "international",
+        "lang": "en",
+        "dims": 0,
+        "short_name": "德国 2026 靶向治疗启动与转换共识"
+      },
+      "source": {
+        "title": "Practical Guidance on Initiating and Switching Targeted Immunotherapies in Generalised Myasthenia Gravis: A German-Austrian Expert Opinion Paper",
+        "journal": "European Journal of Neurology",
+        "citation": "Eur J Neurol. 2026;33:e70747",
+        "doi": "10.1111/ene.70747",
+        "pmid": "42717567",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/42717567/"
+      },
+      "review_note": "18 位德奥神经科专家、正式投票（>75% 为共识，>95% 为强共识）的 POSITION PAPER；不是国际共识，也不覆盖 nipocalimab/inebilizumab 的正式投票。",
+      "divergence_patches": {
+        "gd01": {
+          "international": "多国仍把 FcRn/补体抑制剂定位为经标准免疫抑制治疗无效后的二线或替代（北欧、比利时、以色列五线），2026 国际管理目标共识设 6~12 个月传统治疗未达标的前置条件；但 2026 德奥专家意见把启动门槛改为 (highly) active gMG——充分对症与疾病修饰治疗后仍有功能相关症状、反复严重加重或需抢救治疗，不再以难治为前提，并明确指出全球尚无统一的疾病活动度评估标准。该文属地区性专家意见，不能当作国际共识引用。",
+          "clinical_impact": "国际口径并非铁板一块：把\"必须先用满 6~12 个月传统治疗\"当作统一国际门槛会误读 2026 德奥共识；MSL 需按地区与文件类型区分\"指南 / 专家意见 / 监管标签\"三种证据层级。",
+          "msl_action": "讨论靶向药启动时机时，先问对方引用的是管理目标共识还是德奥专家意见；德国口径以活动度分层为准，且该共识明确未把 nipocalimab 与 inebilizumab 纳入正式投票，这两药的定位需另找证据。",
+          "evidence_add": [
+            "a globally accepted standard for assessing disease activity is still lacking",
+            "C5-I can be considered for patients with (highly) active gMG in whom the disease pathophysiology is complement-mediated",
+            "Nipocalimab and inebilizumab had not received European Medicines Agency (EMA) approval at the time of the expert meetings"
+          ]
+        },
+        "gd08": {
+          "international": "依库珠单抗在欧洲标签仍限定难治性 AChR 抗体阳性 gMG，日本限定 IVIg 或血浆置换无法控制时使用，多国要求接种脑膜炎球菌疫苗或预防性抗生素；2026 德奥专家意见则推荐 C5 抑制剂用于 (highly) active AChR-Ab+ gMG（含难治），对 LRP4 抗体阳性或血清阴性、且有补体沉积证据者可考虑超说明书使用，并要求 C5-I 治疗 12 周时评估应答以决定后续方案（强共识）。",
+          "clinical_impact": "补体抑制剂的适用指征正从\"难治后用\"向\"高活动度早期用\"移动，且出现了明确的 12 周疗效评估节点；把欧洲标签与德奥专家意见混为一谈会导致适用人群表述错误。",
+          "msl_action": "准备三层口径：EMA/NMPA 标签、德国指南的活动度分层、德奥专家意见的 12 周应答评估与转换路径；疫苗与 IgG 监测作为启动前安全清单单独说明。",
+          "evidence_add": [
+            "Add-on therapy with C5-I should be considered for patients with (highly) active gMG",
+            "Treatment response should be assessed after 12 weeks of C5-I therapy"
+          ]
+        }
+      }
+    }
+  }
+}

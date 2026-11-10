@@ -147,27 +147,37 @@ CHAPTERS = [
     },
     {
         "id": "targeted",
-        "title": "靶向生物制剂定位（FcRn 与补体抑制剂）",
-        "summary": "两类靶向药均已进入中外指南，但中国线位靠前、国际强调传统治疗失败后再用。",
+        "title": "靶向生物制剂定位（总论 · 分类 · 重点药物）",
+        "summary": "先给生物制剂在整体治疗路径中的共同定位，再按机制分类与品种展开；efgartigimod 单列各指南 / 共识的推荐定位。",
         "statements": [
-            {"text": "中国 2026 抗体药物药学共识对艾加莫德用于 AChR 抗体阳性成人全身型 MG 给出 1a 强推荐；中国 2026 补体抑制剂建议把终末补体 C5 列为核心干预策略。", "refs": [G("g31"), G("g32")]},
-            {"text": "中国部分共识把 FcRn 拮抗剂或补体抑制剂用于高活动性患者的一线治疗，但明确注明这一做法尚未获得国际共识。", "refs": [G("g33")]},
-            {"text": "国际 2026 管理目标共识要求常规治疗 6~12 个月未控制症状才启动靶向治疗；以色列 2025 把艾加莫德和 nipocalimab 列为五线选择。", "refs": [G("g28"), G("g24")]},
-            {"text": "支撑各品种进入指南的关键随机证据包括：艾加莫德 ADAPT、rozanolixizumab MycarinG、zilucoplan RAISE、ravulizumab CHAMPION、依库珠单抗 REGAIN、nipocalimab Vivacity-MG3。", "refs": [A("34146511"), A("37059507"), A("37059508"), A("38319212"), A("29066163"), A("39862879")]},
+            {"group": "一、总定位", "text": "靶向生物制剂是『加用』而非替代：在胆碱酯酶抑制剂对症治疗与糖皮质激素 / 非激素免疫抑制之上，用于仍有功能相关症状、反复严重加重或需抢救治疗的患者。中国文件线位靠前，国际口径正从『难治后』向『(highly) active 高活动度』移动。", "refs": [G("g31"), G("g28"), G("g35")]},
+            {"group": "一、总定位", "text": "启动门槛没有全球统一标准：德国 2026 德奥专家意见直言『全球尚无统一的疾病活动度评估标准』，以 MG-ADL 下降 ≥2 分、QMG 下降 ≥3 分为常用有意义改善阈值，并给出 C5-I 治疗 12 周评估应答的强共识。", "refs": [G("g35")]},
+            {"group": "一、总定位", "text": "三层证据不可混用：监管标签（适应症、脑膜炎球菌疫苗要求）／指南（推荐强度）／专家意见（正式投票共识）。本章引用的德国 2026 文件是地区性 POSITION PAPER，不是国际共识；nipocalimab 与 inebilizumab 未纳入其正式投票。", "refs": [G("g35"), G("g32")]},
+            {"group": "二、按机制分类", "text": "FcRn 拮抗剂（efgartigimod、rozanolixizumab、nipocalimab、batoclimab）：加速 IgG 降解，按周期给药；关键随机证据包括 ADAPT、MycarinG、Vivacity-MG3 与 ADAPT-SC+。", "refs": [G("g18"), G("g31"), A("34146511"), A("37059507"), A("39862879")]},
+            {"group": "二、按机制分类", "text": "补体 C5 抑制剂（eculizumab、ravulizumab、zilucoplan、gefurulimab）：针对补体介导的 AChR-Ab+ 高活动度 gMG，启动前须完成脑膜炎球菌疫苗接种。中国按难治性标签，德国 2026 专家意见放宽至 (highly) active（含难治），并对 LRP4 抗体阳性 / 血清阴性且提示补体介导者考虑超说明书使用。", "refs": [G("g16"), G("g32"), G("g35")]},
+            {"group": "二、按机制分类", "text": "B 细胞 / BAFF-APRIL 轴（rituximab、telitacicept、inebilizumab）：德国 2026 专家意见把 RTX 列为强化免疫调节与类间转换选项，但明确停用 C5-I 时 RTX 不是标准治疗；telitacicept 与 inebilizumab 已进入竞争格局，本语料尚未收录针对二者的指南级推荐，inebilizumab 更因 EMA 未获批未纳入该共识投票。细胞治疗等仅见于临床管线，不作推荐表述。", "refs": [G("g35"), G("g16")]},
+            {"group": "三、efgartigimod：各指南 / 共识的推荐定位", "text": "中国 2026 抗体药物药学共识：AChR-Ab+ 成人 gMG 联合治疗，1a 强推荐。", "refs": [G("g31")]},
+            {"group": "三、efgartigimod：各指南 / 共识的推荐定位", "text": "中国 2024 难治性 gMG 共识：严重感染控制后的急性加重、危象前状态与危象可用（强推荐）。", "refs": [G("g16")]},
+            {"group": "三、efgartigimod：各指南 / 共识的推荐定位", "text": "中国 2024 FcRn 专家建议：医保可承受范围内规律长期维持治疗，未设专科中心或 MDT 前置门槛。", "refs": [G("g18")]},
+            {"group": "三、efgartigimod：各指南 / 共识的推荐定位", "text": "中国 2026 临床治疗研究共识：高活动性患者可作一线，但明确注明这一做法尚未获得国际共识。", "refs": [G("g33")]},
+            {"group": "三、efgartigimod：各指南 / 共识的推荐定位", "text": "以色列 2025 MG 指南：与 nipocalimab 同列五线选择。", "refs": [G("g24")]},
+            {"group": "三、efgartigimod：各指南 / 共识的推荐定位", "text": "国际 2026 管理目标共识：常规治疗 6~12 个月未控制症状才启动靶向治疗。", "refs": [G("g28")]},
+            {"group": "三、efgartigimod：各指南 / 共识的推荐定位", "text": "北欧 2024 MG 指南 / 比利时 2024 MG 建议：传统免疫抑制无效后的二线或替代。", "refs": [G("g20"), G("g21")]},
+            {"group": "三、efgartigimod：各指南 / 共识的推荐定位", "text": "德国 2026 德奥专家意见：以 (highly) active 为门槛、不以难治为前提；FcRn-I 用于 AChR-Ab+ 与 MuSK-Ab+（含难治）的高活动度 gMG，LRP4 抗体阳性 / 血清阴性可个体化考虑；按周期给药并依上一周期安排下一周期。", "refs": [G("g35")]},
         ],
         "branches": [
             {
                 "topic": "靶向药的治疗线位",
                 "sides": [
-                    {"label": "中国", "text": "艾加莫德用于 AChR 阳性成人 gMG 联合治疗为强推荐；危象前/危象等急性加重在感染控制后可用；部分共识提及高活动性可作一线。", "refs": [G("g31"), G("g16"), G("g33")]},
-                    {"label": "国际", "text": "北欧、比利时等多定位为传统免疫抑制无效后的二线或替代；以色列列为五线；2026 国际共识设 6~12 个月传统治疗未达标的前置条件。", "refs": [G("g20"), G("g21"), G("g24"), G("g28")]},
+                    {"label": "中国", "text": "艾加莫德用于 AChR 阳性成人 gMG 联合治疗为强推荐；危象前 / 危象等急性加重在感染控制后可用；部分共识提及高活动性可作一线。", "refs": [G("g31"), G("g16"), G("g33")]},
+                    {"label": "国际", "text": "北欧、比利时等多定位为传统免疫抑制无效后的二线或替代；以色列列为五线；2026 国际共识设 6~12 个月传统治疗未达标的前置条件，而德奥专家意见改以高活动度启动。", "refs": [G("g20"), G("g21"), G("g24"), G("g28"), G("g35")]},
                 ],
             },
             {
                 "topic": "补体抑制剂的适用指征",
                 "sides": [
                     {"label": "中国", "text": "依库珠单抗用于 AChR 阳性难治性 gMG，900 mg 每周 ×4 周后 1200 mg 每 2 周；用药前需脑膜炎球菌疫苗接种。", "refs": [G("g16")]},
-                    {"label": "国际", "text": "日本限定 IVIg 或血浆置换无法控制时使用；多国要求在其他免疫治疗未达标后再考虑，并强调疫苗或预防性抗生素。", "refs": [G("g09"), G("g27")]},
+                    {"label": "国际", "text": "日本限定 IVIg 或血浆置换无法控制时使用，多国强调疫苗或预防性抗生素；2026 德奥专家意见则把 C5-I 用于 (highly) active AChR-Ab+ gMG（含难治），并要求 12 周评估应答。", "refs": [G("g09"), G("g27"), G("g35")]},
                 ],
             },
         ],
@@ -344,11 +354,11 @@ QUESTION_GROUPS = [
                 "id": "q-complement-switch",
                 "question": "依库珠单抗与 ravulizumab、zilucoplan 之间如何转换？",
                 "stance": "证据不足",
-                "whyOpen": "转换指征、间隔与疗效保持情况没有随机对照数据。",
+                "whyOpen": "转换指征、间隔与疗效保持情况没有随机对照数据；2026 德奥专家意见给出的是共识性路径，不是试验证据。",
                 "answer": [
                     {"text": "真实世界已有依库珠单抗转换至 ravulizumab 的系列报道，转换后疗效与安全性总体维持。", "refs": [A("38572524")]},
                     {"text": "ravulizumab 无应答伴 C5 p.Arg885 变异者换用 zilucoplan 有效的个案提示转换前可评估药理原因。", "refs": [A("41771246")]},
-                    {"text": "转换决策目前以个体化判断为主，缺少统一流程。", "refs": [G("g16")]},
+                    {"text": "转换决策目前以个体化判断为主；2026 德奥专家意见补充了类内/类间转换、末剂效应与抢救治疗后切换的共识性流程，仍属专家共识而非随机证据。", "refs": [G("g16"), G("g35")]},
                 ],
                 "keywords": ["eculizumab", "ravulizumab", "zilucoplan", "switch", "conversion"],
             },
@@ -986,16 +996,16 @@ def build():
     from common.io import atomic_write_js_global
     atomic_write_js_global(OUT_CHAPTERS, "MG_TREATMENT_CHAPTERS", {
         "generated_at": stamp,
-        "version": "2026-10-27-v1",
-        "basis": "34 份中外指南/共识（已回验立场卡）+ 本地 PubMed 证据库；引文按 PMID 反查生成",
-        "update_rule": "周更后仅高等级证据（I/II 级或新指南原文）且经人工确认才写入正文；候选证据先入待确认队列",
+        "version": "2026-11-10-v2",
+        "basis": f"{len(GUIDELINES)} 份中外指南/共识（含周更增量纳入并逐字回验的语料）+ 本地 PubMed 证据库；引文按 PMID 反查生成",
+        "update_rule": "周更发现新指南/共识时联动刷新；结论改动需全文与经审阅的增量立场卡，候选证据先入待确认队列",
         "chapters": chapters,
     }, header="/* 诊疗现状章节：由 scripts/build-landscape-knowledge.py 生成，请勿手动编辑 */\n")
     atomic_write_js_global(OUT_QUESTIONS, "MG_CLINICAL_QUESTIONS", {
         "generated_at": stamp,
-        "version": "2026-10-27-v1",
+        "version": "2026-11-10-v2",
         "basis": "基于指南语料、PubMed 摘要证据与未解决问题梳理；问题与答案均可滚动修订",
-        "update_rule": "问题可新增/退役；证据更新需高等级且经人工确认；候选证据入待确认队列",
+        "update_rule": "问题可新增/退役；新指南/共识经周更登记后由人工审阅纳入；候选证据入待确认队列",
         "groups": groups,
     }, header="/* 临床问题库：由 scripts/build-landscape-knowledge.py 生成，请勿手动编辑 */\n")
     print(f"chapters={len(chapters)} question_groups={len(groups)}")

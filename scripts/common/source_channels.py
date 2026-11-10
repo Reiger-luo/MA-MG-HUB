@@ -65,27 +65,6 @@ def _guideline_items(payload: dict[str, Any]) -> list[dict[str, Any]]:
     } for item in payload.get("records") or []]
 
 
-def _guideline_recent_items(payload: dict[str, Any], limit: int = 8) -> list[dict[str, Any]]:
-    """指南/共识最近入库条目：供诊治格局页与领域重大事件共用同一份缓存。"""
-    records = [item for item in payload.get("records") or [] if item.get("pmid")]
-    records.sort(
-        key=lambda item: str(item.get("entry_date") or item.get("pub_date") or ""),
-        reverse=True,
-    )
-    return [{
-        "id": str(item.get("pmid") or ""),
-        "title": item.get("title") or "",
-        "date": item.get("entry_date") or item.get("pub_date") or "",
-        "status": "待纳入差异语料人工回验",
-        "source": "PubMed · guideline/consensus cache",
-        "journal": item.get("journal") or "",
-        "study_types": item.get("study_types") or [],
-        "url": _safe_http_url(item.get("url")) or (
-            f"https://pubmed.ncbi.nlm.nih.gov/{item.get('pmid')}/"
-        ),
-    } for item in records[:limit]]
-
-
 def _key_drug_trial_items(selected: list[dict[str, Any]], limit: int = 12) -> list[dict[str, Any]]:
     """投影重点药物 II/III 期文献为来源频道条目。"""
     return [{
@@ -332,14 +311,15 @@ def build_source_signals(
             {
                 "id": "guidelineConsensus", "label": "指南 / 共识", "evidence_required": False,
                 "sources": ["PubMed cache"], "items": _guideline_items(guidelines),
-                "recent_items": _guideline_recent_items(guidelines),
-                # link 接口：周更发现的新指南/共识只更新这一份缓存，两个页面共用。
+                # link 接口：一份缓存驱动三个既有板块，周更由 refresh-guideline-views.py 联动刷新。
                 "sync": {
                     "hub": "data/guideline-consensus-cache.json",
-                    "rule": "文献周更全量重扫并幂等合并；不改写指南差异 Top10 语料与结论",
+                    "rule": "周更全量重扫并幂等合并；发现新指南时联动刷新三板块，结论改动须有全文与逐字引文回验",
+                    "refresh_step": "scripts/refresh-guideline-views.py",
                     "linked_views": [
-                        {"view": "情报中心 · 领域重大事件", "path": "pages/literature.html"},
-                        {"view": "诊治格局 · 周更指南/共识同步", "path": "pages/landscape.html"},
+                        {"view": "中外指南共识差异", "path": "pages/landscape.html", "artifact": "data/landscape-data.js"},
+                        {"view": "诊疗现状", "path": "pages/landscape.html", "artifact": "data/treatmentChapters.js"},
+                        {"view": "领域重大事件", "path": "pages/literature.html", "artifact": "data/source-signals.js"},
                     ],
                     "generated_at": generated_at,
                 },

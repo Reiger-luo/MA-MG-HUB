@@ -297,9 +297,9 @@ git diff --check
 | 模块 | 回答的问题 | 更新节奏 | 数据源 | 失败影响 |
 | --- | --- | --- | --- | --- |
 | 近一年中外文献主题差异 | 中外**正在研究什么、证据类型结构差在哪** | 随文献周更确定性重算，滚动近一年窗口前移 | `data/china-foreign-themes.json` | 页面保留上一窗口并标黄「窗口已 N 天未更新」 |
-| 中外指南共识差异 | 中外**规定该怎么做** | 新增/替换指南全文后手动重跑 | `data/guideline-divergence.json` | 页面继续显示上一版语料与生成时间 |
+| 中外指南共识差异 | 中外**规定该怎么做** | 周更发现新指南后联动刷新；全量 16 维立场重提取仍人工执行 | `data/guideline-divergence.json` | 页面继续显示上一版语料与生成时间 |
 
-页面用两个独立面板呈现：滚动模块带青绿顶条与 `⟳ 周更滚动` 标签，指南模块带靛蓝顶条与 `◈ 新指南入库后更新` 标签；每个面板头部有自己的状态条和元信息行（窗口/语料/生成时间/更新方式），互不引用对方的数字。
+页面用两个独立面板呈现：滚动模块带青绿顶条与 `⟳ 周更滚动` 标签，指南模块带靛蓝顶条与 `◈ 新指南周更联动` 标签；每个面板头部有自己的状态条和元信息行（窗口/语料/生成时间/更新方式），互不引用对方的数字。
 
 **近一年中外文献主题差异**（`scripts/analyze-china-foreign-themes-yearly.py`，确定性无 LLM）：
 
@@ -316,24 +316,31 @@ git diff --check
 - **面向读者的文本一律用可读短名**（如「中国 2025 MG 指南」「英国 2025 MG 指南」），短名由 `scripts/common/guidelineLabels.py` 按文件名规则生成；`g01`–`gNN` 只是语料内部代号，仅保留在 `evidence[].doc` 与 `corpus[].key` 用于溯源，不得出现在标题、立场、影响、动作或语料清单里。命名规则调整后用 `--relabel-only` 就地修正，不必重跑 LLM；
 - 维度级中外比对后合并排序为 Top 10，每条给出中国/国际立场、为什么重要、医学部动作和可展开的原文引文；
 - 引文按 NFKC 规范化回验原文，结果标记「逐字命中 / 部分命中 / 待核对」，面板元信息行显示整体回验率；
-- 语料清单在折叠区展示，含中国/国际/中国台湾分组、年份和更新触发条件；
-- **不随文献周更改动**：只有新增或替换指南/共识全文时才重跑，避免每周重算 34 份 PDF。
+- 语料清单在折叠区展示，只分中国 / 国际两组（中国台湾语料并入中国侧），含年份和更新触发条件；
+- **周更联动、结论审慎**：周更发现新指南时刷新语料与三个板块；只有拿到全文且逐字引文回验通过才改写结论，全量 16 维立场重提取仍人工执行，避免每周重算数十份 PDF。
+
+「诊疗现状」的「靶向生物制剂定位」按三层组织：总定位 → 按机制分类（FcRn 拮抗剂 / 补体 C5 抑制剂 / B 细胞与 BAFF-APRIL 轴）→ 重点药物；efgartigimod 单列各指南 / 共识的推荐定位，每条陈述带语料角标。中外指南共识差异的语料清单只分中国 / 国际两组，中国台湾语料并入中国侧。
 
 两块内容都来自公开全文或摘要，只作为医学信息与证据生成的线索；对外表述前必须核对原文，abstract 级差异不能直接当成诊疗结论。完整流程见 [monthlyDivergenceAnalysis.md](../runbooks/monthlyDivergenceAnalysis.md)。
 
-## 17. 指南/共识周更同步 link
+## 17. 指南/共识周更联动三板块
 
-网站所有涉及指南共识的位置共用一份权威缓存 `data/guideline-consensus-cache.json`。周更时 `scripts/sync-guideline-consensus.py` 对已发布的公开文献层 `literature-recent.js` 做全量重扫（并合并当周 `literature-weekly.json`），按 PMID 幂等写入；不依赖当周抓取窗口，因此既往入库而本周不再出现的指南不会被漏掉。该步骤在 `build-frontend` 与 `build-source-signals` 之前执行，`trials-only` 模式也在重建来源频道之前执行。公开文献层不可读时保留 last-good 缓存、不写入，也不阻塞发布。
+网站涉及指南共识的三个既有板块共用一份权威缓存 `data/guideline-consensus-cache.json`，不再另设展示面板：
+
+| 板块 | 位置 | 刷新产物 |
+| --- | --- | --- |
+| 中外指南共识差异 | `pages/landscape.html` | `data/guideline-divergence.json` → `data/landscape-data.js` |
+| 诊疗现状（含临床问题） | `pages/landscape.html` | `data/treatmentChapters.js` / `data/clinicalQuestions.js` |
+| 领域重大事件 | `pages/literature.html` | `data/source-signals.js` |
+
+周更链路：`sync-guideline-consensus.py`（对 `literature-recent.js` 全量重扫、按 PMID 幂等写入、不依赖当周抓取窗口）→ `refresh-guideline-views.py`（比对 `data/guideline-view-state.json` 找出新增 PMID）→ `build-frontend` / `build-landscape-knowledge` / `build-source-signals`。`trials-only` 模式同样接了这两步；无新增指南时刷新步骤直接 no-op，保持 last-good；公开文献层不可读时也保留上一版缓存，不阻塞发布。
+
+证据边界：`refresh-guideline-views.py` 只有在拿到全文（`--full-text` 或 scratch `texts/gNN.txt`）且有 `data/guideline-stance-deltas.json` 中经人工/LLM 审阅的增量立场卡时才改写结论；每条新增引文按 NFKC 规范化逐字回验，任一引文无法回验即整体失败、不写坏数据。仅有 PubMed 摘要时只把 PMID 登记进 `pending_full_text`，并刷新三个板块的元信息与时间线，不臆造诊疗结论。全量 16 维立场重提取仍按 [monthlyDivergenceAnalysis.md](../runbooks/monthlyDivergenceAnalysis.md) 人工执行。
 
 识别规则见 `scripts/common/guideline_consensus.py`：除 PubMed Guideline / Practice Guideline PubType 与 `study_types` 标签外，题名本身是指导性文件（如 “Practical Guidance … Expert Opinion Paper”、expert consensus、position statement）也放行——PubMed 常把专家共识只标成 Journal Article，`study_types` 还可能被误标为 Single Arm。所有候选仍须通过 MG-core 二次门控，避免把正文提到 guideline 的论文误路由。
 
-`source-signals.js` 的 `guidelineConsensus` 频道同时输出 `recent_items` 与 `sync.linked_views`，两个消费端共用同一份数据：
+`source-signals.js` 的 `guidelineConsensus.sync.linked_views` 显式登记上述三个板块与产物，`refresh_step` 指向刷新脚本，便于审计。
 
-| 视图 | 位置 | 呈现 |
-| --- | --- | --- |
-| 情报中心 · 领域重大事件 | `pages/literature.html` | 以「指南/共识」类型进入时间线 |
-| 诊治格局 · 周更指南/共识同步 | `pages/landscape.html` | 最近 8 条，标注「待纳入差异语料人工回验」 |
+本次德国共识（PMID 42717567，Eur J Neurol 2026;33:e70747）按此链路全文入库为 `g35`：修订了 gd01 / gd08 国际侧口径（启动门槛从难治性转向活动性导向、补体抑制剂适用指征与 12 周应答评估），在诊疗现状 targeted 章节增补带角标的启动路径、转换与证据边界陈述，并进入领域重大事件时间线。审阅结论与逐字引文登记在 `data/guideline-stance-deltas.json`。
 
-诊治格局页新增面板惰性加载 `source-signals.js`，不增加首屏负担；它只提示摘要级线索，**不改写**第 16 节「中外指南共识差异 Top 10」的语料、引文回验与结论，后者仍在新增指南全文后人工重跑。新面板与原有两块差异模块互不引用对方数字。
-
-验证：`tests/test_landscape_sync_interfaces.py` 覆盖别名纠错、II/III 期门控、指南识别、缓存幂等、双视图 link 与周更步骤接线。
+验证：`tests/test_landscape_sync_interfaces.py` 覆盖别名纠错、II/III 期门控、指南识别、缓存幂等、三板块 link、全文增量刷新与周更步骤接线。

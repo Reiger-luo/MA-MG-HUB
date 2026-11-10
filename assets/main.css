@@ -4625,21 +4625,10 @@ body.pmid-modal-open { overflow: hidden; }
 }
 .chapter-nav-item.active .chapter-nav-count { color: var(--accent); }
 
-/* 周更指南/共识同步面板：摘要级线索，与中外差异语料结论严格分离 */
-.guideline-sync-list { display: grid; gap: 0.55rem; margin-top: 0.8rem; }
-.guideline-sync-item {
-  display: grid; grid-template-columns: 6.5rem 1fr auto; gap: 0.15rem 0.8rem;
-  align-items: baseline; padding: 0.6rem 0.8rem;
-  border: 1px solid var(--bg3); border-left: 3px solid var(--accent);
-  border-radius: 8px; background: var(--bg);
-}
-.guideline-sync-date { font-size: 0.76rem; color: var(--fg3); }
-.guideline-sync-title { font-size: 0.88rem; font-weight: 600; line-height: 1.45; }
-.guideline-sync-title a { color: var(--fg); text-decoration: none; }
-.guideline-sync-title a:hover { color: var(--accent); text-decoration: underline; }
-.guideline-sync-journal { grid-column: 2; font-size: 0.76rem; color: var(--fg3); }
-.guideline-sync-status { grid-column: 3; grid-row: 1 / span 2; font-size: 0.72rem; color: var(--accent); }
-@media (max-width: 900px) {
-  .guideline-sync-item { grid-template-columns: 1fr; }
-  .guideline-sync-journal, .guideline-sync-status { grid-column: 1; grid-row: auto; }
+/* 诊疗现状：按 group 分层的陈述小标题（总定位 / 分类 / 重点药物） */
+.chapter-statement-group { margin: 0.9rem 0 0.4rem; }
+.chapter-statement-group > h4 {
+  font-size: 0.83rem; font-weight: 600; letter-spacing: 0.02em;
+  color: var(--accent); margin: 0 0 0.35rem;
+  padding-bottom: 0.25rem; border-bottom: 1px solid var(--bg3);
 }
