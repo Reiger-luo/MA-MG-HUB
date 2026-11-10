@@ -268,6 +268,11 @@ def test_targeted_chapter_is_layered_and_regions_have_only_two_sides():
     assert sum(1 for item in efg if "中国 2025 MG 指南" in item["text"]) == 3
     assert any("升级为艾加莫德" in item["text"] and "Ⅰa 级证据" in item["text"] for item in efg)
     assert "贝利尤单抗" in texts and "IL-6R" in texts
+    # 2026 药学共识按 wiki 全文核对：JBI 2014 分级与 4 类适用情形，不能写成 2025 指南的 Ⅰa/A 级
+    assert any(
+        "药学共识" in item["text"] and "JBI 2014" in item["text"] and "1a，强推荐" in item["text"]
+        for item in efg
+    )
     gd01 = next(x for x in divergence["divergences"] if x["id"] == "gd01")
     g23_quotes = [e for e in gd01["evidence"] if e.get("doc") == "g23"]
     assert len(g23_quotes) >= 3 and all(e["quote_verified"] for e in g23_quotes)

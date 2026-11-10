@@ -99,7 +99,9 @@
 // 首屏渲染完成后再异步加载，避免阻塞首屏。
 window.addEventListener('load', function() {
   var script = document.createElement('script');
-  script.src = 'data/literature-recent.js?v=local-20261027-1920';
+  // 资源版本跟随发布清单，避免硬编码 token 与 updateFrontendReleaseToken 脱节。
+  var releaseId = (window.MG_RELEASE_MANIFEST && window.MG_RELEASE_MANIFEST.run_id) || '';
+  script.src = 'data/literature-recent.js?v=' + encodeURIComponent(releaseId);
   script.onload = function() {
     if (window.MgDashboard && typeof window.MgDashboard.onLiteratureDataReady === 'function') {
       window.MgDashboard.onLiteratureDataReady();

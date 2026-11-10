@@ -268,10 +268,15 @@ python3 scripts/run-weekly-pipeline.py --mode authoritative-full --run-id weekly
 ```bash
 python3 -m pytest -q
 python3 -m py_compile scripts/*.py scripts/common/*.py
-for file in assets/*.js; do node --check "$file" || exit 1; done
+for file in assets/*.js scripts/*.js; do node --check "$file" || exit 1; done
+node scripts/verifyFrontendRender.js
 bash scripts/build-sites-static.sh
 git diff --check
 ```
+
+`verifyFrontendRender.js` 用 jsdom 真实执行诊治格局与情报中心页面脚本，覆盖 `pytest` 静态契约测不到的渲染函数（分组章节、两侧语料、差异卡片、五类事件时间线）；`tests/test_frontend_render_smoke.py` 把它接入测试套件，node / jsdom 不可用时跳过。
+
+上线后另跑 `python3 scripts/verifyOnlineRelease.py`：按 `release-manifest.js` 的 sha256 逐一核对线上公开产物，并核对 5 个活动页面的 `?v=` 资源版本与 run_id 一致；任一漂移或读取失败即非零退出。GitHub Pages 部署可能瞬时失败，push 成功不等于站点已切换，这一步是上线闭环的凭据。
 
 ## 14. 后续建设方向
 
@@ -341,6 +346,6 @@ git diff --check
 
 `source-signals.js` 的 `guidelineConsensus.sync.linked_views` 显式登记上述三个板块与产物，`refresh_step` 指向刷新脚本，便于审计。
 
-本次德国共识（PMID 42717567，Eur J Neurol 2026;33:e70747）按此链路全文入库为 `g35`：修订了 gd01 / gd08 国际侧口径（启动门槛从难治性转向活动性导向、补体抑制剂适用指征与 12 周应答评估），在诊疗现状 targeted 章节增补带角标的启动路径、转换与证据边界陈述，并进入领域重大事件时间线。审阅结论与逐字引文登记在 `data/guideline-stance-deltas.json`。中国 2025 MG 指南（`g23`）的 wiki 全文（PDF / MD）也已入库本地语料目录：据此修订了诊疗现状的靶向生物制剂四类分类与 efgartigimod 分层定位（适用人群与用法、达标 / 升级治疗、场景与人群边界），并给 gd01 补入逐字回验引文。
+本次德国共识（PMID 42717567，Eur J Neurol 2026;33:e70747）按此链路全文入库为 `g35`：修订了 gd01 / gd08 国际侧口径（启动门槛从难治性转向活动性导向、补体抑制剂适用指征与 12 周应答评估），在诊疗现状 targeted 章节增补带角标的启动路径、转换与证据边界陈述，并进入领域重大事件时间线。审阅结论与逐字引文登记在 `data/guideline-stance-deltas.json`。中国 2025 MG 指南（`g23`）的 wiki 全文（PDF / MD）也已入库本地语料目录：据此修订了诊疗现状的靶向生物制剂四类分类与 efgartigimod 分层定位（适用人群与用法、达标 / 升级治疗、场景与人群边界），并给 gd01 补入逐字回验引文。中国 2026 抗体药物药学共识（`g31`）的 wiki PDF 全文亦已入库并核对：其「1a，强推荐」出自 JBI 2014 干预性证据分级的推荐意见 1（4 类适用情形），与 2025 指南的「Ⅰa 级证据 / A 级推荐」是药物适用性 / 药学管理与治疗线位两个不同维度，不是同一条推荐被挂错文件。中国 2026 抗体药物药学共识（`g31`）的 wiki PDF 全文亦已入库并核对：其「1a，强推荐」出自 JBI 2014 干预性证据分级的推荐意见 1（4 类适用情形），与 2025 指南的「Ⅰa 级证据 / A 级推荐」是药物适用性 / 药学管理与治疗线位两个不同维度，不是同一条推荐被挂错文件。
 
 验证：`tests/test_landscape_sync_interfaces.py` 覆盖别名纠错、II/III 期门控、指南识别、缓存幂等、三板块 link、全文增量刷新与周更步骤接线。
