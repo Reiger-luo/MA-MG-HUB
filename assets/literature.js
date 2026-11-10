@@ -1943,7 +1943,7 @@
     renderPipelineMatrix();
   }
 
-  // ── 领域重大事件：获批监管 / 指南共识 / 新III期 / 周更强中试验信号 ──
+  // ── 领域重大事件：获批监管 / 指南共识 / II-III期重点药物文献 / 新III期 / 周更强中试验信号 ──
   // 数据源唯一为 source-signals.js（周更重建；trialRegistry 频道内嵌 weekly_signals）。
   // 惰性加载：首次进入「领域重大事件」标签时才拉取，不增加情报中心首屏负担。
   function shortenEventDate(value) {
@@ -1968,17 +1968,29 @@
     var sourceSignals = window.MG_SOURCE_SIGNALS || { channels: [] };
     var channels = sourceSignals.channels || [];
     var events = [];
-    var typeByChannel = { chinaRegulatory: '获批/监管', guidelineConsensus: '指南/共识' };
+    var typeByChannel = {
+      chinaRegulatory: '获批/监管',
+      guidelineConsensus: '指南/共识',
+      keyDrugTrialPublications: 'II/III期文献'
+    };
     channels.forEach(function (channel) {
       var type = typeByChannel[channel.id];
       if (!type) return;
-      (channel.items || []).forEach(function (item) {
+      var items = channel.items || [];
+      // 重点药物文献最多占 4 席，避免单一来源挤掉监管、指南与试验信号。
+      if (channel.id === 'keyDrugTrialPublications') items = items.slice(0, 4);
+      items.forEach(function (item) {
+        var source = item.source || channel.label || '';
+        // 重点药物文献在信息流里带出药名与期别，便于 MSL 直接判断相关性。
+        if (channel.id === 'keyDrugTrialPublications' && (item.drugs || []).length) {
+          source = 'PubMed · ' + item.drugs.slice(0, 2).join(' / ') + ' · ' + (item.phase_label || '');
+        }
         events.push({
           type: type,
           date: shortenEventDate(item.date),
           title: item.title || '',
           url: item.url || '',
-          source: item.source || channel.label || ''
+          source: source
         });
       });
     });
@@ -2026,7 +2038,7 @@
     if (badge) badge.textContent = (sourceSignals.generated_at || '—') + ' · ' + (events.length ? '最近 ' + events.length + ' 条' : '暂无记录');
     if (meta) meta.textContent = events.length ? '最近 ' + events.length + ' 条' : '暂无记录';
     if (!events.length) {
-      target.innerHTML = '<div class="empty-state small"><h3>近期暂无重大事件记录</h3><p>新获批、新指南、新 III 期启动与周更强/中试验信号将随周更自动进入时间线。</p></div>';
+      target.innerHTML = '<div class="empty-state small"><h3>近期暂无重大事件记录</h3><p>新获批、新指南共识、重点药物 II/III 期文献、新 III 期启动与周更强/中试验信号将随周更自动进入时间线。</p></div>';
       return;
     }
     target.innerHTML = events.map(function (event) {

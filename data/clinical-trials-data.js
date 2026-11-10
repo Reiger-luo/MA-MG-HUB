@@ -31,8 +31,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "name": "Efgartigimod (艾加莫德)",
       "highest_phase_label": "Phase 4",
       "stage_number": 4,
-      "study_count": 45,
-      "status_summary": "招募 19 · 进行 6 · 完成 12",
+      "study_count": 46,
+      "status_summary": "招募 20 · 进行 6 · 完成 12",
       "sponsors": [
         "Affiliated Hospital of Zunyi Medical University",
         "BioSensics",
@@ -41,7 +41,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "sources": {
         "ChiCTR": 13,
         "ChinaDrugTrials": 5,
-        "ClinicalTrials.gov": 27
+        "ClinicalTrials.gov": 28
       },
       "key_trial": {
         "registry": "ChiCTR",
@@ -634,6 +634,19 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "completion_date": "",
           "sponsor": "argenx",
           "url": "https://clinicaltrials.gov/study/NCT07595653"
+        },
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT07673627",
+          "title": "ADAPT Forward 2 - ISA2 - a Study to Evaluate the Safety, Tolerability and Efficacy of Empasiprubart IV Monotherapy in Participants With AChR-Ab Seropositive Generalized Myasthenia Gravis",
+          "status_label": "招募中",
+          "status_class": "recruiting",
+          "phase_label": "Phase 2",
+          "start_date": "2026-07-10",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "argenx",
+          "url": "https://clinicaltrials.gov/study/NCT07673627"
         }
       ],
       "timeline": {
@@ -895,8 +908,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "name": "Batoclimab (巴托利单抗)",
       "highest_phase_label": "Phase 3",
       "stage_number": 3,
-      "study_count": 12,
-      "status_summary": "招募 0 · 进行 0 · 完成 7 · 终止 2",
+      "study_count": 11,
+      "status_summary": "招募 0 · 进行 0 · 完成 7 · 终止 1",
       "sponsors": [
         "Harbour BioMed (Guangzhou) Co. Ltd.",
         "Harbour BioMed Therapeutics Limited/ 和铂医药（苏州）有限公司/ Samsung Biologics Co., Ltd.",
@@ -905,7 +918,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "sources": {
         "ChiCTR": 3,
         "ChinaDrugTrials": 3,
-        "ClinicalTrials.gov": 6
+        "ClinicalTrials.gov": 5
       },
       "key_trial": {
         "registry": "ChiCTR",
@@ -994,29 +1007,16 @@ window.MG_CLINICAL_TRIALS_DATA = {
         },
         {
           "registry": "ClinicalTrials.gov",
-          "registry_id": "NCT03772587",
-          "title": "A Study to Evaluate the Safety, Tolerability, Efficacy, Pharmacokinetics and Pharmacodynamics of M281 Administered to Adults With Generalized Myasthenia Gravis",
+          "registry_id": "NCT03863080",
+          "title": "A Study of RVT-1401 in Myasthenia Gravis (MG) Patients",
           "status_label": "已完成",
           "status_class": "completed",
           "phase_label": "Phase 2",
-          "start_date": "2019-04-10",
-          "readout_date": "2020-06-25",
-          "completion_date": "2020-06-25",
-          "sponsor": "Momenta Pharmaceuticals, Inc.",
-          "url": "https://clinicaltrials.gov/study/NCT03772587"
-        },
-        {
-          "registry": "ClinicalTrials.gov",
-          "registry_id": "NCT03896295",
-          "title": "An Extension Study of MOM-M281-004 to Evaluate the Safety, Tolerability, and Efficacy of M281 Administered to Patients With Generalized Myasthenia Gravis",
-          "status_label": "已终止",
-          "status_class": "terminated",
-          "phase_label": "Phase 2",
-          "start_date": "2019-08-06",
-          "readout_date": "2020-12-09",
-          "completion_date": "2020-12-09",
-          "sponsor": "Momenta Pharmaceuticals, Inc.",
-          "url": "https://clinicaltrials.gov/study/NCT03896295"
+          "start_date": "2019-05-21",
+          "readout_date": "2020-10-07",
+          "completion_date": "2020-12-21",
+          "sponsor": "Immunovant Sciences GmbH",
+          "url": "https://clinicaltrials.gov/study/NCT03863080"
         },
         {
           "registry": "ClinicalTrials.gov",
@@ -1072,11 +1072,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
         }
       ],
       "timeline": {
-        "start": "2019-04-10",
+        "start": "2019-05-21",
         "readout": "2025-01-10",
         "completion": "2026-08-07"
       },
-      "first_registered": "2018-12-11",
+      "first_registered": "2019-03-05",
       "latest_registered": "2022-06-03",
       "linked_registries": []
     },
@@ -1085,8 +1085,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "name": "Nipocalimab (尼卡利单抗)",
       "highest_phase_label": "Phase 3",
       "stage_number": 3,
-      "study_count": 5,
-      "status_summary": "招募 3 · 进行 1 · 完成 1",
+      "study_count": 7,
+      "status_summary": "招募 3 · 进行 1 · 完成 2 · 终止 1",
       "sponsors": [
         "Janssen Research & Development, LLC",
         "Janssen Research & Development, LLC/ 强生（中国）投资有限公司/ Vetter Pharma-Fertigung GmbH & Co. KG/ Janssen R&D, a Division of Janssen Pharmaceutica, NV；Catalent CTS, LLC；Catalent Pharma Solutions, LLC；Catalent Germany Schorndorf GmbH；Fisher Clinical Services UK；Fisher Clinical Services；Fisher Clinical Services (Allentown)",
@@ -1094,7 +1094,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
       ],
       "sources": {
         "ChinaDrugTrials": 2,
-        "ClinicalTrials.gov": 3
+        "ClinicalTrials.gov": 5
       },
       "key_trial": {
         "registry": "ChinaDrugTrials",
@@ -1128,6 +1128,32 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "completion_date": "",
           "sponsor": "Janssen Research & Development, LLC/ 强生（中国）投资有限公司/ Vetter Pharma-Fertigung GmbH & Co. KG/ Janssen R&D, a Division of Janssen Pharmaceutica, NV；Catalent CTS, LLC；Catalent Pharma Solutions, LLC；Catalent Germany Schorndorf GmbH；Fisher Clinical Services UK；Fisher Clinical Services；Fisher Clinical Services (Allentown)",
           "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20213446"
+        },
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT03772587",
+          "title": "A Study to Evaluate the Safety, Tolerability, Efficacy, Pharmacokinetics and Pharmacodynamics of M281 Administered to Adults With Generalized Myasthenia Gravis",
+          "status_label": "已完成",
+          "status_class": "completed",
+          "phase_label": "Phase 2",
+          "start_date": "2019-04-10",
+          "readout_date": "2020-06-25",
+          "completion_date": "2020-06-25",
+          "sponsor": "Momenta Pharmaceuticals, Inc.",
+          "url": "https://clinicaltrials.gov/study/NCT03772587"
+        },
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT03896295",
+          "title": "An Extension Study of MOM-M281-004 to Evaluate the Safety, Tolerability, and Efficacy of M281 Administered to Patients With Generalized Myasthenia Gravis",
+          "status_label": "已终止",
+          "status_class": "terminated",
+          "phase_label": "Phase 2",
+          "start_date": "2019-08-06",
+          "readout_date": "2020-12-09",
+          "completion_date": "2020-12-09",
+          "sponsor": "Momenta Pharmaceuticals, Inc.",
+          "url": "https://clinicaltrials.gov/study/NCT03896295"
         },
         {
           "registry": "ClinicalTrials.gov",
@@ -1170,11 +1196,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
         }
       ],
       "timeline": {
-        "start": "2021-07-15",
+        "start": "2019-04-10",
         "readout": "2027-09-28",
         "completion": "2029-07-02"
       },
-      "first_registered": "2021-07-07",
+      "first_registered": "2018-12-11",
       "latest_registered": "2025-10-16",
       "linked_registries": []
     },
@@ -1219,62 +1245,6 @@ window.MG_CLINICAL_TRIALS_DATA = {
       },
       "first_registered": "2025-06-26",
       "latest_registered": "2025-06-26",
-      "linked_registries": []
-    },
-    {
-      "drug_class": "FcRn 拮抗剂",
-      "name": "Empasiprubart",
-      "highest_phase_label": "Phase 2",
-      "stage_number": 2,
-      "study_count": 2,
-      "status_summary": "招募 2 · 进行 0 · 完成 0",
-      "sponsors": [
-        "argenx"
-      ],
-      "sources": {
-        "ClinicalTrials.gov": 2
-      },
-      "key_trial": {
-        "registry": "ClinicalTrials.gov",
-        "registry_id": "NCT07284420",
-        "title": "ADAPT Forward 1 - ISA1 - a Study to Evaluate Empasiprubart IV as add-on Therapy to Efgartigimod IV in Participants With AChR-Ab Seropositive Generalized Myasthenia Gravis With a Partial Clinical Response to Efgartigimod",
-        "url": "https://clinicaltrials.gov/study/NCT07284420"
-      },
-      "trials": [
-        {
-          "registry": "ClinicalTrials.gov",
-          "registry_id": "NCT07284420",
-          "title": "ADAPT Forward 1 - ISA1 - a Study to Evaluate Empasiprubart IV as add-on Therapy to Efgartigimod IV in Participants With AChR-Ab Seropositive Generalized Myasthenia Gravis With a Partial Clinical Response to Efgartigimod",
-          "status_label": "招募中",
-          "status_class": "recruiting",
-          "phase_label": "Phase 2",
-          "start_date": "2025-12-19",
-          "readout_date": "2028-03-07",
-          "completion_date": "2028-03-07",
-          "sponsor": "argenx",
-          "url": "https://clinicaltrials.gov/study/NCT07284420"
-        },
-        {
-          "registry": "ClinicalTrials.gov",
-          "registry_id": "NCT07294170",
-          "title": "ADAPT Forward - Master Protocol of a Platform Study to Evaluate the Safety and Efficacy of Multiple Regimens in Participants With Myasthenia Gravis",
-          "status_label": "招募中",
-          "status_class": "recruiting",
-          "phase_label": "未标注",
-          "start_date": "2025-12-19",
-          "readout_date": "2028-03-07",
-          "completion_date": "2028-03-07",
-          "sponsor": "argenx",
-          "url": "https://clinicaltrials.gov/study/NCT07294170"
-        }
-      ],
-      "timeline": {
-        "start": "2025-12-19",
-        "readout": "2028-03-07",
-        "completion": "2028-03-07"
-      },
-      "first_registered": "2025-12-16",
-      "latest_registered": "2025-12-19",
       "linked_registries": []
     },
     {
@@ -1325,16 +1295,16 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "name": "Ravulizumab (瑞利珠单抗)",
       "highest_phase_label": "Phase 4",
       "stage_number": 4,
-      "study_count": 11,
-      "status_summary": "招募 7 · 进行 3 · 完成 1",
+      "study_count": 9,
+      "status_summary": "招募 7 · 进行 1 · 完成 1",
       "sponsors": [
         "Alexion Europe SAS/ 阿斯利康全球研发（中国）有限公司/ Alexion Pharma International Operations Limited, Alexion Athlone Manufacturing Facility (AAMF)",
         "Alexion Pharmaceuticals, Inc.",
         "AstraZeneca"
       ],
       "sources": {
-        "ChinaDrugTrials": 2,
-        "ClinicalTrials.gov": 9
+        "ChinaDrugTrials": 1,
+        "ClinicalTrials.gov": 8
       },
       "key_trial": {
         "registry": "ClinicalTrials.gov",
@@ -1343,19 +1313,6 @@ window.MG_CLINICAL_TRIALS_DATA = {
         "url": "https://clinicaltrials.gov/study/NCT07221838"
       },
       "trials": [
-        {
-          "registry": "ChinaDrugTrials",
-          "registry_id": "CTR20232711",
-          "title": "ALXN1720治疗全身型重症肌无力成人患者",
-          "status_label": "进行中",
-          "status_class": "active",
-          "phase_label": "Phase 3",
-          "start_date": "",
-          "readout_date": "",
-          "completion_date": "",
-          "sponsor": "不适用/ 阿斯利康全球研发（中国）有限公司",
-          "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20232711"
-        },
         {
           "registry": "ChinaDrugTrials",
           "registry_id": "CTR20262539",
@@ -1381,19 +1338,6 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "completion_date": "2023-05-25",
           "sponsor": "Alexion Pharmaceuticals, Inc.",
           "url": "https://clinicaltrials.gov/study/NCT03920293"
-        },
-        {
-          "registry": "ClinicalTrials.gov",
-          "registry_id": "NCT05556096",
-          "title": "Safety and Efficacy of ALXN1720 in Adults With Generalized Myasthenia Gravis",
-          "status_label": "进行中",
-          "status_class": "active",
-          "phase_label": "Phase 3",
-          "start_date": "2022-11-21",
-          "readout_date": "2025-05-27",
-          "completion_date": "2027-08-31",
-          "sponsor": "Alexion Pharmaceuticals, Inc.",
-          "url": "https://clinicaltrials.gov/study/NCT05556096"
         },
         {
           "registry": "ClinicalTrials.gov",
@@ -1828,6 +1772,77 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "drug_class": "补体抑制剂",
+      "name": "Gefurulimab (戈鲁利单抗)",
+      "highest_phase_label": "Phase 3",
+      "stage_number": 3,
+      "study_count": 3,
+      "status_summary": "招募 1 · 进行 2 · 完成 0",
+      "sponsors": [
+        "Alexion Pharmaceuticals, Inc.",
+        "不适用/ 阿斯利康全球研发（中国）有限公司"
+      ],
+      "sources": {
+        "ChinaDrugTrials": 1,
+        "ClinicalTrials.gov": 2
+      },
+      "key_trial": {
+        "registry": "ChinaDrugTrials",
+        "registry_id": "CTR20232711",
+        "title": "ALXN1720治疗全身型重症肌无力成人患者",
+        "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20232711"
+      },
+      "trials": [
+        {
+          "registry": "ChinaDrugTrials",
+          "registry_id": "CTR20232711",
+          "title": "ALXN1720治疗全身型重症肌无力成人患者",
+          "status_label": "进行中",
+          "status_class": "active",
+          "phase_label": "Phase 3",
+          "start_date": "",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "不适用/ 阿斯利康全球研发（中国）有限公司",
+          "url": "https://www.chinadrugtrials.org.cn/clinicaltrials.searchlistpage.dhtml?searchtype=keyword&keyword=CTR20232711"
+        },
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT05556096",
+          "title": "Safety and Efficacy of ALXN1720 in Adults With Generalized Myasthenia Gravis",
+          "status_label": "进行中",
+          "status_class": "active",
+          "phase_label": "Phase 3",
+          "start_date": "2022-11-21",
+          "readout_date": "2025-05-27",
+          "completion_date": "2027-08-31",
+          "sponsor": "Alexion Pharmaceuticals, Inc.",
+          "url": "https://clinicaltrials.gov/study/NCT05556096"
+        },
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT06607627",
+          "title": "PK, PD, Safety, and Efficacy Study of Gefurulimab in Pediatric Patients With AChR+ Generalized Myasthenia Gravis",
+          "status_label": "招募中",
+          "status_class": "recruiting",
+          "phase_label": "Phase 3",
+          "start_date": "2024-11-13",
+          "readout_date": "2026-12-15",
+          "completion_date": "2029-01-23",
+          "sponsor": "Alexion Pharmaceuticals, Inc.",
+          "url": "https://clinicaltrials.gov/study/NCT06607627"
+        }
+      ],
+      "timeline": {
+        "start": "2022-11-21",
+        "readout": "2026-12-15",
+        "completion": "2029-01-23"
+      },
+      "first_registered": "2022-09-27",
+      "latest_registered": "2024-09-23",
+      "linked_registries": []
+    },
+    {
+      "drug_class": "补体抑制剂",
       "name": "Cemdisiran",
       "highest_phase_label": "Phase 3",
       "stage_number": 3,
@@ -1892,6 +1907,105 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "drug_class": "补体抑制剂",
+      "name": "Claseprubart",
+      "highest_phase_label": "Phase 3",
+      "stage_number": 3,
+      "study_count": 2,
+      "status_summary": "招募 1 · 进行 1 · 完成 0",
+      "sponsors": [
+        "Dianthus Therapeutics"
+      ],
+      "sources": {
+        "ClinicalTrials.gov": 2
+      },
+      "key_trial": {
+        "registry": "ClinicalTrials.gov",
+        "registry_id": "NCT07647510",
+        "title": "A Phase 3 Study to Evaluate Claseprubart in Adults With Generalized Myasthenia Gravis (EMERGE)",
+        "url": "https://clinicaltrials.gov/study/NCT07647510"
+      },
+      "trials": [
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT06282159",
+          "title": "A Phase 2 Study to Evaluate DNTH103 in Adults With Generalized Myasthenia Gravis (MAGIC)",
+          "status_label": "进行中",
+          "status_class": "active",
+          "phase_label": "Phase 2",
+          "start_date": "2024-02-23",
+          "readout_date": "2025-07-28",
+          "completion_date": "",
+          "sponsor": "Dianthus Therapeutics",
+          "url": "https://clinicaltrials.gov/study/NCT06282159"
+        },
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT07647510",
+          "title": "A Phase 3 Study to Evaluate Claseprubart in Adults With Generalized Myasthenia Gravis (EMERGE)",
+          "status_label": "招募中",
+          "status_class": "recruiting",
+          "phase_label": "Phase 3",
+          "start_date": "2026-06-29",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "Dianthus Therapeutics",
+          "url": "https://clinicaltrials.gov/study/NCT07647510"
+        }
+      ],
+      "timeline": {
+        "start": "2024-02-23",
+        "readout": "2025-07-28",
+        "completion": ""
+      },
+      "first_registered": "2024-02-28",
+      "latest_registered": "2026-06-15",
+      "linked_registries": []
+    },
+    {
+      "drug_class": "补体抑制剂",
+      "name": "Iptacopan",
+      "highest_phase_label": "Phase 3",
+      "stage_number": 3,
+      "study_count": 1,
+      "status_summary": "招募 0 · 进行 1 · 完成 0",
+      "sponsors": [
+        "Novartis Pharmaceuticals"
+      ],
+      "sources": {
+        "ClinicalTrials.gov": 1
+      },
+      "key_trial": {
+        "registry": "ClinicalTrials.gov",
+        "registry_id": "NCT06517758",
+        "title": "A Phase III Study to Investigate Efficacy, Safety and Tolerability of Iptacopan Compared With Placebo in Participants Aged 18 to 85 Years With gMG.",
+        "url": "https://clinicaltrials.gov/study/NCT06517758"
+      },
+      "trials": [
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT06517758",
+          "title": "A Phase III Study to Investigate Efficacy, Safety and Tolerability of Iptacopan Compared With Placebo in Participants Aged 18 to 85 Years With gMG.",
+          "status_label": "进行中",
+          "status_class": "active",
+          "phase_label": "Phase 3",
+          "start_date": "2024-07-31",
+          "readout_date": "2027-04-30",
+          "completion_date": "2032-05-27",
+          "sponsor": "Novartis Pharmaceuticals",
+          "url": "https://clinicaltrials.gov/study/NCT06517758"
+        }
+      ],
+      "timeline": {
+        "start": "2024-07-31",
+        "readout": "2027-04-30",
+        "completion": "2032-05-27"
+      },
+      "first_registered": "2024-07-24",
+      "latest_registered": "2024-07-24",
+      "linked_registries": []
+    },
+    {
+      "drug_class": "补体抑制剂",
       "name": "Pozelimab",
       "highest_phase_label": "Phase 3",
       "stage_number": 3,
@@ -1931,6 +2045,75 @@ window.MG_CLINICAL_TRIALS_DATA = {
       },
       "first_registered": "2021-10-07",
       "latest_registered": "2021-10-07",
+      "linked_registries": []
+    },
+    {
+      "drug_class": "补体抑制剂",
+      "name": "Empasiprubart",
+      "highest_phase_label": "Phase 2",
+      "stage_number": 2,
+      "study_count": 3,
+      "status_summary": "招募 3 · 进行 0 · 完成 0",
+      "sponsors": [
+        "argenx"
+      ],
+      "sources": {
+        "ClinicalTrials.gov": 3
+      },
+      "key_trial": {
+        "registry": "ClinicalTrials.gov",
+        "registry_id": "NCT07284420",
+        "title": "ADAPT Forward 1 - ISA1 - a Study to Evaluate Empasiprubart IV as add-on Therapy to Efgartigimod IV in Participants With AChR-Ab Seropositive Generalized Myasthenia Gravis With a Partial Clinical Response to Efgartigimod",
+        "url": "https://clinicaltrials.gov/study/NCT07284420"
+      },
+      "trials": [
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT07284420",
+          "title": "ADAPT Forward 1 - ISA1 - a Study to Evaluate Empasiprubart IV as add-on Therapy to Efgartigimod IV in Participants With AChR-Ab Seropositive Generalized Myasthenia Gravis With a Partial Clinical Response to Efgartigimod",
+          "status_label": "招募中",
+          "status_class": "recruiting",
+          "phase_label": "Phase 2",
+          "start_date": "2025-12-19",
+          "readout_date": "2028-03-07",
+          "completion_date": "2028-03-07",
+          "sponsor": "argenx",
+          "url": "https://clinicaltrials.gov/study/NCT07284420"
+        },
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT07294170",
+          "title": "ADAPT Forward - Master Protocol of a Platform Study to Evaluate the Safety and Efficacy of Multiple Regimens in Participants With Myasthenia Gravis",
+          "status_label": "招募中",
+          "status_class": "recruiting",
+          "phase_label": "未标注",
+          "start_date": "2025-12-19",
+          "readout_date": "2028-03-07",
+          "completion_date": "2028-03-07",
+          "sponsor": "argenx",
+          "url": "https://clinicaltrials.gov/study/NCT07294170"
+        },
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT07673627",
+          "title": "ADAPT Forward 2 - ISA2 - a Study to Evaluate the Safety, Tolerability and Efficacy of Empasiprubart IV Monotherapy in Participants With AChR-Ab Seropositive Generalized Myasthenia Gravis",
+          "status_label": "招募中",
+          "status_class": "recruiting",
+          "phase_label": "Phase 2",
+          "start_date": "2026-07-10",
+          "readout_date": "",
+          "completion_date": "",
+          "sponsor": "argenx",
+          "url": "https://clinicaltrials.gov/study/NCT07673627"
+        }
+      ],
+      "timeline": {
+        "start": "2025-12-19",
+        "readout": "2028-03-07",
+        "completion": "2028-03-07"
+      },
+      "first_registered": "2025-12-16",
+      "latest_registered": "2026-06-29",
       "linked_registries": []
     },
     {
@@ -5822,62 +6005,6 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "drug_class": "其他",
-      "name": "Claseprubart",
-      "highest_phase_label": "Phase 3",
-      "stage_number": 3,
-      "study_count": 2,
-      "status_summary": "招募 1 · 进行 1 · 完成 0",
-      "sponsors": [
-        "Dianthus Therapeutics"
-      ],
-      "sources": {
-        "ClinicalTrials.gov": 2
-      },
-      "key_trial": {
-        "registry": "ClinicalTrials.gov",
-        "registry_id": "NCT07647510",
-        "title": "A Phase 3 Study to Evaluate Claseprubart in Adults With Generalized Myasthenia Gravis (EMERGE)",
-        "url": "https://clinicaltrials.gov/study/NCT07647510"
-      },
-      "trials": [
-        {
-          "registry": "ClinicalTrials.gov",
-          "registry_id": "NCT06282159",
-          "title": "A Phase 2 Study to Evaluate DNTH103 in Adults With Generalized Myasthenia Gravis (MAGIC)",
-          "status_label": "进行中",
-          "status_class": "active",
-          "phase_label": "Phase 2",
-          "start_date": "2024-02-23",
-          "readout_date": "2025-07-28",
-          "completion_date": "",
-          "sponsor": "Dianthus Therapeutics",
-          "url": "https://clinicaltrials.gov/study/NCT06282159"
-        },
-        {
-          "registry": "ClinicalTrials.gov",
-          "registry_id": "NCT07647510",
-          "title": "A Phase 3 Study to Evaluate Claseprubart in Adults With Generalized Myasthenia Gravis (EMERGE)",
-          "status_label": "招募中",
-          "status_class": "recruiting",
-          "phase_label": "Phase 3",
-          "start_date": "2026-06-29",
-          "readout_date": "",
-          "completion_date": "",
-          "sponsor": "Dianthus Therapeutics",
-          "url": "https://clinicaltrials.gov/study/NCT07647510"
-        }
-      ],
-      "timeline": {
-        "start": "2024-02-23",
-        "readout": "2025-07-28",
-        "completion": ""
-      },
-      "first_registered": "2024-02-28",
-      "latest_registered": "2026-06-15",
-      "linked_registries": []
-    },
-    {
-      "drug_class": "其他",
       "name": "Decartes-08",
       "highest_phase_label": "Phase 3",
       "stage_number": 3,
@@ -5917,49 +6044,6 @@ window.MG_CLINICAL_TRIALS_DATA = {
       },
       "first_registered": "2025-01-29",
       "latest_registered": "2025-01-29",
-      "linked_registries": []
-    },
-    {
-      "drug_class": "其他",
-      "name": "Iptacopan",
-      "highest_phase_label": "Phase 3",
-      "stage_number": 3,
-      "study_count": 1,
-      "status_summary": "招募 0 · 进行 1 · 完成 0",
-      "sponsors": [
-        "Novartis Pharmaceuticals"
-      ],
-      "sources": {
-        "ClinicalTrials.gov": 1
-      },
-      "key_trial": {
-        "registry": "ClinicalTrials.gov",
-        "registry_id": "NCT06517758",
-        "title": "A Phase III Study to Investigate Efficacy, Safety and Tolerability of Iptacopan Compared With Placebo in Participants Aged 18 to 85 Years With gMG.",
-        "url": "https://clinicaltrials.gov/study/NCT06517758"
-      },
-      "trials": [
-        {
-          "registry": "ClinicalTrials.gov",
-          "registry_id": "NCT06517758",
-          "title": "A Phase III Study to Investigate Efficacy, Safety and Tolerability of Iptacopan Compared With Placebo in Participants Aged 18 to 85 Years With gMG.",
-          "status_label": "进行中",
-          "status_class": "active",
-          "phase_label": "Phase 3",
-          "start_date": "2024-07-31",
-          "readout_date": "2027-04-30",
-          "completion_date": "2032-05-27",
-          "sponsor": "Novartis Pharmaceuticals",
-          "url": "https://clinicaltrials.gov/study/NCT06517758"
-        }
-      ],
-      "timeline": {
-        "start": "2024-07-31",
-        "readout": "2027-04-30",
-        "completion": "2032-05-27"
-      },
-      "first_registered": "2024-07-24",
-      "latest_registered": "2024-07-24",
       "linked_registries": []
     },
     {
@@ -6538,49 +6622,6 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "drug_class": "其他",
-      "name": "Empasiprubart",
-      "highest_phase_label": "Phase 2",
-      "stage_number": 2,
-      "study_count": 1,
-      "status_summary": "招募 1 · 进行 0 · 完成 0",
-      "sponsors": [
-        "argenx"
-      ],
-      "sources": {
-        "ClinicalTrials.gov": 1
-      },
-      "key_trial": {
-        "registry": "ClinicalTrials.gov",
-        "registry_id": "NCT07673627",
-        "title": "ADAPT Forward 2 - ISA2 - a Study to Evaluate the Safety, Tolerability and Efficacy of Empasiprubart IV Monotherapy in Participants With AChR-Ab Seropositive Generalized Myasthenia Gravis",
-        "url": "https://clinicaltrials.gov/study/NCT07673627"
-      },
-      "trials": [
-        {
-          "registry": "ClinicalTrials.gov",
-          "registry_id": "NCT07673627",
-          "title": "ADAPT Forward 2 - ISA2 - a Study to Evaluate the Safety, Tolerability and Efficacy of Empasiprubart IV Monotherapy in Participants With AChR-Ab Seropositive Generalized Myasthenia Gravis",
-          "status_label": "招募中",
-          "status_class": "recruiting",
-          "phase_label": "Phase 2",
-          "start_date": "2026-07-10",
-          "readout_date": "",
-          "completion_date": "",
-          "sponsor": "argenx",
-          "url": "https://clinicaltrials.gov/study/NCT07673627"
-        }
-      ],
-      "timeline": {
-        "start": "2026-07-10",
-        "readout": "",
-        "completion": ""
-      },
-      "first_registered": "2026-06-29",
-      "latest_registered": "2026-06-29",
-      "linked_registries": []
-    },
-    {
-      "drug_class": "其他",
       "name": "Etoposide",
       "highest_phase_label": "Phase 2",
       "stage_number": 2,
@@ -6835,49 +6876,6 @@ window.MG_CLINICAL_TRIALS_DATA = {
       },
       "first_registered": "2020-03-10",
       "latest_registered": "2020-03-10",
-      "linked_registries": []
-    },
-    {
-      "drug_class": "其他",
-      "name": "RVT-1401",
-      "highest_phase_label": "Phase 2",
-      "stage_number": 2,
-      "study_count": 1,
-      "status_summary": "招募 0 · 进行 0 · 完成 1",
-      "sponsors": [
-        "Immunovant Sciences GmbH"
-      ],
-      "sources": {
-        "ClinicalTrials.gov": 1
-      },
-      "key_trial": {
-        "registry": "ClinicalTrials.gov",
-        "registry_id": "NCT03863080",
-        "title": "A Study of RVT-1401 in Myasthenia Gravis (MG) Patients",
-        "url": "https://clinicaltrials.gov/study/NCT03863080"
-      },
-      "trials": [
-        {
-          "registry": "ClinicalTrials.gov",
-          "registry_id": "NCT03863080",
-          "title": "A Study of RVT-1401 in Myasthenia Gravis (MG) Patients",
-          "status_label": "已完成",
-          "status_class": "completed",
-          "phase_label": "Phase 2",
-          "start_date": "2019-05-21",
-          "readout_date": "2020-10-07",
-          "completion_date": "2020-12-21",
-          "sponsor": "Immunovant Sciences GmbH",
-          "url": "https://clinicaltrials.gov/study/NCT03863080"
-        }
-      ],
-      "timeline": {
-        "start": "2019-05-21",
-        "readout": "2020-10-07",
-        "completion": "2020-12-21"
-      },
-      "first_registered": "2019-03-05",
-      "latest_registered": "2019-03-05",
       "linked_registries": []
     },
     {
@@ -12673,7 +12671,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "drug_class": "FcRn 拮抗剂",
           "drug_name": "M281",
           "drug_names": [
-            "Batoclimab (巴托利单抗)"
+            "Nipocalimab (尼卡利单抗)"
           ],
           "indication": "重症肌无力",
           "phase_label": "Phase 2",
@@ -12755,7 +12753,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "drug_class": "其他",
           "drug_name": "RVT-1401",
           "drug_names": [
-            "RVT-1401"
+            "Batoclimab (巴托利单抗)"
           ],
           "indication": "重症肌无力",
           "phase_label": "Phase 2",
@@ -12797,7 +12795,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "drug_class": "FcRn 拮抗剂",
           "drug_name": "M281",
           "drug_names": [
-            "Batoclimab (巴托利单抗)"
+            "Nipocalimab (尼卡利单抗)"
           ],
           "indication": "重症肌无力",
           "phase_label": "Phase 2",
@@ -13922,7 +13920,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "status_label": "未知",
           "status_class": "other",
           "drug_class": "其他",
-          "drug_name": "",
+          "drug_name": "Drug treatment of myasthenia gravis and treatment of crisis",
           "drug_names": [],
           "indication": "重症肌无力",
           "phase_label": "未标注",
@@ -14278,8 +14276,10 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "status_label": "进行中",
           "status_class": "active",
           "drug_class": "补体抑制剂",
-          "drug_name": "",
-          "drug_names": [],
+          "drug_name": "ALXN1720",
+          "drug_names": [
+            "Gefurulimab (戈鲁利单抗)"
+          ],
           "indication": "重症肌无力",
           "phase_label": "Phase 3",
           "sponsor": "Alexion Pharmaceuticals, Inc.",
@@ -15011,7 +15011,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "status": "ACTIVE_NOT_RECRUITING",
           "status_label": "进行中",
           "status_class": "active",
-          "drug_class": "其他",
+          "drug_class": "补体抑制剂",
           "drug_name": "Claseprubart",
           "drug_names": [
             "Claseprubart"
@@ -15491,7 +15491,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "status": "ACTIVE_NOT_RECRUITING",
           "status_label": "进行中",
           "status_class": "active",
-          "drug_class": "其他",
+          "drug_class": "补体抑制剂",
           "drug_name": "Iptacopan",
           "drug_names": [
             "Iptacopan"
@@ -15556,8 +15556,10 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "status_label": "进行中",
           "status_class": "active",
           "drug_class": "FcRn 拮抗剂",
-          "drug_name": "",
-          "drug_names": [],
+          "drug_name": "Efgartigimod PH20 SC",
+          "drug_names": [
+            "Efgartigimod (艾加莫德)"
+          ],
           "indication": "重症肌无力",
           "phase_label": "Phase 3",
           "sponsor": "argenx",
@@ -15617,9 +15619,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "status": "RECRUITING",
           "status_label": "招募中",
           "status_class": "recruiting",
-          "drug_class": "其他",
-          "drug_name": "",
-          "drug_names": [],
+          "drug_class": "补体抑制剂",
+          "drug_name": "Gefurulimab",
+          "drug_names": [
+            "Gefurulimab (戈鲁利单抗)"
+          ],
           "indication": "重症肌无力",
           "phase_label": "Phase 3",
           "sponsor": "Alexion Pharmaceuticals, Inc.",
@@ -17667,7 +17671,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "status": "RECRUITING",
           "status_label": "招募中",
           "status_class": "recruiting",
-          "drug_class": "其他",
+          "drug_class": "补体抑制剂",
           "drug_name": "Claseprubart",
           "drug_names": [
             "Claseprubart"
@@ -17729,10 +17733,11 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "status": "RECRUITING",
           "status_label": "招募中",
           "status_class": "recruiting",
-          "drug_class": "其他",
+          "drug_class": "补体抑制剂",
           "drug_name": "Empasiprubart IV",
           "drug_names": [
-            "Empasiprubart"
+            "Empasiprubart",
+            "Efgartigimod (艾加莫德)"
           ],
           "indication": "重症肌无力",
           "phase_label": "Phase 2",
@@ -20943,7 +20948,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "drug_class": "补体抑制剂",
           "drug_name": "ALXN1720注射液",
           "drug_names": [
-            "Ravulizumab (瑞利珠单抗)"
+            "Gefurulimab (戈鲁利单抗)"
           ],
           "indication": "重症肌无力",
           "phase_label": "Phase 3",

@@ -159,6 +159,8 @@ PubMed 主文献流必须先通过 MG-core，再通过证据等级 I–V 门控�
 
 文献列表与中国情报的期刊分区统一采用 EasyScholar `xr` 字段返回的“新锐分区”（如 1 区、2 区），旧中科院分区（CAS/sciBase）已不再使用。简报只在浏览器内生成 Markdown 预览并支持复制。信号简报从首页信号板生成，按文献与试验两节分别解释强/中/弱；情报中心不保存简报、筛选条件或复制历史。
 
+情报中心「领域重大事件」标签位于「临床试验」右侧，按时间降序聚合五类事件：获批/监管、指南/共识、重点药物 II/III 期文献、近 12 个月新启动 III 期、周更强/中试验信号。数据唯一来源为 `source-signals.js`，首次进入标签时惰性加载。`keyDrugTrialPublications` 频道由 `scripts/common/key_drugs.py` 确定性生成：重点药物清单取自 `landscape-data.js` 的 `all_competitive_matrix` 与 `clinical_pipeline_matrix`，叠加可复核的开发代号与中文名别名；只有标题或 PubMed PubType 明确标注 II/III 期、且标题命中重点药物的试验类文章才进入信息流。综述、荟萃分析、评论、间接比较、真实世界研究、机制研究与生物标志物文章一律排除；摘要里出现的 phase 字样不参与期别判定，避免把引用既往 III 期试验的文章误报成新发表。
+
 会议数据由 `build-conference-data.py` 确定性构建，再由可选 enrich 脚本生成中文摘要和 signal-to-kol 叙事。确定性重建必须保留已经通过校验的 LLM 字段。
 
 无稳定主来源的会议不保留伪完整数据，前端显示待接入状态。
@@ -175,7 +177,7 @@ MSL 工作台是 China-only：
 - 专家画像首屏不展示默认候选；须在左侧搜索框输入关键词后，才显示匹配列表与画像详情，其他筛选项只用于细化该检索结果；
 - 输出是公开证据、话题建议和 PMID 材料；
 - 拜访助手选择专家并勾选内容模块后，"导出拜访手卡"按钮可用：以 Markdown 预览 + 复制输出个体化依据、切入点、模块接入、追问问题、近期信号与文献清单，文本尾部带生成时间、数据版本与核对原文提示；
-- 原"本月格局行动"面板已撤下（动态洞察信息密度不足，职责由诊治格局"领域重大事件"时间线承接）；专家画像不再展示"主要合作者"区块（数据契约中无该字段，避免恒空展示）；
+- 原"本月格局行动"面板已撤下（动态洞察信息密度不足，职责由情报中心「领域重大事件」标签承接）；专家画像不再展示"主要合作者"区块（数据契约中无该字段，避免恒空展示）；
 - 不保存用户选择、行为或历史。
 
 ## 8.1 导出能力基线（field exports）
@@ -201,6 +203,8 @@ ClinicalTrials.gov 每次构建对比上一期快照（`clinicaltrials-weekly-ch
 试验信号先经过严格 MG-core、移除/重复/行政变化排除，再由确定性规则给出 `trialImportance`、`updateMateriality` 和强度上限。关键试验新增或发生高实质更新可为强；关键试验的中等更新、一般试验的高实质更新或战略性早期项目的重要变化可为中；其余真实而有限的开发变化为弱。MG 专家 LLM 只接收结构化注册字段并解释临床/开发意义与证据限制，不得提高强度、改写登记号，或把“结果已上传”“研究完成”写成疗效阳性。首页试验组显示三源变化计数、比较窗口、更新时间与管线矩阵入口；不展示或导出 KOL 追问与 MSL action。完整原始变化继续在临床试验页查看。
 
 `clinicalTrialsSummary.js.source_updates` 为三源缓存记录稳定 revision，必须同时等于原始缓存的当前语义 revision 和 `trial-signals-weekly.js.source_windows[*].source_revision`；CT.gov 的差分日期还必须与其信号窗口一致。任一来源缓存推进但摘要或信号分析未更新时，公开发布校验失败。来源频道和 `weekly-summary.md` 均在试验 enrichment 之后生成，周报按文献/试验分节并允许合法空试验组，不能沿用旧的纯文献周报逻辑。
+
+药物归并别名以 `build-clinical-trials-data.py` 的 `DRUG_SYNONYMS` 为准，且必须与公开代号一致：`ALXN1720` 只指向 gefurulimab（戈鲁利单抗，III 期 PREVAIL / NCT05556096、儿科 PK/PD / NCT06607627、中国 CTR20232711），`M281` 只指向 nipocalimab；两者过去分别被误并到 ravulizumab 与 batoclimab，已纠正。CT.gov 干预类型为 `COMBINATION_PRODUCT` 时同样抽取药物名，否则 III 期纳米抗体会因无药物标签而整行消失。注册状态按登记库原文展示：PREVAIL 的 26 周随机对照期完成并已发表，但整体状态为 ACTIVE_NOT_RECRUITING（开放标签延长期预计 2027-08-31 结束），不得写成「试验已结束」。
 
 失败时保留 last-good cache；不使用低可信第三方数据静默覆盖官方缓存。
 
@@ -316,3 +320,20 @@ git diff --check
 - **不随文献周更改动**：只有新增或替换指南/共识全文时才重跑，避免每周重算 34 份 PDF。
 
 两块内容都来自公开全文或摘要，只作为医学信息与证据生成的线索；对外表述前必须核对原文，abstract 级差异不能直接当成诊疗结论。完整流程见 [monthlyDivergenceAnalysis.md](../runbooks/monthlyDivergenceAnalysis.md)。
+
+## 17. 指南/共识周更同步 link
+
+网站所有涉及指南共识的位置共用一份权威缓存 `data/guideline-consensus-cache.json`。周更时 `scripts/sync-guideline-consensus.py` 对已发布的公开文献层 `literature-recent.js` 做全量重扫（并合并当周 `literature-weekly.json`），按 PMID 幂等写入；不依赖当周抓取窗口，因此既往入库而本周不再出现的指南不会被漏掉。该步骤在 `build-frontend` 与 `build-source-signals` 之前执行，`trials-only` 模式也在重建来源频道之前执行。公开文献层不可读时保留 last-good 缓存、不写入，也不阻塞发布。
+
+识别规则见 `scripts/common/guideline_consensus.py`：除 PubMed Guideline / Practice Guideline PubType 与 `study_types` 标签外，题名本身是指导性文件（如 “Practical Guidance … Expert Opinion Paper”、expert consensus、position statement）也放行——PubMed 常把专家共识只标成 Journal Article，`study_types` 还可能被误标为 Single Arm。所有候选仍须通过 MG-core 二次门控，避免把正文提到 guideline 的论文误路由。
+
+`source-signals.js` 的 `guidelineConsensus` 频道同时输出 `recent_items` 与 `sync.linked_views`，两个消费端共用同一份数据：
+
+| 视图 | 位置 | 呈现 |
+| --- | --- | --- |
+| 情报中心 · 领域重大事件 | `pages/literature.html` | 以「指南/共识」类型进入时间线 |
+| 诊治格局 · 周更指南/共识同步 | `pages/landscape.html` | 最近 8 条，标注「待纳入差异语料人工回验」 |
+
+诊治格局页新增面板惰性加载 `source-signals.js`，不增加首屏负担；它只提示摘要级线索，**不改写**第 16 节「中外指南共识差异 Top 10」的语料、引文回验与结论，后者仍在新增指南全文后人工重跑。新面板与原有两块差异模块互不引用对方数字。
+
+验证：`tests/test_landscape_sync_interfaces.py` 覆盖别名纠错、II/III 期门控、指南识别、缓存幂等、双视图 link 与周更步骤接线。

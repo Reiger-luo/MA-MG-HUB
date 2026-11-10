@@ -29,6 +29,8 @@ CANONICAL_INTERVENTIONS = [
     ("Claseprubart", ["claseprubart", "dnth103"], "补体", "补体通路", "Dianthus"),
     ("Pozelimab/Cemdisiran", ["pozelimab", "cemdisiran"], "补体", "C5 / C5 siRNA", "Regeneron"),
     ("Empasiprubart", ["empasiprubart"], "补体", "C2", "argenx"),
+    # PREVAIL（NCT05556096）用 ALXN1720 作为干预名，儿科 OLE（NCT06607627）用 gefurulimab。
+    ("Gefurulimab", ["gefurulimab", "alxn1720", "klygefa"], "补体", "C5 双结合纳米抗体", "Alexion / AstraZeneca"),
     ("Inebilizumab", ["inebilizumab"], "B细胞", "CD19", "Amgen"),
     ("Remibrutinib", ["remibrutinib"], "B细胞", "BTK", "Novartis"),
     ("Blinatumomab", ["blinatumomab"], "B细胞", "CD19/CD3 BiTE", "Academic"),

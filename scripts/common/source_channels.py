@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from .io import load_js_global
+from .key_drugs import buildWatchlist, selectKeyDrugTrialPublications
 from .mg_relevance import assess_mg_core
 
 
@@ -64,6 +65,43 @@ def _guideline_items(payload: dict[str, Any]) -> list[dict[str, Any]]:
     } for item in payload.get("records") or []]
 
 
+def _guideline_recent_items(payload: dict[str, Any], limit: int = 8) -> list[dict[str, Any]]:
+    """指南/共识最近入库条目：供诊治格局页与领域重大事件共用同一份缓存。"""
+    records = [item for item in payload.get("records") or [] if item.get("pmid")]
+    records.sort(
+        key=lambda item: str(item.get("entry_date") or item.get("pub_date") or ""),
+        reverse=True,
+    )
+    return [{
+        "id": str(item.get("pmid") or ""),
+        "title": item.get("title") or "",
+        "date": item.get("entry_date") or item.get("pub_date") or "",
+        "status": "待纳入差异语料人工回验",
+        "source": "PubMed · guideline/consensus cache",
+        "journal": item.get("journal") or "",
+        "study_types": item.get("study_types") or [],
+        "url": _safe_http_url(item.get("url")) or (
+            f"https://pubmed.ncbi.nlm.nih.gov/{item.get('pmid')}/"
+        ),
+    } for item in records[:limit]]
+
+
+def _key_drug_trial_items(selected: list[dict[str, Any]], limit: int = 12) -> list[dict[str, Any]]:
+    """投影重点药物 II/III 期文献为来源频道条目。"""
+    return [{
+        "id": item.get("pmid") or "",
+        "title": item.get("title") or "",
+        "date": item.get("date") or "",
+        "status": item.get("phase_label") or "",
+        "source": "PubMed · 重点药物 II/III 期",
+        "url": _safe_http_url(item.get("url")),
+        "journal": item.get("journal") or "",
+        "phase_label": item.get("phase_label") or "",
+        "drugs": item.get("drugs") or [],
+        "evidence_level": item.get("evidence_level") or "",
+    } for item in selected[:limit]]
+
+
 def _regulatory_items(payload: dict[str, Any]) -> list[dict[str, Any]]:
     return [{
         "id": str(item.get("name") or ""),
@@ -94,7 +132,9 @@ def _ct_items(payload: dict[str, Any]) -> list[dict[str, Any]]:
         drug_names = [
             iv.get("name", "").strip()
             for iv in interventions
-            if iv.get("type") in {"DRUG", "BIOLOGICAL"} and iv.get("name")
+            # COMBINATION_PRODUCT 同样是真实干预药（如 ALXN1720 / gefurulimab），
+            # 漏掉会让 III 期研究在管线矩阵里归不出药物名。
+            if iv.get("type") in {"DRUG", "BIOLOGICAL", "COMBINATION_PRODUCT"} and iv.get("name")
             and iv.get("name", "").strip().lower() not in _PLACEBO_NAMES
         ]
         items.append({
@@ -247,9 +287,17 @@ def build_source_signals(
     *, literature_signals_path: Path, guideline_cache_path: Path, regulatory_path: Path,
     clinicaltrials_path: Path, chictr_path: Path, china_drug_trials_path: Path,
     conference_path: Path, trial_signals_path: Path | None = None,
+    literature_recent_path: Path | None = None, landscape_data_path: Path | None = None,
 ) -> dict[str, Any]:
     literature = _js(literature_signals_path, "MG_SIGNALS_DATA", {})
     guidelines = _json(guideline_cache_path, {})
+    # 重点药物清单来自诊治格局与临床试验格局自身数据，避免名单漂移。
+    landscape = _js(landscape_data_path, "MG_LANDSCAPE_DATA", {}) if landscape_data_path else {}
+    publicArticles = _js(literature_recent_path, "MG_LITERATURE_DATA", []) if literature_recent_path else []
+    if not isinstance(publicArticles, list):
+        publicArticles = []
+    watchlist = buildWatchlist(landscape if isinstance(landscape, dict) else {})
+    keyDrugPublications = selectKeyDrugTrialPublications(publicArticles, watchlist)
     regulatory = _json(regulatory_path, {})
     clinicaltrials = _json(clinicaltrials_path, {})
     chictr = _json(chictr_path, {})
@@ -281,7 +329,21 @@ def build_source_signals(
         "generated_at": generated_at,
         "channels": [
             {"id": "literatureEvidence", "label": "文献证据", "evidence_required": True, "sources": ["PubMed"], "items": _literature_items(literature)},
-            {"id": "guidelineConsensus", "label": "指南 / 共识", "evidence_required": False, "sources": ["PubMed cache"], "items": _guideline_items(guidelines)},
+            {
+                "id": "guidelineConsensus", "label": "指南 / 共识", "evidence_required": False,
+                "sources": ["PubMed cache"], "items": _guideline_items(guidelines),
+                "recent_items": _guideline_recent_items(guidelines),
+                # link 接口：周更发现的新指南/共识只更新这一份缓存，两个页面共用。
+                "sync": {
+                    "hub": "data/guideline-consensus-cache.json",
+                    "rule": "文献周更全量重扫并幂等合并；不改写指南差异 Top10 语料与结论",
+                    "linked_views": [
+                        {"view": "情报中心 · 领域重大事件", "path": "pages/literature.html"},
+                        {"view": "诊治格局 · 周更指南/共识同步", "path": "pages/landscape.html"},
+                    ],
+                    "generated_at": generated_at,
+                },
+            },
             {"id": "chinaRegulatory", "label": "中国监管", "evidence_required": False, "sources": ["NMPA", "CDE", "NHSA"], "items": _regulatory_items(regulatory)},
             {
                 "id": "trialRegistry", "label": "试验注册", "evidence_required": False,
@@ -292,5 +354,12 @@ def build_source_signals(
                 "strength_scale": "source_internal_trial_milestone_priority",
             },
             {"id": "conference", "label": "会议线索", "evidence_required": False, "sources": ["Conference primary sources"], "items": conference_items},
+            {
+                "id": "keyDrugTrialPublications", "label": "重点药物 II/III 期文献",
+                "evidence_required": False, "sources": ["PubMed"],
+                "items": _key_drug_trial_items(keyDrugPublications),
+                "watchlist_count": len(watchlist),
+                "selection_rule": "标题/PubType/摘要明确 II 或 III 期 + 命中格局重点药物；排除综述与荟萃分析",
+            },
         ],
     }

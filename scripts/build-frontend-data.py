@@ -466,6 +466,8 @@ PIPELINE = [
     {"name": "Zilucoplan", "target": "C5", "route": "SC", "status": "已上市", "owner": "UCB"},
     {"name": "Ravulizumab", "target": "C5", "route": "IV", "status": "已上市", "owner": "Alexion"},
     {"name": "Eculizumab", "target": "C5", "route": "IV", "status": "已上市", "owner": "Alexion"},
+    # III 期 PREVAIL 已发表（JAMA Neurol，PMID 42507440）；中国尚未获批，不进入 approved 竞品矩阵。
+    {"name": "Gefurulimab", "target": "C5", "route": "SC", "status": "III期已发表 / 上市审评中", "owner": "Alexion / AstraZeneca"},
     {"name": "Telitacicept", "target": "BLyS/APRIL", "route": "SC", "status": "中国已上市", "owner": "RemeGen"},
     {"name": "Rituximab", "target": "CD20", "route": "IV", "status": "超说明书/研究", "owner": "Multiple"},
     {"name": "Inebilizumab", "target": "CD19", "route": "IV", "status": "研究线索", "owner": "Amgen"},
@@ -525,6 +527,15 @@ LANDSCAPE_CHANGE_SPECS = [
 ]
 
 DRUG_POSITIONING = {
+    "Gefurulimab": {
+        "mechanism": "C5 双结合纳米抗体",
+        "population": "AChR-Ab+ gMG（PREVAIL III 期入组 MGFA II–IV、MG-ADL ≥5）",
+        "positioning": "III 期 PREVAIL 随机对照期 26 周已完成并发表（JAMA Neurol，PMID 42507440）；开放标签延长期仍在进行，注册整体状态为进行中/停止招募。中国处上市审评阶段，暂不按已获批竞品对标。",
+        "speed": "以 PREVAIL 原文报告的第 26 周 MG-ADL / QMG 终点为准",
+        "convenience": "每周一次皮下自我注射",
+        "safety": "以 PREVAIL 原文安全性结果为准；C5 抑制剂相关疫苗接种要求需按当地说明书核对",
+        "competition": "与 ravulizumab / zilucoplan / eculizumab 同属 C5 赛道，给药方式是主要区隔点。",
+    },
     "Efgartigimod": {
         "mechanism": "FcRn",
         "population": "AChR+ gMG 及真实世界扩展人群",

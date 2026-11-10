@@ -90,6 +90,12 @@ def pipeline_steps(args, full_available: bool | None = None) -> list[PipelineSte
                 py("enrich-clinical-trial-signals.py"),
                 outputs=[DATA / "trial-signals-weekly.js"],
             )]),
+            # 指南/共识 link：先全量重扫公开文献层更新权威缓存，再重建来源频道。
+            PipelineStep(
+                "sync-guideline-consensus",
+                py("sync-guideline-consensus.py"),
+                outputs=[DATA / "guideline-consensus-cache.json"],
+            ),
             PipelineStep("build-source-signals", py("build-source-signals.py"), outputs=[DATA / "source-signals.js"]),
             PipelineStep("generate-weekly-summary", py("generate-weekly-summary.py"), outputs=[DATA / "weekly-summary.md"]),
             PipelineStep("update-release-token", py("updateFrontendReleaseToken.py"), outputs=ACTIVE_HTML),
@@ -124,6 +130,13 @@ def pipeline_steps(args, full_available: bool | None = None) -> list[PipelineSte
         ])
     if args.skip_downstream:
         return steps
+    # 指南/共识 link 必须在 build-frontend 与 build-source-signals 之前：
+    # 此时公开文献层已是本周版本，缓存更新后两个页面才能读到同一批新指南。
+    steps.append(PipelineStep(
+        "sync-guideline-consensus",
+        py("sync-guideline-consensus.py"),
+        outputs=[DATA / "guideline-consensus-cache.json"],
+    ))
     # 三个注册源都在同一次周更内连续抓取，构建阶段才能读到同一批新缓存：
     # ChiCTR → ChinaDrugTrials → ClinicalTrials.gov（build-frontend 内实时抓取）
     steps.extend([

@@ -680,6 +680,7 @@ def test_source_channel_builder_has_stable_schema_and_safe_empty_fallbacks(tmp_p
         "chinaRegulatory",
         "trialRegistry",
         "conference",
+        "keyDrugTrialPublications",
     ]
     by_id = {item["id"]: item for item in payload["channels"]}
     assert by_id["literatureEvidence"]["evidence_required"] is True

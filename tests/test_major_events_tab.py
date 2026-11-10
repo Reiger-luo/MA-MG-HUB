@@ -1,8 +1,8 @@
 """Contract tests for 情报中心「领域重大事件」标签。
 
 领域重大事件时间线从诊治格局迁移至情报中心，位于「临床试验」标签右侧；
-数据源唯一为 source-signals.js（惰性加载），聚合四类事件并按时间降序：
-获批/监管 · 指南/共识 · 近12个月新启动III期 · 周更强/中试验信号。
+数据源唯一为 source-signals.js（惰性加载），聚合五类事件并按时间降序：
+获批/监管 · 指南/共识 · 重点药物 II/III 期文献 · 近12个月新启动III期 · 周更强/中试验信号。
 """
 import re
 from pathlib import Path
@@ -62,8 +62,8 @@ def test_landscape_no_longer_hosts_major_events():
     assert "collectMajorEvents" not in js
 
 
-def test_literature_js_aggregates_four_event_sources():
-    """literature.js 必须聚合四类事件，且周更强/中信号只取强与中。"""
+def test_literature_js_aggregates_five_event_sources():
+    """literature.js 必须聚合五类事件，且周更强/中信号只取强与中。"""
     js = (PROJECT / "assets" / "literature.js").read_text(encoding="utf-8")
     assert "collectMajorEvents" in js
     assert "renderMajorEvents" in js
@@ -71,9 +71,10 @@ def test_literature_js_aggregates_four_event_sources():
     # 惰性加载入口与数据源
     assert "MG_SOURCE_SIGNALS" in js
     assert "data/source-signals.js" in js
-    # 四类事件源：获批监管 / 指南共识 / III期 / 周更强中试验信号
+    # 五类事件源：获批监管 / 指南共识 / 重点药物 II-III 期文献 / III期 / 周更强中试验信号
     assert "chinaRegulatory" in js
     assert "guidelineConsensus" in js
+    assert "keyDrugTrialPublications" in js
     assert "weekly_signals" in js
     assert "trialRegistry" in js
     # 只收强/中试验信号

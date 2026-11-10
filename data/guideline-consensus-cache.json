@@ -3,6 +3,601 @@
   "source": "MG-core PubMed guideline/consensus records outside evidence literature",
   "records": [
     {
+      "source_type": "pubmed_article",
+      "pmid": "42717567",
+      "title": "Practical Guidance on Initiating and Switching Targeted Immunotherapies in Generalised Myasthenia Gravis: A German-Austrian Expert Opinion Paper.",
+      "abstract": "BACKGROUND: The therapeutic landscape of generalised myasthenia gravis (gMG) has evolved substantially with the approval of targeted immunotherapies, including complement C5 inhibitors (C5-I) and neonatal Fc receptor inhibitors (FcRn-I). While pivotal trials have demonstrated marked efficacy in defined subgroups, real-world experience reveals more heterogeneous outcomes and raises questions about optimal patient selection, therapy sequencing and integration into clinical practice. In Germany and Austria, early access following regulatory approval has facilitated clinical experience over recent years. This expert opinion paper aims to combine current evidence with clinical experience to guide the use of C5-I and FcRn-I in everyday care.\nMETHODS: A panel of 18 neurologists from Germany and Austria, including two paediatric neurologists, evaluated study data and real-world experiences. Through structured discussion and a consensus process, they developed evidence- and experience-based recommendations on integrating targeted immunotherapies into existing treatment algorithms.\nRESULTS: The panel provides practical recommendations for managing (highly) active gMG in adults, focusing on C5-I (eculizumab, ravulizumab, zilucoplan) and FcRn-I (efgartigimod, rozanolixizumab). The statements cover initiation criteria, sequencing and switching within and between drug classes and transitions to intensified immunomodulatory therapies (rituximab, apheresis, intravenous or subcutaneous immunoglobulin), as well as special considerations for juvenile MG.\nCONCLUSIONS: This expert statement provides a practice-oriented framework integrating current evidence and clinical experience to support individualised therapeutic decision-making in gMG.",
+      "authors": [
+        "Meisel Andreas",
+        "Marina Adela Della",
+        "Doksani Paolo",
+        "Hagenacker Tim",
+        "Kleinschnitz Christoph",
+        "Krämer Heidrun H",
+        "Lünemann Jan D",
+        "Meuth Sven G",
+        "Ruck Tobias",
+        "Schara-Schmidt Ulrike",
+        "Schneider-Gold Christiane",
+        "Schoser Benedikt",
+        "Schroeter Michael",
+        "Schubert Charlotte",
+        "Sieb Jörn Peter",
+        "Zimprich Fritz",
+        "Zschüntzsch Jana",
+        "Hoffmann Sarah"
+      ],
+      "first_authors": [
+        "Meisel Andreas"
+      ],
+      "corresponding_authors": [
+        "Hoffmann Sarah"
+      ],
+      "corresponding_authors_source": "last_author_fallback",
+      "author_affiliations": [
+        {
+          "position": 1,
+          "name": "Meisel Andreas",
+          "affiliations": [
+            "Department of Neurology With Experimental Neurology, Charité - Universitätsmedizin Berlin, Corporate Member of Freie Universität Berlin and Humboldt-Universität zu Berlin, Berlin, Germany.",
+            "Neuroscience Clinical Research Center, Charité - Universitätsmedizin Berlin, Corporate Member of Freie Universität Berlin and Humboldt-Universität zu Berlin, Berlin, Germany.",
+            "Charité - Universitätsmedizin Berlin, Corporate Member of Freie Universität Berlin and Humboldt-Universität zu Berlin, Berlin, Germany."
+          ],
+          "emails": [],
+          "is_first": true,
+          "is_last": false,
+          "equal_contrib": false,
+          "is_corresponding": false
+        },
+        {
+          "position": 2,
+          "name": "Marina Adela Della",
+          "affiliations": [
+            "Department of Pediatric Neurology, Center for Neuromuscular Disorders in Children and Adolescents, University Hospital Essen, University Duisburg-Essen, Essen, Germany."
+          ],
+          "emails": [],
+          "is_first": false,
+          "is_last": false,
+          "equal_contrib": false,
+          "is_corresponding": false
+        },
+        {
+          "position": 3,
+          "name": "Doksani Paolo",
+          "affiliations": [
+            "Department of Neurology With Experimental Neurology, Charité - Universitätsmedizin Berlin, Corporate Member of Freie Universität Berlin and Humboldt-Universität zu Berlin, Berlin, Germany.",
+            "Neuroscience Clinical Research Center, Charité - Universitätsmedizin Berlin, Corporate Member of Freie Universität Berlin and Humboldt-Universität zu Berlin, Berlin, Germany."
+          ],
+          "emails": [],
+          "is_first": false,
+          "is_last": false,
+          "equal_contrib": false,
+          "is_corresponding": false
+        },
+        {
+          "position": 4,
+          "name": "Hagenacker Tim",
+          "affiliations": [
+            "Department of Neurology and Center for Translational Neuro- and Behavioral Sciences (C-TNBS), University Hospital Essen, Essen, Germany."
+          ],
+          "emails": [],
+          "is_first": false,
+          "is_last": false,
+          "equal_contrib": false,
+          "is_corresponding": false
+        },
+        {
+          "position": 5,
+          "name": "Kleinschnitz Christoph",
+          "affiliations": [
+            "Department of Neurology and Center for Translational Neuro- and Behavioral Sciences (C-TNBS), University Hospital Essen, Essen, Germany."
+          ],
+          "emails": [],
+          "is_first": false,
+          "is_last": false,
+          "equal_contrib": false,
+          "is_corresponding": false
+        },
+        {
+          "position": 6,
+          "name": "Krämer Heidrun H",
+          "affiliations": [
+            "Department of Neurology, Justus-Liebig-University Giessen, Giessen, Germany."
+          ],
+          "emails": [],
+          "is_first": false,
+          "is_last": false,
+          "equal_contrib": false,
+          "is_corresponding": false
+        },
+        {
+          "position": 7,
+          "name": "Lünemann Jan D",
+          "affiliations": [
+            "Division of Neurology, Department of Medicine, University of British Columbia, Vancouver, British Columbia, Canada.",
+            "Djavad Mowafaghian Centre for Brain Health, University of British Columbia, Vancouver, British Columbia, Canada.",
+            "School of Biomedical Engineering, University of British Columbia, Vancouver, British Columbia, Canada.",
+            "Department of Neurology, University Hospital Münster, Münster, Germany."
+          ],
+          "emails": [],
+          "is_first": false,
+          "is_last": false,
+          "equal_contrib": false,
+          "is_corresponding": false
+        },
+        {
+          "position": 8,
+          "name": "Meuth Sven G",
+          "affiliations": [
+            "Department of Neurology, Heinrich-Heine-University Düsseldorf, Düsseldorf, Germany."
+          ],
+          "emails": [],
+          "is_first": false,
+          "is_last": false,
+          "equal_contrib": false,
+          "is_corresponding": false
+        },
+        {
+          "position": 9,
+          "name": "Ruck Tobias",
+          "affiliations": [
+            "Department of Neurology, Ruhr University Bochum, BG University Hospital Bergmannsheil, Heimer Institute for Muscle Research, Bochum, Germany."
+          ],
+          "emails": [],
+          "is_first": false,
+          "is_last": false,
+          "equal_contrib": false,
+          "is_corresponding": false
+        },
+        {
+          "position": 10,
+          "name": "Schara-Schmidt Ulrike",
+          "affiliations": [
+            "Department of Pediatric Neurology, Center for Neuromuscular Disorders in Children and Adolescents, University Hospital Essen, University Duisburg-Essen, Essen, Germany."
+          ],
+          "emails": [],
+          "is_first": false,
+          "is_last": false,
+          "equal_contrib": false,
+          "is_corresponding": false
+        },
+        {
+          "position": 11,
+          "name": "Schneider-Gold Christiane",
+          "affiliations": [
+            "Department of Neurology, St. Josef Hospital, Ruhr-University Bochum, Bochum, Germany."
+          ],
+          "emails": [],
+          "is_first": false,
+          "is_last": false,
+          "equal_contrib": false,
+          "is_corresponding": false
+        },
+        {
+          "position": 12,
+          "name": "Schoser Benedikt",
+          "affiliations": [
+            "Friedrich-Baur-Institut Neurologische Klinik und Poliklinik LMU Klinikum München, Friedrich-Baur-Institute, Department of Neurology, LMU Clinics Munich, Munich, Germany."
+          ],
+          "emails": [],
+          "is_first": false,
+          "is_last": false,
+          "equal_contrib": false,
+          "is_corresponding": false
+        },
+        {
+          "position": 13,
+          "name": "Schroeter Michael",
+          "affiliations": [
+            "Department of Neurology, University of Cologne and University Hospital, Cologne, Germany."
+          ],
+          "emails": [],
+          "is_first": false,
+          "is_last": false,
+          "equal_contrib": false,
+          "is_corresponding": false
+        },
+        {
+          "position": 14,
+          "name": "Schubert Charlotte",
+          "affiliations": [
+            "Department of Neurology, Institute of Neuroimmunology and MS (INIMS), University Medical Center Hamburg-Eppendorf, Hamburg, Germany."
+          ],
+          "emails": [],
+          "is_first": false,
+          "is_last": false,
+          "equal_contrib": false,
+          "is_corresponding": false
+        },
+        {
+          "position": 15,
+          "name": "Sieb Jörn Peter",
+          "affiliations": [
+            "Department of Neurology, Helios Hanseklinikum Stralsund, Stralsund, Germany."
+          ],
+          "emails": [],
+          "is_first": false,
+          "is_last": false,
+          "equal_contrib": false,
+          "is_corresponding": false
+        },
+        {
+          "position": 16,
+          "name": "Zimprich Fritz",
+          "affiliations": [
+            "Department of Neurology, Medical University of Vienna, Vienna, Austria."
+          ],
+          "emails": [],
+          "is_first": false,
+          "is_last": false,
+          "equal_contrib": false,
+          "is_corresponding": false
+        },
+        {
+          "position": 17,
+          "name": "Zschüntzsch Jana",
+          "affiliations": [
+            "Department of Neurology, University Medical Center Göttingen, Göttingen, Germany."
+          ],
+          "emails": [],
+          "is_first": false,
+          "is_last": false,
+          "equal_contrib": false,
+          "is_corresponding": false
+        },
+        {
+          "position": 18,
+          "name": "Hoffmann Sarah",
+          "affiliations": [
+            "Department of Neurology With Experimental Neurology, Charité - Universitätsmedizin Berlin, Corporate Member of Freie Universität Berlin and Humboldt-Universität zu Berlin, Berlin, Germany.",
+            "Neuroscience Clinical Research Center, Charité - Universitätsmedizin Berlin, Corporate Member of Freie Universität Berlin and Humboldt-Universität zu Berlin, Berlin, Germany."
+          ],
+          "emails": [],
+          "is_first": false,
+          "is_last": true,
+          "equal_contrib": false,
+          "is_corresponding": false
+        }
+      ],
+      "journal": "European journal of neurology",
+      "journal_iso": "Eur J Neurol",
+      "issn": "1468-1331",
+      "volume": "33",
+      "issue": "9",
+      "pages": "e70747",
+      "entry_date": "2026/09/10 05:04",
+      "pub_date": "2026-09",
+      "date_completed": "2026-09-10",
+      "date_revised": "2026-09-10",
+      "doi": "10.1007/s00431-022-04385-z",
+      "pmcid": "PMC9056438",
+      "article_ids": {
+        "pubmed": "35084548",
+        "doi": "10.1007/s00431-022-04385-z",
+        "pmc": "PMC9056438"
+      },
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42717567/",
+      "full_text_url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9056438/",
+      "affiliations": [
+        "Department of Neurology With Experimental Neurology, Charité - Universitätsmedizin Berlin, Corporate Member of Freie Universität Berlin and Humboldt-Universität zu Berlin, Berlin, Germany.",
+        "Neuroscience Clinical Research Center, Charité - Universitätsmedizin Berlin, Corporate Member of Freie Universität Berlin and Humboldt-Universität zu Berlin, Berlin, Germany.",
+        "Charité - Universitätsmedizin Berlin, Corporate Member of Freie Universität Berlin and Humboldt-Universität zu Berlin, Berlin, Germany.",
+        "Department of Pediatric Neurology, Center for Neuromuscular Disorders in Children and Adolescents, University Hospital Essen, University Duisburg-Essen, Essen, Germany.",
+        "Department of Neurology and Center for Translational Neuro- and Behavioral Sciences (C-TNBS), University Hospital Essen, Essen, Germany.",
+        "Department of Neurology, Justus-Liebig-University Giessen, Giessen, Germany.",
+        "Division of Neurology, Department of Medicine, University of British Columbia, Vancouver, British Columbia, Canada.",
+        "Djavad Mowafaghian Centre for Brain Health, University of British Columbia, Vancouver, British Columbia, Canada.",
+        "School of Biomedical Engineering, University of British Columbia, Vancouver, British Columbia, Canada.",
+        "Department of Neurology, University Hospital Münster, Münster, Germany.",
+        "Department of Neurology, Heinrich-Heine-University Düsseldorf, Düsseldorf, Germany.",
+        "Department of Neurology, Ruhr University Bochum, BG University Hospital Bergmannsheil, Heimer Institute for Muscle Research, Bochum, Germany.",
+        "Department of Neurology, St. Josef Hospital, Ruhr-University Bochum, Bochum, Germany.",
+        "Friedrich-Baur-Institut Neurologische Klinik und Poliklinik LMU Klinikum München, Friedrich-Baur-Institute, Department of Neurology, LMU Clinics Munich, Munich, Germany.",
+        "Department of Neurology, University of Cologne and University Hospital, Cologne, Germany.",
+        "Department of Neurology, Institute of Neuroimmunology and MS (INIMS), University Medical Center Hamburg-Eppendorf, Hamburg, Germany.",
+        "Department of Neurology, Helios Hanseklinikum Stralsund, Stralsund, Germany.",
+        "Department of Neurology, Medical University of Vienna, Vienna, Austria.",
+        "Department of Neurology, University Medical Center Göttingen, Göttingen, Germany."
+      ],
+      "pub_types": [
+        "Journal Article"
+      ],
+      "publication_types": [
+        "Journal Article"
+      ],
+      "mesh_terms": [
+        {
+          "descriptor": "Humans",
+          "major": false,
+          "qualifiers": []
+        },
+        {
+          "descriptor": "Myasthenia Gravis",
+          "major": true,
+          "qualifiers": [
+            {
+              "name": "therapy",
+              "major": false
+            },
+            {
+              "name": "drug therapy",
+              "major": false
+            }
+          ]
+        },
+        {
+          "descriptor": "Immunotherapy",
+          "major": true,
+          "qualifiers": [
+            {
+              "name": "methods",
+              "major": false
+            },
+            {
+              "name": "standards",
+              "major": false
+            }
+          ]
+        },
+        {
+          "descriptor": "Germany",
+          "major": false,
+          "qualifiers": []
+        },
+        {
+          "descriptor": "Austria",
+          "major": false,
+          "qualifiers": []
+        },
+        {
+          "descriptor": "Receptors, Fc",
+          "major": false,
+          "qualifiers": [
+            {
+              "name": "antagonists & inhibitors",
+              "major": false
+            }
+          ]
+        },
+        {
+          "descriptor": "Histocompatibility Antigens Class I",
+          "major": false,
+          "qualifiers": []
+        }
+      ],
+      "keywords": [
+        "clinical practice",
+        "complement inhibitors",
+        "generalised myasthenia gravis",
+        "neonatal fc receptor inhibitors",
+        "targeted immunotherapies"
+      ],
+      "chemicals": [
+        {
+          "name": "Receptors, Fc",
+          "registry_number": "0"
+        },
+        {
+          "name": "Fc receptor, neonatal",
+          "registry_number": "TW3XAW0RCY"
+        },
+        {
+          "name": "Histocompatibility Antigens Class I",
+          "registry_number": "0"
+        }
+      ],
+      "grants": [
+        {
+          "grant_id": "",
+          "agency": "Alexion Pharmaceuticals",
+          "country": ""
+        }
+      ],
+      "languages": [
+        "eng"
+      ],
+      "publication_status": "ppublish",
+      "china_related": false,
+      "study_types": [
+        "Single Arm"
+      ],
+      "evidence_level": "IV",
+      "mg_core": true,
+      "mg_core_reason": "explicit_mg_title",
+      "journal_if": 4.3,
+      "journal_quartile": "2区",
+      "signal_strength": "中"
+    },
+    {
+      "pmid": "42137634",
+      "title": "Meningococcal prophylaxis in neurological diseases treated with complement inhibitors: an expert consensus for Germany, Austria, and Switzerland.",
+      "abstract": "Inhibition of terminal complement activation is an effective therapeutic strategy for acetylcholine receptor antibody-positive generalized myasthenia gravis (gMG) and aquaporin-4 antibody-positive neuromyelitis optica spectrum disorder (NMOSD), but it increases the risk of invasive meningococcal infections. Consequently, vaccination against meningococcal serogroups A, C, W, Y, and B is mandatory for all patients receiving complement inhibitors. This article provides expert consensus recommendations for managing meningococcal vaccination in patients with NMOSD and gMG receiving complement-inhibiting therapies in Germany, Austria, and Switzerland. The timing and procedures of vaccination should be adapted to the underlying diagnosis and the individual risk of disease exacerbation in this population. In NMOSD, treatment often must begin promptly, particularly after an acute attack; in such cases, vaccination should be administered at treatment initiation together with antibiotic prophylaxis. By contrast, treatment urgency in gMG is typically lower, allowing vaccination to be completed in advance and thereby avoiding antibiotic exposure, which may worsen gMG symptoms. For both diseases, ceftriaxone is recommended as first-line therapy for suspected infection, rifampicin for prophylaxis, and either rifampicin or intramuscular ceftriaxone for post-exposure chemoprophylaxis. Patients should also carry a standby dose of ciprofloxacin for emergency self-administration at the first signs of meningitis, followed by immediate clinical evaluation. These recommendations should be reviewed regularly and updated as necessary to reflect emerging evidence and new vaccine options.\nHow to prevent serious infections during treatment for NMOSD and myasthenia gravis Blocking terminal complement activation is an effective treatment for people with acetylcholine receptor antibody–positive generalized myasthenia gravis (gMG) and aquaporin-4 antibody–positive neuromyelitis optica spectrum disorder (NMOSD). However, this treatment increases the risk of serious meningococcal infections. For this reason, all patients receiving complement inhibitors must be vaccinated against meningococcal serogroups A, C, W, Y, and B. This article presents expert consensus recommendations on how to manage meningococcal vaccination in patients with NMOSD and gMG receiving complement-inhibiting therapies in Germany, Austria, and Switzerland. The timing and approach to vaccination should be adapted to the specific disease and to each patient’s risk of worsening symptoms. In NMOSD, treatment often needs to start quickly, especially after an acute attack. In these cases, vaccination should be given at the start of complement inhibitor therapy together with preventive antibiotic treatment. In contrast, treatment for gMG is usually less urgent. This often allows vaccination to be completed before therapy begins and helps avoid antibiotic use, which may worsen gMG symptoms. For both diseases, ceftriaxone is recommended as the first treatment if infection is suspected. Rifampicin is recommended for preventive antibiotic treatment, and either rifampicin or intramuscular ceftriaxone can be used after possible exposure to infection. Patients should also carry a standby dose of ciprofloxacin to take immediately if early signs of meningitis appear, followed by urgent medical evaluation. These recommendations should be reviewed regularly and updated as new evidence and vaccines become available.",
+      "authors": [
+        "Berthele Achim",
+        "Aktas Orhan",
+        "Ayzenberg Ilya",
+        "Claus Heike",
+        "Lâm Thiên-Trí",
+        "Löscher Wolfgang N",
+        "Pröbstel Anne-Katrin",
+        "Prüss Harald",
+        "Rademacher Nina",
+        "Ringelstein Marius",
+        "Rommer Paulus",
+        "Schara-Schmidt Ulrike",
+        "Schoser Benedikt",
+        "Weber Jörg R",
+        "Zschüntzsch Jana",
+        "Meisel Andreas",
+        "Lünemann Jan D"
+      ],
+      "journal": "Therapeutic advances in neurological disorders",
+      "entry_date": "2026/05/15 04:54",
+      "pub_date": "2026",
+      "doi": "",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42137634/",
+      "pub_types": [
+        "Journal Article",
+        "Review"
+      ],
+      "affiliations": [
+        "Department of Neurology, School of Medicine and Health, Technical University Munich, Munich, Germany.",
+        "Heinrich Heine University, Düsseldorf, Germany.",
+        "Department of Neurology, Ruhr University Bochum, St. Josef Hospital, Bochum, Germany.",
+        "National Reference Center for Meningococci and Haemophilus influenzae, Institute for Hygiene and Microbiology, University of Würzburg, Würzburg, Germany.",
+        "Department of Neurology, Medical University of Innsbruck, Innsbruck, Austria.",
+        "Center for Neurology, Department of Neuroimmunology and Neuromuscular Diseases, University Hospital and University Bonn, Bonn, Germany.",
+        "German Center for Neurodegenerative Diseases (DZNE), Bonn, Germany.",
+        "Department of Neurology and Research Center for Clinical Neuroimmunology and Neuroscience Basel (RC2NB), University Hospital Basel and University of Basel, Basel, Switzerland.",
+        "Departments of Biomedicine and Clinical Research, University Hospital Basel and University of Basel, Basel, Switzerland.",
+        "Department of Neurology with Experimental Neurology, Neuroscience Clinical Research Center, Charité - Universitätsmedizin Berlin, Berlin, Germany.",
+        "German Center for Neurodegenerative Diseases (DZNE) Berlin, Berlin, Germany.",
+        "Department of Pediatric Neurology, University Hospital Essen, University of Duisburg-Essen, Essen, Germany.",
+        "Department of Neurology, Center for Neurology and Neuropsychiatry, LVR Klinikum, Heinrich Heine Universität, Düsseldorf, Germany.",
+        "Department of Neurology, Medical University of Vienna, Vienna, Austria.",
+        "Friedrich Baur Institute at the Department of Neurology, Ludwig Maximilian University of Munich, Munich, Germany.",
+        "Department of Neurology, Klinikum Klagenfurt, Klagenfurt, Austria.",
+        "Department of Neurology, University Medical Center Göttingen, Göttingen, Germany.",
+        "Department of Neurology, University Hospital Münster, Münster 48149, Germany."
+      ],
+      "china_related": false,
+      "study_types": [
+        "Review"
+      ],
+      "evidence_level": null,
+      "journal_if": 4.0,
+      "journal_quartile": "2区",
+      "author_affiliations": [
+        {
+          "position": 1,
+          "name": "Berthele Achim",
+          "affiliations": [
+            "Department of Neurology, School of Medicine and Health, Technical University Munich, Munich, Germany."
+          ]
+        },
+        {
+          "position": 2,
+          "name": "Aktas Orhan",
+          "affiliations": [
+            "Heinrich Heine University, Düsseldorf, Germany."
+          ]
+        },
+        {
+          "position": 3,
+          "name": "Ayzenberg Ilya",
+          "affiliations": [
+            "Department of Neurology, Ruhr University Bochum, St. Josef Hospital, Bochum, Germany."
+          ]
+        },
+        {
+          "position": 4,
+          "name": "Claus Heike",
+          "affiliations": [
+            "National Reference Center for Meningococci and Haemophilus influenzae, Institute for Hygiene and Microbiology, University of Würzburg, Würzburg, Germany."
+          ]
+        },
+        {
+          "position": 5,
+          "name": "Lâm Thiên-Trí",
+          "affiliations": [
+            "National Reference Center for Meningococci and Haemophilus influenzae, Institute for Hygiene and Microbiology, University of Würzburg, Würzburg, Germany."
+          ]
+        },
+        {
+          "position": 6,
+          "name": "Löscher Wolfgang N",
+          "affiliations": [
+            "Department of Neurology, Medical University of Innsbruck, Innsbruck, Austria."
+          ]
+        },
+        {
+          "position": 7,
+          "name": "Pröbstel Anne-Katrin",
+          "affiliations": [
+            "Center for Neurology, Department of Neuroimmunology and Neuromuscular Diseases, University Hospital and University Bonn, Bonn, Germany.",
+            "German Center for Neurodegenerative Diseases (DZNE), Bonn, Germany.",
+            "Department of Neurology and Research Center for Clinical Neuroimmunology and Neuroscience Basel (RC2NB), University Hospital Basel and University of Basel, Basel, Switzerland.",
+            "Departments of Biomedicine and Clinical Research, University Hospital Basel and University of Basel, Basel, Switzerland."
+          ]
+        },
+        {
+          "position": 8,
+          "name": "Prüss Harald",
+          "affiliations": [
+            "Department of Neurology with Experimental Neurology, Neuroscience Clinical Research Center, Charité - Universitätsmedizin Berlin, Berlin, Germany.",
+            "German Center for Neurodegenerative Diseases (DZNE) Berlin, Berlin, Germany."
+          ]
+        },
+        {
+          "position": 9,
+          "name": "Rademacher Nina",
+          "affiliations": [
+            "Department of Pediatric Neurology, University Hospital Essen, University of Duisburg-Essen, Essen, Germany."
+          ]
+        },
+        {
+          "position": 10,
+          "name": "Ringelstein Marius",
+          "affiliations": [
+            "Heinrich Heine University, Düsseldorf, Germany.",
+            "Department of Neurology, Center for Neurology and Neuropsychiatry, LVR Klinikum, Heinrich Heine Universität, Düsseldorf, Germany."
+          ]
+        },
+        {
+          "position": 11,
+          "name": "Rommer Paulus",
+          "affiliations": [
+            "Department of Neurology, Medical University of Vienna, Vienna, Austria."
+          ]
+        },
+        {
+          "position": 12,
+          "name": "Schara-Schmidt Ulrike",
+          "affiliations": [
+            "Department of Pediatric Neurology, University Hospital Essen, University of Duisburg-Essen, Essen, Germany."
+          ]
+        },
+        {
+          "position": 13,
+          "name": "Schoser Benedikt",
+          "affiliations": [
+            "Friedrich Baur Institute at the Department of Neurology, Ludwig Maximilian University of Munich, Munich, Germany."
+          ]
+        },
+        {
+          "position": 14,
+          "name": "Weber Jörg R",
+          "affiliations": [
+            "Department of Neurology, Klinikum Klagenfurt, Klagenfurt, Austria."
+          ]
+        },
+        {
+          "position": 15,
+          "name": "Zschüntzsch Jana",
+          "affiliations": [
+            "Department of Neurology, University Medical Center Göttingen, Göttingen, Germany."
+          ]
+        },
+        {
+          "position": 16,
+          "name": "Meisel Andreas",
+          "affiliations": [
+            "Department of Neurology with Experimental Neurology, Neuroscience Clinical Research Center, Charité - Universitätsmedizin Berlin, Berlin, Germany."
+          ]
+        },
+        {
+          "position": 17,
+          "name": "Lünemann Jan D",
+          "affiliations": [
+            "Department of Neurology, University Hospital Münster, Münster 48149, Germany."
+          ]
+        }
+      ],
+      "mg_core": true,
+      "mg_core_reason": "repeated_mg_core_mentions",
+      "signal_strength": "弱"
+    },
+    {
       "pmid": "39806659",
       "title": "Epidemiology, management and patient needs in myasthenia gravis: an Italian multistakeholder consensus based on Delphi methodology.",
       "abstract": "OBJECTIVES: To provide comprehensive information on the burden of myasthenia gravis (MG) in Italy, including the unmet needs of patients and several other aspects related to the disease, based on skilled viewpoints of MG experts.\nDESIGN: Iterative analysis conducted in accordance with the best practices of the Delphi method, including anonymity, controlled feedback, and statistical stability of consensus.\nSETTING AND PARTICIPANTS: 24 clinicians, 18 public health experts and 4 patient associations experts completed all the Delphi iterations between 18 April and 3 July 2023, for a total of 46 participants from several Italian Regions.\nOUTCOME MEASURES: Five areas of investigation related to MG were examined: epidemiology in Italy and characteristics of disease; diagnostic issues and Italian patient journey; unmet needs during the acute and chronic phases of MG; quality of life; public health management of MG. Consensus in the Delphi iterations was defined by both the percentage level of agreement between panellists or the median value of the responses.\nRESULTS: We reported a high level of agreement (ie, >66.7% of panellists) on the prevalence and incidence of disease in Italy and on several management issues. A strong impact of MG on the quality of life of patients also emerged. Cross-agreement was achieved among different subgroups of panellists (ie, clinicians, public health experts and patient associations representatives) for most items proposed.\nCONCLUSIONS: This study provided guidance for educational and practical aspects of MG in Italy, highlighted disease severity and its role on patients' quality of life. A few gaps related to the handling of MG in Italy also emerged.",

@@ -8,7 +8,7 @@ window.MG_CLINICAL_TRIALS_SUMMARY = {
       "ChinaDrugTrials"
     ]
   },
-  "pipeline_matrix_count": 197,
+  "pipeline_matrix_count": 196,
   "recruiting_count": 129,
   "recent_registration_count": 47,
   "leading_mechanism": {

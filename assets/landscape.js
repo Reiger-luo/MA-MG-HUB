@@ -462,6 +462,77 @@
     return 'outline';
   }
 
+  // ── 周更指南/共识同步 ──
+  // 与情报中心事件时间线共用 source-signals.js 的 guidelineConsensus 频道；
+  // 只做摘要级线索展示，不改写中外指南差异 Top10 的语料与结论。
+  var guidelineSyncStarted = false;
+
+  function renderGuidelineSync() {
+    var badge = $('guidelineSyncMeta');
+    var box = $('guidelineSyncList');
+    var note = $('guidelineSyncNote');
+    var payload = window.MG_SOURCE_SIGNALS || {};
+    var channel = null;
+    (payload.channels || []).forEach(function (item) {
+      if (item && item.id === 'guidelineConsensus') channel = item;
+    });
+    var items = (channel && channel.recent_items) || [];
+    var sync = (channel && channel.sync) || {};
+    if (badge) badge.textContent = items.length ? '最近 ' + items.length + ' 条' : '暂无记录';
+    if (note) {
+      var views = (sync.linked_views || []).map(function (view) { return view.view; }).join('、');
+      note.textContent = views
+        ? '同步源：' + (sync.hub || '') + '；' + (sync.rule || '') + '；同步视图：' + views + '。'
+        : '同步数据暂不可用，请检查周更来源频道。';
+    }
+    if (!box) return;
+    if (!items.length) {
+      box.innerHTML = '<div class="kg-empty-hint">周更暂未识别到新的指南/共识。</div>';
+      return;
+    }
+    box.innerHTML = items.map(function (item) {
+      var titleHtml = item.url
+        ? '<a href="' + escapeHref(item.url) + '" target="_blank" rel="noopener">' + escapeHtml(item.title) + '</a>'
+        : escapeHtml(item.title);
+      return '<article class="guideline-sync-item">' +
+        '<span class="guideline-sync-date">' + escapeHtml(String(item.date || '').slice(0, 10)) + '</span>' +
+        '<strong class="guideline-sync-title">' + titleHtml + '</strong>' +
+        '<span class="guideline-sync-journal">' + escapeHtml(item.journal || '') + '</span>' +
+        '<span class="guideline-sync-status">' + escapeHtml(item.status || '') + '</span>' +
+      '</article>';
+    }).join('');
+  }
+
+  function loadGuidelineSyncModule() {
+    if (window.MG_SOURCE_SIGNALS) {
+      renderGuidelineSync();
+      return;
+    }
+    if (guidelineSyncStarted) return;
+    guidelineSyncStarted = true;
+    var box = $('guidelineSyncList');
+    if (box) box.innerHTML = '<div class="kg-empty-hint">指南/共识同步数据加载中…</div>';
+    var done = function (ok) {
+      if (!ok) {
+        var badge = $('guidelineSyncMeta');
+        if (badge) badge.textContent = '同步数据加载失败';
+        var list = $('guidelineSyncList');
+        if (list) list.innerHTML = '<div class="kg-empty-hint">来源频道数据未能加载，请刷新重试。</div>';
+        return;
+      }
+      renderGuidelineSync();
+    };
+    if (hub.loadScript) {
+      hub.loadScript('data/source-signals.js', done);
+      return;
+    }
+    var script = document.createElement('script');
+    script.src = 'data/source-signals.js';
+    script.onload = function () { done(true); };
+    script.onerror = function () { done(false); };
+    document.head.appendChild(script);
+  }
+
   // 领域重大事件时间线已迁移至情报中心「领域重大事件」标签（assets/literature.js），
   // 此处不再聚合获批监管 / 指南共识 / III期 / 周更试验信号。
 
@@ -628,6 +699,7 @@
     renderQuestions();
     renderThemeDivergence();
     renderGuidelineDivergence();
+    loadGuidelineSyncModule();
     bindPmidModal();
     applyInitialKnowledgeRoute();
   }
