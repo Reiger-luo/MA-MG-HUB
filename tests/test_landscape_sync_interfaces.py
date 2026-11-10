@@ -246,10 +246,16 @@ def test_targeted_chapter_is_layered_and_regions_have_only_two_sides():
     targeted = next(item for item in chapters["chapters"] if item["id"] == "targeted")
     groups = [item.get("group", "") for item in targeted["statements"]]
     assert sum(1 for g in groups if g.startswith("一、")) == 3
-    assert sum(1 for g in groups if g.startswith("二、")) == 3
+    assert sum(1 for g in groups if g.startswith("二、")) == 4
     efg = [item for item in targeted["statements"] if item.get("group", "").startswith("三、")]
-    assert len(efg) >= 8
+    assert len(efg) >= 11
     assert all(item["refs"] for item in efg), "每份指南定位都必须带语料角标"
+    # 中国 2025 MG 指南首次纳入艾加莫德，必须带 g23 语料角标与推荐等级
+    assert any(
+        "中国 2025 MG 指南" in item["text"] and any(r.get("key") == "g23" for r in item["refs"])
+        for item in efg
+    )
+    assert any("Ⅰa 级证据" in item["text"] and "A 级推荐" in item["text"] for item in efg)
     texts = " ".join(item["text"] for item in targeted["statements"])
     for name in ("telitacicept", "inebilizumab", "rituximab", "gefurulimab", "efgartigimod"):
         assert name in texts
@@ -257,3 +263,12 @@ def test_targeted_chapter_is_layered_and_regions_have_only_two_sides():
     js = (PROJECT / "assets" / "landscape.js").read_text(encoding="utf-8")
     assert "renderGroupedStatements" in js
     assert "['china', 'international']" in js
+
+    # 中国 2025 MG 指南：按 wiki 全文逐字回验后落地的分层定位与差异引文
+    assert sum(1 for item in efg if "中国 2025 MG 指南" in item["text"]) == 3
+    assert any("升级为艾加莫德" in item["text"] and "Ⅰa 级证据" in item["text"] for item in efg)
+    assert "贝利尤单抗" in texts and "IL-6R" in texts
+    gd01 = next(x for x in divergence["divergences"] if x["id"] == "gd01")
+    g23_quotes = [e for e in gd01["evidence"] if e.get("doc") == "g23"]
+    assert len(g23_quotes) >= 3 and all(e["quote_verified"] for e in g23_quotes)
+    assert "中国 2025 MG 指南" in gd01["china"]

@@ -341,6 +341,6 @@ git diff --check
 
 `source-signals.js` 的 `guidelineConsensus.sync.linked_views` 显式登记上述三个板块与产物，`refresh_step` 指向刷新脚本，便于审计。
 
-本次德国共识（PMID 42717567，Eur J Neurol 2026;33:e70747）按此链路全文入库为 `g35`：修订了 gd01 / gd08 国际侧口径（启动门槛从难治性转向活动性导向、补体抑制剂适用指征与 12 周应答评估），在诊疗现状 targeted 章节增补带角标的启动路径、转换与证据边界陈述，并进入领域重大事件时间线。审阅结论与逐字引文登记在 `data/guideline-stance-deltas.json`。
+本次德国共识（PMID 42717567，Eur J Neurol 2026;33:e70747）按此链路全文入库为 `g35`：修订了 gd01 / gd08 国际侧口径（启动门槛从难治性转向活动性导向、补体抑制剂适用指征与 12 周应答评估），在诊疗现状 targeted 章节增补带角标的启动路径、转换与证据边界陈述，并进入领域重大事件时间线。审阅结论与逐字引文登记在 `data/guideline-stance-deltas.json`。中国 2025 MG 指南（`g23`）的 wiki 全文（PDF / MD）也已入库本地语料目录：据此修订了诊疗现状的靶向生物制剂四类分类与 efgartigimod 分层定位（适用人群与用法、达标 / 升级治疗、场景与人群边界），并给 gd01 补入逐字回验引文。
 
 验证：`tests/test_landscape_sync_interfaces.py` 覆盖别名纠错、II/III 期门控、指南识别、缓存幂等、三板块 link、全文增量刷新与周更步骤接线。
