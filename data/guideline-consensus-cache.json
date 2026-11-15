@@ -598,6 +598,347 @@
       "signal_strength": "弱"
     },
     {
+      "pmid": "40762789",
+      "title": "Use of Corticosteroids in Myasthenia Gravis: Expert Opinion for Daily Management.",
+      "abstract": "INTRODUCTION: Myasthenia gravis, a rare autoimmune disorder characterized by muscle weakness and fatigue, it is a mainly B-cell mediated condition with antibodies directed against the acetylcholine receptor or functionally related molecules at the neuromuscular junction. Corticosteroids are still the most used treatment, as they are cheap and characterized by a rapid response. However, their long-term administration is associated with frequent and often severe side effects.\nMETHODS: We used the Expert Opinion methodology: a panel of eight neurologists, known to be experts in the management of MG patients, and one specialist in pharmacoeconomics, were brought together to discuss clinical relevant issues about the use of corticosteroids in MG.\nRESULTS: Increasing doses of corticosteroids may temporarily exacerbate the symptoms of MG and clinical exacerbations can lead to severe consequences. In addition, prolonged chronic corticosteroid therapy carries a burden in terms of indirect costs due to side effects, which has prompted strategies to obtain the maximum benefits with minimal side effects.\nCONCLUSION: The panel concludes that, in the near future, therapeutic strategies based on the use drugs with better tolerability and potentially lower direct and indirect costs, will be necessary.",
+      "authors": [
+        "Mantegazza Renato",
+        "Antonini Giovanni",
+        "Gastaldi Matteo",
+        "Liguori Rocco",
+        "Maestri Michelangelo",
+        "Pegoraro Elena",
+        "Polistena Barbara",
+        "Rodolico Carmelo",
+        "Habetswallner Francesco"
+      ],
+      "journal": "Neurology and therapy",
+      "entry_date": "2025/08/05 11:16",
+      "pub_date": "2025-10",
+      "doi": "",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40762789/",
+      "pub_types": [
+        "Journal Article"
+      ],
+      "affiliations": [
+        "Neuroimmunology and Neuromuscular Diseases Unit, Fondazione IRCCS Istituto Neurologico Carlo Besta, Milan, Italy.",
+        "Department of Neuroscience, Mental Health and Sensory Organs (NESMOS), Sapienza University of Rome, Rome, Italy.",
+        "UniCamillus-Saint Camillus International University of Health Sciences, Rome, Italy.",
+        "Neuroimmunology Research Section, IRCCS Mondino Foundation, Pavia, Italy.",
+        "Department of Biomedical and Neuromotor Sciences, IRCCS Institute of Neurological Sciences of Bologna, University of Bologna, Bologna, Italy.",
+        "Department of Clinical and Experimental Medicine, University of Pisa, Pisa, Italy.",
+        "Department of Neurosciences, University of Padova, Padua, Italy.",
+        "C.R.E.A. Sanità, University of Rome Tor Vergata, Rome, Italy.",
+        "Department of Clinical and Experimental Medicine, University of Messina, \"G. Martino\" University Hospital, Messina, Italy. carmelo.rodolico@unime.it.",
+        "Department of Clinical Neurophysiology, Cardarelli Hospital, Naples, Italy."
+      ],
+      "china_related": false,
+      "study_types": [
+        "Unclassified"
+      ],
+      "evidence_level": null,
+      "journal_if": 4.7,
+      "journal_quartile": "2区",
+      "author_affiliations": [
+        {
+          "position": 1,
+          "name": "Mantegazza Renato",
+          "affiliations": [
+            "Neuroimmunology and Neuromuscular Diseases Unit, Fondazione IRCCS Istituto Neurologico Carlo Besta, Milan, Italy."
+          ]
+        },
+        {
+          "position": 2,
+          "name": "Antonini Giovanni",
+          "affiliations": [
+            "Department of Neuroscience, Mental Health and Sensory Organs (NESMOS), Sapienza University of Rome, Rome, Italy.",
+            "UniCamillus-Saint Camillus International University of Health Sciences, Rome, Italy."
+          ]
+        },
+        {
+          "position": 3,
+          "name": "Gastaldi Matteo",
+          "affiliations": [
+            "Neuroimmunology Research Section, IRCCS Mondino Foundation, Pavia, Italy."
+          ]
+        },
+        {
+          "position": 4,
+          "name": "Liguori Rocco",
+          "affiliations": [
+            "Department of Biomedical and Neuromotor Sciences, IRCCS Institute of Neurological Sciences of Bologna, University of Bologna, Bologna, Italy."
+          ]
+        },
+        {
+          "position": 5,
+          "name": "Maestri Michelangelo",
+          "affiliations": [
+            "Department of Clinical and Experimental Medicine, University of Pisa, Pisa, Italy."
+          ]
+        },
+        {
+          "position": 6,
+          "name": "Pegoraro Elena",
+          "affiliations": [
+            "Department of Neurosciences, University of Padova, Padua, Italy."
+          ]
+        },
+        {
+          "position": 7,
+          "name": "Polistena Barbara",
+          "affiliations": [
+            "C.R.E.A. Sanità, University of Rome Tor Vergata, Rome, Italy."
+          ]
+        },
+        {
+          "position": 8,
+          "name": "Rodolico Carmelo",
+          "affiliations": [
+            "Department of Clinical and Experimental Medicine, University of Messina, \"G. Martino\" University Hospital, Messina, Italy. carmelo.rodolico@unime.it."
+          ]
+        },
+        {
+          "position": 9,
+          "name": "Habetswallner Francesco",
+          "affiliations": [
+            "Department of Clinical Neurophysiology, Cardarelli Hospital, Naples, Italy."
+          ]
+        }
+      ],
+      "mg_core": true,
+      "mg_core_reason": "explicit_mg_title"
+    },
+    {
+      "pmid": "40069719",
+      "title": "Toward European harmonization of national myasthenia gravis registries: modified Delphi procedure-based expert consensus on collectable data.",
+      "abstract": "BACKGROUND: Myasthenia gravis (MG) is a rare autoimmune disorder. Several new treatment concepts have emerged in recent years, but access to these treatments varies due to differing national reimbursement regulations, leading to disparities across Europe. This highlights the need for high-quality data collection by stakeholders to establish MG registries. A European MG registry could help bridge the treatment access gap across different countries, offering critical data to support regulatory decisions, foster international collaborations, and enhance clinical and epidemiological research. Several national MG registries already exist or are in development. To avoid duplication and ensure harmonization in data collection, a modified Delphi procedure was implemented to identify essential data elements for inclusion in national registries.\nRESULTS: Following a literature review, consultations with patient associations and pharmaceutical companies, and input from multiple European MG experts, 100 data elements were identified. Of these, 62 reached consensus for inclusion and classification, while only 1 item was agreed for exclusion. 30 items failed to reach the ≥ 80% agreement threshold and were excluded. Among the 62 accepted items, 21 were classified as mandatory data elements, 32 optional, and 9 items pertained to the informed consent form.\nCONCLUSIONS: Through a modified Delphi procedure, consensus was successfully achieved. This consensus-based approach represents a crucial step toward harmonizing MG registries across Europe. The resulting dataset will facilitate the sharing of knowledge and enhance European collaborations. Furthermore, the harmonized data may assist in regulatory or reimbursement decisions regarding novel therapies, as well as address treatment access disparities between European countries.",
+      "authors": [
+        "Slioui Abderhmane",
+        "Tammam Giulia",
+        "Vanoli Fiammetta",
+        "Marina Adela Della",
+        "Vohanka Stanislav",
+        "Gilhus Nils Erik",
+        "Moroni Isabella",
+        "Leite Maria Isabel",
+        "Piehl Fredrik",
+        "Antozzi Carlo",
+        "Pini Jonathan",
+        "Stascheit Frauke",
+        "Attarian Shahram",
+        "Santos Ernestina",
+        "Verschuuren Jan",
+        "Canonge Lou",
+        "Garcia Jeremy",
+        "Perriard Caroline",
+        "Cortés-Vicente Elena",
+        "Mantegazza Renato",
+        "Meisel Andreas",
+        "Sacconi Sabrina"
+      ],
+      "journal": "Orphanet journal of rare diseases",
+      "entry_date": "2025/03/12 00:44",
+      "pub_date": "2025-03-11",
+      "doi": "",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40069719/",
+      "pub_types": [
+        "Journal Article",
+        "Consensus Statement"
+      ],
+      "affiliations": [
+        "Peripheral Nervous System and Muscle Department, Reference Center for Neuromuscular Disorders, Pasteur 2 Hospital, Centre Hospitalier, Universitaire de Nice, Nice University Hospital, SNPM - Hôpital Pasteur 2 - 30 voie Romaine, 06001, Nice CEDEX, France.",
+        "Department of Brain and Behavioral Sciences, University of Pavia, IRCCS Mondino Foundation, Pavia, Italy.",
+        "Neuroimmunology and Neuromuscular Diseases Unit, Fondazione IRCCS Istituto Neurologico Carlo Besta, Milan, Italy.",
+        "Department of Human Neurosciences, Sapienza University of Rome, Rome, Italy.",
+        "Department of Pediatric Neurology, Centre for Neuromuscular Disorders, C-TNBS, University Duisburg-Essen, Essen, Germany.",
+        "Department of Neurology, Faculty of Medicine, University Hospital Brno, Masaryk University, Brno, Czechia.",
+        "Department of Clinical Medicine, University of Bergen, Bergen, Norway.",
+        "Department of Pediatric Neurosciences, Fondazione IRCCS Istituto Neurologico Carlo Besta, Milan, Italy.",
+        "Nuffield Department of Clinical Neurosciences, University of Oxford, John Radcliffe Hospital, Level 3, West Wing, Headley Way, Oxford, OX3 9DU, UK.",
+        "Departments of Clinical Neuroscience, Karolinska Institutet, and Neurology, Karolinska University Hospital, Stockholm, Sweden.",
+        "Immunotherapy and Apheresis Departmental Unit, Fondazione IRCCS Istituto Neurologico Carlo Besta, Milan, Italy.",
+        "Corporate Member of Freie Universität Berlin and Humboldt Universität Zu Berlin, Department of Neurology With Experimental Neurologie, Neuroscience Clinical Research Center, Universitätsmedizin Berlin, Charitéplatz 1, 10117, Berlin, Germany.",
+        "Reference Center for Neuromuscular Disorders and ALS, Timone University Hospital, Aix-Marseille University, Marseille, France.",
+        "Neurology Department, Centro Hospitalar Universitário de Santo António; Unit for Multidisciplinary Research in Biomedicine, Instituto de Ciências Biomédicas Abel Salazar, Universidade do Porto, Porto, Portugal.",
+        "Department of Neurology, Leiden University Medical Center, Leiden, the Netherlands.",
+        "ESIEE PARIS School, Gustave Eiffel University, Paris, France.",
+        "Reference Center for Neuromuscular Disorders, Lenval Pediatric Hospitals of Nice University Hospital, Nice, France.",
+        "Neuromuscular Diseases Unit, Hospital de La Santa Creu I Sant Pau, Barcelona, Spain.",
+        "Peripheral Nervous System and Muscle Department, Reference Center for Neuromuscular Disorders, Pasteur 2 Hospital, Centre Hospitalier, Universitaire de Nice, Nice University Hospital, SNPM - Hôpital Pasteur 2 - 30 voie Romaine, 06001, Nice CEDEX, France. sacconi.s@chu-nice.fr.",
+        "Institute for Research On Cancer and Aging of Nice, CNRS, INSERM, Côte d'Azur University, SNPM - Hôpital Pasteur 2 - 30 voie Romaine, 06001, Nice CEDEX, France. sacconi.s@chu-nice.fr."
+      ],
+      "china_related": false,
+      "study_types": [
+        "Review"
+      ],
+      "evidence_level": null,
+      "journal_if": 3.6,
+      "journal_quartile": "2区",
+      "author_affiliations": [
+        {
+          "position": 1,
+          "name": "Slioui Abderhmane",
+          "affiliations": [
+            "Peripheral Nervous System and Muscle Department, Reference Center for Neuromuscular Disorders, Pasteur 2 Hospital, Centre Hospitalier, Universitaire de Nice, Nice University Hospital, SNPM - Hôpital Pasteur 2 - 30 voie Romaine, 06001, Nice CEDEX, France."
+          ]
+        },
+        {
+          "position": 2,
+          "name": "Tammam Giulia",
+          "affiliations": [
+            "Peripheral Nervous System and Muscle Department, Reference Center for Neuromuscular Disorders, Pasteur 2 Hospital, Centre Hospitalier, Universitaire de Nice, Nice University Hospital, SNPM - Hôpital Pasteur 2 - 30 voie Romaine, 06001, Nice CEDEX, France.",
+            "Department of Brain and Behavioral Sciences, University of Pavia, IRCCS Mondino Foundation, Pavia, Italy."
+          ]
+        },
+        {
+          "position": 3,
+          "name": "Vanoli Fiammetta",
+          "affiliations": [
+            "Neuroimmunology and Neuromuscular Diseases Unit, Fondazione IRCCS Istituto Neurologico Carlo Besta, Milan, Italy.",
+            "Department of Human Neurosciences, Sapienza University of Rome, Rome, Italy."
+          ]
+        },
+        {
+          "position": 4,
+          "name": "Marina Adela Della",
+          "affiliations": [
+            "Department of Pediatric Neurology, Centre for Neuromuscular Disorders, C-TNBS, University Duisburg-Essen, Essen, Germany."
+          ]
+        },
+        {
+          "position": 5,
+          "name": "Vohanka Stanislav",
+          "affiliations": [
+            "Department of Neurology, Faculty of Medicine, University Hospital Brno, Masaryk University, Brno, Czechia."
+          ]
+        },
+        {
+          "position": 6,
+          "name": "Gilhus Nils Erik",
+          "affiliations": [
+            "Department of Clinical Medicine, University of Bergen, Bergen, Norway."
+          ]
+        },
+        {
+          "position": 7,
+          "name": "Moroni Isabella",
+          "affiliations": [
+            "Department of Pediatric Neurosciences, Fondazione IRCCS Istituto Neurologico Carlo Besta, Milan, Italy."
+          ]
+        },
+        {
+          "position": 8,
+          "name": "Leite Maria Isabel",
+          "affiliations": [
+            "Nuffield Department of Clinical Neurosciences, University of Oxford, John Radcliffe Hospital, Level 3, West Wing, Headley Way, Oxford, OX3 9DU, UK."
+          ]
+        },
+        {
+          "position": 9,
+          "name": "Piehl Fredrik",
+          "affiliations": [
+            "Departments of Clinical Neuroscience, Karolinska Institutet, and Neurology, Karolinska University Hospital, Stockholm, Sweden."
+          ]
+        },
+        {
+          "position": 10,
+          "name": "Antozzi Carlo",
+          "affiliations": [
+            "Neuroimmunology and Neuromuscular Diseases Unit, Fondazione IRCCS Istituto Neurologico Carlo Besta, Milan, Italy.",
+            "Immunotherapy and Apheresis Departmental Unit, Fondazione IRCCS Istituto Neurologico Carlo Besta, Milan, Italy."
+          ]
+        },
+        {
+          "position": 11,
+          "name": "Pini Jonathan",
+          "affiliations": [
+            "Peripheral Nervous System and Muscle Department, Reference Center for Neuromuscular Disorders, Pasteur 2 Hospital, Centre Hospitalier, Universitaire de Nice, Nice University Hospital, SNPM - Hôpital Pasteur 2 - 30 voie Romaine, 06001, Nice CEDEX, France."
+          ]
+        },
+        {
+          "position": 12,
+          "name": "Stascheit Frauke",
+          "affiliations": [
+            "Corporate Member of Freie Universität Berlin and Humboldt Universität Zu Berlin, Department of Neurology With Experimental Neurologie, Neuroscience Clinical Research Center, Universitätsmedizin Berlin, Charitéplatz 1, 10117, Berlin, Germany."
+          ]
+        },
+        {
+          "position": 13,
+          "name": "Attarian Shahram",
+          "affiliations": [
+            "Reference Center for Neuromuscular Disorders and ALS, Timone University Hospital, Aix-Marseille University, Marseille, France."
+          ]
+        },
+        {
+          "position": 14,
+          "name": "Santos Ernestina",
+          "affiliations": [
+            "Neurology Department, Centro Hospitalar Universitário de Santo António; Unit for Multidisciplinary Research in Biomedicine, Instituto de Ciências Biomédicas Abel Salazar, Universidade do Porto, Porto, Portugal."
+          ]
+        },
+        {
+          "position": 15,
+          "name": "Verschuuren Jan",
+          "affiliations": [
+            "Department of Neurology, Leiden University Medical Center, Leiden, the Netherlands."
+          ]
+        },
+        {
+          "position": 16,
+          "name": "Canonge Lou",
+          "affiliations": [
+            "Peripheral Nervous System and Muscle Department, Reference Center for Neuromuscular Disorders, Pasteur 2 Hospital, Centre Hospitalier, Universitaire de Nice, Nice University Hospital, SNPM - Hôpital Pasteur 2 - 30 voie Romaine, 06001, Nice CEDEX, France.",
+            "ESIEE PARIS School, Gustave Eiffel University, Paris, France."
+          ]
+        },
+        {
+          "position": 17,
+          "name": "Garcia Jeremy",
+          "affiliations": [
+            "Peripheral Nervous System and Muscle Department, Reference Center for Neuromuscular Disorders, Pasteur 2 Hospital, Centre Hospitalier, Universitaire de Nice, Nice University Hospital, SNPM - Hôpital Pasteur 2 - 30 voie Romaine, 06001, Nice CEDEX, France."
+          ]
+        },
+        {
+          "position": 18,
+          "name": "Perriard Caroline",
+          "affiliations": [
+            "Reference Center for Neuromuscular Disorders, Lenval Pediatric Hospitals of Nice University Hospital, Nice, France."
+          ]
+        },
+        {
+          "position": 19,
+          "name": "Cortés-Vicente Elena",
+          "affiliations": [
+            "Neuromuscular Diseases Unit, Hospital de La Santa Creu I Sant Pau, Barcelona, Spain."
+          ]
+        },
+        {
+          "position": 20,
+          "name": "Mantegazza Renato",
+          "affiliations": [
+            "Neuroimmunology and Neuromuscular Diseases Unit, Fondazione IRCCS Istituto Neurologico Carlo Besta, Milan, Italy."
+          ]
+        },
+        {
+          "position": 21,
+          "name": "Meisel Andreas",
+          "affiliations": [
+            "Corporate Member of Freie Universität Berlin and Humboldt Universität Zu Berlin, Department of Neurology With Experimental Neurologie, Neuroscience Clinical Research Center, Universitätsmedizin Berlin, Charitéplatz 1, 10117, Berlin, Germany."
+          ]
+        },
+        {
+          "position": 22,
+          "name": "Sacconi Sabrina",
+          "affiliations": [
+            "Peripheral Nervous System and Muscle Department, Reference Center for Neuromuscular Disorders, Pasteur 2 Hospital, Centre Hospitalier, Universitaire de Nice, Nice University Hospital, SNPM - Hôpital Pasteur 2 - 30 voie Romaine, 06001, Nice CEDEX, France. sacconi.s@chu-nice.fr.",
+            "Institute for Research On Cancer and Aging of Nice, CNRS, INSERM, Côte d'Azur University, SNPM - Hôpital Pasteur 2 - 30 voie Romaine, 06001, Nice CEDEX, France. sacconi.s@chu-nice.fr."
+          ]
+        }
+      ],
+      "mg_core": true,
+      "mg_core_reason": "explicit_mg_title"
+    },
+    {
       "pmid": "39806659",
       "title": "Epidemiology, management and patient needs in myasthenia gravis: an Italian multistakeholder consensus based on Delphi methodology.",
       "abstract": "OBJECTIVES: To provide comprehensive information on the burden of myasthenia gravis (MG) in Italy, including the unmet needs of patients and several other aspects related to the disease, based on skilled viewpoints of MG experts.\nDESIGN: Iterative analysis conducted in accordance with the best practices of the Delphi method, including anonymity, controlled feedback, and statistical stability of consensus.\nSETTING AND PARTICIPANTS: 24 clinicians, 18 public health experts and 4 patient associations experts completed all the Delphi iterations between 18 April and 3 July 2023, for a total of 46 participants from several Italian Regions.\nOUTCOME MEASURES: Five areas of investigation related to MG were examined: epidemiology in Italy and characteristics of disease; diagnostic issues and Italian patient journey; unmet needs during the acute and chronic phases of MG; quality of life; public health management of MG. Consensus in the Delphi iterations was defined by both the percentage level of agreement between panellists or the median value of the responses.\nRESULTS: We reported a high level of agreement (ie, >66.7% of panellists) on the prevalence and incidence of disease in Italy and on several management issues. A strong impact of MG on the quality of life of patients also emerged. Cross-agreement was achieved among different subgroups of panellists (ie, clinicians, public health experts and patient associations representatives) for most items proposed.\nCONCLUSIONS: This study provided guidance for educational and practical aspects of MG in Italy, highlighted disease severity and its role on patients' quality of life. A few gaps related to the handling of MG in Italy also emerged.",
@@ -701,6 +1042,217 @@
       "mg_core_reason": "explicit_mg_title"
     },
     {
+      "pmid": "38967883",
+      "title": "Therapeutic challenges and unmet needs in the management of myasthenia gravis: an Italian expert opinion.",
+      "abstract": "Myasthenia gravis (MG) is a rare, autoimmune, neurological disorder. Most MG patients have autoantibodies against acetylcholine receptors (AChRs). Some have autoantibodies against muscle-specific tyrosine kinase (MuSK) or lipoprotein-receptor-related protein 4 (LRP4), and some are seronegative. Standard of care, which includes anti-cholinesterase drugs, thymectomy, corticosteroids (CS), and off-label use of non-steroidal immunosuppressive drugs (NSISTs), is bounded by potential side effects and limited efficacy in refractory generalized MG (gMG) patients. This highlights the need for new therapeutic approaches for MG. Eculizumab, a monoclonal antibody that inhibits the complement system, has been recently approved in Italy for refractory gMG. A panel of 11 experts met to discuss unmet therapeutic needs in the acute and chronic phases of the disease, as well as the standard of care for refractory patients. Survival was emphasized as an acute phase outcome. In the chronic phase, persistent remission and early recognition of exacerbations to prevent myasthenic crisis and respiratory failure were considered crucial. Refractory patients require treatments with fast onset of action, improved tolerability, and the ability to slow disease progression and increase life expectancy. The Panel agreed that eculizumab would presumably meet the therapeutic needs of many refractory gMG patients. The panel concluded that the unmet needs of current standard of care treatments for gMG are significant. Evaluating new therapeutic options accurately is essential to find the best balance between efficacy and tolerability for each patient. Collecting real-world data on novel molecules in routine clinical practice is necessary to address unmet needs.",
+      "authors": [
+        "Mantegazza Renato",
+        "Saccà Francesco",
+        "Antonini Giovanni",
+        "Bonifati Domenico Marco",
+        "Evoli Amelia",
+        "Habetswallner Francesco",
+        "Liguori Rocco",
+        "Pegoraro Elena",
+        "Rodolico Carmelo",
+        "Schenone Angelo",
+        "Sgarzi Manlio",
+        "Pappagallo Giovanni"
+      ],
+      "journal": "Neurological sciences : official journal of the Italian Neurological Society and of the Italian Society of Clinical Neurophysiology",
+      "entry_date": "2024/07/05 11:17",
+      "pub_date": "2024-12",
+      "doi": "",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38967883/",
+      "pub_types": [
+        "Journal Article",
+        "Review"
+      ],
+      "affiliations": [
+        "Neuroimmunology and Neuromuscular Diseases Unit, IRCCS Foundation Carlo Besta Neurological Institute, Milan, Italy. mantegazza.renato@gmail.com.",
+        "NSRO Department, Federico II University of Naples, Naples, Italy.",
+        "Department of Neurosciences, Mental Health and Sensory Organs (NESMOS), Sapienza University of Rome, Rome, Italy.",
+        "Neurology Unit, Cerebro-Cardiovascular Department, Ca' Foncello Hospital Treviso, Piazzale Ospedale 1, 31100, Treviso, Italy.",
+        "Neuroscience Department, Facolta Di Medicina E Chirurgia, Università Cattolica del Sacro Cuore, Rome, Italy.",
+        "Neurology Institute, Fondazione Policlinico Universitario Agostino Gemelli IRCCS, Rome, Italy.",
+        "Clinical Neurophysiology Unit, Cardarelli Hospital, Naples, Italy.",
+        "Department of Biomedical and Neuromotor Sciences (DIBINEM), University of Bologna, Bologna, Italy.",
+        "IRCCS Istituto Delle Scienze Neurologiche Di Bologna, UOC Clinica Neurologica, Bologna, Italy.",
+        "University of Padova, Padova, Italy.",
+        "Department of Clinical and Experimental Medicine, University of Messina, Messina, Italy.",
+        "Department of Neurosciences, Rehabilitation, Ophthalmology, Genetic and Maternal and Infantile Sciences (DINOGMI), University and IRCCS San Martino Hospital, Genoa, Italy.",
+        "Department of Neurology, Papa Giovanni XXIII Hospital, Piazza OMS 1, 24127, Bergamo, Italy.",
+        "School of Clinical Methodology, IRCCS \"Sacred Heart - Don Calabria\", Negrar Di Valpolicella, Italy."
+      ],
+      "china_related": false,
+      "study_types": [
+        "Review"
+      ],
+      "evidence_level": null,
+      "journal_if": 2.4,
+      "journal_quartile": "3区",
+      "author_affiliations": [
+        {
+          "position": 1,
+          "name": "Mantegazza Renato",
+          "affiliations": [
+            "Neuroimmunology and Neuromuscular Diseases Unit, IRCCS Foundation Carlo Besta Neurological Institute, Milan, Italy. mantegazza.renato@gmail.com."
+          ]
+        },
+        {
+          "position": 2,
+          "name": "Saccà Francesco",
+          "affiliations": [
+            "NSRO Department, Federico II University of Naples, Naples, Italy."
+          ]
+        },
+        {
+          "position": 3,
+          "name": "Antonini Giovanni",
+          "affiliations": [
+            "Department of Neurosciences, Mental Health and Sensory Organs (NESMOS), Sapienza University of Rome, Rome, Italy."
+          ]
+        },
+        {
+          "position": 4,
+          "name": "Bonifati Domenico Marco",
+          "affiliations": [
+            "Neurology Unit, Cerebro-Cardiovascular Department, Ca' Foncello Hospital Treviso, Piazzale Ospedale 1, 31100, Treviso, Italy."
+          ]
+        },
+        {
+          "position": 5,
+          "name": "Evoli Amelia",
+          "affiliations": [
+            "Neuroscience Department, Facolta Di Medicina E Chirurgia, Università Cattolica del Sacro Cuore, Rome, Italy.",
+            "Neurology Institute, Fondazione Policlinico Universitario Agostino Gemelli IRCCS, Rome, Italy."
+          ]
+        },
+        {
+          "position": 6,
+          "name": "Habetswallner Francesco",
+          "affiliations": [
+            "Clinical Neurophysiology Unit, Cardarelli Hospital, Naples, Italy."
+          ]
+        },
+        {
+          "position": 7,
+          "name": "Liguori Rocco",
+          "affiliations": [
+            "Department of Biomedical and Neuromotor Sciences (DIBINEM), University of Bologna, Bologna, Italy.",
+            "IRCCS Istituto Delle Scienze Neurologiche Di Bologna, UOC Clinica Neurologica, Bologna, Italy."
+          ]
+        },
+        {
+          "position": 8,
+          "name": "Pegoraro Elena",
+          "affiliations": [
+            "University of Padova, Padova, Italy."
+          ]
+        },
+        {
+          "position": 9,
+          "name": "Rodolico Carmelo",
+          "affiliations": [
+            "Department of Clinical and Experimental Medicine, University of Messina, Messina, Italy."
+          ]
+        },
+        {
+          "position": 10,
+          "name": "Schenone Angelo",
+          "affiliations": [
+            "Department of Neurosciences, Rehabilitation, Ophthalmology, Genetic and Maternal and Infantile Sciences (DINOGMI), University and IRCCS San Martino Hospital, Genoa, Italy."
+          ]
+        },
+        {
+          "position": 11,
+          "name": "Sgarzi Manlio",
+          "affiliations": [
+            "Department of Neurology, Papa Giovanni XXIII Hospital, Piazza OMS 1, 24127, Bergamo, Italy."
+          ]
+        },
+        {
+          "position": 12,
+          "name": "Pappagallo Giovanni",
+          "affiliations": [
+            "School of Clinical Methodology, IRCCS \"Sacred Heart - Don Calabria\", Negrar Di Valpolicella, Italy."
+          ]
+        }
+      ],
+      "mg_core": true,
+      "mg_core_reason": "explicit_mg_title"
+    },
+    {
+      "pmid": "38523419",
+      "title": "Expert consensus recommendations for improving and standardising the assessment of patients with generalised myasthenia gravis.",
+      "abstract": "BACKGROUND: Regular and consistent disease assessment could provide a clearer picture of burden in generalised myasthenia gravis (gMG) and improve patient care; however, the use of assessment tools in practice lacks standardisation. This modified Delphi approach was taken to review current evidence on assessment tool use in gMG and develop expert-derived consensus recommendations for good practice.\nMETHODS: A European expert panel of 15 experienced gMG neurologists contributed to development of this consensus, four of whom formed a lead Sub-committee. The PICO (Population, Intervention, Control, Outcomes) framework was used to define six clinical questions on gMG assessment tools, a systematic literature review was conducted, and evidence-based statements were developed. According to a modified Delphi voting process, consensus was reached when ≥70% of the experts rated agreement with a statement as ≥8 on a scale of 1-10.\nRESULTS: Eighteen expert- and evidence-based consensus statements based on six themes were developed. Key recommendations include: consistent use of the Myasthenia Gravis Activities of Daily Living score (MG-ADL) across clinical settings, followed by a simple question (e.g., Patient Acceptable Symptom State [PASS]) or scale to determine patient satisfaction in clinical practice; use of a Quantitative Myasthenia Gravis [QMG] or quality of life [QoL] assessment when the MG-ADL indicates disease worsening; and consideration of symptom state to determine the timing and frequency of recommended assessments. Expert panel consensus was reached on all 18 statements after two voting rounds.\nCONCLUSIONS: This process provided evidence- and expert consensus-based recommendations for the use of objective and subjective assessment tools across gMG research and care to improve management and outcomes for patients.",
+      "authors": [
+        "Meisel Andreas",
+        "Saccà Francesco",
+        "Spillane Jennifer",
+        "Vissing John"
+      ],
+      "journal": "European journal of neurology",
+      "entry_date": "2024/03/25 02:33",
+      "pub_date": "2024-07",
+      "doi": "",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38523419/",
+      "pub_types": [
+        "Journal Article",
+        "Consensus Statement"
+      ],
+      "affiliations": [
+        "Department of Neurology with Experimental Neurology, Neuroscience Clinical Research Center, Charité Universitätsmedizin Berlin, Berlin, Germany.",
+        "GENESIS Department, Federico II University of Naples, Naples, Italy.",
+        "National Hospital for Neurology and Neurosurgery, UCLH NHS Foundation Trust, London, UK.",
+        "Copenhagen Neuromuscular Center, Copenhagen University Hospital Rigshospitalet, Copenhagen, Denmark."
+      ],
+      "china_related": false,
+      "study_types": [
+        "Review"
+      ],
+      "evidence_level": null,
+      "journal_if": 4.3,
+      "journal_quartile": "2区",
+      "author_affiliations": [
+        {
+          "position": 1,
+          "name": "Meisel Andreas",
+          "affiliations": [
+            "Department of Neurology with Experimental Neurology, Neuroscience Clinical Research Center, Charité Universitätsmedizin Berlin, Berlin, Germany."
+          ]
+        },
+        {
+          "position": 2,
+          "name": "Saccà Francesco",
+          "affiliations": [
+            "GENESIS Department, Federico II University of Naples, Naples, Italy."
+          ]
+        },
+        {
+          "position": 3,
+          "name": "Spillane Jennifer",
+          "affiliations": [
+            "National Hospital for Neurology and Neurosurgery, UCLH NHS Foundation Trust, London, UK."
+          ]
+        },
+        {
+          "position": 4,
+          "name": "Vissing John",
+          "affiliations": [
+            "Copenhagen Neuromuscular Center, Copenhagen University Hospital Rigshospitalet, Copenhagen, Denmark."
+          ]
+        },
+        {
+          "position": 5,
+          "name": "MG Collegium Sub‐committee",
+          "affiliations": []
+        }
+      ],
+      "mg_core": true,
+      "mg_core_reason": "explicit_mg_title"
+    },
+    {
       "pmid": "37197966",
       "title": "[Transition of Japanese clinical guidelines for myasthenia gravis].",
       "abstract": "The Japanese clinical guidelines for myasthenia gravis (MG) were revised in 2022. The major revision points in these guidelines are as follows. 1) A description of Lambert-Eaton myasthenic syndrome (LEMS) was included for the first time. 2) Revised diagnostic criteria of both MG and LEMS are proposed. 3) A high-dose oral steroid regimen with escalation and de-escalation schedule is not recommended. 4) Refractory MG is defined. 5) The use of molecular-targeted drugs is included. 6) MG is divided into six clinical subtypes. 7) Treatment algorithms for both MG and LEMS are presented.",
@@ -731,6 +1283,259 @@
           "name": "Murai Hiroyuki",
           "affiliations": [
             "Department of Neurology, International University of Health and Welfare."
+          ]
+        }
+      ],
+      "mg_core": true,
+      "mg_core_reason": "explicit_mg_title"
+    },
+    {
+      "pmid": "36869326",
+      "title": "The determinants of expert opinion in the development of care pathways: insights from an exploratory cluster analysis.",
+      "abstract": "BACKGROUND: We performed a secondary exploratory cluster analysis on the data collected from the validation phase of the study leading to the development of the model care pathway (CP) for Myasthenia Gravis (MG), in which a panel of 85 international experts were asked some characteristics about themselves and their opinion about the model CP. Our aim was to identify which characteristics of the experts play a role in the genesis of their opinion.\nMETHODS: We extracted the questions probing an opinion and those describing a characteristic of the expert from the original questionnaire. We performed a multiple correspondence analysis (MCA) and a subsequent hierarchical clustering on principal component (HCPC) on the opinion variables, integrating the characteristic variables as supplementary (predicted).\nRESULTS: After reducing the dimensionality of the questionnaire to three dimensions we noticed that the not-appropriateness judgement of the clinical activities may overlap with the completeness one. From the HCPC it seems that the working setting of the expert may play a crucial role in determining the opinion about the setting of the sub-processes of MG: shifting from a cluster where the experts do not work in sub-specialist settings to one where the experts are working in them, the opinion changes accordingly from a mono-disciplinary setting to a multi-disciplinary one. Another interesting result is that the experience in neuromuscular diseases (NMD) measured in years and the expert typology (whether general neurologist or NMD expert) seem not to contribute significantly to the opinions.\nCONCLUSIONS: These findings might indicate a poor ability of the expert to discriminate what is not appropriate from what is not complete. Also, the opinion of the expert might be influenced by the working setting, but not by the experience in NMD (as measured in years).",
+      "authors": [
+        "Ratti Matteo",
+        "Milicia Osvaldo",
+        "Rescinito Riccardo",
+        "Coeckelberghs Ellen",
+        "Seys Deborah",
+        "Vanhaecht Kris",
+        "Panella Massimiliano"
+      ],
+      "journal": "BMC health services research",
+      "entry_date": "2023/03/03 23:30",
+      "pub_date": "2023-03-03",
+      "doi": "",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36869326/",
+      "pub_types": [
+        "Journal Article"
+      ],
+      "affiliations": [
+        "Department of Translational Medicine (DiMeT), University of Piemonte Orientale (UNIUPO), Via Solaroli,17, 28100, Novara, Italy. matteo.ratti@uniupo.it.",
+        "Department of Translational Medicine (DiMeT), University of Piemonte Orientale (UNIUPO), Via Solaroli,17, 28100, Novara, Italy.",
+        "Leuven Institute for Healthcare Policy, KU Louvain-University of Leuven, Leuven, Belgium.",
+        "European Pathway Association, Louvain, Belgium."
+      ],
+      "china_related": false,
+      "study_types": [
+        "Cross-Sectional"
+      ],
+      "evidence_level": "IV",
+      "journal_if": 3.3,
+      "journal_quartile": "4区",
+      "author_affiliations": [
+        {
+          "position": 1,
+          "name": "Ratti Matteo",
+          "affiliations": [
+            "Department of Translational Medicine (DiMeT), University of Piemonte Orientale (UNIUPO), Via Solaroli,17, 28100, Novara, Italy. matteo.ratti@uniupo.it."
+          ]
+        },
+        {
+          "position": 2,
+          "name": "Milicia Osvaldo",
+          "affiliations": [
+            "Department of Translational Medicine (DiMeT), University of Piemonte Orientale (UNIUPO), Via Solaroli,17, 28100, Novara, Italy."
+          ]
+        },
+        {
+          "position": 3,
+          "name": "Rescinito Riccardo",
+          "affiliations": [
+            "Department of Translational Medicine (DiMeT), University of Piemonte Orientale (UNIUPO), Via Solaroli,17, 28100, Novara, Italy."
+          ]
+        },
+        {
+          "position": 4,
+          "name": "Coeckelberghs Ellen",
+          "affiliations": [
+            "Leuven Institute for Healthcare Policy, KU Louvain-University of Leuven, Leuven, Belgium.",
+            "European Pathway Association, Louvain, Belgium."
+          ]
+        },
+        {
+          "position": 5,
+          "name": "Seys Deborah",
+          "affiliations": [
+            "Leuven Institute for Healthcare Policy, KU Louvain-University of Leuven, Leuven, Belgium.",
+            "European Pathway Association, Louvain, Belgium."
+          ]
+        },
+        {
+          "position": 6,
+          "name": "Vanhaecht Kris",
+          "affiliations": [
+            "Leuven Institute for Healthcare Policy, KU Louvain-University of Leuven, Leuven, Belgium.",
+            "European Pathway Association, Louvain, Belgium."
+          ]
+        },
+        {
+          "position": 7,
+          "name": "Panella Massimiliano",
+          "affiliations": [
+            "Department of Translational Medicine (DiMeT), University of Piemonte Orientale (UNIUPO), Via Solaroli,17, 28100, Novara, Italy.",
+            "European Pathway Association, Louvain, Belgium."
+          ]
+        }
+      ],
+      "mg_core": true,
+      "mg_core_reason": "repeated_mg_core_mentions"
+    },
+    {
+      "pmid": "33144515",
+      "title": "International Consensus Guidance for Management of Myasthenia Gravis: 2020 Update.",
+      "abstract": "OBJECTIVE: To update the 2016 formal consensus-based guidance for the management of myasthenia gravis (MG) based on the latest evidence in the literature.\nMETHODS: In October 2013, the Myasthenia Gravis Foundation of America appointed a Task Force to develop treatment guidance for MG, and a panel of 15 international experts was convened. The RAND/UCLA appropriateness method was used to develop consensus recommendations pertaining to 7 treatment topics. In February 2019, the international panel was reconvened with the addition of one member to represent South America. All previous recommendations were reviewed for currency, and new consensus recommendations were developed on topics that required inclusion or updates based on the recent literature. Up to 3 rounds of anonymous e-mail votes were used to reach consensus, with modifications to recommendations between rounds based on the panel input. A simple majority vote (80% of panel members voting \"yes\") was used to approve minor changes in grammar and syntax to improve clarity.\nRESULTS: The previous recommendations for thymectomy were updated. New recommendations were developed for the use of rituximab, eculizumab, and methotrexate as well as for the following topics: early immunosuppression in ocular MG and MG associated with immune checkpoint inhibitor treatment.\nCONCLUSION: This updated formal consensus guidance of international MG experts, based on new evidence, provides recommendations to clinicians caring for patients with MG worldwide.",
+      "authors": [
+        "Narayanaswami Pushpa",
+        "Sanders Donald B",
+        "Wolfe Gil",
+        "Benatar Michael",
+        "Cea Gabriel",
+        "Evoli Amelia",
+        "Gilhus Nils Erik",
+        "Illa Isabel",
+        "Kuntz Nancy L",
+        "Massey Janice",
+        "Melms Arthur",
+        "Murai Hiroyuki",
+        "Nicolle Michael",
+        "Palace Jacqueline",
+        "Richman David",
+        "Verschuuren Jan"
+      ],
+      "journal": "Neurology",
+      "entry_date": "2020/11/04 05:37",
+      "pub_date": "2021-01-19",
+      "doi": "",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33144515/",
+      "pub_types": [
+        "Journal Article",
+        "Research Support, Non-U.S. Gov't",
+        "Review",
+        "Consensus Statement"
+      ],
+      "affiliations": [
+        "From the Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA; Department of Neurology (D.B.S., J.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.W.), Univ. at Buffalo Jacobs School of Medicine and Biomedical Sciences, State University of New York, Buffalo, NY; Department of Neurology (M.B.), University of Miami, Miller School of Medicine. Miami, FL; Gabriel Cea (G.C.), Departamento de Ciencias Neurologicas, Facultad de Medicina, Universidad de Chile, Santiago, Chile; Dipartimento di Neuroscienze (A.E.), Fondazione Policlinico Universitario A. Gemelli IRCCS, Università Cattolica del Sacro Cuore, Roma, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Isabel Illa (I.I.), Department of Neurology, Hospital Santa Creu i Sant Pau. Universitat Autònoma de Barcelona, Barcelona, ERN EURO-NMD and CIBERER U762, Spain; Departments of Pediatrics and Neurology (N.L.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurology (A.M.), University of Tübingen Medical Centre, Tübingen, Germany; Department of Neurology (H.M.), International University of Health and Welfare, Narita, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, ON, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.R.), University of California, Davis, Davis, CA; and Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands. pnarayan@bidmc.harvard.edu.",
+        "From the Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA; Department of Neurology (D.B.S., J.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.W.), Univ. at Buffalo Jacobs School of Medicine and Biomedical Sciences, State University of New York, Buffalo, NY; Department of Neurology (M.B.), University of Miami, Miller School of Medicine. Miami, FL; Gabriel Cea (G.C.), Departamento de Ciencias Neurologicas, Facultad de Medicina, Universidad de Chile, Santiago, Chile; Dipartimento di Neuroscienze (A.E.), Fondazione Policlinico Universitario A. Gemelli IRCCS, Università Cattolica del Sacro Cuore, Roma, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Isabel Illa (I.I.), Department of Neurology, Hospital Santa Creu i Sant Pau. Universitat Autònoma de Barcelona, Barcelona, ERN EURO-NMD and CIBERER U762, Spain; Departments of Pediatrics and Neurology (N.L.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurology (A.M.), University of Tübingen Medical Centre, Tübingen, Germany; Department of Neurology (H.M.), International University of Health and Welfare, Narita, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, ON, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.R.), University of California, Davis, Davis, CA; and Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands."
+      ],
+      "china_related": false,
+      "study_types": [
+        "Review"
+      ],
+      "evidence_level": null,
+      "journal_if": 8.9,
+      "journal_quartile": "1区",
+      "author_affiliations": [
+        {
+          "position": 1,
+          "name": "Narayanaswami Pushpa",
+          "affiliations": [
+            "From the Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA; Department of Neurology (D.B.S., J.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.W.), Univ. at Buffalo Jacobs School of Medicine and Biomedical Sciences, State University of New York, Buffalo, NY; Department of Neurology (M.B.), University of Miami, Miller School of Medicine. Miami, FL; Gabriel Cea (G.C.), Departamento de Ciencias Neurologicas, Facultad de Medicina, Universidad de Chile, Santiago, Chile; Dipartimento di Neuroscienze (A.E.), Fondazione Policlinico Universitario A. Gemelli IRCCS, Università Cattolica del Sacro Cuore, Roma, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Isabel Illa (I.I.), Department of Neurology, Hospital Santa Creu i Sant Pau. Universitat Autònoma de Barcelona, Barcelona, ERN EURO-NMD and CIBERER U762, Spain; Departments of Pediatrics and Neurology (N.L.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurology (A.M.), University of Tübingen Medical Centre, Tübingen, Germany; Department of Neurology (H.M.), International University of Health and Welfare, Narita, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, ON, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.R.), University of California, Davis, Davis, CA; and Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands. pnarayan@bidmc.harvard.edu."
+          ]
+        },
+        {
+          "position": 2,
+          "name": "Sanders Donald B",
+          "affiliations": [
+            "From the Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA; Department of Neurology (D.B.S., J.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.W.), Univ. at Buffalo Jacobs School of Medicine and Biomedical Sciences, State University of New York, Buffalo, NY; Department of Neurology (M.B.), University of Miami, Miller School of Medicine. Miami, FL; Gabriel Cea (G.C.), Departamento de Ciencias Neurologicas, Facultad de Medicina, Universidad de Chile, Santiago, Chile; Dipartimento di Neuroscienze (A.E.), Fondazione Policlinico Universitario A. Gemelli IRCCS, Università Cattolica del Sacro Cuore, Roma, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Isabel Illa (I.I.), Department of Neurology, Hospital Santa Creu i Sant Pau. Universitat Autònoma de Barcelona, Barcelona, ERN EURO-NMD and CIBERER U762, Spain; Departments of Pediatrics and Neurology (N.L.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurology (A.M.), University of Tübingen Medical Centre, Tübingen, Germany; Department of Neurology (H.M.), International University of Health and Welfare, Narita, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, ON, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.R.), University of California, Davis, Davis, CA; and Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands."
+          ]
+        },
+        {
+          "position": 3,
+          "name": "Wolfe Gil",
+          "affiliations": [
+            "From the Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA; Department of Neurology (D.B.S., J.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.W.), Univ. at Buffalo Jacobs School of Medicine and Biomedical Sciences, State University of New York, Buffalo, NY; Department of Neurology (M.B.), University of Miami, Miller School of Medicine. Miami, FL; Gabriel Cea (G.C.), Departamento de Ciencias Neurologicas, Facultad de Medicina, Universidad de Chile, Santiago, Chile; Dipartimento di Neuroscienze (A.E.), Fondazione Policlinico Universitario A. Gemelli IRCCS, Università Cattolica del Sacro Cuore, Roma, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Isabel Illa (I.I.), Department of Neurology, Hospital Santa Creu i Sant Pau. Universitat Autònoma de Barcelona, Barcelona, ERN EURO-NMD and CIBERER U762, Spain; Departments of Pediatrics and Neurology (N.L.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurology (A.M.), University of Tübingen Medical Centre, Tübingen, Germany; Department of Neurology (H.M.), International University of Health and Welfare, Narita, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, ON, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.R.), University of California, Davis, Davis, CA; and Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands."
+          ]
+        },
+        {
+          "position": 4,
+          "name": "Benatar Michael",
+          "affiliations": [
+            "From the Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA; Department of Neurology (D.B.S., J.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.W.), Univ. at Buffalo Jacobs School of Medicine and Biomedical Sciences, State University of New York, Buffalo, NY; Department of Neurology (M.B.), University of Miami, Miller School of Medicine. Miami, FL; Gabriel Cea (G.C.), Departamento de Ciencias Neurologicas, Facultad de Medicina, Universidad de Chile, Santiago, Chile; Dipartimento di Neuroscienze (A.E.), Fondazione Policlinico Universitario A. Gemelli IRCCS, Università Cattolica del Sacro Cuore, Roma, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Isabel Illa (I.I.), Department of Neurology, Hospital Santa Creu i Sant Pau. Universitat Autònoma de Barcelona, Barcelona, ERN EURO-NMD and CIBERER U762, Spain; Departments of Pediatrics and Neurology (N.L.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurology (A.M.), University of Tübingen Medical Centre, Tübingen, Germany; Department of Neurology (H.M.), International University of Health and Welfare, Narita, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, ON, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.R.), University of California, Davis, Davis, CA; and Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands."
+          ]
+        },
+        {
+          "position": 5,
+          "name": "Cea Gabriel",
+          "affiliations": [
+            "From the Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA; Department of Neurology (D.B.S., J.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.W.), Univ. at Buffalo Jacobs School of Medicine and Biomedical Sciences, State University of New York, Buffalo, NY; Department of Neurology (M.B.), University of Miami, Miller School of Medicine. Miami, FL; Gabriel Cea (G.C.), Departamento de Ciencias Neurologicas, Facultad de Medicina, Universidad de Chile, Santiago, Chile; Dipartimento di Neuroscienze (A.E.), Fondazione Policlinico Universitario A. Gemelli IRCCS, Università Cattolica del Sacro Cuore, Roma, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Isabel Illa (I.I.), Department of Neurology, Hospital Santa Creu i Sant Pau. Universitat Autònoma de Barcelona, Barcelona, ERN EURO-NMD and CIBERER U762, Spain; Departments of Pediatrics and Neurology (N.L.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurology (A.M.), University of Tübingen Medical Centre, Tübingen, Germany; Department of Neurology (H.M.), International University of Health and Welfare, Narita, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, ON, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.R.), University of California, Davis, Davis, CA; and Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands."
+          ]
+        },
+        {
+          "position": 6,
+          "name": "Evoli Amelia",
+          "affiliations": [
+            "From the Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA; Department of Neurology (D.B.S., J.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.W.), Univ. at Buffalo Jacobs School of Medicine and Biomedical Sciences, State University of New York, Buffalo, NY; Department of Neurology (M.B.), University of Miami, Miller School of Medicine. Miami, FL; Gabriel Cea (G.C.), Departamento de Ciencias Neurologicas, Facultad de Medicina, Universidad de Chile, Santiago, Chile; Dipartimento di Neuroscienze (A.E.), Fondazione Policlinico Universitario A. Gemelli IRCCS, Università Cattolica del Sacro Cuore, Roma, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Isabel Illa (I.I.), Department of Neurology, Hospital Santa Creu i Sant Pau. Universitat Autònoma de Barcelona, Barcelona, ERN EURO-NMD and CIBERER U762, Spain; Departments of Pediatrics and Neurology (N.L.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurology (A.M.), University of Tübingen Medical Centre, Tübingen, Germany; Department of Neurology (H.M.), International University of Health and Welfare, Narita, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, ON, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.R.), University of California, Davis, Davis, CA; and Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands."
+          ]
+        },
+        {
+          "position": 7,
+          "name": "Gilhus Nils Erik",
+          "affiliations": [
+            "From the Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA; Department of Neurology (D.B.S., J.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.W.), Univ. at Buffalo Jacobs School of Medicine and Biomedical Sciences, State University of New York, Buffalo, NY; Department of Neurology (M.B.), University of Miami, Miller School of Medicine. Miami, FL; Gabriel Cea (G.C.), Departamento de Ciencias Neurologicas, Facultad de Medicina, Universidad de Chile, Santiago, Chile; Dipartimento di Neuroscienze (A.E.), Fondazione Policlinico Universitario A. Gemelli IRCCS, Università Cattolica del Sacro Cuore, Roma, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Isabel Illa (I.I.), Department of Neurology, Hospital Santa Creu i Sant Pau. Universitat Autònoma de Barcelona, Barcelona, ERN EURO-NMD and CIBERER U762, Spain; Departments of Pediatrics and Neurology (N.L.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurology (A.M.), University of Tübingen Medical Centre, Tübingen, Germany; Department of Neurology (H.M.), International University of Health and Welfare, Narita, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, ON, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.R.), University of California, Davis, Davis, CA; and Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands."
+          ]
+        },
+        {
+          "position": 8,
+          "name": "Illa Isabel",
+          "affiliations": [
+            "From the Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA; Department of Neurology (D.B.S., J.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.W.), Univ. at Buffalo Jacobs School of Medicine and Biomedical Sciences, State University of New York, Buffalo, NY; Department of Neurology (M.B.), University of Miami, Miller School of Medicine. Miami, FL; Gabriel Cea (G.C.), Departamento de Ciencias Neurologicas, Facultad de Medicina, Universidad de Chile, Santiago, Chile; Dipartimento di Neuroscienze (A.E.), Fondazione Policlinico Universitario A. Gemelli IRCCS, Università Cattolica del Sacro Cuore, Roma, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Isabel Illa (I.I.), Department of Neurology, Hospital Santa Creu i Sant Pau. Universitat Autònoma de Barcelona, Barcelona, ERN EURO-NMD and CIBERER U762, Spain; Departments of Pediatrics and Neurology (N.L.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurology (A.M.), University of Tübingen Medical Centre, Tübingen, Germany; Department of Neurology (H.M.), International University of Health and Welfare, Narita, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, ON, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.R.), University of California, Davis, Davis, CA; and Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands."
+          ]
+        },
+        {
+          "position": 9,
+          "name": "Kuntz Nancy L",
+          "affiliations": [
+            "From the Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA; Department of Neurology (D.B.S., J.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.W.), Univ. at Buffalo Jacobs School of Medicine and Biomedical Sciences, State University of New York, Buffalo, NY; Department of Neurology (M.B.), University of Miami, Miller School of Medicine. Miami, FL; Gabriel Cea (G.C.), Departamento de Ciencias Neurologicas, Facultad de Medicina, Universidad de Chile, Santiago, Chile; Dipartimento di Neuroscienze (A.E.), Fondazione Policlinico Universitario A. Gemelli IRCCS, Università Cattolica del Sacro Cuore, Roma, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Isabel Illa (I.I.), Department of Neurology, Hospital Santa Creu i Sant Pau. Universitat Autònoma de Barcelona, Barcelona, ERN EURO-NMD and CIBERER U762, Spain; Departments of Pediatrics and Neurology (N.L.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurology (A.M.), University of Tübingen Medical Centre, Tübingen, Germany; Department of Neurology (H.M.), International University of Health and Welfare, Narita, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, ON, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.R.), University of California, Davis, Davis, CA; and Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands."
+          ]
+        },
+        {
+          "position": 10,
+          "name": "Massey Janice",
+          "affiliations": [
+            "From the Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA; Department of Neurology (D.B.S., J.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.W.), Univ. at Buffalo Jacobs School of Medicine and Biomedical Sciences, State University of New York, Buffalo, NY; Department of Neurology (M.B.), University of Miami, Miller School of Medicine. Miami, FL; Gabriel Cea (G.C.), Departamento de Ciencias Neurologicas, Facultad de Medicina, Universidad de Chile, Santiago, Chile; Dipartimento di Neuroscienze (A.E.), Fondazione Policlinico Universitario A. Gemelli IRCCS, Università Cattolica del Sacro Cuore, Roma, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Isabel Illa (I.I.), Department of Neurology, Hospital Santa Creu i Sant Pau. Universitat Autònoma de Barcelona, Barcelona, ERN EURO-NMD and CIBERER U762, Spain; Departments of Pediatrics and Neurology (N.L.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurology (A.M.), University of Tübingen Medical Centre, Tübingen, Germany; Department of Neurology (H.M.), International University of Health and Welfare, Narita, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, ON, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.R.), University of California, Davis, Davis, CA; and Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands."
+          ]
+        },
+        {
+          "position": 11,
+          "name": "Melms Arthur",
+          "affiliations": [
+            "From the Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA; Department of Neurology (D.B.S., J.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.W.), Univ. at Buffalo Jacobs School of Medicine and Biomedical Sciences, State University of New York, Buffalo, NY; Department of Neurology (M.B.), University of Miami, Miller School of Medicine. Miami, FL; Gabriel Cea (G.C.), Departamento de Ciencias Neurologicas, Facultad de Medicina, Universidad de Chile, Santiago, Chile; Dipartimento di Neuroscienze (A.E.), Fondazione Policlinico Universitario A. Gemelli IRCCS, Università Cattolica del Sacro Cuore, Roma, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Isabel Illa (I.I.), Department of Neurology, Hospital Santa Creu i Sant Pau. Universitat Autònoma de Barcelona, Barcelona, ERN EURO-NMD and CIBERER U762, Spain; Departments of Pediatrics and Neurology (N.L.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurology (A.M.), University of Tübingen Medical Centre, Tübingen, Germany; Department of Neurology (H.M.), International University of Health and Welfare, Narita, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, ON, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.R.), University of California, Davis, Davis, CA; and Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands."
+          ]
+        },
+        {
+          "position": 12,
+          "name": "Murai Hiroyuki",
+          "affiliations": [
+            "From the Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA; Department of Neurology (D.B.S., J.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.W.), Univ. at Buffalo Jacobs School of Medicine and Biomedical Sciences, State University of New York, Buffalo, NY; Department of Neurology (M.B.), University of Miami, Miller School of Medicine. Miami, FL; Gabriel Cea (G.C.), Departamento de Ciencias Neurologicas, Facultad de Medicina, Universidad de Chile, Santiago, Chile; Dipartimento di Neuroscienze (A.E.), Fondazione Policlinico Universitario A. Gemelli IRCCS, Università Cattolica del Sacro Cuore, Roma, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Isabel Illa (I.I.), Department of Neurology, Hospital Santa Creu i Sant Pau. Universitat Autònoma de Barcelona, Barcelona, ERN EURO-NMD and CIBERER U762, Spain; Departments of Pediatrics and Neurology (N.L.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurology (A.M.), University of Tübingen Medical Centre, Tübingen, Germany; Department of Neurology (H.M.), International University of Health and Welfare, Narita, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, ON, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.R.), University of California, Davis, Davis, CA; and Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands."
+          ]
+        },
+        {
+          "position": 13,
+          "name": "Nicolle Michael",
+          "affiliations": [
+            "From the Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA; Department of Neurology (D.B.S., J.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.W.), Univ. at Buffalo Jacobs School of Medicine and Biomedical Sciences, State University of New York, Buffalo, NY; Department of Neurology (M.B.), University of Miami, Miller School of Medicine. Miami, FL; Gabriel Cea (G.C.), Departamento de Ciencias Neurologicas, Facultad de Medicina, Universidad de Chile, Santiago, Chile; Dipartimento di Neuroscienze (A.E.), Fondazione Policlinico Universitario A. Gemelli IRCCS, Università Cattolica del Sacro Cuore, Roma, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Isabel Illa (I.I.), Department of Neurology, Hospital Santa Creu i Sant Pau. Universitat Autònoma de Barcelona, Barcelona, ERN EURO-NMD and CIBERER U762, Spain; Departments of Pediatrics and Neurology (N.L.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurology (A.M.), University of Tübingen Medical Centre, Tübingen, Germany; Department of Neurology (H.M.), International University of Health and Welfare, Narita, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, ON, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.R.), University of California, Davis, Davis, CA; and Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands."
+          ]
+        },
+        {
+          "position": 14,
+          "name": "Palace Jacqueline",
+          "affiliations": [
+            "From the Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA; Department of Neurology (D.B.S., J.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.W.), Univ. at Buffalo Jacobs School of Medicine and Biomedical Sciences, State University of New York, Buffalo, NY; Department of Neurology (M.B.), University of Miami, Miller School of Medicine. Miami, FL; Gabriel Cea (G.C.), Departamento de Ciencias Neurologicas, Facultad de Medicina, Universidad de Chile, Santiago, Chile; Dipartimento di Neuroscienze (A.E.), Fondazione Policlinico Universitario A. Gemelli IRCCS, Università Cattolica del Sacro Cuore, Roma, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Isabel Illa (I.I.), Department of Neurology, Hospital Santa Creu i Sant Pau. Universitat Autònoma de Barcelona, Barcelona, ERN EURO-NMD and CIBERER U762, Spain; Departments of Pediatrics and Neurology (N.L.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurology (A.M.), University of Tübingen Medical Centre, Tübingen, Germany; Department of Neurology (H.M.), International University of Health and Welfare, Narita, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, ON, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.R.), University of California, Davis, Davis, CA; and Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands."
+          ]
+        },
+        {
+          "position": 15,
+          "name": "Richman David",
+          "affiliations": [
+            "From the Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA; Department of Neurology (D.B.S., J.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.W.), Univ. at Buffalo Jacobs School of Medicine and Biomedical Sciences, State University of New York, Buffalo, NY; Department of Neurology (M.B.), University of Miami, Miller School of Medicine. Miami, FL; Gabriel Cea (G.C.), Departamento de Ciencias Neurologicas, Facultad de Medicina, Universidad de Chile, Santiago, Chile; Dipartimento di Neuroscienze (A.E.), Fondazione Policlinico Universitario A. Gemelli IRCCS, Università Cattolica del Sacro Cuore, Roma, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Isabel Illa (I.I.), Department of Neurology, Hospital Santa Creu i Sant Pau. Universitat Autònoma de Barcelona, Barcelona, ERN EURO-NMD and CIBERER U762, Spain; Departments of Pediatrics and Neurology (N.L.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurology (A.M.), University of Tübingen Medical Centre, Tübingen, Germany; Department of Neurology (H.M.), International University of Health and Welfare, Narita, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, ON, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.R.), University of California, Davis, Davis, CA; and Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands."
+          ]
+        },
+        {
+          "position": 16,
+          "name": "Verschuuren Jan",
+          "affiliations": [
+            "From the Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA; Department of Neurology (D.B.S., J.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.W.), Univ. at Buffalo Jacobs School of Medicine and Biomedical Sciences, State University of New York, Buffalo, NY; Department of Neurology (M.B.), University of Miami, Miller School of Medicine. Miami, FL; Gabriel Cea (G.C.), Departamento de Ciencias Neurologicas, Facultad de Medicina, Universidad de Chile, Santiago, Chile; Dipartimento di Neuroscienze (A.E.), Fondazione Policlinico Universitario A. Gemelli IRCCS, Università Cattolica del Sacro Cuore, Roma, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Isabel Illa (I.I.), Department of Neurology, Hospital Santa Creu i Sant Pau. Universitat Autònoma de Barcelona, Barcelona, ERN EURO-NMD and CIBERER U762, Spain; Departments of Pediatrics and Neurology (N.L.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurology (A.M.), University of Tübingen Medical Centre, Tübingen, Germany; Department of Neurology (H.M.), International University of Health and Welfare, Narita, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, ON, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.R.), University of California, Davis, Davis, CA; and Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands."
           ]
         }
       ],
@@ -998,6 +1803,270 @@
           "position": 1,
           "name": "Liu W B",
           "affiliations": []
+        }
+      ],
+      "mg_core": true,
+      "mg_core_reason": "explicit_mg_title"
+    },
+    {
+      "pmid": "28138082",
+      "title": "Author response: International consensus guidance for management of myasthenia gravis: Executive summary.",
+      "abstract": "",
+      "authors": [
+        "Sanders Donald B",
+        "Wolfe Gil I",
+        "Narayanaswami Pushpa"
+      ],
+      "journal": "Neurology",
+      "entry_date": "2017/02/01 06:00",
+      "pub_date": "2017-01-31",
+      "doi": "",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28138082/",
+      "pub_types": [
+        "Journal Article",
+        "Comment"
+      ],
+      "affiliations": [
+        "Durham, NC.",
+        "Buffalo, NY.",
+        "Boston."
+      ],
+      "china_related": false,
+      "study_types": [
+        "Comment"
+      ],
+      "evidence_level": null,
+      "journal_if": 8.9,
+      "journal_quartile": "1区",
+      "author_affiliations": [
+        {
+          "position": 1,
+          "name": "Sanders Donald B",
+          "affiliations": [
+            "Durham, NC."
+          ]
+        },
+        {
+          "position": 2,
+          "name": "Wolfe Gil I",
+          "affiliations": [
+            "Buffalo, NY."
+          ]
+        },
+        {
+          "position": 3,
+          "name": "Narayanaswami Pushpa",
+          "affiliations": [
+            "Boston."
+          ]
+        }
+      ],
+      "mg_core": true,
+      "mg_core_reason": "explicit_mg_title"
+    },
+    {
+      "pmid": "28138081",
+      "title": "Letter re: International consensus guidance for management of myasthenia gravis: Executive summary.",
+      "abstract": "",
+      "authors": [
+        "Li Hai-Feng",
+        "Xie Yanchen",
+        "Hong Yu"
+      ],
+      "journal": "Neurology",
+      "entry_date": "2017/02/01 06:00",
+      "pub_date": "2017-01-31",
+      "doi": "",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28138081/",
+      "pub_types": [
+        "Journal Article",
+        "Comment"
+      ],
+      "affiliations": [
+        "Jinan, China.",
+        "Washington, DC.",
+        "Bergen, Norway."
+      ],
+      "china_related": true,
+      "study_types": [
+        "Comment"
+      ],
+      "evidence_level": null,
+      "journal_if": 8.9,
+      "journal_quartile": "1区",
+      "author_affiliations": [
+        {
+          "position": 1,
+          "name": "Li Hai-Feng",
+          "affiliations": [
+            "Jinan, China."
+          ]
+        },
+        {
+          "position": 2,
+          "name": "Xie Yanchen",
+          "affiliations": [
+            "Washington, DC."
+          ]
+        },
+        {
+          "position": 3,
+          "name": "Hong Yu",
+          "affiliations": [
+            "Bergen, Norway."
+          ]
+        }
+      ],
+      "mg_core": true,
+      "mg_core_reason": "explicit_mg_title"
+    },
+    {
+      "pmid": "27358333",
+      "title": "International consensus guidance for management of myasthenia gravis: Executive summary.",
+      "abstract": "OBJECTIVE: To develop formal consensus-based guidance for the management of myasthenia gravis (MG).\nMETHODS: In October 2013, the Myasthenia Gravis Foundation of America appointed a Task Force to develop treatment guidance for MG, and a panel of 15 international experts was convened. The RAND/UCLA appropriateness methodology was used to develop consensus guidance statements. Definitions were developed for goals of treatment, minimal manifestations, remission, ocular MG, impending crisis, crisis, and refractory MG. An in-person panel meeting then determined 7 treatment topics to be addressed. Initial guidance statements were developed from literature summaries. Three rounds of anonymous e-mail votes were used to attain consensus on guidance statements modified on the basis of panel input.\nRESULTS: Guidance statements were developed for symptomatic and immunosuppressive treatments, IV immunoglobulin and plasma exchange, management of impending and manifest myasthenic crisis, thymectomy, juvenile MG, MG associated with antibodies to muscle-specific tyrosine kinase, and MG in pregnancy.\nCONCLUSION: This is an international formal consensus of MG experts intended to be a guide for clinicians caring for patients with MG worldwide.",
+      "authors": [
+        "Sanders Donald B",
+        "Wolfe Gil I",
+        "Benatar Michael",
+        "Evoli Amelia",
+        "Gilhus Nils E",
+        "Illa Isabel",
+        "Kuntz Nancy",
+        "Massey Janice M",
+        "Melms Arthur",
+        "Murai Hiroyuki",
+        "Nicolle Michael",
+        "Palace Jacqueline",
+        "Richman David P",
+        "Verschuuren Jan",
+        "Narayanaswami Pushpa"
+      ],
+      "journal": "Neurology",
+      "entry_date": "2016/07/01 06:00",
+      "pub_date": "2016-07-26",
+      "doi": "",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27358333/",
+      "pub_types": [
+        "Consensus Statement",
+        "Journal Article",
+        "Review"
+      ],
+      "affiliations": [
+        "From the Department of Neurology (D.B.S., J.M.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.I.W.), University at Buffalo School of Medicine and Biomedical Sciences, State University of New York; Department of Neurology (M.B.), University of Miami, Miller School of Medicine, FL; Department of Neurology (A.E.), Catholic University, Rome, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Department of Neurology (I.I.), Hospital Santa Creu i Sant Pau, Universitat Autònoma de Barcelona; CIBERER U762 (I.I.), Barcelona, Spain; Departments of Pediatrics and Neurology (N.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurologische Klinik (A.M.), Universitätsklinikum Erlangen; Hertie Institute for Clinical Research (A.M.), University of Tübingen, Germany; Department of Neurological Therapeutics (H.M.), Graduate School of Medical Sciences, Kyushu University, Fukuoka, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.P.R.), University of California, Davis, CA; Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands; and Department of Neurology, Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA. donald.sanders@duke.edu.",
+        "From the Department of Neurology (D.B.S., J.M.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.I.W.), University at Buffalo School of Medicine and Biomedical Sciences, State University of New York; Department of Neurology (M.B.), University of Miami, Miller School of Medicine, FL; Department of Neurology (A.E.), Catholic University, Rome, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Department of Neurology (I.I.), Hospital Santa Creu i Sant Pau, Universitat Autònoma de Barcelona; CIBERER U762 (I.I.), Barcelona, Spain; Departments of Pediatrics and Neurology (N.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurologische Klinik (A.M.), Universitätsklinikum Erlangen; Hertie Institute for Clinical Research (A.M.), University of Tübingen, Germany; Department of Neurological Therapeutics (H.M.), Graduate School of Medical Sciences, Kyushu University, Fukuoka, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.P.R.), University of California, Davis, CA; Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands; and Department of Neurology, Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA."
+      ],
+      "china_related": false,
+      "study_types": [
+        "Review"
+      ],
+      "evidence_level": null,
+      "journal_if": 8.9,
+      "journal_quartile": "1区",
+      "author_affiliations": [
+        {
+          "position": 1,
+          "name": "Sanders Donald B",
+          "affiliations": [
+            "From the Department of Neurology (D.B.S., J.M.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.I.W.), University at Buffalo School of Medicine and Biomedical Sciences, State University of New York; Department of Neurology (M.B.), University of Miami, Miller School of Medicine, FL; Department of Neurology (A.E.), Catholic University, Rome, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Department of Neurology (I.I.), Hospital Santa Creu i Sant Pau, Universitat Autònoma de Barcelona; CIBERER U762 (I.I.), Barcelona, Spain; Departments of Pediatrics and Neurology (N.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurologische Klinik (A.M.), Universitätsklinikum Erlangen; Hertie Institute for Clinical Research (A.M.), University of Tübingen, Germany; Department of Neurological Therapeutics (H.M.), Graduate School of Medical Sciences, Kyushu University, Fukuoka, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.P.R.), University of California, Davis, CA; Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands; and Department of Neurology, Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA. donald.sanders@duke.edu."
+          ]
+        },
+        {
+          "position": 2,
+          "name": "Wolfe Gil I",
+          "affiliations": [
+            "From the Department of Neurology (D.B.S., J.M.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.I.W.), University at Buffalo School of Medicine and Biomedical Sciences, State University of New York; Department of Neurology (M.B.), University of Miami, Miller School of Medicine, FL; Department of Neurology (A.E.), Catholic University, Rome, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Department of Neurology (I.I.), Hospital Santa Creu i Sant Pau, Universitat Autònoma de Barcelona; CIBERER U762 (I.I.), Barcelona, Spain; Departments of Pediatrics and Neurology (N.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurologische Klinik (A.M.), Universitätsklinikum Erlangen; Hertie Institute for Clinical Research (A.M.), University of Tübingen, Germany; Department of Neurological Therapeutics (H.M.), Graduate School of Medical Sciences, Kyushu University, Fukuoka, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.P.R.), University of California, Davis, CA; Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands; and Department of Neurology, Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA."
+          ]
+        },
+        {
+          "position": 3,
+          "name": "Benatar Michael",
+          "affiliations": [
+            "From the Department of Neurology (D.B.S., J.M.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.I.W.), University at Buffalo School of Medicine and Biomedical Sciences, State University of New York; Department of Neurology (M.B.), University of Miami, Miller School of Medicine, FL; Department of Neurology (A.E.), Catholic University, Rome, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Department of Neurology (I.I.), Hospital Santa Creu i Sant Pau, Universitat Autònoma de Barcelona; CIBERER U762 (I.I.), Barcelona, Spain; Departments of Pediatrics and Neurology (N.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurologische Klinik (A.M.), Universitätsklinikum Erlangen; Hertie Institute for Clinical Research (A.M.), University of Tübingen, Germany; Department of Neurological Therapeutics (H.M.), Graduate School of Medical Sciences, Kyushu University, Fukuoka, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.P.R.), University of California, Davis, CA; Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands; and Department of Neurology, Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA."
+          ]
+        },
+        {
+          "position": 4,
+          "name": "Evoli Amelia",
+          "affiliations": [
+            "From the Department of Neurology (D.B.S., J.M.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.I.W.), University at Buffalo School of Medicine and Biomedical Sciences, State University of New York; Department of Neurology (M.B.), University of Miami, Miller School of Medicine, FL; Department of Neurology (A.E.), Catholic University, Rome, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Department of Neurology (I.I.), Hospital Santa Creu i Sant Pau, Universitat Autònoma de Barcelona; CIBERER U762 (I.I.), Barcelona, Spain; Departments of Pediatrics and Neurology (N.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurologische Klinik (A.M.), Universitätsklinikum Erlangen; Hertie Institute for Clinical Research (A.M.), University of Tübingen, Germany; Department of Neurological Therapeutics (H.M.), Graduate School of Medical Sciences, Kyushu University, Fukuoka, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.P.R.), University of California, Davis, CA; Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands; and Department of Neurology, Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA."
+          ]
+        },
+        {
+          "position": 5,
+          "name": "Gilhus Nils E",
+          "affiliations": [
+            "From the Department of Neurology (D.B.S., J.M.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.I.W.), University at Buffalo School of Medicine and Biomedical Sciences, State University of New York; Department of Neurology (M.B.), University of Miami, Miller School of Medicine, FL; Department of Neurology (A.E.), Catholic University, Rome, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Department of Neurology (I.I.), Hospital Santa Creu i Sant Pau, Universitat Autònoma de Barcelona; CIBERER U762 (I.I.), Barcelona, Spain; Departments of Pediatrics and Neurology (N.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurologische Klinik (A.M.), Universitätsklinikum Erlangen; Hertie Institute for Clinical Research (A.M.), University of Tübingen, Germany; Department of Neurological Therapeutics (H.M.), Graduate School of Medical Sciences, Kyushu University, Fukuoka, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.P.R.), University of California, Davis, CA; Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands; and Department of Neurology, Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA."
+          ]
+        },
+        {
+          "position": 6,
+          "name": "Illa Isabel",
+          "affiliations": [
+            "From the Department of Neurology (D.B.S., J.M.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.I.W.), University at Buffalo School of Medicine and Biomedical Sciences, State University of New York; Department of Neurology (M.B.), University of Miami, Miller School of Medicine, FL; Department of Neurology (A.E.), Catholic University, Rome, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Department of Neurology (I.I.), Hospital Santa Creu i Sant Pau, Universitat Autònoma de Barcelona; CIBERER U762 (I.I.), Barcelona, Spain; Departments of Pediatrics and Neurology (N.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurologische Klinik (A.M.), Universitätsklinikum Erlangen; Hertie Institute for Clinical Research (A.M.), University of Tübingen, Germany; Department of Neurological Therapeutics (H.M.), Graduate School of Medical Sciences, Kyushu University, Fukuoka, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.P.R.), University of California, Davis, CA; Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands; and Department of Neurology, Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA."
+          ]
+        },
+        {
+          "position": 7,
+          "name": "Kuntz Nancy",
+          "affiliations": [
+            "From the Department of Neurology (D.B.S., J.M.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.I.W.), University at Buffalo School of Medicine and Biomedical Sciences, State University of New York; Department of Neurology (M.B.), University of Miami, Miller School of Medicine, FL; Department of Neurology (A.E.), Catholic University, Rome, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Department of Neurology (I.I.), Hospital Santa Creu i Sant Pau, Universitat Autònoma de Barcelona; CIBERER U762 (I.I.), Barcelona, Spain; Departments of Pediatrics and Neurology (N.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurologische Klinik (A.M.), Universitätsklinikum Erlangen; Hertie Institute for Clinical Research (A.M.), University of Tübingen, Germany; Department of Neurological Therapeutics (H.M.), Graduate School of Medical Sciences, Kyushu University, Fukuoka, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.P.R.), University of California, Davis, CA; Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands; and Department of Neurology, Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA."
+          ]
+        },
+        {
+          "position": 8,
+          "name": "Massey Janice M",
+          "affiliations": [
+            "From the Department of Neurology (D.B.S., J.M.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.I.W.), University at Buffalo School of Medicine and Biomedical Sciences, State University of New York; Department of Neurology (M.B.), University of Miami, Miller School of Medicine, FL; Department of Neurology (A.E.), Catholic University, Rome, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Department of Neurology (I.I.), Hospital Santa Creu i Sant Pau, Universitat Autònoma de Barcelona; CIBERER U762 (I.I.), Barcelona, Spain; Departments of Pediatrics and Neurology (N.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurologische Klinik (A.M.), Universitätsklinikum Erlangen; Hertie Institute for Clinical Research (A.M.), University of Tübingen, Germany; Department of Neurological Therapeutics (H.M.), Graduate School of Medical Sciences, Kyushu University, Fukuoka, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.P.R.), University of California, Davis, CA; Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands; and Department of Neurology, Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA."
+          ]
+        },
+        {
+          "position": 9,
+          "name": "Melms Arthur",
+          "affiliations": [
+            "From the Department of Neurology (D.B.S., J.M.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.I.W.), University at Buffalo School of Medicine and Biomedical Sciences, State University of New York; Department of Neurology (M.B.), University of Miami, Miller School of Medicine, FL; Department of Neurology (A.E.), Catholic University, Rome, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Department of Neurology (I.I.), Hospital Santa Creu i Sant Pau, Universitat Autònoma de Barcelona; CIBERER U762 (I.I.), Barcelona, Spain; Departments of Pediatrics and Neurology (N.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurologische Klinik (A.M.), Universitätsklinikum Erlangen; Hertie Institute for Clinical Research (A.M.), University of Tübingen, Germany; Department of Neurological Therapeutics (H.M.), Graduate School of Medical Sciences, Kyushu University, Fukuoka, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.P.R.), University of California, Davis, CA; Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands; and Department of Neurology, Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA."
+          ]
+        },
+        {
+          "position": 10,
+          "name": "Murai Hiroyuki",
+          "affiliations": [
+            "From the Department of Neurology (D.B.S., J.M.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.I.W.), University at Buffalo School of Medicine and Biomedical Sciences, State University of New York; Department of Neurology (M.B.), University of Miami, Miller School of Medicine, FL; Department of Neurology (A.E.), Catholic University, Rome, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Department of Neurology (I.I.), Hospital Santa Creu i Sant Pau, Universitat Autònoma de Barcelona; CIBERER U762 (I.I.), Barcelona, Spain; Departments of Pediatrics and Neurology (N.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurologische Klinik (A.M.), Universitätsklinikum Erlangen; Hertie Institute for Clinical Research (A.M.), University of Tübingen, Germany; Department of Neurological Therapeutics (H.M.), Graduate School of Medical Sciences, Kyushu University, Fukuoka, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.P.R.), University of California, Davis, CA; Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands; and Department of Neurology, Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA."
+          ]
+        },
+        {
+          "position": 11,
+          "name": "Nicolle Michael",
+          "affiliations": [
+            "From the Department of Neurology (D.B.S., J.M.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.I.W.), University at Buffalo School of Medicine and Biomedical Sciences, State University of New York; Department of Neurology (M.B.), University of Miami, Miller School of Medicine, FL; Department of Neurology (A.E.), Catholic University, Rome, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Department of Neurology (I.I.), Hospital Santa Creu i Sant Pau, Universitat Autònoma de Barcelona; CIBERER U762 (I.I.), Barcelona, Spain; Departments of Pediatrics and Neurology (N.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurologische Klinik (A.M.), Universitätsklinikum Erlangen; Hertie Institute for Clinical Research (A.M.), University of Tübingen, Germany; Department of Neurological Therapeutics (H.M.), Graduate School of Medical Sciences, Kyushu University, Fukuoka, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.P.R.), University of California, Davis, CA; Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands; and Department of Neurology, Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA."
+          ]
+        },
+        {
+          "position": 12,
+          "name": "Palace Jacqueline",
+          "affiliations": [
+            "From the Department of Neurology (D.B.S., J.M.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.I.W.), University at Buffalo School of Medicine and Biomedical Sciences, State University of New York; Department of Neurology (M.B.), University of Miami, Miller School of Medicine, FL; Department of Neurology (A.E.), Catholic University, Rome, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Department of Neurology (I.I.), Hospital Santa Creu i Sant Pau, Universitat Autònoma de Barcelona; CIBERER U762 (I.I.), Barcelona, Spain; Departments of Pediatrics and Neurology (N.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurologische Klinik (A.M.), Universitätsklinikum Erlangen; Hertie Institute for Clinical Research (A.M.), University of Tübingen, Germany; Department of Neurological Therapeutics (H.M.), Graduate School of Medical Sciences, Kyushu University, Fukuoka, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.P.R.), University of California, Davis, CA; Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands; and Department of Neurology, Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA."
+          ]
+        },
+        {
+          "position": 13,
+          "name": "Richman David P",
+          "affiliations": [
+            "From the Department of Neurology (D.B.S., J.M.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.I.W.), University at Buffalo School of Medicine and Biomedical Sciences, State University of New York; Department of Neurology (M.B.), University of Miami, Miller School of Medicine, FL; Department of Neurology (A.E.), Catholic University, Rome, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Department of Neurology (I.I.), Hospital Santa Creu i Sant Pau, Universitat Autònoma de Barcelona; CIBERER U762 (I.I.), Barcelona, Spain; Departments of Pediatrics and Neurology (N.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurologische Klinik (A.M.), Universitätsklinikum Erlangen; Hertie Institute for Clinical Research (A.M.), University of Tübingen, Germany; Department of Neurological Therapeutics (H.M.), Graduate School of Medical Sciences, Kyushu University, Fukuoka, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.P.R.), University of California, Davis, CA; Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands; and Department of Neurology, Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA."
+          ]
+        },
+        {
+          "position": 14,
+          "name": "Verschuuren Jan",
+          "affiliations": [
+            "From the Department of Neurology (D.B.S., J.M.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.I.W.), University at Buffalo School of Medicine and Biomedical Sciences, State University of New York; Department of Neurology (M.B.), University of Miami, Miller School of Medicine, FL; Department of Neurology (A.E.), Catholic University, Rome, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Department of Neurology (I.I.), Hospital Santa Creu i Sant Pau, Universitat Autònoma de Barcelona; CIBERER U762 (I.I.), Barcelona, Spain; Departments of Pediatrics and Neurology (N.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurologische Klinik (A.M.), Universitätsklinikum Erlangen; Hertie Institute for Clinical Research (A.M.), University of Tübingen, Germany; Department of Neurological Therapeutics (H.M.), Graduate School of Medical Sciences, Kyushu University, Fukuoka, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.P.R.), University of California, Davis, CA; Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands; and Department of Neurology, Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA."
+          ]
+        },
+        {
+          "position": 15,
+          "name": "Narayanaswami Pushpa",
+          "affiliations": [
+            "From the Department of Neurology (D.B.S., J.M.M.), Duke University Medical Center, Durham, NC; Department of Neurology (G.I.W.), University at Buffalo School of Medicine and Biomedical Sciences, State University of New York; Department of Neurology (M.B.), University of Miami, Miller School of Medicine, FL; Department of Neurology (A.E.), Catholic University, Rome, Italy; Department of Clinical Medicine (N.E.G.), University of Bergen, Norway; Department of Neurology (I.I.), Hospital Santa Creu i Sant Pau, Universitat Autònoma de Barcelona; CIBERER U762 (I.I.), Barcelona, Spain; Departments of Pediatrics and Neurology (N.K.), Northwestern Feinberg School of Medicine, Chicago, IL; Neurologische Klinik (A.M.), Universitätsklinikum Erlangen; Hertie Institute for Clinical Research (A.M.), University of Tübingen, Germany; Department of Neurological Therapeutics (H.M.), Graduate School of Medical Sciences, Kyushu University, Fukuoka, Japan; Department of Clinical Neurological Sciences (M.N.), Western University, London, Canada; Department of Clinical Neurology (J.P.), John Radcliffe Hospital, Oxford University Hospitals Trust, Oxford, UK; Department of Neurology (D.P.R.), University of California, Davis, CA; Department of Neurology (J.V.), Leiden University Medical Centre, Leiden, the Netherlands; and Department of Neurology, Beth Israel Deaconess Medical Center/Harvard Medical School (P.N.), Boston, MA."
+          ]
         }
       ],
       "mg_core": true,
