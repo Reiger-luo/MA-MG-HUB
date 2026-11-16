@@ -42,6 +42,16 @@
 - Post-marketing surveillance 只有在呈现为 non-randomized controlled cohort / follow-up 且有足够样本量或 large-scale / nationwide / registry 信号时，才升为 Level III；普通 FAERS / disproportionality / spontaneous report 仍为 Level IV 或非证据筛选项，视文本而定。
 - GWAS / omics / genetic association / exploratory biomarker association 不自动等同 mechanism-based reasoning；默认归为 exploratory observational association（Level IV），只有明确机制推理文本才给 Level V。
 
+### 信号纳入决策的证据上限（第二道门）
+
+证据等级只回答“这篇研究在 CEBM 梯子上属于哪一级”，不直接决定它是否成为本周信号。文献进入 `signals-weekly.js` 之前，还要经过 `scripts/enrich-literature-narrative.py::apply_decision_evidence_ceiling` 这一道确定性闸门，在模型给出 include / background 判断后按研究设计二次收口。要点：
+
+- **判定来源分级结果，不复读原文猜设计**：是否病例级系统综述只读 `studyTypes` 里的 `Systematic Review of Case Reports`，不再用“systematic review + case series”文本共现推断。综述/荟萃分析摘要里出现的 case series 指被纳入的研究，不是本文设计，不据此把综述降为病例级（否则会把明确合并了 RCT 的荟萃分析误判为非对照综述）。
+- **“非对照系统综述”由 `studyClassifier.py` 判为 IV 级后即到此为止**：强度由 `normalize_signal_strength` 收口，闸门不再对同一篇做第二次证据上限惩罚。IV 级单臂真实世界研究在 score 达标时仍可成为“中”信号。
+- **触发降级的规则**：病例级（`case_level`）、病例级系统综述（`case_based_review`）、V 级证据（`evidence_level_v`）、MG 亚组事件不足（`insufficient_mg_subgroup`）、无对照的单中心回顾性描述队列（`descriptive_single_center`）、体外或计算性探索（`laboratory_or_computational`）；动物证据与缺少有效风险集的死亡者比较直接 `exclude`。明确标注的安全性新信号可豁免上限。
+- **降级必须可审计**：降级时覆写 `reason`，另写 `ceilingRule`（命中的规则名）、`preCeilingDecision`、`preCeilingValueScore`、`preCeilingReason`（模型原判断）四个字段，不允许把上限理由拼接在模型原句之后，避免产出“建议纳入…按上限降为背景”的自相矛盾记录。
+- 闸门只决定信号层级归属，不改 `evidence_level`；强度与证据等级的封顶关系另见 `normalize_signal_strength`。
+
 ### 自动化局限
 
 - 无全文时无法可靠判断诊断研究的 consecutive sampling、blinding、reference standard 一致性；当前诊断准确性研究按保守 III 桶，诊断 case-control / scale validation 按 IV。

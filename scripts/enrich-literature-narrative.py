@@ -385,12 +385,21 @@ def apply_decision_evidence_ceiling(decision: dict, record: dict) -> dict:
         "in vitro", "network toxicology", "molecular dynamics", "machine learning model",
         "purely computational", "computational study",
     ))
-    case_level = any(term in blob for term in (
+    study_types = {str(item) for item in (record.get("studyTypes") or [])}
+    # 综述/荟萃分析里的 case series 指被纳入的研究，不是本文设计，不能据此把综述降为病例级。
+    review_record = any(
+        "Systematic Review" in item or item == "ITC" for item in study_types
+    ) or any(
+        str(item).strip().lower() in {"meta-analysis", "systematic review"}
+        for item in (record.get("pubTypes") or [])
+    )
+    case_level = (not review_record) and any(term in blob for term in (
         "case report", "case reports", "case series", "we report a patient", "two cases",
     ))
-    uncontrolled_review = "systematic review" in blob and any(
-        term in blob for term in ("case report", "case reports", "case series")
-    )
+    # 只读分级结果，不再复读原文：原实现用「systematic review + case series」文本共现判断，
+    # 会把明确合并了 RCT 的荟萃分析（如 PMID 43012536）误判为非对照综述并强制降级。
+    # 「非对照系统综述」本身已封顶 IV 级，强度由 normalize_signal_strength 收口，无需二次降级。
+    case_based_review = "Systematic Review of Case Reports" in study_types
     insufficient_mg_subgroup = (
         any(term in blob for term in ("among mg patients", "mg subgroup", "patients with mg"))
         and any(term in blob for term in ("insufficient events", "precluding reliable", "unable to estimate", "could not estimate"))
@@ -442,24 +451,47 @@ def apply_decision_evidence_ceiling(decision: dict, record: dict) -> dict:
         })
     elif (
         case_level
-        or uncontrolled_review
+        or case_based_review
         or evidence_level == "V"
         or insufficient_mg_subgroup
         or descriptive_single_center
         or laboratory_or_computational
     ) and not exceptional_safety:
         if descriptive_single_center:
-            ceiling_reason = " 无比较组的单中心回顾性描述队列按证据上限降为背景。"
+            ceiling_rule = "descriptive_single_center"
+            ceiling_reason = "无比较组的单中心回顾性描述队列，按证据上限降为背景。"
         elif insufficient_mg_subgroup:
-            ceiling_reason = " MG亚组事件不足以支持可靠估计，按证据上限降为背景。"
+            ceiling_rule = "insufficient_mg_subgroup"
+            ceiling_reason = "MG 亚组事件不足以支持可靠估计，按证据上限降为背景。"
         elif laboratory_or_computational:
-            ceiling_reason = " 体外或计算性探索尚无直接临床证据，保留为背景。"
+            ceiling_rule = "laboratory_or_computational"
+            ceiling_reason = "体外或计算性探索尚无直接临床证据，保留为背景。"
+        elif case_level:
+            ceiling_rule = "case_level"
+            ceiling_reason = "病例级证据，按证据上限降为背景。"
+        elif case_based_review:
+            ceiling_rule = "case_based_review"
+            ceiling_reason = "病例级系统综述，按证据上限降为背景。"
+        elif evidence_level == "V":
+            ceiling_rule = "evidence_level_v"
+            ceiling_reason = "V 级证据，按证据上限降为背景。"
         else:
-            ceiling_reason = " 病例级、非对照综述或 V 级证据按临床证据上限降为背景。"
+            ceiling_rule = "evidence_ceiling"
+            ceiling_reason = "证据设计不支持本周信号层级，按上限降为背景。"
+        pre_ceiling_decision = str(item.get("decision") or "")
+        try:
+            pre_ceiling_value_score = int(item.get("valueScore") or 0)
+        except (TypeError, ValueError):
+            pre_ceiling_value_score = 0
         item.update({
             "decision": "background",
-            "valueScore": min(2, int(item.get("valueScore") or 2)),
-            "reason": reason + ceiling_reason,
+            "valueScore": min(2, pre_ceiling_value_score or 2),
+            # 覆写而不是拼接：模型原句移到 preCeilingReason，避免产出「建议纳入…按上限降为背景」的自相矛盾理由
+            "reason": ceiling_reason,
+            "ceilingRule": ceiling_rule,
+            "preCeilingDecision": pre_ceiling_decision,
+            "preCeilingValueScore": pre_ceiling_value_score,
+            "preCeilingReason": reason,
         })
     return item
 

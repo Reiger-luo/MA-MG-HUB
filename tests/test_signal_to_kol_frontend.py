@@ -1098,3 +1098,91 @@ def test_mg_core_guard_rejects_secondary_disease_comparator():
     assert reason == "secondary_disease_in_title"
     assert included is True
     assert included_reason == "title_explicit_mg"
+
+
+def test_review_with_pooled_rct_is_not_demoted_to_case_level():
+    """综述里的 case series 指被纳入研究，不能据此把合并了 RCT 的荟萃分析降为背景。"""
+    module = load_enrichment_module()
+
+    meta_review = {
+        "pmid": "4312536",
+        "title": "Safety and Efficacy of a Drug for Generalized Myasthenia Gravis: A Systematic Review and Meta-Analysis",
+        "abstract": (
+            "This systematic review and meta-analysis assessed efficacy and safety, analyzing "
+            "randomized controlled evidence separately from uncontrolled real-world evidence. "
+            "We included eleven studies: two placebo-controlled RCTs, six cohort studies, and "
+            "three case series."
+        ),
+        "evidence_level": "IV",
+        "study_types": ["Systematic Review of Uncontrolled Studies"],
+        "pub_types": ["Meta-Analysis", "Systematic Review"],
+        "journal": "Test Journal",
+    }
+    decision = module.apply_decision_evidence_ceiling(
+        {
+            "decision": "include",
+            "category": "治疗疗效与定位",
+            "valueScore": 4,
+            "strategicNoveltyScore": 2,
+            "reason": "系统综述直接回答短期疗效与再治疗需求。",
+        },
+        module.records_for_prompt([meta_review])[0],
+    )
+
+    assert decision["decision"] == "include"
+    assert decision["valueScore"] == 4
+    assert "ceilingRule" not in decision
+    assert decision["reason"] == "系统综述直接回答短期疗效与再治疗需求。"
+
+
+def test_case_based_review_records_structured_ceiling_audit():
+    """真正的病例级综述仍须降级，并留下可审计的规则名与原判断。"""
+    module = load_enrichment_module()
+
+    case_review = {
+        "pmid": "4312537",
+        "title": "Systematic review of case reports in myasthenia gravis",
+        "abstract": "This systematic review included case reports and case series.",
+        "evidence_level": "IV",
+        "study_types": ["Systematic Review of Case Reports"],
+        "pub_types": ["Systematic Review"],
+        "journal": "Test Journal",
+    }
+    decision = module.apply_decision_evidence_ceiling(
+        {
+            "decision": "include",
+            "category": "病例级警示",
+            "valueScore": 4,
+            "reason": "病例线索有提示意义。",
+        },
+        module.records_for_prompt([case_review])[0],
+    )
+
+    assert decision["decision"] == "background"
+    assert decision["valueScore"] == 2
+    assert decision["ceilingRule"] == "case_based_review"
+    assert decision["preCeilingDecision"] == "include"
+    assert decision["preCeilingValueScore"] == 4
+    assert decision["preCeilingReason"] == "病例线索有提示意义。"
+    assert "按证据上限降为背景" in decision["reason"]
+    assert "病例线索有提示意义" not in decision["reason"]
+
+
+def test_case_report_still_hits_case_level_ceiling():
+    """单篇病例报告必须继续被病例级闸门拦下。"""
+    module = load_enrichment_module()
+    case_article = sample_article("4312538", "IV")
+    case_article.update({
+        "title": "A case report in myasthenia gravis",
+        "abstract": "We report a patient with myasthenia gravis.",
+        "study_types": ["Case Report"],
+        "pub_types": ["Case Reports"],
+    })
+
+    decision = module.apply_decision_evidence_ceiling(
+        {"decision": "include", "category": "病例级警示", "valueScore": 4, "reason": "单例。"},
+        module.records_for_prompt([case_article])[0],
+    )
+
+    assert decision["decision"] == "background"
+    assert decision["ceilingRule"] == "case_level"

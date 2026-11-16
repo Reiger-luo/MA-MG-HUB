@@ -114,7 +114,7 @@ MG-core 与证据门控
 
 ## 5. 证据与来源边界
 
-PubMed 主文献流必须先通过 MG-core，再通过证据等级 I–V 门控。分类由 `scripts/studyClassifier.py` 执行，方法学依据见 [evidenceGrading.md](../reference/evidenceGrading.md)。
+PubMed 主文献流必须先通过 MG-core，再通过证据等级 I–V 门控。证据等级分类由 `scripts/studyClassifier.py` 执行，方法学依据见 [evidenceGrading.md](../reference/evidenceGrading.md)。文献进入周信号前还有第二道确定性闸门：模型给出 include / background 判断后，`scripts/enrich-literature-narrative.py::apply_decision_evidence_ceiling` 按研究设计二次收口，病例级、非对照、亚组事件不足、单中心描述与体外/计算探索降为背景，并写入可审计的 `ceilingRule` 与原判断字段。这道闸门只读分级结果、不复读原文猜设计，综述里的 case series 视为被纳入研究而非本文设计；触发规则与审计字段口径见 [evidenceGrading.md 的信号纳入决策节](../reference/evidenceGrading.md)。
 
 指南/共识、监管、临床试验注册和会议来源不赋 Oxford 等级，统一通过 `source-signals.js` 保留独立来源身份。临床试验信号另按“试验重要性 × 本轮更新实质性”给出来源内强/中/弱；它表示注册与开发里程碑的跟踪优先级，不与文献证据强度比较，也不代表疗效结论。
 
