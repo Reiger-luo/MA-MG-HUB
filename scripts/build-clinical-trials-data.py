@@ -70,6 +70,9 @@ DRUG_CLASS_TERMS = (
             "艾加莫德",
             "argx-113",
             "罗泽利昔珠单抗",
+            # ALXN1830（orilanolimab/SYNT001）为抗 FcRn 单抗，不是普通免疫抑制剂。
+            "alxn1830",
+            "orilanolimab",
         ),
     ),
     (
@@ -95,6 +98,12 @@ DRUG_CLASS_TERMS = (
             "iptacopan",
             "empasiprubart",
             "vemircopan",
+            # ALXN2050 = vemircopan（补体因子 D 抑制剂），代号需与通用名同归补体。
+            "alxn2050",
+            # CG001（CRIg/FH，C3b/iC3b）、EA5 与 IM-101 均为抗补体 C5/C3 分子。
+            "cg001",
+            "ea5",
+            "im-101",
         ),
     ),
     (
@@ -112,6 +121,36 @@ DRUG_CLASS_TERMS = (
             "senl103",
             "car-t",
             "cizutamig",
+            # BAFF/APRIL 双拮抗剂与 CD19/CD20/BCMA 细胞治疗同属 B 细胞轴，
+            # 与已归入本类的泰它西普（telitacicept, RC18）机制一致。
+            "gensci136",
+            "belimumab",
+            "povetacicept",
+            "aritinercept",
+            # TAK-079（mezagitamab）抗 CD38 耗竭浆细胞；ripertamab 为利妥昔单抗类似药。
+            "tak-079",
+            "mezagitamab",
+            "ripertamab",
+            # 细胞治疗：CD19/BCMA/BAFF-R CAR-T、CAR-NK、CAAR-T、TCR-T 与 CD3 双抗。
+            "caba-201",
+            "baff-r cart",
+            "baffr cart",
+            "musk-caart",
+            "caart",
+            "cd19-car-nk",
+            "car-nk",
+            "ct103a",
+            "gc012f",
+            "cc-97540",
+            "kite-363",
+            "anito-cel",
+            "descartes-08",
+            "decartes-08",
+            "star-t",
+            "gt802",
+            "hn2301",
+            "blinatumomab",
+            "b007",
         ),
     ),
     (
@@ -129,17 +168,43 @@ DRUG_CLASS_TERMS = (
             "硫唑嘌呤",
             "他克莫司",
             "克拉屈滨",
+            # 糖皮质激素、烷化剂/清淋化疗与 T 细胞清除剂按字面机制归免疫抑制剂。
+            "prednisone",
+            "泼尼松",
+            "methylprednisolone",
+            "甲泼尼龙",
+            "glucocorticoid",
+            "steroid drug",
+            "cyclophosphamide",
+            "fludarabine",
+            "melphalan",
+            "anti-thymocyte globulin",
+            "atg (rabbit)",
+            # Tofacitinib 为 JAK 抑制剂、abatacept 为 CD28 共刺激阻断，均非 IL-6 通路。
+            "tofacitinib",
+            "abatacept",
         ),
     ),
-    ("胆碱酯酶抑制剂", ("pyridostigmine", "溴吡斯的明", "huperzine", "石杉碱甲", "edrophonium", "依酚氯铵")),
+    (
+        "胆碱酯酶抑制剂",
+        (
+            "pyridostigmine", "溴吡斯的明", "huperzine", "石杉碱甲", "edrophonium", "依酚氯铵",
+            "neostigmine",
+        ),
+    ),
     (
         "免疫调节",
         (
             "plasma exchange",
             "plex",
             "ivig",
+            "igiv-c",
             "immunoglobulin",
             "immune globulin",
+            "cnp-106",
+            "cv-mg01",
+            # SHR-2173 为 IFNAR1×TACI 双靶点融合蛋白，兼顾 I 型干扰素与 BAFF/APRIL 通路。
+            "shr-2173",
         ),
     ),
     (
@@ -360,6 +425,9 @@ def build_decision_signals(records: list[dict[str, Any]], generated_at: str) -> 
 PHASE_RANK = {
     "Early Phase 1": 0.5, "Phase 1": 1, "Phase 1/2": 1.5,
     "Phase 2": 2, "Phase 2/3": 2.5, "Phase 3": 3, "Phase 4": 4,
+    # phase_label() 对多阶段列表输出带空格的 "Phase 1 / Phase 2"，
+    # 必须与无空格写法等价，否则联合期别被判为 -1 → 最高阶段显示「未标注」并沉底。
+    "Phase 1 / Phase 2": 1.5, "Phase 2 / Phase 3": 2.5,
 }
 
 DRUG_CLASS_ORDER = [
@@ -480,6 +548,25 @@ DRUG_SYNONYMS: dict[str, str] = {
     "egamod": "Efgartigimod (艾加莫德)",
     "empasiprubart": "Empasiprubart",
     "ublituximab": "Ublituximab",
+    # GenSci136：同一 BCMA 三聚体融合蛋白（BAFF/APRIL 双拮抗），中国/美国注册名合并。
+    "gensci136": "GenSci136 (BAFF/APRIL双拮抗)",
+    "注射用gensci136": "GenSci136 (BAFF/APRIL双拮抗)",
+    "rc18": "Telitacicept (泰它西普)",
+    "ripertamab": "Rituximab (利妥昔单抗)",
+    "ucb7665": "Rozanolixizumab (罗泽利昔珠单抗)",
+    "alxn1830": "Orilanolimab (ALXN1830)",
+    "alxn2050": "Vemircopan (ALXN2050)",
+    "fk506": "Tacrolimus (他克莫司)",
+    "fk506 therapy": "Tacrolimus (他克莫司)",
+    "igiv-c": "IVIg (静注人免疫球蛋白)",
+    "shr-2173 injection": "SHR-2173",
+    "ea5": "EA5 (抗C5单抗)",
+    "ea5注射液皮下制剂": "EA5 (抗C5单抗)",
+    "im-101 part a": "IM-101 (抗C5单抗)",
+    "im-101 part b": "IM-101 (抗C5单抗)",
+    "atg (rabbit)": "Anti-Thymocyte Globulin (ATG)",
+    "anti-thymocyte globulin": "Anti-Thymocyte Globulin (ATG)",
+    "decartes-08": "Descartes-08",
     "amifampridine": "Amifampridine (氨吡啶)",
     "3,4-diaminopyridine": "Amifampridine (氨吡啶)",
     "3,4-dap": "Amifampridine (氨吡啶)",

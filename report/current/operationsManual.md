@@ -206,6 +206,8 @@ ClinicalTrials.gov 每次构建对比上一期快照（`clinicaltrials-weekly-ch
 
 药物归并别名以 `build-clinical-trials-data.py` 的 `DRUG_SYNONYMS` 为准，且必须与公开代号一致：`ALXN1720` 只指向 gefurulimab（戈鲁利单抗，III 期 PREVAIL / NCT05556096、儿科 PK/PD / NCT06607627、中国 CTR20232711），`M281` 只指向 nipocalimab；两者过去分别被误并到 ravulizumab 与 batoclimab，已纠正。CT.gov 干预类型为 `COMBINATION_PRODUCT` 时同样抽取药物名，否则 III 期纳米抗体会因无药物标签而整行消失。注册状态按登记库原文展示：PREVAIL 的 26 周随机对照期完成并已发表，但整体状态为 ACTIVE_NOT_RECRUITING（开放标签延长期预计 2027-08-31 结束），不得写成「试验已结束」。
 
+管线矩阵的「靶点/机制」分组由 `DRUG_CLASS_TERMS` 从归一化药名判定，再用记录层标题兜底；周更信号板与管线矩阵同源但互不回写，信号叙事字段不会写入矩阵。归并必须按公开机制而不是字面拼写：`注射用 GenSci136`（CTR20264227）与 `GenSci136 for injection`（NCT07936084）是同一 BCMA 三聚体、BAFF/APRIL 双拮抗分子，合并为 `GenSci136 (BAFF/APRIL双拮抗)` 并归入 `B细胞/抗CD19/CD20`，与同机制的泰它西普一致；`RC18` 并入泰它西普、`ripertamab` 并入利妥昔单抗、`UCB7665` 并入罗泽利昔珠单抗、`FK506` 并入他克莫司、`IGIV-C` 并入 IVIg。可识别机制的新分子（如 ALXN1830 抗 FcRn、ALXN2050 因子 D、CG001/EA5/IM-101 抗补体、CNP-106/CV-MG01/SHR-2173 免疫调节及 CD19/BCMA 细胞治疗）按机制入现有类；麻醉、清疗预处理、中药、常规护理与靶点未公开者保留「其他」，不强行归类。`PHASE_RANK` 同时接受带空格的 `Phase 1 / Phase 2` 与无空格写法，避免联合期别被降为「未标注」并在矩阵沉底。
+
 失败时保留 last-good cache；不使用低可信第三方数据静默覆盖官方缓存。
 
 ## 10. 周更与恢复
