@@ -8,12 +8,12 @@ window.MG_CLINICAL_TRIALS_SUMMARY = {
       "ChinaDrugTrials"
     ]
   },
-  "pipeline_matrix_count": 199,
+  "pipeline_matrix_count": 183,
   "recruiting_count": 129,
   "recent_registration_count": 49,
   "leading_mechanism": {
-    "label": "FcRn 拮抗剂",
-    "count": 73
+    "label": "B细胞/抗CD19/CD20",
+    "count": 77
   },
   "source_counts": [
     {
@@ -57,7 +57,7 @@ window.MG_CLINICAL_TRIALS_SUMMARY = {
     },
     {
       "title": "药物机制热点",
-      "detail": "FcRn 拮抗剂在可识别机制中最多，共 73 项。",
+      "detail": "B细胞/抗CD19/CD20在可识别机制中最多，共 77 项。",
       "tag": "药物分类"
     },
     {

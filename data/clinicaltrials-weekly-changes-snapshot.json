@@ -220,7 +220,7 @@
       "results_post_date": "",
       "phase_label": "Phase 2",
       "drug_names": [
-        "SHR-2173 injection"
+        "SHR-2173"
       ],
       "enrollment_count": 60,
       "enrollment_type": "ESTIMATED",
@@ -1097,7 +1097,7 @@
       "results_post_date": "",
       "phase_label": "Phase 3",
       "drug_names": [
-        "Decartes-08"
+        "Descartes-08"
       ],
       "enrollment_count": 128,
       "enrollment_type": "ACTUAL",
@@ -1594,7 +1594,7 @@
       "phase_label": "Phase 1",
       "drug_names": [
         "Cyclophosphamide",
-        "ATG (rabbit)",
+        "Anti-Thymocyte Globulin (ATG)",
         "Mesna",
         "Methylprednisolone (甲泼尼龙)",
         "G-CSF"
@@ -1707,7 +1707,7 @@
       "results_post_date": "2019-03-05",
       "phase_label": "Phase 2",
       "drug_names": [
-        "IGIV-C"
+        "IVIg (静注人免疫球蛋白)"
       ],
       "enrollment_count": 62,
       "enrollment_type": "ACTUAL",
@@ -2022,7 +2022,7 @@
       "results_post_date": "",
       "phase_label": "Phase 2",
       "drug_names": [
-        "ALXN1830"
+        "Orilanolimab (ALXN1830)"
       ],
       "enrollment_count": 0,
       "enrollment_type": "ACTUAL",
@@ -2379,7 +2379,7 @@
       "results_post_date": "",
       "phase_label": "Phase 2",
       "drug_names": [
-        "Anti-Thymocyte Globulin",
+        "Anti-Thymocyte Globulin (ATG)",
         "Carmustine",
         "Cytarabine",
         "Etoposide",
@@ -2676,8 +2676,7 @@
       "results_post_date": "",
       "phase_label": "Phase 2",
       "drug_names": [
-        "RC18 160mg",
-        "RC18 240 mg"
+        "Telitacicept (泰它西普)"
       ],
       "enrollment_count": 29,
       "enrollment_type": "ACTUAL",
@@ -3028,7 +3027,7 @@
       "results_post_date": "2025-01-09",
       "phase_label": "Phase 2",
       "drug_names": [
-        "ALXN2050"
+        "Vemircopan (ALXN2050)"
       ],
       "enrollment_count": 70,
       "enrollment_type": "ACTUAL",
@@ -3139,7 +3138,7 @@
       "results_post_date": "",
       "phase_label": "Phase 1",
       "drug_names": [
-        "EA5"
+        "EA5 (抗C5单抗)"
       ],
       "enrollment_count": 18,
       "enrollment_type": "ESTIMATED",
@@ -3155,8 +3154,7 @@
       "results_post_date": "",
       "phase_label": "Phase 1 / Phase 2",
       "drug_names": [
-        "IM-101 Part A",
-        "IM-101 Part B"
+        "IM-101 (抗C5单抗)"
       ],
       "enrollment_count": 96,
       "enrollment_type": "ESTIMATED",
@@ -3414,7 +3412,7 @@
       "results_post_date": "",
       "phase_label": "Phase 1 / Phase 2",
       "drug_names": [
-        "GenSci136 for injection"
+        "GenSci136 (BAFF/APRIL双拮抗)"
       ],
       "enrollment_count": 72,
       "enrollment_type": "ESTIMATED",
@@ -3616,7 +3614,7 @@
       "results_post_date": "2021-08-03",
       "phase_label": "Phase 2",
       "drug_names": [
-        "UCB7665"
+        "Rozanolixizumab (罗泽利昔珠单抗)"
       ],
       "enrollment_count": 43,
       "enrollment_type": "ACTUAL",
@@ -3785,7 +3783,7 @@
       "results_post_date": "2020-02-26",
       "phase_label": "Phase 2",
       "drug_names": [
-        "IGIV-C"
+        "IVIg (静注人免疫球蛋白)"
       ],
       "enrollment_count": 60,
       "enrollment_type": "ACTUAL",
@@ -4975,7 +4973,7 @@
       "results_post_date": "",
       "phase_label": "Phase 1 / Phase 2",
       "drug_names": [
-        "ripertamab"
+        "Rituximab (利妥昔单抗)"
       ],
       "enrollment_count": 20,
       "enrollment_type": "ESTIMATED",
@@ -5297,7 +5295,7 @@
       "results_post_date": "2020-04-24",
       "phase_label": "Phase 3",
       "drug_names": [
-        "IGIV-C"
+        "IVIg (静注人免疫球蛋白)"
       ],
       "enrollment_count": 49,
       "enrollment_type": "ACTUAL",
