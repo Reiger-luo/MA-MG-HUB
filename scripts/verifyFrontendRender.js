@@ -123,21 +123,26 @@ try {
     .filter((type) => type === 'II/III期文献').length;
   check('重点药物文献最多 4 席', pubCount <= 4, pubCount);
 
-  // 排版：每条事件分为左列元信息与右列正文，长题名在正文内换行，来源紧跟题名。
-  const structured = Array.from(items).every((item) =>
-    item.querySelector('.major-event-meta') && item.querySelector('.major-event-body'));
-  check('每条事件含 meta/body 双列结构', structured, items.length);
-  const titleInBody = Array.from(items).every((item) => {
-    const body = item.querySelector('.major-event-body');
-    return body && body.querySelector('.major-event-title');
-  });
-  check('标题位于右列正文内', titleInBody, items.length);
-  const sourceAfterTitle = Array.from(items).every((item) => {
+  // 排版三层：扫描层 meta → 标题独占 → 溯源层带「来源」标签，标题与来源互不嵌套。
+  const layers = Array.from(items).every((item) =>
+    item.querySelector('.major-event-meta') && item.querySelector('.major-event-title'));
+  check('每条事件含元信息行与独立标题', layers, items.length);
+  const noBodyWrapper = Array.from(items).every((item) => !item.querySelector('.major-event-body'));
+  check('标题与来源不再共用 body 容器', noBodyWrapper, items.length);
+  const sourceSeparated = Array.from(items).every((item) => {
     const title = item.querySelector('.major-event-title');
     const source = item.querySelector('.major-event-source');
-    return !source || (title && title.nextElementSibling === source);
+    if (!source) return true;
+    const label = source.querySelector('.major-event-source-label');
+    const text = source.querySelector('.major-event-source-text');
+    return title && title.nextElementSibling === source &&
+      label && label.textContent.trim() === '来源' && text && text.textContent.trim() &&
+      !source.querySelector('.major-event-title');
   });
-  check('来源信息紧跟标题之后', sourceAfterTitle, items.length);
+  check('来源带来源标签且独立于标题', sourceSeparated, items.length);
+  const typeStripes = Array.from(items).every((item) =>
+    /major-event--(regulatory|guideline|publication|trial|signal)/.test(item.className));
+  check('事件类型带语义色条类', typeStripes, items.length);
 } catch (error) {
   check('情报中心页面运行时异常', false, String(error));
 }

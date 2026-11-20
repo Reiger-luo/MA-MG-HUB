@@ -2174,6 +2174,16 @@
     return String(type || 'event').replace(/[^a-zA-Z0-9_-]+/g, '-');
   }
 
+  // 事件类型 → 语义 key，用于左侧色条分类，避免用中文做 CSS 类名。
+  function eventTypeKey(type) {
+    if (type === '获批/监管') return 'regulatory';
+    if (type === '指南/共识') return 'guideline';
+    if (type === 'II/III期文献') return 'publication';
+    if (type === 'III期') return 'trial';
+    if (type === '试验信号') return 'signal';
+    return 'other';
+  }
+
   function collectMajorEvents() {
     var sourceSignals = window.MG_SOURCE_SIGNALS || { channels: [] };
     var channels = sourceSignals.channels || [];
@@ -2258,17 +2268,21 @@
       var strengthBadge = event.strength
         ? '<span class="major-event-strength major-event-strength-' + (event.strength === '强' ? 'strong' : 'medium') + '">' + escapeHtml(event.strength) + '</span>'
         : '';
-      // 左列放类型/强度/日期，右列放标题与来源；长题名在右列内换行，来源另起一行对齐。
-      return '<article class="major-event-item major-event-' + escapeHtml(eventClassToken(event.type)) + '">' +
+      // 三层结构：扫描层（meta）→ 内容层（标题独占整行）→ 溯源层（带来源标签）。
+      return '<article class="major-event-item major-event-' + escapeHtml(eventClassToken(event.type)) +
+          ' major-event--' + eventTypeKey(event.type) + '">' +
         '<div class="major-event-meta">' +
           '<span class="major-event-type">' + escapeHtml(event.type) + '</span>' +
           strengthBadge +
-          '<span class="major-event-date">' + escapeHtml(event.date || '日期待核') + '</span>' +
+          '<time class="major-event-date">' + escapeHtml(event.date || '日期待核') + '</time>' +
         '</div>' +
-        '<div class="major-event-body">' +
-          '<strong class="major-event-title">' + titleHtml + '</strong>' +
-          (event.source ? '<span class="major-event-source">' + escapeHtml(event.source) + '</span>' : '') +
-        '</div>' +
+        '<strong class="major-event-title">' + titleHtml + '</strong>' +
+        (event.source
+          ? '<div class="major-event-source">' +
+              '<span class="major-event-source-label">来源</span>' +
+              '<span class="major-event-source-text">' + escapeHtml(event.source) + '</span>' +
+            '</div>'
+          : '') +
       '</article>';
     }).join('');
   }

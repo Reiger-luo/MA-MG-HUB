@@ -91,27 +91,34 @@ def test_major_events_css_tokens_present():
     assert ".major-event-strength-medium" in css
 
 
-def test_major_events_layout_wraps_long_titles():
-    """时间线采用双列网格：元信息固定列、标题与来源在自适应列内换行。"""
+def test_major_events_layout_readable_layers():
+    """时间线三层信息：扫描层/标题整行/来源带标签；标题与来源分属独立区块。"""
     css = (PROJECT / "assets" / "main.css").read_text(encoding="utf-8")
     block = css[css.index(".major-events-list"):css.index("/* 诊疗现状章节与临床问题库 */")]
-    assert ".major-event-item" in block
-    assert "grid-template-columns: 8.5rem minmax(0, 1fr)" in block
-    assert ".major-event-meta" in block and ".major-event-body" in block
-    assert "overflow-wrap: anywhere" in block
-    assert "@media (max-width: 760px)" in block
-    # 来源不得再靠 margin-left:auto 把标题挤出对齐列。
-    assert "margin-left: auto" not in block
+    # 纵向卡片，不再用双列网格挤压标题。
+    assert "flex-direction: column" in block
+    assert "grid-template-columns" not in block
+    assert ".major-event-body" not in block
+    # 扫描层：日期右对齐成列；内容层与溯源层分别有样式，且来源有显式标签。
+    assert ".major-event-meta" in block and "margin-left: auto" in block
+    assert ".major-event-title" in block and "overflow-wrap: anywhere" in block
+    assert ".major-event-source-label" in block and ".major-event-source-text" in block
+    # 按类型着色的语义类存在。
+    for key in ("regulatory", "guideline", "publication", "trial", "signal"):
+        assert ".major-event--" + key in block
 
     js = (PROJECT / "assets" / "literature.js").read_text(encoding="utf-8")
     assert 'class="major-event-meta"' in js
-    assert 'class="major-event-body"' in js
-    meta_body = js.index('class="major-event-meta"')
-    tail = js[meta_body:meta_body + 600]
-    assert 'class="major-event-title"' in tail
-    assert 'class="major-event-source"' in tail
-    # 标题与来源都在 body 内，且标题在来源之前。
-    assert tail.index('class="major-event-title"') < tail.index('class="major-event-source"')
+    assert 'class="major-event-title"' in js
+    assert 'class="major-event-source"' in js
+    assert 'major-event-source-label">来源<' in js
+    assert 'class="major-event-source-text"' in js
+    assert 'class="major-event-body"' not in js
+    assert "function eventTypeKey" in js
+    # 渲染顺序：meta 之后是 title，title 之后才是有标签的 source。
+    render = js[js.index("// 三层结构"):js.index("// 三层结构") + 900]
+    assert render.index("major-event-meta") < render.index("major-event-title")
+    assert render.index("major-event-title") < render.index("major-event-source-label")
 
 
 def test_global_regulatory_events_merge_without_mislabeling(tmp_path):
