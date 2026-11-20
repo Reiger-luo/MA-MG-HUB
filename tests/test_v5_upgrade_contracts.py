@@ -688,6 +688,47 @@ def test_source_channel_builder_has_stable_schema_and_safe_empty_fallbacks(tmp_p
     assert by_id["trialRegistry"]["sources"] == ["ClinicalTrials.gov", "ChiCTR", "ChinaDrugTrials"]
 
 
+def test_guideline_channel_labels_synthetic_chinese_source_without_pubmed(tmp_path):
+    """合成 id 的中文期刊共识不得标称 PubMed；PubMed 记录保持原标签。"""
+    from scripts.common.source_channels import build_source_signals
+
+    cache_path = tmp_path / "guidelines.json"
+    cache_path.write_text(json.dumps({"records": [
+        {
+            "pmid": "CN-MG-2026-BIOTARGET",
+            "title": "生物靶向制剂治疗重症肌无力专家共识（2026版）",
+            "entry_date": "2026/11/11 09:07",
+            "study_types": ["Guideline", "Consensus"],
+            "journal": "中国神经免疫学和神经病学杂志",
+            "id_type": "synthetic_non_pubmed",
+            "url": "https://mp.weixin.qq.com/s/hYx025r_Hhr4JQ-fp7xgew",
+        },
+        {
+            "pmid": "42717567",
+            "title": "Practical Guidance on Initiating and Switching Targeted Immunotherapies",
+            "pub_date": "2026-09",
+            "study_types": ["Guideline"],
+        },
+    ]}), encoding="utf-8")
+    payload = build_source_signals(
+        literature_signals_path=tmp_path / "missing-signals.js",
+        guideline_cache_path=cache_path,
+        regulatory_path=tmp_path / "missing-regulatory.json",
+        clinicaltrials_path=tmp_path / "missing-ct.json",
+        chictr_path=tmp_path / "missing-chictr.json",
+        china_drug_trials_path=tmp_path / "missing-china-drug-trials.json",
+        conference_path=tmp_path / "missing-conference.json",
+    )
+
+    channel = next(item for item in payload["channels"] if item["id"] == "guidelineConsensus")
+    by_id = {item["id"]: item for item in channel["items"]}
+    cn = by_id["CN-MG-2026-BIOTARGET"]
+    assert cn["source"] == "中文期刊 · 中国神经免疫学和神经病学杂志"
+    assert "PubMed" not in cn["source"]
+    assert cn["url"] == "https://mp.weixin.qq.com/s/hYx025r_Hhr4JQ-fp7xgew"
+    assert by_id["42717567"]["source"] == "PubMed · guideline/consensus cache"
+
+
 def test_source_channel_builder_includes_china_drug_trials(tmp_path):
     from scripts.common.source_channels import build_source_signals
 
