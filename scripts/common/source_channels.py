@@ -52,13 +52,21 @@ def _literature_items(payload: dict[str, Any]) -> list[dict[str, Any]]:
     return items
 
 
+def _guideline_source_label(item: dict[str, Any]) -> str:
+    """合成 id 的中文期刊共识不得标称 PubMed，按来源类型给出真实标签。"""
+    if item.get("id_type") == "synthetic_non_pubmed":
+        journal = str(item.get("journal") or "").strip()
+        return f"中文期刊 · {journal}" if journal else "中文期刊 · 专家共识"
+    return "PubMed · guideline/consensus cache"
+
+
 def _guideline_items(payload: dict[str, Any]) -> list[dict[str, Any]]:
     return [{
         "id": str(item.get("pmid") or ""),
         "title": item.get("title") or "",
         "date": item.get("entry_date") or item.get("pub_date") or "",
         "status": ", ".join(item.get("study_types") or []),
-        "source": "PubMed · guideline/consensus cache",
+        "source": _guideline_source_label(item),
         "url": _safe_http_url(item.get("url")) or (
             f"https://pubmed.ncbi.nlm.nih.gov/{item.get('pmid')}/" if item.get("pmid") else ""
         ),

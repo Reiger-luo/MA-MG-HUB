@@ -74,7 +74,7 @@ try {
     statements.filter((node) => node.querySelector('sup.cite-mark')).length + ' / ' + statements.length);
 
   const refs = document.querySelectorAll('#chapterContent .chapter-refs li');
-  check('章节参考文献 16 条', refs.length === 16, refs.length);
+  check('章节参考文献 17 条', refs.length === 17, refs.length);
 
   const corpus = textOf(document.querySelectorAll('.corpus-group > span'));
   check('中外语料只分中国 / 国际两组',
@@ -86,7 +86,7 @@ try {
 
   const meta = document.querySelector('#guidelineDivergenceMetaRow');
   const metaText = meta ? meta.textContent : '';
-  check('引文回验 43 / 43', metaText.indexOf('43 / 43') >= 0, metaText.slice(0, 140));
+  check('引文回验 49 / 49', metaText.indexOf('49 / 49') >= 0, metaText.slice(0, 140));
   check('更新方式为周更联动', metaText.indexOf('周更发现新指南后联动刷新') >= 0, metaText.slice(0, 140));
 } catch (error) {
   check('诊治格局页面运行时异常', false, String(error));

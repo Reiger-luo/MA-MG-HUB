@@ -47,6 +47,7 @@ PubMed MG-core + 证据等级 I–V
 
 MG-core 指南/共识
   → 指南共识频道（sync.linked_views 联动中外指南共识差异 / 诊疗现状 / 领域重大事件），不显示 Oxford 等级
+  · 中文期刊共识无 PMID：合成 id（id_type=synthetic_non_pubmed）+ 官方推文 url，同样按增量立场卡与逐字回验入库；来源标签不得标称 PubMed
 
 重点药物 II/III 期 PubMed 文献（标题或 PubType 明确期别）
   → keyDrugTrialPublications 频道，进入领域重大事件时间线，不显示 Oxford 等级

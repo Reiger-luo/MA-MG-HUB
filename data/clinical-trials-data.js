@@ -20238,7 +20238,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
     {
       "source": "ChinaDrugTrials",
       "meta": {
-        "generated_at": "2026-11-15",
+        "generated_at": "2026-11-20",
         "mode": "live_crawl",
         "warning": "",
         "revision": "semantic-v1:9f88a36132a0002474442a6c184aabac23d9607cba4deabaf18f29111e833fbc"
