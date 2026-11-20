@@ -213,18 +213,24 @@
     </div>
     <div class="china-grid">
       <div class="chart-panel chart-panel-wide">
-        <div class="chart-title">近一年中国相关文献趋势</div>
+        <div class="chart-title">近一年中国相关文献趋势 <span class="chart-hint">点击柱子联动筛选下方视图</span></div>
         <div class="chart-canvas" id="chinaMonthlyChart"></div>
+        <div class="china-filter-bar" id="chinaFilterBar" hidden>
+          <span class="china-filter-caption">当前筛选</span>
+          <span class="china-filter-chips" id="chinaFilterChips"></span>
+          <span class="china-filter-count" id="chinaFilterCount"></span>
+          <button class="china-filter-clear" id="chinaFilterClear" type="button">清除全部</button>
+        </div>
       </div>
     </div>
     <div class="china-content-grid">
       <div class="china-chart-pair">
         <div class="chart-panel">
-          <div class="chart-title">中国相关证据等级</div>
+          <div class="chart-title">中国相关证据等级 <span class="chart-hint">点击筛选</span></div>
           <div class="chart-canvas" id="chinaEvidenceChart"></div>
         </div>
         <div class="chart-panel">
-          <div class="chart-title">中国相关文献 新锐分区</div>
+          <div class="chart-title">中国相关文献 新锐分区 <span class="chart-hint">点击筛选</span></div>
           <div class="chart-canvas" id="chinaQuartileChart"></div>
         </div>
       </div>

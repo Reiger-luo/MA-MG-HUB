@@ -14,6 +14,10 @@
   let chinaMonthlyChart = null;
   let chinaEvidenceChart = null;
   let chinaQuartileChart = null;
+  // 中国情报交叉筛选状态与文章级索引（由 data/china-intelligence.js 提供）
+  var chinaFilterState = { month: '', evidence: '', quartile: '' };
+  var chinaFilterIndex = [];
+  var chinaViewCache = { articles: [], payload: null };
   let communityTaxonomy = window.MG_COMMUNITY_TAXONOMY || { communities: [] };
   let communityAssignmentsById = {};
   let communityAssignmentLoading = {};
@@ -127,6 +131,10 @@
     signalKeywords: $('signalKeywords'),
     chinaBadge: $('chinaBadge'),
     chinaSourceList: $('chinaSourceList'),
+    chinaFilterBar: $('chinaFilterBar'),
+    chinaFilterChips: $('chinaFilterChips'),
+    chinaFilterCount: $('chinaFilterCount'),
+    chinaFilterClear: $('chinaFilterClear'),
   };
 
   function parseDate(dateStr) {
@@ -1359,28 +1367,34 @@
         el.chinaBadge.textContent = label + chinaTotal + ' 篇';
       }
 
-      var sourceHtml = '';
-      if (chinaPayload && chinaPayload.top_journals && chinaPayload.top_journals.length) {
-        sourceHtml += '<div class="source-block"><h4>主要期刊</h4>' + renderRankItems(chinaPayload.top_journals, 10, 'journal') + '</div>';
-        sourceHtml += '<div class="source-block"><h4>机构线索（第一作者机构出现频次排序）</h4>' + renderRankItems(chinaPayload.top_institutions || [], 12, 'institution') + '</div>';
-      } else {
-        var journalCounts = {};
-        var institutionCounts = {};
-        for (var j = 0; j < chinaArticles.length; j++) {
-          var art = chinaArticles[j];
-          var journal = art.journal || 'Unknown';
-          journalCounts[journal] = (journalCounts[journal] || 0) + 1;
-          var affs = art.affiliations || [];
-          for (var k = 0; k < affs.length; k++) {
-            var inst = normalizeInstitution(affs[k]);
-            if (inst) institutionCounts[inst] = (institutionCounts[inst] || 0) + 1;
+      // 文章级索引存在时，榜单与图表统一由联动渲染，保证筛选口径一致。
+      chinaFilterIndex = chinaPayload && chinaPayload.filter_index && chinaPayload.filter_index.length
+        ? chinaPayload.filter_index : [];
+      chinaViewCache = { articles: chinaArticles, payload: chinaPayload };
+      if (!chinaFilterIndex.length) {
+        var sourceHtml = '';
+        if (chinaPayload && chinaPayload.top_journals && chinaPayload.top_journals.length) {
+          sourceHtml += '<div class="source-block"><h4>主要期刊</h4>' + renderRankItems(chinaPayload.top_journals, 10, 'journal') + '</div>';
+          sourceHtml += '<div class="source-block"><h4>机构线索（第一作者机构出现频次排序）</h4>' + renderRankItems(chinaPayload.top_institutions || [], 12, 'institution') + '</div>';
+        } else {
+          var journalCounts = {};
+          var institutionCounts = {};
+          for (var j = 0; j < chinaArticles.length; j++) {
+            var art = chinaArticles[j];
+            var journal = art.journal || 'Unknown';
+            journalCounts[journal] = (journalCounts[journal] || 0) + 1;
+            var affs = art.affiliations || [];
+            for (var k = 0; k < affs.length; k++) {
+              var inst = normalizeInstitution(affs[k]);
+              if (inst) institutionCounts[inst] = (institutionCounts[inst] || 0) + 1;
+            }
           }
+          sourceHtml += '<div class="source-block"><h4>主要期刊</h4>' + renderRankList(journalCounts, 10) + '</div>';
+          sourceHtml += '<div class="source-block"><h4>机构线索（第一作者机构出现频次排序）</h4>' + renderRankList(institutionCounts, 12) + '</div>';
         }
-        sourceHtml += '<div class="source-block"><h4>主要期刊</h4>' + renderRankList(journalCounts, 10) + '</div>';
-        sourceHtml += '<div class="source-block"><h4>机构线索（第一作者机构出现频次排序）</h4>' + renderRankList(institutionCounts, 12) + '</div>';
+        el.chinaSourceList.innerHTML = sourceHtml;
+        bindRankLinks();
       }
-      el.chinaSourceList.innerHTML = sourceHtml;
-      bindRankLinks();
 
       loadEcharts(function (chartOk) {
         if (chartOk) renderChinaCharts(chinaArticles, chinaPayload);
@@ -1514,8 +1528,127 @@
     document.addEventListener('keydown', handleKeydown);
   }
 
+  // 中国情报联动：维度归一化、匹配与柱形选中态
+  function chinaNormalizeQuartile(value) {
+    var match = String(value || '').match(/^([1-4])/);
+    return match ? match[1] + '区' : '';
+  }
+
+  // skipDim 让被点选维度自身不过滤自己，保证其他柱形仍可继续点选。
+  function chinaMatchesFilter(record, skipDim) {
+    var state = chinaFilterState;
+    if (skipDim !== 'month' && state.month && record.month !== state.month) return false;
+    if (skipDim !== 'evidence' && state.evidence && record.evidence_level !== state.evidence) return false;
+    if (skipDim !== 'quartile' && state.quartile && chinaNormalizeQuartile(record.journal_quartile) !== state.quartile) return false;
+    return true;
+  }
+
+  function chinaSelectionBarData(order, counts, selected, activeColor) {
+    var data = [];
+    for (var i = 0; i < order.length; i++) {
+      var item = { value: counts[order[i]] || 0 };
+      if (selected === order[i]) {
+        item.itemStyle = { color: activeColor, borderColor: '#1e40af', borderWidth: 1.5 };
+      }
+      data.push(item);
+    }
+    return data;
+  }
+
+  function renderLinkedRankList(counts, articleMap, limit, groupType) {
+    var names = Object.keys(counts).sort(function(a, b) { return counts[b] - counts[a]; });
+    if (!names.length) return '<div class="muted">暂无数据</div>';
+    var html = '<ol class="rank-list">';
+    for (var i = 0; i < Math.min(names.length, limit); i++) {
+      var name = names[i];
+      var articles = uniqueRankArticles(articleMap[name] || []);
+      articles.sort(function(a, b) {
+        return (parseDate(b.entry_date) || 0) - (parseDate(a.entry_date) || 0);
+      });
+      var payloadId = 'rank-payload-' + groupType + '-' + i;
+      html += '<li class="rank-list-item">' +
+        '<span class="rank-name">' + escapeHtml(name) + '</span>' +
+        '<button class="rank-count-link" type="button" data-rank-target="' + payloadId + '" data-rank-title="' + escapeHtml(name) + '" data-rank-count="' + counts[name] + '">' +
+          counts[name] +
+        '</button>' +
+        '<div class="rank-modal-payload" id="' + payloadId + '" hidden>' + renderRankArticles(articles) + '</div>' +
+      '</li>';
+    }
+    return html + '</ol>';
+  }
+
+  function renderChinaSourcesFromIndex(records) {
+    var journalCounts = {};
+    var institutionCounts = {};
+    var journalArticles = {};
+    var institutionArticles = {};
+    for (var i = 0; i < records.length; i++) {
+      var record = records[i];
+      var journal = record.journal || 'Unknown';
+      journalCounts[journal] = (journalCounts[journal] || 0) + 1;
+      if (!journalArticles[journal]) journalArticles[journal] = [];
+      journalArticles[journal].push(record);
+      var institutions = record.institutions || [];
+      for (var k = 0; k < institutions.length; k++) {
+        var inst = institutions[k];
+        institutionCounts[inst] = (institutionCounts[inst] || 0) + 1;
+        if (!institutionArticles[inst]) institutionArticles[inst] = [];
+        institutionArticles[inst].push(record);
+      }
+    }
+    if (!el.chinaSourceList) return;
+    el.chinaSourceList.innerHTML =
+      '<div class="source-block"><h4>主要期刊</h4>' +
+        renderLinkedRankList(journalCounts, journalArticles, 10, 'journal') + '</div>' +
+      '<div class="source-block"><h4>机构线索（第一作者机构出现频次排序）</h4>' +
+        renderLinkedRankList(institutionCounts, institutionArticles, 12, 'institution') + '</div>';
+    bindRankLinks();
+  }
+
+  function renderChinaFilterBar(hitCount) {
+    if (!el.chinaFilterBar) return;
+    var labels = { month: '月份', evidence: '证据等级', quartile: '分区' };
+    var chips = [];
+    for (var dim in labels) {
+      if (chinaFilterState[dim]) chips.push({ dim: dim, label: labels[dim], value: chinaFilterState[dim] });
+    }
+    if (!chips.length) {
+      el.chinaFilterBar.hidden = true;
+      return;
+    }
+    el.chinaFilterBar.hidden = false;
+    var html = '';
+    for (var i = 0; i < chips.length; i++) {
+      html += '<button class="china-filter-chip" type="button" data-filter-dim="' + chips[i].dim + '">' +
+        chips[i].label + '：' + escapeHtml(chips[i].value) + ' <span aria-hidden="true">×</span></button>';
+    }
+    el.chinaFilterChips.innerHTML = html;
+    el.chinaFilterCount.textContent = '命中 ' + hitCount + ' 篇';
+    var buttons = el.chinaFilterChips.querySelectorAll('.china-filter-chip');
+    for (var b = 0; b < buttons.length; b++) {
+      buttons[b].addEventListener('click', function() {
+        chinaFilterState[this.getAttribute('data-filter-dim')] = '';
+        refreshChinaViews();
+      });
+    }
+  }
+
+  function refreshChinaViews() {
+    renderChinaCharts(chinaViewCache.articles, chinaViewCache.payload);
+  }
+
+  function toggleChinaFilter(dim, value) {
+    if (!value) return;
+    chinaFilterState[dim] = chinaFilterState[dim] === value ? '' : value;
+    refreshChinaViews();
+  }
+
   function renderChinaCharts(chinaArticles, chinaPayload) {
     if (typeof echarts === 'undefined') return;
+
+    // 文章级索引决定能否联动；旧数据产物保持原有静态图表与榜单。
+    var linked = chinaFilterIndex.length > 0;
+    var detail = linked ? chinaFilterIndex : [];
 
     var allMonths = groupByMonth(allArticles);
     var chinaMonths = {};
@@ -1549,13 +1682,32 @@
         yAxis: { type: 'value', axisLabel: { color: '#6b7280' }, splitLine: { lineStyle: { color: '#e5e7eb' } } },
         series: [
           { name: '全部文献', type: 'line', smooth: true, data: allValues, symbolSize: 6 },
-          { name: '中国相关', type: 'bar', data: chinaValues, barMaxWidth: 18 }
+          {
+            name: '中国相关', type: 'bar', barMaxWidth: 18,
+            data: linked ? chinaSelectionBarData(monthKeys, chinaMonths, chinaFilterState.month, '#16a34a') : chinaValues,
+            cursor: linked ? 'pointer' : 'default'
+          }
         ]
       });
+      if (linked && !chinaMonthlyChart.__chinaFilterBound) {
+        chinaMonthlyChart.__chinaFilterBound = true;
+        chinaMonthlyChart.on('click', function(params) {
+          if (params.seriesType !== 'bar') return;
+          toggleChinaFilter('month', monthKeys[params.dataIndex]);
+        });
+      }
     }
 
+    // 证据等级图按“除证据外”的条件聚合，保留其他等级柱形可继续点选。
     var evidenceCounts = {};
-    if (chinaPayload && chinaPayload.evidence && chinaPayload.evidence.length) {
+    if (linked) {
+      for (var evRecordIdx = 0; evRecordIdx < detail.length; evRecordIdx++) {
+        var evRecord = detail[evRecordIdx];
+        if (!chinaMatchesFilter(evRecord, 'evidence')) continue;
+        var evLevel = evRecord.evidence_level;
+        if (evLevel) evidenceCounts[evLevel] = (evidenceCounts[evLevel] || 0) + 1;
+      }
+    } else if (chinaPayload && chinaPayload.evidence && chinaPayload.evidence.length) {
       for (var evIdx = 0; evIdx < chinaPayload.evidence.length; evIdx++) {
         evidenceCounts[chinaPayload.evidence[evIdx].level] = chinaPayload.evidence[evIdx].count;
       }
@@ -1578,12 +1730,31 @@
         grid: { left: 36, right: 16, top: 20, bottom: 28 },
         xAxis: { type: 'category', data: evOrder, axisLabel: { color: '#6b7280' } },
         yAxis: { type: 'value', axisLabel: { color: '#6b7280' }, splitLine: { lineStyle: { color: '#e5e7eb' } } },
-        series: [{ name: '篇数', type: 'bar', data: evValues, barMaxWidth: 22 }]
+        series: [{
+          name: '篇数', type: 'bar', barMaxWidth: 22,
+          data: linked ? chinaSelectionBarData(evOrder, evidenceCounts, chinaFilterState.evidence, '#2563eb') : evValues,
+          cursor: linked ? 'pointer' : 'default'
+        }]
       });
+      if (linked && !chinaEvidenceChart.__chinaFilterBound) {
+        chinaEvidenceChart.__chinaFilterBound = true;
+        chinaEvidenceChart.on('click', function(params) {
+          if (params.seriesType !== 'bar') return;
+          toggleChinaFilter('evidence', evOrder[params.dataIndex]);
+        });
+      }
     }
 
+    // 分区图按“除分区外”的条件聚合，保留其他分区柱形可继续点选。
     var quartileCounts = {};
-    if (chinaPayload && chinaPayload.quartile && chinaPayload.quartile.length) {
+    if (linked) {
+      for (var qRecordIdx = 0; qRecordIdx < detail.length; qRecordIdx++) {
+        var qRecord = detail[qRecordIdx];
+        if (!chinaMatchesFilter(qRecord, 'quartile')) continue;
+        var quartileKey = chinaNormalizeQuartile(qRecord.journal_quartile);
+        if (quartileKey) quartileCounts[quartileKey] = (quartileCounts[quartileKey] || 0) + 1;
+      }
+    } else if (chinaPayload && chinaPayload.quartile && chinaPayload.quartile.length) {
       for (var qIdx = 0; qIdx < chinaPayload.quartile.length; qIdx++) {
         quartileCounts[chinaPayload.quartile[qIdx].level] = chinaPayload.quartile[qIdx].count;
       }
@@ -1591,9 +1762,9 @@
       for (var qArticleIdx = 0; qArticleIdx < chinaArticles.length; qArticleIdx++) {
         var quartile = chinaArticles[qArticleIdx].journal_quartile;
         if (!quartile) continue;
-        var quartileKey = String(quartile).charAt(0) + '区';
-        if (['1区', '2区', '3区', '4区'].indexOf(quartileKey) !== -1) {
-          quartileCounts[quartileKey] = (quartileCounts[quartileKey] || 0) + 1;
+        var quartileKeyFallback = String(quartile).charAt(0) + '区';
+        if (['1区', '2区', '3区', '4区'].indexOf(quartileKeyFallback) !== -1) {
+          quartileCounts[quartileKeyFallback] = (quartileCounts[quartileKeyFallback] || 0) + 1;
         }
       }
     }
@@ -1610,8 +1781,31 @@
         grid: { left: 36, right: 16, top: 20, bottom: 28 },
         xAxis: { type: 'category', data: quartileOrder, axisLabel: { color: '#6b7280', interval: 0 } },
         yAxis: { type: 'value', axisLabel: { color: '#6b7280' }, splitLine: { lineStyle: { color: '#e5e7eb' } } },
-        series: [{ name: '篇数', type: 'bar', data: quartileValues, barMaxWidth: 22 }]
+        series: [{
+          name: '篇数', type: 'bar', barMaxWidth: 22,
+          data: linked ? chinaSelectionBarData(quartileOrder, quartileCounts, chinaFilterState.quartile, '#0284c7') : quartileValues,
+          cursor: linked ? 'pointer' : 'default'
+        }]
       });
+      if (linked && !chinaQuartileChart.__chinaFilterBound) {
+        chinaQuartileChart.__chinaFilterBound = true;
+        chinaQuartileChart.on('click', function(params) {
+          if (params.seriesType !== 'bar') return;
+          toggleChinaFilter('quartile', quartileOrder[params.dataIndex]);
+        });
+      }
+    }
+
+    // 期刊与机构榜单按全部维度命中的文章重算；筛选状态条同步命中篇数。
+    if (linked) {
+      var filteredRecords = [];
+      for (var f = 0; f < detail.length; f++) {
+        if (chinaMatchesFilter(detail[f], '')) filteredRecords.push(detail[f]);
+      }
+      renderChinaSourcesFromIndex(filteredRecords);
+      renderChinaFilterBar(filteredRecords.length);
+    } else if (el.chinaFilterBar) {
+      el.chinaFilterBar.hidden = true;
     }
   }
 
@@ -1647,6 +1841,12 @@
       if (el.sortMode) el.sortMode.addEventListener('change', applyFilters);
       el.chinaAll.addEventListener('change', applyFilters);
       el.chinaOnly.addEventListener('change', applyFilters);
+      if (el.chinaFilterClear) {
+        el.chinaFilterClear.addEventListener('click', function() {
+          chinaFilterState = { month: '', evidence: '', quartile: '' };
+          refreshChinaViews();
+        });
+      }
       wireCheckboxAll('filterIFList');
       wireCheckboxAll('filterQuartileList');
       wireCheckboxAll('filterEvidenceList');

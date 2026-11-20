@@ -89,3 +89,75 @@ def test_major_events_css_tokens_present():
     assert ".major-event-item" in css
     assert ".major-event-strength-strong" in css
     assert ".major-event-strength-medium" in css
+
+
+def test_global_regulatory_events_merge_without_mislabeling(tmp_path):
+    """境外 FDA/EU 获批并入监管频道，逐条标注审批机构，不污染 NMPA 数据文件。"""
+    import json
+    from scripts.common.source_channels import build_source_signals
+
+    china = tmp_path / "china-regulatory-status.json"
+    china.write_text(json.dumps({"drugs": [{
+        "name": "Efgartigimod", "status_label": "已获批", "status_date": "2023-06",
+        "source_type": "NMPA / company", "source_url": "https://www.nmpa.gov.cn/",
+        "last_verified": "2026-06-25",
+    }]}), encoding="utf-8")
+    glob = tmp_path / "global-regulatory-status.json"
+    glob.write_text(json.dumps({"drugs": [
+        {
+            "generic_name": "cemdisiran", "name": "Cemdisiran（Livsayis）获 FDA 批准上市",
+            "status_label": "FDA 批准", "status_date": "2026-11-18",
+            "source_type": "FDA · Regeneron 官方新闻稿（2026-11-18）",
+            "source_url": "https://investor.regeneron.com/news-releases/x",
+            "region": "美国 FDA", "last_verified": "2026-11-21",
+        },
+        {
+            "generic_name": "gefurulimab", "name": "Gefurulimab（Klygefa）获 FDA 与欧盟批准",
+            "status_label": "FDA + EU 批准", "status_date": "2026-11-16",
+            "source_type": "FDA / EU 委员会 · AstraZeneca 官方新闻稿（2026-11-16）",
+            "source_url": "https://www.astrazeneca.com/media-centre/x",
+            "region": "美国 FDA + 欧盟委员会", "last_verified": "2026-11-21",
+        },
+    ]}), encoding="utf-8")
+
+    payload = build_source_signals(
+        literature_signals_path=tmp_path / "missing.js",
+        guideline_cache_path=tmp_path / "missing.json",
+        regulatory_path=china,
+        clinicaltrials_path=tmp_path / "missing.json",
+        chictr_path=tmp_path / "missing.json",
+        china_drug_trials_path=tmp_path / "missing.json",
+        conference_path=tmp_path / "missing.json",
+        global_regulatory_path=glob,
+    )
+    channel = {c["id"]: c for c in payload["channels"]}["chinaRegulatory"]
+    items = channel["items"]
+    assert len(items) == 3
+    assert items[0]["source"] == "NMPA / company"
+    assert items[0]["date"] == "2026-06-25"
+    cemdisiran = [i for i in items if i["id"] == "cemdisiran"][0]
+    gefurulimab = [i for i in items if i["id"] == "gefurulimab"][0]
+    assert cemdisiran["date"] == "2026-11-18"
+    assert "FDA" in cemdisiran["source"] and "NMPA" not in cemdisiran["source"]
+    assert gefurulimab["date"] == "2026-11-16"
+    assert "FDA" in gefurulimab["source"] and "EU" in gefurulimab["source"]
+    assert "NMPA" not in gefurulimab["source"]
+    assert set(channel["sources"]) >= {"NMPA", "FDA", "EU Commission"}
+    assert "scope_note" in channel
+    assert len(json.loads(china.read_text(encoding="utf-8"))["drugs"]) == 1
+
+
+def test_global_regulatory_optional_without_file(tmp_path):
+    """未传境外监管路径时行为与旧版一致，空降级不报错。"""
+    from scripts.common.source_channels import build_source_signals
+    payload = build_source_signals(
+        literature_signals_path=tmp_path / "missing.js",
+        guideline_cache_path=tmp_path / "missing.json",
+        regulatory_path=tmp_path / "missing-reg.json",
+        clinicaltrials_path=tmp_path / "missing.json",
+        chictr_path=tmp_path / "missing.json",
+        china_drug_trials_path=tmp_path / "missing.json",
+        conference_path=tmp_path / "missing.json",
+    )
+    channel = {c["id"]: c for c in payload["channels"]}["chinaRegulatory"]
+    assert channel["items"] == []

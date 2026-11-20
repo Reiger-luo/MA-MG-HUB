@@ -100,6 +100,20 @@ def _regulatory_items(payload: dict[str, Any]) -> list[dict[str, Any]]:
     } for item in payload.get("drugs") or []]
 
 
+def _global_regulatory_items(payload: dict[str, Any]) -> list[dict[str, Any]]:
+    """境外监管获批投影：日期用获批日、来源逐条写明审批机构，绝不标成 NMPA。"""
+    return [{
+        "id": str(item.get("generic_name") or item.get("name") or ""),
+        "title": item.get("name") or "",
+        # 时间线显示真实获批日期，不用核验日期，避免把 11-21 核验误当成获批日。
+        "date": item.get("status_date") or item.get("last_verified") or "",
+        "status": item.get("status_label") or "",
+        "source": item.get("source_type") or payload.get("source_note") or "境外监管获批",
+        "url": _safe_http_url(item.get("source_url")),
+        "region": item.get("region") or "",
+    } for item in payload.get("drugs") or []]
+
+
 def _ct_items(payload: dict[str, Any]) -> list[dict[str, Any]]:
     items = []
     for study in payload.get("studies") or []:
@@ -275,6 +289,7 @@ def build_source_signals(
     clinicaltrials_path: Path, chictr_path: Path, china_drug_trials_path: Path,
     conference_path: Path, trial_signals_path: Path | None = None,
     literature_recent_path: Path | None = None, landscape_data_path: Path | None = None,
+    global_regulatory_path: Path | None = None,
 ) -> dict[str, Any]:
     literature = _js(literature_signals_path, "MG_SIGNALS_DATA", {})
     guidelines = _json(guideline_cache_path, {})
@@ -286,6 +301,8 @@ def build_source_signals(
     watchlist = buildWatchlist(landscape if isinstance(landscape, dict) else {})
     keyDrugPublications = selectKeyDrugTrialPublications(publicArticles, watchlist)
     regulatory = _json(regulatory_path, {})
+    # 境外 FDA/EU 获批与 NMPA 监管分文件维护，构建时合并进同一「获批/监管」时间线。
+    global_regulatory = _json(global_regulatory_path, {}) if global_regulatory_path else {}
     clinicaltrials = _json(clinicaltrials_path, {})
     chictr = _json(chictr_path, {})
     china_drug_trials = _json(china_drug_trials_path, {})
@@ -332,7 +349,13 @@ def build_source_signals(
                     "generated_at": generated_at,
                 },
             },
-            {"id": "chinaRegulatory", "label": "中国监管", "evidence_required": False, "sources": ["NMPA", "CDE", "NHSA"], "items": _regulatory_items(regulatory)},
+            {
+                "id": "chinaRegulatory", "label": "监管获批", "evidence_required": False,
+                "sources": ["NMPA", "CDE", "NHSA", "FDA", "EU Commission"],
+                # 中国 NMPA 与境外 FDA/EU 分源合并；每条 item.source 自带真实审批机构标签。
+                "items": _regulatory_items(regulatory) + _global_regulatory_items(global_regulatory),
+                "scope_note": "获批/监管时间线合并境内 NMPA/CDE 与境外 FDA/EU 官方动态；逐条来源标注审批机构，不混用。",
+            },
             {
                 "id": "trialRegistry", "label": "试验注册", "evidence_required": False,
                 "sources": ["ClinicalTrials.gov", "ChiCTR", "ChinaDrugTrials"], "items": trials,

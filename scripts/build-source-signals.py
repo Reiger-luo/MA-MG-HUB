@@ -18,6 +18,8 @@ def main() -> int:
         literature_signals_path=DATA / "signals-weekly.js",
         guideline_cache_path=DATA / "guideline-consensus-cache.json",
         regulatory_path=DATA / "china-regulatory-status.json",
+        # 境外 FDA/EU 获批独立文件，构建时并入同一「获批/监管」时间线。
+        global_regulatory_path=DATA / "global-regulatory-status.json",
         clinicaltrials_path=DATA / "clinicaltrials-pipeline-cache.json",
         chictr_path=DATA / "chictr-trials-cache.json",
         china_drug_trials_path=DATA / "china-drug-trials-cache.json",

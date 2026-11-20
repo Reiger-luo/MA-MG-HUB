@@ -6,7 +6,7 @@
 >
 > 维护规则：Release 状态由实现任务同步更新；动态数量和发布时间只进入发布状态产物，不写入本计划
 >
-> 已上线基线：首页工作台以统一“信号板”分别呈现文献信号与临床试验信号，两组拥有独立强度口径、筛选和简报章节，不跨来源比较；试验注册频道与来源内信号均覆盖 ClinicalTrials.gov、ChiCTR、ChinaDrugTrials，并以来源 revision 门禁防止新缓存搭配旧分析。情报中心可按当前标签与筛选条件生成文献、中国、会议和临床试验 Markdown 简报。公开 rolling 与社区 recent 已统一 PMID 窗口，文献周信号只读取 ingest 真实新增；完整发布使用显式产物契约、统一缓存 run id 和清单 hash，GitHub Actions 发布验证只读，代码 PR 另有不阻断合并的 advisory 图谱审查，获批源码 push 后执行本地与 `main` 云端两次完整重建。该功能是来源层的浏览器内摘要，不是本计划中的 Decision Brief。 情报中心「领域重大事件」已扩展为五类事件：重点药物 II/III 期发表与指南/共识都从文献周更自动进入信息流；指南/共识经单一权威缓存联动刷新中外指南共识差异、诊疗现状与领域重大事件，全量 16 维立场重提取仍人工执行。诊治格局「靶向生物制剂定位」按总论 / 机制分类 / 重点药物分层，efgartigimod 单列各指南共识推荐定位；中外指南差异语料只分中国与国际两侧。
+> 已上线基线：首页工作台以统一“信号板”分别呈现文献信号与临床试验信号，两组拥有独立强度口径、筛选和简报章节，不跨来源比较；试验注册频道与来源内信号均覆盖 ClinicalTrials.gov、ChiCTR、ChinaDrugTrials，并以来源 revision 门禁防止新缓存搭配旧分析。情报中心可按当前标签与筛选条件生成文献、中国、会议和临床试验 Markdown 简报。公开 rolling 与社区 recent 已统一 PMID 窗口，文献周信号只读取 ingest 真实新增；完整发布使用显式产物契约、统一缓存 run id 和清单 hash，GitHub Actions 发布验证只读，代码 PR 另有不阻断合并的 advisory 图谱审查，获批源码 push 后执行本地与 `main` 云端两次完整重建。该功能是来源层的浏览器内摘要，不是本计划中的 Decision Brief。 情报中心「领域重大事件」已扩展为五类事件：重点药物 II/III 期发表与指南/共识都从文献周更自动进入信息流；指南/共识经单一权威缓存联动刷新中外指南共识差异、诊疗现状与领域重大事件，全量 16 维立场重提取仍人工执行。诊治格局「靶向生物制剂定位」按总论 / 机制分类 / 重点药物分层，efgartigimod 单列各指南共识推荐定位；中外指南差异语料只分中国与国际两侧。情报中心「中国情报」已支持近一年趋势月份、证据等级与新锐分区的柱形交叉筛选，基于文章级 `filter_index` 重算图表与期刊/机构榜单，重复点选取消、状态条可清除，缺索引时静态降级。
 
 **Goal:** 在不引入 CRM、拜访记录、互动历史、私有后端或浏览器持久化的前提下，把 MA-MG-HUB 从“公开证据浏览站”升级为“围绕 EFG 学术推广策略、可追溯的医学问题导航、判断建议和拜访前准备来源”。本计划只处理纯学术与医学策略，不覆盖政务、支付、市场准入或 Health Economics and Outcomes Research（HEOR）。
 
@@ -33,7 +33,7 @@
 | `data/literature-recent.js` | `window.MG_LITERATURE_DATA` | 严格 MG-core + 信号准入文献证据（OCEBM 2011 v2.1 官方 I–V 等级，或无等级的原始临床研究；非原始证据不进）；问题检索、Claim 支持、Delta 新文献 |
 | `data/signals-weekly.js` | `window.MG_SIGNALS_DATA` | 当前 1 周 Signal、talkingPoints、evidenceBoundary、PMID、KOL/机构公开线索 |
 | `data/trial-signals-weekly.js` | `window.MG_TRIAL_SIGNALS_DATA` | 三源原生比较窗口、逐项裁决、试验重要性、更新实质性、来源内强度与 MG 专家解读 |
-| `data/source-signals.js` | `window.MG_SOURCE_SIGNALS` | 文献、指南/共识、中国监管、试验注册、会议五频道统一入口 |
+| `data/source-signals.js` | `window.MG_SOURCE_SIGNALS` | 文献、指南/共识、监管获批（NMPA + FDA/EU 合并）、试验注册、会议五频道统一入口 |
 | `data/guideline-consensus-cache.json` | JSON `records[]` | 指南/共识来源；不赋 Oxford 等级 |
 | `data/landscape-data.js` | `window.MG_LANDSCAPE_DATA` | 6 个现有 Living Answers、竞争矩阵、临床管线、中国差异框架 |
 | `data/landscapeInsights.js` | `window.MG_LANDSCAPE_INSIGHTS` | 动态格局洞察、confidence、limitations、MSL action、PMID |
@@ -47,7 +47,8 @@
 | `data/china-intelligence.js` | `window.MG_CHINA_DATA` | 严格 recent 的中国文献、机构、期刊和证据结构 |
 | `data/china-author-network.js` | `window.MG_CHINA_AUTHOR_NETWORK` | 中国机构合作、作者、主题、药物和 PMID |
 | `data/expert-profiles-china.js` | `window.MG_EXPERT_PROFILE_CHINA` | China-only 公开作者画像、机构、兴趣和时间线 |
-| `data/china-regulatory-status.json` | JSON `drugs[]` | 保留为情报中心独立频道；仅在适用人群、剂量或说明书边界必须核查时被 Brief 引用 |
+| `data/china-regulatory-status.json` | JSON `drugs[]` | 仅承载 NMPA/CDE 中国监管；保留为诊治格局 NMPA 竞争列与情报中心监管频道的数据源；仅在适用人群、剂量或说明书边界必须核查时被 Brief 引用 |
+| `data/global-regulatory-status.json` | JSON `drugs[]` | 境外 FDA/EU 获批独立存储，构建时并入情报中心监管频道；逐条标注审批机构与真实获批日，与 NMPA 数据文件分离以免误标 |
 | `data/clinicaltrials-pipeline-cache.json` | ClinicalTrials.gov API v2 cache | 识别未来将产生的科学证据、研究设计和终点，不讨论审批进度 |
 | `data/chictr-trials-cache.json` | JSON `records[]` | 识别中国正在生成的科学证据与研究缺口 |
 | `data/conference-data.js/json` | `window.MG_CONFERENCE_DATA` / JSON | 会议摘要、deepInsight、signal-to-kol |

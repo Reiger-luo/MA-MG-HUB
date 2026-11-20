@@ -126,6 +126,91 @@ try {
   check('情报中心页面运行时异常', false, String(error));
 }
 
+// ── 中国情报：柱形点击交叉筛选（mock ECharts 捕获 setOption 与 click handler） ──
+try {
+  const chinaJson = read('data/china-intelligence.js')
+    .replace(/^window\.MG_CHINA_DATA\s*=\s*/, '')
+    .replace(/;\s*$/, '');
+  const chinaPrelude =
+    'window.MG_CHINA_DATA = ' + chinaJson + ';\n' +
+    'window.echarts = { init: function(el) {' +
+      'var inst = { setOption: function(o){ this.option = o; },' +
+      ' on: function(k,h){ this.handlers = this.handlers || {}; this.handlers[k] = h; },' +
+      ' resize: function(){} };' +
+      'if (!window.__chinaCharts) window.__chinaCharts = {};' +
+      'window.__chinaCharts[el.id] = inst; return inst; } };\n';
+  const chinaDoc = bootPage('pages/literature.html', [
+    'assets/common.js',
+    'data/literature-recent.js',
+    'data/signals-weekly.js',
+    'data/communityTaxonomy.js',
+    'data/clinical-trials-data.js',
+    'assets/literature.js'
+  ], chinaPrelude);
+  const chinaWin = chinaDoc.defaultView;
+  const chinaTab = Array.from(chinaDoc.querySelectorAll('[data-tab]'))
+    .find((node) => node.getAttribute('data-tab') === 'china');
+  if (chinaTab) chinaTab.click();
+
+  const filterBar = chinaDoc.querySelector('#chinaFilterBar');
+  const chipTexts = () => textOf(chinaDoc.querySelectorAll('#chinaFilterBar .china-filter-chip'));
+  const hitCount = () => Number((chinaDoc.querySelector('#chinaFilterCount').textContent.match(/\d+/) || [0])[0]);
+  const topCount = (blockIndex) => {
+    const blocks = chinaDoc.querySelectorAll('#chinaSourceList .source-block');
+    return Number(blocks[blockIndex].querySelector('.rank-count-link').textContent);
+  };
+  const monthly = chinaWin.__chinaCharts && chinaWin.__chinaCharts.chinaMonthlyChart;
+  const evidence = chinaWin.__chinaCharts && chinaWin.__chinaCharts.chinaEvidenceChart;
+  const quartile = chinaWin.__chinaCharts && chinaWin.__chinaCharts.chinaQuartileChart;
+
+  check('中国情报榜单初始 22 项', chinaDoc.querySelectorAll('#chinaSourceList .rank-list-item').length === 22,
+    chinaDoc.querySelectorAll('#chinaSourceList .rank-list-item').length);
+  check('图表实例全部初始化', Boolean(monthly && evidence && quartile));
+  check('初始筛选状态条隐藏', filterBar && filterBar.hidden === true);
+  const journal0 = topCount(0);
+  const institution0 = topCount(1);
+
+  if (monthly && monthly.handlers && monthly.handlers.click) {
+    const labels = monthly.option.xAxis.data;
+    const monthIndex = labels.findIndex((label) => String(label).replace('\n', '-') === '2026-03');
+    monthly.handlers.click({ seriesType: 'bar', dataIndex: monthIndex });
+    check('点击月份后显示筛选 chip', chipTexts().some((text) => text.indexOf('2026-03') >= 0), chipTexts().join(' / '));
+    check('月份命中 18 篇', hitCount() === 18, chinaDoc.querySelector('#chinaFilterCount').textContent);
+    check('期刊榜按月份重算', topCount(0) < journal0, journal0 + ' -> ' + topCount(0));
+    check('机构榜按月份重算', topCount(1) < institution0, institution0 + ' -> ' + topCount(1));
+  }
+
+  if (evidence && evidence.handlers && evidence.handlers.click) {
+    evidence.handlers.click({ seriesType: 'bar', dataIndex: 3 });
+    const afterEvidence = hitCount();
+    check('点击证据等级新增 chip', chipTexts().some((text) => text.indexOf('IV') >= 0), chipTexts().join(' / '));
+    check('证据等级进一步收窄命中', afterEvidence > 0 && afterEvidence < 18, afterEvidence);
+  }
+
+  if (quartile && quartile.handlers && quartile.handlers.click) {
+    const beforeQuartile = topCount(0);
+    quartile.handlers.click({ seriesType: 'bar', dataIndex: 2 });
+    check('点击分区新增 chip', chipTexts().some((text) => text.indexOf('3区') >= 0), chipTexts().join(' / '));
+    check('分区联动期刊榜', topCount(0) <= beforeQuartile, beforeQuartile + ' -> ' + topCount(0));
+    quartile.handlers.click({ seriesType: 'bar', dataIndex: 2 });
+    check('再次点击同一分区取消筛选', !chipTexts().some((text) => text.indexOf('3区') >= 0), chipTexts().join(' / '));
+  }
+
+  chinaDoc.querySelector('#chinaFilterClear').click();
+  check('清除全部后状态条隐藏', filterBar.hidden === true);
+  check('清除全部后榜单恢复', topCount(0) === journal0 && topCount(1) === institution0,
+    topCount(0) + ' / ' + topCount(1));
+
+  if (evidence && evidence.handlers && evidence.handlers.click) {
+    evidence.handlers.click({ seriesType: 'bar', dataIndex: 3 });
+    check('独立点击证据等级即筛选期刊', topCount(0) < journal0, journal0 + ' -> ' + topCount(0));
+    check('独立点击证据等级即筛选机构', topCount(1) < institution0, institution0 + ' -> ' + topCount(1));
+    evidence.handlers.click({ seriesType: 'bar', dataIndex: 3 });
+  }
+} catch (error) {
+  check('中国情报联动运行时异常', false, String(error));
+}
+
 const ok = checks.every((item) => item.ok);
 process.stdout.write(JSON.stringify({ ok: ok, checks: checks }, null, 2) + '\n');
 process.exit(ok ? 0 : 1);

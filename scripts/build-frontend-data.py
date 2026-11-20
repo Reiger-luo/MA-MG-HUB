@@ -1754,6 +1754,30 @@ def build_china(recent):
             institutions[inst] += 1
             institution_articles[inst].append(article)
     articles.sort(key=lambda a: parse_date(a.get("entry_date")) or datetime.min, reverse=True)
+    # 文章级联动索引：保留交叉筛选所需的维度字段与榜单弹窗所需的最小字段。
+    # 机构维度复用榜单同一套 normalize_institution 规则，避免筛选后计数口径漂移。
+    filter_index = []
+    for article in articles:
+        dt = parse_date(article.get("entry_date"))
+        record = {
+            "pmid": article.get("pmid", ""),
+            "title": article.get("title", ""),
+            "journal": article.get("journal", ""),
+            "entry_date": article.get("entry_date", ""),
+            "pub_date": article.get("pub_date", ""),
+            "url": article.get("url", ""),
+            "evidence_level": article.get("evidence_level"),
+            "journal_if": article.get("journal_if"),
+            "journal_quartile": article.get("journal_quartile"),
+            "month": dt.strftime("%Y-%m") if dt else "",
+            "institutions": sorted(set(
+                inst
+                for affiliation in article.get("affiliations") or []
+                for inst in [normalize_institution(affiliation)]
+                if inst
+            )),
+        }
+        filter_index.append(record)
     return {
         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "summary": {
@@ -1767,6 +1791,7 @@ def build_china(recent):
         "top_journals": build_rank_items(journals, journal_articles, limit=10),
         "top_institutions": build_rank_items(institutions, institution_articles, limit=12),
         "pubmed_articles": [compact_article(a) for a in articles[:120]],
+        "filter_index": filter_index,
         "manual_updates": load_manual_china_updates(),
     }
 

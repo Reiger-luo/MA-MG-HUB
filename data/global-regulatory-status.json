@@ -1,0 +1,33 @@
+{
+  "generated_at": "2026-11-21",
+  "source_note": "境外监管获批（FDA / EU 委员会）公开动态，用于情报中心「领域重大事件」时间线。与 china-regulatory-status.json（NMPA/CDE 中国监管列）分离，避免在竞争格局里被误标为中国获批。每条以官方新闻稿或监管公报为主来源，source_type 明确写出审批机构，不得标成 NMPA。",
+  "scope": "international regulatory approvals (FDA / European Commission), separate from NMPA channel data",
+  "drugs": [
+    {
+      "name": "Cemdisiran（Livsayis）获 FDA 批准上市",
+      "brand_name": "Livsayis", "generic_name": "cemdisiran", "region": "美国 FDA",
+      "status_label": "FDA 批准 · AChR 抗体阳性成人 gMG", "status_date": "2026-11-18",
+      "indication": "治疗抗乙酰胆碱受体（AChR）抗体阳性的成人全身型重症肌无力（gMG）。",
+      "mechanism": "靶向补体 C5 的小干扰 RNA（siRNA），降解编码 C5 的 mRNA、降低循环 C5 蛋白，抑制终末补体激活；皮下注射，每年 4 次（每 3 个月一次）。",
+      "trial": "Ⅲ期 NIMBLE（NCT05070858）：24 周 MG-ADL 较基线改善 4.5 分 vs 安慰剂 2.2 分（安慰剂校正差 2.3 分，p=0.0005）；QMG 校正差 2.8 分（p=0.0015）。",
+      "eu_status": "欧盟上市申请仍在审评，预计 2027 年下半年作出决定；本条仅为 FDA 批准，不得标注为欧盟获批。",
+      "source_type": "FDA · Regeneron 官方新闻稿（2026-11-18）",
+      "source_url": "https://investor.regeneron.com/news-releases/news-release-details/livsayistm-cemdisiran-approved-fda-first-and-only-sirna-therapy",
+      "secondary_url": "https://investors.alnylam.com/press-release?id=10d98b15-1f66-4478-a56b-acc5dfc93feb",
+      "last_verified": "2026-11-21"
+    },
+    {
+      "name": "Gefurulimab（Klygefa，戈鲁利单抗）获 FDA 与欧盟批准",
+      "brand_name": "Klygefa", "generic_name": "gefurulimab", "region": "美国 FDA + 欧盟委员会",
+      "status_label": "FDA + EU 批准 · AChR 抗体阳性成人 gMG", "status_date": "2026-11-16",
+      "indication": "治疗抗乙酰胆碱受体（AChR）抗体阳性的成人全身型重症肌无力（gMG）。",
+      "mechanism": "双特异性（双靶点）纳米抗体 C5 抑制剂，结合 C5 抑制终末补体级联，并经结合血清白蛋白延长半衰期；每周一次皮下注射，自动注射器居家给药。",
+      "trial": "Ⅲ期 PREVAIL（NCT05556096，n=260）：26 周 MG-ADL 最小二乘均数变化 −4.2 vs 安慰剂 −2.6，组间差 −1.6（95% CI −2.4~−0.8，p<0.0001）；第 1 周即见临床改善。",
+      "eu_status": "欧盟委员会 2026-11-12 批准（EU/1/26/2073，EMEA/H/C/006558）；本次为 FDA 与 EU 双获批。",
+      "source_type": "FDA / EU 委员会 · AstraZeneca 官方新闻稿（2026-11-16）",
+      "source_url": "https://www.astrazeneca.com/media-centre/press-releases/2026/klygefa-gefurulimab-approved-in-the-US.html",
+      "secondary_url": "https://ec.europa.eu/health/documents/community-register/html/h2073.htm",
+      "last_verified": "2026-11-21"
+    }
+  ]
+}
