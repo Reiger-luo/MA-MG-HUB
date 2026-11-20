@@ -1,7 +1,7 @@
 window.MG_CLINICAL_TRIALS_DATA = {
   "meta": {
-    "generated_at": "2026-11-15",
-    "total_count": 488,
+    "generated_at": "2026-11-20",
+    "total_count": 489,
     "sources_order": [
       "ClinicalTrials.gov",
       "ChiCTR",
@@ -21,7 +21,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "title": "近 6 个月新登记",
-      "detail": "截至 2026-11-15，近 6 个月登记 49 项试验。",
+      "detail": "截至 2026-11-20，近 6 个月登记 47 项试验。",
       "tag": "近期登记"
     }
   ],
@@ -539,7 +539,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "status_class": "recruiting",
           "phase_label": "Phase 4",
           "start_date": "2025-04-17",
-          "readout_date": "",
+          "readout_date": "2026-07-08",
           "completion_date": "",
           "sponsor": "argenx",
           "url": "https://clinicaltrials.gov/study/NCT06909214"
@@ -819,8 +819,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "status_class": "active",
           "phase_label": "Phase 4",
           "start_date": "2025-12-01",
-          "readout_date": "2027-10-15",
-          "completion_date": "2027-10-15",
+          "readout_date": "2027-06-03",
+          "completion_date": "2027-06-03",
           "sponsor": "UCB Biopharma SRL",
           "url": "https://clinicaltrials.gov/study/NCT07246564"
         },
@@ -5659,7 +5659,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
       "highest_phase_label": "Phase 3",
       "stage_number": 3,
       "study_count": 2,
-      "status_summary": "招募 0 · 进行 1 · 完成 0 · 终止 1",
+      "status_summary": "招募 0 · 进行 0 · 完成 0 · 终止 2",
       "sponsors": [
         "Novartis Pharmaceuticals",
         "不适用/ 诺华（中国）生物医学研究有限公司"
@@ -5692,20 +5692,20 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry": "ClinicalTrials.gov",
           "registry_id": "NCT06744920",
           "title": "A Study to Investigate the Efficacy, Safety and Tolerability of Remibrutinib Versus Placebo in Adult Patients With Generalized Myasthenia Gravis",
-          "status_label": "进行中",
-          "status_class": "active",
+          "status_label": "已终止",
+          "status_class": "terminated",
           "phase_label": "Phase 3",
           "start_date": "2025-02-07",
-          "readout_date": "2028-02-25",
-          "completion_date": "2033-02-26",
+          "readout_date": "2026-10-30",
+          "completion_date": "2026-10-30",
           "sponsor": "Novartis Pharmaceuticals",
           "url": "https://clinicaltrials.gov/study/NCT06744920"
         }
       ],
       "timeline": {
         "start": "2025-02-07",
-        "readout": "2028-02-25",
-        "completion": "2033-02-26"
+        "readout": "2026-10-30",
+        "completion": "2026-10-30"
       },
       "first_registered": "2024-12-20",
       "latest_registered": "2025-07-07",
@@ -8403,6 +8403,49 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "drug_class": "其他",
+      "name": "Felzartamab",
+      "highest_phase_label": "Phase 2",
+      "stage_number": 2,
+      "study_count": 1,
+      "status_summary": "招募 1 · 进行 0 · 完成 0",
+      "sponsors": [
+        "Biogen"
+      ],
+      "sources": {
+        "ClinicalTrials.gov": 1
+      },
+      "key_trial": {
+        "registry": "ClinicalTrials.gov",
+        "registry_id": "NCT07939802",
+        "title": "A Study to Learn About the Effects of Felzartamab on Daily Living Activities and Its Safety in Adults With Generalized Myasthenia Gravis (gMG) Ages 18 to 80 Years Old",
+        "url": "https://clinicaltrials.gov/study/NCT07939802"
+      },
+      "trials": [
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT07939802",
+          "title": "A Study to Learn About the Effects of Felzartamab on Daily Living Activities and Its Safety in Adults With Generalized Myasthenia Gravis (gMG) Ages 18 to 80 Years Old",
+          "status_label": "尚未招募",
+          "status_class": "recruiting",
+          "phase_label": "Phase 2",
+          "start_date": "2026-11-19",
+          "readout_date": "2028-09-19",
+          "completion_date": "2029-03-20",
+          "sponsor": "Biogen",
+          "url": "https://clinicaltrials.gov/study/NCT07939802"
+        }
+      ],
+      "timeline": {
+        "start": "2026-11-19",
+        "readout": "2028-09-19",
+        "completion": "2029-03-20"
+      },
+      "first_registered": "2026-11-16",
+      "latest_registered": "2026-11-16",
+      "linked_registries": []
+    },
+    {
+      "drug_class": "其他",
       "name": "NMD670",
       "highest_phase_label": "Phase 2",
       "stage_number": 2,
@@ -10799,9 +10842,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
     {
       "source": "ClinicalTrials.gov",
       "meta": {
-        "generated_at": "2026-11-15",
+        "generated_at": "2026-11-20",
         "mode": "cache",
-        "revision": "semantic-v1:4fa27644697229a6a5f8695d5a2974a04afb0bf669e5075700b6516faaa27edc"
+        "revision": "semantic-v1:430a86f2352bad8bde7a542aa62567d82692f1694f10713eb2843ec29d87b0a0"
       },
       "records": [
         {
@@ -13571,7 +13614,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "sponsor": "Intuitive Surgical",
           "start_date": "2022-07-20",
           "readout_date": "2023-06-16",
-          "completion_date": "2028-07",
+          "completion_date": "2028-10",
           "registered_date": "2021-12-09",
           "linked_registries": []
         },
@@ -15554,9 +15597,9 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "registry_id": "NCT06744920",
           "title": "A Study to Investigate the Efficacy, Safety and Tolerability of Remibrutinib Versus Placebo in Adult Patients With Generalized Myasthenia Gravis",
           "url": "https://clinicaltrials.gov/study/NCT06744920",
-          "status": "ACTIVE_NOT_RECRUITING",
-          "status_label": "进行中",
-          "status_class": "active",
+          "status": "TERMINATED",
+          "status_label": "已终止",
+          "status_class": "terminated",
           "drug_class": "免疫抑制剂",
           "drug_name": "Remibrutinib (Blinded)",
           "drug_names": [
@@ -15566,8 +15609,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 3",
           "sponsor": "Novartis Pharmaceuticals",
           "start_date": "2025-02-07",
-          "readout_date": "2028-02-25",
-          "completion_date": "2033-02-26",
+          "readout_date": "2026-10-30",
+          "completion_date": "2026-10-30",
           "registered_date": "2024-12-20",
           "linked_registries": []
         },
@@ -15989,8 +16032,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 4",
           "sponsor": "argenx",
           "start_date": "2025-04-17",
-          "readout_date": "2026-08",
-          "completion_date": "2027-05",
+          "readout_date": "2026-07-08",
+          "completion_date": "2027-12",
           "registered_date": "2025-04-03",
           "linked_registries": []
         },
@@ -16635,8 +16678,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 4",
           "sponsor": "UCB Biopharma SRL",
           "start_date": "2025-12-01",
-          "readout_date": "2027-10-15",
-          "completion_date": "2027-10-15",
+          "readout_date": "2027-06-03",
+          "completion_date": "2027-06-03",
           "registered_date": "2025-11-24",
           "linked_registries": []
         },
@@ -16811,8 +16854,8 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "phase_label": "Phase 1",
           "sponsor": "Kite, A Gilead Company",
           "start_date": "2026-04-10",
-          "readout_date": "2029-06",
-          "completion_date": "2029-06",
+          "readout_date": "2031-12",
+          "completion_date": "2031-12",
           "registered_date": "2025-12-26",
           "linked_registries": []
         },
@@ -17593,6 +17636,28 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "readout_date": "2028-12",
           "completion_date": "2029-06",
           "registered_date": "2026-11-13",
+          "linked_registries": []
+        },
+        {
+          "registry": "ClinicalTrials.gov",
+          "registry_id": "NCT07939802",
+          "title": "A Study to Learn About the Effects of Felzartamab on Daily Living Activities and Its Safety in Adults With Generalized Myasthenia Gravis (gMG) Ages 18 to 80 Years Old",
+          "url": "https://clinicaltrials.gov/study/NCT07939802",
+          "status": "NOT_YET_RECRUITING",
+          "status_label": "尚未招募",
+          "status_class": "recruiting",
+          "drug_class": "其他",
+          "drug_name": "Felzartamab",
+          "drug_names": [
+            "Felzartamab"
+          ],
+          "indication": "重症肌无力",
+          "phase_label": "Phase 2",
+          "sponsor": "Biogen",
+          "start_date": "2026-11-19",
+          "readout_date": "2028-09-19",
+          "completion_date": "2029-03-20",
+          "registered_date": "2026-11-16",
           "linked_registries": []
         }
       ]

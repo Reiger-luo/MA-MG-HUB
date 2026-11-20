@@ -95,7 +95,7 @@ MG-core 与证据门控
 | 产物 | 用途 |
 | --- | --- |
 | `dashboard-data.js` | 工作台近期信号、页面摘要和数据健康 |
-| `literature-recent.js` | 严格 MG-core + 证据等级 I–V 文献 |
+| `literature-recent.js` | 严格 MG-core + 信号准入文献（OCEBM 官方 I–V 等级，或无等级的原始临床研究；非原始证据不进） |
 | `signals-weekly.js` | 当前周 Signal、证据项和 KOL key points |
 | `trial-signals-weekly.js` | 三源试验冻结窗口、逐项裁决、来源内强度与 MG 专家解读 |
 | `source-signals.js` | 文献、指南/共识、监管、三源试验注册、会议独立频道 |

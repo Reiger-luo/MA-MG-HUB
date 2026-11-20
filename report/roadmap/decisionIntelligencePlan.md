@@ -30,7 +30,7 @@
 
 | 现有产物 | 当前接口 | 本计划用途 |
 |---|---|---|
-| `data/literature-recent.js` | `window.MG_LITERATURE_DATA` | 严格 MG-core + Evidence I–V 文献证据；问题检索、Claim 支持、Delta 新文献 |
+| `data/literature-recent.js` | `window.MG_LITERATURE_DATA` | 严格 MG-core + 信号准入文献证据（OCEBM 2011 v2.1 官方 I–V 等级，或无等级的原始临床研究；非原始证据不进）；问题检索、Claim 支持、Delta 新文献 |
 | `data/signals-weekly.js` | `window.MG_SIGNALS_DATA` | 当前 1 周 Signal、talkingPoints、evidenceBoundary、PMID、KOL/机构公开线索 |
 | `data/trial-signals-weekly.js` | `window.MG_TRIAL_SIGNALS_DATA` | 三源原生比较窗口、逐项裁决、试验重要性、更新实质性、来源内强度与 MG 专家解读 |
 | `data/source-signals.js` | `window.MG_SOURCE_SIGNALS` | 文献、指南/共识、中国监管、试验注册、会议五频道统一入口 |
@@ -77,7 +77,7 @@
 2. 不使用 `localStorage`、IndexedDB、cookie 或后端数据库保存用户选择。
 3. URL 参数只表达当前公开视图；不表达内部关系、反馈或未公开标签。
 4. 导出只在浏览器内瞬时生成，由用户自行下载；网站不保留导出历史。
-5. PubMed 文献继续执行 MG-core + Evidence I–V 双门；指南、监管、注册、会议不冒充 Oxford 文献证据。
+5. PubMed 文献继续执行 MG-core + 信号准入双门（OCEBM 2011 v2.1 官方 I–V 等级，或无等级的原始临床研究；非原始证据不进）；指南、监管、注册、会议不冒充 Oxford 文献证据。
 6. Abstract-level 推断必须明确标识，不能替代全文、说明书、指南原文或医学审核。
 7. 云端缺少 full 时，不重建或覆盖 full-derived 产物。
 8. Decision Brief 不讨论政务、支付、市场准入或 HEOR；监管信息不进入默认学术叙事。

@@ -33,14 +33,18 @@
 
 ## MG-HUB 自动脚本落地规则
 
-### 明确采用
+### 明确采用（2026-11-20 按 OCEBM 官方表重构）
 
-- 输出 I / II / III / IV / V。
-- Narrative review、editorial、letter、comment、protocol、guideline/consensus、HEOR、animal、in vitro 等不作为 CEBM 证据等级，保留 study_type 但 `evidence_level = null`。
-- Case report / case series / case-control / historical control 归入 Level IV 低等级临床证据桶；不再归入 Level V。
-- Level V 只保留给 mechanism-based reasoning。
-- Post-marketing surveillance 只有在呈现为 non-randomized controlled cohort / follow-up 且有足够样本量或 large-scale / nationwide / registry 信号时，才升为 Level III；普通 FAERS / disproportionality / spontaneous report 仍为 Level IV 或非证据筛选项，视文本而定。
-- GWAS / omics / genetic association / exploratory biomarker association 不自动等同 mechanism-based reasoning；默认归为 exploratory observational association（Level IV），只有明确机制推理文本才给 Level V。
+本项目**只采用 OCEBM 2011 v2.1 官方表实际存在的等级条目**；官方表没有的研究设计不赋予罗马数字，统一标为「无等级」（`evidence_level = null`），取消旧稿中"未分级/暂未分级"的说法。每一篇文章都经过分类器，因此不存在"尚未分级"状态。
+
+- 输出 I / II / III / IV / V（仅官方表有对应条目者）或无等级（`null`）。
+- 官方表内条目：治疗/伤害域 RCT=II、非随机对照队列=III、病例系列/病例对照/历史对照=IV；预后域 inception cohort=II、普通队列=III、低质量预后队列=IV；诊断域合格横断面（一致参考标准+盲法+前瞻/连续入组）=L2、非连续入组/参考标准不一致=L3、病例对照=IV；患病率域随机抽样调查/普查=L1、本地非随机抽样=L3；筛查域 RCT=L2；机制推理=L5。
+- 横断面/调查按问题域归位，不整体沉无等级：有诊断词走诊断域（L2/L3/L4），有患病率/调查词走患病率域（L1/L3），两者皆无（如纯 DCE、患者偏好）才归无等级。回顾性队列即使出现 prevalence 词也不判患病率。
+- 诊断准确性 L2 判定须摘要同时具备：盲法（double-blind/blinded/masked）+ 参考标准或敏感特异度线索 + 前瞻或连续入组；缺一保守 L3。此 L2 不是 RCT——诊断域 L2 不要求随机分组，SCREAM（PMID 37554174，前瞻多中心双盲、2272 例）即属此类。
+- **无等级（原始临床研究，官方表无对应设计，但保留 study_type 且可进信号证据流）**：biomarker 结局关联（Biomarker Prognostic Study）、预测模型开发与外部验证（Prediction Model Development / External Validation）、GWAS/omics/遗传关联（Genetic/Omics Association）、量表验证（Scale Validation）、普通药物警戒（Pharmacovigilance：FAERS/disproportionality/spontaneous report）、无诊断/患病率线索的横断面与 DCE/患者偏好（Cross-Sectional）。这些设计官方表均无条目，不给罗马数字；信号强度按弱处理。有诊断或患病率线索的横断面已按域归 L1/L2/L3，不在无等级内。
+- **无等级（非原始临床证据，不进证据流）**：narrative review、editorial、letter、comment、protocol、guideline/consensus、HEOR、animal、in vitro 等。
+- Post-marketing surveillance 只有在呈现为 non-randomized controlled cohort / follow-up 且有足够样本量（≥100，识别 `n=123`、`123 patients`、`consisted of 123 patients`）或 large-scale / nationwide / registry 信号时，升为官方伤害域 Level III；`Post-marketing Controlled Follow-up` 保留 III，普通 FAERS 等归无等级。
+- 信号准入门控 `scripts/studyClassifier.py::isSignalEligible`：有 I–V 等级，或属于上述 8 类无等级原始研究（`NO_LEVEL_ORIGINAL_TYPES`）；非原始证据不进。综述、评论、动物、体外等不进证据流，避免稀释信号。
 
 ### 信号纳入决策的证据上限（第二道门）
 
@@ -54,6 +58,7 @@
 
 ### 自动化局限
 
-- 无全文时无法可靠判断诊断研究的 consecutive sampling、blinding、reference standard 一致性；当前诊断准确性研究按保守 III 桶，诊断 case-control / scale validation 按 IV。
-- 无全文时无法可靠判断预后 inception cohort 与 follow-up 质量；脚本只在明确 `inception cohort` 时给 II，其余按摘要信号保守映射。
+- 无全文时诊断研究的 consecutive sampling、blinding、reference standard 一致性只能靠摘要显式线索判定：三者齐全给官方 L2，缺任一保守 L3，病例对照 L4，量表验证因官方表无条目归无等级。SCREAM 类双盲多中心准确性研究据此由 III 升 II。
+- 无全文时无法可靠判断预后 inception cohort 与 follow-up 质量；脚本只在明确 `inception cohort` 时给 II，其余按摘要信号保守映射到队列 III 或低质量队列 IV。
+- 罗马数字只在各自问题域内可比：同为 III 的治疗域非随机对照队列与预后域普通队列，不代表证据强度相同或可互换。
 - 输出只用于文献筛选与排序；医学结论、指南引用、材料定稿前必须核查原文。

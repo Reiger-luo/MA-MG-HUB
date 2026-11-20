@@ -26,22 +26,31 @@ levelMap = {
     "Prognostic Inception Cohort": "II",
     "Prognostic Cohort": "III",
     "Poor-quality Prognostic Cohort": "IV",
-    "Biomarker Prognostic Study": "III",
-    "Prediction Model External Validation": "III",
-    "Prediction Model Development": "IV",
+    # OCEBM 2011 v2.1 官方表无以下设计的对应条目，统一沉为「无等级」。
+    # 保留 study_types 供检索与 LLM 复核，但 evidence_level 置空。
+    "Biomarker Prognostic Study": None,
+    "Prediction Model External Validation": None,
+    "Prediction Model Development": None,
     "Diagnostic Accuracy Study": "III",
+    # 诊断域官方 L2：一致参考标准+盲法的前瞻/连续入组横断面（SCREAM 类）。
+    "Diagnostic Accuracy Study (Blinded)": "II",
+    # 患病率域官方 L1/L3：随机抽样调查 vs 本地非随机抽样。
+    "Prevalence Survey (Random Sample)": "I",
+    "Prevalence Survey": "III",
     "Diagnostic Case-Control": "IV",
-    "Scale Validation": "IV",
+    "Scale Validation": None,
     "Historical Control": "IV",
     "Case-Control": "IV",
-    "Cross-Sectional": "IV",
+    # 横断面/问卷/DCE 在 OCEBM 官方表无统一等级：诊断域需参考标准+盲法、
+    # 患病率域需区分随机/非随机抽样，摘要级无法判定，统一沉为「无等级」。
+    "Cross-Sectional": None,
     "Single Arm": "IV",
     "Case Series": "IV",
     "Case Report": "IV",
     "Post-marketing Controlled Follow-up": "III",
-    "Pharmacovigilance": "IV",
-    "Genetic/Omics Association": "IV",
-    "Biomarker Association": "IV",
+    "Pharmacovigilance": None,
+    "Genetic/Omics Association": None,
+    "Biomarker Association": None,
     "Mechanism-based Reasoning": "V",
     "Review": None,
     "Protocol": None,
@@ -70,6 +79,30 @@ levelMap = {
     "Portrait": None,
     "Legal Case": None,
 }
+
+EVIDENCE_LEVELS = {"I", "II", "III", "IV", "V"}
+
+# OCEBM 官方表无条目、但属于原始临床研究的类型：evidence_level 沉为「无等级」，
+# 仍允许进入信号证据流（强度按弱处理）。非原始证据（综述、评论、动物、体外等）
+# 不在白名单内，维持不进信号，避免稀释证据流。
+NO_LEVEL_ORIGINAL_TYPES = {
+    "Biomarker Prognostic Study",
+    "Prediction Model External Validation",
+    "Prediction Model Development",
+    "Scale Validation",
+    "Pharmacovigilance",
+    "Genetic/Omics Association",
+    "Biomarker Association",
+    "Cross-Sectional",
+}
+
+
+def isSignalEligible(article: dict) -> bool:
+    """是否允许进入信号证据流：有 I–V 等级，或无等级的原始临床研究。"""
+    if article.get("evidence_level") in EVIDENCE_LEVELS:
+        return True
+    studyTypes = set(article.get("study_types") or [])
+    return bool(studyTypes & NO_LEVEL_ORIGINAL_TYPES)
 
 protocolTerms = [
     "study protocol",
@@ -121,7 +154,8 @@ crossSectionalTerms = [
     "cross sectional",
     "cross-sectional survey",
     "cross sectional survey",
-    "survey",
+    # 单独的 "survey" 过宽：registry survey / post-marketing survey 是队列或监测，
+    # 不是横断面调查，改由后续队列/单臂规则判定（15 轮迭代 R05 分歧）。
     "questionnaire",
     "discrete choice experiment",
     "willingness-to-pay",
@@ -689,10 +723,12 @@ def isPharmacovigilance(text: str) -> bool:
 def hasSufficientHarmSample(text: str) -> bool:
     if hasAny(text, largeSampleTerms):
         return True
+    # 三层正则分别覆盖 n=123、enrolled 123、123 patients；
+    # 至少 3 位数字即可能 ≥100，具体阈值由下方 value>=100 判定。
     sample_patterns = [
         r"\b[nN]\s*=\s*([0-9][0-9,]{1,})\b",
-        r"\b(?:included|enrolled|followed|analysed|analyzed)\s+([0-9][0-9,]{2,})\b",
-        r"\b([0-9][0-9,]{2,})\s+(?:patients|participants|subjects|individuals|persons)\b",
+        r"\b(?:included|enrolled|followed|analysed|analyzed|consisted of)\s+([0-9][0-9,]{1,})\b",
+        r"\b([0-9][0-9,]{1,})\s+(?:patients|participants|subjects|individuals|persons)\b",
     ]
     for pattern in sample_patterns:
         for match in re.finditer(pattern, text, re.I):
@@ -712,6 +748,9 @@ def isPostMarketingControlledFollowup(text: str) -> bool:
         "follow-up",
         "follow up",
         "registry",
+        "registered",
+        "post-marketing surveillance",
+        "postmarketing surveillance",
         "surveillance study",
         "post-marketing surveillance study",
         "postmarketing surveillance study",
@@ -870,6 +909,27 @@ def classifyPrognosis(text: str, pubTypeText: str) -> str:
     return "Single Arm"
 
 
+def hasDiagnosticLevel2Conditions(text: str) -> bool:
+    """OCEBM 诊断域官方 L2：一致参考标准 + 盲法 + 前瞻/连续入组。
+
+    无全文时只能通过摘要显式线索判定；缺少任一条件一律保守留 L3。
+    """
+    if isRetrospective(text):
+        return False
+    hasBlinding = hasAny(text, [
+        "double-blind", "double blind", "blinded", "blinding",
+        "masked", "masking",
+    ])
+    hasReferenceStandard = hasAny(text, [
+        "reference standard", "consistently applied reference",
+        "diagnostic accuracy", "sensitivity", "specificity",
+    ])
+    hasProspectiveConsecutive = hasAny(text, [
+        "prospective", "consecutive", "consecutively recruited",
+    ])
+    return hasBlinding and hasReferenceStandard and hasProspectiveConsecutive
+
+
 def classifyDiagnosis(text: str) -> str:
     if word("case-control", text) or hasPattern(text, r"\bpatients with .+ and .+ controls\b"):
         return "Diagnostic Case-Control"
@@ -877,6 +937,8 @@ def classifyDiagnosis(text: str) -> str:
         return "Diagnostic Case-Control"
     if isScaleValidation(text):
         return "Scale Validation"
+    if hasDiagnosticLevel2Conditions(text):
+        return "Diagnostic Accuracy Study (Blinded)"
     return "Diagnostic Accuracy Study"
 
 
@@ -988,7 +1050,29 @@ def classifyStudyType(pubTypes, abstract: str | None = "", title: str | None = "
         return classifyDiagnosis(text)
     if isPharmacovigilance(text):
         return classifyPharmacovigilance(text)
-    if isCrossSectional(text):
+    # 横断面/调查按 OCEBM 问题域归位，不整体沉无等级：
+    # 诊断词优先走诊断域（官方 L2/L3/L4），患病率/调查走患病率域（官方 L1/L3）。
+    # 先排除指南/共识/综述：其背景段常提 prevalence/diagnosis，但研究设计不是横断面。
+    isGuidelineOrReviewType = (
+        hasAny(pubTypeText.lower(), [
+            "guideline", "consensus", "review", "practice guideline",
+        ])
+        or hasAny(titleText, ["guideline", "consensus", "systematic review"])
+    )
+    prevalenceTerms = [
+        # 只保留明确的患病率调查词；incidence/epidemiology/mechanism 等常出现在
+        # 非患病率研究的背景段，过宽会误伤单臂真实世界研究与机制研究。
+        "prevalence survey", "prevalence study", "population-based survey",
+        "population based survey", "random sample", "census",
+    ]
+    titleSaysPrevalence = hasPattern(titleText, r"^prevalence\b") or hasAny(titleText, ["prevalence of", "epidemiology of"])
+    if (isCrossSectional(text) or hasAny(text, prevalenceTerms) or titleSaysPrevalence) and not isRetrospective(text, pubTypeText) and not isGuidelineOrReviewType:
+        if isDiagnosticQuestion(text):
+            return classifyDiagnosis(text)
+        if hasAny(text, prevalenceTerms) or titleSaysPrevalence:
+            if hasAny(text, ["random sample", "randomly sampled", "census", "representative sample"]):
+                return "Prevalence Survey (Random Sample)"
+            return "Prevalence Survey"
         return "Cross-Sectional"
     if isRetrospective(text, pubTypeText) and hasAdjustment(text):
         return "Adjusted Retrospective Cohort"

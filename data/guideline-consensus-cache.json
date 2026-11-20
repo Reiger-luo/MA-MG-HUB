@@ -1,7 +1,85 @@
 {
   "schema_version": "1.0",
-  "source": "MG-core PubMed guideline/consensus records outside evidence literature",
+  "source": "MG-core guideline/consensus records (PubMed + 中文期刊人工补录，合成 id 记录以 id_type 标注)",
   "records": [
+    {
+      "source_type": "chinese_journal_consensus",
+      "pmid": "CN-MG-2026-BIOTARGET",
+      "title": "生物靶向制剂治疗重症肌无力专家共识（2026版）",
+      "abstract": "重症肌无力（MG）是一种经典自身免疫性疾病，以免疫调节为核心治疗方案。近年来多种生物靶向制剂、小分子药物陆续获批上市，国内尚无针对生物靶向制剂治疗MG的专项指南与共识。由北京神经科学学会神经免疫与相关疾病专业委员会、北京重症肌无力协作组组织国内相关专家，基于循证医学证据与国内真实临床实践，经多轮德尔菲法论证制定本共识，规范MG个体化分层治疗。",
+      "authors": [
+        "侯世芳",
+        "高枫",
+        "刘翕然"
+      ],
+      "first_authors": [
+        "侯世芳"
+      ],
+      "corresponding_authors": [
+        "张华",
+        "王佳伟"
+      ],
+      "corresponding_authors_source": "article_footnote",
+      "author_affiliations": [],
+      "journal": "中国神经免疫学和神经病学杂志",
+      "journal_iso": "Chin J Neuroimmunol Neurol",
+      "issn": "1006-2963",
+      "volume": "33",
+      "issue": "5",
+      "pages": "533-543",
+      "entry_date": "2026/11/11 09:07",
+      "pub_date": "2026-09",
+      "date_completed": "2026-06-05",
+      "date_revised": "2026-09-15",
+      "doi": "10.3969/j.issn.1006-2963.2026.05.001",
+      "pmcid": "",
+      "article_ids": {
+        "doi": "10.3969/j.issn.1006-2963.2026.05.001"
+      },
+      "url": "https://mp.weixin.qq.com/s/hYx025r_Hhr4JQ-fp7xgew",
+      "full_text_url": "https://mp.weixin.qq.com/s/hYx025r_Hhr4JQ-fp7xgew",
+      "affiliations": [
+        "北京医院（国家老年医学中心）神经内科",
+        "北京大学第一医院神经内科",
+        "首都医科大学附属北京同仁医院神经内科"
+      ],
+      "pub_types": [
+        "Guideline",
+        "Consensus statement"
+      ],
+      "publication_types": [
+        "Guideline",
+        "Consensus statement"
+      ],
+      "mesh_terms": [],
+      "keywords": [
+        "重症肌无力",
+        "生物靶向制剂",
+        "FcRn拮抗剂",
+        "补体抑制剂",
+        "B细胞靶向治疗",
+        "专家共识"
+      ],
+      "chemicals": [],
+      "grants": [],
+      "languages": [
+        "chi"
+      ],
+      "publication_status": "ppublish",
+      "china_related": true,
+      "study_types": [
+        "Guideline",
+        "Consensus"
+      ],
+      "evidence_level": "IV",
+      "mg_core": true,
+      "mg_core_reason": "explicit_mg_title",
+      "journal_if": "1.189",
+      "journal_quartile": "中国科技核心期刊",
+      "signal_strength": "强",
+      "id_type": "synthetic_non_pubmed",
+      "id_note": "中文期刊发表，无 PMID；采用稳定合成 id 作为主键，url 指向官方推文原文"
+    },
     {
       "source_type": "pubmed_article",
       "pmid": "42717567",

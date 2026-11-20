@@ -173,34 +173,32 @@
         证据等级分类说明 <span id="evidenceArrow">▸</span>
       </button>
       <div class="evidence-ref-content" id="evidenceContent">
-        <p>文献证据等级是 <strong>Oxford CEBM 2011-informed</strong> 的自动筛选标签：先区分治疗/伤害、预后、诊断/监测、患病率/筛查、机制问题域，再按标题/摘要可识别的研究设计保守映射。正式引用和医学决策仍需核查原文。</p>
+        <p>文献证据等级以 <strong>Oxford CEBM 2011 v2.1 官方表</strong>为准的自动筛选标签：先区分治疗/伤害、预后、诊断/监测、患病率/筛查、机制问题域，再按标题/摘要可识别的研究设计映射。罗马数字<strong>只在各自问题域内可比</strong>，不同域同为 III 级不代表证据强度相同。官方表没有对应的研究设计一律标为<strong>无等级</strong>，不强行给出罗马数字。正式引用和医学决策仍需核查原文。</p>
         <table class="evidence-table">
           <tr><th>等级</th><th>分类</th><th>说明</th></tr>
-          <tr><td><strong>I</strong></td><td>Systematic Review / Meta-Analysis</td><td>随机试验系统综述 / 荟萃分析 / 间接治疗比较；或预后 inception cohort 系统综述</td></tr>
-          <tr><td rowspan="2"><strong>II</strong></td><td>Randomized Controlled Trial</td><td>本研究存在随机分组或随机分配的临床对照试验</td></tr>
-          <tr><td>Prognostic Inception Cohort</td><td>预后问题中的 inception cohort</td></tr>
-          <tr><td rowspan="6"><strong>III</strong></td><td>Non-randomized Controlled Cohort</td><td>前瞻性对照队列 / 非随机对照临床研究</td></tr>
+          <tr><td><strong>I</strong></td><td>Systematic Review / Meta-Analysis / ITC / Prevalence Survey (Random Sample)</td><td>随机试验系统综述 / 荟萃分析 / 间接治疗比较；预后 inception cohort 系统综述；患病率域本地当前随机抽样调查 / 普查</td></tr>
+          <tr><td rowspan="3"><strong>II</strong></td><td>Randomized Controlled Trial</td><td>治疗域：本研究存在随机分组或随机分配的临床对照试验</td></tr>
+          <tr><td>Prognostic Inception Cohort</td><td>预后域官方 L2：在疾病早期统一时点入组并随访的队列（inception cohort）</td></tr>
+          <tr><td>Diagnostic Accuracy Study (Blinded)</td><td>诊断域官方 L2：一致参考标准 + 盲法 + 前瞻/连续入组的横断面准确性研究（如 SCREAM）。注意此类不是 RCT，但按诊断域为 L2</td></tr>
+          <tr><td rowspan="6"><strong>III</strong></td><td>Non-randomized Controlled Cohort</td><td>治疗/伤害域：非随机对照队列 / 随访研究</td></tr>
           <tr><td>Adjusted Retrospective Cohort</td><td>回顾性对照 + 统计校正（PSM/IPTW 等）</td></tr>
-          <tr><td>Post-marketing Controlled Follow-up</td><td>上市后安全性随访 / 监测研究；需有队列或随访设计且样本量足够</td></tr>
-          <tr><td>Prognostic Cohort</td><td>预后 / 风险因素 / 进展结局队列研究</td></tr>
-          <tr><td>Biomarker Prognostic / Prediction External Validation</td><td>生物标志物-结局关联研究 / 明确外部验证预测模型</td></tr>
-          <tr><td>Diagnostic Accuracy Study</td><td>诊断/监测准确性研究（无法确认连续入组与盲法时按保守等级）</td></tr>
-          <tr><td rowspan="12"><strong>IV</strong></td><td>Historical Control / Case-Control</td><td>回顾性对照（未校正）/ 病例对照</td></tr>
-          <tr><td>Cross-Sectional / Survey / DCE</td><td>横断面、问卷、患者偏好或离散选择实验</td></tr>
-          <tr><td>Single Arm</td><td>单臂研究（含无真实外部对照的真实世界 / 回顾性研究）</td></tr>
-          <tr><td>Poor-quality Prognostic Cohort</td><td>回顾性、质量受限或无法确认入组质量的预后队列</td></tr>
-          <tr><td>Prediction Model Development</td><td>预测模型开发 / 内部验证模型</td></tr>
-          <tr><td>Diagnostic Case-Control / Scale Validation</td><td>诊断病例对照 / 量表或监测工具验证</td></tr>
-          <tr><td>Pharmacovigilance</td><td>普通药物警戒 / FAERS / disproportionality，未满足 Level III 上市后随访条件</td></tr>
-          <tr><td>Case Report / Case Series</td><td>病例报告 / 病例系列；按 CEBM 2011 case-series 低等级临床证据桶处理</td></tr>
-          <tr><td>Genetic / Omics Association</td><td>GWAS、omics、遗传关联等探索性观察关联，不自动等同机制推理</td></tr>
-          <tr><td>Biomarker Association</td><td>未明确结局预测或外部验证的探索性 biomarker association</td></tr>
-          <tr><td>Systematic Review of Case Reports</td><td>病例报告或病例系列的系统综述</td></tr>
+          <tr><td>Post-marketing Controlled Follow-up</td><td>常见伤害域官方 L3：足量上市后安全性监测，需队列/随访设计且样本量足够</td></tr>
+          <tr><td>Prognostic Cohort</td><td>预后域官方 L3：普通队列 / RCT 对照臂</td></tr>
+          <tr><td>Diagnostic Accuracy Study</td><td>诊断域：无法从摘要确认连续入组与盲法时按保守 L3；符合参考标准+盲法者升 L2</td></tr>
+          <tr><td>Prevalence Survey</td><td>患病率域官方 L3：本地非随机抽样调查；随机抽样普查为 L1</td></tr>
+          <tr><td rowspan="8"><strong>IV</strong></td><td>Historical Control / Case-Control</td><td>治疗/伤害/诊断域 L4：历史对照 / 病例对照</td></tr>
+          <tr><td>Single Arm</td><td>单臂研究（无真实外部对照的真实世界 / 回顾性研究），按病例系列 L4 处理</td></tr>
+          <tr><td>Poor-quality Prognostic Cohort</td><td>预后域官方 L4：回顾性、质量受限或无法确认入组质量的预后队列</td></tr>
+          <tr><td>Diagnostic Case-Control</td><td>诊断域官方 L4：参考标准不一致或非独立的病例对照</td></tr>
+          <tr><td>Case Report / Case Series</td><td>病例报告 / 病例系列；按官方 case-series L4 处理</td></tr>
+          <tr><td>Systematic Review of Case Reports</td><td>病例报告或病例系列的系统综述；证据基础仍为病例级 L4</td></tr>
           <tr><td>Systematic Review of Uncontrolled Studies</td><td>无对照单臂研究、病例系列或比例 meta-analysis 的系统综述</td></tr>
-          <tr><td><strong>V</strong></td><td>Mechanism-based Reasoning</td><td>机制推理；不能直接外推为疗效或安全性结论</td></tr>
-          <tr><td><strong>—</strong></td><td>Narrative Review / Protocol / HEOR / Guideline / Consensus / Editorial / Letter / Comment / Animal / In Vitro</td><td>未分级或非原始临床证据类</td></tr>
+          <tr><td><strong>V</strong></td><td>Mechanism-based Reasoning</td><td>官方 L5：机制推理；不能直接外推为疗效或安全性结论</td></tr>
+          <tr><td rowspan="3"><strong>无等级</strong><br>（官方表无条目）</td><td>Biomarker / Prediction Model / Genetic-Omics</td><td>biomarker 结局关联、预测模型开发与外部验证、GWAS/omics/遗传关联：OCEBM 2011 官方表没有这些设计，不给罗马数字；原始研究仍可进入信号候选（按弱信号）</td></tr>
+          <tr><td>Cross-Sectional / DCE / Scale Validation / Pharmacovigilance</td><td>无法归入诊断域或患病率域的横断面（如患者偏好、DCE）、量表验证、FAERS 药物警戒：官方表无对应条目，归无等级。有诊断/患病率线索的横断面已按域归 L1/L2/L3</td></tr>
+          <tr><td>Narrative Review / Protocol / HEOR / Guideline / Consensus / Editorial / Letter / Comment / Animal / In Vitro</td><td>非原始临床证据，不属于证据等级体系；不进入证据流</td></tr>
         </table>
-        <p style="margin-top:0.5rem;font-size:0.8rem;color:var(--fg3);">分类结果来自规则程序自动判定，仅供快速过滤参考。自动分级口径与方法学限制见本页映射表；重要决策请核查原文。</p>
+        <p style="margin-top:0.5rem;font-size:0.8rem;color:var(--fg3);">分类结果来自规则程序自动判定，仅供快速过滤参考。「无等级」不等于低质量，只表示 OCEBM 官方表没有对应设计；自动口径与方法学限制见本报告参考文档；重要决策请核查原文。</p>
       </div>
     </div>
   </section>

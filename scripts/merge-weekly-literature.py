@@ -25,6 +25,7 @@ from common.guideline_consensus import isGuidelineConsensus, updateGuidelineCach
 from common.io import atomic_write_json, atomic_write_text, load_json
 from common.mg_relevance import assess_mg_core
 from common.signalStrength import classifySignalStrength
+from studyClassifier import isSignalEligible
 
 
 PROJECT = Path(__file__).resolve().parent.parent
@@ -190,7 +191,7 @@ def filterEligibleIncoming(articles):
         if not assessment.is_core:
             counters["not_mg_core"] += 1
             continue
-        if article.get("evidence_level") not in EVIDENCE_LEVELS:
+        if not isSignalEligible(article):
             counters["missing_evidence_level"] += 1
             continue
         article["mg_core"] = True
@@ -229,7 +230,7 @@ def derivePublicArticles(
             guidelines.append(article)
             counters["guideline_consensus"] += 1
             continue
-        if article.get("evidence_level") not in EVIDENCE_LEVELS:
+        if not isSignalEligible(article):
             counters["missing_evidence_level"] += 1
             continue
         signalStrength = classifySignalStrength(article)

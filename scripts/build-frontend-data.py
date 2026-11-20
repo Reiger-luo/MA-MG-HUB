@@ -21,6 +21,8 @@ from common.expert_outputs import build_expert_manifest, write_expert_outputs as
 from common.mg_relevance import assess_mg_core
 from common.signalStrength import EFGAR_TERMS, classifySignalStrength, isEfgarRelated
 from common import clinical_registry
+from studyClassifier import isSignalEligible
+from chinaLocationRules import infer_china_location as infer_china_location_rule
 
 try:
     import requests
@@ -62,36 +64,9 @@ CHINA_PROFILE_TERMS = [
     "jiangsu", "hunan", "hubei", "guangdong", "pla general",
 ]
 
-CHINA_LOCATION_RULES = [
-    ("上海", "上海", ["shanghai", "fudan", "huashan", "ruijin", "zhongshan hospital"]),
-    ("北京", "北京", ["beijing", "peking", "xuanwu", "capital medical", "pumch", "peking union"]),
-    ("广东", "广州", ["guangzhou", "guangdong", "sun yat-sen", "sun yat sen", "southern medical"]),
-    ("湖南", "长沙", ["changsha", "hunan", "xiangya", "central south university"]),
-    ("陕西", "西安", ["xian", "xi'an", "shaanxi", "tangdu", "air force medical", "fourth military"]),
-    ("江苏", "徐州", ["xuzhou", "jiangsu"]),
-    ("湖北", "武汉", ["wuhan", "hubei", "tongji hospital", "union hospital tongji medical"]),
-    ("四川", "成都", ["chengdu", "sichuan", "west china"]),
-    ("黑龙江", "哈尔滨", ["harbin", "heilongjiang"]),
-    ("河南", "郑州", ["zhengzhou", "henan"]),
-    ("山东", "济南", ["jinan", "shandong"]),
-    ("浙江", "杭州", ["hangzhou", "zhejiang"]),
-    ("天津", "天津", ["tianjin"]),
-    ("重庆", "重庆", ["chongqing"]),
-    ("辽宁", "沈阳", ["shenyang", "liaoning"]),
-    ("吉林", "长春", ["changchun", "jilin"]),
-    ("河北", "石家庄", ["shijiazhuang", "hebei"]),
-    ("山西", "太原", ["taiyuan", "shanxi"]),
-    ("安徽", "合肥", ["hefei", "anhui"]),
-    ("福建", "福州", ["fuzhou", "fujian"]),
-    ("江西", "南昌", ["nanchang", "jiangxi"]),
-    ("广西", "南宁", ["nanning", "guangxi"]),
-    ("云南", "昆明", ["kunming", "yunnan"]),
-    ("贵州", "贵阳", ["guiyang", "guizhou"]),
-    ("新疆", "乌鲁木齐", ["urumqi", "xinjiang"]),
-    ("甘肃", "兰州", ["lanzhou", "gansu"]),
-    ("台湾", "台湾", ["taiwan"]),
-    ("香港", "香港", ["hong kong"]),
-]
+# 中国机构 → 省市规则已迁移到 chinaLocationRules.py（权威单一来源）。
+# 旧表存在省份级词映射到单一城市、裸子串 "xian" 误命中 etc. 的系统性缺陷，
+# 详见 chinaLocationRules 模块 docstring。infer_china_location 现委托该模块。
 
 INTERNATIONAL_LOCATION_RULES = [
     ("美国", ["united states", "u.s.a", "america", "mayo clinic", "harvard", "stanford", "duke university", "johns hopkins", "nih", "boston", "new york"]),
@@ -1742,12 +1717,11 @@ def build_rank_items(counts, article_map, limit=10, article_limit=10):
 
 
 def build_china(recent):
-    allowedEvidenceLevels = {"I", "II", "III", "IV", "V"}
     articles = [
         article
         for article in recent
         if article.get("china_related")
-        and article.get("evidence_level") in allowedEvidenceLevels
+        and isSignalEligible(article)
         and assess_mg_core(article).is_core
     ]
     monthly = Counter()
@@ -1788,7 +1762,7 @@ def build_china(recent):
             "top_journal": journals.most_common(1)[0][0] if journals else "",
         },
         "monthly": [{"month": k, "count": monthly[k]} for k in sorted(monthly)],
-        "evidence": [{"level": k, "count": evidence[k]} for k in ["I", "II", "III", "IV", "V"] if evidence[k]],
+        "evidence": [{"level": k, "count": evidence[k]} for k in ["I", "II", "III", "IV", "V", "未分级"] if evidence[k]],
         "quartile": [{"level": k, "count": quartiles[k]} for k in ["1区", "2区", "3区", "4区"] if quartiles[k]],
         "top_journals": build_rank_items(journals, journal_articles, limit=10),
         "top_institutions": build_rank_items(institutions, institution_articles, limit=12),
@@ -1855,13 +1829,15 @@ def canonicalize_institution(institution, raw_affiliations):
 
 
 def infer_china_location(institution, raw_affiliation_counter):
-    """从机构名和 affiliation 中粗略提取中国省份/城市，供前端筛选。"""
-    raw_items = raw_affiliation_counter.keys() if hasattr(raw_affiliation_counter, "keys") else (raw_affiliation_counter or [])
-    text = normalize_alias_text(" ".join([institution or ""] + list(raw_items)))
-    for province, city, terms in CHINA_LOCATION_RULES:
-        if any(term in text for term in terms):
-            return {"province": province, "city": city}
-    return {"province": "未识别", "city": ""}
+    """从机构名和 affiliation 提取中国省份/城市，供前端筛选。
+
+    统一委托给 chinaLocationRules 权威规则模块，避免与修复脚本各写一套逻辑：
+    优先按规范化机构名（含具体医院专名）判定，带字母数字边界防止子串误命中
+    （如 "xian" 误命中 "xiangya"、"West China Hospital" 被判成西安）。
+    raw affiliations 只在机构名无信号时兜底。
+    """
+    raw_items = list(raw_affiliation_counter.keys()) if hasattr(raw_affiliation_counter, "keys") else (raw_affiliation_counter or [])
+    return infer_china_location_rule(institution, raw_items)
 
 
 def infer_international_country(institution, raw_affiliation_counter):

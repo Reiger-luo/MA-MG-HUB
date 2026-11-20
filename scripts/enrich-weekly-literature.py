@@ -18,7 +18,7 @@ from pathlib import Path
 from common.io import atomic_write_json
 from common.guideline_consensus import isGuidelineConsensus, updateGuidelineCache
 from common.mg_relevance import assess_mg_core
-from studyClassifier import classifyEvidence
+from studyClassifier import classifyEvidence, isSignalEligible
 
 
 PROJECT = Path(__file__).resolve().parent.parent
@@ -167,7 +167,7 @@ def processArticles(articles, cache, normalized, guidelineCachePath=GUIDELINE_CA
             guidelines.append(article)
             counters["routed_guideline_consensus"] += 1
             continue
-        if article.get("evidence_level") not in {"I", "II", "III", "IV", "V"}:
+        if not isSignalEligible(article):
             counters["dropped_no_evidence"] += 1
             continue
         counters["metrics_filled"] += int(enrichMetrics(article, cache, normalized))
