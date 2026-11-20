@@ -19,14 +19,15 @@
     "39806659",
     "40069719",
     "40762789",
+    "41947805",
     "42137634",
     "42717567",
     "CN-MG-2026-BIOTARGET"
   ],
-  "last_refreshed_at": "2026-11-20 23:39:46",
+  "last_refreshed_at": "2026-11-20 23:43:44",
   "last_new_pmids": [
-    "CN-MG-2026-BIOTARGET"
+    "41947805"
   ],
-  "applied_deltas": 1,
-  "reviewed_quotes": 6
+  "applied_deltas": 0,
+  "reviewed_quotes": 0
 }

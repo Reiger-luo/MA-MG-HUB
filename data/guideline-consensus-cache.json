@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "source": "MG-core guideline/consensus records (PubMed + 中文期刊人工补录，合成 id 记录以 id_type 标注)",
+  "source": "MG-core PubMed guideline/consensus records outside evidence literature",
   "records": [
     {
       "source_type": "chinese_journal_consensus",
@@ -673,6 +673,144 @@
       ],
       "mg_core": true,
       "mg_core_reason": "repeated_mg_core_mentions",
+      "signal_strength": "弱"
+    },
+    {
+      "pmid": "41947805",
+      "title": "A Delphi consensus on integrating novel therapies into the management of generalized myasthenia gravis.",
+      "abstract": "BACKGROUND: The treatment landscape for myasthenia gravis (MG) has evolved with the introduction of novel therapies. An international consensus on patient selection criteria and optimal time to initiate these therapies could improve clinical outcomes and reduce delays for likely beneficiaries.\nOBJECTIVE: This Delphi consensus was undertaken by MG specialists from selected European countries to explore gaps in the application of national guidelines and elicit expert opinion in practice.\nDESIGN: A mixed-method approach was used; qualitative and quantitative study phases were combined to explore key concepts and reach consensus.\nMETHODS: The qualitative first phase involved seven healthcare professionals (HCPs) and two patient advocacy group representatives who participated in idea generation. Findings from this phase supported the development of a Delphi survey, which was completed by 16 HCPs in two rounds. This constituted the quantitative second phase of the study. Consensus was defined as ⩾70% agreement or disagreement on a 6-point Likert scale.\nRESULTS: In total, 65% of statements achieved consensus. Key findings include-HCPs highly regard international guidelines but find critical discrepancies between the \"ideal\" scenario and current clinical practices. Consensus was achieved on the importance of incorporating patient-related quality of life in decision-making, despite limited current methods. Consensus was obtained on steroid tapering and treatment-switch criteria based on steroid dose and duration. Consensus was also achieved on suitable patient profiles, including those with persistent symptoms, severe side effects, or needing rapid control.\nCONCLUSION: This study recognized that guidelines offer valuable direction but do not replace individualized treatment decisions. This study identified the areas of alignment and opportunities to refine patient selection criteria and treatment-switch categories, particularly to integrate novel therapy use in MG management, highlighting a path to a more patient-centric approach.",
+      "authors": [
+        "Vissing John",
+        "Zimprich Fritz",
+        "Atula Sari",
+        "Chan Andrew",
+        "Andersen Henning",
+        "Topakian Raffi",
+        "Tannemaat Martijn R",
+        "Weber Konrad P",
+        "Cetin Hakan",
+        "Neuwirth Christoph",
+        "Kuusisto Hanna",
+        "Loescher Wolfgang N"
+      ],
+      "journal": "Therapeutic advances in neurological disorders",
+      "entry_date": "2026/04/08 04:23",
+      "pub_date": "2026",
+      "doi": "",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41947805/",
+      "pub_types": [
+        "Journal Article"
+      ],
+      "affiliations": [
+        "Copenhagen Neuromuscular Center, Rigshospitalet, University of Copenhagen, Copenhagen DK-1165, Denmark.",
+        "Department of Neurology, Medical University of Vienna, Vienna, Austria.",
+        "HUS Neurocenter, University of Helsinki, Helsinki, Finland.",
+        "Department of Neurology, Inselspital, Bern University Hospital, University of Bern, Bern, Switzerland.",
+        "Department of Neurology, Aarhus University, Aarhus, Denmark.",
+        "Department of Neurology, Academic Teaching Hospital Wels-Grieskirchen, Wels, Austria.",
+        "Clinical Research Institute for Neurosciences, Johannes Kepler University Linz, Linz, Austria.",
+        "Department of Neurology, Leiden University Medical Center, Leiden, Netherlands.",
+        "Departments of Neurology and Ophthalmology, University Hospital Zurich, Zurich, Switzerland.",
+        "Neuromuscular Diseases Unit/ALS Clinic, HOCH, Cantonal Hospital St Gallen, St Gallen, Switzerland.",
+        "Neurocenter, Tampere University Hospital, Tampere, Finland.",
+        "Department of Neurology, Medical University of Innsbruck, Innsbruck, Austria."
+      ],
+      "china_related": false,
+      "study_types": [
+        "Guideline/Consensus"
+      ],
+      "evidence_level": null,
+      "journal_if": 4.0,
+      "journal_quartile": "2区",
+      "author_affiliations": [
+        {
+          "position": 1,
+          "name": "Vissing John",
+          "affiliations": [
+            "Copenhagen Neuromuscular Center, Rigshospitalet, University of Copenhagen, Copenhagen DK-1165, Denmark."
+          ]
+        },
+        {
+          "position": 2,
+          "name": "Zimprich Fritz",
+          "affiliations": [
+            "Department of Neurology, Medical University of Vienna, Vienna, Austria."
+          ]
+        },
+        {
+          "position": 3,
+          "name": "Atula Sari",
+          "affiliations": [
+            "HUS Neurocenter, University of Helsinki, Helsinki, Finland."
+          ]
+        },
+        {
+          "position": 4,
+          "name": "Chan Andrew",
+          "affiliations": [
+            "Department of Neurology, Inselspital, Bern University Hospital, University of Bern, Bern, Switzerland."
+          ]
+        },
+        {
+          "position": 5,
+          "name": "Andersen Henning",
+          "affiliations": [
+            "Department of Neurology, Aarhus University, Aarhus, Denmark."
+          ]
+        },
+        {
+          "position": 6,
+          "name": "Topakian Raffi",
+          "affiliations": [
+            "Department of Neurology, Academic Teaching Hospital Wels-Grieskirchen, Wels, Austria.",
+            "Clinical Research Institute for Neurosciences, Johannes Kepler University Linz, Linz, Austria."
+          ]
+        },
+        {
+          "position": 7,
+          "name": "Tannemaat Martijn R",
+          "affiliations": [
+            "Department of Neurology, Leiden University Medical Center, Leiden, Netherlands."
+          ]
+        },
+        {
+          "position": 8,
+          "name": "Weber Konrad P",
+          "affiliations": [
+            "Departments of Neurology and Ophthalmology, University Hospital Zurich, Zurich, Switzerland."
+          ]
+        },
+        {
+          "position": 9,
+          "name": "Cetin Hakan",
+          "affiliations": [
+            "Department of Neurology, Medical University of Vienna, Vienna, Austria."
+          ]
+        },
+        {
+          "position": 10,
+          "name": "Neuwirth Christoph",
+          "affiliations": [
+            "Neuromuscular Diseases Unit/ALS Clinic, HOCH, Cantonal Hospital St Gallen, St Gallen, Switzerland."
+          ]
+        },
+        {
+          "position": 11,
+          "name": "Kuusisto Hanna",
+          "affiliations": [
+            "Neurocenter, Tampere University Hospital, Tampere, Finland."
+          ]
+        },
+        {
+          "position": 12,
+          "name": "Loescher Wolfgang N",
+          "affiliations": [
+            "Department of Neurology, Medical University of Innsbruck, Innsbruck, Austria."
+          ]
+        }
+      ],
+      "mg_core": true,
+      "mg_core_reason": "explicit_mg_title",
       "signal_strength": "弱"
     },
     {
