@@ -91,6 +91,29 @@ def test_major_events_css_tokens_present():
     assert ".major-event-strength-medium" in css
 
 
+def test_major_events_layout_wraps_long_titles():
+    """时间线采用双列网格：元信息固定列、标题与来源在自适应列内换行。"""
+    css = (PROJECT / "assets" / "main.css").read_text(encoding="utf-8")
+    block = css[css.index(".major-events-list"):css.index("/* 诊疗现状章节与临床问题库 */")]
+    assert ".major-event-item" in block
+    assert "grid-template-columns: 8.5rem minmax(0, 1fr)" in block
+    assert ".major-event-meta" in block and ".major-event-body" in block
+    assert "overflow-wrap: anywhere" in block
+    assert "@media (max-width: 760px)" in block
+    # 来源不得再靠 margin-left:auto 把标题挤出对齐列。
+    assert "margin-left: auto" not in block
+
+    js = (PROJECT / "assets" / "literature.js").read_text(encoding="utf-8")
+    assert 'class="major-event-meta"' in js
+    assert 'class="major-event-body"' in js
+    meta_body = js.index('class="major-event-meta"')
+    tail = js[meta_body:meta_body + 600]
+    assert 'class="major-event-title"' in tail
+    assert 'class="major-event-source"' in tail
+    # 标题与来源都在 body 内，且标题在来源之前。
+    assert tail.index('class="major-event-title"') < tail.index('class="major-event-source"')
+
+
 def test_global_regulatory_events_merge_without_mislabeling(tmp_path):
     """境外 FDA/EU 获批并入监管频道，逐条标注审批机构，不污染 NMPA 数据文件。"""
     import json

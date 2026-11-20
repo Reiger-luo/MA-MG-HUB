@@ -15,7 +15,7 @@
   let chinaEvidenceChart = null;
   let chinaQuartileChart = null;
   // 中国情报交叉筛选状态与文章级索引（由 data/china-intelligence.js 提供）
-  var chinaFilterState = { month: '', evidence: '', quartile: '' };
+  var chinaFilterState = { month: [], evidence: [], quartile: [] };
   var chinaFilterIndex = [];
   var chinaViewCache = { articles: [], payload: null };
   let communityTaxonomy = window.MG_COMMUNITY_TAXONOMY || { communities: [] };
@@ -1534,12 +1534,13 @@
     return match ? match[1] + '区' : '';
   }
 
+  // 同维度多选为并集（命中任一即可），跨维度为交集；
   // skipDim 让被点选维度自身不过滤自己，保证其他柱形仍可继续点选。
   function chinaMatchesFilter(record, skipDim) {
     var state = chinaFilterState;
-    if (skipDim !== 'month' && state.month && record.month !== state.month) return false;
-    if (skipDim !== 'evidence' && state.evidence && record.evidence_level !== state.evidence) return false;
-    if (skipDim !== 'quartile' && state.quartile && chinaNormalizeQuartile(record.journal_quartile) !== state.quartile) return false;
+    if (skipDim !== 'month' && state.month.length && state.month.indexOf(record.month) < 0) return false;
+    if (skipDim !== 'evidence' && state.evidence.length && state.evidence.indexOf(record.evidence_level) < 0) return false;
+    if (skipDim !== 'quartile' && state.quartile.length && state.quartile.indexOf(chinaNormalizeQuartile(record.journal_quartile)) < 0) return false;
     return true;
   }
 
@@ -1547,7 +1548,7 @@
     var data = [];
     for (var i = 0; i < order.length; i++) {
       var item = { value: counts[order[i]] || 0 };
-      if (selected === order[i]) {
+      if (selected.indexOf(order[i]) >= 0) {
         item.itemStyle = { color: activeColor, borderColor: '#1e40af', borderWidth: 1.5 };
       }
       data.push(item);
@@ -1610,7 +1611,10 @@
     var labels = { month: '月份', evidence: '证据等级', quartile: '分区' };
     var chips = [];
     for (var dim in labels) {
-      if (chinaFilterState[dim]) chips.push({ dim: dim, label: labels[dim], value: chinaFilterState[dim] });
+      var values = chinaFilterState[dim];
+      for (var v = 0; v < values.length; v++) {
+        chips.push({ dim: dim, label: labels[dim], value: values[v] });
+      }
     }
     if (!chips.length) {
       el.chinaFilterBar.hidden = true;
@@ -1619,7 +1623,8 @@
     el.chinaFilterBar.hidden = false;
     var html = '';
     for (var i = 0; i < chips.length; i++) {
-      html += '<button class="china-filter-chip" type="button" data-filter-dim="' + chips[i].dim + '">' +
+      html += '<button class="china-filter-chip" type="button" data-filter-dim="' + chips[i].dim +
+        '" data-filter-value="' + escapeHtml(chips[i].value) + '">' +
         chips[i].label + '：' + escapeHtml(chips[i].value) + ' <span aria-hidden="true">×</span></button>';
     }
     el.chinaFilterChips.innerHTML = html;
@@ -1627,7 +1632,9 @@
     var buttons = el.chinaFilterChips.querySelectorAll('.china-filter-chip');
     for (var b = 0; b < buttons.length; b++) {
       buttons[b].addEventListener('click', function() {
-        chinaFilterState[this.getAttribute('data-filter-dim')] = '';
+        var values = chinaFilterState[this.getAttribute('data-filter-dim')];
+        var index = values.indexOf(this.getAttribute('data-filter-value'));
+        if (index >= 0) values.splice(index, 1);
         refreshChinaViews();
       });
     }
@@ -1638,8 +1645,11 @@
   }
 
   function toggleChinaFilter(dim, value) {
-    if (!value) return;
-    chinaFilterState[dim] = chinaFilterState[dim] === value ? '' : value;
+    if (!value || !chinaFilterState[dim]) return;
+    var selected = chinaFilterState[dim];
+    var index = selected.indexOf(value);
+    if (index >= 0) selected.splice(index, 1);
+    else selected.push(value);
     refreshChinaViews();
   }
 
@@ -1843,7 +1853,7 @@
       el.chinaOnly.addEventListener('change', applyFilters);
       if (el.chinaFilterClear) {
         el.chinaFilterClear.addEventListener('click', function() {
-          chinaFilterState = { month: '', evidence: '', quartile: '' };
+          chinaFilterState = { month: [], evidence: [], quartile: [] };
           refreshChinaViews();
         });
       }
@@ -2248,12 +2258,17 @@
       var strengthBadge = event.strength
         ? '<span class="major-event-strength major-event-strength-' + (event.strength === '强' ? 'strong' : 'medium') + '">' + escapeHtml(event.strength) + '</span>'
         : '';
+      // 左列放类型/强度/日期，右列放标题与来源；长题名在右列内换行，来源另起一行对齐。
       return '<article class="major-event-item major-event-' + escapeHtml(eventClassToken(event.type)) + '">' +
-        '<span class="major-event-type">' + escapeHtml(event.type) + '</span>' +
-        strengthBadge +
-        '<span class="major-event-date">' + escapeHtml(event.date || '日期待核') + '</span>' +
-        '<strong class="major-event-title">' + titleHtml + '</strong>' +
-        (event.source ? '<span class="major-event-source">' + escapeHtml(event.source) + '</span>' : '') +
+        '<div class="major-event-meta">' +
+          '<span class="major-event-type">' + escapeHtml(event.type) + '</span>' +
+          strengthBadge +
+          '<span class="major-event-date">' + escapeHtml(event.date || '日期待核') + '</span>' +
+        '</div>' +
+        '<div class="major-event-body">' +
+          '<strong class="major-event-title">' + titleHtml + '</strong>' +
+          (event.source ? '<span class="major-event-source">' + escapeHtml(event.source) + '</span>' : '') +
+        '</div>' +
       '</article>';
     }).join('');
   }

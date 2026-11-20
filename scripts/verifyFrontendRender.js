@@ -122,6 +122,22 @@ try {
   const pubCount = textOf(document.querySelectorAll('#majorEventsList .major-event-type'))
     .filter((type) => type === 'II/III期文献').length;
   check('重点药物文献最多 4 席', pubCount <= 4, pubCount);
+
+  // 排版：每条事件分为左列元信息与右列正文，长题名在正文内换行，来源紧跟题名。
+  const structured = Array.from(items).every((item) =>
+    item.querySelector('.major-event-meta') && item.querySelector('.major-event-body'));
+  check('每条事件含 meta/body 双列结构', structured, items.length);
+  const titleInBody = Array.from(items).every((item) => {
+    const body = item.querySelector('.major-event-body');
+    return body && body.querySelector('.major-event-title');
+  });
+  check('标题位于右列正文内', titleInBody, items.length);
+  const sourceAfterTitle = Array.from(items).every((item) => {
+    const title = item.querySelector('.major-event-title');
+    const source = item.querySelector('.major-event-source');
+    return !source || (title && title.nextElementSibling === source);
+  });
+  check('来源信息紧跟标题之后', sourceAfterTitle, items.length);
 } catch (error) {
   check('情报中心页面运行时异常', false, String(error));
 }
@@ -206,6 +222,44 @@ try {
     check('独立点击证据等级即筛选期刊', topCount(0) < journal0, journal0 + ' -> ' + topCount(0));
     check('独立点击证据等级即筛选机构', topCount(1) < institution0, institution0 + ' -> ' + topCount(1));
     evidence.handlers.click({ seriesType: 'bar', dataIndex: 3 });
+  }
+
+  // 同维度多选：并集而非替换，跨维度仍为交集。
+  if (monthly && monthly.handlers && monthly.handlers.click) {
+    const labels = monthly.option.xAxis.data;
+    const idxOf = (value) => labels.findIndex((label) => String(label).replace('\n', '-') === value);
+    monthly.handlers.click({ seriesType: 'bar', dataIndex: idxOf('2026-03') });
+    const singleHit = hitCount();
+    const singleTop = topCount(0);
+    monthly.handlers.click({ seriesType: 'bar', dataIndex: idxOf('2026-04') });
+    check('月份多选保留两个 chip', chipTexts().length === 2, chipTexts().join(' / '));
+    check('月份多选命中为并集 33 篇', hitCount() === 33, singleHit + ' + 15 -> ' + hitCount());
+    check('月份多选期刊榜按并集重算', topCount(0) > singleTop, singleTop + ' -> ' + topCount(0));
+    const marchChip = Array.from(chinaDoc.querySelectorAll('#chinaFilterBar .china-filter-chip'))
+      .find((node) => node.textContent.indexOf('2026-03') >= 0);
+    if (marchChip) marchChip.click();
+    check('单独移除一个 chip 仅保留另一个', chipTexts().length === 1 && chipTexts()[0].indexOf('2026-04') >= 0,
+      chipTexts().join(' / '));
+    check('移除后命中回到单月 15 篇', hitCount() === 15, hitCount());
+    monthly.handlers.click({ seriesType: 'bar', dataIndex: idxOf('2026-04') });
+    check('取消最后一个月恢复无筛选', filterBar.hidden === true, chipTexts().join(' / '));
+  }
+
+  if (evidence && evidence.handlers && evidence.handlers.click) {
+    evidence.handlers.click({ seriesType: 'bar', dataIndex: 3 });
+    const ivHit = hitCount();
+    evidence.handlers.click({ seriesType: 'bar', dataIndex: 2 });
+    check('证据等级多选保留两个 chip', chipTexts().length === 2, chipTexts().join(' / '));
+    check('证据等级多选命中为并集 129 篇', hitCount() === 129, ivHit + ' -> ' + hitCount());
+    chinaDoc.querySelector('#chinaFilterClear').click();
+  }
+
+  if (quartile && quartile.handlers && quartile.handlers.click) {
+    quartile.handlers.click({ seriesType: 'bar', dataIndex: 1 });
+    quartile.handlers.click({ seriesType: 'bar', dataIndex: 2 });
+    check('分区多选保留两个 chip', chipTexts().length === 2, chipTexts().join(' / '));
+    check('分区多选命中为并集 164 篇', hitCount() === 164, hitCount());
+    chinaDoc.querySelector('#chinaFilterClear').click();
   }
 } catch (error) {
   check('中国情报联动运行时异常', false, String(error));
