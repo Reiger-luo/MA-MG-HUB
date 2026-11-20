@@ -91,36 +91,38 @@ def test_major_events_css_tokens_present():
     assert ".major-event-strength-medium" in css
 
 
-def test_major_events_layout_grouped_masonry():
-    """按类型并列模块，每个模块内部 CSS 多列瀑布流，卡片自身只有标题+元信息两行。"""
+def test_major_events_layout_single_masonry():
+    """全部事件按降序放入单一 CSS 多列瀑布流，卡片两行且自带类型 chip。"""
     css = (PROJECT / "assets" / "main.css").read_text(encoding="utf-8")
     block = css[css.index(".major-events-list"):css.index("/* 诊疗现状章节与临床问题库 */")]
-    # 模块与瀑布流结构存在，卡片不被拆断。
-    assert ".major-event-group" in block and ".major-event-group-head" in block
+    # 单一瀑布流容器，卡片不被拆断；不再有类型模块结构。
     assert ".major-event-masonry" in block and "column-width" in block
-    assert "break-inside: avoid" in block
-    assert ".major-event-item" in block
-    # 卡片两行：标题可换行，元信息含显式来源标签；不再有整行的 type/body/虚线分隔。
+    assert "break-inside: avoid" in block and ".major-event-item" in block
+    assert ".major-event-group" not in block
+    # 卡片两行：标题可换行，元信息含类型 chip 与来源标签。
     assert ".major-event-title" in block and "overflow-wrap: anywhere" in block
-    assert ".major-event-source-label" in block
-    assert ".major-event-type" not in block
+    assert ".major-event-type" in block and ".major-event-source-label" in block
     assert 'margin-left: auto' not in block
-    # 按类型着色的语义类存在。
+    # 卡片（非模块）按类型着色的语义类存在。
     for key in ("regulatory", "guideline", "publication", "trial", "signal"):
         assert ".major-event--" + key in block
 
     js = (PROJECT / "assets" / "literature.js").read_text(encoding="utf-8")
-    assert "MAJOR_EVENT_TYPE_MODULES" in js
-    assert "MAJOR_EVENT_PER_TYPE_LIMIT = 8" in js
+    assert "MAJOR_EVENT_TYPE_KEYS" in js
+    assert "MAJOR_EVENT_TYPE_MODULES" not in js
+    assert "MAJOR_EVENT_PER_TYPE_LIMIT" not in js
     assert "function renderMajorEventCard" in js
-    assert 'class="major-event-group major-event--' in js
-    assert 'class="major-event-masonry"' in js
+    assert "'<div class=\"major-event-masonry\">'" in js
+    assert 'class="major-event-group' not in js
     assert 'class="major-event-body"' not in js
-    assert 'class="major-event-type"' not in js
-    # 卡片顺序：标题在前，元信息（含来源）在后。
+    # 收集阶段为全局降序，不按类型切分或截断。
+    collect = js[js.index("function collectMajorEvents"):js.index("function renderMajorEventCard")]
+    assert "events.sort" in collect and "MAJOR_EVENT_TYPE_MODULES" not in collect
+    # 卡片带类型 chip，顺序为标题 → 元信息（类型/来源）。
     card = js[js.index("function renderMajorEventCard"):js.index("function renderMajorEvents()")]
+    assert 'class="major-event-item major-event--' in card
     assert card.index("major-event-title") < card.index("major-event-meta")
-    assert card.index("major-event-meta") < card.index("major-event-source-label")
+    assert card.index("major-event-type") < card.index("major-event-source-label")
 
 
 def test_global_regulatory_events_merge_without_mislabeling(tmp_path):

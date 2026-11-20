@@ -2169,16 +2169,15 @@
     return found;
   }
 
-  // 领域重大事件按类型分模块；key 用于语义类名，避免用中文做 CSS 选择器。
-  var MAJOR_EVENT_TYPE_MODULES = [
-    { type: '获批/监管', key: 'regulatory' },
-    { type: '指南/共识', key: 'guideline' },
-    { type: 'II/III期文献', key: 'publication' },
-    { type: 'III期', key: 'trial' },
-    { type: '试验信号', key: 'signal' }
-  ];
-  // 每个模块最多 8 条，保证瀑布流有足够卡片又不淹没其他类型。
-  var MAJOR_EVENT_PER_TYPE_LIMIT = 8;
+  // 事件类型 → 语义类名，用于卡片色条，避免用中文做 CSS 选择器。
+  // 时间线为单一全局降序瀑布流，不按类型切分模块；类型仍以 chip 标在每张卡片上。
+  var MAJOR_EVENT_TYPE_KEYS = {
+    '获批/监管': 'regulatory',
+    '指南/共识': 'guideline',
+    'II/III期文献': 'publication',
+    'III期': 'trial',
+    '试验信号': 'signal'
+  };
 
   function collectMajorEvents() {
     var sourceSignals = window.MG_SOURCE_SIGNALS || { channels: [] };
@@ -2240,27 +2239,23 @@
         source: trial.registry || trial.source || ''
       });
     });
+    // 单一全局降序事件流，交由 CSS 多列渲染成瀑布流；门控（文献≤4、强中信号、
+    // 近12月III期）已在上方采集阶段执行，这里不再按类型截断。
     events.sort(function (a, b) { return String(b.date).localeCompare(String(a.date)); });
-    // 按类型分组，每组独立取最近若干条；返回 {key,type,items,hiddenCount} 模块数组。
-    return MAJOR_EVENT_TYPE_MODULES.map(function (module) {
-      var matched = events.filter(function (event) { return event.type === module.type; });
-      return {
-        key: module.key,
-        type: module.type,
-        items: matched.slice(0, MAJOR_EVENT_PER_TYPE_LIMIT),
-        hiddenCount: Math.max(0, matched.length - MAJOR_EVENT_PER_TYPE_LIMIT)
-      };
-    }).filter(function (module) { return module.items.length > 0; });
+    return events;
   }
 
   function renderMajorEventCard(event) {
     var titleHtml = event.url
       ? '<a href="' + escapeHref(event.url) + '" target="_blank" rel="noopener">' + escapeHtml(event.title) + '</a>'
       : escapeHtml(event.title);
-    // 卡片自身只保留两行：标题（可换行）+ 元信息行（强度/日期/来源）。
-    return '<article class="major-event-item">' +
+    var typeKey = MAJOR_EVENT_TYPE_KEYS[event.type] || 'other';
+    // 卡片保持两行：标题（可换行）+ 元信息行（类型/强度/日期/来源）。
+    // 无模块头，类型以 chip 与左侧色条标在卡片自身，避免丢失分类信息。
+    return '<article class="major-event-item major-event--' + typeKey + '">' +
       '<strong class="major-event-title">' + titleHtml + '</strong>' +
       '<div class="major-event-meta">' +
+        '<span class="major-event-type">' + escapeHtml(event.type) + '</span>' +
         (event.strength
           ? '<span class="major-event-strength major-event-strength-' + (event.strength === '强' ? 'strong' : 'medium') + '">' + escapeHtml(event.strength) + '</span>'
           : '') +
@@ -2276,31 +2271,19 @@
     var target = document.getElementById('majorEventsList');
     if (!target) return;
     var sourceSignals = window.MG_SOURCE_SIGNALS || {};
-    var modules = collectMajorEvents();
-    var total = modules.reduce(function (sum, module) { return sum + module.items.length; }, 0);
+    var events = collectMajorEvents();
     var badge = document.getElementById('eventsBadge');
     var meta = document.getElementById('majorEventsMeta');
-    var summary = total ? modules.length + ' 类 · ' + total + ' 条' : '暂无记录';
+    var summary = events.length ? '最近 ' + events.length + ' 条' : '暂无记录';
     if (badge) badge.textContent = (sourceSignals.generated_at || '—') + ' · ' + summary;
     if (meta) meta.textContent = summary;
-    if (!total) {
+    if (!events.length) {
       target.innerHTML = '<div class="empty-state small"><h3>近期暂无重大事件记录</h3><p>新获批、新指南共识、重点药物 II/III 期文献、新 III 期启动与周更强/中试验信号将随周更自动进入时间线。</p></div>';
       return;
     }
-    target.innerHTML = modules.map(function (module) {
-      var more = module.hiddenCount
-        ? '<span class="major-event-group-more">另有 ' + module.hiddenCount + ' 条略早记录</span>'
-        : '';
-      return '<section class="major-event-group major-event--' + module.key + '">' +
-        '<header class="major-event-group-head">' +
-          '<h3 class="major-event-group-title">' + escapeHtml(module.type) + '</h3>' +
-          '<span class="major-event-group-count">' + module.items.length + ' 条</span>' + more +
-        '</header>' +
-        '<div class="major-event-masonry">' +
-          module.items.map(renderMajorEventCard).join('') +
-        '</div>' +
-      '</section>';
-    }).join('');
+    target.innerHTML = '<div class="major-event-masonry">' +
+      events.map(renderMajorEventCard).join('') +
+    '</div>';
   }
 
   function loadMajorEventsModule() {

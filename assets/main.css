@@ -4589,40 +4589,24 @@ body.pmid-modal-open { overflow: hidden; }
 }
 .kg-citation-export .citation-export-row .btn { flex-shrink: 0; }
 
-/* 领域重大事件：按类型并列模块，每个模块内部独立瀑布流。
-   卡片自身保持两行（标题 + 元信息），不再让单条信息独占整行堆叠。 */
-.major-events-list { display: flex; flex-direction: column; gap: 0.8rem; }
-.major-event-group {
-  padding: 0.7rem 0.8rem 0.35rem;
-  border: 1px solid var(--bg3); border-radius: 8px;
-  border-left: 3px solid var(--bg3); background: var(--bg2);
+/* 领域重大事件：全部事件按时间降序的单一瀑布流。
+   卡片保持两行（标题 + 元信息），类型以 chip 与左侧色条标在卡片自身。 */
+.major-events-list { display: block; }
+/* 瀑布流：CSS 多列随宽度自动增减列数，卡片不被拆断 */
+.major-event-masonry { column-width: 18rem; column-gap: 0.6rem; }
+.major-event-item {
+  display: inline-block; width: 100%;
+  break-inside: avoid; page-break-inside: avoid;
+  margin: 0 0 0.55rem; padding: 0.5rem 0.6rem;
+  border: 1px solid var(--bg3); border-left: 3px solid var(--bg3);
+  border-radius: 6px; background: var(--bg);
 }
-/* 模块标题左侧色条按类型区分 */
+/* 卡片左侧色条按类型区分，与类型 chip 双重提示 */
 .major-event--regulatory { border-left-color: #2563eb; }
 .major-event--guideline { border-left-color: #7c3aed; }
 .major-event--publication { border-left-color: #0d9488; }
 .major-event--trial { border-left-color: #0891b2; }
 .major-event--signal { border-left-color: #d97706; }
-.major-event-group-head {
-  display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.5rem;
-  margin-bottom: 0.55rem;
-}
-.major-event-group-title { font-size: 0.88rem; font-weight: 600; margin: 0; }
-.major-event-group-count {
-  font-size: 0.72rem; font-weight: 600; color: var(--fg2);
-  padding: 0.05rem 0.4rem; border-radius: 999px; background: var(--bg);
-}
-.major-event-group-more { font-size: 0.7rem; color: var(--fg3); }
-/* 瀑布流：CSS 多列随宽度自动增减列数，卡片不被拆断 */
-.major-event-masonry {
-  column-width: 18rem; column-gap: 0.6rem;
-}
-.major-event-item {
-  display: inline-block; width: 100%;
-  break-inside: avoid; page-break-inside: avoid;
-  margin: 0 0 0.55rem; padding: 0.5rem 0.6rem;
-  border: 1px solid var(--bg3); border-radius: 6px; background: var(--bg);
-}
 .major-event-title {
   display: block; font-size: 0.82rem; font-weight: 500; line-height: 1.45;
   min-width: 0; overflow-wrap: anywhere; word-break: break-word;
@@ -4631,6 +4615,11 @@ body.pmid-modal-open { overflow: hidden; }
 .major-event-meta {
   display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.2rem 0.4rem;
   margin-top: 0.35rem; min-width: 0;
+}
+.major-event-type {
+  font-size: 0.68rem; font-weight: 600; flex-shrink: 0;
+  padding: 0.05rem 0.34rem; border-radius: 4px;
+  background: var(--bg2); border: 1px solid var(--bg3);
 }
 .major-event-strength {
   font-size: 0.68rem; font-weight: 600; flex-shrink: 0;
