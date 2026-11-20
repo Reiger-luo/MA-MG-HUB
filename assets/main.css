@@ -4589,66 +4589,64 @@ body.pmid-modal-open { overflow: hidden; }
 }
 .kg-citation-export .citation-export-row .btn { flex-shrink: 0; }
 
-/* 领域重大事件时间线（情报中心「领域重大事件」标签）
-   信息分三层：扫描层（类型/强度/日期）→ 内容层（标题独占整行）→ 溯源层（带来源标签）。
-   标题与来源分属独立区块，长题名在整行宽度内自动换行，不再挤压来源。 */
-.major-events-list { display: flex; flex-direction: column; gap: 0.5rem; }
-.major-event-item {
-  display: flex; flex-direction: column; gap: 0.4rem;
-  padding: 0.6rem 0.8rem; border: 1px solid var(--bg3);
-  border-left: 3px solid var(--bg3);
-  border-radius: 8px; background: var(--bg);
+/* 领域重大事件：按类型并列模块，每个模块内部独立瀑布流。
+   卡片自身保持两行（标题 + 元信息），不再让单条信息独占整行堆叠。 */
+.major-events-list { display: flex; flex-direction: column; gap: 0.8rem; }
+.major-event-group {
+  padding: 0.7rem 0.8rem 0.35rem;
+  border: 1px solid var(--bg3); border-radius: 8px;
+  border-left: 3px solid var(--bg3); background: var(--bg2);
 }
-/* 按事件类型着色左侧细条，便于快速扫描 */
+/* 模块标题左侧色条按类型区分 */
 .major-event--regulatory { border-left-color: #2563eb; }
 .major-event--guideline { border-left-color: #7c3aed; }
 .major-event--publication { border-left-color: #0d9488; }
 .major-event--trial { border-left-color: #0891b2; }
 .major-event--signal { border-left-color: #d97706; }
-
-/* 扫描层：类型与强度左对齐，日期右对齐形成整齐的时间列 */
-.major-event-meta {
-  display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem;
-  min-width: 0;
+.major-event-group-head {
+  display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.5rem;
+  margin-bottom: 0.55rem;
 }
-.major-event-type {
-  font-size: 0.72rem; font-weight: 600; flex-shrink: 0;
-  padding: 0.1rem 0.4rem; border-radius: 4px;
-  background: var(--bg2); border: 1px solid var(--bg3);
+.major-event-group-title { font-size: 0.88rem; font-weight: 600; margin: 0; }
+.major-event-group-count {
+  font-size: 0.72rem; font-weight: 600; color: var(--fg2);
+  padding: 0.05rem 0.4rem; border-radius: 999px; background: var(--bg);
+}
+.major-event-group-more { font-size: 0.7rem; color: var(--fg3); }
+/* 瀑布流：CSS 多列随宽度自动增减列数，卡片不被拆断 */
+.major-event-masonry {
+  column-width: 18rem; column-gap: 0.6rem;
+}
+.major-event-item {
+  display: inline-block; width: 100%;
+  break-inside: avoid; page-break-inside: avoid;
+  margin: 0 0 0.55rem; padding: 0.5rem 0.6rem;
+  border: 1px solid var(--bg3); border-radius: 6px; background: var(--bg);
+}
+.major-event-title {
+  display: block; font-size: 0.82rem; font-weight: 500; line-height: 1.45;
+  min-width: 0; overflow-wrap: anywhere; word-break: break-word;
+}
+.major-event-title a { color: var(--accent); }
+.major-event-meta {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.2rem 0.4rem;
+  margin-top: 0.35rem; min-width: 0;
 }
 .major-event-strength {
-  font-size: 0.7rem; font-weight: 600; flex-shrink: 0;
-  padding: 0.1rem 0.38rem; border-radius: 999px;
-  border: 1px solid var(--bg3);
+  font-size: 0.68rem; font-weight: 600; flex-shrink: 0;
+  padding: 0.05rem 0.34rem; border-radius: 999px; border: 1px solid var(--bg3);
 }
 .major-event-strength-strong { background: rgba(220, 38, 38, 0.08); border-color: rgba(220, 38, 38, 0.25); color: #b91c1c; }
 .major-event-strength-medium { background: rgba(217, 119, 6, 0.08); border-color: rgba(217, 119, 6, 0.25); color: #b45309; }
 .major-event-date {
-  margin-left: auto; font-size: 0.74rem; color: var(--fg3); flex-shrink: 0;
+  font-size: 0.72rem; color: var(--fg3); flex-shrink: 0;
   font-variant-numeric: tabular-nums;
 }
-
-/* 内容层：标题独占整行，冗长题名在此自动换行 */
-.major-event-title {
-  font-size: 0.88rem; font-weight: 500; line-height: 1.5;
-  min-width: 0; overflow-wrap: anywhere; word-break: break-word;
-}
-.major-event-title a { color: var(--accent); }
-
-/* 溯源层：显式的「来源」标签与来源正文，虚线分隔，与标题彻底分开 */
-.major-event-source {
-  display: flex; align-items: baseline; gap: 0.45rem;
-  margin-top: 0.05rem; padding-top: 0.4rem;
-  border-top: 1px dashed var(--bg3); min-width: 0;
-}
+.major-event-source { font-size: 0.71rem; color: var(--fg3); min-width: 0; line-height: 1.35; }
 .major-event-source-label {
-  flex-shrink: 0; font-size: 0.68rem; font-weight: 600; color: var(--fg2);
-  background: var(--bg2); border: 1px solid var(--bg3); border-radius: 4px;
-  padding: 0.05rem 0.35rem;
-}
-.major-event-source-text {
-  font-size: 0.72rem; color: var(--fg3); line-height: 1.4;
-  min-width: 0; overflow-wrap: anywhere;
+  font-size: 0.66rem; font-weight: 600; color: var(--fg2);
+  padding: 0.02rem 0.28rem; margin-right: 0.28rem;
+  border: 1px solid var(--bg3); border-radius: 3px; background: var(--bg2);
 }
 
 /* 诊疗现状章节与临床问题库 */

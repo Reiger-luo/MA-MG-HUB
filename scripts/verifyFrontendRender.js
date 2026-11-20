@@ -108,41 +108,43 @@ try {
   check('存在领域重大事件标签', Boolean(tab), tab ? tab.textContent.trim() : '未找到');
   if (tab) tab.click();
 
-  const items = document.querySelectorAll('#majorEventsList .major-event-item');
-  check('时间线 12 条', items.length === 12, items.length);
-
-  const types = Array.from(new Set(textOf(document.querySelectorAll('#majorEventsList .major-event-type'))));
+  const groups = document.querySelectorAll('#majorEventsList .major-event-group');
   const expected = ['获批/监管', '指南/共识', 'II/III期文献', 'III期', '试验信号'];
-  check('五类事件齐全', expected.every((type) => types.indexOf(type) >= 0), types.join(' / '));
+  const groupTitles = textOf(document.querySelectorAll('.major-event-group-title'));
+  check('五类模块并列齐全', expected.every((type) => groupTitles.indexOf(type) >= 0), groupTitles.join(' / '));
 
   const listText = document.querySelector('#majorEventsList')
     ? document.querySelector('#majorEventsList').textContent : '';
   check('德国共识进入时间线', listText.indexOf('Practical Guidance') >= 0, listText.slice(0, 120));
+  check('境外获批进入时间线', listText.indexOf('Livsayis') >= 0 && listText.indexOf('Klygefa') >= 0, '');
 
-  const pubCount = textOf(document.querySelectorAll('#majorEventsList .major-event-type'))
-    .filter((type) => type === 'II/III期文献').length;
-  check('重点药物文献最多 4 席', pubCount <= 4, pubCount);
+  const masonryCount = document.querySelectorAll('#majorEventsList .major-event-masonry').length;
+  check('每个模块自带瀑布流容器', masonryCount === groups.length, masonryCount + ' / ' + groups.length);
 
-  // 排版三层：扫描层 meta → 标题独占 → 溯源层带「来源」标签，标题与来源互不嵌套。
-  const layers = Array.from(items).every((item) =>
-    item.querySelector('.major-event-meta') && item.querySelector('.major-event-title'));
-  check('每条事件含元信息行与独立标题', layers, items.length);
-  const noBodyWrapper = Array.from(items).every((item) => !item.querySelector('.major-event-body'));
-  check('标题与来源不再共用 body 容器', noBodyWrapper, items.length);
-  const sourceSeparated = Array.from(items).every((item) => {
-    const title = item.querySelector('.major-event-title');
+  const perModule = Array.from(groups).map((group) => group.querySelectorAll('.major-event-item').length);
+  check('每模块卡片不超过 8 条', perModule.every((n) => n > 0 && n <= 8), perModule.join(' / '));
+  const pubGroup = Array.from(groups).find((g) =>
+    g.querySelector('.major-event-group-title').textContent.trim() === 'II/III期文献');
+  check('重点药物文献最多 4 席', pubGroup && pubGroup.querySelectorAll('.major-event-item').length <= 4,
+    pubGroup ? pubGroup.querySelectorAll('.major-event-item').length : '无模块');
+
+  const items = document.querySelectorAll('#majorEventsList .major-event-item');
+  const twoLineCards = Array.from(items).every((item) =>
+    item.children.length === 2 &&
+    item.children[0].classList.contains('major-event-title') &&
+    item.children[1].classList.contains('major-event-meta'));
+  check('卡片仅标题+元信息两行', twoLineCards, items.length);
+  const sourceLabeled = Array.from(items).every((item) => {
     const source = item.querySelector('.major-event-source');
     if (!source) return true;
     const label = source.querySelector('.major-event-source-label');
-    const text = source.querySelector('.major-event-source-text');
-    return title && title.nextElementSibling === source &&
-      label && label.textContent.trim() === '来源' && text && text.textContent.trim() &&
-      !source.querySelector('.major-event-title');
+    return label && label.textContent.trim() === '来源' && source.textContent.trim().length > 2 &&
+      !item.querySelector('.major-event-body') && !item.querySelector('.major-event-type');
   });
-  check('来源带来源标签且独立于标题', sourceSeparated, items.length);
-  const typeStripes = Array.from(items).every((item) =>
-    /major-event--(regulatory|guideline|publication|trial|signal)/.test(item.className));
-  check('事件类型带语义色条类', typeStripes, items.length);
+  check('来源带标签且不与标题混排', sourceLabeled, items.length);
+  const moduleStripes = Array.from(groups).every((group) =>
+    /major-event--(regulatory|guideline|publication|trial|signal)/.test(group.className));
+  check('模块带语义色条类', moduleStripes, groups.length);
 } catch (error) {
   check('情报中心页面运行时异常', false, String(error));
 }
