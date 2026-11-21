@@ -2169,6 +2169,8 @@
     return found;
   }
 
+  // 事件时间线页面最多展示 10 条（全局降序取前 10），瀑布流每行最多 2 列由 CSS 控制。
+  var MAJOR_EVENT_PAGE_LIMIT = 10;
   // 事件类型 → 语义类名，用于卡片色条，避免用中文做 CSS 选择器。
   // 时间线为单一全局降序瀑布流，不按类型切分模块；类型仍以 chip 标在每张卡片上。
   var MAJOR_EVENT_TYPE_KEYS = {
@@ -2242,7 +2244,7 @@
     // 单一全局降序事件流，交由 CSS 多列渲染成瀑布流；门控（文献≤4、强中信号、
     // 近12月III期）已在上方采集阶段执行，这里不再按类型截断。
     events.sort(function (a, b) { return String(b.date).localeCompare(String(a.date)); });
-    return events;
+    return events.slice(0, MAJOR_EVENT_PAGE_LIMIT);
   }
 
   function renderMajorEventCard(event) {

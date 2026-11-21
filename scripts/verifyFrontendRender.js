@@ -113,10 +113,11 @@ try {
   check('无按类型切分的模块', document.querySelectorAll('#majorEventsList .major-event-group').length === 0, '');
 
   const items = document.querySelectorAll('#majorEventsList .major-event-item');
-  check('全部事件进入时间线', items.length > 12, items.length);
+  check('页面限定 10 条', items.length === 10, items.length);
   const expected = ['获批/监管', '指南/共识', 'II/III期文献', 'III期', '试验信号'];
   const types = textOf(document.querySelectorAll('#majorEventsList .major-event-type'));
-  check('五类事件齐全', expected.every((type) => types.indexOf(type) >= 0), Array.from(new Set(types)).join(' / '));
+  const present = Array.from(new Set(types));
+  check('显示类型均在五类之内', present.length > 0 && present.every((type) => expected.indexOf(type) >= 0), present.join(' / '));
   const pubCount = types.filter((type) => type === 'II/III期文献').length;
   check('重点药物文献最多 4 席', pubCount <= 4, pubCount);
 

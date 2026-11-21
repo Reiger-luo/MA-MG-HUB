@@ -178,7 +178,8 @@ def test_weekly_pipeline_wires_guideline_sync_before_channel_builders():
 
 def test_guideline_link_targets_three_existing_views():
     literature_html = (PROJECT / "pages" / "literature.html").read_text(encoding="utf-8")
-    assert "II/III期重点药物文献" in literature_html
+    # 领域重大事件面板以稳定 id 标识；类型清单 kicker 已按排版要求移除。
+    assert 'id="tab-events"' in literature_html
     literature_js = (PROJECT / "assets" / "literature.js").read_text(encoding="utf-8")
     assert "keyDrugTrialPublications: 'II/III期文献'" in literature_js
 

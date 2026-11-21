@@ -4592,8 +4592,11 @@ body.pmid-modal-open { overflow: hidden; }
 /* 领域重大事件：全部事件按时间降序的单一瀑布流。
    卡片保持两行（标题 + 元信息），类型以 chip 与左侧色条标在卡片自身。 */
 .major-events-list { display: block; }
-/* 瀑布流：CSS 多列随宽度自动增减列数，卡片不被拆断 */
-.major-event-masonry { column-width: 18rem; column-gap: 0.6rem; }
+/* 瀑布流：固定最多 2 列（每行最多 2 条），窄屏降为 1 列；卡片不被拆断 */
+.major-event-masonry { column-count: 2; column-gap: 0.75rem; }
+@media (max-width: 640px) {
+  .major-event-masonry { column-count: 1; }
+}
 .major-event-item {
   display: inline-block; width: 100%;
   break-inside: avoid; page-break-inside: avoid;

@@ -38,6 +38,9 @@ def test_literature_html_events_panel_structure():
     assert 'id="majorEventsMeta"' in panel, "事件条数徽标缺失"
     assert 'id="eventsBadge"' in panel, "事件页眉徽标缺失"
     assert "领域重大事件" in panel, "面板标题缺失"
+    # 类型清单 kicker 已移除，瀑布流直接跟在标题下方。
+    assert "section-kicker" not in panel
+    assert "获批监管 · 指南共识" not in panel
 
 
 def test_literature_html_does_not_statically_load_source_signals():
@@ -95,8 +98,10 @@ def test_major_events_layout_single_masonry():
     """全部事件按降序放入单一 CSS 多列瀑布流，卡片两行且自带类型 chip。"""
     css = (PROJECT / "assets" / "main.css").read_text(encoding="utf-8")
     block = css[css.index(".major-events-list"):css.index("/* 诊疗现状章节与临床问题库 */")]
-    # 单一瀑布流容器，卡片不被拆断；不再有类型模块结构。
-    assert ".major-event-masonry" in block and "column-width" in block
+    # 单一瀑布流容器，固定最多 2 列、窄屏 1 列，卡片不被拆断；不再有类型模块结构。
+    assert ".major-event-masonry" in block
+    assert "column-count: 2" in block and "column-count: 1" in block
+    assert "column-width" not in block
     assert "break-inside: avoid" in block and ".major-event-item" in block
     assert ".major-event-group" not in block
     # 卡片两行：标题可换行，元信息含类型 chip 与来源标签。
@@ -111,6 +116,7 @@ def test_major_events_layout_single_masonry():
     assert "MAJOR_EVENT_TYPE_KEYS" in js
     assert "MAJOR_EVENT_TYPE_MODULES" not in js
     assert "MAJOR_EVENT_PER_TYPE_LIMIT" not in js
+    assert "MAJOR_EVENT_PAGE_LIMIT = 10" in js
     assert "function renderMajorEventCard" in js
     assert "'<div class=\"major-event-masonry\">'" in js
     assert 'class="major-event-group' not in js
@@ -118,6 +124,7 @@ def test_major_events_layout_single_masonry():
     # 收集阶段为全局降序，不按类型切分或截断。
     collect = js[js.index("function collectMajorEvents"):js.index("function renderMajorEventCard")]
     assert "events.sort" in collect and "MAJOR_EVENT_TYPE_MODULES" not in collect
+    assert "events.slice(0, MAJOR_EVENT_PAGE_LIMIT)" in collect
     # 卡片带类型 chip，顺序为标题 → 元信息（类型/来源）。
     card = js[js.index("function renderMajorEventCard"):js.index("function renderMajorEvents()")]
     assert 'class="major-event-item major-event--' in card
