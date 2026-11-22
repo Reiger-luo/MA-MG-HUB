@@ -1,30 +1,30 @@
 # MA-MG-HUB 周更
 
-生成时间：2026-11-20 23:51:11
-文献周更窗口：2026-11-16 至 2026-11-16
+生成时间：2026-11-23 05:07:33
+文献周更窗口：2026-11-23 至 2026-11-23
 文献周更口径：trueIngestAddedPmids
 
 ## 数据状态
 
-- 近1年文献：817
-- 中国相关：227
-- 文献信号：6
-- 临床试验信号：2
-- 文献级 Signal-to-KOL：6（自动审核发布）
-- 专家画像：40543
+- 近1年文献：822
+- 中国相关：224
+- 文献信号：3
+- 临床试验信号：0
+- 文献级 Signal-to-KOL：3（自动审核发布）
+- 专家画像：40701
 - 内容模块：6
 
 ## 优先文献信号 Top 3
 
-1. [中] Efgartigimod 证据继续向不同治疗节点和人群延伸（PMID 43012536）
-2. [中] 其他靶向机制在难治和特殊人群中形成治疗线索（PMID 43009845）
-3. [中] 补体通路证据继续扩展到长期治疗与给药便利性（PMID 43008373）
+1. [中] gMG长期疾病控制目标达成率普遍偏低且随时间无改善趋势（PMID 43040486）
+2. [弱] 首次gMG急性加重时IVIg应答缺乏可识别预测因素（PMID 43049496）
+3. [弱] ELISA法抗AChR抗体在真实世界疑似MG中的诊断性能与阴性复测缺口（PMID 43042520）
 
 ## 文献级 Signal-to-KOL Top 3
 
-1. PMID 43012536｜Ahmed Ghazi Uddin（第一作者；Jinnah Sindh Medical University）｜会前逐篇核对研究人群、主要终点、效应值与全文限制，并准备同类证据对照。
-2. PMID 43009845｜Luo Sushan（末位作者/通讯作者；Huashan Hospital, Fudan University）｜会前逐篇核对研究人群、主要终点、效应值与全文限制，并准备同类证据对照。
-3. PMID 43008373｜Greenberg Julia（第一作者/通讯作者；Stanford Department of Neurology and Neurological Sciences）｜会前逐篇核对研究人群、主要终点、效应值与全文限制，并准备同类证据对照。
+1. PMID 43040486｜Casasnovas C（第一作者；Bellvitge University Hospital）｜会前核查该综述中MM-0/1/2与CSR/PR的具体定义及随访时间分布，以便在交流中准确引用达成率上限而不误读为某一治疗的疗效。
+2. PMID 43049496｜Bouhour Françoise（末位作者；Centre de référence des maladies neuromusculaires PACA-Réunion-Rhône-Alpes）｜会前核查该队列中IVIg剂量方案、伴随激素与PLEX使用比例，以及“临床改善”的具体定义与评估时间点，以便与本地实践对照。
+3. PMID 43042520｜Tomaselli Pedro José（末位作者；University of São Paulo (FMRP-USP)）｜会前核查本中心抗AChR抗体检测方法（ELISA vs RIPA/CBA）及阴性复测流程，准备ELISA敏感性64.9%、特异性98.2%、AUC 0.844的对比卡片。
 
 ## 临床试验信号
 
@@ -32,33 +32,32 @@
 
 注册/开发信号，不代表疗效证据；完成或上传结果也不等于达到主要终点。
 
-1. [强] Remibrutinib Phase 3 gMG试验因预设无效性标准终止（NCT06744920；Phase 3）｜状态：进行中 → 已终止｜该Phase 3 gMG试验状态由进行中转为已终止，登记信息说明申办方基于预设无效性疗效标准达到而作出决定。｜边界：登记信息仅给出终止原因归类，不能据此推断具体疗效数值、安全性结论或对其他BTK抑制剂的类效应；终止不等于已发表完整结果。
-2. [弱] Felzartamab启动gMG Phase 2随机干预试验（NCT07939802；Phase 2）｜登记平台新增Felzartamab在成人gMG（MGFA II–IVa）中的Phase 2干预性研究，受试者需维持稳定背景治疗，状态为尚未招募。｜登记平台新增Felzartamab在成人gMG（MGFA II–IVa）中的Phase 2干预性研究，受试者需维持稳定背景治疗，状态为尚未招募。｜边界：登记信息仅说明研究已注册，不能推断药物疗效、安全性或与现有疗法的比较优势；尚未招募也不代表已产生任何临床数据。
+- 本轮无合格试验信号（允许空组，不补造弱信号）。
 
 ### 三源比较窗口
 
-- ClinicalTrials.gov：原始变化 10；比较窗口 2026-11-13 至 2026-11-20；更新 2026-11-20
-- ChiCTR：原始变化 1；比较窗口 - 至 2026-11-09T02:14:47.349329+00:00；更新 2026-11-09T02:14:47.349329+00:00
-- ChinaDrugTrials：原始变化 1；比较窗口 - 至 2026-11-15T21:01:46.041647+00:00；更新 2026-11-15T21:01:46.041647+00:00
+- ClinicalTrials.gov：原始变化 0；比较窗口 2026-11-15 至 2026-11-22；更新 2026-11-22
+- ChiCTR：原始变化 1；比较窗口 2026-11-09T02:14:47.349329+00:00 至 2026-11-22T21:02:43.430676+00:00；更新 2026-11-22T21:02:43.430676+00:00
+- ChinaDrugTrials：原始变化 0；比较窗口 2026-11-20T15:44:17.598791+00:00 至 2026-11-22T21:03:17.515402+00:00；更新 2026-11-22T21:03:17.515402+00:00
 
 ## 中国情报 Top 3
 
-1. Case Report: Fulminant sintilimab-associated myocarditis complicated by complete atrioventricular block and suspected myositis-myasthenia gravis overlap syndrome.（Frontiers in cardiovascular medicine；PMID 43021877；证据 IV）
-2. [Nasopharyngeal carcinoma presenting with diplopia as the initial symptom mimicking ocular myasthenia gravis: a case report].（[Zhonghua yan ke za zhi] Chinese journal of ophthalmology；PMID 43010764；证据 IV）
-3. Targeted biologics in muscle strength restoration and corticosteroid sparing for patients post-myasthenic crisis.（BMC neurology；PMID 43009845；证据 IV）
+1. Neurological adverse events associated with immune checkpoint inhibitors: a pharmacovigilance study based on the FAERS and JADER databases.（Frontiers in pharmacology；PMID 43061204；证据 未分类）
+2. Telitacicept as add-on therapy for myasthenic crisis: A retrospective cohort study.（Therapeutic advances in neurological disorders；PMID 43036551；证据 IV）
+3. Case Report: Fulminant sintilimab-associated myocarditis complicated by complete atrioventricular block and suspected myositis-myasthenia gravis overlap syndrome.（Frontiers in cardiovascular medicine；PMID 43021877；证据 IV）
 
 ## 热点主题
 
-- 疗效: 3
-- 抗体分型: 2
-- 真实世界: 2
-- B细胞: 2
-- 安全性: 2
+- 疗效: 10
+- 机制: 9
+- 真实世界: 7
+- 抗体分型: 6
+- 补体: 4
 
 ## 待处理
 
-- 本周信号: 6
-- 已构建专家画像: 40543
+- 本周信号: 3
+- 已构建专家画像: 40701
 - MSL 内容模块: 6
 - 待确认证据矩阵: 6
 

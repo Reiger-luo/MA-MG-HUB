@@ -1,7 +1,7 @@
 window.MG_CLINICAL_TRIALS_DATA = {
   "meta": {
-    "generated_at": "2026-11-20",
-    "total_count": 489,
+    "generated_at": "2026-11-22",
+    "total_count": 490,
     "sources_order": [
       "ClinicalTrials.gov",
       "ChiCTR",
@@ -21,7 +21,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
     },
     {
       "title": "近 6 个月新登记",
-      "detail": "截至 2026-11-20，近 6 个月登记 47 项试验。",
+      "detail": "截至 2026-11-22，近 6 个月登记 47 项试验。",
       "tag": "近期登记"
     }
   ],
@@ -10842,7 +10842,7 @@ window.MG_CLINICAL_TRIALS_DATA = {
     {
       "source": "ClinicalTrials.gov",
       "meta": {
-        "generated_at": "2026-11-20",
+        "generated_at": "2026-11-22",
         "mode": "cache",
         "revision": "semantic-v1:430a86f2352bad8bde7a542aa62567d82692f1694f10713eb2843ec29d87b0a0"
       },
@@ -17665,10 +17665,10 @@ window.MG_CLINICAL_TRIALS_DATA = {
     {
       "source": "ChiCTR",
       "meta": {
-        "generated_at": "2026-11-09",
+        "generated_at": "2026-11-22",
         "mode": "live",
         "warning": "",
-        "revision": "semantic-v1:913a8648bdb5e5aa3c34b5486e6c9f2b644f8502f00e34df7d1f0ba0564ba0f0"
+        "revision": "semantic-v1:0facb145dba27a8d26dfa2ed669412567fa497272945b4e5f8b96a5f7859a470"
       },
       "records": [
         {
@@ -20232,13 +20232,33 @@ window.MG_CLINICAL_TRIALS_DATA = {
           "completion_date": "",
           "registered_date": "2026-10-30",
           "linked_registries": []
+        },
+        {
+          "registry": "ChiCTR",
+          "registry_id": "ChiCTR2600136682",
+          "title": "Research on the mechanism by which bilirubin regulates immune cell subsets and participates in the pathogenesis of myasthenia gravis",
+          "url": "https://www.chictr.org.cn/showproj.html?proj=350760",
+          "status": "Pending",
+          "status_label": "Pending",
+          "status_class": "other",
+          "drug_class": "其他",
+          "drug_name": "",
+          "drug_names": [],
+          "indication": "重症肌无力",
+          "phase_label": "未标注",
+          "sponsor": "The Affiliated Hospital of Xuzhou Medical University",
+          "start_date": "2026-11-20",
+          "readout_date": "",
+          "completion_date": "",
+          "registered_date": "2026-11-13",
+          "linked_registries": []
         }
       ]
     },
     {
       "source": "ChinaDrugTrials",
       "meta": {
-        "generated_at": "2026-11-20",
+        "generated_at": "2026-11-22",
         "mode": "live_crawl",
         "warning": "",
         "revision": "semantic-v1:9f88a36132a0002474442a6c184aabac23d9607cba4deabaf18f29111e833fbc"

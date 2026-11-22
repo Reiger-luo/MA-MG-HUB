@@ -3,84 +3,6 @@
   "source": "MG-core PubMed guideline/consensus records outside evidence literature",
   "records": [
     {
-      "source_type": "chinese_journal_consensus",
-      "pmid": "CN-MG-2026-BIOTARGET",
-      "title": "生物靶向制剂治疗重症肌无力专家共识（2026版）",
-      "abstract": "重症肌无力（MG）是一种经典自身免疫性疾病，以免疫调节为核心治疗方案。近年来多种生物靶向制剂、小分子药物陆续获批上市，国内尚无针对生物靶向制剂治疗MG的专项指南与共识。由北京神经科学学会神经免疫与相关疾病专业委员会、北京重症肌无力协作组组织国内相关专家，基于循证医学证据与国内真实临床实践，经多轮德尔菲法论证制定本共识，规范MG个体化分层治疗。",
-      "authors": [
-        "侯世芳",
-        "高枫",
-        "刘翕然"
-      ],
-      "first_authors": [
-        "侯世芳"
-      ],
-      "corresponding_authors": [
-        "张华",
-        "王佳伟"
-      ],
-      "corresponding_authors_source": "article_footnote",
-      "author_affiliations": [],
-      "journal": "中国神经免疫学和神经病学杂志",
-      "journal_iso": "Chin J Neuroimmunol Neurol",
-      "issn": "1006-2963",
-      "volume": "33",
-      "issue": "5",
-      "pages": "533-543",
-      "entry_date": "2026/11/11 09:07",
-      "pub_date": "2026-09",
-      "date_completed": "2026-06-05",
-      "date_revised": "2026-09-15",
-      "doi": "10.3969/j.issn.1006-2963.2026.05.001",
-      "pmcid": "",
-      "article_ids": {
-        "doi": "10.3969/j.issn.1006-2963.2026.05.001"
-      },
-      "url": "https://mp.weixin.qq.com/s/hYx025r_Hhr4JQ-fp7xgew",
-      "full_text_url": "https://mp.weixin.qq.com/s/hYx025r_Hhr4JQ-fp7xgew",
-      "affiliations": [
-        "北京医院（国家老年医学中心）神经内科",
-        "北京大学第一医院神经内科",
-        "首都医科大学附属北京同仁医院神经内科"
-      ],
-      "pub_types": [
-        "Guideline",
-        "Consensus statement"
-      ],
-      "publication_types": [
-        "Guideline",
-        "Consensus statement"
-      ],
-      "mesh_terms": [],
-      "keywords": [
-        "重症肌无力",
-        "生物靶向制剂",
-        "FcRn拮抗剂",
-        "补体抑制剂",
-        "B细胞靶向治疗",
-        "专家共识"
-      ],
-      "chemicals": [],
-      "grants": [],
-      "languages": [
-        "chi"
-      ],
-      "publication_status": "ppublish",
-      "china_related": true,
-      "study_types": [
-        "Guideline",
-        "Consensus"
-      ],
-      "evidence_level": "IV",
-      "mg_core": true,
-      "mg_core_reason": "explicit_mg_title",
-      "journal_if": "1.189",
-      "journal_quartile": "中国科技核心期刊",
-      "signal_strength": "强",
-      "id_type": "synthetic_non_pubmed",
-      "id_note": "中文期刊发表，无 PMID；采用稳定合成 id 作为主键，url 指向官方推文原文"
-    },
-    {
       "source_type": "pubmed_article",
       "pmid": "42717567",
       "title": "Practical Guidance on Initiating and Switching Targeted Immunotherapies in Generalised Myasthenia Gravis: A German-Austrian Expert Opinion Paper.",
@@ -1536,7 +1458,7 @@
       "study_types": [
         "Cross-Sectional"
       ],
-      "evidence_level": "IV",
+      "evidence_level": null,
       "journal_if": 3.3,
       "journal_quartile": "4区",
       "author_affiliations": [
@@ -1596,6 +1518,142 @@
       ],
       "mg_core": true,
       "mg_core_reason": "repeated_mg_core_mentions"
+    },
+    {
+      "pmid": "33597816",
+      "title": "A Sum Score to Define Therapy-Refractory Myasthenia Gravis: A German Consensus.",
+      "abstract": "BACKGROUND AND PURPOSE: In 2017, eculizumab has been approved for treatment-refractory generalised myasthenia gravis (TRgMG). The German Myasthenia Foundation has published a consensus statement on the use of eculizumab, with a recent update. However, a treatment-refractory state is still ill-defined and the term warrants further clarification. We aimed at developing a sum score to operationalise the definition of a TRgMG status, which is easy- to-handle in clinical decision making.\nMETHODS: We established a structured consensus process according to the Delphi consensus methodology, with 12 members of the medical advisory board of the German Myasthenia Foundation. Accordingly, 4 consensus rounds were accomplished. Additionally, a literature survey covering the years 2004-2020 was done and relevant information offered to the consensus group. Consensus criteria were predefined. In the consensus process the relative importance of scoring items were to be consented, with a sum score of 20 and above indicating a TRgMG status.\nRESULTS: The sum score considers the categories disease severity, inefficiency of antecedent therapies, cessation of therapies due to side effects, and long term stay on the intensive care unit. Categories were specified by a total of 13 scoring items. Eventually, the Delphi process developed an unanimous scoring consensus.\nCONCLUSION: We suggest a sum score to define treatment refractory state in generalised myasthenia gravis. Beyond clarifying the indication of eculizumab, this easy-to-handle score facilitates clinical decision making and offers new inclusion criteria for clinical studies that explore new therapeutic perspectives in myasthenia gravis treatment.",
+      "authors": [
+        "Schroeter Michael",
+        "Berger Benjamin",
+        "Blaes Franz",
+        "Hagenacker Tim",
+        "Jander Sebastian",
+        "Kaiser Julia",
+        "Kalischewski Petra",
+        "Lee De-Hyung",
+        "Ruck Tobias",
+        "Schara Ulrike",
+        "Urban Peter",
+        "Meisel Andreas"
+      ],
+      "journal": "Journal of central nervous system disease",
+      "entry_date": "2021/02/18 06:10",
+      "pub_date": "2021",
+      "doi": "",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33597816/",
+      "pub_types": [
+        "Journal Article"
+      ],
+      "affiliations": [
+        "Department of Neurology, University Cologne and University Hospital, Cologne, Germany.",
+        "Clinic of Neurology and Neurophysiology, Medical Center - University of Freiburg, Faculty of Medicine, University of Freiburg, Freiburg im Breisgau, Germany.",
+        "Department of Neurology, Gummersbach Hospital, Gummersbach, Germany.",
+        "Department of Neurology, University Hospital Essen, Essen, Germany.",
+        "Department of Neurology, Heinrich-Heine-University, Medical Faculty, Düsseldorf, Germany.",
+        "Department of Neurology, LVR-Klinik, Bonn, Nordrhein-Westfalen, Germany.",
+        "Neurological outpatient clinic Drs. Kalischewski & Spiegel-Meixensberger, Leipzig, Germany.",
+        "Department of Neurology, University of Regensburg, Regensburg, Bayern, Germany.",
+        "Department of Neurology with Institute of Translational Neurology, University Münster, Münster, Nordrhein-Westfalen, Germany.",
+        "Department of Pediatric Neurology, University Clinic Essen, University of Duisburg-Essen, UK.",
+        "Department of Neurology, Asklepios Klinik Barmbek, Hamburg, Germany.",
+        "Department of Neurology with Experimental Neurology, Integrated Myasthenia gravis Center, Neurocure Clinical Research Center, Center for Stroke Research Berlin Charité - Universitätsmedizin, corporate member of Freie Universität Berlin, Humboldt-Universität zu Berlin and Berlin Institute of Health, Berlin, Germany."
+      ],
+      "china_related": false,
+      "study_types": [
+        "Guideline/Consensus"
+      ],
+      "evidence_level": null,
+      "journal_if": 2.4,
+      "journal_quartile": "3区",
+      "author_affiliations": [
+        {
+          "position": 1,
+          "name": "Schroeter Michael",
+          "affiliations": [
+            "Department of Neurology, University Cologne and University Hospital, Cologne, Germany."
+          ]
+        },
+        {
+          "position": 2,
+          "name": "Berger Benjamin",
+          "affiliations": [
+            "Clinic of Neurology and Neurophysiology, Medical Center - University of Freiburg, Faculty of Medicine, University of Freiburg, Freiburg im Breisgau, Germany."
+          ]
+        },
+        {
+          "position": 3,
+          "name": "Blaes Franz",
+          "affiliations": [
+            "Department of Neurology, Gummersbach Hospital, Gummersbach, Germany."
+          ]
+        },
+        {
+          "position": 4,
+          "name": "Hagenacker Tim",
+          "affiliations": [
+            "Department of Neurology, University Hospital Essen, Essen, Germany."
+          ]
+        },
+        {
+          "position": 5,
+          "name": "Jander Sebastian",
+          "affiliations": [
+            "Department of Neurology, Heinrich-Heine-University, Medical Faculty, Düsseldorf, Germany."
+          ]
+        },
+        {
+          "position": 6,
+          "name": "Kaiser Julia",
+          "affiliations": [
+            "Department of Neurology, LVR-Klinik, Bonn, Nordrhein-Westfalen, Germany."
+          ]
+        },
+        {
+          "position": 7,
+          "name": "Kalischewski Petra",
+          "affiliations": [
+            "Neurological outpatient clinic Drs. Kalischewski & Spiegel-Meixensberger, Leipzig, Germany."
+          ]
+        },
+        {
+          "position": 8,
+          "name": "Lee De-Hyung",
+          "affiliations": [
+            "Department of Neurology, University of Regensburg, Regensburg, Bayern, Germany."
+          ]
+        },
+        {
+          "position": 9,
+          "name": "Ruck Tobias",
+          "affiliations": [
+            "Department of Neurology with Institute of Translational Neurology, University Münster, Münster, Nordrhein-Westfalen, Germany."
+          ]
+        },
+        {
+          "position": 10,
+          "name": "Schara Ulrike",
+          "affiliations": [
+            "Department of Pediatric Neurology, University Clinic Essen, University of Duisburg-Essen, UK."
+          ]
+        },
+        {
+          "position": 11,
+          "name": "Urban Peter",
+          "affiliations": [
+            "Department of Neurology, Asklepios Klinik Barmbek, Hamburg, Germany."
+          ]
+        },
+        {
+          "position": 12,
+          "name": "Meisel Andreas",
+          "affiliations": [
+            "Department of Neurology with Experimental Neurology, Integrated Myasthenia gravis Center, Neurocure Clinical Research Center, Center for Stroke Research Berlin Charité - Universitätsmedizin, corporate member of Freie Universität Berlin, Humboldt-Universität zu Berlin and Berlin Institute of Health, Berlin, Germany."
+          ]
+        }
+      ],
+      "mg_core": true,
+      "mg_core_reason": "explicit_mg_title"
     },
     {
       "pmid": "33144515",
