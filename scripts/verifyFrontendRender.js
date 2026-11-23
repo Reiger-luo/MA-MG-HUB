@@ -186,6 +186,68 @@ try {
   check('更新进展板块运行时异常', false, String(error));
 }
 
+// ── MSL 工作台：筛选项运行时驱动（真正执行筛选函数，非源码字符串断言） ──
+try {
+  const mslDoc = bootPage('pages/msl.html', [
+    'assets/common.js',
+    'data/expert-profiles.js',
+    'data/expert-profiles-china.js',
+    'data/signals-weekly.js',
+    'data/content-modules.js',
+    'data/landscapeInsights.js',
+    'assets/msl.js'
+  ]);
+  const mslWin = mslDoc.defaultView;
+  const fire = (el, type) => el && el.dispatchEvent(new mslWin.Event(type, { bubbles: true }));
+  const countOf = () => Number((mslDoc.querySelector('#expertCount') || {}).textContent || 0);
+  const topicRadio = (value) => Array.from(mslDoc.querySelectorAll('#topicFilters input[name=topic]'))
+    .find((node) => node.value === value);
+
+  // 期望值从当前数据与生产门槛动态推导，避免硬编码人数随周更漂移。
+  const specialtyMin = Number((mslWin.MG_EXPERT_PROFILES.summary || {}).topic_specialty_min_publications) || 5;
+  const chinaItems = (mslWin.MG_EXPERT_PROFILE_CHINA || {}).items || [];
+  const quotaByTopic = {};
+  chinaItems.forEach((expert) => (expert.interests || []).forEach((it) => {
+    if (Array.isArray(it) && (it[1] || 0) >= specialtyMin) quotaByTopic[it[0]] = (quotaByTopic[it[0]] || 0) + 1;
+  }));
+  const probeTopic = Object.keys(quotaByTopic).sort((a, b) => quotaByTopic[a] - quotaByTopic[b])[0];
+  const probeExpected = quotaByTopic[probeTopic];
+
+  // 专长门槛：方向选项只保留至少一位专家达标者，且显示达标人数。
+  const topicLabels = Array.from(mslDoc.querySelectorAll('#topicFilters label')).map((n) => n.textContent.trim());
+  const numbersMatch = Object.keys(quotaByTopic).every((topic) =>
+    topicLabels.some((t) => new RegExp(topic + '\\s*·\\s*' + quotaByTopic[topic] + '\\s*人').test(t)));
+  check('研究方向选项按专长门槛过滤并标人数', numbersMatch && topicLabels.length === Object.keys(quotaByTopic).length + 1,
+    topicLabels.join(' | '));
+  check('专长门槛提示文案可见',
+    new RegExp('≥\\s*' + specialtyMin + '\\s*篇').test((mslDoc.querySelector('#topicFilterHint') || {}).textContent || ''), '');
+
+  // 初始空态：搜索与筛选皆空时不列专家。
+  check('MSL 初始空态为 0 人', countOf() === 0, countOf());
+
+  // 仅选方向即可从全库筛选（无需搜索词），结果数等于该方向达标人数。
+  const probeRadio = topicRadio(probeTopic);
+  if (probeRadio) { probeRadio.checked = true; fire(probeRadio, 'change'); }
+  check('仅选研究方向即可独立筛选出专家', countOf() === probeExpected, probeTopic + ' 期望 ' + probeExpected + ' 实得 ' + countOf());
+
+  // 方向 + 机构关键词按 AND 收窄：结果不得超过仅方向时的数量。
+  const topicOnlyCount = countOf();
+  const institution = mslDoc.querySelector('#institutionFilter');
+  if (institution) { institution.value = 'Fudan'; fire(institution, 'input'); }
+  check('方向与机构筛选按 AND 收窄', countOf() > 0 && countOf() < topicOnlyCount,
+    topicOnlyCount + ' -> ' + countOf());
+
+  // 再选一个达标人数更多的方向，验证筛选随方向动态重算。
+  if (institution) { institution.value = ''; fire(institution, 'input'); }
+  const wideTopic = Object.keys(quotaByTopic).sort((a, b) => quotaByTopic[b] - quotaByTopic[a])[0];
+  const wideRadio = topicRadio(wideTopic);
+  if (wideRadio) { wideRadio.checked = true; fire(wideRadio, 'change'); }
+  check('专长门槛按方向动态生效', countOf() === quotaByTopic[wideTopic],
+    wideTopic + ' 期望 ' + quotaByTopic[wideTopic] + ' 实得 ' + countOf());
+} catch (error) {
+  check('MSL 筛选运行时异常', false, String(error));
+}
+
 // ── 中国情报：柱形点击交叉筛选（mock ECharts 捕获 setOption 与 click handler） ──
 try {
   const chinaJson = read('data/china-intelligence.js')

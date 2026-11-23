@@ -71,6 +71,7 @@ def test_expert_output_module_always_writes_both_regional_shards(tmp_path):
 def test_expert_manifest_exposes_topic_specialty_threshold(tmp_path):
     from scripts.common.expert_outputs import (
         TOPIC_SPECIALTY_MIN_PUBLICATIONS,
+        build_expert_manifest,
         write_expert_outputs,
     )
 
@@ -82,6 +83,10 @@ def test_expert_manifest_exposes_topic_specialty_threshold(tmp_path):
         "quick_expert_ids": {},
         "summary": {},
     }
+    # 直接断言 build_expert_manifest 的门槛写入（CRG 需要直接调用才建立 TESTED_BY 边）。
+    manifest_direct = build_expert_manifest(payload)
+    assert manifest_direct["summary"]["topic_specialty_min_publications"] == TOPIC_SPECIALTY_MIN_PUBLICATIONS
+
     write_expert_outputs(payload, tmp_path)
 
     manifest = load_js_global(tmp_path / "expert-profiles.js", "MG_EXPERT_PROFILES")
