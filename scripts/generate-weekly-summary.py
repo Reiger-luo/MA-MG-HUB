@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """
 generate-weekly-summary.py — 生成当前通讯渠道可直接使用的 MA-MG-HUB 周报。
+
+定位：状态呈现 + 阅读线索，不是待办清单。
+每条文献信号合并呈现「新发现 → KOL → 会前动作」，不再拆成两个 Top 3。
 """
 
 from __future__ import annotations
@@ -22,16 +25,6 @@ def load_js_data(filename: str, global_name: str):
     return load_js_global(DATA_DIR / filename, global_name)
 
 
-def signal_line(signal: dict, index: int) -> str:
-    article = signal.get("article") or {}
-    title = signal.get("summary") or article.get("title") or "Untitled"
-    pmids = signal.get("related_pmids") or []
-    pmid = pmids[0] if pmids else article.get("pmid", "-")
-    strength = signal.get("strength") or "-"
-    reason = signal.get("reason") or ""
-    return f"{index}. [{strength}] {title}（PMID {pmid}）{(' - ' + reason) if reason else ''}"
-
-
 def kol_lead_text(signal: dict) -> str:
     leads = signal.get("kol_leads") or []
     if leads:
@@ -47,13 +40,20 @@ def kol_lead_text(signal: dict) -> str:
     return "KOL/机构待识别"
 
 
-def signal_to_kol_line(signal: dict, index: int) -> str:
+def signal_entry(signal: dict, index: int) -> list[str]:
+    """一条信号 = 新发现 + KOL + 会前动作，三行一组。"""
     article = signal.get("article") or {}
+    title = signal.get("summary") or article.get("title") or "Untitled"
     pmids = signal.get("related_pmids") or []
     pmid = pmids[0] if pmids else article.get("pmid", "-")
+    strength = signal.get("strength") or "-"
     medical = signal.get("medical_affairs") or {}
     action = medical.get("msl_action") or "MSL 后续行动待补充"
-    return f"{index}. PMID {pmid}｜{kol_lead_text(signal)}｜{action}"
+    return [
+        f"{index}. **[{strength}] {title}**（PMID {pmid}）",
+        f"   KOL：{kol_lead_text(signal)}",
+        f"   会前：{action}",
+    ]
 
 
 def trial_signal_line(signal: dict, index: int) -> str:
@@ -61,18 +61,16 @@ def trial_signal_line(signal: dict, index: int) -> str:
     phase = signal.get("phase") or "阶段未标注"
     change = signal.get("changeSummary") or signal.get("takeaway") or "注册信息更新"
     takeaway = signal.get("takeaway") or "开发意义待复核"
-    boundary = signal.get("evidenceBoundary") or "注册/开发信号，不代表疗效证据。"
     return (
         f"{index}. [{signal.get('strength') or '-'}] {signal.get('title') or '未命名试验信号'}"
-        f"（{registry_ids}；{phase}）｜{change}｜{takeaway}｜边界：{boundary}"
+        f"（{registry_ids}；{phase}）｜{change}｜{takeaway}"
     )
 
 
 def trial_window_line(source: str, window: dict) -> str:
-    start = window.get("window_start") or "-"
-    end = window.get("window_end") or window.get("updated_at") or "-"
-    updated = window.get("updated_at") or "-"
-    return f"- {source}：原始变化 {window.get('raw_change_count', 0)}；比较窗口 {start} 至 {end}；更新 {updated}"
+    start = str(window.get("window_start") or "-")[:10]
+    end = str(window.get("window_end") or window.get("updated_at") or "-")[:10]
+    return f"- {source}：原始变化 {window.get('raw_change_count', 0)}（{start} → {end}）"
 
 
 def article_line(article: dict, index: int) -> str:
@@ -94,71 +92,57 @@ def build_summary() -> str:
     trial_items = trial_signals.get("signals") or []
     trial_windows = trial_signals.get("source_windows") or {}
     top_signals = (dashboard.get("top_signals") or signal_items)[:3]
-    top_signal_to_kol = signal_items[:3]
     china_articles = (china.get("pubmed_articles") or [])[:3]
-    work_items = dashboard.get("work_items") or []
     hotspots = (signals.get("topic_hotspots") or [])[:5]
 
     lines = [
         "# MA-MG-HUB 周更",
         "",
         f"生成时间：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
-        f"文献周更窗口：{signals.get('window_start') or '-'} 至 {signals.get('window_end') or '-'}",
-        f"文献周更口径：{signals.get('window_basis') or '未声明'}",
+        f"文献窗口：{signals.get('window_start') or '-'} → {signals.get('window_end') or '-'}（口径 {signals.get('window_basis') or '未声明'}）",
         "",
-        "## 数据状态",
-        "",
-        f"- 近1年文献：{stats.get('recent_articles', 0)}",
-        f"- 中国相关：{stats.get('china_articles', 0)}",
-        f"- 文献信号：{len(signal_items)}",
-        f"- 临床试验信号：{len(trial_items)}",
-        f"- 文献级 Signal-to-KOL：{len(signal_items)}（自动审核发布）",
-        f"- 专家画像：{stats.get('experts', 0)}",
-        f"- 内容模块：{stats.get('modules', 0)}",
-        "",
-        "## 优先文献信号 Top 3",
+        "## 本周文献信号（新发现 → KOL → 会前动作）",
         "",
     ]
-    lines.extend(signal_line(signal, idx) for idx, signal in enumerate(top_signals, 1))
-
-    lines.extend(["", "## 文献级 Signal-to-KOL Top 3", ""])
-    if top_signal_to_kol:
-        lines.extend(signal_to_kol_line(signal, idx) for idx, signal in enumerate(top_signal_to_kol, 1))
+    if top_signals:
+        for idx, signal in enumerate(top_signals, 1):
+            lines.extend(signal_entry(signal, idx))
     else:
-        lines.append("- 暂无")
+        lines.append("- 本周无文献信号")
 
-    lines.extend([
-        "", "## 临床试验信号", "",
-        "强度口径（仅在试验组内比较）：强=新增关键试验或关键试验高实质更新；中=关键试验中等更新、一般试验高实质更新等；弱=真实但判断影响有限的早期或一般试验更新。",
-        "",
-        "注册/开发信号，不代表疗效证据；完成或上传结果也不等于达到主要终点。",
-        "",
-    ])
+    lines.extend(["", "## 临床试验信号", ""])
     if trial_items:
         lines.extend(trial_signal_line(signal, idx) for idx, signal in enumerate(trial_items, 1))
+        lines.append("")
+        lines.append("强度口径（仅试验组内比较）：强=新增关键试验或关键试验高实质更新；中=关键试验中等更新等；弱=影响有限的早期/一般更新。")
     else:
         lines.append("- 本轮无合格试验信号（允许空组，不补造弱信号）。")
+    lines.append("注册/开发信号，不代表疗效证据；完成或上传结果也不等于达到主要终点。")
 
-    lines.extend(["", "### 三源比较窗口", ""])
+    lines.extend(["", "三源比较窗口："])
     for source in ("ClinicalTrials.gov", "ChiCTR", "ChinaDrugTrials"):
         lines.append(trial_window_line(source, trial_windows.get(source) or {}))
 
     lines.extend(["", "## 中国情报 Top 3", ""])
-    lines.extend(article_line(article, idx) for idx, article in enumerate(china_articles, 1))
+    if china_articles:
+        lines.extend(article_line(article, idx) for idx, article in enumerate(china_articles, 1))
+    else:
+        lines.append("- 暂无")
 
     lines.extend(["", "## 热点主题", ""])
     if hotspots:
-        lines.extend(f"- {item.get('topic')}: {item.get('count')}" for item in hotspots)
+        lines.append(" · ".join(f"{item.get('topic')} {item.get('count')}" for item in hotspots))
     else:
         lines.append("- 暂无")
 
-    lines.extend(["", "## 待处理", ""])
-    if work_items:
-        lines.extend(f"- {item.get('label')}: {item.get('count')}" for item in work_items)
-    else:
-        lines.append("- 暂无")
-
-    lines.extend(["", "## 入口", "", SITE_URL, ""])
+    lines.extend([
+        "", "## 数据库存（状态呈现，非待办）", "",
+        f"- 文献：近1年 {stats.get('recent_articles', 0)} · 中国相关 {stats.get('china_articles', 0)}",
+        f"- 信号：文献 {len(signal_items)} · 试验 {len(trial_items)}",
+        f"- 专家画像：{stats.get('experts', 0)}",
+        f"- 内容模块 {stats.get('modules', 0)} · 证据矩阵 {stats.get('landscape_questions', 0)}（均为自动生成草稿，对外使用前核对原文即可，无需逐项处理）",
+        "", "## 入口", "", SITE_URL, "",
+    ])
     return "\n".join(lines)
 
 
