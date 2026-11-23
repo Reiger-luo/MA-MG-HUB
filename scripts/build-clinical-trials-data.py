@@ -62,6 +62,8 @@ DRUG_CLASS_TERMS = (
             "nipocalimab",
             "m281",
             "imvt-1401",
+            # IMVT-1402（下一代 FcRn 抗体）与 batoclimab（IMVT-1401/RVT-1401/HBM9161）
+            # 是不同分子，始终分成两条，不得互相合并。
             "imvt-1402",
             "fcrn antagonist",
             "fcrn inhibitor",
@@ -133,6 +135,10 @@ DRUG_CLASS_TERMS = (
             "ripertamab",
             # 细胞治疗：CD19/BCMA/BAFF-R CAR-T、CAR-NK、CAAR-T、TCR-T 与 CD3 双抗。
             "caba-201",
+            # KYV-101（mivocabtagene autoleucel）、SENL103/S103、SYS6020 均为 B 细胞轴 CAR-T；
+            # RTX 是利妥昔单抗缩写，Ublituximab 是抗 CD20 单抗，均不得落到标题里的其他机制。
+            "kyv-101", "mivocabtagene", "senl103", "s103", "sys6020", "ucar t-cell",
+            "rtx", "ublituximab",
             "baff-r cart",
             "baffr cart",
             "musk-caart",
@@ -183,6 +189,14 @@ DRUG_CLASS_TERMS = (
             # Tofacitinib 为 JAK 抑制剂、abatacept 为 CD28 共刺激阻断，均非 IL-6 通路。
             "tofacitinib",
             "abatacept",
+            # Tolebrutinib（SAR442168）是 BTK 抑制剂，与 remibrutinib 同属免疫抑制剂，
+            # 不是 IL-6 通路；注册库常把代号 SAR442168 误当独立干预。
+            "tolebrutinib", "tolebrutininb", "sar442168",
+            # 低效价糖皮质激素/激素类泛称统一落免疫抑制剂。
+            "corticosteroid", "corticosteroids", "steroid drug",
+            "glucocorticoid", "glucocorticoids", "糖皮质激素",
+            # 甲氨蝶呤/硫唑嘌呤/环孢素/吗替麦考酚酸的缩写与全称同归一药。
+            "mtx", "aza", "ciclosporin",
         ),
     ),
     (
@@ -209,7 +223,8 @@ DRUG_CLASS_TERMS = (
     ),
     (
         "IL-6 抑制剂",
-        ("satralizumab", "萨特利珠单抗", "tocilizumab", "sar442168"),
+        # SAR442168（tolebrutinib）是 BTK 抑制剂，已归入免疫抑制剂，不在此类。
+        ("satralizumab", "萨特利珠单抗", "tocilizumab", "托珠单抗"),
     ),
 )
 
@@ -464,6 +479,8 @@ DRUG_SYNONYMS: dict[str, str] = {
     "hl161": "Batoclimab (巴托利单抗)",
     "imvt-1401": "Batoclimab (巴托利单抗)",
     "rvt-1401": "Batoclimab (巴托利单抗)",
+    # IMVT-1402 是 Immunovant 新一代抗 FcRn 分子，与 batoclimab（IMVT-1401 /
+    # RVT-1401 / HBM9161 / HL161）机制同类但为不同药物，必须各占一行。
     "imvt-1402": "IMVT-1402",
     "batoclimab": "Batoclimab (巴托利单抗)",
     # M281 是 nipocalimab 的旧代号（JNJ-80202135），不是 batoclimab。
@@ -500,23 +517,70 @@ DRUG_SYNONYMS: dict[str, str] = {
     "注射用泰它西普": "Telitacicept (泰它西普)",
     "tetanercept": "Telitacicept (泰它西普)",
     "rituximab": "Rituximab (利妥昔单抗)",
-    "inebilizumab": "Inebilizumab",
-    "inebilizumab 注射液": "Inebilizumab",
+    # RTX / RTX therapy 是利妥昔单抗缩写，必须与全称并成一行。
+    "rtx": "Rituximab (利妥昔单抗)",
+    "rtx therapy": "Rituximab (利妥昔单抗)",
+    "inebilizumab": "Inebilizumab (伊奈利珠单抗)",
+    "inebilizumab 注射液": "Inebilizumab (伊奈利珠单抗)",
+    "伊奈利珠单抗": "Inebilizumab (伊奈利珠单抗)",
+    "伊奈利珠单抗注射液": "Inebilizumab (伊奈利珠单抗)",
+    "uplizna": "Inebilizumab (伊奈利珠单抗)",
+    "sys6020": "SYS6020 (BCMA CAR-T)",
     "sys6020注射液": "SYS6020 (BCMA CAR-T)",
+    "sys6020 injection": "SYS6020 (BCMA CAR-T)",
+    "senl103": "SENL103 (CAR-T)",
     "senl103自体t细胞注射液": "SENL103 (CAR-T)",
+    "using senl103 autologous t-cell": "SENL103 (CAR-T)",
+    # NCT06958939（官方题名 SENL103/S103）把四个剂量组登记为独立干预，
+    # 这些是同一 CAR-T 的剂量水平，不是四种药。
+    "dose level 1 group": "SENL103 (CAR-T)",
+    "dose level 2 group": "SENL103 (CAR-T)",
+    "dose level 3 group": "SENL103 (CAR-T)",
+    "dose level 4 group": "SENL103 (CAR-T)",
+    # NCT06371040 的 Dose 1/Dose 2 是同一 CD19-BCMA CAR-T 的剂量递增。
+    "cd19-bcma targeted car-t": "CD19-BCMA Targeted CAR-T",
+    "cd19-bcma targeted car-t dose 1": "CD19-BCMA Targeted CAR-T",
+    "cd19-bcma targeted car-t dose 2": "CD19-BCMA Targeted CAR-T",
+    "ucar t-cell group": "UCAR T-cell",
+    "ublituximab": "Ublituximab (抗CD20单抗)",
     "cizutamig": "Cizutamig",
     "cizutamig注射液": "Cizutamig",
-    # IL-6
+    # IL-6：托珠单抗的注射剂型/商品写法统一为一行。
     "satralizumab": "Satralizumab (萨特利珠单抗)",
     "萨特利珠单抗注射液": "Satralizumab (萨特利珠单抗)",
-    "sar442168": "SAR442168 (已终止)",
-    # Immunosuppressants
+    "tocilizumab": "Tocilizumab (托珠单抗)",
+    "tocilizumab injection": "Tocilizumab (托珠单抗)",
+    "tocilizumab injectable product": "Tocilizumab (托珠单抗)",
+    "托珠单抗": "Tocilizumab (托珠单抗)",
+    # Tolebrutinib = SAR442168，是 BTK 抑制剂；注册库拼写 tolebrutininb 亦归一。
+    "sar442168": "Tolebrutinib (SAR442168)",
+    "sar442168 (已终止)": "Tolebrutinib (SAR442168)",
+    "tolebrutinib": "Tolebrutinib (SAR442168)",
+    "tolebrutininb": "Tolebrutinib (SAR442168)",
+    # Immunosuppressants：缩写、大小写、剂型与全称全部并到同一规范名。
     "remibrutinib": "Remibrutinib (LOU064)",
     "remibrutinib (lou064)": "Remibrutinib (LOU064)",
     "cladribine": "Cladribine (克拉屈滨)",
     "克拉屈滨胶囊": "Cladribine (克拉屈滨)",
     "azathioprine": "Azathioprine (硫唑嘌呤)",
     "硫唑嘌呤片": "Azathioprine (硫唑嘌呤)",
+    "aza": "Azathioprine (硫唑嘌呤)",
+    "methotrexate": "Methotrexate (甲氨蝶呤)",
+    "甲氨蝶呤": "Methotrexate (甲氨蝶呤)",
+    "mtx": "Methotrexate (甲氨蝶呤)",
+    "mycophenolic acid": "Mycophenolate (吗替麦考酚酯)",
+    "cyclosporine": "Cyclosporine (环孢素)",
+    "ciclosporin": "Cyclosporine (环孢素)",
+    "环孢素": "Cyclosporine (环孢素)",
+    "corticosteroids": "Corticosteroids (糖皮质激素)",
+    "corticosteroid": "Corticosteroids (糖皮质激素)",
+    "oral corticosteroids": "Corticosteroids (糖皮质激素)",
+    "glucocorticoid": "Corticosteroids (糖皮质激素)",
+    "glucocorticoids": "Corticosteroids (糖皮质激素)",
+    "glucocorticoids alone": "Corticosteroids (糖皮质激素)",
+    "steroid drug": "Corticosteroids (糖皮质激素)",
+    "糖皮质激素": "Corticosteroids (糖皮质激素)",
+    "traditional chinese medicine compound glucocorticoid": "Corticosteroids (糖皮质激素)",
     "tacrolimus": "Tacrolimus (他克莫司)",
     "他克莫司胶囊": "Tacrolimus (他克莫司)",
     "shr-2173注射液": "SHR-2173",
@@ -525,6 +589,14 @@ DRUG_SYNONYMS: dict[str, str] = {
     "pyridostigmine": "Pyridostigmine (溴吡斯的明)",
     "溴吡斯的明片": "Pyridostigmine (溴吡斯的明)",
     "溴吡斯的明缓释片": "Pyridostigmine (溴吡斯的明)",
+    # NCT07154095 只写剂型（缓释/速释片），题名明确是吡斯的明 PK 研究。
+    "sustained-release tablets": "Pyridostigmine (溴吡斯的明)",
+    "immediate-release tablets": "Pyridostigmine (溴吡斯的明)",
+    # CK-2017357 = tirasemtiv（肌钙蛋白激活剂），250/500 mg 是剂量组不是两种药。
+    "ck-2017357": "Tirasemtiv (CK-2017357)",
+    "tirasemtiv": "Tirasemtiv (CK-2017357)",
+    "250 mg ck-2017357": "Tirasemtiv (CK-2017357)",
+    "500 mg ck-2017357": "Tirasemtiv (CK-2017357)",
     "huperzine": "Huperzine A (石杉碱甲)",
     "石杉碱甲口服溶液": "Huperzine A (石杉碱甲)",
     "edrophonium": "Edrophonium (依酚氯铵)",
@@ -533,6 +605,10 @@ DRUG_SYNONYMS: dict[str, str] = {
     "ivig": "IVIg (静注人免疫球蛋白)",
     "gamma globulin": "IVIg (静注人免疫球蛋白)",
     "immunoglobulin": "IVIg (静注人免疫球蛋白)",
+    "immune globulin": "IVIg (静注人免疫球蛋白)",
+    "intravenous immuneglobulin": "IVIg (静注人免疫球蛋白)",
+    "hizentra": "IVIg (静注人免疫球蛋白)",
+    "hizentra ®": "IVIg (静注人免疫球蛋白)",
     "plasma exchange": "Plasma Exchange (血浆置换)",
     "plex": "Plasma Exchange (血浆置换)",
     # Corticosteroids / Other
@@ -547,7 +623,7 @@ DRUG_SYNONYMS: dict[str, str] = {
     "agamod": "Efgartigimod (艾加莫德)",
     "egamod": "Efgartigimod (艾加莫德)",
     "empasiprubart": "Empasiprubart",
-    "ublituximab": "Ublituximab",
+    # ublituximab 已在 B 细胞段映射为 "Ublituximab (抗CD20单抗)"；此处不可重复定义覆盖。
     # GenSci136：同一 BCMA 三聚体融合蛋白（BAFF/APRIL 双拮抗），中国/美国注册名合并。
     "gensci136": "GenSci136 (BAFF/APRIL双拮抗)",
     "注射用gensci136": "GenSci136 (BAFF/APRIL双拮抗)",
@@ -592,7 +668,19 @@ _NON_DRUG_KEYWORDS = (
     "robotic", "机器人", "thoracoscopic", "胸腔镜",
     "vitaccess", "ide study", "inpatient",
     "treatment with", "medication", "hormone", "激素",
+    # ChiCTR i_freetext 的给药周期片段（如 "1+5 treatment cycles" 被 "+" 拆出的
+    # "5 treatment cycles."）与清淋预处理不是研究药，不能生成独立药物行。
+    "treatment cycle", "lymphodepletion",
 )
+
+# 非药物干预的精确名称：对照/清淋/占位符，整条丢弃而非当药聚合。
+_NON_DRUG_EXACT = {
+    "nothing", "na", "nil", "not applicable", "no intervention",
+    "standard of care treatment", "standard lymphodepletion regimen",
+    "cyclophosphamide and fludarabine",  # 清淋预处理，非研究干预药
+    "basic treatment regimen", "basic treatment plan", "routine",
+    "routine therapy", "routine care", "local",
+}
 
 # 英语虚词（用于检测句子碎片）
 _EN_FUNCTION_WORDS = {"the", "of", "in", "and", "with", "for", "by", "was",
@@ -637,6 +725,8 @@ def normalize_drug_name(raw: str) -> str:
             return DRUG_SYNONYMS[alias]
     # 4. Placebo / non-drug interventions → discard
     if any(tok in key for tok in _PLACEBO_TOKENS):
+        return ""
+    if key in _NON_DRUG_EXACT or cleaned in _NON_DRUG_EXACT:
         return ""
     if any(kw in key for kw in _NON_DRUG_KEYWORDS):
         return ""
@@ -683,22 +773,32 @@ def build_pipeline_matrix(records: list[dict[str, Any]]) -> list[dict[str, Any]]
 
     联用试验（drug_names 多个）会出现在每个药物行下（多标签可筛选）。
     """
-    # Group by (drug_class, drug_name) — combo trials appear under each drug
-    groups: dict[tuple[str, str], list[dict[str, Any]]] = {}
+    # 每个规范药名只决定一个分类：先按药名自身关键词判定，再回退到该药名
+    # 所有研究的 titles 合并文本。绝不能用单条记录的标题兜底——同一药名会
+    # 因不同研究标题被分到两个类，产生两行，"研究数/最高阶段"随之失真。
+    name_records: dict[str, list[dict[str, Any]]] = {}
     for rec in records:
         names = rec.get("drug_names") or []
         if not names:
             names = [_extract_drug_name(rec)]
         names = [n for n in names if n]  # drop empty (placebo/noise filtered)
-        if not names:
-            continue  # no identifiable drug → skip from pipeline matrix
         for drug_name in dict.fromkeys(names):  # dedupe, preserve order
-            # Derive drug_class from the drug name itself (not record-level title)
-            drug_class = extract_drug_class("", drug_name)
-            if drug_class == "其他":
-                drug_class = rec.get("drug_class") or "其他"
-            key = (drug_class, drug_name)
-            groups.setdefault(key, []).append(rec)
+            name_records.setdefault(drug_name, []).append(rec)
+
+    drug_class_of: dict[str, str] = {}
+    for drug_name in name_records:
+        drug_class = extract_drug_class("", drug_name)
+        if drug_class == "其他":
+            combined_title = " ".join(str(r.get("title") or "") for r in name_records[drug_name])
+            combined_names = " ".join(str(r.get("drug_name") or "") for r in name_records[drug_name])
+            drug_class = extract_drug_class(combined_title, combined_names)
+        drug_class_of[drug_name] = drug_class
+
+    # Group by (drug_class, drug_name) — combo trials appear under each drug
+    groups: dict[tuple[str, str], list[dict[str, Any]]] = {}
+    for drug_name, recs in name_records.items():
+        key = (drug_class_of[drug_name], drug_name)
+        groups.setdefault(key, []).extend(recs)
 
     matrix = []
     for (drug_class, drug_name), trials in groups.items():

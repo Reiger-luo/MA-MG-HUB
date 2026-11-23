@@ -8,12 +8,12 @@ window.MG_CLINICAL_TRIALS_SUMMARY = {
       "ChinaDrugTrials"
     ]
   },
-  "pipeline_matrix_count": 184,
+  "pipeline_matrix_count": 142,
   "recruiting_count": 129,
   "recent_registration_count": 47,
   "leading_mechanism": {
     "label": "B细胞/抗CD19/CD20",
-    "count": 77
+    "count": 78
   },
   "source_counts": [
     {
@@ -57,7 +57,7 @@ window.MG_CLINICAL_TRIALS_SUMMARY = {
     },
     {
       "title": "药物机制热点",
-      "detail": "B细胞/抗CD19/CD20在可识别机制中最多，共 77 项。",
+      "detail": "B细胞/抗CD19/CD20在可识别机制中最多，共 78 项。",
       "tag": "药物分类"
     },
     {
@@ -70,7 +70,7 @@ window.MG_CLINICAL_TRIALS_SUMMARY = {
     "schema_version": "1.0",
     "source": "ClinicalTrials.gov",
     "generated_at": "2026-11-22",
-    "previous_snapshot_at": "2026-11-20",
+    "previous_snapshot_at": "2026-11-22",
     "comparison_available": true,
     "window_days": 7,
     "window_start": "2026-11-15",

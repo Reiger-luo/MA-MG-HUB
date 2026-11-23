@@ -12,8 +12,7 @@
       "results_post_date": "",
       "phase_label": "Early Phase 1",
       "drug_names": [
-        "CT103A cells",
-        "Cyclophosphamide and fludarabine"
+        "CT103A cells"
       ],
       "enrollment_count": 36,
       "enrollment_type": "ESTIMATED",
@@ -397,7 +396,7 @@
       "results_post_date": "2026-03-10",
       "phase_label": "Phase 3",
       "drug_names": [
-        "Inebilizumab"
+        "Inebilizumab (伊奈利珠单抗)"
       ],
       "enrollment_count": 238,
       "enrollment_type": "ACTUAL",
@@ -553,8 +552,7 @@
       "results_post_date": "",
       "phase_label": "Phase 1",
       "drug_names": [
-        "Sustained-Release Tablets",
-        "Immediate-Release Tablets"
+        "Pyridostigmine (溴吡斯的明)"
       ],
       "enrollment_count": 40,
       "enrollment_type": "ACTUAL",
@@ -628,7 +626,7 @@
       "results_post_date": "",
       "phase_label": "Phase 2 / Phase 3",
       "drug_names": [
-        "Tocilizumab Injection"
+        "Tocilizumab (托珠单抗)"
       ],
       "enrollment_count": 64,
       "enrollment_type": "ESTIMATED",
@@ -660,7 +658,7 @@
       "results_post_date": "",
       "phase_label": "Early Phase 1",
       "drug_names": [
-        "UCAR T-cell group"
+        "UCAR T-cell"
       ],
       "enrollment_count": 18,
       "enrollment_type": "ESTIMATED",
@@ -853,7 +851,7 @@
       "results_post_date": "2024-04-08",
       "phase_label": "Phase 3",
       "drug_names": [
-        "Tolebrutininb"
+        "Tolebrutinib (SAR442168)"
       ],
       "enrollment_count": 6,
       "enrollment_type": "ACTUAL",
@@ -1230,8 +1228,8 @@
       "results_post_date": "",
       "phase_label": "未标注",
       "drug_names": [
-        "Mycophenolic acid",
-        "AZA"
+        "Mycophenolate (吗替麦考酚酯)",
+        "Azathioprine (硫唑嘌呤)"
       ],
       "enrollment_count": 40,
       "enrollment_type": "ESTIMATED",
@@ -1444,7 +1442,7 @@
       "results_post_date": "",
       "phase_label": "Phase 2",
       "drug_names": [
-        "Inebilizumab"
+        "Inebilizumab (伊奈利珠单抗)"
       ],
       "enrollment_count": 15,
       "enrollment_type": "ESTIMATED",
@@ -1494,7 +1492,7 @@
       "results_post_date": "",
       "phase_label": "未标注",
       "drug_names": [
-        "Steroid Drug"
+        "Corticosteroids (糖皮质激素)"
       ],
       "enrollment_count": 202,
       "enrollment_type": "ESTIMATED",
@@ -2436,6 +2434,7 @@
       "results_post_date": "",
       "phase_label": "Phase 3",
       "drug_names": [
+        "Corticosteroids (糖皮质激素)",
         "Rituximab (利妥昔单抗)"
       ],
       "enrollment_count": 128,
@@ -2526,7 +2525,7 @@
       "results_post_date": "",
       "phase_label": "未标注",
       "drug_names": [
-        "immune globulin"
+        "IVIg (静注人免疫球蛋白)"
       ],
       "enrollment_count": 100,
       "enrollment_type": "",
@@ -2618,7 +2617,7 @@
       "results_post_date": "",
       "phase_label": "Phase 1",
       "drug_names": [
-        "SYS6020 injection"
+        "SYS6020 (BCMA CAR-T)"
       ],
       "enrollment_count": 60,
       "enrollment_type": "ESTIMATED",
@@ -2774,7 +2773,7 @@
       "results_post_date": "2015-12-23",
       "phase_label": "Phase 2",
       "drug_names": [
-        "Methotrexate"
+        "Methotrexate (甲氨蝶呤)"
       ],
       "enrollment_count": 50,
       "enrollment_type": "ACTUAL",
@@ -2898,7 +2897,7 @@
       "results_post_date": "2019-12-13",
       "phase_label": "Phase 2",
       "drug_names": [
-        "HIZENTRA ®"
+        "IVIg (静注人免疫球蛋白)"
       ],
       "enrollment_count": 23,
       "enrollment_type": "ACTUAL",
@@ -3627,7 +3626,7 @@
       "results_post_date": "",
       "phase_label": "Phase 2",
       "drug_names": [
-        "Tocilizumab Injectable Product"
+        "Tocilizumab (托珠单抗)"
       ],
       "enrollment_count": 64,
       "enrollment_type": "ESTIMATED",
@@ -3997,7 +3996,7 @@
       "results_post_date": "",
       "phase_label": "Phase 3",
       "drug_names": [
-        "Intravenous ImmuneGlobulin"
+        "IVIg (静注人免疫球蛋白)"
       ],
       "enrollment_count": 50,
       "enrollment_type": "",
@@ -4307,8 +4306,7 @@
       "results_post_date": "",
       "phase_label": "Phase 2",
       "drug_names": [
-        "250 mg CK-2017357",
-        "500 mg CK-2017357"
+        "Tirasemtiv (CK-2017357)"
       ],
       "enrollment_count": 32,
       "enrollment_type": "ACTUAL",
@@ -4643,7 +4641,7 @@
       "results_post_date": "",
       "phase_label": "Phase 2",
       "drug_names": [
-        "Ublituximab"
+        "Ublituximab (抗CD20单抗)"
       ],
       "enrollment_count": 120,
       "enrollment_type": "ESTIMATED",
@@ -4844,10 +4842,7 @@
       "results_post_date": "",
       "phase_label": "Phase 1",
       "drug_names": [
-        "Dose level 1 group",
-        "Dose level 2 group",
-        "Dose level 3 group",
-        "Dose level 4 group"
+        "SENL103 (CAR-T)"
       ],
       "enrollment_count": 10,
       "enrollment_type": "ACTUAL",
@@ -4893,8 +4888,7 @@
       "results_post_date": "",
       "phase_label": "Phase 1",
       "drug_names": [
-        "CD19-BCMA Targeted CAR-T Dose 1",
-        "CD19-BCMA Targeted CAR-T Dose 2"
+        "CD19-BCMA Targeted CAR-T"
       ],
       "enrollment_count": 9,
       "enrollment_type": "ESTIMATED",
@@ -5465,7 +5459,6 @@
       "results_post_date": "",
       "phase_label": "Phase 2 / Phase 3",
       "drug_names": [
-        "Standard lymphodepletion regimen",
         "KYV-101"
       ],
       "enrollment_count": 66,

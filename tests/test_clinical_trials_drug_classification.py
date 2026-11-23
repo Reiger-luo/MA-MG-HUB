@@ -74,6 +74,46 @@ def test_known_mechanism_reclassifications():
     assert cls("Neostigmine") == "胆碱酯酶抑制剂"
 
 
+def test_one_drug_one_row_normalization():
+    """同一药物的代号/缩写/剂型/剂量组必须归一为同一个规范名。"""
+    norm = load_builder_module().normalize_drug_name
+    # ChiCTR2600133923 的给药周期片段不是新 FcRn 药，应丢弃。
+    assert norm("5 treatment cycles.") == ""
+    # NCT06193889 的清淋预处理不是研究药。
+    assert norm("Standard lymphodepletion regimen") == ""
+    # NCT06371040 / NCT06958939 的剂量组是同一 CAR-T 的不同剂量水平。
+    assert norm("CD19-BCMA Targeted CAR-T Dose 1") == norm("CD19-BCMA Targeted CAR-T Dose 2")
+    assert norm("Dose level 1 group") == norm("Dose level 4 group") == "SENL103 (CAR-T)"
+    # 缩写/全称/大小写/中文名归并。
+    assert norm("AZA") == norm("azathioprine") == "Azathioprine (硫唑嘌呤)"
+    assert norm("methotrexate") == norm("Methotrexate") == "Methotrexate (甲氨蝶呤)"
+    assert norm("Mycophenolic acid") == norm("mycophenolate") == "Mycophenolate (吗替麦考酚酯)"
+    assert norm("cyclosporine") == norm("环孢素") == "Cyclosporine (环孢素)"
+    assert norm("glucocorticoid") == norm("Steroid Drug") == "Corticosteroids (糖皮质激素)"
+    assert norm("Tocilizumab Injection") == norm("Tocilizumab") == "Tocilizumab (托珠单抗)"
+    assert norm("RTX therapy") == norm("rituximab") == "Rituximab (利妥昔单抗)"
+    assert norm("inebilizumab") == norm("伊奈利珠单抗") == "Inebilizumab (伊奈利珠单抗)"
+    assert norm("HIZENTRA ®") == norm("immune globulin") == "IVIg (静注人免疫球蛋白)"
+    assert norm("Immediate-Release Tablets") == norm("Sustained-Release Tablets") == "Pyridostigmine (溴吡斯的明)"
+    assert norm("250 mg CK-2017357") == norm("500 mg CK-2017357") == "Tirasemtiv (CK-2017357)"
+
+
+def test_imvt1402_is_not_batoclimab():
+    """IMVT-1402 是 Immunovant 新一代 FcRn 抗体，不等于 batoclimab（IMVT-1401）。"""
+    norm = load_builder_module().normalize_drug_name
+    assert norm("IMVT-1402") == "IMVT-1402"
+    for alias in ("batoclimab", "IMVT-1401", "RVT-1401", "HBM9161", "HL161"):
+        assert norm(alias) == "Batoclimab (巴托利单抗)", alias
+    assert norm("IMVT-1402") != norm("Batoclimab")
+
+
+def test_tolebrutinib_is_btk_not_il6():
+    """SAR442168 = tolebrutinib，是 BTK 抑制剂，不得归入 IL-6 类。"""
+    module = load_builder_module()
+    assert module.normalize_drug_name("SAR442168") == module.normalize_drug_name("Tolebrutininb")
+    assert module.extract_drug_class("", "Tolebrutinib (SAR442168)") == "免疫抑制剂"
+
+
 def test_combined_phase_labels_keep_stage_rank():
     """带空格与不带空格的联合期别必须同权，避免最高阶段被判「未标注」。"""
     module = load_builder_module()
