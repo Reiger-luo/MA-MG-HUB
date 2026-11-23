@@ -111,18 +111,57 @@ def test_topic_weekly_impact_is_scoped_to_assigned_communities():
     assert impacts["fcrnTargetedTherapy"]["recent_article_count"] == 1
 
 
-def test_frontend_distinguishes_new_evidence_from_long_term_topic_pmids():
+def test_frontend_marks_curated_topics_as_static_snapshot():
     knowledge = (ROOT / "assets" / "knowledge.js").read_text(encoding="utf-8")
     contract = (ROOT / "scripts" / "common" / "publicDataContract.py").read_text(encoding="utf-8")
 
-    # 图谱节点详情的相关专题仍区分"本周新证据"与常驻专题
-    assert "本周新证据" in knowledge
+    # 策展专题就地展开，明确标注为静态快照、非实时证据。
+    # curated-topics.js 已于 2026-10-26 停止周更，旧的"本周新证据"角标是事实错误，已移除。
+    assert "topicSnapshotDate" in knowledge
+    assert "静态策展快照" in knowledge
+    assert "本周新证据" not in knowledge
     assert "topicsById" in knowledge
+    assert "renderTopicCuration" in knowledge
     # 社区视图/证据矩阵下线后，周更社区数据仍作为公开产物保留（诊疗现状滚动层数据源）
     assert "communityWeekly.js" in contract
     assert "communityAudit.js" in contract
     # wiki 覆盖层已退役
     assert "wikiTopicCoverage.js" not in contract
+
+
+def test_related_topic_opens_inline_and_deep_link_is_consumed():
+    """专题在工作台右栏展开、深链 ?topic= 有接收端、三层工作台结构就位。"""
+    knowledge = (ROOT / "assets" / "knowledge.js").read_text(encoding="utf-8")
+    landscape = (ROOT / "assets" / "landscape.js").read_text(encoding="utf-8")
+    html = (ROOT / "pages" / "knowledge.html").read_text(encoding="utf-8")
+
+    # 整个知识图谱模块无任何页面跳转（唯一外链是 PMID 的 target=_blank）
+    assert "landscape.html?tab=chapters" not in knowledge
+    assert "location.href" not in knowledge
+    # 深链接收端
+    assert "getInitialKnowledgeTopicId" in knowledge
+    assert "selectNode(anchorNodeId, { topicId: initialTopicId })" in knowledge
+    assert "function renderTopicCuration" in knowledge
+    # 三段式工作台渲染函数
+    assert "function renderWorkbench" in knowledge
+    assert "function renderCuration" in knowledge
+    assert "function renderCrossEvidence" in knowledge
+    assert "function hideEvidencePane" in knowledge
+    # 旧的外跳函数与三 tab 死代码已清理
+    assert "function topicHref" not in knowledge
+    assert "function topicHref" not in landscape
+    assert "function renderCommunityProfileBlock" not in knowledge
+    assert "switchWorkbenchTab" not in knowledge
+    # 前端显示名已改为主题分类
+    assert "全部主题分类" in html
+    assert "按主题分类染色" in html
+    assert "全部医学社区" not in html
+    # 三段式工作台结构：左关系 / 右策展 / 下文献
+    assert 'id="kgRelationList"' in html
+    assert 'id="kgCurationPanel"' in html
+    assert 'id="kgEvidencePane"' in html
+    assert 'id="kgEvidenceClose"' in html
+    assert 'data-workbench-tab' not in html
 
 
 def test_capability_docs_define_the_true_weekly_community_baseline():
@@ -132,6 +171,8 @@ def test_capability_docs_define_the_true_weekly_community_baseline():
 
     assert "周更前基线真正新增的 PMID" in operations
     assert "primary/secondary 社区" in operations
-    assert "进入相关专题时保留社区筛选参数" in operations
+    # 相关专题已改为就地展开静态策展快照，不再有"社区→专题"的周更过滤流程
+    assert "静态策展知识底座" in operations
+    assert "?topic=<id>" in operations
     assert "不等于滚动 14 天" in design
     assert "本周真实新增 PMID" in roadmap

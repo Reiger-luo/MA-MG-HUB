@@ -14,6 +14,13 @@
   var edges = coreEdges;
   var nodeRefs = graphData.node_references || {};
   var matrixRows = graphData.evidence_matrix || [];
+  // 关系详情索引：evidence_matrix 每行是一条"节点对"的交叉证据（含 references/limitation）。
+  // 共 180 行，不是全量边；没有矩阵记录的边回退用 edge.pmids。
+  var matrixByPairKey = {};
+  function pairKey(a, b) { return [a, b].sort().join('::'); }
+  matrixRows.forEach(function (row) {
+    if (row.source_id && row.target_id) matrixByPairKey[pairKey(row.source_id, row.target_id)] = row;
+  });
   var curatedData = window.MG_CURATED_TOPICS || { topics: [], bridge_by_node: {}, stats: {} };
   var curatedTopics = curatedData.topics || [];
   var topicsById = {};
@@ -44,6 +51,16 @@
   var elGraphDensity = document.getElementById('knowledgeGraphDensity');
   var elGraphColorMode = document.getElementById('knowledgeGraphColorMode');
   var elGraphLegend = document.getElementById('knowledgeGraphLegend');
+  var elWorkbenchTitle = document.getElementById('kgWorkbenchTitle');
+  var elWorkbenchNote = document.getElementById('kgWorkbenchNote');
+  var elRelationList = document.getElementById('kgRelationList');
+  var elCurationPanel = document.getElementById('kgCurationPanel');
+  var elEvidencePane = document.getElementById('kgEvidencePane');
+  var elEvidenceBody = document.getElementById('kgEvidenceBody');
+  var elEvidenceTitle = document.getElementById('kgEvidenceTitle');
+  var elEvidenceMeta = document.getElementById('kgEvidenceMeta');
+  var activeTopicId = '';
+  var activeEdgeId = ''; // 选边模式：非空表示正在看"主节点 × 关联节点"这条关系
 
   var svgNamespace = 'http://www.w3.org/2000/svg';
   var viewBox = { x: 0, y: 0, w: 1100, h: 720 };
@@ -53,10 +70,6 @@
   var activeNodeId = null;
   var activeCommunityId = null;
   var tabController = null;
-  var communityAssignmentCache = {};
-  var communityAssignmentLoading = {};
-  var communityAssignmentErrors = {};
-  var communityAssignmentCallbacks = {};
   var graphColorMode = 'type';
   var graphDensityMode = 'core';
   var communityPalette = [
@@ -142,25 +155,12 @@
     return escapeHtml(fallback || '#');
   }
 
-  function assetUrl(path) {
-    if (hub.assetUrl) return hub.assetUrl(path);
-    if (/\/pages\/[^/]*$/.test(window.location.pathname || '') && /^(assets|data|pages)\//.test(String(path || ''))) {
-      return '../' + path;
-    }
-    return path;
-  }
-
   function pageUrl(path) {
     if (hub.pageUrl) return hub.pageUrl(path);
     if (/\/pages\/[^/]*$/.test(window.location.pathname || '') && /^(assets|data|pages)\//.test(String(path || ''))) {
       return '../' + path;
     }
     return path;
-  }
-
-  function topicHref(topicId, communityId) {
-    var communityQuery = communityId ? '&community=' + encodeURIComponent(communityId) : '';
-    return pageUrl('pages/knowledge.html?topic=' + encodeURIComponent(topicId || '') + communityQuery);
   }
 
   function safeClassToken(value, fallback) {
@@ -170,10 +170,6 @@
   function cssEscape(value) {
     if (window.CSS && window.CSS.escape) return window.CSS.escape(value);
     return String(value).replace(/"/g, '\\"');
-  }
-
-  function attrSelectorEscape(value) {
-    return String(value).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
   }
 
   function compactNumber(value) {
@@ -217,7 +213,7 @@
   }
 
   function initializeCommunityControls() {
-    populateCommunitySelect(elGraphCommunityFilter, '全部医学社区');
+    populateCommunitySelect(elGraphCommunityFilter, '全部主题分类');
     graphColorMode = (elGraphColorMode && elGraphColorMode.value) || 'type';
     renderGraphLegend();
   }
@@ -475,8 +471,12 @@
 
     elCanvas.onclick = function () {
       activeNodeId = null;
+      activeEdgeId = '';
+      activeTopicId = '';
       clearActive();
       clearHighlight();
+      renderDetail(null);
+      renderWorkbench(null);
     };
   }
 
@@ -530,9 +530,11 @@
     }
   }
 
-  function selectNode(id) {
+  function selectNode(id, options) {
     if (!nodesById[id]) return;
     activeNodeId = id;
+    activeTopicId = '';
+    activeEdgeId = '';
     clearActive();
     clearHighlight();
     ensureNodeInView(id);
@@ -540,8 +542,82 @@
     if (nodeEl) nodeEl.classList.add('active');
     highlightNeighborhood(id);
     renderDetail(id);
+    renderWorkbench(id);
+    // 深链进入专题时，选中锚点后在右栏策展区显示该专题；用 options.topicId 传递，避免再次解析 URL。
+    if (options && options.topicId) {
+      openTopic(options.topicId);
+    }
   }
 
+  // ===== 选边模式：主节点 × 关联节点 =====
+  // 图谱里"边"是一等公民：点下方共现关系中的某行，即选中主节点与该节点之间的边。
+  // 图谱与主节点身份卡保持锁定；右侧切换为关联节点的解读，下方给出该边的交叉证据文献。
+
+  function edgeById(id) {
+    return allEdges.find(function (edge) { return edge.id === id; }) || null;
+  }
+
+  // 返回一条边相对于主节点的"另一端"节点 id；找不到主节点时取边的 to。
+  function edgeOtherId(edge, primaryId) {
+    if (!edge) return '';
+    if (edge.from === primaryId) return edge.to;
+    if (edge.to === primaryId) return edge.from;
+    return edge.to;
+  }
+
+  // 从 evidence_matrix 取这条节点对的交叉证据；无矩阵记录时回退到边上的代表 PMID。
+  function crossEvidenceFor(edge, primaryId) {
+    var otherId = edgeOtherId(edge, primaryId);
+    var row = matrixByPairKey[pairKey(primaryId, otherId)] || null;
+    if (row) {
+      return {
+        references: row.references || [],
+        key_pmids: row.key_pmids || [],
+        article_count: row.article_count || edge.article_count || 0,
+        level: row.best_evidence_level || edge.best_evidence_level || '',
+        relation: row.relation || edge.relation || '',
+        limitation: row.limitation || '',
+        hasMatrix: true
+      };
+    }
+    var refs = (edge.pmids || []).map(function (pmid) {
+      return { pmid: String(pmid), title: '（摘要级代表文献，标题请回 PMID 原文核对）', url: 'https://pubmed.ncbi.nlm.nih.gov/' + encodeURIComponent(pmid) + '/' };
+    });
+    return {
+      references: refs,
+      key_pmids: edge.pmids || [],
+      article_count: edge.article_count || 0,
+      level: edge.best_evidence_level || '',
+      relation: edge.relation || '',
+      limitation: '这条关系未进入证据矩阵明细，仅提供摘要级代表 PMID，不能作为完整文献清单。',
+      hasMatrix: false
+    };
+  }
+
+  function selectEdge(edgeId) {
+    var edge = edgeById(edgeId);
+    if (!edge || !activeNodeId) return;
+    activeEdgeId = edgeId;
+    activeTopicId = '';
+    // 图谱：主节点仍 active，同时把这条边单独高亮，让"选中的关系"可见。
+    clearHighlight();
+    highlightNeighborhood(activeNodeId);
+    var line = elCanvas.querySelector('.kg-edge[data-id="' + cssEscape(edgeId) + '"]');
+    if (line) line.classList.add('edge-selected');
+    var otherEl = elCanvas.querySelector('.kg-node[data-id="' + cssEscape(edgeOtherId(edge, activeNodeId)) + '"]');
+    if (otherEl) otherEl.classList.add('edge-peer');
+
+    // 左栏高亮选中的关系
+    Array.prototype.forEach.call(elRelationList ? elRelationList.querySelectorAll('[data-edge]') : [], function (button) {
+      button.classList.toggle('selected', button.getAttribute('data-edge') === edgeId);
+    });
+    // 右栏策展 + 下方文献清单
+    renderCuration(activeEdgeId);
+    renderCrossEvidence(activeEdgeId);
+  }
+
+  // 右侧身份卡：只回答「这个节点是什么」。所有可交互的清单统一移到下方工作台，
+  // 避免右侧既做身份说明又做导航，造成点击行为不一致。
   function renderDetail(id) {
     if (!elDetail) return;
     var node = nodesById[id];
@@ -549,33 +625,15 @@
       elDetail.innerHTML = '<div class="kg-empty-hint">点击图谱节点查看详情</div>';
       return;
     }
-    var refs = nodeRefs[id] || [];
-    var relatedEdges = allEdges.filter(function (edge) {
-      return edge.from === id || edge.to === id;
-    }).sort(function (a, b) {
-      return (b.evidence_score || 0) - (a.evidence_score || 0);
-    });
 
     var levelHtml = Object.keys(node.evidence_levels || {}).map(function (level) {
       return '<span class="mini-chip">Level ' + escapeHtml(level) + ' · ' + escapeHtml(node.evidence_levels[level]) + '</span>';
     }).join('');
 
-    var relatedHtml = relatedEdges.map(function (edge) {
-      var otherId = edge.from === id ? edge.to : edge.from;
-      var otherNode = nodesById[otherId] || {};
-      return '<button class="kg-relation-row" type="button" data-node="' + escapeHtml(otherId) + '">' +
-        '<span>' + escapeHtml(edge.relation) + '</span>' +
-        '<strong>' + escapeHtml(otherNode.title || otherId) + '</strong>' +
-        '<em>' + escapeHtml(edge.article_count || 0) + ' 篇</em>' +
-      '</button>';
-    }).join('');
-
-    var refsHtml = refs.length ? refs.map(renderReferenceItem).join('') : '<li>暂无 PMID 引用</li>';
-    var topicHtml = renderRelatedTopics(id);
-    var communityHtml = renderCommunityProfileBlock(node, '社区映射');
+    // 主主题静态呈现，不设点击。要按主题筛选请用顶部「主题分类」下拉或下方工作台。
     var communityBadge = node.dominant_community_id ?
       '<span class="kg-badge community-badge" style="--community-color:' + escapeHtml(communityColor(node.dominant_community_id)) + '">' + escapeHtml(node.dominant_community_title || getCommunityTitle(node.dominant_community_id)) + '</span>' :
-      '<span class="kg-badge">未映射社区</span>';
+      '<span class="kg-badge">未归入主题分类</span>';
 
     elDetail.innerHTML =
       '<div class="kg-detail-type">' + escapeHtml(typeLabel[node.type] || node.type) + '</div>' +
@@ -583,62 +641,240 @@
       '<div class="kg-badges">' +
         '<span class="kg-badge conf-' + escapeHtml(node.confidence || 'low') + '">' + escapeHtml(confidenceLabel[node.confidence] || '覆盖未知') + '</span>' +
         '<span class="kg-badge">' + escapeHtml(node.article_count || 0) + ' 篇 abstract</span>' +
-        '<span class="kg-badge">' + escapeHtml(sourceTypeLabel[node.source_type] || '摘要提及') + '</span>' +
         communityBadge +
       '</div>' +
       '<div class="kg-detail-summary">' + escapeHtml(node.summary || '') + '</div>' +
-      communityHtml +
-      topicHtml +
       '<div class="kg-detail-section"><h4>证据等级分布</h4><div class="kg-tags">' + levelHtml + '</div></div>' +
-      '<div class="kg-detail-section"><h4>关联关系 (' + escapeHtml(relatedEdges.length) + ')</h4><div class="kg-relation-list">' + relatedHtml + '</div></div>' +
-      '<div class="kg-detail-section"><h4>代表 PMID</h4><ul class="kg-study-list">' + refsHtml + '</ul></div>';
+      '<p class="kg-detail-note">在下方工作台选择一条关系，可查看关联节点的策展解读与两者的交叉文献。</p>';
+  }
 
-    Array.prototype.forEach.call(elDetail.querySelectorAll('[data-node]'), function (button) {
+  // ===== 下方工作台：左=关系选择(1) / 右=策展解读(3) / 下=证据文献清单 =====
+  // 选边交互完全收进工作台内部：选一条关系 → 右侧看关联节点策展 → 下方看这条关系的文献。
+  // 页面右侧身份卡始终锁定主节点，图谱也保持主节点高亮。
+  // 统一点击契约：除 PMID 原文是外链外，工作台内所有点击都是页内状态更新。
+
+  function renderWorkbench(id) {
+    var node = nodesById[id];
+    if (!elRelationList) return;
+    if (!node) {
+      if (elWorkbenchTitle) elWorkbenchTitle.textContent = '尚未选中节点';
+      if (elWorkbenchNote) elWorkbenchNote.textContent = '点击图谱中的节点开始';
+      elRelationList.innerHTML = '<div class="kg-empty-hint">点击图谱节点后列出它的共现关系。</div>';
+      if (elCurationPanel) elCurationPanel.innerHTML = '<div class="kg-empty-hint">选择左侧一条关系后，这里显示关联节点的策展解读。</div>';
+      hideEvidencePane();
+      return;
+    }
+    if (elWorkbenchTitle) elWorkbenchTitle.textContent = node.title;
+    if (elWorkbenchNote) elWorkbenchNote.textContent = (node.article_count || 0) + ' 篇 abstract · 摘要级证据线索';
+
+    var relatedEdges = allEdges.filter(function (edge) {
+      return edge.from === id || edge.to === id;
+    }).sort(function (a, b) {
+      return (b.article_count || 0) - (a.article_count || 0);
+    });
+
+    if (!relatedEdges.length) {
+      elRelationList.innerHTML = '<div class="kg-empty-hint">这个节点暂无共现关系。</div>';
+    } else {
+      elRelationList.innerHTML = '<p class="kg-detail-note">共 ' + relatedEdges.length + ' 条关系。点选一条，右侧看策展、下方看文献。</p>' +
+        relatedEdges.map(function (edge) {
+          var otherId = edge.from === id ? edge.to : edge.from;
+          var otherNode = nodesById[otherId] || {};
+          var level = edge.best_evidence_level ? '证据 ' + escapeHtml(edge.best_evidence_level) : '';
+          var inMatrix = !!matrixByPairKey[pairKey(id, otherId)];
+          var selected = edge.id === activeEdgeId ? ' selected' : '';
+          return '<button class="kg-relation-pick' + selected + '" type="button" data-edge="' + escapeHtml(edge.id) + '">' +
+            '<strong>' + escapeHtml(otherNode.title || otherId) + '</strong>' +
+            '<span>' + escapeHtml(edge.article_count || 0) + ' 篇' + (level ? ' · ' + level : '') + (inMatrix ? ' · 有明细' : '') + '</span>' +
+          '</button>';
+        }).join('');
+      Array.prototype.forEach.call(elRelationList.querySelectorAll('[data-edge]'), function (button) {
+        button.addEventListener('click', function () {
+          selectEdge(button.getAttribute('data-edge'));
+        });
+      });
+    }
+
+    if (activeEdgeId) {
+      // 切换节点后若仍有选边，重渲染右栏与下方
+      renderCuration(activeEdgeId);
+      renderCrossEvidence(activeEdgeId);
+    } else {
+      if (elCurationPanel) elCurationPanel.innerHTML = '<div class="kg-empty-hint">选择左侧一条关系后，这里显示关联节点的策展解读。</div>';
+      hideEvidencePane();
+    }
+  }
+
+  // 右栏：关联节点的策展解读（身份 + 该节点自己的策展专题）
+  function renderCuration(edgeId) {
+    if (!elCurationPanel) return;
+    var edge = edgeById(edgeId);
+    if (!edge || !activeNodeId) return;
+    var otherId = edgeOtherId(edge, activeNodeId);
+    var other = nodesById[otherId] || {};
+    var primary = nodesById[activeNodeId] || {};
+    var otherTopics = (curatedData.bridge_by_node && curatedData.bridge_by_node[otherId]) || [];
+    var topicHtml = otherTopics.length
+      ? otherTopics.map(function (tid) {
+          var t = topicsById[tid];
+          return t ? '<div class="kg-curation-topic"><strong>' + escapeHtml(t.title) + '</strong>' +
+            (t.summary ? '<p>' + escapeHtml(t.summary) + '</p>' : '') + '</div>' : '';
+        }).join('')
+      : '<div class="kg-empty-hint">该关联节点暂无策展专题（专题只覆盖部分核心节点）。</div>';
+
+    elCurationPanel.innerHTML =
+      '<div class="kg-curation-head">' +
+        '<div class="kg-detail-type">关联节点</div>' +
+        '<h4>' + escapeHtml(other.title || otherId) + '</h4>' +
+        '<div class="kg-badges">' +
+          '<span class="kg-badge">' + escapeHtml(typeLabel[other.type] || other.type || '') + '</span>' +
+          '<span class="kg-badge">' + escapeHtml(other.article_count || 0) + ' 篇 abstract</span>' +
+          '<span class="kg-badge relation-peer-badge">与 ' + escapeHtml(primary.title) + ' 共现</span>' +
+        '</div>' +
+        (other.summary ? '<p class="kg-detail-summary">' + escapeHtml(other.summary) + '</p>' : '') +
+      '</div>' +
+      '<div class="kg-curation-section"><h5>策展解读</h5>' + topicHtml + '</div>' +
+      '<p class="kg-detail-note">策展专题为观点性整理、非实时证据；引用前请核对 PMID 原文。</p>';
+  }
+
+  function hideEvidencePane() {
+    if (elEvidencePane) elEvidencePane.hidden = true;
+    // 收起即退出选边：右栏回到提示态、左栏取消关系高亮、图谱取消边高亮。
+    activeEdgeId = '';
+    if (elCurationPanel) elCurationPanel.innerHTML = '<div class="kg-empty-hint">选择左侧一条关系后，这里显示关联节点的策展解读。</div>';
+    if (elRelationList) {
+      Array.prototype.forEach.call(elRelationList.querySelectorAll('[data-edge]'), function (button) {
+        button.classList.remove('selected');
+      });
+    }
+    if (elCanvas) {
+      Array.prototype.forEach.call(elCanvas.querySelectorAll('.kg-edge.edge-selected,.kg-node.edge-peer'), function (el) {
+        el.classList.remove('edge-selected', 'edge-peer');
+      });
+    }
+  }
+
+  // 下方文献清单：这条"节点对"在 evidence_matrix 中的交叉证据。
+  function renderCrossEvidence(edgeId) {
+    if (!elEvidencePane || !elEvidenceBody) return;
+    var edge = edgeById(edgeId);
+    if (!edge || !activeNodeId) return;
+    var primary = nodesById[activeNodeId] || {};
+    var otherId = edgeOtherId(edge, activeNodeId);
+    var other = nodesById[otherId] || {};
+    var x = crossEvidenceFor(edge, activeNodeId);
+
+    if (elEvidenceTitle) elEvidenceTitle.textContent = (primary.title || '') + ' × ' + (other.title || '');
+    if (elEvidenceMeta) elEvidenceMeta.textContent = x.article_count + ' 篇共现 abstract · ' + (x.level ? '最佳证据 ' + x.level : '证据等级未标注');
+
+    var refsHtml = x.references.length
+      ? '<ul class="kg-study-list">' + x.references.slice(0, 20).map(renderReferenceItem).join('') + '</ul>'
+      : '<div class="kg-empty-hint">这条关系没有可展示的代表文献。</div>';
+    var limitHtml = x.limitation
+      ? '<p class="kg-detail-note">' + escapeHtml(x.limitation) + '</p>'
+      : '';
+
+    elEvidenceBody.innerHTML =
+      '<div class="cross-evidence-head">' +
+        '<span class="kg-badge">' + escapeHtml(x.relation || '共现关系') + '</span>' +
+        '<span class="kg-badge">' + escapeHtml(x.key_pmids.length) + ' 条代表 PMID</span>' +
+        (x.hasMatrix ? '' : '<span class="kg-badge conf-low">非完整清单</span>') +
+      '</div>' +
+      limitHtml +
+      '<p class="kg-detail-note">以下为两者在同一批文献中共同出现时被抽到的代表文献（PMID 标题可点回原文）。共现不代表疗效或因果。</p>' +
+      refsHtml;
+    elEvidencePane.hidden = false;
+  }
+
+  // 专题来源类型：策展层沿用旧 wiki 分类，这里只作标签，不参与图谱节点类型语义。
+  var topicSourceTypeLabel = {
+    concept: '概念专题',
+    entity: '事实专题',
+    dataPoint: '数据专题',
+    comparison: '对比专题'
+  };
+
+  // 策展快照日期：来自 curated-topics.js 的 generated_at，只取日期部分。
+  // 它不等于 topic.updated（各 wiki 正文的更新日期），两者都展示以避免误导。
+  var topicSnapshotDate = (function () {
+    var raw = curatedData.generated_at || '';
+    return raw ? String(raw).slice(0, 10) : '未知';
+  })();
+
+  // 右栏渲染一个完整策展专题（供 ?topic= 深链使用）。
+  // 数据已在内存（knowledge.html 已加载 curated-topics.js），标注为静态策展快照。
+  function renderTopicCuration(topicId) {
+    if (!elCurationPanel) return;
+    var topic = topicsById[topicId];
+    if (!topic) {
+      elCurationPanel.innerHTML = '<div class="kg-empty-hint">未找到该策展专题。</div>';
+      return;
+    }
+    var kind = topicSourceTypeLabel[topic.source_type] || '策展专题';
+    var updated = topic.updated || '未知';
+
+    var claimsHtml = (topic.claims || []).slice(0, 5).map(function (claim) {
+      var meta = [claim.claim_type, claim.section].filter(Boolean).join(' · ');
+      return '<div class="curated-claim">' +
+        (meta ? '<span>' + escapeHtml(meta) + '</span>' : '') +
+        '<p>' + escapeHtml(claim.text || '') + '</p>' +
+      '</div>';
+    }).join('');
+
+    var sceneHtml = (topic.msl_use || []).map(function (scene) {
+      return '<span class="mini-chip">' + escapeHtml(scene) + '</span>';
+    }).join('');
+
+    var anchorHtml = (topic.anchor_nodes || []).filter(function (id) { return nodesById[id]; }).map(function (id) {
+      return '<button class="kg-relation-row" type="button" data-node="' + escapeHtml(id) + '">' +
+        '<span>锚点节点</span><strong>' + escapeHtml(nodesById[id].title || id) + '</strong><em>跳转图谱</em>' +
+      '</button>';
+    }).join('');
+
+    var refs = topic.evidence_refs || [];
+    var refsHtml = refs.length
+      ? '<ul class="kg-study-list">' + refs.slice(0, 8).map(renderReferenceItem).join('') + '</ul>'
+      : '<div class="kg-empty-hint">暂无可校验 PMID；本专题观点无法据摘要级文献直接溯源。</div>';
+
+    var recent = (topic.impact && topic.impact.recent_articles) || [];
+    var recentHtml = recent.length
+      ? '<div class="kg-detail-section"><h4>快照新增证据（' + escapeHtml(topicSnapshotDate) + '）</h4>' +
+        '<ul class="kg-study-list">' + recent.slice(0, 5).map(renderReferenceItem).join('') + '</ul></div>'
+      : '';
+
+    var obsidianLink = topic.obsidian_url
+      ? '<a class="text-link" href="' + escapeHref(topic.obsidian_url) + '">在本地 Obsidian 打开原文</a>（需安装 Obsidian 与 efgartigimod-wiki 库）'
+      : '';
+
+    elCurationPanel.innerHTML =
+      '<div class="topic-freshness-note">静态策展快照 · 数据截至 ' + escapeHtml(topicSnapshotDate) +
+        ' · 正文更新 ' + escapeHtml(updated) + '。为观点性整理，非实时证据；引用前请核对 PMID 原文。</div>' +
+      '<div class="curated-topic-detail">' +
+        '<h2>' + escapeHtml(topic.title) + '</h2>' +
+        '<div class="kg-badges">' +
+          '<span class="kg-badge">' + escapeHtml(kind) + '</span>' +
+          '<span class="kg-badge">' + escapeHtml(topic.confidence || '未标注') + '</span>' +
+          '<span class="kg-badge">' + escapeHtml(topic.status || '') + '</span>' +
+        '</div>' +
+        '<div class="kg-detail-summary">' + escapeHtml(topic.summary || '') + '</div>' +
+        (sceneHtml ? '<div class="kg-detail-section"><h4>沟通场景</h4><div class="kg-tags">' + sceneHtml + '</div></div>' : '') +
+        (claimsHtml ? '<div class="kg-detail-section"><h4>策展要点（EFG 视角观点，非证据结论）</h4>' + claimsHtml + '</div>' : '') +
+        (anchorHtml ? '<div class="kg-detail-section"><h4>关联节点</h4><div class="kg-relation-list">' + anchorHtml + '</div></div>' : '') +
+        '<div class="kg-detail-section"><h4>长期知识底座 PMID</h4>' + refsHtml + '</div>' +
+        recentHtml +
+        (obsidianLink || topic.rel_path
+          ? '<div class="kg-detail-section"><h4>原始笔记</h4><div class="kg-detail-summary">' +
+            (topic.rel_path ? '<code>' + escapeHtml(topic.rel_path) + '</code><br>' : '') + obsidianLink +
+            '</div></div>'
+          : '') +
+      '</div>';
+
+    // 专题内的锚点按钮：图谱内选中该节点。
+    Array.prototype.forEach.call(elCurationPanel.querySelectorAll('[data-node]'), function (button) {
       button.addEventListener('click', function () {
         selectNode(button.getAttribute('data-node'));
       });
     });
-    Array.prototype.forEach.call(elDetail.querySelectorAll('[data-topic]'), function (button) {
-      button.addEventListener('click', function () {
-        openTopic(button.getAttribute('data-topic'));
-      });
-    });
-    Array.prototype.forEach.call(elDetail.querySelectorAll('[data-community]'), function (button) {
-      button.addEventListener('click', function () {
-        openCommunity(button.getAttribute('data-community'));
-      });
-    });
-  }
-
-  function renderRelatedTopics(nodeId) {
-    var ids = (curatedData.bridge_by_node && curatedData.bridge_by_node[nodeId]) || [];
-    var topics = ids.map(function (id) { return topicsById[id]; }).filter(Boolean).slice(0, 5);
-    if (!topics.length) return '';
-    return '<div class="kg-detail-section"><h4>相关专题</h4><div class="kg-relation-list">' +
-      topics.map(function (topic) {
-        var impact = topic.impact && topic.impact.status === 'updatedEvidence' ? '本周新证据' : '专题';
-        return '<button class="kg-relation-row" type="button" data-topic="' + escapeHtml(topic.id) + '">' +
-          '<span>' + escapeHtml(impact) + '</span>' +
-          '<strong>' + escapeHtml(topic.title) + '</strong>' +
-          '<em>' + escapeHtml((topic.evidence_refs || []).length) + ' PMID</em>' +
-        '</button>';
-      }).join('') + '</div></div>';
-  }
-
-  function renderCommunityProfileBlock(item, title) {
-    var profile = item.community_profile || [];
-    if (!profile.length) {
-      return '<div class="kg-detail-section"><h4>' + escapeHtml(title) + '</h4><div class="kg-empty-hint">当前图谱关系尚未映射到稳定医学事务社区。</div></div>';
-    }
-    var rows = profile.map(function (community) {
-      return '<button class="kg-relation-row community-profile-link" type="button" data-community="' + escapeHtml(community.community_id) + '">' +
-        '<span><i style="background:' + escapeHtml(communityColor(community.community_id)) + '"></i>' + escapeHtml(Math.round((community.total_ratio || 0) * 100)) + '%</span>' +
-        '<strong>' + escapeHtml(community.title || community.community_id) + '</strong>' +
-        '<em>' + escapeHtml(community.count || 0) + ' PMID</em>' +
-      '</button>';
-    }).join('');
-    return '<div class="kg-detail-section"><h4>' + escapeHtml(title) + '</h4>' +
-      '<div class="kg-relation-list">' + rows + '</div></div>';
   }
 
   function renderReferenceItem(ref) {
@@ -714,131 +950,6 @@
     });
   }
 
-  function loadScriptOnce(src, callback) {
-    var finalSrc = hub.withReleaseVersion ? hub.withReleaseVersion(src) : src;
-    var existing = document.querySelector('script[src="' + attrSelectorEscape(finalSrc) + '"]');
-    if (existing && existing.getAttribute('data-loaded') === '1') {
-      callback(true);
-      return;
-    }
-    if (existing && existing.getAttribute('data-loading') === '1') {
-      existing.addEventListener('load', function () { callback(true); }, { once: true });
-      existing.addEventListener('error', function () { callback(false); }, { once: true });
-      return;
-    }
-    if (existing) existing.remove();
-    var script = document.createElement('script');
-    script.src = finalSrc;
-    script.setAttribute('data-loading', '1');
-    script.onload = function () {
-      script.setAttribute('data-loaded', '1');
-      script.removeAttribute('data-loading');
-      callback(true);
-    };
-    script.onerror = function () {
-      script.removeAttribute('data-loading');
-      callback(false);
-    };
-    if (!existing) document.head.appendChild(script);
-  }
-
-  function loadCommunityAssignmentShard(communityId, callback) {
-    if (communityAssignmentCache[communityId]) {
-      callback(true, communityAssignmentCache[communityId]);
-      return;
-    }
-    if (communityAssignmentLoading[communityId]) {
-      communityAssignmentCallbacks[communityId].push(callback);
-      return;
-    }
-    communityAssignmentLoading[communityId] = true;
-    communityAssignmentCallbacks[communityId] = [callback];
-    loadScriptOnce(assetUrl('data/communityAssignments-' + encodeURIComponent(communityId) + '.js'), function (ok) {
-      var shards = window.MG_COMMUNITY_ASSIGNMENT_SHARDS || {};
-      var payload = shards[communityId] || null;
-      if (ok && payload) {
-        communityAssignmentCache[communityId] = payload;
-        delete communityAssignmentErrors[communityId];
-      } else {
-        communityAssignmentErrors[communityId] = true;
-      }
-      communityAssignmentLoading[communityId] = false;
-      var callbacks = communityAssignmentCallbacks[communityId] || [];
-      delete communityAssignmentCallbacks[communityId];
-      for (var i = 0; i < callbacks.length; i++) {
-        callbacks[i](ok && !!payload, payload);
-      }
-    });
-  }
-
-  function assignmentFlagLabel(flag) {
-    return {
-      lowConfidence: '低置信度',
-      crossCommunityConflict: '跨社区冲突'
-    }[flag] || flag;
-  }
-
-  function assignmentConfidenceLabel(value) {
-    return {
-      high: '高',
-      medium: '中',
-      low: '低',
-      unassigned: '未归类'
-    }[value] || value || '未知';
-  }
-
-  function renderAssignmentFlags(flags) {
-    return (flags || []).map(function (flag) {
-      return '<span class="community-assignment-flag">' + escapeHtml(assignmentFlagLabel(flag)) + '</span>';
-    }).join('');
-  }
-
-  function renderAssignmentSummary(items) {
-    var counts = { high: 0, medium: 0, low: 0, conflict: 0, china: 0 };
-    for (var i = 0; i < items.length; i++) {
-      var item = items[i] || {};
-      if (counts[item.confidence] !== undefined) counts[item.confidence]++;
-      if ((item.flags || []).indexOf('crossCommunityConflict') !== -1) counts.conflict++;
-      if (item.china_related) counts.china++;
-    }
-    return '<div class="community-assignment-summary">' +
-      '<span>全量 ' + escapeHtml(compactNumber(items.length)) + '</span>' +
-      '<span>高 ' + escapeHtml(counts.high) + '</span>' +
-      '<span>中 ' + escapeHtml(counts.medium) + '</span>' +
-      '<span>低 ' + escapeHtml(counts.low) + '</span>' +
-      '<span>冲突 ' + escapeHtml(counts.conflict) + '</span>' +
-      '<span>中国 ' + escapeHtml(counts.china) + '</span>' +
-    '</div>';
-  }
-
-  function renderAssignmentList(communityId, payload) {
-    var panel = document.getElementById('communityAssignmentPanel');
-    if (!panel || panel.getAttribute('data-community') !== communityId) return;
-    var items = (payload && payload.items) || [];
-    if (!items.length) {
-      panel.innerHTML = '<div class="kg-empty-hint">该社区分片暂无归类记录。</div>';
-      return;
-    }
-    var rows = items.map(function (item) {
-      var flags = renderAssignmentFlags(item.flags || []);
-      var secondary = (item.secondary || []).slice(0, 2).map(function (entry) {
-        var title = getCommunityTitle(entry.community_id);
-        return title + ' ' + Number(entry.score || 0).toFixed(1).replace(/\.0$/, '');
-      }).join(' / ');
-      return '<li class="community-assignment-row">' +
-        '<a href="' + escapeHref('https://pubmed.ncbi.nlm.nih.gov/' + encodeURIComponent(item.pmid || '') + '/') + '" target="_blank" rel="noopener">PMID ' + escapeHtml(item.pmid) + '</a>' +
-        '<span class="kg-badge conf-' + escapeHtml(item.confidence === 'high' ? 'high' : item.confidence === 'medium' ? 'medium' : 'low') + '">' + escapeHtml(assignmentConfidenceLabel(item.confidence)) + '</span>' +
-        '<span>' + escapeHtml(item.entry_date || item.pub_date || '-') + '</span>' +
-        '<span>' + escapeHtml(item.evidence_level ? 'Level ' + item.evidence_level : '未分级') + '</span>' +
-        (item.china_related ? '<span class="community-assignment-flag china">中国</span>' : '') +
-        flags +
-        (secondary ? '<em>' + escapeHtml(secondary) + '</em>' : '') +
-      '</li>';
-    }).join('');
-    panel.innerHTML = renderAssignmentSummary(items) +
-      '<ul class="community-assignment-list">' + rows + '</ul>';
-  }
-
   function getCommunityTitle(communityId) {
     var card = communityCardsById[communityId] || {};
     var taxonomy = taxonomyById[communityId] || {};
@@ -876,13 +987,23 @@
     }
   }
 
-  function openTopic(topicId, communityId) {
-    // 专题详情视图已由诊治格局「诊疗现状」承接
-    window.location.href = pageUrl('pages/landscape.html?tab=chapters');
+  // 深链 ?topic=<id>：专题来自策展层，有文档契约（operationsManual）但此前无实现。
+  // 非法 id 安全降级为空，不报错。
+  function getInitialKnowledgeTopicId() {
+    try {
+      var params = new URLSearchParams(window.location.search || '');
+      var topicId = params.get('topic') || '';
+      if (topicId && topicsById[topicId]) return topicId;
+      return '';
+    } catch (err) {
+      return '';
+    }
   }
 
-  function openCommunity(communityId) {
-    openCommunityGraph(communityId);
+  function openTopic(topicId) {
+    // 深链 ?topic=：在右栏策展区显示该专题完整内容，页内不跳页。
+    activeTopicId = topicId;
+    renderTopicCuration(topicId);
   }
 
   function openCommunityGraph(communityId) {
@@ -930,6 +1051,9 @@
   }
 
   function init() {
+    var closeEvidenceBtn = document.getElementById('kgEvidenceClose');
+    if (closeEvidenceBtn) closeEvidenceBtn.addEventListener('click', hideEvidencePane);
+
     renderBadge();
     renderStats();
     initializeCommunityControls();
@@ -938,17 +1062,28 @@
     attachGraphInteraction();
     attachNodeFilters();
     attachTabs();
-    selectNode(nodesById.fcrnInhibition ? 'fcrnInhibition' : (nodes[0] && nodes[0].id));
+
     var initialCommunityId = getInitialKnowledgeCommunityId();
     var initialNodeId = getInitialKnowledgeNodeId();
+    var initialTopicId = getInitialKnowledgeTopicId();
     var initialTab = getInitialKnowledgeTab();
-    if (initialNodeId) {
+    var defaultNodeId = nodesById.fcrnInhibition ? 'fcrnInhibition' : (nodes[0] && nodes[0].id);
+
+    if (initialTopicId) {
+      // 专题深链：选一个锚点节点作为身份卡上下文，并在工作台展开该专题。
+      var topic = topicsById[initialTopicId];
+      var anchors = (topic.anchor_nodes || []).filter(function (id) { return nodesById[id]; });
+      var anchorNodeId = anchors[0] || defaultNodeId;
+      activateTab('graph');
+      selectNode(anchorNodeId, { topicId: initialTopicId });
+    } else if (initialNodeId) {
       activateTab('graph');
       selectNode(initialNodeId);
     } else if (initialCommunityId) {
       openCommunityGraph(initialCommunityId);
-    } else if (['graph', 'china-network'].indexOf(initialTab) !== -1) {
-      activateTab(initialTab);
+    } else {
+      selectNode(defaultNodeId);
+      if (['graph', 'china-network'].indexOf(initialTab) !== -1) activateTab(initialTab);
     }
   }
 

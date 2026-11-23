@@ -24,7 +24,7 @@ function textOf(nodes) {
   return Array.from(nodes).map((node) => node.textContent.trim());
 }
 
-function bootPage(htmlRel, scriptRels, prelude) {
+function bootPage(htmlRel, scriptRels, prelude, fireDomReady) {
   // 去掉带 src 的 script，避免 jsdom 发起网络请求；数据脚本按顺序手动注入。
   const html = read(htmlRel).replace(/<script\b[^>]*\bsrc="[^"]*"[^>]*><\/script>/g, '');
   const dom = new JSDOM(html, {
@@ -36,6 +36,11 @@ function bootPage(htmlRel, scriptRels, prelude) {
   win.eval('window.MG_RELEASE_MANIFEST = ' + JSON.stringify({ run_id: 'frontend-smoke' }) + ';');
   if (prelude) win.eval(prelude);
   for (const rel of scriptRels) win.eval(read(rel));
+  // outside-only 模式下 jsdom 停在 loading，不会自动派发 DOMContentLoaded。
+  // 依赖该事件初始化的页面（如知识图谱）需显式触发一次。
+  if (fireDomReady) {
+    win.document.dispatchEvent(new win.Event('DOMContentLoaded', { bubbles: true }));
+  }
   return doc(win);
 }
 
@@ -374,6 +379,90 @@ try {
   }
 } catch (error) {
   check('中国情报联动运行时异常', false, String(error));
+}
+
+// ── 知识库：身份卡锁定主节点 + 工作台左关系/右策展 + 下方文献清单 ──
+try {
+  const document = bootPage('pages/knowledge.html', [
+    'assets/common.js',
+    'data/release-manifest.js',
+    'data/knowledge-graph.js',
+    'data/graphHealth.js',
+    'data/curated-topics.js',
+    'data/communityTaxonomy.js',
+    'data/communityCards.js',
+    'assets/knowledge.js'
+  ], null, true);
+
+  const detailTitle = document.querySelector('#knowledgeDetail h2');
+  check('默认节点身份卡渲染标题', Boolean(detailTitle && detailTitle.textContent.trim()),
+    detailTitle ? detailTitle.textContent.trim() : '未渲染');
+  check('右侧身份卡不含长列表',
+    document.querySelectorAll('#knowledgeDetail .kg-study-list').length === 0 &&
+    document.querySelectorAll('#knowledgeDetail [data-edge]').length === 0);
+
+  const workbenchTitle = document.querySelector('#kgWorkbenchTitle');
+  check('工作台标题随节点联动', Boolean(workbenchTitle && workbenchTitle.textContent.trim()) &&
+    workbenchTitle.textContent.trim() === (detailTitle ? detailTitle.textContent.trim() : ''),
+    workbenchTitle ? workbenchTitle.textContent.trim() : '未渲染');
+
+  // 左栏：关系选择列表；右栏初始提示；下方文献区初始隐藏
+  const relPicks = document.querySelectorAll('#kgRelationList [data-edge]');
+  check('左栏渲染共现关系列表', relPicks.length > 0, relPicks.length);
+  check('右栏初始为提示态', Boolean(document.querySelector('#kgCurationPanel .kg-empty-hint')));
+  check('下方文献区初始隐藏', Boolean(document.querySelector('#kgEvidencePane')).valueOf() &&
+    document.querySelector('#kgEvidencePane').hidden);
+
+  // 选中 efgartigimod 作为主节点（图谱节点点击）
+  const efgNode = document.querySelector('.kg-node[data-id="efgartigimod"]');
+  if (efgNode) efgNode.dispatchEvent(new document.defaultView.Event('click', { bubbles: true }));
+  const mainTitle = document.querySelector('#knowledgeDetail h2');
+  check('主节点锁定为 Efgartigimod', Boolean(mainTitle) && mainTitle.textContent.trim() === 'Efgartigimod',
+    mainTitle ? mainTitle.textContent.trim() : '未渲染');
+
+  // 左栏找 MG-ADL 关系并点击
+  const mgAdlPick = Array.from(document.querySelectorAll('#kgRelationList [data-edge]'))
+    .find((row) => row.textContent.indexOf('MG-ADL') >= 0);
+  check('左栏能找到 MG-ADL 关系', Boolean(mgAdlPick),
+    mgAdlPick ? mgAdlPick.textContent.trim().slice(0, 60) : '未找到');
+  if (mgAdlPick) {
+    mgAdlPick.click();
+
+    // 主节点身份卡保持锁定（不再切换）
+    const stillMain = document.querySelector('#knowledgeDetail h2');
+    check('选边后右侧身份卡仍锁定主节点', Boolean(stillMain) && stillMain.textContent.trim() === 'Efgartigimod',
+      stillMain ? stillMain.textContent.trim() : '未渲染');
+
+    // 左栏选中态高亮
+    check('左栏关系选中态高亮', Boolean(mgAdlPick.classList.contains('selected')));
+
+    // 右栏策展：显示关联节点 MG-ADL
+    const curationH4 = document.querySelector('#kgCurationPanel .kg-curation-head h4');
+    check('右栏显示关联节点策展', Boolean(curationH4) && curationH4.textContent.trim() === 'MG-ADL',
+      curationH4 ? curationH4.textContent.trim() : '未渲染');
+
+    // 下方文献区出现，标题为两节点交叉，文献清单有 PMID
+    const evidencePane = document.querySelector('#kgEvidencePane');
+    check('选边后下方文献区出现', Boolean(evidencePane) && !evidencePane.hidden);
+    const evidenceTitle = document.querySelector('#kgEvidenceTitle');
+    check('文献区标题为两节点交叉', Boolean(evidenceTitle) &&
+      evidenceTitle.textContent.indexOf('Efgartigimod') >= 0 &&
+      evidenceTitle.textContent.indexOf('MG-ADL') >= 0,
+      evidenceTitle ? evidenceTitle.textContent.trim() : '未渲染');
+    const crossRefs = document.querySelectorAll('#kgEvidenceBody .kg-study-list li');
+    check('交叉证据文献清单有 PMID', crossRefs.length > 0, crossRefs.length);
+
+    // 收起文献区：文献隐藏、右栏回提示、左栏取消高亮
+    const closeBtn = document.querySelector('#kgEvidenceClose');
+    if (closeBtn) closeBtn.click();
+    check('收起后文献区隐藏', Boolean(evidencePane) && evidencePane.hidden);
+    check('收起后右栏回提示态', Boolean(document.querySelector('#kgCurationPanel .kg-empty-hint')));
+    check('收起后左栏取消高亮', !mgAdlPick.classList.contains('selected'));
+  }
+
+  // 深链 ?topic= 的接收端（getInitialKnowledgeTopicId / 右栏专题渲染）由静态契约测试覆盖。
+} catch (error) {
+  check('知识库工作台运行时异常', false, String(error));
 }
 
 const ok = checks.every((item) => item.ok);

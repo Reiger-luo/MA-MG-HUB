@@ -1947,6 +1947,107 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
   display: block; margin-top: 0.18rem;
   color: var(--fg3); font-size: 0.72rem; font-style: normal;
 }
+/* 图谱控制区：分两行，先筛选节点再决定画法 */
+.kg-control-bar {
+  display: flex; flex-direction: column; gap: 0.7rem;
+  padding: 0.75rem 0.9rem; margin-bottom: 0.6rem;
+  background: var(--bg2); border: 1px solid var(--bg3); border-radius: 10px;
+}
+.kg-control-group { width: 100%; min-width: 0; }
+.kg-control-hint {
+  display: block; margin-bottom: 0.45rem;
+  font-size: 0.74rem; color: var(--fg3); font-weight: 500;
+}
+.kg-control-group .kg-filter-bar { margin-bottom: 0; }
+.kg-usage-hint {
+  font-size: 0.8rem; color: var(--fg2); line-height: 1.55;
+  margin: 0 0 0.8rem; padding-left: 0.15rem;
+}
+
+/* 下方节点工作台：左=关系选择(1) / 右=策展解读(3) / 下=证据文献清单 */
+.kg-workbench {
+  margin-top: 1.1rem; padding: 1rem 1.1rem 1.1rem;
+  background: var(--bg2); border: 1px solid var(--bg3); border-radius: 10px;
+}
+.kg-workbench-head {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  gap: 1rem; flex-wrap: wrap; margin-bottom: 0.5rem;
+}
+.kg-workbench-kicker {
+  display: block; font-size: 0.72rem; color: var(--fg3);
+  letter-spacing: 0.04em; margin-bottom: 0.15rem;
+}
+.kg-workbench-head h3 { font-size: 1.02rem; color: var(--fg); margin: 0; font-weight: 600; }
+.kg-workbench-note { font-size: 0.78rem; color: var(--fg3); }
+.kg-workbench-guide {
+  font-size: 0.78rem; color: var(--fg2); line-height: 1.5;
+  margin: 0 0 0.8rem;
+}
+
+/* 左右两栏：关系选择 : 策展解读 = 1 : 3 */
+.kg-workbench-main {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+  gap: 0.9rem; align-items: start;
+}
+.kg-relation-pane, .kg-curation-pane {
+  background: var(--bg); border: 1px solid var(--bg3);
+  border-radius: 8px; padding: 0.8rem 0.85rem; min-width: 0;
+}
+.kg-relation-pane h4, .kg-curation-pane h4, .kg-evidence-head h4 {
+  font-size: 0.82rem; color: var(--fg2); font-weight: 600;
+  margin: 0 0 0.6rem; letter-spacing: 0.02em;
+}
+.kg-relation-pane .kg-relation-list { max-height: 380px; overflow-y: auto; }
+.kg-relation-pane .kg-detail-note { margin-bottom: 0.5rem; }
+.kg-relation-pick {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 0.12rem;
+  width: 100%; text-align: left; cursor: pointer;
+  border: 1px solid var(--bg3); background: var(--bg2);
+  border-radius: 6px; padding: 0.45rem 0.6rem;
+  margin-bottom: 0.35rem;
+}
+.kg-relation-pick:hover { border-color: rgba(37,99,235,0.32); background: rgba(37,99,235,0.04); }
+.kg-relation-pick.selected {
+  border-color: rgba(37,99,235,0.5); background: rgba(37,99,235,0.07);
+}
+.kg-relation-pick strong { font-size: 0.83rem; color: var(--fg); font-weight: 500; line-height: 1.3; }
+.kg-relation-pick span { font-size: 0.72rem; color: var(--fg3); }
+.kg-curation-pane #kgCurationPanel { max-height: 420px; overflow-y: auto; }
+.kg-curation-head h4 { font-size: 0.98rem; color: var(--fg); margin: 0.15rem 0 0.45rem; }
+.kg-curation-section { margin-top: 0.7rem; }
+.kg-curation-section h5 {
+  font-size: 0.76rem; color: var(--fg3); font-weight: 500;
+  margin: 0 0 0.4rem; text-transform: uppercase; letter-spacing: 0.04em;
+}
+.kg-curation-topic {
+  border: 1px solid var(--bg3); background: var(--bg2);
+  border-radius: 6px; padding: 0.5rem 0.65rem; margin-bottom: 0.4rem;
+}
+.kg-curation-topic strong { font-size: 0.84rem; color: var(--fg); }
+.kg-curation-topic p { font-size: 0.78rem; color: var(--fg2); line-height: 1.5; margin: 0.25rem 0 0; }
+
+/* 下方证据文献清单：选中关系后出现 */
+.kg-evidence-pane {
+  margin-top: 0.9rem; padding: 0.85rem 0.95rem;
+  background: var(--bg); border: 1px solid var(--bg3); border-radius: 8px;
+}
+.kg-evidence-pane[hidden] { display: none; }
+.kg-evidence-head {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  gap: 1rem; flex-wrap: wrap;
+}
+.kg-evidence-head h4 { font-size: 0.9rem; color: var(--fg); margin: 0; }
+.kg-evidence-head-right { display: flex; align-items: center; gap: 0.7rem; }
+.kg-evidence-close {
+  padding: 0.25rem 0.55rem; background: var(--bg2);
+  border: 1px solid var(--bg3); border-radius: 5px;
+  color: var(--fg2); font-size: 0.75rem; cursor: pointer;
+}
+.kg-evidence-close:hover { border-color: rgba(37,99,235,0.4); color: var(--accent); }
+.cross-evidence-head { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.6rem; }
+.kg-evidence-pane .kg-study-list { margin: 0; max-height: 360px; overflow-y: auto; }
+.relation-peer-badge { color: var(--red); border-color: rgba(220,38,38,0.3); }
+
 .kg-filter-bar {
   display: flex; gap: 0.6rem; align-items: center;
   margin-bottom: 0.8rem; flex-wrap: wrap;
@@ -1999,6 +2100,9 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
 }
 .kg-canvas .kg-edge.dim { stroke-opacity: 0.16; }
 .kg-canvas .kg-edge.hl { stroke: var(--accent); stroke-opacity: 0.82; stroke-width: 2.6; }
+/* 选边模式：被选中的关系线加粗描边，关联节点单独标记 */
+.kg-canvas .kg-edge.edge-selected { stroke: var(--red); stroke-opacity: 1; stroke-width: 3.6; }
+.kg-node.edge-peer circle { stroke: var(--red); stroke-width: 3; }
 .kg-canvas .kg-edge.source-metadataConfirmed { stroke: rgba(22,163,74,0.36); }
 .kg-canvas .kg-edge.secondary-edge { stroke-opacity: 0.2; }
 .kg-canvas.density-bridge .kg-edge.secondary-edge,
@@ -2023,12 +2127,7 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
 .kg-node.active circle { stroke: var(--accent); stroke-width: 4; }
 .kg-node.active text { fill: var(--fg); font-weight: 600; }
 .kg-node:hover text { fill: var(--fg); }
-/* 节点类型配色 */
-.kg-node.type-entity circle { fill: var(--accent); }
-.kg-node.type-entity text { fill: var(--accent); font-weight: 600; }
-.kg-node.type-concept circle { fill: var(--green); }
-.kg-node.type-data-point circle { fill: var(--yellow); }
-.kg-node.type-comparison circle { fill: #7c3aed; }
+/* 节点类型配色（对应现行六类：disease / drug / mechanism / population / outcome / evidence） */
 .kg-node.type-disease circle { fill: #2563eb; }
 .kg-node.type-disease text { fill: #2563eb; font-weight: 600; }
 .kg-node.type-drug circle { fill: #0891b2; }
@@ -2040,12 +2139,6 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
 .kg-canvas.community-mode .kg-node.community-mapped circle { fill: var(--community-color); }
 .kg-canvas.community-mode .kg-node.community-mapped text { fill: var(--community-color); }
 .kg-canvas.community-mode .kg-node.community-unmapped circle { fill: #94a3b8; }
-/* 争议节点红色描边 + 角标 */
-.kg-node.contested circle { stroke: var(--red); stroke-width: 3; }
-.kg-node .kg-contest-mark {
-  fill: var(--red); font-size: 13px; font-weight: 700;
-  text-anchor: middle; pointer-events: none;
-}
 /* 图谱工具栏 */
 .kg-controls {
   position: absolute; top: 0.6rem; right: 0.6rem;
@@ -2069,17 +2162,13 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
 /* 图例 */
 .kg-legend {
   display: flex; flex-wrap: wrap; gap: 0.8rem; align-items: center;
-  margin: 0.7rem 0 0; padding: 0.55rem 0.85rem;
+  margin: 0 0 0.6rem; padding: 0.5rem 0.85rem;
   background: var(--bg2); border: 1px solid var(--bg3);
   border-radius: 8px;
   font-size: 0.78rem; color: var(--fg2);
 }
 .kg-legend-item { display: flex; align-items: center; gap: 0.35rem; }
 .kg-legend-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
-.kg-legend-dot.entity { background: var(--accent); }
-.kg-legend-dot.concept { background: var(--green); }
-.kg-legend-dot.data-point { background: var(--yellow); }
-.kg-legend-dot.comparison { background: #7c3aed; }
 .kg-legend-dot.disease { background: #2563eb; }
 .kg-legend-dot.drug { background: #0891b2; }
 .kg-legend-dot.mechanism { background: #16a34a; }
@@ -2087,9 +2176,6 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
 .kg-legend-dot.outcome { background: #7c3aed; }
 .kg-legend-dot.evidence { background: #64748b; }
 .kg-legend-dot.unmapped { background: #94a3b8; }
-.kg-legend-dot.contested {
-  background: var(--bg2); border: 2.5px solid var(--red);
-}
 
 /* 详情面板 */
 .kg-detail {
@@ -2120,15 +2206,12 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
   border-color: color-mix(in srgb, var(--community-color) 30%, #d7dee8);
 }
 .kg-badge.community-badge.mini { font-size: 0.68rem; padding: 0.14rem 0.38rem; margin-right: 0.18rem; }
-.kg-badge.contested { color: var(--red); background: rgba(220,38,38,0.1); border-color: rgba(220,38,38,0.3); font-weight: 600; }
+.kg-detail-note {
+  font-size: 0.72rem; color: var(--fg3); line-height: 1.5;
+  margin: 0 0 0.4rem;
+}
 .kg-detail-summary {
   font-size: 0.85rem; color: var(--fg); line-height: 1.6;
-  margin-bottom: 0.8rem;
-}
-.kg-detail-contradiction {
-  font-size: 0.8rem; color: var(--red);
-  background: rgba(220,38,38,0.07); border: 1px solid rgba(220,38,38,0.2);
-  border-radius: 6px; padding: 0.5rem 0.65rem;
   margin-bottom: 0.8rem;
 }
 .kg-detail-section h4 {
@@ -2588,43 +2671,14 @@ button.conference-ref-chip:hover { border-color: rgba(37,99,235,0.34); backgroun
   border-color: rgba(37,99,235,0.45);
   color: var(--accent);
 }
-.curated-topic-layout {
-  display: grid; grid-template-columns: minmax(300px, 0.78fr) minmax(0, 1.22fr);
-  gap: 0.8rem; align-items: start;
-}
-.curated-topic-list {
-  display: flex; flex-direction: column; gap: 0.45rem;
-  max-height: 680px; overflow-y: auto;
-}
-.curated-topic-card {
-  border: 1px solid var(--bg3); background: var(--bg);
-  border-radius: 8px; padding: 0.7rem 0.75rem;
-  text-align: left; cursor: pointer;
-  display: flex; flex-direction: column; gap: 0.18rem;
-}
-.curated-topic-card:hover {
-  border-color: rgba(37,99,235,0.28);
-  background: rgba(37,99,235,0.035);
-}
-.curated-topic-card.active {
-  border-color: rgba(37,99,235,0.5);
-  background: rgba(37,99,235,0.07);
-}
-.curated-topic-card span {
-  color: var(--fg3); font-size: 0.72rem;
-}
-.curated-topic-card strong {
-  color: var(--fg); font-size: 0.86rem; font-weight: 500;
-  line-height: 1.35;
-}
-.curated-topic-card em {
-  color: var(--fg3); font-size: 0.72rem; font-style: normal;
-}
-.topic-community-row {
-  display: flex; flex-wrap: wrap; gap: 0.25rem; margin: 0.12rem 0 0.04rem;
-}
-.topic-community-chip {
-  margin-bottom: 0.18rem;
+/* 专题就地展开面板（旧两栏专题列表布局已随视图下线移除） */
+.curated-topic-inline { margin-top: 0.7rem; }
+.topic-freshness-note {
+  background: var(--bg2); border: 1px solid var(--bg3);
+  border-left: 3px solid var(--yellow);
+  border-radius: 6px; padding: 0.5rem 0.7rem;
+  font-size: 0.75rem; line-height: 1.55; color: var(--fg2);
+  margin-bottom: 0.6rem;
 }
 .curated-topic-detail {
   background: var(--bg); border: 1px solid var(--bg3);
@@ -4427,8 +4481,9 @@ body.pmid-modal-open { overflow: hidden; }
   .kg-filter-bar { flex-direction: column; align-items: stretch; }
   .knowledge-search.compact, .compact-select { width: 100%; max-width: none; }
   .kg-layout { grid-template-columns: 1fr; }
-  .curated-topic-layout { grid-template-columns: 1fr; }
-  .curated-topic-list, .curated-topic-detail { max-height: none; }
+  .kg-workbench-main { grid-template-columns: 1fr; }
+  .kg-relation-pane .kg-relation-list, .kg-curation-pane #kgCurationPanel { max-height: none; }
+  .curated-topic-detail { max-height: none; }
   .community-profile-grid { grid-template-columns: 1fr; }
   .kg-canvas-wrap { height: 440px; }
   .kg-detail { max-height: none; }

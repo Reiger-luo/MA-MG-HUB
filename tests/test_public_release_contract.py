@@ -91,7 +91,11 @@ def test_all_local_lazy_loaders_inherit_the_release_token():
     chinaNetwork = (PROJECT / "assets" / "chinaAuthorNetwork.js").read_text(encoding="utf-8")
 
     assert "withReleaseVersion(assetUrl(src))" in common
-    assert "hub.withReleaseVersion(src)" in knowledge
+    # knowledge.js 的社区文章级分片懒加载（loadScriptOnce）已作为死代码移除：
+    # 该加载器无调用方，HTML 也无 #communityAssignmentPanel 容器。
+    # 因此这里改为断言"无残留懒加载"，而不是要求它带 release token。
+    assert "loadScriptOnce" not in knowledge
+    assert "communityAssignments-" not in knowledge
     assert "hub.loadScript(src, callback)" in literature
     assert "var loader = hub.loadScript" in chinaNetwork
 

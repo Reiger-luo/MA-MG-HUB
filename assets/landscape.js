@@ -93,11 +93,6 @@
     }
   }
 
-  function topicHref(topicId, communityId) {
-    var communityQuery = communityId && communityId !== 'all' ? '&community=' + encodeURIComponent(communityId) : '';
-    return pageUrl('pages/knowledge.html?topic=' + encodeURIComponent(topicId || '') + communityQuery);
-  }
-
   function toSet(items) {
     var output = {};
     (items || []).forEach(function(item) {
