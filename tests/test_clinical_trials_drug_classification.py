@@ -114,6 +114,68 @@ def test_tolebrutinib_is_btk_not_il6():
     assert module.extract_drug_class("", "Tolebrutinib (SAR442168)") == "免疫抑制剂"
 
 
+def _trial(module, rid, names, *, phase="Phase 1", title="", registry="ClinicalTrials.gov"):
+    """构造管线矩阵所需的最小记录；drug_names 按真实管线先经 split_combo_drugs 归一化。"""
+    normalized = module.split_combo_drugs(names)
+    return {
+        "registry": registry,
+        "registry_id": rid,
+        "drug_name": normalized[0] if normalized else "",
+        "drug_names": normalized,
+        "title": title or rid,
+        "phase_label": phase,
+        "status_label": "招募中",
+        "sponsor": "Sponsor",
+    }
+
+
+def test_pipeline_matrix_one_row_per_drug():
+    """同一规范药名只能出现一行，研究数/最高阶段按合并后的研究汇总。"""
+    module = load_builder_module()
+    records = [
+        _trial(module, "NCT06371040", ["CD19-BCMA Targeted CAR-T Dose 1", "CD19-BCMA Targeted CAR-T Dose 2"], phase="Phase 1"),
+        _trial(module, "NCT06958939", ["Dose level 1 group", "Dose level 4 group"], phase="Phase 1"),
+        _trial(module, "NCT00814138", ["Methotrexate"], phase="Phase 4"),
+        _trial(module, "ChiCTR-IPR-15006081", ["methotrexate"], phase="Phase 2", registry="ChiCTR"),
+        _trial(module, "NCT00997412", ["AZA", "Mycophenolic acid"], phase="Phase 3"),
+        _trial(module, "NCT001", ["azathioprine"], phase="Phase 4"),
+    ]
+    matrix = module.build_pipeline_matrix(records)
+    names = [m["name"] for m in matrix]
+    assert len(names) == len(set(names)), "每个规范药名只能有一行"
+
+    by_name = {m["name"]: m for m in matrix}
+    # NCT06371040 的 Dose1/Dose2 合并为一行，只计一次研究。
+    car_t = by_name["CD19-BCMA Targeted CAR-T"]
+    assert car_t["study_count"] == 1
+    assert [t["registry_id"] for t in car_t["trials"]] == ["NCT06371040"]
+    # SENL103 的 Dose level 1/4 合并为一行。
+    assert by_name["SENL103 (CAR-T)"]["study_count"] == 1
+    # 大小写不同的 Methotrexate 合并，研究数=2，最高阶段取 Phase 4。
+    mtx = by_name["Methotrexate (甲氨蝶呤)"]
+    assert mtx["study_count"] == 2
+    assert mtx["highest_phase_label"] == "Phase 4"
+    assert {t["registry"] for t in mtx["trials"]} == {"ClinicalTrials.gov", "ChiCTR"}
+    # AZA/azathioprine 合并为 2 项；Mycophenolic acid 独立归一为吗替麦考酚酯。
+    assert by_name["Azathioprine (硫唑嘌呤)"]["study_count"] == 2
+    assert by_name["Mycophenolate (吗替麦考酚酯)"]["study_count"] == 1
+
+
+def test_pipeline_matrix_class_stable_despite_title_drift():
+    """同一药名即便各研究标题含不同机制词，也必须归到同一个分类、只出一行。"""
+    module = load_builder_module()
+    records = [
+        # 两条标题分别含 efgartigimod（FcRn）与 rituximab（B 细胞），但药名相同；
+        # 药名自身无关键词时，分类由该药名全部研究题名合并决定，仍只出一行。
+        _trial(module, "NCT-A", ["Proprietary-X"], title="Study with efgartigimod induction"),
+        _trial(module, "NCT-B", ["Proprietary-X"], title="Study with rituximab comparator"),
+    ]
+    matrix = module.build_pipeline_matrix(records)
+    rows = [m for m in matrix if m["name"] == "Proprietary-X"]
+    assert len(rows) == 1, "同一药名不得因标题不同拆成两行"
+    assert rows[0]["study_count"] == 2
+
+
 def test_combined_phase_labels_keep_stage_rank():
     """带空格与不带空格的联合期别必须同权，避免最高阶段被判「未标注」。"""
     module = load_builder_module()
