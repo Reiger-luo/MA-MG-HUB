@@ -73,7 +73,7 @@ def pipeline_steps(args, full_available: bool | None = None) -> list[PipelineSte
             PipelineStep(
                 "refresh-china-drug-trials-cache",
                 py("refresh-cde-live-cache.py") + ["--no-build", "--interval-days", "6"],
-                outputs=[DATA / "china-drug-trials-cache.json"],
+                outputs=[DATA / "china-drug-trials-cache.json", DATA / "china-drug-trials-changes.json"],
                 optional=True,
             ),
             PipelineStep(
@@ -173,7 +173,7 @@ def pipeline_steps(args, full_available: bool | None = None) -> list[PipelineSte
         PipelineStep(
             "refresh-china-drug-trials-cache",
             py("refresh-cde-live-cache.py") + ["--no-build", "--interval-days", "1"],
-            outputs=[DATA / "china-drug-trials-cache.json"],
+            outputs=[DATA / "china-drug-trials-cache.json", DATA / "china-drug-trials-changes.json"],
             optional=True,
         ),
     ])
@@ -194,13 +194,16 @@ def pipeline_steps(args, full_available: bool | None = None) -> list[PipelineSte
             DATA / "expert-profiles.js", DATA / "expert-profiles-china.js",
             DATA / "expert-profiles-international.js", DATA / "landscape-data.js", DATA / "content-modules.js",
             DATA / "clinicaltrials-pipeline-cache.json",
+            # rebuild-experts-from-full 时由 build_experts 一并写出的后端检索索引。
+            DATA / "pubmed-author-institution-index.json", DATA / "pubmed-entity-normalization-index.json",
         ],
     ))
     if not args.skip_llm:
         steps.append(PipelineStep(
             "enrich-literature-narrative", py("enrich-literature-narrative.py"),
             # 完整中文 finding 是正式发布契约；enrich 失败时不得静默发布占位文案。
-            outputs=[DATA / "signals-weekly.js"],
+            # 该步骤还会按归一化信号回填 dashboard-data.js 的情报中心指标。
+            outputs=[DATA / "signals-weekly.js", DATA / "dashboard-data.js"],
         ))
     if full_available:
         steps.extend([

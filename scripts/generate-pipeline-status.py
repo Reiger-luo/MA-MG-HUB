@@ -44,7 +44,6 @@ PUBLIC_ARTIFACTS = [
     ("graphHealth.js", "图谱健康", "MG_GRAPH_HEALTH"),
     ("china-author-network.js", "中国作者医院联络图", "MG_CHINA_AUTHOR_NETWORK"),
     ("curated-topics.js", "专题层", "MG_CURATED_TOPICS"),
-    ("wikiTopicCoverage.js", "专题社区覆盖", "MG_WIKI_TOPIC_COVERAGE"),
     ("communityTaxonomy.js", "社区 Taxonomy", "MG_COMMUNITY_TAXONOMY"),
     ("communityAssignmentIndex.js", "社区归类索引", "MG_COMMUNITY_ASSIGNMENT_INDEX"),
     ("communityAssignmentsRecent.js", "近一年社区归类", "MG_COMMUNITY_RECENT_ASSIGNMENTS"),
@@ -848,7 +847,7 @@ def buildStatus():
                     "label": "efgar-wiki 本地策展源",
                     "mode": "read_local_vault",
                     "path": "~/Library/Mobile Documents/iCloud~md~obsidian/Documents/efgartigimod-wiki",
-                    "handoff": "build-curated-topic-data.py → curated-topics.js；buildWikiTopicCoverage.py → wikiTopicCoverage.js",
+                    "handoff": "build-curated-topic-data.py → curated-topics.js（wiki 覆盖层已退役，不再产出 wikiTopicCoverage.js）",
                     "note": "wiki cron 先更新本地 vault；MG-HUB 周更随后读取，不让 wiki 任务直接阻断网站部署。"
                 },
                 {

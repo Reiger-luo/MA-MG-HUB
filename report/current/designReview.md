@@ -89,7 +89,7 @@ MG-core 指南/共识
 | 严格公开文献 | `data/literature-recent.js` |
 | 当前周文献信号 | `data/signals-weekly.js` |
 | 当前三源临床试验信号 | `data/trial-signals-weekly.js`（本周 `signals`；`signal_history` 为跨周沉淀的最近 10 条，供临床试验页「更新进展」回溯） |
-| 本周真实新增 PMID 口径 | 本地 `data/literature-ingest-latest.json` → `signals-weekly.js`、`communityWeekly.js`、`curated-topics.js`、`wikiTopicCoverage.js` |
+| 本周真实新增 PMID 口径 | 本地 `data/literature-ingest-latest.json` → `signals-weekly.js`、`communityWeekly.js`、`curated-topics.js`（wiki 覆盖层已退役） |
 | 语义 full 状态 | `data/literature-full-index.js`、community index、`pipeline-status.js` |
 | 指南/共识 | `data/guideline-consensus-cache.json`（`scripts/sync-guideline-consensus.py` 周更全量重扫写入） |
 | 重点药物 II/III 期文献 | `data/source-signals.js` 的 `keyDrugTrialPublications` 频道（`scripts/common/key_drugs.py`） |

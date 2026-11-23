@@ -102,7 +102,7 @@ MG-core 与证据门控
 | `china-intelligence.js` | 严格 recent 的中国相关文献 |
 | `community*.js` | taxonomy、卡片、周更、分配和质量审计 |
 | `knowledge-graph.js`、`graphHealth.js` | 图谱、证据矩阵和图谱健康 |
-| `curated-topics.js`、`wikiTopicCoverage.js` | 策展专题及其社区覆盖 |
+| `curated-topics.js` | 策展专题（wiki 覆盖层 `wikiTopicCoverage.js` 已退役，不再产出） |
 | `china-author-network.js` | 中国医院、作者、合作关系和药物线索 |
 | `expert-profiles*.js` | China-only 前端画像与离线国际分片 |
 | `clinical-trials-data.js` | 多注册源临床试验数据 |
