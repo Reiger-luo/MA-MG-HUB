@@ -802,6 +802,56 @@ def normalize_signal(candidate: dict[str, Any], raw: dict[str, Any], index: int)
     return signal
 
 
+SIGNAL_HISTORY_LIMIT = 10
+
+
+def history_signal_key(signal: dict[str, Any]) -> str:
+    """历史去重用：优先 candidateId，缺失时回退到登记号 + 标题。"""
+    candidate_id = normalize_text(signal.get("candidateId"))
+    if candidate_id:
+        return candidate_id
+    registry_ids = "|".join(normalize_text(item) for item in (signal.get("registryIds") or []) if normalize_text(item))
+    return registry_ids + "::" + normalize_text(signal.get("title"))
+
+
+def build_signal_history(
+    previous_history: list[dict[str, Any]] | None,
+    current_signals: list[dict[str, Any]],
+    captured_at: str,
+    limit: int = SIGNAL_HISTORY_LIMIT,
+) -> list[dict[str, Any]]:
+    """跨周沉淀信号：同一 candidateId 仅保留最新一条，按收录批次与登记日期降序取最近 limit 条。"""
+    captured_at = normalize_text(captured_at)
+    merged: dict[str, dict[str, Any]] = {}
+    # 旧历史先入并保留各自收录批次；本周同名条目随后覆盖，内容与批次更新为最新。
+    for signal in previous_history or []:
+        if not isinstance(signal, dict):
+            continue
+        key = history_signal_key(signal)
+        if not key or key.endswith("::"):
+            continue
+        merged[key] = {**signal, "candidateId": key, "capturedAt": normalize_text(signal.get("capturedAt")) or captured_at}
+    for signal in current_signals or []:
+        if not isinstance(signal, dict):
+            continue
+        key = history_signal_key(signal)
+        if not key or key.endswith("::"):
+            continue
+        merged[key] = {**signal, "candidateId": key, "capturedAt": captured_at}
+
+    ordered = sorted(
+        merged.values(),
+        key=lambda item: (
+            normalize_text(item.get("capturedAt")),
+            STRENGTH_RANK.get(normalize_text(item.get("strength")), 0),
+            normalize_text(item.get("date")),
+            history_signal_key(item),
+        ),
+        reverse=True,
+    )
+    return ordered[:limit]
+
+
 def analyze_candidates(candidates: list[dict[str, Any]], complete_fn=complete) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     decisions = []
     eligible = []
@@ -897,8 +947,9 @@ def main() -> int:
             print("No source window advanced; preserved existing trial signal artifact")
             return 0
     signals, decisions = analyze_candidates(candidates)
+    generated_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     payload = {
-        "schema_version": "1.0", "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "schema_version": "1.0", "generated_at": generated_at,
         "source_policy": {
             "analysis_model": "clinical-trial-signal-enrichment-v2", "llm_enrichment": True,
             "strength_scale": "source_internal_trial_milestone_priority",
@@ -911,6 +962,11 @@ def main() -> int:
             "strength_counts": {label: sum(item.get("strength") == label for item in signals) for label in ("强", "中", "弱")},
         },
         "signals": signals,
+        "signal_history": build_signal_history(
+            previous.get("signal_history") if isinstance(previous, dict) else None,
+            signals,
+            generated_at[:10],
+        ),
     }
     atomic_write_js_global(OUTPUT_PATH, "MG_TRIAL_SIGNALS_DATA", payload)
     try:

@@ -1186,3 +1186,36 @@ def test_case_report_still_hits_case_level_ceiling():
 
     assert decision["decision"] == "background"
     assert decision["ceilingRule"] == "case_level"
+
+
+def test_clinical_trials_tab_has_persistent_update_progress_panel():
+    """情报中心临床试验底部常驻「更新进展」，沉淀跨周信号且随周更数据同步。"""
+    html = (PROJECT / "pages" / "literature.html").read_text(encoding="utf-8")
+    literature_js = (PROJECT / "assets" / "literature.js").read_text(encoding="utf-8")
+    css = (PROJECT / "assets" / "main.css").read_text(encoding="utf-8")
+
+    assert 'id="tab-trials"' in html
+    assert 'id="trialHistoryPanel"' in html
+    assert 'id="trialHistoryList"' in html
+    assert 'id="trialHistoryBadge"' in html
+    assert "更新进展" in html
+    assert "trial-signals-weekly.js" in html
+    assert "function renderTrialHistory()" in literature_js
+    assert "signal_history" in literature_js
+    assert "renderTrialHistory();" in literature_js
+    assert ".trial-history-panel" in css
+    assert ".trial-history-cohort" in css
+
+
+def test_committed_trial_signal_payload_has_backfilled_history():
+    """当前发布的试验信号数据必须携带可回溯的历史沉淀，且不超过 10 条。"""
+    from scripts.common.io import load_js_global
+
+    payload = load_js_global(
+        PROJECT / "data" / "trial-signals-weekly.js", "MG_TRIAL_SIGNALS_DATA"
+    )
+    history = payload.get("signal_history") or []
+    assert 0 < len(history) <= 10
+    keys = [item.get("candidateId") for item in history]
+    assert len(keys) == len(set(keys))
+    assert all(item.get("capturedAt") for item in history)

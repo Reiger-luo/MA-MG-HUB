@@ -40,7 +40,7 @@ ClinicalTrials.gov 是目前唯一按周抓取的注册源。每次构建时，`
 3. 依据新增、状态、结果记录和实际字段变化确定 `updateMateriality`；
 4. 确定性代码给出 `include/background/exclude` 与强度上限；
 5. MG 专家 LLM 只解释可验证字段，输出 takeaway、战略意义、边界和后续追踪问题；
-6. 校验候选—裁决覆盖、登记引用、强度上限和防疗效夸大后，原子写入 `trial-signals-weekly.js`。
+6. 校验候选—裁决覆盖、登记引用、强度上限和防疗效夸大后，把本周信号并入 `signal_history`（按 candidateId 去重、按收录批次降序保留最近 10 条），原子写入 `trial-signals-weekly.js`。
 
 强试验信号仅包括新增关键试验或关键试验的高实质更新。关键试验的联系人、普通地点、格式或不可解释字段变化仍为背景；一般试验的高实质更新为中，早期/探索试验的有限真实变化为弱。注册平台出现结果记录或研究完成，只能写为结果/开发里程碑，不能写成疗效阳性。
 
@@ -53,6 +53,8 @@ python3 scripts/enrich-clinical-trial-signals.py --replay-current-window
 每个来源窗口同时记录缓存实质内容的稳定 `source_revision`（`semantic-v1` 忽略纯抓取时间戳）。发布校验把它与 `clinicalTrialsSummary.js.source_updates` 对齐；只要三源任一缓存实质内容已变化而试验信号仍指向旧 revision，发布就会 fail closed。旧冻结产物在受控 replay 时只有窗口时间仍与当前缓存完全一致、且旧版全缓存摘要仍能匹配时，才允许迁移 revision，避免把旧候选伪装成已分析当前缓存。
 
 首页统一“信号板”只展示通过门控的试验信号，以及三源原始变化计数、比较窗口和更新时间；完整原始变化继续在情报中心临床试验页核查。`source-signals.js` 的 `trialRegistry.items` 保留原始登记列表，`trialRegistry.weekly_signals` 则只接收门控后的试验信号。周更 Markdown 同样按文献/试验分节，不复用旧的文献 Top 3 代替试验判断。文献与试验即使属于同一项目也不跨组聚合。
+
+`trial-signals-weekly.js.signal_history` 是跨周沉淀层：每次 enrichment 用 `build_signal_history` 把本周 `signals` 并入旧历史，同一 `candidateId` 仅留最新一条，按 `capturedAt`（收录批次 YYYY-MM-DD）与强度降序保留最近 10 条；本周无合格信号时旧历史原样保留，旧条目的 `capturedAt` 不被刷新。情报中心临床试验页底部常驻「更新进展」读取该字段供回溯，与首页按周刷新的 `signals` 独立展示。该字段是同一产物的一部分，不改变公开文件契约或发布清单产物列表。
 
 ## ChiCTR 周更
 

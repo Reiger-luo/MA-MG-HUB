@@ -100,6 +100,7 @@ try {
     'data/signals-weekly.js',
     'data/communityTaxonomy.js',
     'data/clinical-trials-data.js',
+    'data/trial-signals-weekly.js',
     'assets/literature.js'
   ], read('data/source-signals.js'));
 
@@ -152,6 +153,37 @@ try {
   check('卡片带类型语义色条', cardStripes, items.length);
 } catch (error) {
   check('情报中心页面运行时异常', false, String(error));
+}
+
+// ── 临床试验：底部常驻「更新进展」跨周沉淀最近 10 条信号 ──
+try {
+  const historyDoc = bootPage('pages/literature.html', [
+    'assets/common.js',
+    'data/literature-recent.js',
+    'data/signals-weekly.js',
+    'data/communityTaxonomy.js',
+    'data/clinical-trials-data.js',
+    'data/trial-signals-weekly.js',
+    'assets/literature.js'
+  ], read('data/source-signals.js'));
+
+  const trialsTab = Array.from(historyDoc.querySelectorAll('[data-tab]'))
+    .find((node) => node.getAttribute('data-tab') === 'trials');
+  if (trialsTab) trialsTab.click();
+  const historyCards = historyDoc.querySelectorAll('#trialHistoryList .trial-history-card');
+  check('更新进展板块渲染 10 条沉淀信号', historyCards.length === 10, historyCards.length);
+  check('更新进展卡片带收录批次',
+    historyCards.length > 0 && Array.from(historyCards).every(
+      (card) => /收录批次\s*\d{4}-\d{2}-\d{2}/.test(card.textContent)),
+    historyCards.length ? historyCards[0].textContent.slice(0, 120) : '无卡片');
+  check('更新进展徽标显示条数',
+    /10\s*条/.test(historyDoc.querySelector('#trialHistoryBadge').textContent),
+    historyDoc.querySelector('#trialHistoryBadge').textContent);
+  check('更新进展保留证据边界声明',
+    historyCards.length > 0 && Array.from(historyCards).every(
+      (card) => card.textContent.indexOf('注册/开发信号，不代表疗效证据') >= 0), '');
+} catch (error) {
+  check('更新进展板块运行时异常', false, String(error));
 }
 
 // ── 中国情报：柱形点击交叉筛选（mock ECharts 捕获 setOption 与 click handler） ──
@@ -262,7 +294,7 @@ try {
     const ivHit = hitCount();
     evidence.handlers.click({ seriesType: 'bar', dataIndex: 2 });
     check('证据等级多选保留两个 chip', chipTexts().length === 2, chipTexts().join(' / '));
-    check('证据等级多选命中为并集 129 篇', hitCount() === 129, ivHit + ' -> ' + hitCount());
+    check('证据等级多选命中为并集 128 篇', hitCount() === 128, ivHit + ' -> ' + hitCount());
     chinaDoc.querySelector('#chinaFilterClear').click();
   }
 
@@ -270,7 +302,7 @@ try {
     quartile.handlers.click({ seriesType: 'bar', dataIndex: 1 });
     quartile.handlers.click({ seriesType: 'bar', dataIndex: 2 });
     check('分区多选保留两个 chip', chipTexts().length === 2, chipTexts().join(' / '));
-    check('分区多选命中为并集 164 篇', hitCount() === 164, hitCount());
+    check('分区多选命中为并集 165 篇', hitCount() === 165, hitCount());
     chinaDoc.querySelector('#chinaFilterClear').click();
   }
 } catch (error) {

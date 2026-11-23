@@ -2151,6 +2151,7 @@
     renderTrialsDecisionSignals();
     populatePipelineFilters();
     renderPipelineMatrix();
+    renderTrialHistory();
   }
 
   // ── 领域重大事件：获批监管 / 指南共识 / II-III期重点药物文献 / 新III期 / 周更强中试验信号 ──
@@ -2314,6 +2315,60 @@
     if (!badge) return;
     var meta = trialsData.meta || {};
     badge.textContent = (meta.generated_at || '—') + ' · ' + (meta.total_count || 0) + ' 条';
+  }
+
+  // ── 更新进展：跨周沉淀的临床试验信号（最近 10 条），常驻不随本周信号刷新清空 ──
+  function trialHistoryRegistryRefs(signal) {
+    var refs = (signal && signal.registryRefs) || [];
+    if (!refs.length) return '';
+    return '<div class="trial-signal-refs"><span>官方登记</span><div>' + refs.map(function(ref) {
+      var url = escapeHref(ref && ref.url);
+      var label = escapeHtml((ref && ref.registryId) || (ref && ref.registry) || '登记页');
+      return '<a href="' + url + '" target="_blank" rel="noopener">' + label + '</a>';
+    }).join('') + '</div></div>';
+  }
+
+  function renderTrialHistoryCard(signal) {
+    var item = signal || {};
+    var statusChange = [item.fromStatus, item.toStatus].filter(Boolean).join(' → ');
+    var changeText = item.changeSummary || item.materialityRationale || '本轮注册变化请打开官方登记页核查。';
+    var interventionText = (item.interventions || []).slice(0, 4).join(' / ');
+    var strength = item.strength || '弱';
+    var capturedAt = escapeHtml(item.capturedAt || '—');
+    return '<article class="signal-card trial-signal-card trial-history-card signal-' + escapeHtml(strength) + '">' +
+      '<div class="signal-card-head"><div>' +
+        '<span class="signal-strength">' + escapeHtml(strength) + '信号</span>' +
+        '<span class="signal-type">' + escapeHtml(item.type || '开发进展') + '</span>' +
+      '</div>' +
+      '<span class="trial-history-cohort">收录批次 ' + capturedAt + '</span></div>' +
+      '<h3 class="signal-title">' + escapeHtml(item.title || '(无标题)') + '</h3>' +
+      '<div class="trial-signal-meta"><span>' + escapeHtml(item.phase || '未标注') + '</span>' +
+        (statusChange ? '<span>' + escapeHtml(statusChange) + '</span>' : '') +
+        (interventionText ? '<span>' + escapeHtml(interventionText) + '</span>' : '') + '</div>' +
+      (item.takeaway ? '<p class="signal-takeaway">' + escapeHtml(item.takeaway) + '</p>' : '') +
+      '<div class="trial-signal-change"><span>本轮更新 · ' + escapeHtml(item.updateMateriality || '轻微') + '实质性</span><p>' + escapeHtml(changeText) + '</p></div>' +
+      '<div class="trial-signal-rationale"><div><span>为何值得关注</span><p>' + escapeHtml(item.whySignal || item.strengthRationale || '') + '</p></div>' +
+        '<div><span>试验定位</span><p>' + escapeHtml(item.keyTrialRationale || '') + '</p></div></div>' +
+      '<p class="trial-signal-boundary"><strong>证据边界</strong> · ' + escapeHtml(item.evidenceBoundary || '注册/开发信号，不代表疗效证据。') + '</p>' +
+      trialHistoryRegistryRefs(item) +
+      '<p class="trial-signal-disclaimer">注册/开发信号，不代表疗效证据</p>' +
+    '</article>';
+  }
+
+  function renderTrialHistory() {
+    var list = document.getElementById('trialHistoryList');
+    if (!list) return;
+    var badge = document.getElementById('trialHistoryBadge');
+    var data = window.MG_TRIAL_SIGNALS_DATA || {};
+    var history = Array.isArray(data.signal_history) ? data.signal_history : [];
+    if (badge) {
+      badge.textContent = history.length + ' 条 · 截至 ' + ((data.generated_at || '').slice(0, 10) || '—');
+    }
+    if (!history.length) {
+      list.innerHTML = '<div class="empty-state small"><h3>暂无沉淀信号</h3><p>后续周更产生的合格试验信号会在此滚动保留最近 10 条。</p></div>';
+      return;
+    }
+    list.innerHTML = history.map(renderTrialHistoryCard).join('');
   }
 
   function renderTrialsDecisionSignals() {

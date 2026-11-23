@@ -422,3 +422,45 @@ def test_replay_does_not_attach_current_revision_to_an_older_frozen_window(monke
 
     assert module.main() == 0
     assert all("source_revision" not in window for window in written["payload"]["source_windows"].values())
+
+
+def test_signal_history_keeps_recent_ten_and_deduplicates_by_candidate():
+    """历史沉淀：同一 candidateId 仅留最新一条，按收录批次降序保留最近 10 条。"""
+    module = load_module()
+    prior = [
+        {"candidateId": "A", "title": "旧版A", "strength": "强", "date": "2026-01-01", "capturedAt": "2026-01-01"},
+        *[
+            {"candidateId": f"H{i}", "title": f"历史{i}", "strength": "中", "date": "2026-01-01", "capturedAt": "2026-02-01"}
+            for i in range(9)
+        ],
+    ]
+    current = [{"candidateId": "A", "title": "新版A", "strength": "强", "date": "2026-03-01"}]
+
+    history = module.build_signal_history(prior, current, "2026-03-10")
+
+    assert len(history) == 10
+    assert history[0]["candidateId"] == "A"
+    assert history[0]["title"] == "新版A"
+    assert history[0]["capturedAt"] == "2026-03-10"
+    assert sum(item["candidateId"] == "A" for item in history) == 1
+    assert all(item["capturedAt"] == "2026-02-01" for item in history[1:])
+
+
+def test_signal_history_empty_current_week_preserves_prior_capture_dates():
+    """本周无合格信号时不得清空历史，也不得把旧信号的批次刷成本周。"""
+    module = load_module()
+    prior = [
+        {"candidateId": "X", "title": "保留", "strength": "弱", "date": "2026-02-01", "capturedAt": "2026-02-05"},
+    ]
+
+    history = module.build_signal_history(prior, [], "2026-03-10")
+
+    assert len(history) == 1
+    assert history[0]["candidateId"] == "X"
+    assert history[0]["capturedAt"] == "2026-02-05"
+
+
+def test_history_key_falls_back_to_registry_ids_and_title():
+    module = load_module()
+    signal = {"registryIds": ["NCT00000001"], "title": "某项研究"}
+    assert module.history_signal_key(signal) == "NCT00000001::某项研究"

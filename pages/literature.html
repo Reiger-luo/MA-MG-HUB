@@ -349,6 +349,18 @@
 
     <!-- Pipeline matrix table -->
     <div id="pipelineMatrixContainer"></div>
+
+    <!-- 更新进展：跨周沉淀的最近 10 条临床试验信号，常驻不随本周刷新清空 -->
+    <section class="workspace-panel trial-history-panel" id="trialHistoryPanel" aria-labelledby="trialHistoryTitle">
+      <div class="panel-head">
+        <div>
+          <h2 id="trialHistoryTitle">更新进展</h2>
+          <p class="trial-history-intro">首页临床试验信号按周刷新，这里保留最近 10 条合格信号，方便错过周更时回溯。每条标注收录批次与证据边界；注册/开发信号不代表疗效结论。</p>
+        </div>
+        <span class="update-badge" id="trialHistoryBadge">—</span>
+      </div>
+      <div class="trial-history-list signal-list" id="trialHistoryList"></div>
+    </section>
   </section>
 
   <section class="intel-tab-panel" id="tab-events">
@@ -381,6 +393,7 @@
 <script src="../data/signals-weekly.js?v=local-20261123-050016"></script>
 <script src="../data/communityTaxonomy.js?v=local-20261123-050016"></script>
 <script src="../data/clinical-trials-data.js?v=local-20261123-050016"></script>
+<script src="../data/trial-signals-weekly.js?v=local-20261123-050016"></script>
 <script src="../assets/literature.js?v=local-20261123-050016"></script>
 </body>
 </html>
