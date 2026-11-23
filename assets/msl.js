@@ -7,6 +7,8 @@
   var profiles = expertPayload.experts || [];
   var chinaExpertIndex = ((window.MG_EXPERT_PROFILE_CHINA || {}).items) || expertPayload.china_expert_index || [];
   var quickExpertIds = expertPayload.quick_expert_ids || {};
+  // 研究方向专长门槛由后台数据管线写入 manifest；当前产物未带该字段时回退同值。
+  var topicSpecialtyMin = Math.max(1, Number((expertPayload.summary || {}).topic_specialty_min_publications) || 5);
   var expertIndex = [];
   var expertPool = [];
   var expertById = {};
@@ -42,6 +44,7 @@
     update: document.getElementById('mslUpdate'),
     search: document.getElementById('expertSearch'),
     topicFilters: document.getElementById('topicFilters'),
+    topicFilterHint: document.getElementById('topicFilterHint'),
     institutionFilter: document.getElementById('institutionFilter'),
     institutionOptions: document.getElementById('institutionOptions'),
     locationFilterLabel: document.getElementById('locationFilterLabel'),
@@ -189,6 +192,30 @@
     return Boolean(normalizeText(keyword));
   }
 
+  function hasProfileFilterSelection() {
+    if (selectedTopic !== 'all') return true;
+    if (selectedLocation !== 'all') return true;
+    if (selectedProductivity !== 'all') return true;
+    if (selectedActive !== 'all') return true;
+    var institutionKeyword = el.institutionFilter ? (el.institutionFilter.value || '').trim() : '';
+    return Boolean(institutionKeyword);
+  }
+
+  // 某专家在指定研究方向的发文数；命中后台专长门槛才视为该方向专长。
+  function expertTopicPublicationCount(expert, topic) {
+    var items = namedCountItems(expert.interests, 'term');
+    var normalized = normalizeText(topic);
+    for (var i = 0; i < items.length; i++) {
+      if (normalizeText(items[i].term) === normalized) return items[i].count || 0;
+    }
+    return 0;
+  }
+
+  function matchesTopicSpecialty(expert) {
+    if (selectedTopic === 'all') return true;
+    return expertTopicPublicationCount(expert, selectedTopic) >= topicSpecialtyMin;
+  }
+
   function quickExperts() {
     var ids = quickExpertIds.china || [];
     return ids.map(function(id) { return expertById[id]; }).filter(Boolean);
@@ -334,22 +361,31 @@
     }
   }
 
+  // 方向选项按专长门槛统计达标人数，只保留至少有一位专长的方向。
   function topTopics() {
     var counts = {};
     for (var i = 0; i < expertPool.length; i++) {
-      var tags = expertTags(expertPool[i]);
-      for (var j = 0; j < tags.length; j++) counts[tags[j]] = (counts[tags[j]] || 0) + 1;
+      for (var j = 0; j < researchTopicOrder.length; j++) {
+        if (expertTopicPublicationCount(expertPool[i], researchTopicOrder[j]) >= topicSpecialtyMin) {
+          counts[researchTopicOrder[j]] = (counts[researchTopicOrder[j]] || 0) + 1;
+        }
+      }
     }
-    return researchTopicOrder.filter(function(topic) { return counts[topic]; });
+    return researchTopicOrder.filter(function(topic) { return counts[topic]; }).map(function(topic) {
+      return { name: topic, count: counts[topic] };
+    });
   }
 
   function renderTopicFilters() {
     var topics = topTopics();
     var html = '<label class="filter-checkbox-item"><input type="radio" name="topic" value="all" checked> 全部</label>';
     for (var i = 0; i < topics.length; i++) {
-      html += '<label class="filter-checkbox-item"><input type="radio" name="topic" value="' + escapeHtml(topics[i]) + '"> ' + escapeHtml(topics[i]) + '</label>';
+      html += '<label class="filter-checkbox-item"><input type="radio" name="topic" value="' + escapeHtml(topics[i].name) + '"> ' + escapeHtml(topics[i].name) + ' · ' + topics[i].count + ' 人</label>';
     }
     el.topicFilters.innerHTML = html;
+    if (el.topicFilterHint) {
+      el.topicFilterHint.textContent = '该方向发文 ≥ ' + topicSpecialtyMin + ' 篇才计为专长，括号内为达标人数。';
+    }
   }
 
   function renderExpertFilterOptions() {
@@ -416,14 +452,14 @@
   function filteredExperts() {
     var keyword = el.search ? (el.search.value || '').trim() : '';
     var institutionKeyword = el.institutionFilter ? (el.institutionFilter.value || '').trim() : '';
-    // 专家画像仅在用户输入关键词后展示，避免首屏默认列出候选专家。
-    if (!hasProfileSearchQuery(keyword)) return [];
-    var list = sortedExperts(keyword);
+    var hasQuery = hasProfileSearchQuery(keyword);
+    var hasFilter = hasProfileFilterSelection();
+    // 搜索词与筛选项都为空时保持空态，避免首屏默认列出候选专家。
+    // 只有筛选项时从全库筛选；搜索词与筛选项同时存在时按 AND 收窄。
+    if (!hasQuery && !hasFilter) return [];
+    var list = hasQuery ? sortedExperts(keyword) : sortedExperts('');
     if (selectedTopic !== 'all') {
-      list = list.filter(function(expert) {
-        var text = expertSearchBlob(expert);
-        return text.indexOf(normalizeText(selectedTopic)) !== -1;
-      });
+      list = list.filter(matchesTopicSpecialty);
     }
     if (institutionKeyword) {
       var institutionQuery = normalizeText(institutionKeyword);
@@ -443,8 +479,10 @@
       });
     }
     list = list.filter(matchesProductivityFilter).filter(matchesActiveFilter);
-    var exactMatches = exactNameMatches(list, keyword);
-    if (exactMatches.length) return exactMatches;
+    if (hasQuery) {
+      var exactMatches = exactNameMatches(list, keyword);
+      if (exactMatches.length) return exactMatches;
+    }
     return list;
   }
 
@@ -480,12 +518,12 @@
 
   function renderExperts() {
     var keyword = el.search ? (el.search.value || '').trim() : '';
-    if (!hasProfileSearchQuery(keyword)) {
+    if (!hasProfileSearchQuery(keyword) && !hasProfileFilterSelection()) {
       selectedProfileExpertId = '';
       el.expertCount.textContent = '0';
-      el.expertList.innerHTML = '<div class="empty-state"><h3>请输入关键词搜索专家</h3><p>可按姓名、拼音、机构、省份或研究方向查询。</p></div>';
-      el.expertDetail.innerHTML = '<div class="empty-state"><h3>等待搜索专家</h3><p>在左侧搜索框输入关键词后查看专家画像。</p></div>';
-      if (el.expertResultMeta) el.expertResultMeta.textContent = '请输入关键词后显示匹配结果';
+      el.expertList.innerHTML = '<div class="empty-state"><h3>请输入关键词或选择筛选条件</h3><p>可输入姓名、拼音、机构、省份或方向；也可仅用筛选项从专家库筛选。</p></div>';
+      el.expertDetail.innerHTML = '<div class="empty-state"><h3>等待检索条件</h3><p>输入关键词或选择筛选条件后查看专家画像。</p></div>';
+      if (el.expertResultMeta) el.expertResultMeta.textContent = '请输入关键词或选择筛选条件后显示匹配结果';
       return;
     }
     var list = filteredExperts();

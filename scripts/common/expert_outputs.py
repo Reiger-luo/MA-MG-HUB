@@ -8,6 +8,10 @@ from typing import Any
 
 from .io import atomic_write_js_global
 
+# 研究方向专长门槛：某方向发文数达到该值，才把该方向视为专家专长。
+# 由后台统一维护，写入 manifest summary 供前端读取；前端仅在当前产物缺字段时回退同值。
+TOPIC_SPECIALTY_MIN_PUBLICATIONS = 5
+
 
 def build_expert_manifest(experts: dict[str, Any]) -> dict[str, Any]:
     """构建轻量 manifest；前端默认只加载中国分片。"""
@@ -16,6 +20,7 @@ def build_expert_manifest(experts: dict[str, Any]) -> dict[str, Any]:
     generated_at = experts.get("generated_at") or datetime.now(timezone.utc).isoformat()
     summary = dict(experts.get("summary") or {})
     summary.update({"frontend_load_mode": "china_only", "initial_shard": "china"})
+    summary["topic_specialty_min_publications"] = TOPIC_SPECIALTY_MIN_PUBLICATIONS
     return {
         "generated_at": generated_at,
         "summary": summary,

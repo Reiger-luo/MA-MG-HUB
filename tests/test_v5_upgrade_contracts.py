@@ -68,6 +68,27 @@ def test_expert_output_module_always_writes_both_regional_shards(tmp_path):
     assert "international_expert_index" not in manifest
 
 
+def test_expert_manifest_exposes_topic_specialty_threshold(tmp_path):
+    from scripts.common.expert_outputs import (
+        TOPIC_SPECIALTY_MIN_PUBLICATIONS,
+        write_expert_outputs,
+    )
+
+    payload = {
+        "generated_at": "2026-07-15T00:00:00Z",
+        "experts": [],
+        "china_expert_index": [],
+        "international_expert_index": [],
+        "quick_expert_ids": {},
+        "summary": {},
+    }
+    write_expert_outputs(payload, tmp_path)
+
+    manifest = load_js_global(tmp_path / "expert-profiles.js", "MG_EXPERT_PROFILES")
+    assert TOPIC_SPECIALTY_MIN_PUBLICATIONS == 5
+    assert manifest["summary"]["topic_specialty_min_publications"] == TOPIC_SPECIALTY_MIN_PUBLICATIONS
+
+
 def test_atomic_write_failure_preserves_target_and_cleans_unique_temp(tmp_path, monkeypatch):
     target = tmp_path / "artifact.json"
     target.write_text("old", encoding="utf-8")

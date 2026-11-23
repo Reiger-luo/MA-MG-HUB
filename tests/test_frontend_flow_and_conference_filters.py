@@ -30,14 +30,30 @@ def test_msl_expert_detail_uses_page_flow_without_changing_list_scroll_contract(
     assert "overflow-y: auto" in shared_rule.group(1)
 
 
-def test_msl_expert_profiles_require_a_search_keyword_before_rendering_results():
+def test_msl_expert_profiles_allow_filters_without_search_keyword():
     js = (PROJECT / "assets" / "msl.js").read_text(encoding="utf-8")
 
     assert "function hasProfileSearchQuery(keyword)" in js
-    assert "if (!hasProfileSearchQuery(keyword)) return [];" in js
-    assert "请输入关键词搜索专家" in js
-    assert "请输入关键词后显示匹配结果" in js
-    assert "在左侧搜索框输入关键词后查看专家画像。" in js
+    assert "function hasProfileFilterSelection()" in js
+    assert "if (!hasQuery && !hasFilter) return [];" in js
+    assert "var list = hasQuery ? sortedExperts(keyword) : sortedExperts('');" in js
+    assert "if (!hasProfileSearchQuery(keyword) && !hasProfileFilterSelection())" in js
+    assert "请输入关键词或选择筛选条件" in js
+    assert "输入关键词或选择筛选条件后查看专家画像" in js
+    assert "搜索词与筛选项同时存在时按 AND 收窄" in js
+
+
+def test_msl_topic_filter_uses_backend_specialty_threshold():
+    js = (PROJECT / "assets" / "msl.js").read_text(encoding="utf-8")
+
+    assert "topic_specialty_min_publications" in js
+    assert "Number((expertPayload.summary || {}).topic_specialty_min_publications) || 5" in js
+    assert "function expertTopicPublicationCount(expert, topic)" in js
+    assert "function matchesTopicSpecialty(expert)" in js
+    assert "return expertTopicPublicationCount(expert, selectedTopic) >= topicSpecialtyMin;" in js
+    assert "list = list.filter(matchesTopicSpecialty);" in js
+    assert "expertSearchBlob" in js
+    assert "text.indexOf(normalizeText(selectedTopic)) !== -1" not in js
 
 
 def test_landscape_chapters_and_questions_replace_living_answers():
