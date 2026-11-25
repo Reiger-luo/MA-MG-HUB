@@ -136,7 +136,9 @@ def test_related_topic_opens_inline_and_deep_link_is_consumed():
     html = (ROOT / "pages" / "knowledge.html").read_text(encoding="utf-8")
 
     # 整个知识图谱模块无任何页面跳转（唯一外链是 PMID 的 target=_blank）
-    assert "landscape.html?tab=chapters" not in knowledge
+    # 旧问题：专题曾无条件外跳诊治格局第一章节并丢掉 topicId；现在只允许带 chapter id 的精确深链
+    assert "landscape.html?tab=chapters'" not in knowledge
+    assert "pages/landscape.html?tab=chapters&chapter=" in knowledge
     assert "location.href" not in knowledge
     # 深链接收端
     assert "getInitialKnowledgeTopicId" in knowledge
@@ -152,9 +154,9 @@ def test_related_topic_opens_inline_and_deep_link_is_consumed():
     assert "function topicHref" not in landscape
     assert "function renderCommunityProfileBlock" not in knowledge
     assert "switchWorkbenchTab" not in knowledge
-    # 前端显示名已改为主题分类
-    assert "全部主题分类" in html
-    assert "按主题分类染色" in html
+    # 数据层仍叫 community，前端显示名已简化为"主题 / 医学主题"
+    assert "全部主题" in html
+    assert "医学主题" in html
     assert "全部医学社区" not in html
     # 三段式工作台结构：左关系 / 右策展 / 下文献
     assert 'id="kgRelationList"' in html

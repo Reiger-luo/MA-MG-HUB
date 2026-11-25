@@ -18,6 +18,7 @@ MA-MG-HUB 重点回答：
 - 如何按当前文献、信号、中国、会议或临床试验筛选生成可复制简报？
 - 中国相关证据、机构和作者线索有哪些变化？
 - MG 证据网络形成了哪些主题、机制和治疗社区？
+- 刷完更新流、做完拜访准备之后，这些线索落在哪些概念上，概念之间怎么连接，还有哪些问题没有定论？
 - 具体治疗问题目前可以形成怎样的 abstract-level 回答？
 - MSL 拜访专家前应准备哪些证据、话题和材料模块？
 - 数据产物、社区归类和图谱状态是否健康？
@@ -29,7 +30,7 @@ MA-MG-HUB 重点回答：
 | 工作台 | [index.html](index.html) | 近期信号、社区动态、工作流状态和数据健康 |
 | 情报中心 | [pages/literature.html](pages/literature.html) | 公开文献、信号板、中国情报、会议摘要、临床试验和当前上下文简报 |
 | 诊治格局 | [pages/landscape.html](pages/landscape.html) | 格局洞察、竞争矩阵、临床管线和 Living Answers |
-| 知识库 | [pages/knowledge.html](pages/knowledge.html) | 知识图谱、医学事务社区、证据矩阵、专题和中国作者网络 |
+| 知识库 | [pages/knowledge.html](pages/knowledge.html) | 沉淀层：同心圆概念图、大白话筛选、精读三镜（知识 / 连接 / 思考）、编辑层（每周 LLM 校对）、中国作者联络图 |
 | MSL 工作台 | [pages/msl.html](pages/msl.html) | China-only 专家画像、内容模块、拜访话题建议和 PMID 清单 |
 
 历史页面 `pages/materials.html`、`pages/outputs.html`、`pages/progress.html` 和 `pages/competitive.html` 仅保留重定向入口。

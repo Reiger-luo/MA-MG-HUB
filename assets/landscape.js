@@ -394,7 +394,8 @@
               '</div>' +
             '</li>';
           }).join('');
-          return '<article class="guideline-divergence-card">' +
+          return '<article class="guideline-divergence-card" id="gd-' + escapeHtml(item.id) +
+            '" data-divergence-id="' + escapeHtml(item.id) + '">' +
             '<div class="gd-head">' +
               '<span class="divergence-index">' + escapeHtml(String(index + 1).padStart(2, '0')) + '</span>' +
               '<strong>' + escapeHtml(item.title || '') + '</strong>' +
@@ -557,12 +558,14 @@
         }).join('') + '</div>';
     }).join('');
     box.innerHTML =
+      '<div class="chapter-body" id="chapter-' + escapeHtml(chapter.id) + '" data-chapter-id="' + escapeHtml(chapter.id) + '">' +
       '<h3>' + escapeHtml(chapter.title) + '</h3>' +
       '<p class="chapter-summary">' + escapeHtml(chapter.summary || '') + '</p>' +
       renderGroupedStatements(chapter.statements, chapter.ref_map) +
       branchHtml +
       renderPendingCandidates('chapter', chapter.id) +
-      '<h4 class="refs-title">参考文献</h4>' + renderEvidenceRefs(chapter.refs);
+      '<h4 class="refs-title">参考文献</h4>' + renderEvidenceRefs(chapter.refs) +
+      '</div>';
   }
 
   function renderChapters() {
@@ -605,7 +608,7 @@
       '<p class="chapter-summary">' + group.questions.length + ' 个未解决问题；未解决点与当前证据能回答到的程度并列呈现。</p>' +
       group.questions.map(function (q) {
         var stanceClass = q.stance === '证据不足' ? 'insufficient' : 'cautious';
-        return '<article class="question-card">' +
+        return '<article class="question-card" id="question-' + escapeHtml(q.id) + '" data-question-id="' + escapeHtml(q.id) + '">' +
           '<div class="question-card-head"><h4>' + escapeHtml(q.question) + '</h4>' +
             '<span class="stance-badge stance-' + stanceClass + '">' + escapeHtml(q.stance || '待评估') + '</span></div>' +
           (q.whyOpen ? '<p class="question-open">未解决点：' + escapeHtml(q.whyOpen) + '</p>' : '') +
@@ -625,6 +628,52 @@
     renderQuestionContent();
   }
 
+  // 深链 ?question=<id>：切到所属方向并高亮该问题卡（知识库"开放问题"卡片的入站链接）。
+  function focusQuestionCard(questionId) {
+    var group = null;
+    clinicalQuestionGroups.forEach(function (item) {
+      if ((item.questions || []).some(function (q) { return q.id === questionId; })) group = item;
+    });
+    if (!group) return false;
+    activeQuestionGroupId = group.id;
+    renderQuestionNav();
+    renderQuestionContent();
+    var card = document.getElementById('question-' + questionId);
+    if (card) {
+      card.classList.add('is-focused');
+      if (card.scrollIntoView) card.scrollIntoView({ block: 'center' });
+    }
+    return true;
+  }
+
+  // 深链 ?chapter=<id>：定位到诊疗现状的具体章节（知识库"怎么读"卡片的入站链接）
+  function focusChapterCard(chapterId) {
+    var found = treatmentChapters.some(function (chapter) { return chapter.id === chapterId; });
+    if (!found) return false;
+    activeChapterId = chapterId;
+    renderChapterNav();
+    renderChapterContent();
+    var card = document.getElementById('chapter-' + chapterId);
+    if (card) {
+      card.classList.add('is-focused');
+      if (card.scrollIntoView) card.scrollIntoView({ block: 'center' });
+    }
+    return true;
+  }
+
+  // 深链 ?divergence=<id>：定位到中外指南共识差异的具体条目
+  function focusDivergenceCard(divergenceId) {
+    var found = guidelineDivergence.divergences.some(function (item) { return item.id === divergenceId; });
+    if (!found) return false;
+    var card = document.querySelector('[data-divergence-id="' + divergenceId + '"]');
+    if (!card) return false;
+    card.classList.add('is-focused');
+    var details = card.querySelector('details');
+    if (details) details.open = true;
+    if (card.scrollIntoView) card.scrollIntoView({ block: 'center' });
+    return true;
+  }
+
   function applyInitialKnowledgeRoute() {
     var topicId = getQueryParam('topic');
     var communityId = getQueryParam('community');
@@ -633,6 +682,13 @@
         (communityId ? '&community=' + encodeURIComponent(communityId) : ''));
       return;
     }
+    // 卡片级深链优先于通用的 ?tab=，避免标签切换把高亮冲掉。
+    var questionId = getQueryParam('question');
+    if (questionId && focusQuestionCard(questionId)) { activateLandscapeTab('questions'); return; }
+    var chapterId = getQueryParam('chapter');
+    if (chapterId && focusChapterCard(chapterId)) { activateLandscapeTab('chapters'); return; }
+    var divergenceId = getQueryParam('divergence');
+    if (divergenceId && focusDivergenceCard(divergenceId)) { activateLandscapeTab('overview'); return; }
     var tab = getQueryParam('tab');
     if (tab === 'chapters' || tab === 'questions') activateLandscapeTab(tab);
   }

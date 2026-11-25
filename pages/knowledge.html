@@ -31,116 +31,137 @@
   </div>
 
   <p class="page-subtitle">
-    基于 full PubMed abstract 库生成的 MG 学术情报图谱。关系来自标题、摘要与元数据共现，详细判断需回到 PMID 原文。
+    刷完首页的更新流、做完拜访准备之后，来这里沉下来：读策展精读，看概念之间怎么连接，想还没解决的问题。
   </p>
 
-  <section class="knowledge-stat-grid compact" id="knowledgeStats"></section>
+  <div class="kb-baseline" id="kbBaseline" aria-label="知识库规模"></div>
 
   <div class="intel-tabs" role="tablist" aria-label="知识库视图">
-    <button class="intel-tab active" type="button" data-knowledge-tab="graph">知识图谱</button>
+    <button class="intel-tab active" type="button" data-knowledge-tab="graph">知识地图与精读</button>
     <button class="intel-tab" type="button" data-knowledge-tab="china-network">中国作者联络图</button>
   </div>
 
   <section class="intel-tab-panel active" id="knowledge-graph-panel">
-    <div class="kg-control-bar">
-      <div class="kg-control-group">
-        <span class="kg-control-hint">① 筛选要看的节点</span>
-        <div class="kg-filter-bar">
+    <!-- 知识地图：同心圆分层发散，只画最相关的关系 -->
+    <section class="kb-map" aria-label="知识地图">
+      <div class="kg-control-bar">
+        <div class="kg-control-row">
+          <span class="kg-control-label">找概念</span>
           <div class="knowledge-search compact">
-            <input id="knowledgeNodeSearch" placeholder="搜索节点，例如 FcRn / efgartigimod / AChR">
+            <input id="knowledgeNodeSearch" placeholder="输入药名、机制或结局，例如 艾加莫德 / FcRn" aria-label="搜索概念">
           </div>
-          <select class="filter-input compact-select" id="knowledgeTypeFilter" title="按节点是什么类别筛选">
-            <option value="all">全部节点类型</option>
-            <option value="disease">疾病</option>
-            <option value="drug">药物/干预</option>
-            <option value="mechanism">机制</option>
+          <select class="filter-input compact-select" id="knowledgeTypeFilter" title="只看某一类概念">
+            <option value="all">全部类别</option>
             <option value="population">人群/亚型</option>
+            <option value="mechanism">机制</option>
+            <option value="drug">药物/干预</option>
             <option value="outcome">结局</option>
             <option value="evidence">证据类型</option>
           </select>
-          <select class="filter-input compact-select" id="knowledgeCommunityFilter" title="按医学主题筛选节点">
-            <option value="all">全部主题分类</option>
+          <select class="filter-input compact-select" id="knowledgeCommunityFilter" title="只看某个医学主题">
+            <option value="all">全部主题</option>
           </select>
+          <button class="kg-reset-btn" id="kgResetFilters" type="button" title="清空上面的搜索和筛选">重置</button>
+          <span class="kg-map-count" id="kgMapCount" aria-live="polite"></span>
         </div>
-      </div>
-      <div class="kg-control-group">
-        <span class="kg-control-hint">② 决定图怎么画</span>
-        <div class="kg-filter-bar">
-          <select class="filter-input compact-select" id="knowledgeGraphDensity" title="显示多少条共现关系">
-            <option value="core">核心关系</option>
-            <option value="bridge">高置信桥接</option>
-            <option value="all">全部合格关系</option>
-          </select>
-          <select class="filter-input compact-select" id="knowledgeGraphColorMode" title="节点颜色代表什么">
-            <option value="community">按主题分类染色（默认）</option>
-            <option value="type">按节点类型染色</option>
-          </select>
+        <div class="kg-control-row">
+          <span class="kg-control-label">图上看什么</span>
+          <span class="kg-control-static">只画最相关的关系：两篇文献同时提到它们的次数，明显多于各自单独出现的预期。圆点颜色只标药物机制家族，其余概念一律灰色。</span>
         </div>
+        <details class="kg-help">
+          <summary>这些说法是什么意思？</summary>
+          <div class="kg-help-body">
+            <p><strong>最相关</strong>：两个概念在同一批文献里一起出现的次数，明显高于按它们各自热门程度算出的预期。只保留这种关系——按"一起出现篇数"排，结果永远都是最热门的那几个概念，没有区分价值。</p>
+            <p><strong>圆点颜色</strong>只标药物的机制家族（FcRn / 补体 / B 细胞 / 传统免疫 / 对症救援）；机制和人群等概念一律灰色，因为同心圆的位置已经说明了它们的类别。</p>
+            <p><strong>连线</strong>只表示文献里一起出现过，不代表疗效或因果。<strong>落点</strong>由关键词关联推断，只用于导航。<strong>点任意圆点</strong>，下方精读区就换成那个概念。</p>
+          </div>
+        </details>
       </div>
+
+      <div class="kg-legend" id="knowledgeGraphLegend"></div>
+
+      <div class="kg-canvas-wrap">
+        <svg id="knowledgeGraph" class="kg-canvas" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="MG 概念地图：中心为重症肌无力底座，向外依次为人群、机制、药物、结局、证据类型"></svg>
+        <div class="kg-controls">
+          <button class="kg-ctrl-btn" id="kgZoomIn" title="放大" type="button">+</button>
+          <button class="kg-ctrl-btn" id="kgZoomOut" title="缩小" type="button">−</button>
+          <button class="kg-ctrl-btn" id="kgZoomReset" title="重置视图" type="button">⟲</button>
+        </div>
+        <span class="kg-zoom-label" id="kgZoomLabel">100%</span>
+      </div>
+      <p class="kg-map-footnote">从中心的 MG 底座向外：人群 → 机制 → 药物 → 结局 → 证据类型。同一圈里靠得近、用线连起来的概念更常一起出现。</p>
+    </section>
+
+    <!-- 选中来源提示：明确告诉用户下面的内容由图谱点击决定 -->
+    <div class="kg-selection-ribbon" id="kgSelectionRibbon" aria-live="polite">
+      <span class="kg-ribbon-dot" id="kgRibbonDot"></span>
+      <span id="kgRibbonText">点击图谱里的圆点，下方精读区就会切换到那个概念。</span>
+      <button class="kg-ribbon-link" id="kgRibbonToMap" type="button">回到图谱 ↑</button>
     </div>
 
-    <p class="kg-usage-hint">
-      点图谱节点锁定关注对象；在下方"共现关系"里再点一个节点，即可深挖"两者交叉"的证据。图中连线代表文献共现，不代表因果。
-    </p>
-
-    <div class="kg-layout">
-      <div>
-        <div class="kg-legend" id="knowledgeGraphLegend"></div>
-        <div class="kg-canvas-wrap">
-          <svg id="knowledgeGraph" class="kg-canvas" xmlns="http://www.w3.org/2000/svg"></svg>
-          <div class="kg-controls">
-            <button class="kg-ctrl-btn" id="kgZoomIn" title="放大" type="button">+</button>
-            <button class="kg-ctrl-btn" id="kgZoomOut" title="缩小" type="button">−</button>
-            <button class="kg-ctrl-btn" id="kgZoomReset" title="重置视图" type="button">⟲</button>
-          </div>
-          <span class="kg-zoom-label" id="kgZoomLabel">100%</span>
+    <!-- 精读区：一个概念，三面视角——知识 / 连接 / 思考 -->
+    <section class="kg-workbench" id="knowledgeWorkbench" aria-label="概念精读区">
+      <div class="kg-workbench-head" id="kgWorkbenchHead">
+        <div class="kg-workbench-title">
+          <span class="kg-workbench-kicker">精读 · <span id="kgFromGraph">来自图谱，点其他圆点可切换</span></span>
+          <h3 id="kgWorkbenchTitle">尚未选中概念</h3>
+          <span class="kg-workbench-note" id="kgWorkbenchNote"></span>
+        </div>
+        <div class="kg-workbench-actions">
+          <button class="btn" id="kgShowOnMap" type="button" title="回到地图并定位这个概念">在地图上看</button>
+          <button class="btn" id="kgExportCard" type="button" title="复制这个概念的知识卡（Markdown）">导出精读卡</button>
         </div>
       </div>
 
-      <aside class="kg-detail" id="knowledgeDetail">
-        <div class="kg-empty-hint">点击图谱节点查看详情</div>
-      </aside>
-    </div>
-
-    <section class="kg-workbench" id="knowledgeWorkbench" aria-label="节点证据工作台">
-      <div class="kg-workbench-head">
-        <div>
-          <span class="kg-workbench-kicker">选中节点的证据与解读</span>
-          <h3 id="kgWorkbenchTitle">尚未选中节点</h3>
-        </div>
-        <span class="kg-workbench-note" id="kgWorkbenchNote">点击图谱中的节点开始</span>
+      <div class="kg-identity" id="kgIdentity">
+        <div class="kg-empty-hint">点击地图中的概念开始精读。</div>
       </div>
 
-      <p class="kg-workbench-guide">先在左侧选一条"关系"，右侧看它的策展解读；选定后下方展开这条关系的证据文献清单。</p>
+      <div class="kg-lens-tabs" role="tablist" aria-label="精读视角">
+        <button class="kg-lens-tab active" type="button" role="tab" aria-selected="true" data-kg-lens="knowledge">知识 <em id="kgLensCountKnowledge"></em></button>
+        <button class="kg-lens-tab" type="button" role="tab" aria-selected="false" data-kg-lens="connect">连接 <em id="kgLensCountConnect"></em></button>
+        <button class="kg-lens-tab" type="button" role="tab" aria-selected="false" data-kg-lens="think">思考 <em id="kgLensCountThink"></em></button>
+      </div>
 
-      <div class="kg-workbench-main">
-        <div class="kg-relation-pane" aria-label="关系选择">
-          <h4>关系选择</h4>
-          <div class="kg-relation-list" id="kgRelationList">
-            <div class="kg-empty-hint">点击图谱节点后列出它的共现关系。</div>
+      <!-- 镜一：知识 = 已经沉淀下来的内容 -->
+      <div class="kg-lens-panel" id="kgLensKnowledge" role="tabpanel" aria-label="知识"></div>
+
+      <!-- 镜二：连接 = 这个概念和谁相关（三段式：左选关系 / 右看解读 / 下看证据） -->
+      <div class="kg-lens-panel" id="kgLensConnect" role="tabpanel" aria-label="连接" hidden>
+        <div class="kg-relation-note" id="kgRelationNote">按最相关排序：明显比一般情况更常一起出现的概念排在前面。点一行看解读与证据；要换精读对象，请点图谱圆点。</div>
+        <div class="kg-workbench-main">
+          <div class="kg-relation-pane" aria-label="和它相关的概念">
+            <h4>和它相关的概念</h4>
+            <div class="kg-relation-list" id="kgRelationList">
+              <div class="kg-empty-hint">选择概念后列出它的关联概念。</div>
+            </div>
+          </div>
+          <div class="kg-curation-pane" aria-label="这一对怎么读">
+            <h4>这一对怎么读</h4>
+            <div id="kgCurationPanel">
+              <div class="kg-empty-hint">点左侧一条关系，这里解释两者怎么关联；下方展开交叉证据文献。</div>
+            </div>
+            <div id="kgHospitalsPanel"></div>
           </div>
         </div>
-        <div class="kg-curation-pane" aria-label="策展解读">
-          <h4>策展解读</h4>
-          <div id="kgCurationPanel">
-            <div class="kg-empty-hint">选择左侧一条关系后，这里显示关联节点的策展解读。</div>
+
+        <div class="kg-evidence-pane" id="kgEvidencePane" hidden aria-label="证据文献清单">
+          <div class="kg-evidence-head">
+            <div>
+              <span class="kg-workbench-kicker">这条关系的证据</span>
+              <h4 id="kgEvidenceTitle">证据文献清单</h4>
+            </div>
+            <div class="kg-evidence-head-right">
+              <span class="kg-workbench-note" id="kgEvidenceMeta"></span>
+              <button class="kg-evidence-close" type="button" id="kgEvidenceClose" title="收起文献清单">收起 ×</button>
+            </div>
           </div>
+          <div id="kgEvidenceBody"></div>
         </div>
       </div>
 
-      <div class="kg-evidence-pane" id="kgEvidencePane" hidden aria-label="证据文献清单">
-        <div class="kg-evidence-head">
-          <div>
-            <span class="kg-workbench-kicker">这条关系的证据</span>
-            <h4 id="kgEvidenceTitle">证据文献清单</h4>
-          </div>
-          <div class="kg-evidence-head-right">
-            <span class="kg-workbench-note" id="kgEvidenceMeta"></span>
-            <button class="kg-evidence-close" type="button" id="kgEvidenceClose" title="收起文献清单">收起 ×</button>
-          </div>
-        </div>
-        <div id="kgEvidenceBody"></div>
-      </div>
+      <!-- 镜三：思考 = 还没有定论的东西 -->
+      <div class="kg-lens-panel" id="kgLensThink" role="tabpanel" aria-label="思考" hidden></div>
     </section>
   </section>
 
@@ -247,8 +268,12 @@
 <script src="../data/knowledge-graph.js?v=local-20261123-050016"></script>
 <script src="../data/graphHealth.js?v=local-20261123-050016"></script>
 <script src="../data/curated-topics.js?v=local-20261123-050016"></script>
+<script src="../data/knowledgeEditorial.js?v=local-20261123-050016"></script>
 <script src="../data/communityTaxonomy.js?v=local-20261123-050016"></script>
 <script src="../data/communityCards.js?v=local-20261123-050016"></script>
+<script src="../data/signals-weekly.js?v=local-20261123-050016"></script>
+<script src="../data/trial-signals-weekly.js?v=local-20261123-050016"></script>
+<script src="../data/clinicalQuestions.js?v=local-20261123-050016"></script>
 <script src="../assets/knowledge.js?v=local-20261123-050016"></script>
 <script src="../assets/china-provinces-map.js?v=local-20261123-050016"></script>
 <script src="../assets/chinaAuthorNetwork.js?v=local-20261123-050016"></script>

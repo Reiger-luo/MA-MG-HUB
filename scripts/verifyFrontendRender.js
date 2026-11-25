@@ -24,11 +24,11 @@ function textOf(nodes) {
   return Array.from(nodes).map((node) => node.textContent.trim());
 }
 
-function bootPage(htmlRel, scriptRels, prelude, fireDomReady) {
+function bootPage(htmlRel, scriptRels, prelude, fireDomReady, query) {
   // 去掉带 src 的 script，避免 jsdom 发起网络请求；数据脚本按顺序手动注入。
   const html = read(htmlRel).replace(/<script\b[^>]*\bsrc="[^"]*"[^>]*><\/script>/g, '');
   const dom = new JSDOM(html, {
-    url: 'https://example.test/' + htmlRel,
+    url: 'https://example.test/' + htmlRel + (query || ''),
     runScripts: 'outside-only',
     pretendToBeVisual: true
   });
@@ -381,88 +381,223 @@ try {
   check('中国情报联动运行时异常', false, String(error));
 }
 
-// ── 知识库：身份卡锁定主节点 + 工作台左关系/右策展 + 下方文献清单 ──
+// ── 知识库 · 同心圆地图与精读三镜 ──
+const knowledgeScripts = [
+  'assets/common.js',
+  'data/release-manifest.js',
+  'data/knowledge-graph.js',
+  'data/graphHealth.js',
+  'data/curated-topics.js',
+  'data/knowledgeEditorial.js',
+  'data/communityTaxonomy.js',
+  'data/communityCards.js',
+  'data/signals-weekly.js',
+  'data/trial-signals-weekly.js',
+  'data/clinicalQuestions.js',
+  'assets/knowledge.js'
+];
+const knowledgeLandscape = read('data/landscape-data.js');
+
 try {
-  const document = bootPage('pages/knowledge.html', [
-    'assets/common.js',
-    'data/release-manifest.js',
-    'data/knowledge-graph.js',
-    'data/graphHealth.js',
-    'data/curated-topics.js',
-    'data/communityTaxonomy.js',
-    'data/communityCards.js',
-    'assets/knowledge.js'
-  ], null, true);
+  const document = bootPage('pages/knowledge.html', knowledgeScripts, knowledgeLandscape, true);
+  const win = document.defaultView;
+  const graph = win.MG_KNOWLEDGE_GRAPH || { nodes: [], all_edges: [] };
+  const textOf = (selector) => ((document.querySelector(selector) || {}).textContent || '');
+  const click = (el) => { if (el) el.click(); };
+  const titleOf = () => textOf('#kgWorkbenchTitle');
+  const activeLens = () => ((document.querySelector('[data-kg-lens].active') || {}).textContent || '');
+  const relationRows = () => document.querySelectorAll('#kgRelationList [data-edge]');
 
-  const detailTitle = document.querySelector('#knowledgeDetail h2');
-  check('默认节点身份卡渲染标题', Boolean(detailTitle && detailTitle.textContent.trim()),
-    detailTitle ? detailTitle.textContent.trim() : '未渲染');
-  check('右侧身份卡不含长列表',
-    document.querySelectorAll('#knowledgeDetail .kg-study-list').length === 0 &&
-    document.querySelectorAll('#knowledgeDetail [data-edge]').length === 0);
+  // 控制区：大白话标签、单一排序规则、计数与说明
+  check('顶部三栏已移除', !document.querySelector('.kb-entry') && !document.getElementById('kbLedger'), '');
+  check('控制区改用大白话标签', textOf('.kg-control-bar').indexOf('找概念') >= 0 &&
+    textOf('.kg-control-bar').indexOf('图上看什么') >= 0 &&
+    textOf('.kg-control-bar').indexOf('圆点颜色只标药物机制家族') >= 0 &&
+    textOf('.kg-control-bar').indexOf('这些说法是什么意思') >= 0, '');
+  check('无意义切换已删除', document.querySelectorAll('[data-map-mode]').length === 0 &&
+    !document.getElementById('knowledgeGraphColorMode') &&
+    document.querySelectorAll('[data-relation-mode]').length === 0, '');
+  check('只保留"最相关"一条规则', textOf('.kg-control-bar').indexOf('只画最相关的关系') >= 0 &&
+    textOf('.kg-control-bar').indexOf('一起出现最多') < 0 &&
+    textOf('.kg-control-bar').indexOf('决定图怎么画') < 0, '');
+  check('底座条显示概念数', textOf('#kbBaseline').indexOf('概念') >= 0 &&
+    textOf('#kbBaseline').indexOf(String(graph.nodes.length)) >= 0, textOf('#kbBaseline').slice(0, 80));
 
-  const workbenchTitle = document.querySelector('#kgWorkbenchTitle');
-  check('工作台标题随节点联动', Boolean(workbenchTitle && workbenchTitle.textContent.trim()) &&
-    workbenchTitle.textContent.trim() === (detailTitle ? detailTitle.textContent.trim() : ''),
-    workbenchTitle ? workbenchTitle.textContent.trim() : '未渲染');
+  // 同心圆地图
+  const mapNodes = document.querySelectorAll('#knowledgeGraph .kg-node');
+  const mapEdges = document.querySelectorAll('#knowledgeGraph .kg-edge');
+  check('地图画出全部概念', mapNodes.length === graph.nodes.length, mapNodes.length);
+  check('地图只画骨干关系', mapEdges.length > 0 && mapEdges.length < graph.all_edges.length,
+    mapEdges.length + ' / ' + graph.all_edges.length);
+  check('同心圆引导线为六圈', document.querySelectorAll('#knowledgeGraph .kg-ring-guide').length === 6, '');
+  check('底座节点居中并单列标记', Boolean(
+    document.querySelector('#knowledgeGraph .kg-node.kg-base-node[data-id="myastheniaGravis"]')), '');
+  check('不再用分列布局', !document.querySelector('#knowledgeGraph .kg-col-title') &&
+    document.querySelector('#knowledgeGraph .kg-ring-guide') !== null, '');
+  check('底座节点的连线不画', Array.from(mapEdges).every((edge) =>
+    edge.getAttribute('data-from') !== 'myastheniaGravis' && edge.getAttribute('data-to') !== 'myastheniaGravis'), '');
+  check('关系线关闭填充', Array.from(mapEdges).every((edge) => edge.getAttribute('fill') === 'none'), '');
+  check('地图显示概念与连线数量', /\d+ 个概念 · \d+ 条连线/.test(textOf('#kgMapCount')), textOf('#kgMapCount'));
 
-  // 左栏：关系选择列表；右栏初始提示；下方文献区初始隐藏
-  const relPicks = document.querySelectorAll('#kgRelationList [data-edge]');
-  check('左栏渲染共现关系列表', relPicks.length > 0, relPicks.length);
-  check('右栏初始为提示态', Boolean(document.querySelector('#kgCurationPanel .kg-empty-hint')));
-  check('下方文献区初始隐藏', Boolean(document.querySelector('#kgEvidencePane')).valueOf() &&
-    document.querySelector('#kgEvidencePane').hidden);
+  // 选中来源提示
+  check('连接条说明下方内容来自图谱', textOf('#kgSelectionRibbon').indexOf('已选中') >= 0 &&
+    textOf('#kgSelectionRibbon').indexOf('下方三镜内容随图谱切换') >= 0, textOf('#kgSelectionRibbon').slice(0, 100));
+  check('精读头上标注来自图谱', textOf('#kgFromGraph').indexOf('来自图谱') >= 0, textOf('#kgFromGraph'));
+  check('切概念时有视觉反馈', document.querySelector('#knowledgeWorkbench').classList.contains('just-selected'), '');
 
-  // 选中 efgartigimod 作为主节点（图谱节点点击）
-  const efgNode = document.querySelector('.kg-node[data-id="efgartigimod"]');
-  if (efgNode) efgNode.dispatchEvent(new document.defaultView.Event('click', { bubbles: true }));
-  const mainTitle = document.querySelector('#knowledgeDetail h2');
-  check('主节点锁定为 Efgartigimod', Boolean(mainTitle) && mainTitle.textContent.trim() === 'Efgartigimod',
-    mainTitle ? mainTitle.textContent.trim() : '未渲染');
+  // 默认精读：艾加莫德 / 知识镜
+  check('默认精读对象为艾加莫德', titleOf().indexOf('Efgartigimod') >= 0, titleOf());
+  check('默认落在知识镜', activeLens().indexOf('知识') === 0 &&
+    !document.querySelector('#kgLensKnowledge').hidden &&
+    document.querySelector('#kgLensConnect').hidden && document.querySelector('#kgLensThink').hidden, activeLens());
+  const topicCards = document.querySelectorAll('#kgLensKnowledge .kb-topic');
+  check('专题改为逐节点白名单（艾加莫德 4 篇，剔除纯英文/无PMID）', topicCards.length === 4, topicCards.length);
+  check('知识镜有逐概念编辑导语', Boolean(document.querySelector('#kgLensKnowledge .kb-editorial-lead')) &&
+    textOf('#kgLensKnowledge .kb-editorial-lead').indexOf('艾加莫德') >= 0,
+    textOf('#kgLensKnowledge .kb-editorial-lead').slice(0, 80));
+  check('专题保留静态快照与核对提示', textOf('#kgLensKnowledge').indexOf('静态策展快照') >= 0 &&
+    textOf('#kgLensKnowledge').indexOf('引用前请核对 PMID 原文') >= 0, '');
+  check('身份头带证据等级构成与特异关联速览',
+    document.querySelectorAll('#kgIdentity .kg-ev-seg').length > 0 &&
+    document.querySelectorAll('#kgIdentity .kg-ego-node').length > 0, '');
 
-  // 左栏找 MG-ADL 关系并点击
-  const mgAdlPick = Array.from(document.querySelectorAll('#kgRelationList [data-edge]'))
-    .find((row) => row.textContent.indexOf('MG-ADL') >= 0);
-  check('左栏能找到 MG-ADL 关系', Boolean(mgAdlPick),
+  // 概念 chip 只定位、不换主体
+  const chip = document.querySelector('#kgLensKnowledge [data-locate-node]');
+  if (chip) {
+    const before = titleOf();
+    chip.click();
+    check('点概念 chip 不换精读对象', titleOf() === before, titleOf());
+    check('点概念 chip 在图谱中定位', Boolean(document.querySelector('#knowledgeGraph .kg-node.located')) &&
+      textOf('#kgSelectionRibbon').indexOf('已在图谱中定位') >= 0, '');
+  }
+
+  // 连接镜：全部展开、没有"进入"
+  click(document.querySelector('[data-kg-lens="connect"]'));
+  check('连接镜可见', !document.querySelector('#kgLensConnect').hidden && document.querySelector('#kgLensKnowledge').hidden, '');
+  check('关系按三类启示分组且全部展开', relationRows().length > 0 && relationRows().length <= 12 &&
+    document.querySelectorAll('#kgRelationList .kg-relation-group').length >= 1, relationRows().length);
+  check('没有"进入"按钮与折叠按钮',
+    document.querySelectorAll('#kgRelationList .kg-relation-enter').length === 0 &&
+    document.querySelectorAll('#kgRelationList [data-relation-more]').length === 0, '');
+  check('关系行用"相关度"而非黑话', textOf('#kgRelationList').indexOf('相关度') >= 0 &&
+    textOf('#kgRelationNote').indexOf('点图谱圆点') >= 0, '');
+  check('关系解读初始为提示态', Boolean(document.querySelector('#kgCurationPanel .kg-empty-hint')), '');
+  check('证据清单初始隐藏', document.querySelector('#kgEvidencePane').hidden, '');
+
+  const mgAdlPick = Array.from(relationRows()).find((row) => row.textContent.indexOf('MG-ADL') >= 0);
+  check('关系列表能找到 MG-ADL', Boolean(mgAdlPick),
     mgAdlPick ? mgAdlPick.textContent.trim().slice(0, 60) : '未找到');
   if (mgAdlPick) {
     mgAdlPick.click();
-
-    // 主节点身份卡保持锁定（不再切换）
-    const stillMain = document.querySelector('#knowledgeDetail h2');
-    check('选边后右侧身份卡仍锁定主节点', Boolean(stillMain) && stillMain.textContent.trim() === 'Efgartigimod',
-      stillMain ? stillMain.textContent.trim() : '未渲染');
-
-    // 左栏选中态高亮
-    check('左栏关系选中态高亮', Boolean(mgAdlPick.classList.contains('selected')));
-
-    // 右栏策展：显示关联节点 MG-ADL
-    const curationH4 = document.querySelector('#kgCurationPanel .kg-curation-head h4');
-    check('右栏显示关联节点策展', Boolean(curationH4) && curationH4.textContent.trim() === 'MG-ADL',
-      curationH4 ? curationH4.textContent.trim() : '未渲染');
-
-    // 下方文献区出现，标题为两节点交叉，文献清单有 PMID
+    check('选关系后精读对象不变', titleOf().indexOf('Efgartigimod') >= 0, titleOf());
+    const selectedRow = document.querySelector('#kgRelationList [data-edge].selected');
+    check('左栏关系选中态高亮', Boolean(selectedRow) && selectedRow.textContent.indexOf('MG-ADL') >= 0, '');
+    const curationTitle = textOf('#kgCurationPanel .kg-curation-head h4');
+    check('关系解读标题为两者交叉', curationTitle.indexOf('艾加莫德') >= 0 && curationTitle.indexOf('MG-ADL') >= 0, curationTitle);
+    check('关系解读含编辑策展的定制说明', textOf('#kgCurationPanel').indexOf('MG-ADL 是艾加莫德临床叙事的主要终点') >= 0 &&
+      textOf('#kgCurationPanel').indexOf('编辑策展') >= 0, textOf('#kgCurationPanel').slice(0, 160));
     const evidencePane = document.querySelector('#kgEvidencePane');
-    check('选边后下方文献区出现', Boolean(evidencePane) && !evidencePane.hidden);
-    const evidenceTitle = document.querySelector('#kgEvidenceTitle');
-    check('文献区标题为两节点交叉', Boolean(evidenceTitle) &&
-      evidenceTitle.textContent.indexOf('Efgartigimod') >= 0 &&
-      evidenceTitle.textContent.indexOf('MG-ADL') >= 0,
-      evidenceTitle ? evidenceTitle.textContent.trim() : '未渲染');
-    const crossRefs = document.querySelectorAll('#kgEvidenceBody .kg-study-list li');
-    check('交叉证据文献清单有 PMID', crossRefs.length > 0, crossRefs.length);
-
-    // 收起文献区：文献隐藏、右栏回提示、左栏取消高亮
-    const closeBtn = document.querySelector('#kgEvidenceClose');
-    if (closeBtn) closeBtn.click();
-    check('收起后文献区隐藏', Boolean(evidencePane) && evidencePane.hidden);
-    check('收起后右栏回提示态', Boolean(document.querySelector('#kgCurationPanel .kg-empty-hint')));
-    check('收起后左栏取消高亮', !mgAdlPick.classList.contains('selected'));
+    check('选关系后下方证据清单出现', !evidencePane.hidden, '');
+    check('证据标题为两节点交叉', textOf('#kgEvidenceTitle').indexOf('Efgartigimod') >= 0 &&
+      textOf('#kgEvidenceTitle').indexOf('MG-ADL') >= 0, textOf('#kgEvidenceTitle'));
+    check('交叉证据含 PMID', document.querySelectorAll('#kgEvidenceBody .kg-study-list li').length > 0, '');
+    check('证据区显示"证据该看什么"', textOf('#kgEvidenceBody .kb-evidence-focus').indexOf('证据该看什么') >= 0 &&
+      textOf('#kgEvidenceBody .kb-evidence-focus').length > 10, textOf('#kgEvidenceBody .kb-evidence-focus').slice(0, 90));
+    check('解读栏显示启示分组说明', textOf('#kgCurationPanel .kg-insight-banner').length > 10 &&
+      /赛道绑定结构|反常绑定|证据缺口与行动/.test(textOf('#kgCurationPanel .kg-insight-banner')),
+      textOf('#kgCurationPanel .kg-insight-banner').slice(0, 90));
+    click(document.querySelector('#kgEvidenceClose'));
+    check('收起后证据隐藏、解读回提示、左栏取消高亮', evidencePane.hidden &&
+      Boolean(document.querySelector('#kgCurationPanel .kg-empty-hint')) &&
+      !document.querySelector('#kgRelationList [data-edge].selected'), '');
   }
 
-  // 深链 ?topic= 的接收端（getInitialKnowledgeTopicId / 右栏专题渲染）由静态契约测试覆盖。
+  // 思考镜
+  click(document.querySelector('[data-kg-lens="think"]'));
+  check('思考镜可见', !document.querySelector('#kgLensThink').hidden && document.querySelector('#kgLensConnect').hidden, '');
+  check('思考镜有编辑策展问题且锚到确切位置', Boolean(document.querySelector('#kgLensThink .kb-editorial-thought')) &&
+    Array.from(document.querySelectorAll('#kgLensThink .kb-editorial-thought a'))
+      .some((a) => /landscape\.html\?tab=questions&question=q-rwe-efg/.test(a.getAttribute('href'))), '');
+  check('思考镜渲染近期信号落点', document.querySelectorAll('#kgLensThink .kb-signal-card').length > 0, '');
+  const questionLinks = Array.from(document.querySelectorAll('#kgLensThink .kb-question-card a'));
+  check('开放问题卡回链诊治格局对应问题', questionLinks.length > 0 &&
+    questionLinks.every((anchor) => /landscape\.html\?tab=questions&question=/.test(anchor.getAttribute('href'))), '');
+  check('指南分歧卡回链诊治格局', document.querySelectorAll('#kgLensThink .kb-divergence-card').length > 0 &&
+    Array.from(document.querySelectorAll('#kgLensThink .kb-divergence-card a'))
+      .every((anchor) => anchor.getAttribute('href').indexOf('landscape.html') >= 0), '');
+  check('思考镜声明落点仅供导航', textOf('#kgLensThink').indexOf('落点由关键词关联推断') >= 0, '');
+
+  // 逐节点审阅：罗泽利昔珠单抗不再显示无关的 EFG 剂型对比 / FcRn 概念专题
+  const rozaNode = document.querySelector('#knowledgeGraph .kg-node[data-id="rozanolixizumab"]');
+  if (rozaNode) {
+    rozaNode.dispatchEvent(new document.defaultView.Event('click', { bubbles: true }));
+    document.querySelector('[data-kg-lens="knowledge"]').click();
+    check('罗泽利昔珠单抗的无关专题已清空', document.querySelectorAll('#kgLensKnowledge .kb-topic').length === 0 &&
+      textOf('#kgLensKnowledge').indexOf('还没有策展专题') >= 0, textOf('#kgLensKnowledge').slice(0, 100));
+  }
+
+  // 导出精读卡
+  click(document.querySelector('#kgExportCard'));
+  const briefModal = document.querySelector('.modal-overlay.open');
+  check('导出精读卡弹出预览', Boolean(briefModal) && briefModal.textContent.indexOf('知识卡') >= 0 &&
+    briefModal.textContent.indexOf('引用前请核对 PMID 原文') >= 0, '');
+  if (briefModal) briefModal.remove();
 } catch (error) {
-  check('知识库工作台运行时异常', false, String(error));
+  check('知识库运行时异常', false, String(error));
+}
+
+// 知识库深链：?topic= / ?node=&lens= / ?tab=china-network
+try {
+  const topicDoc = bootPage('pages/knowledge.html', knowledgeScripts, knowledgeLandscape, true, '?topic=efgartigimodSteroidSparing');
+  check('深链 ?topic= 选中锚点概念并展开专题',
+    topicDoc.querySelector('#kgWorkbenchTitle').textContent.indexOf('Efgartigimod') >= 0 &&
+    Boolean(topicDoc.querySelector('#kgLensKnowledge .kb-topic.is-focused[data-focus="topic:efgartigimodSteroidSparing"]')), '');
+
+  const nodeDoc = bootPage('pages/knowledge.html', knowledgeScripts, knowledgeLandscape, true, '?node=ivig&lens=think');
+  check('深链 ?node=&lens= 直接进入概念与视角',
+    nodeDoc.querySelector('#kgWorkbenchTitle').textContent.indexOf('静注人免疫球蛋白') >= 0 &&
+    !nodeDoc.querySelector('#kgLensThink').hidden &&
+    nodeDoc.querySelector('#kgLensThink').textContent.indexOf('临床问题') >= 0, '');
+
+  // 联络图模块在页签点击时才按需加载数据，深链测试须一并加载该模块
+  const tabDoc = bootPage('pages/knowledge.html',
+    knowledgeScripts.concat(['assets/china-provinces-map.js', 'assets/chinaAuthorNetwork.js']),
+    knowledgeLandscape, true, '?tab=china-network');
+  check('深链 ?tab=china-network 触发联络图数据加载',
+    Boolean(tabDoc.querySelector('script[src*="china-author-network.js"]')), '');
+} catch (error) {
+  check('知识库深链运行时异常', false, String(error));
+}
+
+// 诊治格局深链：知识库"开放问题"卡 → 定位并高亮该问题
+try {
+  const questionDoc = bootPage('pages/landscape.html', [
+    'assets/common.js',
+    'data/landscape-data.js',
+    'data/treatmentChapters.js',
+    'data/clinicalQuestions.js',
+    'data/landscapeKnowledgeReview.js',
+    'assets/landscape.js'
+  ], null, false, '?tab=questions&question=q-fcrn-compare');
+  const focusedCard = questionDoc.querySelector('#question-q-fcrn-compare');
+  check('深链 ?question= 定位并高亮该问题', Boolean(focusedCard) && focusedCard.classList.contains('is-focused') &&
+    questionDoc.querySelector('#landscape-questions').classList.contains('active'), '');
+  const chapterDoc = bootPage('pages/landscape.html', [
+    'assets/common.js', 'data/landscape-data.js', 'data/treatmentChapters.js',
+    'data/clinicalQuestions.js', 'data/landscapeKnowledgeReview.js', 'assets/landscape.js'
+  ], null, false, '?tab=chapters&chapter=targeted');
+  check('深链 ?chapter= 定位到具体章节', Boolean(chapterDoc.querySelector('#chapter-targeted.is-focused')) &&
+    chapterDoc.querySelector('#landscape-chapters').classList.contains('active'), '');
+
+  const divergenceDoc = bootPage('pages/landscape.html', [
+    'assets/common.js', 'data/landscape-data.js', 'data/treatmentChapters.js',
+    'data/clinicalQuestions.js', 'data/landscapeKnowledgeReview.js', 'assets/landscape.js'
+  ], null, false, '?tab=overview&divergence=gd01');
+  check('深链 ?divergence= 定位到具体指南差异', Boolean(
+    divergenceDoc.querySelector('[data-divergence-id="gd01"].is-focused')) &&
+    divergenceDoc.querySelector('#landscape-overview').classList.contains('active'), '');
+} catch (error) {
+  check('诊治格局问题深链运行时异常', false, String(error));
 }
 
 const ok = checks.every((item) => item.ok);

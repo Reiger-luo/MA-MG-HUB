@@ -64,11 +64,11 @@ DRUG_CATALOG: tuple[dict[str, Any], ...] = (
     },
     {
         "id": "ravulizumab",
-        "label": "Ravulizumab / 拉夫利珠单抗",
+        "label": "Ravulizumab / 瑞利珠单抗",
         "name_en": "Ravulizumab",
-        "name_zh": "拉夫利珠单抗",
+        "name_zh": "瑞利珠单抗",
         "category": "Complement",
-        "patterns": (r"\bravulizumab\b", r"\bultomiris\b", r"拉夫利珠单抗"),
+        "patterns": (r"\bravulizumab\b", r"\bultomiris\b", r"瑞利珠单抗"),
     },
     {
         "id": "zilucoplan",

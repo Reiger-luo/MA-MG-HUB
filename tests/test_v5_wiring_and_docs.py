@@ -67,9 +67,9 @@ def test_pipeline_step_selection_keeps_full_dependent_builds_when_full_exists():
     ):
         assert step_id in ids
 
-    # wiki 覆盖与专题生成已随社区视图/证据矩阵下线而退役
-    for retired in ("build-curated-topics", "build-wiki-coverage"):
-        assert retired not in ids
+    # wiki 专题层已恢复周更同步（sync-wiki-curated-topics）；wiki 覆盖层仍退役
+    assert "sync-wiki-curated-topics" in ids
+    assert "build-wiki-coverage" not in ids
 
 
 def test_literature_narrative_enrichment_is_a_required_publish_step():

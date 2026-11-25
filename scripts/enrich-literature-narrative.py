@@ -1324,6 +1324,56 @@ def merge_llm_signals(
     return normalized, coverage
 
 
+
+# 文献信号跨周沉淀：与试验信号 signal_history 同构，只保留最近 10 个收录批次的代表信号。
+SIGNAL_HISTORY_LIMIT = 10
+LITERATURE_STRENGTH_RANK = {"弱": 1, "中": 2, "强": 3}
+
+
+def literature_history_key(signal: dict[str, Any]) -> str:
+    """历史去重用：每周 id 都是 L01/L02/L03，必须叠加题名才不会把不同周的信号叠掉。"""
+    candidate_id = normalize_text(signal.get("candidateId"))
+    if candidate_id:
+        return candidate_id
+    return normalize_text(signal.get("date")) + "::" + normalize_text(signal.get("title"))
+
+
+def build_literature_signal_history(
+    previous_history: list[dict[str, Any]] | None,
+    current_signals: list[dict[str, Any]],
+    captured_at: str,
+    limit: int = SIGNAL_HISTORY_LIMIT,
+) -> list[dict[str, Any]]:
+    """旧批次保留各自 capturedAt；本周同名条目以最新内容与批次覆盖；按批次→强度→日期降序取前 limit 条。"""
+    captured_at = normalize_text(captured_at)
+    merged: dict[str, dict[str, Any]] = {}
+    for signal in previous_history or []:
+        if not isinstance(signal, dict):
+            continue
+        key = literature_history_key(signal)
+        if not key or key.endswith("::"):
+            continue
+        merged[key] = {**signal, "candidateId": key, "capturedAt": normalize_text(signal.get("capturedAt")) or captured_at}
+    for signal in current_signals or []:
+        if not isinstance(signal, dict):
+            continue
+        key = literature_history_key(signal)
+        if not key or key.endswith("::"):
+            continue
+        merged[key] = {**signal, "candidateId": key, "capturedAt": captured_at}
+    ordered = sorted(
+        merged.values(),
+        key=lambda item: (
+            normalize_text(item.get("capturedAt")),
+            LITERATURE_STRENGTH_RANK.get(normalize_text(item.get("strength")), 0),
+            normalize_text(item.get("date")),
+            literature_history_key(item),
+        ),
+        reverse=True,
+    )
+    return ordered[:limit]
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--force", action="store_true", help="Regenerate even when an enriched payload exists.")
@@ -1405,6 +1455,11 @@ def main() -> None:
             "llm_skip_reason": "no_new_mg_core_signals",
         })
         payload["generated_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        payload["signal_history"] = build_literature_signal_history(
+            published_payload.get("signal_history") if isinstance(published_payload, dict) else None,
+            payload.get("signals") or [],
+            payload["generated_at"][:10],
+        )
         atomic_write_js_global(SIGNALS_PATH, "MG_SIGNALS_DATA", payload)
         print("无新增 MG-core 信号：发布空信号 payload，LLM enrich 跳过（no_new_mg_core_signals）")
         return
@@ -1434,6 +1489,11 @@ def main() -> None:
     payload["analysis_cohort_pmids"] = candidate_pmid_order
     payload["selection_decisions"] = sorted(decisions.values(), key=lambda item: item["pmid"])
     payload["signals"] = normalized
+    payload["signal_history"] = build_literature_signal_history(
+        published_payload.get("signal_history") if isinstance(published_payload, dict) else None,
+        normalized,
+        payload["generated_at"][:10],
+    )
     atomic_write_js_global(SIGNALS_PATH, "MG_SIGNALS_DATA", payload)
     if DASHBOARD_PATH.exists():
         dashboard = load_js_global(DASHBOARD_PATH, "MG_DASHBOARD_DATA")

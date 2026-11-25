@@ -210,6 +210,8 @@ def pipeline_steps(args, full_available: bool | None = None) -> list[PipelineSte
             PipelineStep("build-full-index", py("buildFullLiteratureIndex.py"), outputs=[DATA / "literature-full-index.js"]),
             PipelineStep("build-community", py("buildCommunityData.py"), outputs=communityArtifactPaths(DATA)),
             PipelineStep("build-knowledge", py("build-knowledge-data.py"), outputs=[DATA / "knowledge-graph.js", DATA / "graphHealth.js"]),
+            # wiki 策展层与网站同步：vault 不存在时 builder 自带 last-good 保底。
+            PipelineStep("sync-wiki-curated-topics", py("build-curated-topic-data.py"), outputs=[DATA / "curated-topics.js"]),
             PipelineStep("build-china-author-network", py("buildChinaAuthorNetwork.py"), outputs=[DATA / "china-author-network.js"]),
         ])
     steps.extend([
@@ -238,6 +240,12 @@ def pipeline_steps(args, full_available: bool | None = None) -> list[PipelineSte
             outputs=[DATA / "landscapeKnowledgeReview.js"],
             optional=True,
         ),
+        # 知识库编辑层：LLM 校验通过后自动写公开产物（用户指示无人工闸门）。
+        *([] if args.skip_llm else [PipelineStep(
+            "review-knowledge-editorial",
+            py("enrich-knowledge-editorial.py"),
+            outputs=[DATA / "knowledgeEditorial.js"],
+        )]),
         PipelineStep("update-release-token", py("updateFrontendReleaseToken.py"), outputs=ACTIVE_HTML),
         PipelineStep("validate-public-contracts", py("validatePublicRelease.py")),
     ])

@@ -31,6 +31,7 @@ publicDataGlobals = {
     "expert-profiles.js": "MG_EXPERT_PROFILES",
     "graphHealth.js": "MG_GRAPH_HEALTH",
     "knowledge-graph.js": "MG_KNOWLEDGE_GRAPH",
+    "knowledgeEditorial.js": "MG_KNOWLEDGE_EDITORIAL",
     "landscape-data.js": "MG_LANDSCAPE_DATA",
     "landscapeInsights.js": "MG_LANDSCAPE_INSIGHTS",
     "landscapeKnowledgeReview.js": "MG_KNOWLEDGE_REVIEW",
